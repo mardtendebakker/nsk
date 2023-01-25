@@ -6,11 +6,11 @@
 
 ## Development server
 
-Run `nx serve server` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
+Run `npx nx run-many --target=serve` for a dev client and dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
 
 ## Understand this workspace
 
-Run `nx graph` to see a diagram of the dependencies of the projects.
+Run `npx nx graph` to see a diagram of the dependencies of the projects.
 
 ## Remote caching
 
