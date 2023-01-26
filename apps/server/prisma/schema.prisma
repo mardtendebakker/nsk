@@ -1,0 +1,348 @@
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["views"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model acompany {
+  id                                  Int        @id @default(autoincrement())
+  partner_id                          Int?
+  name                                String     @db.VarChar(255)
+  kvk_nr                              Int?
+  representative                      String?    @db.VarChar(255)
+  email                               String?    @db.VarChar(255)
+  phone                               String?    @db.VarChar(255)
+  phone2                              String?    @db.VarChar(255)
+  street                              String?    @db.VarChar(255)
+  street_extra                        String?    @db.VarChar(255)
+  city                                String?    @db.VarChar(255)
+  country                             String?    @db.VarChar(255)
+  state                               String?    @db.VarChar(255)
+  zip                                 String?    @db.VarChar(255)
+  street2                             String?    @db.VarChar(255)
+  street_extra2                       String?    @db.VarChar(255)
+  city2                               String?    @db.VarChar(255)
+  country2                            String?    @db.VarChar(255)
+  state2                              String?    @db.VarChar(255)
+  zip2                                String?    @db.VarChar(255)
+  discr                               String     @db.VarChar(255)
+  is_partner                          Int?
+  external_id                         Int?
+  acompany                            acompany?  @relation("acompanyToacompany", fields: [partner_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_ABB0A97D9393F8FE")
+  other_acompany                      acompany[] @relation("acompanyToacompany")
+  aorder_aorder_supplier_idToacompany aorder[]   @relation("aorder_supplier_idToacompany")
+  aorder_aorder_customer_idToacompany aorder[]   @relation("aorder_customer_idToacompany")
+  fos_user                            fos_user[]
+  product                             product[]
+
+  @@index([partner_id], map: "IDX_ABB0A97D9393F8FE")
+}
+
+model afile {
+  id                       Int      @id @default(autoincrement())
+  product_id               Int?
+  pickup_id                Int?
+  original_client_filename String   @db.VarChar(255)
+  unique_server_filename   String   @db.VarChar(255)
+  discr                    String   @db.VarChar(255)
+  external_id              Int?
+  order_id                 Int?
+  product                  product? @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_CFAB40EC4584665A")
+  aorder                   aorder?  @relation(fields: [order_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_CFAB40EC8D9F6D38")
+  pickup                   pickup?  @relation(fields: [pickup_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_CFAB40ECC26E160B")
+
+  @@index([product_id], map: "IDX_CFAB40EC4584665A")
+  @@index([order_id], map: "IDX_CFAB40EC8D9F6D38")
+  @@index([pickup_id], map: "IDX_CFAB40ECC26E160B")
+}
+
+model aorder {
+  id                                    Int             @id @default(autoincrement())
+  status_id                             Int?
+  customer_id                           Int?
+  supplier_id                           Int?
+  order_nr                              String?         @unique(map: "UNIQ_416119D9360A4EAE") @db.VarChar(16)
+  remarks                               String?         @db.VarChar(255)
+  order_date                            DateTime        @db.DateTime(0)
+  discount                              Int?
+  transport                             Int?
+  is_gift                               Boolean?
+  discr                                 String          @db.VarChar(255)
+  backingPurchaseOrder_id               Int?
+  external_id                           Int?
+  delivery_type                         Int?
+  delivery_date                         DateTime?       @db.DateTime(0)
+  delivery_instructions                 String?         @db.LongText
+  afile                                 afile[]
+  acompany_aorder_supplier_idToacompany acompany?       @relation("aorder_supplier_idToacompany", fields: [supplier_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_416119D92ADD6D8C")
+  aorder                                aorder?         @relation("aorderToaorder", fields: [backingPurchaseOrder_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_416119D930005451")
+  other_aorder                          aorder[]        @relation("aorderToaorder")
+  order_status                          order_status?   @relation(fields: [status_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_416119D96BF700BD")
+  acompany_aorder_customer_idToacompany acompany?       @relation("aorder_customer_idToacompany", fields: [customer_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_416119D99395C3F3")
+  pickup                                pickup?
+  product_order                         product_order[]
+  repair                                repair?
+
+  @@index([supplier_id], map: "IDX_416119D92ADD6D8C")
+  @@index([backingPurchaseOrder_id], map: "IDX_416119D930005451")
+  @@index([status_id], map: "IDX_416119D96BF700BD")
+  @@index([customer_id], map: "IDX_416119D99395C3F3")
+  @@index([delivery_date], map: "idx_deliveryDate")
+}
+
+model aservice {
+  id            Int            @id @default(autoincrement())
+  relation_id   Int?
+  task_id       Int?
+  status        Int
+  description   String?        @db.LongText
+  discr         String         @db.VarChar(255)
+  price         Int?
+  product_order product_order? @relation(fields: [relation_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_5923AE03256915B")
+  task          task?          @relation(fields: [task_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_5923AE08DB60186")
+
+  @@index([relation_id], map: "IDX_5923AE03256915B")
+  @@index([task_id], map: "IDX_5923AE08DB60186")
+}
+
+model attribute {
+  id                     Int                      @id @default(autoincrement())
+  product_type_filter_id Int?
+  attr_code              String                   @db.VarChar(11)
+  name                   String                   @unique(map: "UNIQ_FA7AEFFB5E237E06") @db.VarChar(255)
+  price                  Int?
+  type                   Int?
+  has_quantity           Boolean                  @default(false)
+  external_id            Int?
+  is_public              Boolean                  @default(true)
+  product_type           product_type?            @relation(fields: [product_type_filter_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_FA7AEFFB343A8D62")
+  attribute_option       attribute_option[]
+  product_attribute      product_attribute[]
+  product_type_attribute product_type_attribute[]
+
+  @@index([product_type_filter_id], map: "IDX_FA7AEFFB343A8D62")
+}
+
+model attribute_option {
+  id           Int       @id @default(autoincrement())
+  attribute_id Int
+  name         String    @db.VarChar(255)
+  price        Int?
+  external_id  Int?
+  attribute    attribute @relation(fields: [attribute_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_78672EEAB6E62EFA")
+
+  @@index([attribute_id], map: "IDX_78672EEAB6E62EFA")
+}
+
+model fos_user {
+  id                    Int             @id @default(autoincrement())
+  username              String          @db.VarChar(180)
+  username_canonical    String          @unique(map: "UNIQ_957A647992FC23A8") @db.VarChar(180)
+  email                 String          @db.VarChar(180)
+  enabled               Boolean
+  salt                  String?         @db.VarChar(255)
+  password              String          @db.VarChar(255)
+  last_login            DateTime?       @db.DateTime(0)
+  confirmation_token    String?         @unique(map: "UNIQ_957A6479C05FB297") @db.VarChar(180)
+  password_requested_at DateTime?       @db.DateTime(0)
+  roles                 String          @db.LongText
+  firstname             String?         @db.VarChar(255)
+  lastname              String?         @db.VarChar(255)
+  emailCanonical        String          @db.VarChar(255)
+  partner_id            Int?
+  acompany              acompany?       @relation(fields: [partner_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_957A64799393F8FE")
+  pickup                pickup[]
+  user_location         user_location[]
+
+  @@index([partner_id], map: "IDX_957A64799393F8FE")
+}
+
+model location {
+  id            Int             @id @default(autoincrement())
+  name          String          @unique(map: "UNIQ_5E9E89CB5E237E06") @db.VarChar(255)
+  zipcodes      String?         @db.VarChar(255)
+  product       product[]
+  user_location user_location[]
+}
+
+model order_status {
+  id          Int      @id @default(autoincrement())
+  is_sale     Boolean
+  is_purchase Boolean
+  pindex      Int?
+  name        String   @db.VarChar(255)
+  color       String?  @db.VarChar(7)
+  mailbody    String?  @db.LongText
+  aorder      aorder[]
+}
+
+model pickup {
+  id               Int       @id @default(autoincrement())
+  order_id         Int?      @unique(map: "UNIQ_419E39FD8D9F6D38")
+  logistics_id     Int?
+  pickup_date      DateTime? @db.DateTime(0)
+  real_pickup_date DateTime? @db.DateTime(0)
+  origin           String?   @db.VarChar(255)
+  data_destruction Int?
+  description      String?   @db.LongText
+  afile            afile[]
+  fos_user         fos_user? @relation(fields: [logistics_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_419E39FD7D418FFA")
+  aorder           aorder?   @relation(fields: [order_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_419E39FD8D9F6D38")
+
+  @@index([logistics_id], map: "IDX_419E39FD7D418FFA")
+  @@index([real_pickup_date], map: "idx_realPickupDate")
+}
+
+model product {
+  id                                                            Int                 @id @default(autoincrement())
+  type_id                                                       Int?
+  location_id                                                   Int
+  status_id                                                     Int?
+  owner_id                                                      Int?
+  sku                                                           String              @db.VarChar(16)
+  name                                                          String              @db.VarChar(255)
+  description                                                   String?             @db.LongText
+  price                                                         Int?
+  created_at                                                    DateTime            @db.DateTime(0)
+  updated_at                                                    DateTime            @db.DateTime(0)
+  external_id                                                   Int?
+  afile                                                         afile[]
+  location                                                      location            @relation(fields: [location_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_D34A04AD64D218E")
+  product_status                                                product_status?     @relation(fields: [status_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_D34A04AD6BF700BD")
+  acompany                                                      acompany?           @relation(fields: [owner_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_D34A04AD7E3C61F9")
+  product_type                                                  product_type?       @relation(fields: [type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_D34A04ADC54C8C93")
+  product_attribute_product_attribute_product_idToproduct       product_attribute[] @relation("product_attribute_product_idToproduct")
+  product_attribute_product_attribute_value_product_idToproduct product_attribute[] @relation("product_attribute_value_product_idToproduct")
+  product_order                                                 product_order[]
+
+  @@index([location_id], map: "IDX_D34A04AD64D218E")
+  @@index([status_id], map: "IDX_D34A04AD6BF700BD")
+  @@index([owner_id], map: "IDX_D34A04AD7E3C61F9")
+  @@index([type_id], map: "IDX_D34A04ADC54C8C93")
+}
+
+model product_attribute {
+  product_id                                          Int
+  attribute_id                                        Int
+  value_product_id                                    Int?
+  value                                               String    @db.VarChar(255)
+  quantity                                            Int?
+  external_id                                         Int?
+  product_product_attribute_product_idToproduct       product   @relation("product_attribute_product_idToproduct", fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_94DA59764584665A")
+  product_product_attribute_value_product_idToproduct product?  @relation("product_attribute_value_product_idToproduct", fields: [value_product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_94DA597667C3E2E6")
+  attribute                                           attribute @relation(fields: [attribute_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_94DA5976B6E62EFA")
+
+  @@id([product_id, attribute_id])
+  @@index([product_id], map: "IDX_94DA59764584665A")
+  @@index([value_product_id], map: "IDX_94DA597667C3E2E6")
+  @@index([attribute_id], map: "IDX_94DA5976B6E62EFA")
+}
+
+model product_order {
+  id          Int        @id @default(autoincrement())
+  product_id  Int
+  order_id    Int
+  quantity    Int?
+  price       Int?
+  external_id Int?
+  aservice    aservice[]
+  product     product    @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_5475E8C44584665A")
+  aorder      aorder     @relation(fields: [order_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_5475E8C48D9F6D38")
+
+  @@index([product_id], map: "IDX_5475E8C44584665A")
+  @@index([order_id], map: "IDX_5475E8C48D9F6D38")
+}
+
+model product_status {
+  id          Int       @id @default(autoincrement())
+  is_stock    Boolean?
+  is_saleable Boolean?
+  pindex      Int?
+  name        String    @db.VarChar(255)
+  color       String?   @db.VarChar(7)
+  product     product[]
+}
+
+model product_type {
+  id                     Int                      @id @default(autoincrement())
+  name                   String                   @unique(map: "UNIQ_13675885E237E06") @db.VarChar(255)
+  pindex                 Int?
+  comment                String?                  @db.LongText
+  is_attribute           Boolean                  @default(false)
+  external_id            Int?
+  attribute              attribute[]
+  product                product[]
+  product_type_attribute product_type_attribute[]
+  product_type_task      product_type_task[]
+}
+
+model product_type_attribute {
+  product_type_id Int
+  attribute_id    Int
+  product_type    product_type @relation(fields: [product_type_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_1DD5D0C714959723")
+  attribute       attribute    @relation(fields: [attribute_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_1DD5D0C7B6E62EFA")
+
+  @@id([product_type_id, attribute_id])
+  @@index([product_type_id], map: "IDX_1DD5D0C714959723")
+  @@index([attribute_id], map: "IDX_1DD5D0C7B6E62EFA")
+}
+
+model product_type_task {
+  product_type_id Int
+  task_id         Int
+  product_type    product_type @relation(fields: [product_type_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_EBD1A8A014959723")
+  task            task         @relation(fields: [task_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_EBD1A8A08DB60186")
+
+  @@id([product_type_id, task_id])
+  @@index([product_type_id], map: "IDX_EBD1A8A014959723")
+  @@index([task_id], map: "IDX_EBD1A8A08DB60186")
+}
+
+model repair {
+  id          Int     @id @default(autoincrement())
+  order_id    Int?    @unique(map: "UNIQ_8EE434218D9F6D38")
+  description String? @db.LongText
+  damage      String? @db.LongText
+  aorder      aorder? @relation(fields: [order_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_8EE434218D9F6D38")
+}
+
+model task {
+  id                Int                 @id @default(autoincrement())
+  name              String              @db.VarChar(255)
+  description       String?             @db.LongText
+  aservice          aservice[]
+  product_type_task product_type_task[]
+}
+
+model user_location {
+  user_id     Int
+  location_id Int
+  location    location @relation(fields: [location_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_BE136DCB64D218E")
+  fos_user    fos_user @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_BE136DCBA76ED395")
+
+  @@id([user_id, location_id])
+  @@index([location_id], map: "IDX_BE136DCB64D218E")
+  @@index([user_id], map: "IDX_BE136DCBA76ED395")
+}
+
+view stock {
+  id        Int      @id
+  purchased Decimal
+  stock     Decimal
+  saleable  Decimal
+  hold      Decimal
+  sold      Decimal
+}
+
+view stock_sub {
+  id              Int      @id
+  purchased       Decimal
+  stock           Decimal
+  sale            Decimal
+  sold            Decimal
+  sold_attributed Decimal
+}
