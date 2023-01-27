@@ -1,18 +1,24 @@
 import { AppProps } from 'next/app';
 import Head from 'next/head';
-import './styles.css';
+import dynamic from 'next/dynamic';
+import { setConfig } from 'itranslator';
+import ThemeProvider from '../theme';
+import source from '../public/translations/en';
 
-function CustomApp({ Component, pageProps }: AppProps) {
+setConfig({ source });
+
+function App({ Component, pageProps }: AppProps) {
   return (
-    <>
+    <ThemeProvider>
       <Head>
-        <title>Welcome to client!</title>
+        <title>NSK</title>
       </Head>
-      <main className="app">
-        <Component {...pageProps} />
-      </main>
-    </>
+      {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+      <Component {...pageProps} />
+    </ThemeProvider>
   );
 }
 
-export default CustomApp;
+export default dynamic(() => Promise.resolve(App), {
+  ssr: false,
+});
