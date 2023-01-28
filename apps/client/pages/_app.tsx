@@ -3,7 +3,8 @@ import Head from 'next/head';
 import dynamic from 'next/dynamic';
 import { setConfig } from 'itranslator';
 import ThemeProvider from '../theme';
-import source from '../public/translations/en';
+import source from '../public/translations/nl';
+import './index.css';
 
 setConfig({ source });
 
