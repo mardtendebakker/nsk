@@ -18,7 +18,6 @@ async function bootstrap() {
     .setTitle('Revamp')
     .setDescription('The revamp Open API')
     .setVersion('1.0')
-    .addTag('revamp')
     .build();
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('openApi', app, document);
