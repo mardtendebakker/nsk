@@ -1,5 +1,11 @@
-export function Index() {
-  return <>hi</>;
+import DashboardLayout from '../layouts/dashboard';
+
+function Dashboard() {
+  return (
+    <DashboardLayout>
+      <div>hi</div>
+    </DashboardLayout>
+  );
 }
 
-export default Index;
+export default Dashboard;
