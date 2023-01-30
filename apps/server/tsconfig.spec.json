@@ -10,5 +10,5 @@
     "src/**/*.test.ts",
     "src/**/*.spec.ts",
     "src/**/*.d.ts"
-  ]
+, "src/order/order.service.spec.ts", "src/order/order-e2e.spec.ts", "src/order/order.controller.spec.ts"  ]
 }

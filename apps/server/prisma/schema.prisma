@@ -34,8 +34,8 @@ model acompany {
   external_id                         Int?
   acompany                            acompany?  @relation("acompanyToacompany", fields: [partner_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_ABB0A97D9393F8FE")
   other_acompany                      acompany[] @relation("acompanyToacompany")
-  aorder_aorder_supplier_idToacompany aorder[]   @relation("aorder_supplier_idToacompany")
-  aorder_aorder_customer_idToacompany aorder[]   @relation("aorder_customer_idToacompany")
+  supplierOrders aorder[]             @relation("aorder_supplier_idToacompany")
+  customerOrders aorder[]             @relation("aorder_customer_idToacompany")
   fos_user                            fos_user[]
   product                             product[]
 
