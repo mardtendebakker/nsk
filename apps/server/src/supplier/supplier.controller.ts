@@ -1,6 +1,7 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { FindAcompanyQueryDto } from '../common/dto/find-acompany-query.dto';
+import { FindAcompanyQueryDto } from '../company/dto/find-company-query.dto';
+import { FindCompaniesResponeDto } from '../company/dto/find-company-response.dto';
 import { SupplierService } from './supplier.service';
 
 @ApiTags('suppliers')
@@ -8,8 +9,8 @@ import { SupplierService } from './supplier.service';
 export class SupplierController {
   constructor(private readonly supplierService: SupplierService) {}
   @Get('')
-  @ApiResponse({isArray: true, type: FindAcompanyQueryDto})
+  @ApiResponse({isArray: true, type: FindCompaniesResponeDto})
   findAll(@Query() query: FindAcompanyQueryDto) {
-    return this.supplierService.getSuppliers(query);
+    return this.supplierService.getCompanies(query);
   }
 }
