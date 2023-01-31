@@ -1,7 +1,7 @@
 import { acompany } from '@prisma/client';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
-export class SuplierEntity implements acompany {
+export class AcompanyEntity implements acompany {
   @ApiProperty()
   id: number;
 

@@ -4,7 +4,7 @@ import { INestApplication } from '@nestjs/common';
 import { SupplierModule } from './supplier.module';
 import { SupplierService } from './supplier.service';
 
-describe('Order', () => {
+describe('Supplier', () => {
   let app: INestApplication;
   const findSupplierResponse =  [
     {
@@ -36,7 +36,7 @@ describe('Order', () => {
     await app.init();
   });
 
-  it(`/GET orders`, () => {
+  it(`/GET suppliers`, () => {
     return request(app.getHttpServer())
       .get('/suppliers')
       .expect(200)
