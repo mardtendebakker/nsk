@@ -3,7 +3,7 @@ import DashboardLayout from '../layouts/dashboard';
 function Dashboard() {
   return (
     <DashboardLayout>
-      <div>hi</div>
+      <div />
     </DashboardLayout>
   );
 }

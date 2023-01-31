@@ -2,10 +2,11 @@ import {
   Box, List, ListItemText, ListItemButton,
 } from '@mui/material';
 import Link from 'next/link';
-import Dashboard from '@mui/icons-material/Dashboard';
+import Dashboard from '@mui/icons-material/DashboardOutlined';
+import People from '@mui/icons-material/PeopleOutlined';
 import { trans } from 'itranslator';
 import { useRouter } from 'next/router';
-import { DASHBOARD } from '../../../pages/routes';
+import { DASHBOARD, CUSTOMERS, SUPPLIERS } from '../../../pages/routes';
 
 function NavItem(
   {
@@ -28,7 +29,7 @@ function NavItem(
           borderRadius: (theme) => theme.shape.borderRadius,
           ...(active) && {
             bgcolor: 'action.selected',
-            fontWeight: 'fontWeightBold',
+            fontWeight: 600,
           },
         }}
       >
@@ -51,6 +52,18 @@ export default function NavSection() {
             path: DASHBOARD,
             icon: <Dashboard sx={{ marginX: 1 }} />,
             active: router.pathname === DASHBOARD,
+          },
+          {
+            title: trans('customers'),
+            path: CUSTOMERS.replace('/:id', ''),
+            icon: <People sx={{ marginX: 1 }} />,
+            active: router.pathname === CUSTOMERS.replace('/:id', ''),
+          },
+          {
+            title: trans('suppliers'),
+            path: SUPPLIERS.replace('/:id', ''),
+            icon: <People sx={{ marginX: 1 }} />,
+            active: router.pathname === SUPPLIERS.replace('/:id', ''),
           },
         ].map((item) => (
           <NavItem key={item.title} item={item} />

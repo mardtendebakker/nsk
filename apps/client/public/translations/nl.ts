@@ -6,6 +6,13 @@ const translation = {
   login: 'Log in',
   dashboard: 'Dashboard',
   logout: 'Uitloggen',
+  suppliers: 'Leveranciers',
+  customers: 'Klanten',
+  isPartner: 'Is vennoot',
+  partner: 'Partner',
+  email: 'E-mailen',
+  name: 'Naam',
+  representative: 'Vertegenwoordiger',
   // http status
   200: 'Actie succesvol afgerond',
   201: 'Bron gemaakt',

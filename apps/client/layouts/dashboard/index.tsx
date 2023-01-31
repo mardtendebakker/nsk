@@ -3,7 +3,7 @@ import { Box } from '@mui/material';
 import Header from './header';
 import Nav from './nav';
 
-export default function DashboardLayout({ children }: { children: JSX.Element }) {
+export default function DashboardLayout({ children }: { children: JSX.Element | JSX.Element[] }) {
   const [open, setOpen] = useState<boolean>(false);
 
   return (

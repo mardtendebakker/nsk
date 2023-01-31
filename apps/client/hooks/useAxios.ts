@@ -26,7 +26,7 @@ const useAxios = (
 
   useEffect(() => source.current.cancel, []);
 
-  async function call(explicitPath: string, params: object, body: object, explicitMethod: Method)
+  async function call(explicitPath: string, params: object, explicitMethod: Method, body?: object)
     : AxiosPromise<AxiosResponse> {
     const headers = {};
 
@@ -49,7 +49,7 @@ const useAxios = (
   }
 
   function handleError(e: Error | AxiosError) {
-    const status = e instanceof AxiosError ? e.response.status : 500;
+    const status = (e instanceof AxiosError && e.response) ? e.response.status : 500;
 
     enqueueSnackbar(trans(status.toString()), { variant: 'error' });
   }
@@ -62,8 +62,8 @@ const useAxios = (
     /** @throws {Error} */
     call: async (
       { params, body, path: explicitPath }
-      : { params: object, body: object, path?: string }
-      = { params: {}, body: {}, path: undefined },
+      : { params: object, body?: object, path?: string }
+      = { params: {}, body: undefined, path: undefined },
       cb?: (e: Error, axiosResponse?: AxiosResponse) => void,
     ): Promise<AxiosResponse | boolean> => {
       try {
@@ -74,7 +74,7 @@ const useAxios = (
           showProgress();
         }
 
-        const resp = await call(finalPath, params, body, method);
+        const resp = await call(finalPath, params, method, body);
         setResponse(resp);
 
         if (showSuccessMessage) {
