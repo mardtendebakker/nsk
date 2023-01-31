@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { FindAcompanyQueryDto } from '../common/dto/find-acompany-query.dto';
-import { SupplierRepository } from './supplier.repository';
+import { CustomerRepository } from './customer.repository';
 
 @Injectable()
-export class SupplierService {
-  constructor(private readonly repository: SupplierRepository) {}
+export class CustomerService {
+  constructor(private readonly repository: CustomerRepository) {}
 
-  async getSuppliers(queryOptions: FindAcompanyQueryDto) {
-    const suppliers = await this.repository.getSuppliers({
+  async getCustomers(queryOptions: FindAcompanyQueryDto) {
+    const customers = await this.repository.getCustomers({
       ...queryOptions,
       select: {
         id: true,
@@ -17,6 +17,6 @@ export class SupplierService {
         partner_id: true
       },
     });
-    return suppliers;
+    return customers;
   }
 }

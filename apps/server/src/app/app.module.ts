@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { CustomerModule } from '../customer/customer.module';
 import { DashboardModule } from '../dashboard/dashboard.module';
 import { OrderModule } from '../order/order.module';
 import { SupplierModule } from '../supplier/supplier.module';
@@ -9,7 +10,8 @@ import { AppService } from './app.service';
   imports: [
     DashboardModule,
     OrderModule,
-    SupplierModule
+    SupplierModule,
+    CustomerModule
   ],
   controllers: [AppController],
   providers: [AppService],
