@@ -1,18 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { CompanyType } from '../company/comapny-type.enum';
+import { CompanyRepository } from '../company/company.repository';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
-export class CustomerRepository {
-  constructor(private prisma: PrismaService) {}
-
-  async getCustomers(params: Prisma.acompanyFindManyArgs) {
-    const {skip, cursor, select, orderBy} = params;
-    const take = params.take ? params.take : 20;
-    const where = {
-      ...params.where,
-      discr: 'c'
-    };
-    return this.prisma.acompany.findMany({ skip, take, cursor, where, select, orderBy });
+export class CustomerRepository extends CompanyRepository{
+  constructor(protected prisma: PrismaService) {
+    super(prisma, CompanyType.CUSTOMER)
   }
 }

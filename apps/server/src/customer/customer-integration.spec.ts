@@ -22,7 +22,7 @@ describe('Customer', () => {
       "partner_id": null
     },
   ]
-  const customerService = { getCustomers: () => findCustomerResponse };
+  const customerService = { getCompanies: () => findCustomerResponse };
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -40,7 +40,7 @@ describe('Customer', () => {
     return request(app.getHttpServer())
       .get('/customers')
       .expect(200)
-      .expect(customerService.getCustomers());
+      .expect(customerService.getCompanies());
   });
 
   afterAll(async () => {
