@@ -66,6 +66,9 @@ function CustomersList({
                   {customer.representative}
                 </TableCell>
                 <TableCell>
+                  {customer.email}
+                </TableCell>
+                <TableCell>
                   {Boolean(customer.is_partner)}
                 </TableCell>
               </TableRow>

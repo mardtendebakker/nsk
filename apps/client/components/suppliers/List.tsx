@@ -66,6 +66,9 @@ function SuppliersList({
                   {supplier.representative}
                 </TableCell>
                 <TableCell>
+                  {supplier.email}
+                </TableCell>
+                <TableCell>
                   {supplier.partner}
                 </TableCell>
               </TableRow>

@@ -46,7 +46,7 @@ function Customers() {
               count={count}
               page={page - 1}
               rowsPerPage={TAKE}
-              onPageChange={setPage}
+              onPageChange={(newPage) => setPage(newPage + 1)}
             />
           </Box>
         </Container>

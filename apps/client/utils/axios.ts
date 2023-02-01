@@ -25,6 +25,7 @@ export interface Customer {
   id: string,
   name?: string,
   representative?: string,
+  email?: string,
   is_partner?: number,
 }
 
@@ -32,5 +33,6 @@ export interface Supplier {
   id: string,
   name?: string,
   representative?: string,
+  email?: string,
   partner?: string,
 }
