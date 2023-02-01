@@ -7,7 +7,7 @@ import List from '../../components/suppliers/List';
 import DashboardLayout from '../../layouts/dashboard';
 import useAxios from '../../hooks/useAxios';
 import { SUPPLIERS_PATH } from '../../utils/axios';
-import { SUPPLIERS } from '../routes';
+import { SUPPLIERS } from '../../utils/routes';
 
 function Suppliers() {
   const TAKE = 10;

@@ -7,7 +7,7 @@ import List from '../../components/customers/List';
 import DashboardLayout from '../../layouts/dashboard';
 import useAxios from '../../hooks/useAxios';
 import { CUSTOMERS_PATH } from '../../utils/axios';
-import { CUSTOMERS } from '../routes';
+import { CUSTOMERS } from '../../utils/routes';
 
 function Customers() {
   const TAKE = 10;

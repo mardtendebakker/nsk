@@ -5,7 +5,7 @@ import {
 } from '@mui/material';
 import { trans } from 'itranslator';
 import { useRouter } from 'next/router';
-import { SIGN_IN } from '../../../pages/routes';
+import { SIGN_IN } from '../../../utils/routes';
 
 export default function AccountPopover() {
   const [open, setOpen] = useState(null);
