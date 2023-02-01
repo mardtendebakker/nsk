@@ -6,7 +6,7 @@ import Dashboard from '@mui/icons-material/DashboardOutlined';
 import People from '@mui/icons-material/PeopleOutlined';
 import { trans } from 'itranslator';
 import { useRouter } from 'next/router';
-import { DASHBOARD, CUSTOMERS, SUPPLIERS } from '../../../pages/routes';
+import { DASHBOARD, CUSTOMERS, SUPPLIERS } from '../../../utils/routes';
 
 function NavItem(
   {

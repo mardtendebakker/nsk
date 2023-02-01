@@ -9,7 +9,7 @@ import RemoveRedEye from '@mui/icons-material/RemoveRedEye';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { trans } from 'itranslator';
 import useForm from '../hooks/useForm';
-import { DASHBOARD } from './routes';
+import { DASHBOARD } from '../utils/routes';
 
 const initFormState = {
   email: {
