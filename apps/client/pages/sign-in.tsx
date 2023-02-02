@@ -24,7 +24,7 @@ const initFormState = {
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
-  const { formData, setValue, validate } = useForm(initFormState);
+  const { formRepresentation, setValue, validate } = useForm(initFormState);
   const router = useRouter();
 
   const handleSubmit = (e: SyntheticEvent) => {
@@ -90,21 +90,21 @@ export default function LoginPage() {
             <form onSubmit={handleSubmit}>
               <Stack spacing={3}>
                 <TextField
-                  error={Boolean(formData.email.error)}
-                  helperText={formData.email.error}
+                  error={Boolean(formRepresentation.email.error)}
+                  helperText={formRepresentation.email.error}
                   name="email"
                   label={trans('emailAddress')}
                   onChange={(e) => setValue({ field: 'email', value: e.target.value })}
                   type="email"
-                  value={formData.email.value}
+                  value={formRepresentation.email.value}
                 />
                 <TextField
-                  error={Boolean(formData.password.error)}
-                  helperText={formData.password.error}
+                  error={Boolean(formRepresentation.password.error)}
+                  helperText={formRepresentation.password.error}
                   name="password"
                   label={trans('password')}
                   onChange={(e) => setValue({ field: 'password', value: e.target.value })}
-                  value={formData.password.value}
+                  value={formRepresentation.password.value}
                   type={showPassword ? 'text' : 'password'}
                   InputProps={{
                     endAdornment: (

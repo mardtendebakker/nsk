@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 
-const getError = (field: Field, data: FormData): string | undefined => {
+export type SetValue = (payload: FieldPayload) => void;
+
+const getError = (field: Field, data: FormRepresentation): string | undefined => {
   switch (true) {
     case field.required && !field.value:
       return field.requiredMessage || 'required field';
@@ -11,24 +13,24 @@ const getError = (field: Field, data: FormData): string | undefined => {
   }
 };
 
-const useForm = (formData: FormData) : {
-  formData: FormData,
-  setValue: (payload: FieldPayload) => void,
+const useForm = (formRepresentation: FormRepresentation) : {
+  formRepresentation: FormRepresentation,
+  setValue: SetValue,
   setError: (payload: FieldErrorPayload) => void,
   validate: () => boolean,
 } => {
-  const [data, setData] = useState<FormData>(formData);
+  const [data, setData] = useState<FormRepresentation>(formRepresentation);
 
   useEffect(() => {
-    if (formData) {
-      setData(formData);
+    if (formRepresentation) {
+      setData(formRepresentation);
     }
-  }, [formData]);
+  }, [formRepresentation]);
 
   return {
-    formData: data,
+    formRepresentation: data,
     setValue: ({ field, value }: FieldPayload): void => {
-      setData((oldData: FormData) => ({
+      setData((oldData: FormRepresentation) => ({
         ...oldData,
         [field]: {
           ...data[field],
@@ -37,7 +39,7 @@ const useForm = (formData: FormData) : {
       }));
     },
     setError: ({ field, error }: FieldErrorPayload) :void => {
-      setData((oldData: FormData) => ({
+      setData((oldData: FormRepresentation) => ({
         ...oldData,
         [field]: {
           ...data[field],
@@ -54,7 +56,7 @@ const useForm = (formData: FormData) : {
           hasError = true;
         }
 
-        setData((oldData: FormData) => ({
+        setData((oldData: FormRepresentation) => ({
           ...oldData,
           [key]: {
             ...data[key],
@@ -72,13 +74,13 @@ export default useForm;
 
 interface Field {
   value: string | number;
-  validator?: (formData: FormData) => string | undefined | null;
+  validator?: (formRepresentation: FormRepresentation) => string | undefined | null;
   required?: boolean;
   requiredMessage?: string;
   error?: string;
 }
 
-interface FormData {
+export interface FormRepresentation {
   [key: string]: Field;
 }
 

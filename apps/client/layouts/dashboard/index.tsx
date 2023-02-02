@@ -10,7 +10,7 @@ export default function DashboardLayout({ children }: { children: JSX.Element | 
     <>
       <Header onOpenNav={() => setOpen(true)} />
       <Nav openNav={open} onCloseNav={() => setOpen(false)} />
-      <Box sx={{ py: 10, pl: { xs: 2, sm: 37 }, pr: 2 }}>
+      <Box sx={{ py: 10, pl: { xs: 2, lg: 37 }, pr: 2 }}>
         {children}
       </Box>
     </>

@@ -1,9 +1,9 @@
 import Head from 'next/head';
-import { Box, Container } from '@mui/material';
+import { Box, Button, Container } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { trans } from 'itranslator';
 import { useRouter } from 'next/router';
-import List from '../../components/customers/List';
+import List from '../../components/customers/list';
 import DashboardLayout from '../../layouts/dashboard';
 import useAxios from '../../hooks/useAxios';
 import { CUSTOMERS_PATH } from '../../utils/axios';
@@ -40,6 +40,11 @@ function Customers() {
         }}
       >
         <Container maxWidth={false}>
+          <Box sx={{ display: 'flex', justifyContent: 'end' }}>
+            <Button variant="contained" onClick={() => router.push(CUSTOMERS.replace(':id', 'new'))}>
+              {trans('newCustomer')}
+            </Button>
+          </Box>
           <Box sx={{ mt: 3 }}>
             <List
               customers={data}
