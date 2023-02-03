@@ -22,7 +22,7 @@ export const SUPPLIERS_PATH = '/suppliers/:id';
 export default client;
 
 export interface Customer {
-  id: string,
+  id: number,
   name?: string,
   representative?: string,
   kvk_nr?: string,
@@ -45,7 +45,7 @@ export interface Customer {
 }
 
 export interface Supplier {
-  id: string,
+  id: number,
   name?: string,
   representative?: string,
   email?: string,

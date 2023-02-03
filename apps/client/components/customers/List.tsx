@@ -1,6 +1,7 @@
 import {
   Box,
   Card,
+  IconButton,
   Table,
   TableBody,
   TableCell,
@@ -8,6 +9,7 @@ import {
   TablePagination,
   TableRow,
 } from '@mui/material';
+import Edit from '@mui/icons-material/Edit';
 import { trans } from 'itranslator';
 import { Customer } from '../../utils/axios';
 
@@ -17,12 +19,14 @@ function CustomersList({
   page,
   rowsPerPage,
   onPageChange,
+  onEdit,
 }: {
   customers: Customer[],
   count: number,
   page: number,
   rowsPerPage: number,
-  onPageChange: (newPage: number)=>void
+  onPageChange: (newPage: number)=>void,
+  onEdit: (id: number) => void
 }) {
   return (
     <Card sx={{ overflowX: 'auto' }}>
@@ -45,6 +49,7 @@ function CustomersList({
               <TableCell>
                 {trans('isPartner')}
               </TableCell>
+              <TableCell />
             </TableRow>
           </TableHead>
           <TableBody>
@@ -70,6 +75,11 @@ function CustomersList({
                 </TableCell>
                 <TableCell>
                   {Boolean(customer.is_partner)}
+                </TableCell>
+                <TableCell>
+                  <IconButton onClick={() => onEdit(customer.id)}>
+                    <Edit />
+                  </IconButton>
                 </TableCell>
               </TableRow>
             ))}

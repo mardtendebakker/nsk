@@ -27,6 +27,8 @@ function Customers() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
+  const onEdit = (customerId: number) => router.push(CUSTOMERS_PATH.replace(':id', customerId.toString()));
+
   return (
     <DashboardLayout>
       <Head>
@@ -47,6 +49,7 @@ function Customers() {
           </Box>
           <Box sx={{ mt: 3 }}>
             <List
+              onEdit={onEdit}
               customers={data}
               count={count}
               page={page - 1}
