@@ -1,9 +1,9 @@
 import Head from 'next/head';
-import { Box, Container } from '@mui/material';
+import { Box, Button, Container } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { trans } from 'itranslator';
 import { useRouter } from 'next/router';
-import List from '../../components/suppliers/List';
+import List from '../../components/suppliers/list';
 import DashboardLayout from '../../layouts/dashboard';
 import useAxios from '../../hooks/useAxios';
 import { SUPPLIERS_PATH } from '../../utils/axios';
@@ -40,6 +40,11 @@ function Suppliers() {
         }}
       >
         <Container maxWidth={false}>
+          <Box sx={{ display: 'flex', justifyContent: 'end' }}>
+            <Button variant="contained" onClick={() => router.push(SUPPLIERS.replace(':id', 'new'))}>
+              {trans('newSupplier')}
+            </Button>
+          </Box>
           <Box sx={{ mt: 3 }}>
             <List
               suppliers={data}
