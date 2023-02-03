@@ -3,7 +3,7 @@ import { Prisma } from '@prisma/client';
 import { IsInt } from 'class-validator';
 import { Type } from 'class-transformer';
 
-export class FindAcompanyQueryDto implements Prisma.acompanyFindManyArgs {
+export class FindCompanyQueryDto implements Prisma.acompanyFindManyArgs {
   @ApiPropertyOptional()
   select?: any;
 

@@ -22,7 +22,35 @@ describe('Customer', () => {
       "partner_id": null
     },
   ]
-  const customerService = { getCompanies: () => findCustomerResponse };
+  const customer = {
+    "id": 55,
+    "partner_id": null,
+    "name": "customer_test",
+    "kvk_nr": null,
+    "representative": null,
+    "email": null,
+    "phone": null,
+    "phone2": null,
+    "street": null,
+    "street_extra": null,
+    "city": null,
+    "country": null,
+    "state": null,
+    "zip": null,
+    "street2": null,
+    "street_extra2": null,
+    "city2": null,
+    "country2": null,
+    "state2": null,
+    "zip2": null,
+    "discr": "c",
+    "is_partner": null,
+    "external_id": null
+  };
+  const customerService = { 
+    findAll: () => findCustomerResponse,
+    create: () => customer 
+  };
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -40,7 +68,15 @@ describe('Customer', () => {
     return request(app.getHttpServer())
       .get('/customers')
       .expect(200)
-      .expect(customerService.getCompanies());
+      .expect(customerService.findAll());
+  });
+
+  it(`/POST customers`, () => {
+    return request(app.getHttpServer())
+      .post('/customers')
+      .send({name: customer.name})
+      .expect(201)
+      .expect(customerService.create())
   });
 
   afterAll(async () => {
