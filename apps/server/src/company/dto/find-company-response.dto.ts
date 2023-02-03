@@ -1,5 +1,5 @@
 import { ApiProperty, PickType } from "@nestjs/swagger";
-import { AcompanyEntity as CompanyEntity } from "../entities/company.entity";
+import { CompanyEntity } from "../entities/company.entity";
 
 class FindCompanyResponeDto extends PickType(CompanyEntity, [
   "id",

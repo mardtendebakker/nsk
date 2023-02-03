@@ -1,12 +1,21 @@
-import { FindAcompanyQueryDto } from './dto/find-company-query.dto';
+import { FindCompanyQueryDto } from './dto/find-company-query.dto';
 import { CompanyRepository } from './company.repository';
+import { CreateCompanyDto } from './dto/create-company.dto';
+import { CompanyDiscrimination } from './types/comapny-discrimination.enum';
 
 export class CompanyService {
-  constructor(protected readonly repository: CompanyRepository) {}
+  constructor(
+    protected readonly repository: CompanyRepository,
+    protected type: CompanyDiscrimination
+  ) {}
 
-  async getCompanies(queryOptions: FindAcompanyQueryDto) {
-    const companies = await this.repository.getCompanies({
+  findAll(queryOptions: FindCompanyQueryDto) {
+    return this.repository.findAll({
       ...queryOptions,
+      where: {
+        ...queryOptions.where,
+        discr: this.type
+      },
       select: {
         id: true,
         name: true,
@@ -15,6 +24,12 @@ export class CompanyService {
         partner_id: true
       },
     });
-    return companies;
+  }
+
+  async create(comapny: CreateCompanyDto) {
+    return this.repository.create({
+      ...comapny,
+      discr: this.type
+    });
   }
 }

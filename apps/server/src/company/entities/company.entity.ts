@@ -1,73 +1,73 @@
 import { acompany } from '@prisma/client';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
-export class AcompanyEntity implements acompany {
+export class CompanyEntity implements acompany {
   @ApiProperty()
   id: number;
 
   @ApiPropertyOptional()
-  partner_id: number;
+  partner_id: number | null;
 
   @ApiProperty()
   name: string;
   
   @ApiPropertyOptional()
-  kvk_nr: number;
+  kvk_nr: number | null;
   
   @ApiPropertyOptional()
-  representative: string;
+  representative: string | null;
   
   @ApiPropertyOptional()
-  email: string;
+  email: string | null;
   
   @ApiPropertyOptional()
-  phone: string;
+  phone: string | null;
   
   @ApiPropertyOptional()
-  phone2: string;
+  phone2: string | null;
   
   @ApiPropertyOptional()
-  street: string;
+  street: string | null;
   
   @ApiPropertyOptional()
-  street_extra: string;
+  street_extra: string | null;
   
   @ApiPropertyOptional()
-  city: string;
+  city: string | null;
   
   @ApiPropertyOptional()
-  country: string;
+  country: string | null;
   
   @ApiPropertyOptional()
-  state: string;
+  state: string | null;
   
   @ApiPropertyOptional()
-  zip: string;
+  zip: string | null;
   
   @ApiPropertyOptional()
-  street2: string;
+  street2: string | null;
   
   @ApiPropertyOptional()
-  street_extra2: string;
+  street_extra2: string | null;
   
   @ApiPropertyOptional()
-  city2: string;
+  city2: string | null;
   
   @ApiPropertyOptional()
-  country2: string;
+  country2: string | null;
   
   @ApiPropertyOptional()
-  state2: string;
+  state2: string | null;
   
   @ApiPropertyOptional()
-  zip2: string;
+  zip2: string | null;
   
   @ApiProperty()
   discr: string;
   
   @ApiPropertyOptional()
-  is_partner: number;
+  is_partner: number | null;
   
   @ApiPropertyOptional()
-  external_id: number;
+  external_id: number | null;
 }

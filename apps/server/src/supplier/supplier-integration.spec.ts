@@ -21,8 +21,37 @@ describe('Supplier', () => {
       "email": "info@jorden.nl",
       "partner_id": null
     },
-  ]
-  const supplierService = { getCompanies: () => findSupplierResponse };
+  ];
+  const supplier = {
+    "id": 50,
+    "partner_id": null,
+    "name": "supplier_test",
+    "kvk_nr": null,
+    "representative": null,
+    "email": null,
+    "phone": null,
+    "phone2": null,
+    "street": null,
+    "street_extra": null,
+    "city": null,
+    "country": null,
+    "state": null,
+    "zip": null,
+    "street2": null,
+    "street_extra2": null,
+    "city2": null,
+    "country2": null,
+    "state2": null,
+    "zip2": null,
+    "discr": "s",
+    "is_partner": null,
+    "external_id": null
+  };
+
+  const supplierService = { 
+    findAll: () => findSupplierResponse,
+    create: () => supplier
+  };
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -40,7 +69,15 @@ describe('Supplier', () => {
     return request(app.getHttpServer())
       .get('/suppliers')
       .expect(200)
-      .expect(supplierService.getCompanies());
+      .expect(supplierService.findAll());
+  });
+
+  it(`/POST supplier`, () => {
+    return request(app.getHttpServer())
+      .post('/suppliers')
+      .send({name: supplier.name})
+      .expect(201)
+      .expect(supplierService.create())
   });
 
   afterAll(async () => {
