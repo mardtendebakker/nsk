@@ -1,6 +1,7 @@
 import {
   Box,
   Card,
+  IconButton,
   Table,
   TableBody,
   TableCell,
@@ -8,6 +9,7 @@ import {
   TablePagination,
   TableRow,
 } from '@mui/material';
+import Edit from '@mui/icons-material/Edit';
 import { trans } from 'itranslator';
 import { Supplier } from '../../utils/axios';
 
@@ -17,12 +19,15 @@ function SuppliersList({
   page,
   rowsPerPage,
   onPageChange,
+  onEdit,
+
 }: {
   suppliers: Supplier[],
   count: number,
   page: number,
   rowsPerPage: number,
-  onPageChange: (newPage: number)=>void
+  onPageChange: (newPage: number)=>void,
+  onEdit: (id: number) => void
 }) {
   return (
     <Card sx={{ overflowX: 'auto' }}>
@@ -45,6 +50,7 @@ function SuppliersList({
               <TableCell>
                 {trans('partner')}
               </TableCell>
+              <TableCell />
             </TableRow>
           </TableHead>
           <TableBody>
@@ -70,6 +76,11 @@ function SuppliersList({
                 </TableCell>
                 <TableCell>
                   {supplier.partner}
+                </TableCell>
+                <TableCell>
+                  <IconButton onClick={() => onEdit(supplier.id)}>
+                    <Edit />
+                  </IconButton>
                 </TableCell>
               </TableRow>
             ))}

@@ -11,7 +11,7 @@ import DashboardLayout from '../../layouts/dashboard';
 import useAxios from '../../hooks/useAxios';
 import { Supplier, SUPPLIERS_PATH } from '../../utils/axios';
 import { SUPPLIERS } from '../../utils/routes';
-import useForm from '../../hooks/useForm';
+import useForm, { FormRepresentation } from '../../hooks/useForm';
 
 export function dataInputsFormatter(supplier?: Supplier) {
   return {
@@ -73,9 +73,33 @@ export function dataInputsFormatter(supplier?: Supplier) {
   };
 }
 
+export function formRepresentationToBody(formRepresentation: FormRepresentation): object {
+  return {
+    name: formRepresentation.name.value,
+    representative: formRepresentation.representative.value || undefined,
+    kvk_nr: formRepresentation.kvk_nr.value || undefined,
+    email: formRepresentation.email.value || undefined,
+    phone: formRepresentation.phone.value || undefined,
+    phone2: formRepresentation.phone2.value || undefined,
+    street: formRepresentation.street.value || undefined,
+    street_extra: formRepresentation.street_extra.value || undefined,
+    city: formRepresentation.city.value || undefined,
+    country: formRepresentation.country.value || undefined,
+    state: formRepresentation.state.value || undefined,
+    zip: formRepresentation.zip.value || undefined,
+    street2: formRepresentation.street2.value || undefined,
+    street_extra2: formRepresentation.street_extra2.value || undefined,
+    city2: formRepresentation.city2.value || undefined,
+    country2: formRepresentation.country2.value || undefined,
+    state2: formRepresentation.state2.value || undefined,
+    zip2: formRepresentation.zip2.value || undefined,
+    is_partner: formRepresentation.is_partner.value || undefined,
+  };
+}
+
 const initFormState = dataInputsFormatter();
 
-function PostUser() {
+function PostSupplier() {
   const router = useRouter();
 
   const { call, performing } = useAxios(
@@ -93,32 +117,17 @@ function PostUser() {
       return;
     }
 
-    const body = {
-      name: formRepresentation.name.value,
-      representative: formRepresentation.representative.value || undefined,
-      email: formRepresentation.email.value || undefined,
-      phone: formRepresentation.phone.value || undefined,
-      phone2: formRepresentation.phone2.value || undefined,
-      street: formRepresentation.street.value || undefined,
-      street_extra: formRepresentation.street_extra.value || undefined,
-      city: formRepresentation.city.value || undefined,
-      country: formRepresentation.country.value || undefined,
-      state: formRepresentation.state.value || undefined,
-      zip: formRepresentation.zip.value || undefined,
-      street2: formRepresentation.street2.value || undefined,
-      street_extra2: formRepresentation.street_extra2.value || undefined,
-      city2: formRepresentation.city2.value || undefined,
-      country2: formRepresentation.country2.value || undefined,
-      state2: formRepresentation.state2.value || undefined,
-      zip2: formRepresentation.zip2.value || undefined,
-      partner: formRepresentation.partner.value || undefined,
-    };
-
-    call({ body, path: SUPPLIERS_PATH.replace(':id', '') }, (err) => {
-      if (!err) {
-        router.push(SUPPLIERS.replace(':id', ''));
-      }
-    });
+    call(
+      {
+        body: formRepresentationToBody(formRepresentation),
+        path: SUPPLIERS_PATH.replace(':id', ''),
+      },
+      (err) => {
+        if (!err) {
+          router.push(SUPPLIERS.replace(':id', ''));
+        }
+      },
+    );
   };
 
   return (
@@ -169,4 +178,4 @@ function PostUser() {
   );
 }
 
-export default PostUser;
+export default PostSupplier;
