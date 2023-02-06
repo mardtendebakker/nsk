@@ -1,8 +1,8 @@
 import Head from 'next/head';
 import { Box, Button, Container } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { trans } from 'itranslator';
 import { useRouter } from 'next/router';
+import useTranslation from '../../hooks/useTranslation';
 import List from '../../components/customers/list';
 import DashboardLayout from '../../layouts/dashboard';
 import useAxios from '../../hooks/useAxios';
@@ -12,6 +12,7 @@ import { CUSTOMERS } from '../../utils/routes';
 function Customers() {
   const TAKE = 10;
   const router = useRouter();
+  const { trans } = useTranslation();
   const [page, setPage] = useState<number>(parseInt(router.query?.page?.toString() || '1', 10));
   const { data: { data = [], count = 0 } = {}, call } = useAxios(
     'get',

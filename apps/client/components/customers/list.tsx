@@ -10,7 +10,7 @@ import {
   TableRow,
 } from '@mui/material';
 import Edit from '@mui/icons-material/Edit';
-import { trans } from 'itranslator';
+import useTranslation from '../../hooks/useTranslation';
 import { Customer } from '../../utils/axios';
 
 function CustomersList({
@@ -28,6 +28,8 @@ function CustomersList({
   onPageChange: (newPage: number)=>void,
   onEdit: (id: number) => void
 }) {
+  const { trans } = useTranslation();
+
   return (
     <Card sx={{ overflowX: 'auto' }}>
       <Box sx={{ minWidth: 1050 }}>

@@ -12,11 +12,7 @@ const translation = {
   logout: 'Uitloggen',
   suppliers: 'Leveranciers',
   customers: 'Klanten',
-  isPartner: 'No',
-  isPartner: 'No, has Partner',
-  isPartner: 'Yes, is Partner',
-  isPartner: 'Yes, is owning Partner',
-  //this partner below is obsolete?
+  isPartner: 'Partner',
   partner: 'Partner',
   email: 'E-mail',
   name: 'Naam',

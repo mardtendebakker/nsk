@@ -5,13 +5,13 @@ import {
 import { useRouter } from 'next/router';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import { SyntheticEvent } from 'react';
-import { trans } from 'itranslator';
 import Form from '../../components/suppliers/form';
 import DashboardLayout from '../../layouts/dashboard';
 import useAxios from '../../hooks/useAxios';
 import { Supplier, SUPPLIERS_PATH } from '../../utils/axios';
 import { SUPPLIERS } from '../../utils/routes';
 import useForm, { FormRepresentation } from '../../hooks/useForm';
+import useTranslation from '../../hooks/useTranslation';
 
 export function dataInputsFormatter(supplier?: Supplier) {
   return {
@@ -101,6 +101,7 @@ const initFormState = dataInputsFormatter();
 
 function PostSupplier() {
   const router = useRouter();
+  const { trans } = useTranslation();
 
   const { call, performing } = useAxios(
     'post',

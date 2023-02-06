@@ -1,5 +1,5 @@
 const translation = {
-  // translate to german
+  // translate to english
 };
 
 export default translation;

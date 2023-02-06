@@ -7,7 +7,7 @@ import {
 import { LoadingButton } from '@mui/lab';
 import RemoveRedEye from '@mui/icons-material/RemoveRedEye';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { trans } from 'itranslator';
+import useTranslation from '../hooks/useTranslation';
 import useForm from '../hooks/useForm';
 import { DASHBOARD } from '../utils/routes';
 
@@ -23,6 +23,7 @@ const initFormState = {
 };
 
 export default function LoginPage() {
+  const { trans } = useTranslation();
   const [showPassword, setShowPassword] = useState(false);
   const { formRepresentation, setValue, validate } = useForm(initFormState);
   const router = useRouter();

@@ -4,8 +4,8 @@ import {
 import Link from 'next/link';
 import Dashboard from '@mui/icons-material/DashboardOutlined';
 import People from '@mui/icons-material/PeopleOutlined';
-import { trans } from 'itranslator';
 import { useRouter } from 'next/router';
+import useTranslation from '../../../hooks/useTranslation';
 import { DASHBOARD, CUSTOMERS, SUPPLIERS } from '../../../utils/routes';
 
 function NavItem(
@@ -42,6 +42,7 @@ function NavItem(
 
 export default function NavSection() {
   const router = useRouter();
+  const { trans } = useTranslation();
 
   return (
     <Box>
