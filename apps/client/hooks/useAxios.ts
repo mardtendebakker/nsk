@@ -10,8 +10,9 @@ export const GET = 'get';
 export const POST = 'post';
 export const PATCH = 'patch';
 export const DELETE = 'delete';
+export const PUT = 'put';
 
-type Method = 'get' | 'post' | 'patch' | 'delete';
+type Method = 'get' | 'post' | 'patch' | 'delete' | 'put';
 
 const useAxios = (
   method: Method,
@@ -30,7 +31,7 @@ const useAxios = (
     : AxiosPromise<AxiosResponse> {
     const headers = {};
 
-    if (method === POST || method === PATCH) {
+    if (method === POST || method === PATCH || method === PUT) {
       return axios[method](explicitPath, body, {
         cancelToken: source.current.token,
         params,

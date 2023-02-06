@@ -4,11 +4,12 @@ import dynamic from 'next/dynamic';
 import { setConfig } from 'itranslator';
 import { SnackbarProvider } from 'notistack';
 import ThemeProvider from '../theme';
-import source from '../public/translations/nl';
 import './index.css';
 import TopLinearProgress from '../components/topLinearProgress';
+import { localeMapping } from '../store/locale';
+import { getDefaultLocale } from '../utils/storage';
 
-setConfig({ source });
+setConfig({ source: localeMapping[getDefaultLocale()] });
 
 function App({ Component, pageProps }: AppProps) {
   return (
