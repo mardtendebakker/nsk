@@ -5,7 +5,7 @@ export class CompanyRepository {
   constructor(protected prisma: PrismaService) {}
 
   async findAll(params: Prisma.acompanyFindManyArgs) {
-    const {skip, cursor, where, select, orderBy} = params;
+    const { skip, cursor, where, select, orderBy } = params;
     const take = params.take ? params.take : 20;
     const submission = await this.prisma.$transaction([
       this.prisma.acompany.count({where}),
@@ -21,6 +21,23 @@ export class CompanyRepository {
   create(data: Prisma.acompanyCreateInput) {
     return this.prisma.acompany.create({
       data
-    })
+    });
+  }
+  
+  findOne(where: Prisma.acompanyWhereUniqueInput) {
+    return this.prisma.acompany.findUnique({
+      where,
+    });
+  }
+  
+  update(params: {
+    where: Prisma.acompanyWhereUniqueInput;
+    data: Prisma.acompanyUpdateInput;
+  }) {
+    const { where, data } = params;
+    return this.prisma.acompany.update({
+      data,
+      where,
+    });
   }
 }
