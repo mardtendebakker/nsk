@@ -77,7 +77,6 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
   return {
     name: formRepresentation.name.value,
     representative: formRepresentation.representative.value || undefined,
-    kvk_nr: formRepresentation.kvk_nr.value || undefined,
     email: formRepresentation.email.value || undefined,
     phone: formRepresentation.phone.value || undefined,
     phone2: formRepresentation.phone2.value || undefined,
@@ -93,7 +92,7 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
     country2: formRepresentation.country2.value || undefined,
     state2: formRepresentation.state2.value || undefined,
     zip2: formRepresentation.zip2.value || undefined,
-    is_partner: formRepresentation.is_partner.value || undefined,
+    partner: formRepresentation.partner.value || undefined,
   };
 }
 
