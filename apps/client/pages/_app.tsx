@@ -6,8 +6,8 @@ import { SnackbarProvider } from 'notistack';
 import ThemeProvider from '../theme';
 import './index.css';
 import TopLinearProgress from '../components/topLinearProgress';
-import { localeMapping } from '../store/locale';
 import { getDefaultLocale } from '../utils/storage';
+import { localeMapping } from '../hooks/useTranslation';
 
 setConfig({ source: localeMapping[getDefaultLocale()] });
 
