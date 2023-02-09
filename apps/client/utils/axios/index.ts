@@ -1,25 +1,21 @@
 import axios from 'axios';
+import axiosClient from './client';
+import refreshToken from './refreshTokenInterceptor';
 
+export {
+  CUSTOMERS_PATH,
+  SUPPLIERS_PATH,
+  SIGN_IN_PATH,
+  REFRESH_TOKEN_PATH,
+} from './paths';
 export { AxiosError } from 'axios';
 export type { AxiosPromise, AxiosResponse } from 'axios';
 
-const baseURL = process.env.NODE_ENV === 'development' ? 'http://localhost:3333/api' : process.env.NX_AXIOS_BASE_URL;
-
-export const client = axios.create({
-  baseURL,
-  timeout: 120000,
-  headers: {
-    Accept: 'application/json',
-    'Content-Type': 'application/json',
-  },
-});
+axiosClient.interceptors.response.use((response) => response, refreshToken);
 
 export const { CancelToken } = axios;
 
-export const CUSTOMERS_PATH = '/customers/:id';
-export const SUPPLIERS_PATH = '/suppliers/:id';
-
-export default client;
+export default axiosClient;
 
 export interface Customer {
   id: number,

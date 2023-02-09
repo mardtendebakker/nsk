@@ -16,6 +16,7 @@ const translation = {
   partner: 'Partner',
   email: 'E-mail',
   name: 'Naam',
+  username: 'gebruikersnaam',
   phone: 'Telefoon',
   phone2: 'Mobiel',
   kvkNr: 'Kvk nr',
@@ -31,6 +32,7 @@ const translation = {
   200: 'Actie succesvol afgerond',
   201: 'Bron gemaakt',
   404: 'Bron niet gevonden',
+  401: 'Foute gebruikersnaam of wachtwoord',
   500: 'Intern serverprobleem. Probeer het later alstublieft',
 };
 

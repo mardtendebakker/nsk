@@ -1,6 +1,36 @@
 import { useEffect, useState } from 'react';
-import { trans } from 'itranslator';
-import localeStore, { LOCALE_UPDATED } from '../store/locale';
+import { trans, setConfig } from 'itranslator';
+import { getDefaultLocale, setDefaultLocale } from '../utils/storage';
+import EventEmitter from '../utils/eventEmitter';
+import nlSource from '../public/translations/nl';
+import enSource from '../public/translations/en';
+import deSource from '../public/translations/de';
+
+export const LOCALE_UPDATED = 'LOCALE_UPDATED';
+
+export const localeMapping = {
+  nl: nlSource,
+  en: enSource,
+  de: deSource,
+};
+
+class LocaleEmitter extends EventEmitter {
+  #locale = getDefaultLocale() || 'nl';
+
+  get locale() { return this.#locale; }
+
+  emit(event: string, payload: string) {
+    if (LOCALE_UPDATED === event) {
+      this.#locale = payload;
+      setConfig({ source: localeMapping[payload] });
+      setDefaultLocale(payload);
+    }
+
+    return super.emit(event, payload);
+  }
+}
+
+const localeStore = new LocaleEmitter();
 
 const useTranslation = () => {
   const [locale, setLocale] = useState<string>(localeStore.locale);

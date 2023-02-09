@@ -1,4 +1,4 @@
-import { SyntheticEvent, useState } from 'react';
+import { SyntheticEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import {
@@ -10,9 +10,10 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import useTranslation from '../hooks/useTranslation';
 import useForm from '../hooks/useForm';
 import { DASHBOARD } from '../utils/routes';
+import useSecurity from '../hooks/useSecurity';
 
 const initFormState = {
-  email: {
+  username: {
     value: '',
     required: true,
   },
@@ -25,6 +26,7 @@ const initFormState = {
 export default function LoginPage() {
   const { trans } = useTranslation();
   const [showPassword, setShowPassword] = useState(false);
+  const { signIn, state: { user } } = useSecurity();
   const { formRepresentation, setValue, validate } = useForm(initFormState);
   const router = useRouter();
 
@@ -32,9 +34,18 @@ export default function LoginPage() {
     e.preventDefault();
 
     if (!validate()) {
-      router.push(DASHBOARD);
+      signIn({
+        username: formRepresentation.username.value.toString(),
+        password: formRepresentation.password.value.toString(),
+      });
     }
   };
+
+  useEffect(() => {
+    if (user) {
+      router.push(DASHBOARD);
+    }
+  }, [user, router]);
 
   return (
     <>
@@ -91,13 +102,12 @@ export default function LoginPage() {
             <form onSubmit={handleSubmit}>
               <Stack spacing={3}>
                 <TextField
-                  error={Boolean(formRepresentation.email.error)}
-                  helperText={formRepresentation.email.error}
-                  name="email"
-                  label={trans('emailAddress')}
-                  onChange={(e) => setValue({ field: 'email', value: e.target.value })}
-                  type="email"
-                  value={formRepresentation.email.value}
+                  error={Boolean(formRepresentation.username.error)}
+                  helperText={formRepresentation.username.error}
+                  name="username"
+                  label={trans('username')}
+                  onChange={(e) => setValue({ field: 'username', value: e.target.value })}
+                  value={formRepresentation.username.value}
                 />
                 <TextField
                   error={Boolean(formRepresentation.password.error)}

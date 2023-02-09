@@ -3,25 +3,19 @@ import { alpha } from '@mui/material/styles';
 import {
   Box, Divider, Typography, MenuItem, Avatar, IconButton, Popover,
 } from '@mui/material';
-import { useRouter } from 'next/router';
+import useSecurity from 'apps/client/hooks/useSecurity';
 import useTranslation from '../../../hooks/useTranslation';
-import { SIGN_IN } from '../../../utils/routes';
 
 export default function AccountPopover() {
   const [open, setOpen] = useState(null);
   const { trans } = useTranslation();
-  const router = useRouter();
-
+  const { signOut } = useSecurity();
   const handleOpen = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     setOpen(event.currentTarget);
   };
 
   const handleClose = () => {
     setOpen(null);
-  };
-
-  const handleLogout = () => {
-    router.push(SIGN_IN);
   };
 
   return (
@@ -75,7 +69,7 @@ export default function AccountPopover() {
         </Box>
 
         <Divider sx={{ borderStyle: 'dashed' }} />
-        <MenuItem onClick={handleLogout} sx={{ m: 1 }}>
+        <MenuItem onClick={signOut} sx={{ m: 1 }}>
           {trans('logout')}
         </MenuItem>
       </Popover>
