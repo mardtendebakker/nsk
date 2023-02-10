@@ -3,13 +3,13 @@ import { alpha } from '@mui/material/styles';
 import {
   Box, Divider, Typography, MenuItem, Avatar, IconButton, Popover,
 } from '@mui/material';
-import useSecurity from 'apps/client/hooks/useSecurity';
+import useSecurity from '../../../hooks/useSecurity';
 import useTranslation from '../../../hooks/useTranslation';
 
 export default function AccountPopover() {
   const [open, setOpen] = useState(null);
   const { trans } = useTranslation();
-  const { signOut } = useSecurity();
+  const { signOut, state: { user } } = useSecurity();
   const handleOpen = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     setOpen(event.currentTarget);
   };
@@ -61,10 +61,10 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle2" noWrap>
-            ##Shayan##
+            {user?.username}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            ##Shayan@gmail.com##
+            {user?.email}
           </Typography>
         </Box>
 

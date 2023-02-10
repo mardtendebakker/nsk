@@ -3,11 +3,13 @@ import { alpha } from '@mui/material/styles';
 import {
   Box, Drawer, Typography, Avatar,
 } from '@mui/material';
+import useSecurity from '../../../hooks/useSecurity';
 import useResponsive from '../../../hooks/useResponsive';
 import NavSection from '../nav-section';
 
 export default function Nav({ openNav, onCloseNav }: { openNav: boolean, onCloseNav:()=>void }) {
   const isDesktop = useResponsive('up', 'lg');
+  const { state: { user } } = useSecurity();
 
   useEffect(() => {
     if (openNav) {
@@ -32,11 +34,11 @@ export default function Nav({ openNav, onCloseNav }: { openNav: boolean, onClose
 
           <Box sx={{ ml: 2 }}>
             <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
-              ##Shayan##
+              {user?.username}
             </Typography>
 
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              ##Pro gamer##
+              {user?.email}
             </Typography>
           </Box>
         </Box>
