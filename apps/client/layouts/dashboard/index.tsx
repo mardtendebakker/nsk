@@ -8,7 +8,7 @@ import { SIGN_IN } from '../../utils/routes';
 
 export default function DashboardLayout({ children }: { children: JSX.Element | JSX.Element[] }) {
   const [open, setOpen] = useState<boolean>(false);
-  const { state: { user } } = useSecurity();
+  const { state: { user }, refreshUserInfo } = useSecurity();
   const router = useRouter();
 
   useEffect(() => {
@@ -16,6 +16,13 @@ export default function DashboardLayout({ children }: { children: JSX.Element | 
       router.push(SIGN_IN);
     }
   }, [user, router]);
+
+  useEffect(() => {
+    if (user) {
+      refreshUserInfo();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>

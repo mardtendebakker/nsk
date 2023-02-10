@@ -1,4 +1,4 @@
-import { getUser } from '../../utils/storage';
+import { getUser, clear, signIn } from '../../utils/storage';
 import EventEmitter from '../../utils/eventEmitter';
 import { State, User } from './types';
 
@@ -12,21 +12,22 @@ export const EVENTS = [
   SIGN_OUT,
 ];
 
-function reducer({ event, payload }: { event: string, payload?: User }): State {
-  return {
-    SIGN_IN_REQUEST: {
-      signIngIn: true,
-      user: null,
-    },
-    SIGN_IN_SUCCESS: {
-      signIngIn: false,
-      user: payload,
-    },
-    SIGN_OUT: {
-      user: null,
-      signIngIn: false,
-    },
-  }[event];
+function reducer(
+  currentState: State,
+  { event, payload }: { event: string, payload?: User },
+): State {
+  switch (event) {
+    case SIGN_IN_REQUEST:
+      return { signIngIn: true, user: null };
+    case SIGN_IN_SUCCESS:
+      signIn(payload);
+      return { signIngIn: false, user: payload };
+    case SIGN_OUT:
+      clear();
+      return { user: null, signIngIn: false };
+    default:
+      return currentState;
+  }
 }
 
 class SecurityEmitter extends EventEmitter {
@@ -42,7 +43,7 @@ class SecurityEmitter extends EventEmitter {
   }
 
   emit(event: string, payload?: User) {
-    const newState = reducer({ event, payload });
+    const newState = reducer(this.state, { event, payload });
     if (newState) {
       this.state = newState;
     }

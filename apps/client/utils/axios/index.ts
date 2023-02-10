@@ -7,6 +7,7 @@ export {
   SUPPLIERS_PATH,
   SIGN_IN_PATH,
   REFRESH_TOKEN_PATH,
+  USER_INFO_PATH,
 } from './paths';
 export { AxiosError } from 'axios';
 export type { AxiosPromise, AxiosResponse } from 'axios';
