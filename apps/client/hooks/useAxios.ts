@@ -17,7 +17,18 @@ type Method = 'get' | 'post' | 'patch' | 'delete' | 'put';
 const useAxios = (
   method: Method,
   path: string,
-  { withProgressBar = false, showErrorMessage = true, showSuccessMessage = false },
+  {
+    withProgressBar = false,
+    showErrorMessage = true,
+    showSuccessMessage = false,
+    customSuccessMessage,
+  }
+  : {
+    withProgressBar? : boolean,
+    showErrorMessage? : boolean,
+    showSuccessMessage? : boolean,
+    customSuccessMessage?: string
+  },
 ) => {
   const [response, setResponse] = useState<AxiosResponse>();
   const [error, setError] = useState<AxiosError>();
@@ -44,7 +55,7 @@ const useAxios = (
 
   function handleSuccess(handledResponse: AxiosResponse) {
     enqueueSnackbar(
-      trans(handledResponse.status.toString()),
+      customSuccessMessage || trans(handledResponse.status.toString()),
       { variant: 'success' },
     );
   }
@@ -78,7 +89,7 @@ const useAxios = (
         const resp = await call(finalPath, params, body);
         setResponse(resp);
 
-        if (showSuccessMessage) {
+        if (showSuccessMessage || customSuccessMessage) {
           handleSuccess(resp);
         }
 
