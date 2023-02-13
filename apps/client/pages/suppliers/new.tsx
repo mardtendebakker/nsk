@@ -5,13 +5,13 @@ import {
 import { useRouter } from 'next/router';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import { SyntheticEvent } from 'react';
-import { trans } from 'itranslator';
 import Form from '../../components/suppliers/form';
 import DashboardLayout from '../../layouts/dashboard';
 import useAxios from '../../hooks/useAxios';
 import { Supplier, SUPPLIERS_PATH } from '../../utils/axios';
 import { SUPPLIERS } from '../../utils/routes';
 import useForm, { FormRepresentation } from '../../hooks/useForm';
+import useTranslation from '../../hooks/useTranslation';
 
 export function dataInputsFormatter(supplier?: Supplier) {
   return {
@@ -77,7 +77,6 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
   return {
     name: formRepresentation.name.value,
     representative: formRepresentation.representative.value || undefined,
-    kvk_nr: formRepresentation.kvk_nr.value || undefined,
     email: formRepresentation.email.value || undefined,
     phone: formRepresentation.phone.value || undefined,
     phone2: formRepresentation.phone2.value || undefined,
@@ -93,7 +92,7 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
     country2: formRepresentation.country2.value || undefined,
     state2: formRepresentation.state2.value || undefined,
     zip2: formRepresentation.zip2.value || undefined,
-    is_partner: formRepresentation.is_partner.value || undefined,
+    partner: formRepresentation.partner.value || undefined,
   };
 }
 
@@ -101,6 +100,7 @@ const initFormState = dataInputsFormatter();
 
 function PostSupplier() {
   const router = useRouter();
+  const { trans } = useTranslation();
 
   const { call, performing } = useAxios(
     'post',

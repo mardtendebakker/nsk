@@ -5,13 +5,13 @@ import {
 import { useRouter } from 'next/router';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import { SyntheticEvent } from 'react';
-import { trans } from 'itranslator';
 import Form from '../../components/customers/form';
 import DashboardLayout from '../../layouts/dashboard';
 import useAxios from '../../hooks/useAxios';
 import { Customer, CUSTOMERS_PATH } from '../../utils/axios';
 import { CUSTOMERS } from '../../utils/routes';
 import useForm, { FormRepresentation } from '../../hooks/useForm';
+import useTranslation from '../../hooks/useTranslation';
 
 export function dataInputsFormatter(customer?: Customer) {
   return {
@@ -103,6 +103,7 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
 }
 
 function PostCustomer() {
+  const { trans } = useTranslation();
   const router = useRouter();
 
   const { call, performing } = useAxios(

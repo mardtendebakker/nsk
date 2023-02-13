@@ -2,7 +2,8 @@ import {
   Box, Stack, AppBar, Toolbar, IconButton,
 } from '@mui/material';
 import Menu from '@mui/icons-material/Menu';
-import AccountPopover from './AccountPopover';
+import AccountPopover from './accountPopover';
+import LanguagePopover from './languagePopover';
 
 export default function Header({ onOpenNav }: { onOpenNav: ()=>void }) {
   return (
@@ -29,6 +30,7 @@ export default function Header({ onOpenNav }: { onOpenNav: ()=>void }) {
             sm: 1,
           }}
         >
+          <LanguagePopover />
           <AccountPopover />
         </Stack>
       </Toolbar>

@@ -7,8 +7,8 @@ import {
   Grid,
   Typography,
 } from '@mui/material';
-import { trans } from 'itranslator';
 import { SyntheticEvent } from 'react';
+import useTranslation from '../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../hooks/useForm';
 import TextField from '../memoizedFormInput/TextField';
 
@@ -23,6 +23,8 @@ function SupplierForm({
   onSubmit: (e: SyntheticEvent) => void,
   setValue: SetValue
 }) {
+  const { trans } = useTranslation();
+
   return (
     <form onSubmit={onSubmit}>
       <Card>

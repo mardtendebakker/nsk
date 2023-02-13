@@ -5,7 +5,7 @@ import {
 import { useRouter } from 'next/router';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import { SyntheticEvent, useEffect, useMemo } from 'react';
-import { trans } from 'itranslator';
+import useTranslation from '../../hooks/useTranslation';
 import Form from '../../components/suppliers/form';
 import DashboardLayout from '../../layouts/dashboard';
 import useAxios from '../../hooks/useAxios';
@@ -15,6 +15,7 @@ import useForm from '../../hooks/useForm';
 import { dataInputsFormatter, formRepresentationToBody } from './new';
 
 function UpdateSupplier() {
+  const { trans } = useTranslation();
   const router = useRouter();
   const { id } = router.query;
 
@@ -29,7 +30,7 @@ function UpdateSupplier() {
   );
 
   const { call, performing } = useAxios(
-    'post',
+    'put',
     null,
     { withProgressBar: true, showSuccessMessage: true },
   );
@@ -62,7 +63,7 @@ function UpdateSupplier() {
     call(
       {
         body: formRepresentationToBody(formRepresentation),
-        path: SUPPLIERS_PATH.replace(':id', ''),
+        path: SUPPLIERS_PATH.replace(':id', id.toString()),
       },
       (err) => {
         if (!err) {

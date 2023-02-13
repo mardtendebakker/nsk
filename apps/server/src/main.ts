@@ -17,6 +17,12 @@ async function bootstrap() {
   app.setGlobalPrefix(globalPrefix);
   const port = process.env.PORT || 3333;
   const swaggerConfig = new DocumentBuilder()
+    .addBearerAuth({
+      description: `Please enter your JWT id token`,
+      bearerFormat: 'JWT',
+      scheme: 'bearer',
+      type: 'http',
+    })
     .setTitle('Revamp')
     .setDescription('The revamp Open API')
     .setVersion('1.0')

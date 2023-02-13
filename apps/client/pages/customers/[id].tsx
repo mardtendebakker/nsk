@@ -5,7 +5,7 @@ import {
 import { useRouter } from 'next/router';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import { SyntheticEvent, useEffect, useMemo } from 'react';
-import { trans } from 'itranslator';
+import useTranslation from '../../hooks/useTranslation';
 import Form from '../../components/customers/form';
 import DashboardLayout from '../../layouts/dashboard';
 import useAxios from '../../hooks/useAxios';
@@ -16,6 +16,8 @@ import { dataInputsFormatter, formRepresentationToBody } from './new';
 
 function UpdateCustomer() {
   const router = useRouter();
+  const { trans } = useTranslation();
+
   const { id } = router.query;
 
   const {
@@ -29,7 +31,7 @@ function UpdateCustomer() {
   );
 
   const { call, performing } = useAxios(
-    'post',
+    'put',
     null,
     { withProgressBar: true, showSuccessMessage: true },
   );
@@ -62,7 +64,7 @@ function UpdateCustomer() {
     call(
       {
         body: formRepresentationToBody(formRepresentation),
-        path: CUSTOMERS_PATH.replace(':id', ''),
+        path: CUSTOMERS_PATH.replace(':id', id.toString()),
       },
       (err) => {
         if (!err) {
