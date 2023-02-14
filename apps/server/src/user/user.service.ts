@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { CognitoUser, CognitoUserPool, CognitoUserSession } from 'amazon-cognito-identity-js';
+import { CognitoUser, CognitoUserPool } from 'amazon-cognito-identity-js';
 import { AuthService } from '../auth/auth.service';
 import { ChanngePasswordRequestDto } from './dto/change-password-request.dto';
 
