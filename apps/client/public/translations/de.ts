@@ -13,10 +13,10 @@ const translation = {
   suppliers: 'Lieferanten',
   customers: 'Kunden',
   isPartner: 'Nein',
-  isPartner: 'Nein, hat Partner',
-  isPartner: 'Ja, ist Partner',
-  isPartner: 'Ja, hat Partner-besitzt',
-  //this partner below is obsolete?
+  // isPartner: 'Nein, hat Partner',
+  // isPartner: 'Ja, ist Partner',
+  // isPartner: 'Ja, hat Partner-besitzt',
+  // this partner below is obsolete?
   partner: 'Partner',
   email: 'E-mail',
   name: 'Name',
@@ -34,9 +34,8 @@ const translation = {
   // http status
   200: 'Aktion erfolgreich abgeschlossen',
   201: 'Ressource erstellt',
-  04: 'Ressource nicht gefunden',
+  404: 'Ressource nicht gefunden',
   500: 'Internes Serverproblem. Bitte versuch es später',
 };
 
 export default translation;
-

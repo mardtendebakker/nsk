@@ -11,6 +11,7 @@ import { ConfirmationRegistrationRequestDto } from './dto/confirmation-registrat
 import { RefreshSesionRequestDto } from './dto/refresh-session-request.dto';
 import { UserAuthenticationRequestDto } from './dto/user-authentication-request.dto';
 import { UserRegisterRequestDto } from './dto/user-register-request.dto';
+import { UserUsernameDto } from './dto/user-username.dto';
 
 @Injectable()
 export class AuthService {
@@ -59,6 +60,29 @@ export class AuthService {
           if (err) {
             reject(new BadRequestException(err.message));
           } else {
+            resolve(result);
+          }
+        }
+      );
+    });
+  }
+
+  resendConfirmationCode(userUsernameDto: UserUsernameDto) {
+    const { username } = userUsernameDto;
+    const userData = {
+      Username: username,
+      Pool: this.userPool,
+    };
+    
+    const user = new CognitoUser(userData);
+    return new Promise((resolve, reject) => {
+      return user.resendConfirmationCode(
+        (err, result) => {
+          if (err) {
+            console.log(err);
+            reject(new BadRequestException(err.message));
+          } else {
+            console.log(result);
             resolve(result);
           }
         }
