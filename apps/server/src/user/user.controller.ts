@@ -2,6 +2,7 @@ import { Authentication, CognitoUser } from '@nestjs-cognito/auth';
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiBearerAuth, ApiCreatedResponse, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { ChanngePasswordRequestDto } from './dto/change-password-request.dto';
+import { ConfirmationRegistrationRequestDto } from './dto/confirmation-registration-request.dto';
 import { UserInfoDto } from './dto/user-info.dto';
 import { UserService } from './user.service';
 
@@ -19,6 +20,13 @@ export class UserController {
     return me;
   }
 
+  @Post('confirmcode')
+  @ApiBadRequestResponse(({ description: 'Invalid verification code provided, please try again.'}))
+  @ApiCreatedResponse({description: 'SUCCESS'})
+  confirmRegistration(@Body() confirmatinRegistration: ConfirmationRegistrationRequestDto) {
+    return this.userService.confirmRegistration(confirmatinRegistration);
+  }
+
   @Post('resendcode')
   @ApiBadRequestResponse(({ description: 'CodeDeliveryFailureException'}))
   @ApiCreatedResponse(({ description: '{}'}))
@@ -26,7 +34,7 @@ export class UserController {
     return this.userService.resendConfirmationCode(username);
   }
 
-  @Post('changepossword')
+  @Post('changepassword')
   @ApiUnauthorizedResponse(({ description: 'Incorrect username or password.'}))
   @ApiCreatedResponse({description: 'SUCCESS'})
   changePassword(

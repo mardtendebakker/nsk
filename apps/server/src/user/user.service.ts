@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { CognitoUser, CognitoUserPool } from 'amazon-cognito-identity-js';
 import { AuthService } from '../auth/auth.service';
 import { ChanngePasswordRequestDto } from './dto/change-password-request.dto';
+import { ConfirmationRegistrationRequestDto } from './dto/confirmation-registration-request.dto';
 
 @Injectable()
 export class UserService {
@@ -14,6 +15,29 @@ export class UserService {
     this.userPool = new CognitoUserPool({
       UserPoolId: this.congigService.get<string>('COGNITO_USER_POOL_ID'),
       ClientId: this.congigService.get<string>('COGNITO_CLIENT_ID'),
+    });
+  }
+
+  confirmRegistration(confirmationRegistrationRequest: ConfirmationRegistrationRequestDto) {
+    const { username, code } = confirmationRegistrationRequest;
+    const userData = {
+      Username: username,
+      Pool: this.userPool,
+    };
+    
+    const user = new CognitoUser(userData);
+    return new Promise((resolve, reject) => {
+      return user.confirmRegistration(
+        code,
+        true,
+        (err, result) => {
+          if (err) {
+            reject(new BadRequestException(err.message));
+          } else {
+            resolve(result);
+          }
+        }
+      );
     });
   }
 
