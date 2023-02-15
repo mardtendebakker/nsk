@@ -10,6 +10,7 @@ export {
   USER_INFO_PATH,
   SIGN_UP_PATH,
   CONFIRM_ACCOUNT_PATH,
+  CHANGE_PASSWORD_PATH,
 } from './paths';
 export { AxiosError } from 'axios';
 export type { AxiosPromise, AxiosResponse } from 'axios';

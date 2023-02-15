@@ -1,6 +1,6 @@
 import { CanceledError, AxiosError } from 'axios';
 import { getUser } from '../storage';
-import securityStore, { SIGN_IN_SUCCESS, SIGN_OUT } from '../../stores/security';
+import securityStore, { SIGN_IN_REQUEST_SUCCEEDED, SIGN_OUT } from '../../stores/security';
 import axiosClient from './client';
 import { REFRESH_TOKEN_PATH, SIGN_IN_PATH } from './paths';
 import buildUserFromResponse from './buildUserFromResponse';
@@ -30,7 +30,7 @@ export default (err: AxiosError): Promise<any> => {
         .post(REFRESH_TOKEN_PATH, { username: user.username, token: user.refreshToken })
         .then((response) => {
           const newUser = buildUserFromResponse(response);
-          securityStore.emit(SIGN_IN_SUCCESS, newUser);
+          securityStore.emit(SIGN_IN_REQUEST_SUCCEEDED, newUser);
           subscribers.map((cb) => cb(newUser.accessToken));
           subscribers = [];
           refreshRequested = false;
