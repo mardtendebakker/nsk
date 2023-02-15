@@ -1,8 +1,9 @@
 import { Body, Controller, HttpCode, Post } from '@nestjs/common';
-import { ApiBadRequestResponse, ApiCreatedResponse, ApiOkResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { CognitoUser, CognitoUserSession } from 'amazon-cognito-identity-js';
 import { AuthService } from './auth.service';
-import { ConfirmationRegistrationRequestDto } from './dto/confirmation-registration-request.dto';
+import { ConfirmPasswordRequestDto } from './dto/confirm-password-request.dto';
+import { ConfirmRegistrationRequestDto } from './dto/confirmation-registration-request.dto';
 import { RefreshSesionRequestDto } from './dto/refresh-session-request.dto';
 import { UserAuthenticationRequestDto } from './dto/user-authentication-request.dto';
 import { UserRegisterRequestDto } from './dto/user-register-request.dto';
@@ -15,7 +16,7 @@ export class AuthController {
 
   @Post('login')
   @HttpCode(200)
-  @ApiUnauthorizedResponse(({ description: 'Password attempts exceeded'}))
+  @ApiBadRequestResponse(({ description: 'Password attempts exceeded'}))
   @ApiOkResponse({type: CognitoUserSession})
   authenticateUser(@Body() userAuthentication: UserAuthenticationRequestDto) {
     return this.authService.authenticateUser(userAuthentication);
@@ -30,9 +31,9 @@ export class AuthController {
 
   @Post('confirm')
   @HttpCode(200)
-  @ApiBadRequestResponse(({ description: 'Invalid verification code provided, please try again.'}))
+  @ApiBadRequestResponse(({ description: 'Attempt limit exceeded, please try after some time.<br>Invalid verification code provided, please try again.'}))
   @ApiOkResponse({description: 'SUCCESS'})
-  confirmRegistration(@Body() confirmatinRegistration: ConfirmationRegistrationRequestDto) {
+  confirmRegistration(@Body() confirmatinRegistration: ConfirmRegistrationRequestDto) {
     return this.authService.confirmRegistration(confirmatinRegistration);
   }
 
@@ -46,8 +47,24 @@ export class AuthController {
 
   @Post('refresh')
   @HttpCode(200)
-  @ApiUnauthorizedResponse(({ description: 'Invalid Refresh Token'}))
+  @ApiBadRequestResponse(({ description: 'Invalid Refresh Token'}))
   refreshSession(@Body() refreshSession: RefreshSesionRequestDto) {
     return this.authService.refreshSession(refreshSession);
+  }
+
+  @Post('forgot')
+  @HttpCode(200)
+  @ApiBadRequestResponse(({ description: 'CodeDeliveryFailureException'}))
+  @ApiOkResponse(({ description: '{}'}))
+  forgotPassword(@Body() userUsernameDto: UserUsernameDto) {
+    return this.authService.forgotPassword(userUsernameDto);
+  }
+
+  @Post('confirmpassword')
+  @HttpCode(200)
+  @ApiBadRequestResponse(({ description: 'Attempt limit exceeded, please try after some time.<br>Invalid verification code provided, please try again.'}))
+  @ApiOkResponse(({ description: 'SUCCESS'}))
+  confirmPassword(@Body() confirmPasswordRequestDto: ConfirmPasswordRequestDto) {
+    return this.authService.confirmPassword(confirmPasswordRequestDto);
   }
 }

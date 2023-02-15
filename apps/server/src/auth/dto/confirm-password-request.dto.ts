@@ -2,8 +2,12 @@ import { ApiProperty } from "@nestjs/swagger";
 import { IsString } from "class-validator";
 import { UserUsernameDto } from "./user-username.dto";
 
-export class ConfirmRegistrationRequestDto extends UserUsernameDto {
+export class ConfirmPasswordRequestDto extends UserUsernameDto {
   @ApiProperty()
   @IsString()
-  code: string;
+  verificationCode: string;
+
+  @ApiProperty()
+  @IsString()
+  newPassword: string;
 }
