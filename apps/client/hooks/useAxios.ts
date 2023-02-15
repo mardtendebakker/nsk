@@ -77,7 +77,7 @@ const useAxios = (
       : { params?: object, body?: object, path?: string }
       = {},
       cb?: (e: Error, axiosResponse?: AxiosResponse) => void,
-    ): Promise<AxiosResponse | boolean> => {
+    ): Promise<AxiosResponse | void> => {
       try {
         const finalPath = explicitPath || path;
 
@@ -94,10 +94,10 @@ const useAxios = (
         }
 
         if (cb) {
-          cb(null, response);
+          cb(null, resp);
         }
 
-        return response;
+        return resp;
       } catch (e) {
         setError(e);
         if (showErrorMessage) {
@@ -117,7 +117,7 @@ const useAxios = (
         }
       }
 
-      return false;
+      return undefined;
     },
   };
 };

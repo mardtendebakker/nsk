@@ -1,11 +1,12 @@
 export interface State {
   user?: User,
-  signIngIn: boolean,
+  loading: boolean,
 }
 
 export interface User {
   username: string,
   email: string,
-  accessToken: string,
-  refreshToken: string
+  accessToken?: string,
+  refreshToken?: string,
+  emailVerified: boolean,
 }

@@ -9,12 +9,14 @@ import { DASHBOARD } from '../../utils/routes';
 import useSecurity from '../../hooks/useSecurity';
 import SignInForm from './signInForm';
 import SignUpForm from './signUpForm';
-import ConfirmationForm from './confirmationForm';
 
 export default function LoginPage() {
   const { trans } = useTranslation();
   const { state: { user } } = useSecurity();
-  const [selectedForm, setSelectedForm] = useState<'signIn' | 'signUp' | 'confirmation'>('signIn');
+  const [selectedForm, setSelectedForm] = useState<{
+    form: 'signIn' | 'signUp',
+    username: string | undefined
+  }>({ form: 'signIn', username: '' });
   const router = useRouter();
 
   useEffect(() => {
@@ -23,7 +25,7 @@ export default function LoginPage() {
     }
   }, [user, router]);
 
-  return (
+  return !user && (
     <>
       <Head>
         <title>{trans('signIn')}</title>
@@ -69,12 +71,10 @@ export default function LoginPage() {
               padding: (theme) => theme.spacing(12, 0),
             }}
           >
-            {SignInForm.type === selectedForm
-            && <SignInForm onFormSelected={setSelectedForm} />}
-            {SignUpForm.type === selectedForm
-            && <SignUpForm onFormSelected={setSelectedForm} />}
-            {ConfirmationForm.type === selectedForm
-            && <ConfirmationForm onFormSelected={setSelectedForm} />}
+            {SignInForm.type === selectedForm.form
+            && <SignInForm onFormSelected={setSelectedForm} username={selectedForm.username} />}
+            {SignUpForm.type === selectedForm.form
+            && <SignUpForm onFormSelected={setSelectedForm} username={selectedForm.username} />}
           </Box>
         </Container>
       </Box>

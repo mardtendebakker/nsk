@@ -1,51 +1,58 @@
 import { SyntheticEvent, useState } from 'react';
 import {
-  Stack, IconButton, InputAdornment, TextField, Typography,
+  Stack, IconButton, InputAdornment, TextField, Typography, Button,
 } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
 import RemoveRedEye from '@mui/icons-material/RemoveRedEye';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { isPassword } from '../../utils/validator';
 import useTranslation from '../../hooks/useTranslation';
-import useForm from '../../hooks/useForm';
+import useForm, { FormRepresentation } from '../../hooks/useForm';
 import useSecurity from '../../hooks/useSecurity';
 
-const initFormState = {
-  username: {
-    value: '',
-    required: true,
-  },
-  email: {
-    value: '',
-    required: true,
-  },
-  password: {
-    value: '',
-    required: true,
-  },
-};
-
 function SignUpForm(
-  { onFormSelected }:
-  { onFormSelected: (formType :'signIn' | 'signUp' | 'confirmation') => void },
+  { onFormSelected, username }:
+  {
+    onFormSelected: (object:{
+      form: 'signIn' | 'signUp',
+      username: string | undefined
+    }) => void,
+    username :string | undefined
+  },
 ) {
   const [showPassword, setShowPassword] = useState(false);
-  const { formRepresentation, setValue, validate } = useForm(initFormState);
   const { trans } = useTranslation();
-  const { signUp } = useSecurity();
+  const { formRepresentation, setValue, validate } = useForm({
+    username: {
+      value: username || '',
+      required: true,
+    },
+    email: {
+      value: '',
+      required: true,
+    },
+    password: {
+      value: '',
+      required: true,
+      validator: (data: FormRepresentation) => (!isPassword(data.password.value.toString()) ? trans('passwordRegexError') : undefined),
+    },
+  });
+  const { signUp, state: { loading } } = useSecurity();
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
 
-    if (!validate()) {
+    if (!loading && !validate()) {
+      const newUsername = formRepresentation.username.value.toString();
+
       try {
         await signUp({
-          username: formRepresentation.username.value.toString(),
+          username: newUsername,
           email: formRepresentation.email.value.toString(),
           password: formRepresentation.password.value.toString(),
         });
-        onFormSelected('confirmation');
+        onFormSelected({ form: 'signIn', username: newUsername });
       // eslint-disable-next-line no-empty
-      } catch {}
+      } catch (ee) { console.log(ee); }
     }
   };
 
@@ -102,19 +109,21 @@ function SignUpForm(
         </Stack>
         <Stack
           direction="row"
-          alignItems="center"
-          justifyContent="space-between"
+          alignItems="end"
+          justifyContent="end"
           sx={{ my: 2 }}
-        />
-        <Stack direction="row" alignItems="center" justifyContent="space-evenly" sx={{ my: 2 }}>
-          <Typography variant="button" color="primary" onClick={() => onFormSelected('signIn')} sx={{ cursor: 'pointer' }}>
+        >
+          <Typography
+            variant="button"
+            color="primary"
+            onClick={() => !loading && onFormSelected({ form: 'signIn', username: formRepresentation.username.value.toString() })}
+            sx={{ cursor: 'pointer' }}
+          >
             {trans('signIn')}
           </Typography>
-          <Typography variant="button" color="primary" onClick={() => onFormSelected('confirmation')} sx={{ cursor: 'pointer' }}>
-            {trans('confirmAccount')}
-          </Typography>
         </Stack>
-        <LoadingButton
+        <Button
+          disabled={loading}
           fullWidth
           size="large"
           type="submit"
@@ -122,7 +131,7 @@ function SignUpForm(
           onClick={handleSubmit}
         >
           {trans('signUp')}
-        </LoadingButton>
+        </Button>
       </form>
     </>
   );

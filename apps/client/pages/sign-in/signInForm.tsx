@@ -1,45 +1,50 @@
 import { SyntheticEvent, useState } from 'react';
 import {
-  Stack, IconButton, InputAdornment, TextField, Typography,
+  Stack, IconButton, InputAdornment, TextField, Typography, Button,
 } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
 import RemoveRedEye from '@mui/icons-material/RemoveRedEye';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { isPassword } from '../../utils/validator';
 import useTranslation from '../../hooks/useTranslation';
-import useForm from '../../hooks/useForm';
+import useForm, { FormRepresentation } from '../../hooks/useForm';
 import useSecurity from '../../hooks/useSecurity';
 
-const initFormState = {
-  username: {
-    value: '',
-    required: true,
-  },
-  password: {
-    value: '',
-    required: true,
-  },
-};
-
 function SignInForm(
-  { onFormSelected }:
-  { onFormSelected: (formType :'signIn' | 'signUp' | 'confirmation') => void },
+  { onFormSelected, username }:
+  {
+    onFormSelected: (object:{
+      form: 'signIn' | 'signUp',
+      username: string | undefined
+    }) => void,
+    username :string | undefined
+  },
 ) {
   const [showPassword, setShowPassword] = useState(false);
-  const { formRepresentation, setValue, validate } = useForm(initFormState);
   const { trans } = useTranslation();
-  const { signIn } = useSecurity();
+  const { formRepresentation, setValue, validate } = useForm({
+    username: {
+      value: username || '',
+      required: true,
+    },
+    password: {
+      value: '',
+      required: true,
+      validator: (data: FormRepresentation) => (!isPassword(data.password.value.toString()) ? trans('passwordRegexError') : undefined),
+    },
+  });
+  const { signIn, state: { loading } } = useSecurity();
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
 
-    if (!validate()) {
+    if (!loading && !validate()) {
       try {
         await signIn({
           username: formRepresentation.username.value.toString(),
           password: formRepresentation.password.value.toString(),
         });
       // eslint-disable-next-line no-empty
-      } catch {}
+      } catch { }
     }
   };
 
@@ -86,19 +91,21 @@ function SignInForm(
         </Stack>
         <Stack
           direction="row"
-          alignItems="center"
-          justifyContent="space-between"
+          alignItems="end"
+          justifyContent="end"
           sx={{ my: 2 }}
-        />
-        <Stack direction="row" alignItems="center" justifyContent="space-evenly" sx={{ my: 2 }}>
-          <Typography variant="button" color="primary" onClick={() => onFormSelected('signUp')} sx={{ cursor: 'pointer' }}>
+        >
+          <Typography
+            variant="button"
+            color="primary"
+            onClick={() => !loading && onFormSelected({ form: 'signUp', username: formRepresentation.username.value.toString() })}
+            sx={{ cursor: 'pointer' }}
+          >
             {trans('signUp')}
           </Typography>
-          <Typography variant="button" color="primary" onClick={() => onFormSelected('confirmation')} sx={{ cursor: 'pointer' }}>
-            {trans('confirmAccount')}
-          </Typography>
         </Stack>
-        <LoadingButton
+        <Button
+          disabled={loading}
           fullWidth
           size="large"
           type="submit"
@@ -106,7 +113,7 @@ function SignInForm(
           onClick={handleSubmit}
         >
           {trans('signIn')}
-        </LoadingButton>
+        </Button>
       </form>
     </>
   );
