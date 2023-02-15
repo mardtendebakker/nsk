@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import useSecurity from '../../hooks/useSecurity';
 import Header from './header';
 import Nav from './nav';
-import { SIGN_IN } from '../../utils/routes';
+import { SIGN_IN, ACCOUNT_VERIFICATION } from '../../utils/routes';
 
 export default function DashboardLayout({ children }: { children: JSX.Element | JSX.Element[] }) {
   const [open, setOpen] = useState<boolean>(false);
@@ -14,17 +14,19 @@ export default function DashboardLayout({ children }: { children: JSX.Element | 
   useEffect(() => {
     if (!user) {
       router.push(SIGN_IN);
+    } else if (!user.emailVerified) {
+      router.push(ACCOUNT_VERIFICATION);
     }
   }, [user, router]);
 
   useEffect(() => {
-    if (user) {
+    if (user?.emailVerified) {
       refreshUserInfo();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return (
+  return user?.emailVerified && (
     <>
       <Header onOpenNav={() => setOpen(true)} />
       <Nav openNav={open} onCloseNav={() => setOpen(false)} />
