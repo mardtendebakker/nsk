@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
   AuthenticationDetails,
@@ -8,7 +8,8 @@ import {
   CognitoUserPool,
   CognitoUserSession,
 } from 'amazon-cognito-identity-js';
-import { ConfirmationRegistrationRequestDto } from './dto/confirmation-registration-request.dto';
+import { ConfirmPasswordRequestDto } from './dto/confirm-password-request.dto';
+import { ConfirmRegistrationRequestDto } from './dto/confirmation-registration-request.dto';
 import { RefreshSesionRequestDto } from './dto/refresh-session-request.dto';
 import { UserAuthenticationRequestDto } from './dto/user-authentication-request.dto';
 import { UserRegisterRequestDto } from './dto/user-register-request.dto';
@@ -47,7 +48,7 @@ export class AuthService {
           resolve(result);
         },
         onFailure: err => {
-          reject(new UnauthorizedException(err.message));
+          reject(new BadRequestException(err.message));
         },
       });
     });
@@ -72,7 +73,7 @@ export class AuthService {
     });
   }
 
-  confirmRegistration(confirmationRegistrationRequest: ConfirmationRegistrationRequestDto) {
+  confirmRegistration(confirmationRegistrationRequest: ConfirmRegistrationRequestDto) {
     const { username, code } = confirmationRegistrationRequest;
     const userData = {
       Username: username,
@@ -134,12 +135,56 @@ export class AuthService {
         new CognitoRefreshToken({ RefreshToken: token }),
         (err, result) => {
           if (err) {
-            reject(new UnauthorizedException(err.message));
+            reject(new BadRequestException(err.message));
           } else {
             resolve(result);
           }
         }
       );
+    });
+  }
+
+  forgotPassword(userUsernameDto: UserUsernameDto) {
+    const { username } = userUsernameDto;
+
+    const userData = {
+      Username: username,
+      Pool: this.userPool,
+    };
+    
+    const user = new CognitoUser(userData);
+
+    return new Promise((resolve, reject) => {
+      return user.forgotPassword({
+        onSuccess: result => {
+          resolve(result);
+        },
+        onFailure: err => {
+          reject(new BadRequestException(err.message));
+        },
+      });
+    });
+  }
+
+  confirmPassword(confirmPasswordRequestDto: ConfirmPasswordRequestDto) {
+    const { username, verificationCode, newPassword } = confirmPasswordRequestDto;
+
+    const userData = {
+      Username: username,
+      Pool: this.userPool,
+    };
+    
+    const user = new CognitoUser(userData);
+
+    return new Promise((resolve, reject) => {
+      return user.confirmPassword(verificationCode, newPassword, {
+        onSuccess: result => {
+          resolve(result);
+        },
+        onFailure: err => {
+          reject(new BadRequestException(err.message));
+        },
+      });
     });
   }
 }
