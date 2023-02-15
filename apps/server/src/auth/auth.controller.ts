@@ -1,5 +1,5 @@
 import { Body, Controller, HttpCode, Post } from '@nestjs/common';
-import { ApiBadRequestResponse, ApiCreatedResponse, ApiOkResponse, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiCreatedResponse, ApiOkResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { CognitoUser, CognitoUserSession } from 'amazon-cognito-identity-js';
 import { AuthService } from './auth.service';
 import { ConfirmationRegistrationRequestDto } from './dto/confirmation-registration-request.dto';
