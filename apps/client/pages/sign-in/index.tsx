@@ -7,17 +7,24 @@ import {
 import useTranslation from '../../hooks/useTranslation';
 import { DASHBOARD } from '../../utils/routes';
 import useSecurity from '../../hooks/useSecurity';
-import SignInForm from './signInForm';
-import SignUpForm from './signUpForm';
+import SignInForm from '../../components/signIn/signInForm';
+import SignUpForm from '../../components/signIn/signUpForm';
+import ForgotPasswordForm from '../../components/signIn/forgoutPasswordForm';
+import { FormValues } from '../../components/signIn/types';
+import ChangePasswordForm from '../../components/signIn/changePasswordForm';
 
 export default function LoginPage() {
   const { trans } = useTranslation();
   const { state: { user } } = useSecurity();
   const [selectedForm, setSelectedForm] = useState<{
-    form: 'signIn' | 'signUp',
+    form: FormValues,
     username: string | undefined
   }>({ form: 'signIn', username: '' });
   const router = useRouter();
+
+  const handleSelectForm = ({ form, username }: { form: FormValues, username? : string }) => {
+    setSelectedForm({ form, username });
+  };
 
   useEffect(() => {
     if (user) {
@@ -72,9 +79,23 @@ export default function LoginPage() {
             }}
           >
             {SignInForm.type === selectedForm.form
-            && <SignInForm onFormSelected={setSelectedForm} username={selectedForm.username} />}
+            && <SignInForm onFormSelected={handleSelectForm} username={selectedForm.username} />}
             {SignUpForm.type === selectedForm.form
-            && <SignUpForm onFormSelected={setSelectedForm} username={selectedForm.username} />}
+            && <SignUpForm onFormSelected={handleSelectForm} username={selectedForm.username} />}
+            {ChangePasswordForm.type === selectedForm.form
+            && (
+            <ChangePasswordForm
+              onFormSelected={handleSelectForm}
+              username={selectedForm.username}
+            />
+            )}
+            {ForgotPasswordForm.type === selectedForm.form
+            && (
+            <ForgotPasswordForm
+              onFormSelected={handleSelectForm}
+              username={selectedForm.username}
+            />
+            )}
           </Box>
         </Container>
       </Box>

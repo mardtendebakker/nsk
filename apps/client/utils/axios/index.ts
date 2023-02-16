@@ -11,6 +11,8 @@ export {
   SIGN_UP_PATH,
   CONFIRM_ACCOUNT_PATH,
   CHANGE_PASSWORD_PATH,
+  SEND_VERIFICATION_CODE_PATH,
+  FORGOT_PASSWORD_PATH,
 } from './paths';
 export { AxiosError } from 'axios';
 export type { AxiosPromise, AxiosResponse } from 'axios';
