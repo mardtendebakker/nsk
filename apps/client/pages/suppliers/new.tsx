@@ -145,26 +145,24 @@ function PostSupplier() {
         }}
       >
         <Container maxWidth={false}>
-          <Box>
-            <Box
-              sx={{
-                alignItems: 'center',
-                display: 'flex',
-                justifyContent: 'space-between',
-                flexWrap: 'wrap',
-                mb: 2,
-              }}
+          <Box
+            sx={{
+              alignItems: 'center',
+              display: 'flex',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              mb: 2,
+            }}
+          >
+            <Typography
+              sx={{ m: 1 }}
+              variant="h4"
             >
-              <Typography
-                sx={{ m: 1 }}
-                variant="h4"
-              >
-                <IconButton onClick={() => router.push(SUPPLIERS.replace(':id', ''))}>
-                  <ArrowBack />
-                </IconButton>
-                {trans('newSupplier')}
-              </Typography>
-            </Box>
+              <IconButton onClick={() => router.push(SUPPLIERS.replace(':id', ''))}>
+                <ArrowBack />
+              </IconButton>
+              {trans('newSupplier')}
+            </Typography>
           </Box>
           <Form
             formRepresentation={formRepresentation}

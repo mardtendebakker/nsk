@@ -1,12 +1,15 @@
 import { useState } from 'react';
 import { alpha } from '@mui/material/styles';
 import {
-  Box, Divider, Typography, MenuItem, Avatar, IconButton, Popover,
+  Box, Divider, Typography, MenuItem, Avatar, IconButton, Popover, Stack,
 } from '@mui/material';
+import { useRouter } from 'next/router';
+import { SETTINGS } from 'apps/client/utils/routes';
 import useSecurity from '../../../hooks/useSecurity';
 import useTranslation from '../../../hooks/useTranslation';
 
 export default function AccountPopover() {
+  const router = useRouter();
   const [open, setOpen] = useState(null);
   const { trans } = useTranslation();
   const { signOut, state: { user } } = useSecurity();
@@ -67,7 +70,11 @@ export default function AccountPopover() {
             {user?.email}
           </Typography>
         </Box>
-
+        <Stack sx={{ p: 1 }}>
+          <MenuItem onClick={() => router.push(SETTINGS)}>
+            {trans('settings')}
+          </MenuItem>
+        </Stack>
         <Divider sx={{ borderStyle: 'dashed' }} />
         <MenuItem onClick={signOut} sx={{ m: 1 }}>
           {trans('logout')}

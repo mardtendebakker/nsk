@@ -89,26 +89,24 @@ function UpdateCustomer() {
         }}
       >
         <Container maxWidth={false}>
-          <Box>
-            <Box
-              sx={{
-                alignItems: 'center',
-                display: 'flex',
-                justifyContent: 'space-between',
-                flexWrap: 'wrap',
-                mb: 2,
-              }}
+          <Box
+            sx={{
+              alignItems: 'center',
+              display: 'flex',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              mb: 2,
+            }}
+          >
+            <Typography
+              sx={{ m: 1 }}
+              variant="h4"
             >
-              <Typography
-                sx={{ m: 1 }}
-                variant="h4"
-              >
-                <IconButton onClick={() => router.push(CUSTOMERS.replace(':id', ''))}>
-                  <ArrowBack />
-                </IconButton>
-                {trans('editCustomer')}
-              </Typography>
-            </Box>
+              <IconButton onClick={() => router.push(CUSTOMERS.replace(':id', ''))}>
+                <ArrowBack />
+              </IconButton>
+              {trans('editCustomer')}
+            </Typography>
           </Box>
           <Form
             formRepresentation={formRepresentation}
