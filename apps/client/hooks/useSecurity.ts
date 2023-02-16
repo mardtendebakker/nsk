@@ -15,18 +15,33 @@ import securityStore, {
   SIGN_UP_REQUEST_FAILED,
   SIGN_UP_REQUEST_SUCCEEDED,
   SIGN_IN_REQUEST_SUCCEEDED,
+  FORGOT_PASSWORD_REQUEST,
+  FORGOT_PASSWORD_REQUEST_SUCCEEDED,
+  FORGOT_PASSWORD_REQUEST_FAILED,
+  CHANGE_PASSWORD_REQUEST,
+  CHANGE_PASSWORD_REQUEST_SUCCEEDED,
+  CHANGE_PASSWORD_REQUEST_FAILED,
 } from '../stores/security';
 import axiosClient, {
-  SIGN_IN_PATH, SIGN_UP_PATH, USER_INFO_PATH, CONFIRM_ACCOUNT_PATH,
+  SIGN_IN_PATH,
+  SIGN_UP_PATH,
+  USER_INFO_PATH,
+  CONFIRM_ACCOUNT_PATH,
+  SEND_VERIFICATION_CODE_PATH,
+  FORGOT_PASSWORD_PATH,
 } from '../utils/axios';
 import useAxios from './useAxios';
 import useTranslation from './useTranslation';
-import { SEND_VERIFICATION_CODE_PATH } from '../utils/axios/paths';
 import buildUserFromResponse from '../utils/axios/buildUserFromResponse';
+import { CONFIRM_PASSWORD_PATH } from '../utils/axios/paths';
 
 const useSecurity = (): {
   state: State,
   signIn: (object: { username: string, password: string }) => Promise<void>,
+  forgotPassword: (object: { username: string }) => Promise<void>,
+  changePassword: (
+    object: { username: string, verificationCode: string, newPassword: string }
+  ) => Promise<void>,
   signUp: (object: { username: string, email: string, password: string }) => Promise<void>,
   confirmAccount: (object: { code: string }) => Promise<void>,
   sendVerificationCode: () => Promise<void>,
@@ -51,6 +66,16 @@ const useSecurity = (): {
     SEND_VERIFICATION_CODE_PATH,
     { withProgressBar: true, showSuccessMessage: true },
   );
+  const { call: forgotPasswordCall } = useAxios(
+    'post',
+    FORGOT_PASSWORD_PATH,
+    { withProgressBar: true, customSuccessMessage: trans('forgotPasswordSuccessMessage') },
+  );
+  const { call: changePasswordCall } = useAxios(
+    'post',
+    CONFIRM_PASSWORD_PATH,
+    { withProgressBar: true, showSuccessMessage: true },
+  );
 
   function cb() {
     setState(securityStore.state);
@@ -70,15 +95,33 @@ const useSecurity = (): {
 
   return {
     state,
-    signOut: () : void => {
+    signOut: () => {
       securityStore.emit(SIGN_OUT);
     },
-    signIn: async (
-      { username, password }: { username: string, password: string },
-    ) : Promise<void> => {
+    forgotPassword: async (body) => {
+      securityStore.emit(FORGOT_PASSWORD_REQUEST);
+      try {
+        await forgotPasswordCall({ body });
+        securityStore.emit(FORGOT_PASSWORD_REQUEST_SUCCEEDED);
+      } catch (e) {
+        securityStore.emit(FORGOT_PASSWORD_REQUEST_FAILED);
+        throw e;
+      }
+    },
+    changePassword: async (body) => {
+      securityStore.emit(CHANGE_PASSWORD_REQUEST);
+      try {
+        await changePasswordCall({ body });
+        securityStore.emit(CHANGE_PASSWORD_REQUEST_SUCCEEDED);
+      } catch (e) {
+        securityStore.emit(CHANGE_PASSWORD_REQUEST_FAILED);
+        throw e;
+      }
+    },
+    signIn: async (body) : Promise<void> => {
       securityStore.emit(SIGN_IN_REQUEST);
       try {
-        const response = await call({ body: { username, password } });
+        const response = await call({ body });
         if (response) {
           securityStore.emit(SIGN_IN_REQUEST_SUCCEEDED, buildUserFromResponse(response));
         }
@@ -87,10 +130,7 @@ const useSecurity = (): {
         throw e;
       }
     },
-    signUp: async (
-      { username, email, password }:
-      { username: string, email: string, password: string },
-    ) => {
+    signUp: async ({ username, email, password }) => {
       securityStore.emit(SIGN_UP_REQUEST);
       try {
         await signUpCall({ body: { username, email, password } });
@@ -100,7 +140,7 @@ const useSecurity = (): {
         throw e;
       }
     },
-    confirmAccount: async ({ code }: { code: string }) => {
+    confirmAccount: async ({ code }) => {
       securityStore.emit(CONFIRM_ACCOUNT_REQUEST);
       try {
         await confirmAccountCall({ body: { code, username: state.user.username } });
@@ -110,7 +150,7 @@ const useSecurity = (): {
         throw e;
       }
     },
-    refreshUserInfo: async (): Promise<void> => {
+    refreshUserInfo: async () => {
       const response = await axiosClient.get(USER_INFO_PATH);
       securityStore.emit(
         SIGN_IN_REQUEST_SUCCEEDED,
@@ -121,7 +161,7 @@ const useSecurity = (): {
         },
       );
     },
-    sendVerificationCode: async (): Promise<void> => {
+    sendVerificationCode: async () => {
       securityStore.emit(SEND_VERIFICATION_CODE_REQUEST);
       try {
         await sendVerificationCodeCall({ body: { username: state.user.username } });

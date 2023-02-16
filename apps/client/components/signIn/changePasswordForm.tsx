@@ -1,6 +1,6 @@
 import { SyntheticEvent, useState } from 'react';
 import {
-  Stack, IconButton, InputAdornment, TextField, Typography, Button,
+  Stack, TextField, Typography, Button, IconButton, InputAdornment,
 } from '@mui/material';
 import RemoveRedEye from '@mui/icons-material/RemoveRedEye';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -8,14 +8,12 @@ import { isPassword } from '../../utils/validator';
 import useTranslation from '../../hooks/useTranslation';
 import useForm, { FormRepresentation } from '../../hooks/useForm';
 import useSecurity from '../../hooks/useSecurity';
+import { SetSelectedForm } from './types';
 
-function SignInForm(
+function ChangePasswordForm(
   { onFormSelected, username }:
   {
-    onFormSelected: (object:{
-      form: 'signIn' | 'signUp',
-      username: string | undefined
-    }) => void,
+    onFormSelected: SetSelectedForm,
     username :string | undefined
   },
 ) {
@@ -26,23 +24,29 @@ function SignInForm(
       value: username || '',
       required: true,
     },
-    password: {
+    verificationCode: {
       value: '',
       required: true,
-      validator: (data: FormRepresentation) => (!isPassword(data.password.value.toString()) ? trans('passwordRegexError') : undefined),
+    },
+    newPassword: {
+      value: '',
+      required: true,
+      validator: (data: FormRepresentation) => (!isPassword(data.newPassword.value.toString()) ? trans('passwordRegexError') : undefined),
     },
   });
-  const { signIn, state: { loading } } = useSecurity();
+  const { changePassword, state: { loading } } = useSecurity();
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
 
     if (!loading && !validate()) {
       try {
-        await signIn({
+        await changePassword({
           username: formRepresentation.username.value.toString(),
-          password: formRepresentation.password.value.toString(),
+          verificationCode: formRepresentation.verificationCode.value.toString(),
+          newPassword: formRepresentation.newPassword.value.toString(),
         });
+        onFormSelected({ form: 'signIn', username: formRepresentation.username.value.toString() });
       // eslint-disable-next-line no-empty
       } catch { }
     }
@@ -55,10 +59,25 @@ function SignInForm(
         variant="h4"
         gutterBottom
       >
-        {trans('signIn')}
+        {trans('changePassword')}
       </Typography>
+      <Stack
+        direction="row"
+        alignItems="end"
+        justifyContent="end"
+        sx={{ mb: 2 }}
+      >
+        <Typography
+          variant="button"
+          color="primary"
+          onClick={() => !loading && onFormSelected({ form: 'signIn', username: formRepresentation.username.value.toString() })}
+          sx={{ cursor: 'pointer' }}
+        >
+          {trans('signIn')}
+        </Typography>
+      </Stack>
       <form onSubmit={handleSubmit}>
-        <Stack spacing={3}>
+        <Stack spacing={3} sx={{ mb: 2 }}>
           <TextField
             error={Boolean(formRepresentation.username.error)}
             helperText={formRepresentation.username.error}
@@ -68,12 +87,20 @@ function SignInForm(
             value={formRepresentation.username.value}
           />
           <TextField
-            error={Boolean(formRepresentation.password.error)}
-            helperText={formRepresentation.password.error}
-            name="password"
-            label={trans('password')}
-            onChange={(e) => setValue({ field: 'password', value: e.target.value })}
-            value={formRepresentation.password.value}
+            error={Boolean(formRepresentation.verificationCode.error)}
+            helperText={formRepresentation.verificationCode.error}
+            name="verificationCode"
+            label={trans('verificationCode')}
+            onChange={(e) => setValue({ field: 'verificationCode', value: e.target.value })}
+            value={formRepresentation.verificationCode.value}
+          />
+          <TextField
+            error={Boolean(formRepresentation.newPassword.error)}
+            helperText={formRepresentation.newPassword.error}
+            name="newPassword"
+            label={trans('newPassword')}
+            onChange={(e) => setValue({ field: 'newPassword', value: e.target.value })}
+            value={formRepresentation.newPassword.value}
             type={showPassword ? 'text' : 'password'}
             InputProps={{
               endAdornment: (
@@ -89,21 +116,6 @@ function SignInForm(
             }}
           />
         </Stack>
-        <Stack
-          direction="row"
-          alignItems="end"
-          justifyContent="end"
-          sx={{ my: 2 }}
-        >
-          <Typography
-            variant="button"
-            color="primary"
-            onClick={() => !loading && onFormSelected({ form: 'signUp', username: formRepresentation.username.value.toString() })}
-            sx={{ cursor: 'pointer' }}
-          >
-            {trans('signUp')}
-          </Typography>
-        </Stack>
         <Button
           disabled={loading}
           fullWidth
@@ -112,13 +124,13 @@ function SignInForm(
           variant="contained"
           onClick={handleSubmit}
         >
-          {trans('signIn')}
+          {trans('confirm')}
         </Button>
       </form>
     </>
   );
 }
 
-SignInForm.type = 'signIn';
+ChangePasswordForm.type = 'changePassword';
 
-export default SignInForm;
+export default ChangePasswordForm;

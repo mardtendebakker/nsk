@@ -8,14 +8,12 @@ import { isPassword } from '../../utils/validator';
 import useTranslation from '../../hooks/useTranslation';
 import useForm, { FormRepresentation } from '../../hooks/useForm';
 import useSecurity from '../../hooks/useSecurity';
+import { SetSelectedForm } from './types';
 
-function SignUpForm(
+function SignInForm(
   { onFormSelected, username }:
   {
-    onFormSelected: (object:{
-      form: 'signIn' | 'signUp',
-      username: string | undefined
-    }) => void,
+    onFormSelected: SetSelectedForm,
     username :string | undefined
   },
 ) {
@@ -26,33 +24,25 @@ function SignUpForm(
       value: username || '',
       required: true,
     },
-    email: {
-      value: '',
-      required: true,
-    },
     password: {
       value: '',
       required: true,
       validator: (data: FormRepresentation) => (!isPassword(data.password.value.toString()) ? trans('passwordRegexError') : undefined),
     },
   });
-  const { signUp, state: { loading } } = useSecurity();
+  const { signIn, state: { loading } } = useSecurity();
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
 
     if (!loading && !validate()) {
-      const newUsername = formRepresentation.username.value.toString();
-
       try {
-        await signUp({
-          username: newUsername,
-          email: formRepresentation.email.value.toString(),
+        await signIn({
+          username: formRepresentation.username.value.toString(),
           password: formRepresentation.password.value.toString(),
         });
-        onFormSelected({ form: 'signIn', username: newUsername });
       // eslint-disable-next-line no-empty
-      } catch (ee) { console.log(ee); }
+      } catch { }
     }
   };
 
@@ -63,11 +53,25 @@ function SignUpForm(
         variant="h4"
         gutterBottom
       >
-        {trans('signUp')}
+        {trans('signIn')}
       </Typography>
-
+      <Stack
+        direction="row"
+        alignItems="end"
+        justifyContent="end"
+        sx={{ mb: 2 }}
+      >
+        <Typography
+          variant="button"
+          color="primary"
+          onClick={() => !loading && onFormSelected({ form: 'signUp', username: formRepresentation.username.value.toString() })}
+          sx={{ cursor: 'pointer' }}
+        >
+          {trans('signUp')}
+        </Typography>
+      </Stack>
       <form onSubmit={handleSubmit}>
-        <Stack spacing={3}>
+        <Stack spacing={3} sx={{ mb: 2 }}>
           <TextField
             error={Boolean(formRepresentation.username.error)}
             helperText={formRepresentation.username.error}
@@ -75,15 +79,6 @@ function SignUpForm(
             label={trans('username')}
             onChange={(e) => setValue({ field: 'username', value: e.target.value })}
             value={formRepresentation.username.value}
-          />
-          <TextField
-            error={Boolean(formRepresentation.email.error)}
-            helperText={formRepresentation.email.error}
-            name="email"
-            type="email"
-            label={trans('email')}
-            onChange={(e) => setValue({ field: 'email', value: e.target.value })}
-            value={formRepresentation.email.value}
           />
           <TextField
             error={Boolean(formRepresentation.password.error)}
@@ -111,15 +106,15 @@ function SignUpForm(
           direction="row"
           alignItems="end"
           justifyContent="end"
-          sx={{ my: 2 }}
+          sx={{ mb: 2 }}
         >
           <Typography
             variant="button"
             color="primary"
-            onClick={() => !loading && onFormSelected({ form: 'signIn', username: formRepresentation.username.value.toString() })}
+            onClick={() => !loading && onFormSelected({ form: 'forgotPassword', username: formRepresentation.username.value.toString() })}
             sx={{ cursor: 'pointer' }}
           >
-            {trans('signIn')}
+            {trans('forgotPasswordQuestion')}
           </Typography>
         </Stack>
         <Button
@@ -130,13 +125,13 @@ function SignUpForm(
           variant="contained"
           onClick={handleSubmit}
         >
-          {trans('signUp')}
+          {trans('signIn')}
         </Button>
       </form>
     </>
   );
 }
 
-SignUpForm.type = 'signUp';
+SignInForm.type = 'signIn';
 
-export default SignUpForm;
+export default SignInForm;

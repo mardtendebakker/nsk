@@ -2,7 +2,7 @@ import Head from 'next/head';
 import { Box, Container } from '@mui/material';
 import useTranslation from '../../hooks/useTranslation';
 import DashboardLayout from '../../layouts/dashboard';
-import PasswordForm from './PasswordForm';
+import PasswordForm from '../../components/settings/passwordForm';
 
 function Settings() {
   const { trans } = useTranslation();
