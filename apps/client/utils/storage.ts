@@ -1,12 +1,12 @@
 import { User } from '../stores/security/types';
 
 export const setDefaultLocale = (locale: string) => typeof window !== 'undefined' && localStorage.setItem('defaultLocale', locale);
-export const getDefaultLocale = (): string | undefined => typeof window !== 'undefined' && (localStorage.getItem('defaultLocale') || 'nl');
-export const getUser = (): undefined | User => {
+export const getDefaultLocale = (): string | null => typeof window !== 'undefined' && (localStorage.getItem('defaultLocale') || 'nl');
+export const getUser = (): null | User => {
   try {
     return JSON.parse(localStorage.getItem('user'));
   } catch {
-    return undefined;
+    return null;
   }
 };
 
