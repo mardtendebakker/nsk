@@ -4,10 +4,10 @@ import { CognitoUser, CognitoUserSession } from 'amazon-cognito-identity-js';
 import { AuthService } from './auth.service';
 import { ConfirmPasswordRequestDto } from './dto/confirm-password-request.dto';
 import { ConfirmRegistrationRequestDto } from './dto/confirmation-registration-request.dto';
+import { EmailOrUsernameDto } from './dto/email-or-username.dto';
 import { RefreshSesionRequestDto } from './dto/refresh-session-request.dto';
 import { UserAuthenticationRequestDto } from './dto/user-authentication-request.dto';
 import { UserRegisterRequestDto } from './dto/user-register-request.dto';
-import { UserUsernameDto } from './dto/user-username.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -41,8 +41,8 @@ export class AuthController {
   @HttpCode(200)
   @ApiBadRequestResponse(({ description: 'CodeDeliveryFailureException'}))
   @ApiOkResponse(({ description: '{}'}))
-  resendConfirmationCode(@Body() userUsernameDto: UserUsernameDto) {
-    return this.authService.resendConfirmationCode(userUsernameDto);
+  resendConfirmationCode(@Body() emailOrUsernameDto: EmailOrUsernameDto) {
+    return this.authService.resendConfirmationCode(emailOrUsernameDto);
   }
 
   @Post('refresh')
@@ -56,8 +56,8 @@ export class AuthController {
   @HttpCode(200)
   @ApiBadRequestResponse(({ description: 'CodeDeliveryFailureException'}))
   @ApiOkResponse(({ description: '{}'}))
-  forgotPassword(@Body() userUsernameDto: UserUsernameDto) {
-    return this.authService.forgotPassword(userUsernameDto);
+  forgotPassword(@Body() emailOrUsernameDto: EmailOrUsernameDto) {
+    return this.authService.forgotPassword(emailOrUsernameDto);
   }
 
   @Post('confirmpassword')
