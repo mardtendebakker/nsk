@@ -1,8 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsEmail, IsString } from "class-validator";
-import { UserAuthenticationRequestDto } from "./user-authentication-request.dto";
 
-export class UserRegisterRequestDto extends UserAuthenticationRequestDto {
+export class UserRegisterRequestDto {
   @ApiProperty()
   @IsEmail()
   email: string;

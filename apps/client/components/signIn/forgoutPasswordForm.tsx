@@ -8,16 +8,13 @@ import useSecurity from '../../hooks/useSecurity';
 import { SetSelectedForm } from './types';
 
 function ForgotPasswordForm(
-  { onFormSelected, emailOrUsername }:
-  {
-    onFormSelected: SetSelectedForm,
-    emailOrUsername :string | undefined
-  },
+  { onFormSelected }:
+  { onFormSelected: SetSelectedForm },
 ) {
   const { trans } = useTranslation();
   const { formRepresentation, setValue, validate } = useForm({
     emailOrUsername: {
-      value: emailOrUsername || '',
+      value: '',
       required: true,
     },
   });
