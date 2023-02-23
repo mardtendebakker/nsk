@@ -8,16 +8,16 @@ import useSecurity from '../../hooks/useSecurity';
 import { SetSelectedForm } from './types';
 
 function ForgotPasswordForm(
-  { onFormSelected, username }:
+  { onFormSelected, emailOrUsername }:
   {
     onFormSelected: SetSelectedForm,
-    username :string | undefined
+    emailOrUsername :string | undefined
   },
 ) {
   const { trans } = useTranslation();
   const { formRepresentation, setValue, validate } = useForm({
-    username: {
-      value: username || '',
+    emailOrUsername: {
+      value: emailOrUsername || '',
       required: true,
     },
   });
@@ -28,8 +28,10 @@ function ForgotPasswordForm(
 
     if (!loading && !validate()) {
       try {
-        await forgotPassword({ username: formRepresentation.username.value.toString() });
-        onFormSelected({ form: 'changePassword', username });
+        await forgotPassword({
+          emailOrUsername: formRepresentation.emailOrUsername.value.toString(),
+        });
+        onFormSelected({ form: 'changePassword' });
       // eslint-disable-next-line no-empty
       } catch { }
     }
@@ -53,7 +55,7 @@ function ForgotPasswordForm(
         <Typography
           variant="button"
           color="primary"
-          onClick={() => !loading && onFormSelected({ form: 'signIn', username: formRepresentation.username.value.toString() })}
+          onClick={() => !loading && onFormSelected({ form: 'signIn' })}
           sx={{ cursor: 'pointer' }}
         >
           {trans('signIn')}
@@ -62,12 +64,12 @@ function ForgotPasswordForm(
       <form onSubmit={handleSubmit}>
         <Stack spacing={3} sx={{ mb: 2 }}>
           <TextField
-            error={Boolean(formRepresentation.username.error)}
-            helperText={formRepresentation.username.error}
-            name="username"
-            label={trans('username')}
-            onChange={(e) => setValue({ field: 'username', value: e.target.value })}
-            value={formRepresentation.username.value}
+            error={Boolean(formRepresentation.emailOrUsername.error)}
+            helperText={formRepresentation.emailOrUsername.error}
+            name="emailOrUsername"
+            label={trans('emailOrUsername')}
+            onChange={(e) => setValue({ field: 'emailOrUsername', value: e.target.value })}
+            value={formRepresentation.emailOrUsername.value}
           />
         </Stack>
         <Button
