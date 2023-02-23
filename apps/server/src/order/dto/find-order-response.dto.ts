@@ -1,11 +1,16 @@
 import { ApiProperty, PickType } from "@nestjs/swagger";
 import { OrderEntity } from "../entities/order.entity";
 
-export class FindOrderResponeDto extends PickType(OrderEntity, [
-  "order_nr",
+class FindOrderResponeDto extends PickType(OrderEntity, [
   "id",
+  "order_nr",
   "order_date",
-] as const) {
+] as const) {}
+
+export class FindOrdersResponeDto {
   @ApiProperty()
-  company_name: string;
+  count: number;
+  
+  @ApiProperty()
+  data: FindOrderResponeDto[]
 }

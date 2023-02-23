@@ -3,12 +3,13 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CognitoAuthModule } from "@nestjs-cognito/auth";
 import { CustomerModule } from '../customer/customer.module';
 import { DashboardModule } from '../dashboard/dashboard.module';
-import { OrderModule } from '../order/order.module';
 import { SupplierModule } from '../supplier/supplier.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from '../auth/auth.module';
 import { UserModule } from '../user/user.module';
+import { SaleModule } from '../sale/sale.module';
+import { PurcahseModule } from '../purchase/purcahse.module';
 
 @Module({
   imports: [
@@ -30,9 +31,10 @@ import { UserModule } from '../user/user.module';
     AuthModule,
     UserModule,
     DashboardModule,
-    OrderModule,
+    CustomerModule,
     SupplierModule,
-    CustomerModule
+    SaleModule,
+    PurcahseModule
   ],
   controllers: [AppController],
   providers: [AppService],
