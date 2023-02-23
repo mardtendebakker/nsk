@@ -38,7 +38,7 @@ import { CONFIRM_PASSWORD_PATH } from '../utils/axios/paths';
 const useSecurity = (): {
   state: State,
   signIn: (object: { username: string, password: string }) => Promise<void>,
-  forgotPassword: (object: { username: string }) => Promise<void>,
+  forgotPassword: (object: { emailOrUsername: string }) => Promise<void>,
   changePassword: (
     object: { username: string, verificationCode: string, newPassword: string }
   ) => Promise<void>,

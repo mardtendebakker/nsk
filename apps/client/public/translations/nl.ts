@@ -43,10 +43,11 @@ const translation = {
   signUpSuccessMessage: 'Registratie verwerkt. Controleer uw e-mailadres met de bevestigingscode.',
   confirmAccountSuccessMessage: 'Account succesvol bevestigd.',
   forgotPasswordQuestion: 'Wachtwoord vergeten ?',
-  forgotPasswordMessage: 'U ontvangt een verificatiecode op de e-mail die betrekking heeft op de gebruikersnaam die u gaat gebruiken.',
+  forgotPasswordMessage: 'U ontvangt een verificatiecode op de e-mail die betrekking heeft op de gebruikersnaam of het e-mailadres dat u gaat gebruiken.',
   passwordRegexError: 'wachtwoord moet minimaal 8 lang zijn met een hoofdletter, een kleine letter, een cijfer en een speciaal teken.',
   verificationCode: 'Verificatie code',
   forgotPasswordSuccessMessage: 'Er is een e-mail verzonden met een verificatiecode.',
+  emailOrUsername: 'E-mail of gebruikersnaam',
   // http status
   200: 'Actie succesvol afgerond',
   201: 'Bron gemaakt',
