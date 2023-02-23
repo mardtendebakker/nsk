@@ -1,8 +1,8 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsString } from "class-validator";
-import { UserUsernameDto } from "./user-username.dto";
+import { EmailOrUsernameDto } from "./email-or-username.dto";
 
-export class ConfirmPasswordRequestDto extends UserUsernameDto {
+export class ConfirmPasswordRequestDto extends EmailOrUsernameDto {
   @ApiProperty()
   @IsString()
   verificationCode: string;

@@ -10,10 +10,10 @@ import {
 } from 'amazon-cognito-identity-js';
 import { ConfirmPasswordRequestDto } from './dto/confirm-password-request.dto';
 import { ConfirmRegistrationRequestDto } from './dto/confirmation-registration-request.dto';
+import { EmailOrUsernameDto } from './dto/email-or-username.dto';
 import { RefreshSesionRequestDto } from './dto/refresh-session-request.dto';
 import { UserAuthenticationRequestDto } from './dto/user-authentication-request.dto';
 import { UserRegisterRequestDto } from './dto/user-register-request.dto';
-import { UserUsernameDto } from './dto/user-username.dto';
 
 @Injectable()
 export class AuthService {
@@ -28,15 +28,15 @@ export class AuthService {
   }
 
   authenticateUser(user: UserAuthenticationRequestDto): Promise<CognitoUserSession> {
-    const { username, password } = user;
+    const { emailOrUsername, password } = user;
 
     const authenticationDetails = new AuthenticationDetails({
-      Username: username,
+      Username: emailOrUsername,
       Password: password,
     });
     
     const userData = {
-      Username: username,
+      Username: emailOrUsername,
       Pool: this.userPool,
     };
 
@@ -74,9 +74,9 @@ export class AuthService {
   }
 
   confirmRegistration(confirmationRegistrationRequest: ConfirmRegistrationRequestDto) {
-    const { username, code } = confirmationRegistrationRequest;
+    const { emailOrUsername, code } = confirmationRegistrationRequest;
     const userData = {
-      Username: username,
+      Username: emailOrUsername,
       Pool: this.userPool,
     };
     
@@ -96,11 +96,11 @@ export class AuthService {
     });
   }
 
-  resendConfirmationCode(userUsernameDto: UserUsernameDto) {
-    const { username } = userUsernameDto;
+  resendConfirmationCode(emailOrUsernameDto: EmailOrUsernameDto) {
+    const { emailOrUsername } = emailOrUsernameDto;
 
     const userData = {
-      Username: username,
+      Username: emailOrUsername,
       Pool: this.userPool,
     };
     
@@ -122,9 +122,9 @@ export class AuthService {
   }
 
   refreshSession(refreshSessionRequest: RefreshSesionRequestDto) {
-    const { username, token } = refreshSessionRequest;
+    const { emailOrUsername, token } = refreshSessionRequest;
     const userData = {
-      Username: username,
+      Username: emailOrUsername,
       Pool: this.userPool,
     };
     
@@ -144,11 +144,11 @@ export class AuthService {
     });
   }
 
-  forgotPassword(userUsernameDto: UserUsernameDto) {
-    const { username } = userUsernameDto;
+  forgotPassword(emailOrUsernameDto: EmailOrUsernameDto) {
+    const { emailOrUsername } = emailOrUsernameDto;
 
     const userData = {
-      Username: username,
+      Username: emailOrUsername,
       Pool: this.userPool,
     };
     
@@ -167,10 +167,10 @@ export class AuthService {
   }
 
   confirmPassword(confirmPasswordRequestDto: ConfirmPasswordRequestDto) {
-    const { username, verificationCode, newPassword } = confirmPasswordRequestDto;
+    const { emailOrUsername, verificationCode, newPassword } = confirmPasswordRequestDto;
 
     const userData = {
-      Username: username,
+      Username: emailOrUsername,
       Pool: this.userPool,
     };
     

@@ -1,8 +1,8 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsString } from "class-validator";
-import { UserUsernameDto } from "./user-username.dto";
+import { EmailOrUsernameDto } from "./email-or-username.dto";
 
-export class RefreshSesionRequestDto extends UserUsernameDto {
+export class RefreshSesionRequestDto extends EmailOrUsernameDto {
   @ApiProperty()
   @IsString()
   token: string;

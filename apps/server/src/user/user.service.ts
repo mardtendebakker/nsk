@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { CognitoUser, CognitoUserPool } from 'amazon-cognito-identity-js';
 import { AuthService } from '../auth/auth.service';
+import { UserAuthenticationRequestDto } from '../auth/dto/user-authentication-request.dto';
 import { ChanngePasswordRequestDto } from './dto/change-password-request.dto';
 
 @Injectable()
@@ -17,17 +18,19 @@ export class UserService {
     });
   }
 
-  async changePassword(username: string, channgePasswordRequestDto: ChanngePasswordRequestDto) {
+  async changePassword(emailOrUsername: string, channgePasswordRequestDto: ChanngePasswordRequestDto) {
     const { oldPassword, newPassword } = channgePasswordRequestDto;
     const userData = {
-      Username: username,
+      Username: emailOrUsername,
       Pool: this.userPool,
     };
 
-    const cognitoUSerSession = await this.authService.authenticateUser({
-      username: username,
+    const userAuthenticationRequestDto: UserAuthenticationRequestDto = {
+      emailOrUsername: emailOrUsername,
       password: oldPassword
-    })
+    };
+
+    const cognitoUSerSession = await this.authService.authenticateUser(userAuthenticationRequestDto);
     
     const user = new CognitoUser(userData);
     user.setSignInUserSession(cognitoUSerSession);
