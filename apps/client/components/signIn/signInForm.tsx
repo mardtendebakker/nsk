@@ -11,17 +11,14 @@ import useSecurity from '../../hooks/useSecurity';
 import { SetSelectedForm } from './types';
 
 function SignInForm(
-  { onFormSelected, username }:
-  {
-    onFormSelected: SetSelectedForm,
-    username :string | undefined
-  },
+  { onFormSelected }:
+  { onFormSelected: SetSelectedForm },
 ) {
   const [showPassword, setShowPassword] = useState(false);
   const { trans } = useTranslation();
   const { formRepresentation, setValue, validate } = useForm({
-    username: {
-      value: username || '',
+    emailOrUsername: {
+      value: '',
       required: true,
     },
     password: {
@@ -38,7 +35,7 @@ function SignInForm(
     if (!loading && !validate()) {
       try {
         await signIn({
-          username: formRepresentation.username.value.toString(),
+          emailOrUsername: formRepresentation.emailOrUsername.value.toString(),
           password: formRepresentation.password.value.toString(),
         });
       // eslint-disable-next-line no-empty
@@ -64,7 +61,7 @@ function SignInForm(
         <Typography
           variant="button"
           color="primary"
-          onClick={() => !loading && onFormSelected({ form: 'signUp', username: formRepresentation.username.value.toString() })}
+          onClick={() => !loading && onFormSelected({ form: 'signUp' })}
           sx={{ cursor: 'pointer' }}
         >
           {trans('signUp')}
@@ -73,12 +70,12 @@ function SignInForm(
       <form onSubmit={handleSubmit}>
         <Stack spacing={3} sx={{ mb: 2 }}>
           <TextField
-            error={Boolean(formRepresentation.username.error)}
-            helperText={formRepresentation.username.error}
-            name="username"
-            label={trans('username')}
-            onChange={(e) => setValue({ field: 'username', value: e.target.value })}
-            value={formRepresentation.username.value}
+            error={Boolean(formRepresentation.emailOrUsername.error)}
+            helperText={formRepresentation.emailOrUsername.error}
+            name="emailOrUsername"
+            label={trans('emailOrUsername')}
+            onChange={(e) => setValue({ field: 'emailOrUsername', value: e.target.value })}
+            value={formRepresentation.emailOrUsername.value}
           />
           <TextField
             error={Boolean(formRepresentation.password.error)}
@@ -111,7 +108,7 @@ function SignInForm(
           <Typography
             variant="button"
             color="primary"
-            onClick={() => !loading && onFormSelected({ form: 'forgotPassword', username: formRepresentation.username.value.toString() })}
+            onClick={() => !loading && onFormSelected({ form: 'forgotPassword' })}
             sx={{ cursor: 'pointer' }}
           >
             {trans('forgotPasswordQuestion')}

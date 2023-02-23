@@ -37,10 +37,10 @@ import { CONFIRM_PASSWORD_PATH } from '../utils/axios/paths';
 
 const useSecurity = (): {
   state: State,
-  signIn: (object: { username: string, password: string }) => Promise<void>,
+  signIn: (object: { emailOrUsername: string, password: string }) => Promise<void>,
   forgotPassword: (object: { emailOrUsername: string }) => Promise<void>,
   changePassword: (
-    object: { username: string, verificationCode: string, newPassword: string }
+    object: { emailOrUsername: string, verificationCode: string, newPassword: string }
   ) => Promise<void>,
   signUp: (object: { username: string, email: string, password: string }) => Promise<void>,
   confirmAccount: (object: { code: string }) => Promise<void>,
@@ -143,7 +143,7 @@ const useSecurity = (): {
     confirmAccount: async ({ code }) => {
       securityStore.emit(CONFIRM_ACCOUNT_REQUEST);
       try {
-        await confirmAccountCall({ body: { code, username: state.user.username } });
+        await confirmAccountCall({ body: { code, emailOrUsername: state.user.username } });
         securityStore.emit(CONFIRM_ACCOUNT_REQUEST_SUCCEEDED);
       } catch (e) {
         securityStore.emit(CONFIRM_ACCOUNT_REQUEST_FAILED);
@@ -164,7 +164,7 @@ const useSecurity = (): {
     sendVerificationCode: async () => {
       securityStore.emit(SEND_VERIFICATION_CODE_REQUEST);
       try {
-        await sendVerificationCodeCall({ body: { username: state.user.username } });
+        await sendVerificationCodeCall({ body: { emailOrUsername: state.user.username } });
         securityStore.emit(SEND_VERIFICATION_CODE_REQUEST_SUCCEEDED);
       } catch (e) {
         securityStore.emit(SEND_VERIFICATION_CODE_REQUEST_FAILED);

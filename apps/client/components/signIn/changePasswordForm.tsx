@@ -11,17 +11,14 @@ import useSecurity from '../../hooks/useSecurity';
 import { SetSelectedForm } from './types';
 
 function ChangePasswordForm(
-  { onFormSelected, username }:
-  {
-    onFormSelected: SetSelectedForm,
-    username :string | undefined
-  },
+  { onFormSelected }:
+  { onFormSelected: SetSelectedForm },
 ) {
   const [showPassword, setShowPassword] = useState(false);
   const { trans } = useTranslation();
   const { formRepresentation, setValue, validate } = useForm({
-    username: {
-      value: username || '',
+    emailOrUsername: {
+      value: '',
       required: true,
     },
     verificationCode: {
@@ -42,11 +39,11 @@ function ChangePasswordForm(
     if (!loading && !validate()) {
       try {
         await changePassword({
-          username: formRepresentation.username.value.toString(),
+          emailOrUsername: formRepresentation.emailOrUsername.value.toString(),
           verificationCode: formRepresentation.verificationCode.value.toString(),
           newPassword: formRepresentation.newPassword.value.toString(),
         });
-        onFormSelected({ form: 'signIn', username: formRepresentation.username.value.toString() });
+        onFormSelected({ form: 'signIn' });
       // eslint-disable-next-line no-empty
       } catch { }
     }
@@ -70,7 +67,7 @@ function ChangePasswordForm(
         <Typography
           variant="button"
           color="primary"
-          onClick={() => !loading && onFormSelected({ form: 'signIn', username: formRepresentation.username.value.toString() })}
+          onClick={() => !loading && onFormSelected({ form: 'signIn' })}
           sx={{ cursor: 'pointer' }}
         >
           {trans('signIn')}
@@ -79,12 +76,12 @@ function ChangePasswordForm(
       <form onSubmit={handleSubmit}>
         <Stack spacing={3} sx={{ mb: 2 }}>
           <TextField
-            error={Boolean(formRepresentation.username.error)}
-            helperText={formRepresentation.username.error}
-            name="username"
-            label={trans('username')}
-            onChange={(e) => setValue({ field: 'username', value: e.target.value })}
-            value={formRepresentation.username.value}
+            error={Boolean(formRepresentation.emailOrUsername.error)}
+            helperText={formRepresentation.emailOrUsername.error}
+            name="emailOrUsername"
+            label={trans('emailOrUsername')}
+            onChange={(e) => setValue({ field: 'emailOrUsername', value: e.target.value })}
+            value={formRepresentation.emailOrUsername.value}
           />
           <TextField
             error={Boolean(formRepresentation.verificationCode.error)}

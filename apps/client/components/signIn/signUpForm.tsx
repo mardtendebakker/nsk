@@ -11,17 +11,14 @@ import useSecurity from '../../hooks/useSecurity';
 import { SetSelectedForm } from './types';
 
 function SignUpForm(
-  { onFormSelected, username }:
-  {
-    onFormSelected: SetSelectedForm,
-    username :string | undefined
-  },
+  { onFormSelected }:
+  { onFormSelected: SetSelectedForm },
 ) {
   const [showPassword, setShowPassword] = useState(false);
   const { trans } = useTranslation();
   const { formRepresentation, setValue, validate } = useForm({
     username: {
-      value: username || '',
+      value: '',
       required: true,
     },
     email: {
@@ -48,7 +45,7 @@ function SignUpForm(
           email: formRepresentation.email.value.toString(),
           password: formRepresentation.password.value.toString(),
         });
-        onFormSelected({ form: 'signIn', username: newUsername });
+        onFormSelected({ form: 'signIn' });
       // eslint-disable-next-line no-empty
       } catch (ee) { console.log(ee); }
     }
@@ -72,7 +69,7 @@ function SignUpForm(
         <Typography
           variant="button"
           color="primary"
-          onClick={() => !loading && onFormSelected({ form: 'signIn', username: formRepresentation.username.value.toString() })}
+          onClick={() => !loading && onFormSelected({ form: 'signIn' })}
           sx={{ cursor: 'pointer' }}
         >
           {trans('signIn')}
