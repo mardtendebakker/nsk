@@ -1,7 +1,7 @@
 import { FindCompanyQueryDto } from './dto/find-company-query.dto';
 import { CompanyRepository } from './company.repository';
 import { CreateCompanyDto } from './dto/create-company.dto';
-import { CompanyDiscrimination } from './types/comapny-discrimination.enum';
+import { CompanyDiscrimination } from './types/company-discrimination.enum';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 
 export class CompanyService {
