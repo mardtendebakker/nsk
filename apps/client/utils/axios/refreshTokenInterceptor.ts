@@ -10,7 +10,7 @@ const EXCLUDED_PATHS = [SIGN_IN_PATH, REFRESH_TOKEN_PATH];
 let subscribers: Array<(token: string)=>void> = [];
 let refreshRequested = false;
 
-export default (err: AxiosError): Promise<any> => {
+export default async (err: AxiosError): Promise<any> => {
   const { config, response: originalResponse } = err;
 
   if (err instanceof CanceledError) {
@@ -22,30 +22,29 @@ export default (err: AxiosError): Promise<any> => {
   }
 
   if (originalResponse?.status === 401) {
+    subscribers.push((token) => {
+      config.headers.Authorization = `Bearer ${token}`;
+      axiosClient(config);
+    });
+
     if (!refreshRequested) {
       refreshRequested = true;
       const user = getUser();
 
-      axiosClient
-        .post(REFRESH_TOKEN_PATH, { username: user.username, token: user.refreshToken })
-        .then((response) => {
-          const newUser = buildUserFromResponse(response);
-          securityStore.emit(SIGN_IN_REQUEST_SUCCEEDED, newUser);
-          subscribers.map((cb) => cb(newUser.accessToken));
-          subscribers = [];
-          refreshRequested = false;
-        })
-        .catch(() => {
-          securityStore.emit(SIGN_OUT);
-        });
+      try {
+        const response = await axiosClient
+          .post(REFRESH_TOKEN_PATH, { username: user.username, token: user.refreshToken });
+        const newUser = buildUserFromResponse(response);
+        securityStore.emit(SIGN_IN_REQUEST_SUCCEEDED, newUser);
+        subscribers.map((cb) => cb(newUser.accessToken));
+        subscribers = [];
+        refreshRequested = false;
+      } catch {
+        securityStore.emit(SIGN_OUT);
+      }
     }
 
-    return new Promise((resolve): void => {
-      subscribers.push((token) => {
-        config.headers.Authorization = `Bearer ${token}`;
-        resolve(axiosClient(config));
-      });
-    });
+    return Promise.resolve();
   }
 
   return Promise.reject(err);
