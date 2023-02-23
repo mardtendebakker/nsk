@@ -50,6 +50,7 @@
     "require-jsdoc": "off",
     "react/react-in-jsx-scope": "off",
     "import/extensions": "off",
+    "import/no-named-as-default": "off",
     "react/jsx-filename-extension": [
       1,
       {

@@ -28,7 +28,7 @@ const useAxios = (
     showErrorMessage? : boolean,
     showSuccessMessage? : boolean,
     customSuccessMessage?: string
-  },
+  } = {},
 ) => {
   const [response, setResponse] = useState<AxiosResponse>();
   const [error, setError] = useState<AxiosError>();
@@ -40,13 +40,10 @@ const useAxios = (
 
   async function call(explicitPath: string, params?: object, body?: object)
     : AxiosPromise<AxiosResponse> {
-    const headers = {};
-
     if (method === POST || method === PATCH || method === PUT) {
       return axios[method](explicitPath, body, {
         cancelToken: source.current.token,
         params,
-        headers,
       });
     }
 

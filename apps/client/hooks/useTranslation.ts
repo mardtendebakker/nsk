@@ -30,7 +30,7 @@ class LocaleEmitter extends EventEmitter {
   }
 }
 
-const localeStore = new LocaleEmitter();
+export const localeStore = new LocaleEmitter();
 
 const useTranslation = () => {
   const [locale, setLocale] = useState<string>(localeStore.locale);
