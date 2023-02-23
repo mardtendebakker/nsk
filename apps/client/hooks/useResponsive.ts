@@ -14,8 +14,6 @@ export default function useResponsive(
 
   const mediaBetween = useMediaQuery(theme.breakpoints.between(start, end));
 
-  const mediaOnly = useMediaQuery(theme.breakpoints.only(start));
-
   if (query === 'up') {
     return mediaUp;
   }
@@ -28,5 +26,5 @@ export default function useResponsive(
     return mediaBetween;
   }
 
-  return mediaOnly;
+  return false;
 }
