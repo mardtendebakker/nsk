@@ -7,7 +7,20 @@ This repository holds version 4 of Nexxus, which is made open source under the t
 Background
 My name is Mardten de Bakker and I am owner of Copiatek based in The Netherlands. Copiatek refurbishes and recycles used computer hardware and uses Nexxus for its own daily workflow. It started when I was manager in a thrift store and I wanted to sell used computers. There was no way to keep track of the computers and to know in what state they were in. Since we operated multiple stores, I also needed to keep track of the computers at several locations and which ones were sold.
 
-The software evolved and it became possible to also keep track of other objects besides computers. Also a billing part was introduced so we could use it as a point of sales. Since we picked up objects through the country, I needed a way to keep track of logistics and distribution. This repository tracks the development of the latest version of Nexxus Stock Keeping. Written in nest.js and node.js
+The software evolved and it became possible to also keep track of other objects besides computers. Also a billing part was introduced so we could use it as a point of sales. Since we picked up objects through the country, I needed a way to keep track of logistics and distribution. 
+his repository tracks the development of the latest version of Nexxus Stock Keeping. Written in nest.js and node.js
 
 Easy to set up. Intuitive UI. Any small business and enterprises can use this software for free. Extra modules available for low priced subscriptions. 
-Why change your business model and workflows to use any propriety software? Simply adjust Nexxus to fit into your business model and workflows.
+Why change your business model and workflows to use any proprietary software? 
+Simply adjust Nexxus to fit into your business model and workflows.
+
+It doesn't maater what kind of company you have. Construction, retail, broker, transport etc. 
+If you have any or all of the below
+1 (digital) goods moving around 
+2 customers 
+3 suppliers
+4) unlimited locations
+5) fleet
+6) partners, resellers or affiliates
+then you may want to use Nexxus
+
