@@ -66,7 +66,7 @@ describe('refreshTokenInterceptor', () => {
 
     expect(mockedClient.post).toHaveBeenCalledWith(
       '/auth/refresh',
-      { username: user.username, token: user.refreshToken },
+      { emailOrUsername: user.username, token: user.refreshToken },
     );
 
     expect(buildUserFromResponse).toHaveReturnedWith(user);
@@ -81,7 +81,7 @@ describe('refreshTokenInterceptor', () => {
 
     expect(mockedClient.post).toHaveBeenCalledWith(
       '/auth/refresh',
-      { username: user.username, token: user.refreshToken },
+      { emailOrUsername: user.username, token: user.refreshToken },
     );
     expect(buildUserFromResponse).toHaveReturnedWith(user);
     expect(securityStore.emit).toHaveBeenCalledWith('SIGN_IN_REQUEST_SUCCEEDED', user);
@@ -94,7 +94,7 @@ describe('refreshTokenInterceptor', () => {
 
     expect(mockedClient.post).toHaveBeenCalledWith(
       '/auth/refresh',
-      { username: user.username, token: user.refreshToken },
+      { emailOrUsername: user.username, token: user.refreshToken },
     );
     expect(securityStore.emit).toHaveBeenCalledWith('SIGN_OUT');
   });

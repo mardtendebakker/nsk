@@ -22,9 +22,11 @@ export default async (err: AxiosError): Promise<any> => {
   }
 
   if (originalResponse?.status === 401) {
-    subscribers.push((token) => {
-      config.headers.Authorization = `Bearer ${token}`;
-      axiosClient(config);
+    const returnPromise = new Promise((resolve) => {
+      subscribers.push((token) => {
+        config.headers.Authorization = `Bearer ${token}`;
+        resolve(axiosClient(config));
+      });
     });
 
     if (!refreshRequested) {
@@ -33,18 +35,18 @@ export default async (err: AxiosError): Promise<any> => {
 
       try {
         const response = await axiosClient
-          .post(REFRESH_TOKEN_PATH, { username: user.username, token: user.refreshToken });
+          .post(REFRESH_TOKEN_PATH, { emailOrUsername: user.username, token: user.refreshToken });
         const newUser = buildUserFromResponse(response);
         securityStore.emit(SIGN_IN_REQUEST_SUCCEEDED, newUser);
         subscribers.map((cb) => cb(newUser.accessToken));
         subscribers = [];
         refreshRequested = false;
       } catch {
-        securityStore.emit(SIGN_OUT);
+        return securityStore.emit(SIGN_OUT);
       }
     }
 
-    return Promise.resolve();
+    return returnPromise;
   }
 
   return Promise.reject(err);
