@@ -5,7 +5,7 @@ Easy to set up. Intuitive UI. Any small business and enterprises can use this so
 Why change your business model and workflows to use any proprietary software? 
 Simply adjust Nexxus to fit into your business model and workflows.
 
-It doesn't maater what kind of company you have. Construction, retail, broker, transport etc. 
+It doesn't matter what kind of company you have. Construction, retail, broker, transport etc. 
 If you have any or all of the below
 1- (digital) goods moving around 
 2- customers 
