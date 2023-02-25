@@ -1,9 +1,6 @@
 # NSK
 Nexxus Stock Keeping - Organise Purchase Orders, Sales Orders and Stock. Keep track of customers, suppliers and partners. Logistics planning, distribution and keep live track of your fleet. Webshop with backorders, invoices and POS implementation. Use existing barcodes or let Nexxus create them for you. Connect to and integrate any application based on API.
 
-Nexxus stock keeping is a webapplication made for purchase, sale and keeping of any stock. The application is built upon most popular technologies. 
-This repository holds version 4 of Nexxus, which is made open source under the terms of the GNU General Public License (GNU GPLv3).
-
 Easy to set up. Intuitive UI. Any small business and enterprises can use this software for free. Extra modules available for low priced subscriptions. 
 Why change your business model and workflows to use any proprietary software? 
 Simply adjust Nexxus to fit into your business model and workflows.
