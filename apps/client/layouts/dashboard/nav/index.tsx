@@ -27,7 +27,7 @@ export default function Nav({ openNav, onCloseNav }: { openNav: boolean, onClose
           alignItems: 'center',
           padding: (theme) => theme.spacing(2, 2.5),
           borderRadius: (theme) => theme.shape.borderRadius,
-          backgroundColor: (theme) => alpha(theme.palette.grey[500], 0.12),
+          backgroundColor: (theme) => alpha(theme.palette.grey[40], 0.12),
         }}
         >
           <Avatar alt="photoURL" />

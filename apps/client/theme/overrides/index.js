@@ -8,6 +8,8 @@ import Tooltip from './Tooltip';
 import Backdrop from './Backdrop';
 import Typography from './Typography';
 import Autocomplete from './Autocomplete';
+import AppBar from './AppBar';
+import Avatar from './Avatar';
 
 // ----------------------------------------------------------------------
 
@@ -22,5 +24,7 @@ export default function ComponentsOverrides(theme) {
     Backdrop(theme),
     Typography(theme),
     Autocomplete(theme),
+    AppBar(theme),
+    Avatar(theme),
   );
 }

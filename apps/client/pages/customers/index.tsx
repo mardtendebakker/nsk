@@ -1,5 +1,8 @@
 import Head from 'next/head';
-import { Box, Button, Container } from '@mui/material';
+import {
+  Box, Button, Container, Typography,
+} from '@mui/material';
+import Add from '@mui/icons-material/Add';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import useTranslation from '../../hooks/useTranslation';
@@ -43,8 +46,10 @@ function Customers() {
         }}
       >
         <Container maxWidth={false}>
-          <Box sx={{ display: 'flex', justifyContent: 'end' }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Typography variant="h3">{trans('customers')}</Typography>
             <Button variant="contained" onClick={() => router.push(CUSTOMERS.replace(':id', 'new'))}>
+              <Add />
               {trans('newCustomer')}
             </Button>
           </Box>
@@ -52,10 +57,9 @@ function Customers() {
             <List
               onEdit={onEdit}
               customers={data}
-              count={count}
-              page={page - 1}
-              rowsPerPage={TAKE}
-              onPageChange={(newPage) => setPage(newPage + 1)}
+              count={Math.floor(count / 10)}
+              page={page}
+              onChange={(newPage) => setPage(newPage)}
             />
           </Box>
         </Container>

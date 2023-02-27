@@ -5,23 +5,19 @@ import { alpha } from '@mui/material/styles';
 // SETUP COLORS
 const GREY = {
   0: '#FFFFFF',
-  100: '#F9FAFB',
-  200: '#F4F6F8',
-  300: '#DFE3E8',
-  400: '#C4CDD5',
-  500: '#919EAB',
-  600: '#637381',
-  700: '#454F5B',
-  800: '#212B36',
-  900: '#161C24',
+  10: '#F5F7F9',
+  20: '#EDF1F7',
+  30: '#D5DCE6',
+  40: '#B7C2D1',
+  50: '#65758B',
+  60: '#4D5D73',
+  70: '#1B2A3D',
 };
 
 const PRIMARY = {
-  lighter: '#D1E9FC',
-  light: '#76B0F1',
-  main: '#2065D1',
-  dark: '#103996',
-  darker: '#061B64',
+  light: '#D2DCF5',
+  main: '#1F0E8F',
+  dark: '#1B2A3D',
   contrastText: '#fff',
 };
 
@@ -35,21 +31,15 @@ const SECONDARY = {
 };
 
 const INFO = {
-  lighter: '#D0F2FF',
-  light: '#74CAFF',
-  main: '#1890FF',
-  dark: '#0C53B7',
-  darker: '#04297A',
+  light: '#D7E0FA',
+  main: '#1F0E8F',
   contrastText: '#fff',
 };
 
 const SUCCESS = {
-  lighter: '#E9FCD4',
-  light: '#AAF27F',
-  main: '#54D62C',
-  dark: '#229A16',
-  darker: '#08660D',
-  contrastText: GREY[800],
+  light: '#CAEAEB',
+  main: '#008A40',
+  contrastText: GREY[70],
 };
 
 const WARNING = {
@@ -58,15 +48,14 @@ const WARNING = {
   main: '#FFC107',
   dark: '#B78103',
   darker: '#7A4F01',
-  contrastText: GREY[800],
+  contrastText: GREY[70],
 };
 
 const ERROR = {
-  lighter: '#FFE7D9',
-  light: '#FFA48D',
-  main: '#FF4842',
+  light: '#F6D5D5',
+  main: '#B82929',
   dark: '#B72136',
-  darker: '#7A0C2E',
+  darker: '#850D0D',
   contrastText: '#fff',
 };
 
@@ -79,24 +68,24 @@ const palette = {
   warning: WARNING,
   error: ERROR,
   grey: GREY,
-  divider: alpha(GREY[500], 0.24),
+  divider: alpha(GREY[40], 0.24),
   text: {
-    primary: GREY[800],
-    secondary: GREY[600],
-    disabled: GREY[500],
+    primary: GREY[70],
+    secondary: GREY[50],
+    disabled: GREY[40],
   },
   background: {
     paper: '#fff',
-    default: GREY[100],
-    neutral: GREY[200],
+    default: GREY[0],
+    neutral: GREY[10],
   },
   action: {
-    active: GREY[600],
-    hover: alpha(GREY[500], 0.08),
-    selected: alpha(GREY[500], 0.16),
-    disabled: alpha(GREY[500], 0.8),
-    disabledBackground: alpha(GREY[500], 0.24),
-    focus: alpha(GREY[500], 0.24),
+    active: GREY[50],
+    hover: alpha(GREY[40], 0.08),
+    selected: alpha(GREY[40], 0.16),
+    disabled: alpha(GREY[40], 0.8),
+    disabledBackground: alpha(GREY[40], 0.24),
+    focus: alpha(GREY[40], 0.24),
     hoverOpacity: 0.08,
     disabledOpacity: 0.48,
   },

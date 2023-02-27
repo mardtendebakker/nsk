@@ -1,13 +1,12 @@
 import {
-  Box,
   Card,
   IconButton,
   Table,
   TableBody,
   TableCell,
   TableHead,
-  TablePagination,
   TableRow,
+  Pagination,
 } from '@mui/material';
 import Edit from '@mui/icons-material/Edit';
 import useTranslation from '../../hooks/useTranslation';
@@ -17,84 +16,80 @@ function CustomersList({
   customers = [],
   count,
   page,
-  rowsPerPage,
-  onPageChange,
+  onChange,
   onEdit,
 }: {
   customers: Customer[],
   count: number,
   page: number,
-  rowsPerPage: number,
-  onPageChange: (newPage: number)=>void,
+  onChange: (newPage: number)=>void,
   onEdit: (id: number) => void
 }) {
   const { trans } = useTranslation();
 
   return (
-    <Card sx={{ overflowX: 'auto' }}>
-      <Box sx={{ minWidth: 1050 }}>
-        <Table>
-          <TableHead>
-            <TableRow>
+    <Card sx={{ overflowX: 'auto', p: '1.5rem' }}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>
+              {trans('id')}
+            </TableCell>
+            <TableCell>
+              {trans('name')}
+            </TableCell>
+            <TableCell>
+              {trans('representative')}
+            </TableCell>
+            <TableCell>
+              {trans('email')}
+            </TableCell>
+            <TableCell>
+              {trans('isPartner')}
+            </TableCell>
+            <TableCell />
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {customers.map((customer: Customer) => (
+            <TableRow
+              sx={{
+                height: 60,
+              }}
+              hover
+              key={customer.id}
+            >
               <TableCell>
-                {trans('id')}
+                {customer.id}
               </TableCell>
               <TableCell>
-                {trans('name')}
+                <b>{customer.name}</b>
               </TableCell>
               <TableCell>
-                {trans('representative')}
+                {customer.representative}
               </TableCell>
               <TableCell>
-                {trans('email')}
+                {customer.email}
               </TableCell>
               <TableCell>
-                {trans('isPartner')}
+                {Boolean(customer.is_partner)}
               </TableCell>
-              <TableCell />
+              <TableCell>
+                <IconButton onClick={() => onEdit(customer.id)}>
+                  <Edit />
+                </IconButton>
+              </TableCell>
             </TableRow>
-          </TableHead>
-          <TableBody>
-            {customers.map((customer: Customer) => (
-              <TableRow
-                sx={{
-                  height: 60,
-                }}
-                hover
-                key={customer.id}
-              >
-                <TableCell>
-                  {customer.id}
-                </TableCell>
-                <TableCell>
-                  {customer.name}
-                </TableCell>
-                <TableCell>
-                  {customer.representative}
-                </TableCell>
-                <TableCell>
-                  {customer.email}
-                </TableCell>
-                <TableCell>
-                  {Boolean(customer.is_partner)}
-                </TableCell>
-                <TableCell>
-                  <IconButton onClick={() => onEdit(customer.id)}>
-                    <Edit />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Box>
-      <TablePagination
-        component="div"
+          ))}
+        </TableBody>
+      </Table>
+      <Pagination
+        sx={{ display: 'flex', justifyContent: 'end', mt: '2rem' }}
+        variant="outlined"
+        shape="rounded"
         count={count}
-        onPageChange={(_, newPage) => onPageChange(newPage)}
+        onChange={(_, newPage) => onChange(newPage)}
         page={page}
-        rowsPerPage={rowsPerPage}
-        rowsPerPageOptions={[]}
       />
     </Card>
   );
