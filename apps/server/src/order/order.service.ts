@@ -1,9 +1,9 @@
-import { FindOrderQueryDto } from './dto/find-order-query.dto';
 import { OrderRepository } from './order.repository';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { OrderDiscrimination } from './types/order-discrimination.enum';
 import { Prisma } from '@prisma/client';
+import { FindManyDto } from '../common/dto/find-many.dto';
 
 export class OrderService {
   constructor(
@@ -36,7 +36,7 @@ export class OrderService {
     })
   }
 
-  findAll(queryOptions: FindOrderQueryDto) {
+  findAll(query: FindManyDto) {
     const companySelect: Prisma.acompanyArgs = {
       select: {
         name: true,
@@ -70,9 +70,9 @@ export class OrderService {
     }
 
     return this.repository.findAll({
-      ...queryOptions,
+      ...query,
       where: {
-        ...queryOptions.where,
+        ...query.where,
         discr: this.type
       },
       select

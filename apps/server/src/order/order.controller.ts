@@ -3,10 +3,10 @@ import { Body, Get, Param, Post, Put, Query } from "@nestjs/common";
 import { ApiBearerAuth, ApiResponse } from "@nestjs/swagger";
 import { OrderService } from "./order.service";
 import { CreateOrderDto } from "./dto/create-order.dto";
-import { FindOrderQueryDto } from "./dto/find-order-query.dto";
 import { FindOrdersResponeDto } from "./dto/find-order-response.dto";
 import { UpdateOrderDto } from "./dto/update-order.dto";
 import { OrderEntity } from "./entities/order.entity";
+import { FindManyDto } from "../common/dto/find-many.dto";
 
 @ApiBearerAuth()
 @Authentication()
@@ -14,7 +14,7 @@ export class OrderController {
   constructor(protected readonly orderService: OrderService) {}
   @Get('')
   @ApiResponse({isArray: true, type: FindOrdersResponeDto})
-  findAll(@Query() query: FindOrderQueryDto) {
+  findAll(@Query() query: FindManyDto) {
     return this.orderService.findAll(query);
   }
 

@@ -1,8 +1,8 @@
-import { FindCompanyQueryDto } from './dto/find-company-query.dto';
 import { CompanyRepository } from './company.repository';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { CompanyDiscrimination } from './types/company-discrimination.enum';
 import { UpdateCompanyDto } from './dto/update-company.dto';
+import { FindManyDto } from '../common/dto/find-many.dto';
 
 export class CompanyService {
   constructor(
@@ -10,14 +10,15 @@ export class CompanyService {
     protected type: CompanyDiscrimination
   ) {}
 
-  findAll(queryOptions: FindCompanyQueryDto) {
+  findAll(query: FindManyDto) {
     return this.repository.findAll({
-      ...queryOptions,
+      ...query,
       where: {
-        ...queryOptions.where,
+        ...query.where,
         discr: this.type
       },
       select: {
+        ...query.select,
         id: true,
         name: true,
         representative: true,
