@@ -14,11 +14,12 @@ setConfig({ source: localeMapping[getDefaultLocale()] });
 function App({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider>
-      <Head>
-        <title>NSK</title>
-      </Head>
-      <TopLinearProgress />
       <SnackbarProvider>
+        <Head>
+          <link href="https://fonts.cdnfonts.com/css/inter" rel="stylesheet" />
+          <title>NSK</title>
+        </Head>
+        <TopLinearProgress />
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Component {...pageProps} />
       </SnackbarProvider>

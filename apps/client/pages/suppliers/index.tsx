@@ -1,5 +1,8 @@
 import Head from 'next/head';
-import { Box, Button, Container } from '@mui/material';
+import {
+  Box, Button, Container, Typography,
+} from '@mui/material';
+import Add from '@mui/icons-material/Add';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import List from '../../components/suppliers/list';
@@ -43,8 +46,10 @@ function Suppliers() {
         }}
       >
         <Container maxWidth={false}>
-          <Box sx={{ display: 'flex', justifyContent: 'end' }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Typography variant="h3">{trans('suppliers')}</Typography>
             <Button variant="contained" onClick={() => router.push(SUPPLIERS.replace(':id', 'new'))}>
+              <Add />
               {trans('newSupplier')}
             </Button>
           </Box>
@@ -52,10 +57,9 @@ function Suppliers() {
             <List
               onEdit={onEdit}
               suppliers={data}
-              count={count}
+              count={Math.floor(count / 10)}
               page={page - 1}
-              rowsPerPage={TAKE}
-              onPageChange={(newPage) => setPage(newPage + 1)}
+              onChange={(newPage) => setPage(newPage + 1)}
             />
           </Box>
         </Container>

@@ -51,7 +51,7 @@ export default function LanguagePopover() {
               height: '100%',
               borderRadius: '50%',
               position: 'absolute',
-              bgcolor: (theme) => alpha(theme.palette.grey[900], 0.8),
+              bgcolor: (theme) => alpha(theme.palette.grey[70], 0.8),
             },
           }),
         }}

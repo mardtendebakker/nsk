@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { alpha } from '@mui/material/styles';
 import {
-  Box, Divider, Typography, MenuItem, Avatar, IconButton, Popover, Stack,
+  Box, Divider, Typography, MenuItem, Avatar, Popover, Stack, IconButton,
 } from '@mui/material';
+import ChevronRight from '@mui/icons-material/ChevronRight';
 import { useRouter } from 'next/router';
-import { SETTINGS } from 'apps/client/utils/routes';
+import { SETTINGS } from '../../../utils/routes';
 import useSecurity from '../../../hooks/useSecurity';
 import useTranslation from '../../../hooks/useTranslation';
 
@@ -23,26 +23,11 @@ export default function AccountPopover() {
 
   return (
     <>
-      <IconButton
-        onClick={handleOpen}
-        sx={{
-          p: 0,
-          ...(open && {
-            '&:before': {
-              zIndex: 1,
-              content: "''",
-              width: '100%',
-              height: '100%',
-              borderRadius: '50%',
-              position: 'absolute',
-              bgcolor: (theme) => alpha(theme.palette.grey[900], 0.8),
-            },
-          }),
-        }}
-      >
-        <Avatar alt="photoURL" />
+      <Avatar sx={{ mr: '0.6rem' }}>{user?.username?.charAt(0)?.toUpperCase()}</Avatar>
+      <Typography variant="h6" sx={{ mr: '0.6rem' }}>{user?.username}</Typography>
+      <IconButton onClick={handleOpen}>
+        <ChevronRight sx={{ transform: 'rotate(90deg)' }} />
       </IconButton>
-
       <Popover
         open={Boolean(open)}
         anchorEl={open}
