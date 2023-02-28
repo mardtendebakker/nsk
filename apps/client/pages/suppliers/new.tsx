@@ -154,10 +154,7 @@ function PostSupplier() {
               mb: 2,
             }}
           >
-            <Typography
-              sx={{ m: 1 }}
-              variant="h4"
-            >
+            <Typography variant="h4">
               <IconButton onClick={() => router.push(SUPPLIERS.replace(':id', ''))}>
                 <ArrowBack />
               </IconButton>

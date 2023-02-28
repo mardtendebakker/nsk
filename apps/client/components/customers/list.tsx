@@ -1,14 +1,13 @@
 import {
   Card,
-  IconButton,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
   Pagination,
+  Checkbox,
 } from '@mui/material';
-import Edit from '@mui/icons-material/Edit';
 import useTranslation from '../../hooks/useTranslation';
 import { Customer } from '../../utils/axios';
 
@@ -16,14 +15,14 @@ function CustomersList({
   customers = [],
   count,
   page,
-  onChange,
-  onEdit,
+  onPageChanged,
+  onChecked,
 }: {
   customers: Customer[],
   count: number,
   page: number,
-  onChange: (newPage: number)=>void,
-  onEdit: (id: number) => void
+  onPageChanged: (newPage: number)=>void,
+  onChecked: (object: { id: number, checked: boolean })=>void,
 }) {
   const { trans } = useTranslation();
 
@@ -47,7 +46,6 @@ function CustomersList({
             <TableCell>
               {trans('isPartner')}
             </TableCell>
-            <TableCell />
           </TableRow>
         </TableHead>
         <TableBody>
@@ -60,6 +58,7 @@ function CustomersList({
               key={customer.id}
             >
               <TableCell>
+                <Checkbox sx={{ mr: '1.5rem' }} onChange={(_, checked) => { onChecked({ id: customer.id, checked }); }} />
                 {customer.id}
               </TableCell>
               <TableCell>
@@ -74,21 +73,15 @@ function CustomersList({
               <TableCell>
                 {Boolean(customer.is_partner)}
               </TableCell>
-              <TableCell>
-                <IconButton onClick={() => onEdit(customer.id)}>
-                  <Edit />
-                </IconButton>
-              </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
       <Pagination
         sx={{ display: 'flex', justifyContent: 'end', mt: '2rem' }}
-        variant="outlined"
         shape="rounded"
         count={count}
-        onChange={(_, newPage) => onChange(newPage)}
+        onChange={(_, newPage) => onPageChanged(newPage)}
         page={page}
       />
     </Card>

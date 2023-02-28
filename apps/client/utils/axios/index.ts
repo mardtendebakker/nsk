@@ -13,6 +13,8 @@ export {
   CHANGE_PASSWORD_PATH,
   SEND_VERIFICATION_CODE_PATH,
   FORGOT_PASSWORD_PATH,
+  SALES_ORDERS_PATH,
+  PURCHASE_ORDERS_PATH,
 } from './paths';
 export { AxiosError } from 'axios';
 export type { AxiosPromise, AxiosResponse } from 'axios';
@@ -23,47 +25,8 @@ export const { CancelToken } = axios;
 
 export default axiosClient;
 
-export interface Customer {
-  id: number,
-  name?: string,
-  representative?: string,
-  kvk_nr?: string,
-  email?: string,
-  phone?: string,
-  phone2?: string,
-  street?: string,
-  street_extra?: string,
-  city?: string,
-  country?: string,
-  state?: string,
-  zip?: string,
-  street2?: string,
-  street_extra2?: string,
-  city2?: string,
-  country2?: string,
-  state2?: string,
-  zip2?: string,
-  is_partner?: number,
-}
-
-export interface Supplier {
-  id: number,
-  name?: string,
-  representative?: string,
-  email?: string,
-  phone?: string,
-  phone2?: string,
-  street?: string,
-  street_extra?: string,
-  city?: string,
-  country?: string,
-  state?: string,
-  zip?: string,
-  street2?: string,
-  street_extra2?: string,
-  city2?: string,
-  country2?: string,
-  state2?: string,
-  zip2?: string,
-  partner?: string,
-}
+export type { default as Customer } from './model/customer';
+export type { default as Supplier } from './model/supplier';
+export type { default as SalesOrder } from './model/salesOrder';
+export type { default as Product } from './model/product';
+export type { default as PurchaseOrder } from './model/purchaseOrder';

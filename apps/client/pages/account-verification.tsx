@@ -69,7 +69,7 @@ export default function LoginPage() {
           {trans('accountVerificationMessage')}
         </Typography>
         <form onSubmit={handleSubmit}>
-          <Stack spacing={3}>
+          <Stack spacing={1}>
             <TextField
               error={Boolean(formRepresentation.code.error)}
               helperText={formRepresentation.code.error}

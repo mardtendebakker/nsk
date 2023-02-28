@@ -59,7 +59,7 @@ function ForgotPasswordForm(
         </Typography>
       </Stack>
       <form onSubmit={handleSubmit}>
-        <Stack spacing={3} sx={{ mb: 2 }}>
+        <Stack spacing={1} sx={{ mb: 2 }}>
           <TextField
             error={Boolean(formRepresentation.emailOrUsername.error)}
             helperText={formRepresentation.emailOrUsername.error}
