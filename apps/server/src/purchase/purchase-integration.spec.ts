@@ -1,8 +1,8 @@
 import * as request from 'supertest';
 import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import { purchaseModule } from './purchase.module';
-import { purchaseService } from './purchase.service';
+import { PurchaseModule } from './purchase.module';
+import { PurchaseService } from './purchase.service';
 import { OrderDiscrimination } from '../order/types/order-discrimination.enum';
 
 describe('purchase', () => {
