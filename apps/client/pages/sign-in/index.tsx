@@ -16,14 +16,11 @@ import ChangePasswordForm from '../../components/signIn/changePasswordForm';
 export default function LoginPage() {
   const { trans } = useTranslation();
   const { state: { user } } = useSecurity();
-  const [selectedForm, setSelectedForm] = useState<{
-    form: FormValues,
-    username: string | undefined
-  }>({ form: 'signIn', username: '' });
+  const [selectedForm, setSelectedForm] = useState<{ form: FormValues }>({ form: 'signIn' });
   const router = useRouter();
 
-  const handleSelectForm = ({ form, username }: { form: FormValues, username? : string }) => {
-    setSelectedForm({ form, username });
+  const handleSelectForm = ({ form }: { form: FormValues }) => {
+    setSelectedForm({ form });
   };
 
   useEffect(() => {
@@ -79,23 +76,13 @@ export default function LoginPage() {
             }}
           >
             {SignInForm.type === selectedForm.form
-            && <SignInForm onFormSelected={handleSelectForm} username={selectedForm.username} />}
+            && <SignInForm onFormSelected={handleSelectForm} />}
             {SignUpForm.type === selectedForm.form
-            && <SignUpForm onFormSelected={handleSelectForm} username={selectedForm.username} />}
+            && <SignUpForm onFormSelected={handleSelectForm} />}
             {ChangePasswordForm.type === selectedForm.form
-            && (
-            <ChangePasswordForm
-              onFormSelected={handleSelectForm}
-              username={selectedForm.username}
-            />
-            )}
+            && (<ChangePasswordForm onFormSelected={handleSelectForm} />)}
             {ForgotPasswordForm.type === selectedForm.form
-            && (
-            <ForgotPasswordForm
-              onFormSelected={handleSelectForm}
-              username={selectedForm.username}
-            />
-            )}
+            && (<ForgotPasswordForm onFormSelected={handleSelectForm} />)}
           </Box>
         </Container>
       </Box>
