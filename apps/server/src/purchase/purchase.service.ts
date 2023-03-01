@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { OrderDiscrimination } from '../order/types/order-discrimination.enum';
 import { OrderService } from '../order/order.service';
-import { PurcahseRepository } from './purcahse.repository';
+import { purchaseRepository } from './purchase.repository';
 
 @Injectable()
-export class PurcahseService extends OrderService {
-  constructor(protected readonly repository: PurcahseRepository) {
+export class purchaseService extends OrderService {
+  constructor(protected readonly repository: purchaseRepository) {
     super(repository, OrderDiscrimination.PURCHASE);
   }
 }
