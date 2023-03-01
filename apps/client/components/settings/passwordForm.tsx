@@ -73,7 +73,7 @@ function PasswordForm() {
           {trans('changePassword')}
         </Typography>
         <form onSubmit={handleSubmit}>
-          <Stack spacing={3} sx={{ mb: 5 }}>
+          <Stack spacing={1} sx={{ mb: 5 }}>
             <TextField
               error={!!formRepresentation?.oldPassword.error}
               helperText={formRepresentation?.oldPassword.error}

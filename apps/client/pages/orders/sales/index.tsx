@@ -2,31 +2,32 @@ import Head from 'next/head';
 import {
   Box, Button, Container, Typography,
 } from '@mui/material';
-import Add from '@mui/icons-material/Add';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import useTranslation from '../../hooks/useTranslation';
-import List from '../../components/customers/list';
-import DashboardLayout from '../../layouts/dashboard';
-import useAxios from '../../hooks/useAxios';
-import { CUSTOMERS_PATH } from '../../utils/axios';
-import { CUSTOMERS } from '../../utils/routes';
+import Add from '@mui/icons-material/Add';
+import useTranslation from '../../../hooks/useTranslation';
+import List from '../../../components/orders/sales/list';
+import DashboardLayout from '../../../layouts/dashboard';
+import useAxios from '../../../hooks/useAxios';
+import { SALES_ORDERS_PATH } from '../../../utils/axios';
+import { SALES_ORDERS } from '../../../utils/routes';
+import Navigation from '../../../components/orders/navigation';
 
-function Customers() {
+function SalesOrders() {
   const TAKE = 10;
   const router = useRouter();
   const { trans } = useTranslation();
   const [page, setPage] = useState<number>(parseInt(router.query?.page?.toString() || '1', 10));
   const { data: { data = [], count = 0 } = {}, call } = useAxios(
     'get',
-    CUSTOMERS_PATH.replace(':id', ''),
+    SALES_ORDERS_PATH.replace(':id', ''),
     {
       withProgressBar: true,
     },
   );
 
   useEffect(() => {
-    router.replace(`${CUSTOMERS.replace(':id', '')}?page=${page}`);
+    router.replace(`${SALES_ORDERS}?page=${page}`);
     call({ params: { take: TAKE, skip: (page - 1) * TAKE } });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
@@ -34,7 +35,7 @@ function Customers() {
   return (
     <DashboardLayout>
       <Head>
-        <title>{trans('customers')}</title>
+        <title>{trans('salesOrders')}</title>
       </Head>
       <Box
         component="main"
@@ -45,15 +46,18 @@ function Customers() {
       >
         <Container maxWidth={false}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Typography variant="h3">{trans('customers')}</Typography>
-            <Button variant="contained" onClick={() => router.push(CUSTOMERS.replace(':id', 'new'))}>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Typography variant="h3" sx={{ mr: '.5rem' }}>{trans('orders')}</Typography>
+              <Navigation />
+            </Box>
+            <Button variant="contained" onClick={() => router.push(SALES_ORDERS.replace(':id', 'new'))}>
               <Add />
-              {trans('newCustomer')}
+              {trans('newSalesOrder')}
             </Button>
           </Box>
           <Box sx={{ mt: 3 }}>
             <List
-              customers={data}
+              salesOrders={data}
               count={Math.floor(count / 10)}
               page={page}
               onChecked={() => {}}
@@ -66,4 +70,4 @@ function Customers() {
   );
 }
 
-export default Customers;
+export default SalesOrders;

@@ -6,7 +6,9 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import AccountPopover from './accountPopover';
 import LanguagePopover from './languagePopover';
-import { DASHBOARD, CUSTOMERS, SUPPLIERS } from '../../../utils/routes';
+import {
+  DASHBOARD, CUSTOMERS, SUPPLIERS, PURCHASE_ORDERS, SALES_ORDERS,
+} from '../../../utils/routes';
 import useTranslation from '../../../hooks/useTranslation';
 
 function MenuItem(
@@ -51,6 +53,12 @@ export default function Header() {
               title: trans('dashboard'),
               path: DASHBOARD,
               active: router.pathname === DASHBOARD,
+            },
+            {
+              title: trans('orders'),
+              path: PURCHASE_ORDERS.replace('/:id', ''),
+              active: router.pathname === PURCHASE_ORDERS.replace('/:id', '')
+              || router.pathname === SALES_ORDERS.replace('/:id', ''),
             },
             {
               title: trans('customers'),

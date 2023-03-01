@@ -45,7 +45,6 @@ function SignInForm(
 
   return (
     <>
-
       <Typography
         variant="h4"
         gutterBottom
@@ -68,7 +67,7 @@ function SignInForm(
         </Typography>
       </Stack>
       <form onSubmit={handleSubmit}>
-        <Stack spacing={3} sx={{ mb: 2 }}>
+        <Stack spacing={1} sx={{ mb: 2 }}>
           <TextField
             error={Boolean(formRepresentation.emailOrUsername.error)}
             helperText={formRepresentation.emailOrUsername.error}

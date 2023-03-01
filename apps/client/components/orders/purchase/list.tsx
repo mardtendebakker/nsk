@@ -8,69 +8,73 @@ import {
   TableRow,
   Checkbox,
 } from '@mui/material';
-import { trans } from 'itranslator';
-import { Supplier } from '../../utils/axios';
+import moment from 'moment';
+import useTranslation from '../../../hooks/useTranslation';
+import { PurchaseOrder } from '../../../utils/axios';
 
-function SuppliersList({
-  suppliers = [],
+function PurchaseOrdersList({
+  purchaseOrders = [],
   count,
   page,
   onPageChanged,
   onChecked,
-
 }: {
-  suppliers: Supplier[],
+  purchaseOrders: PurchaseOrder[],
   count: number,
   page: number,
   onPageChanged: (newPage: number)=>void,
   onChecked: (object: { id: number, checked: boolean })=>void,
 }) {
+  const { trans } = useTranslation();
+
   return (
     <Card sx={{ overflowX: 'auto', p: '1.5rem' }}>
       <Table>
         <TableHead>
           <TableRow>
             <TableCell>
-              {trans('id')}
+              {trans('orderNumber')}
             </TableCell>
             <TableCell>
-              {trans('name')}
+              {trans('orderDate')}
+              {' '}
+              (yy/mm/dd)
             </TableCell>
             <TableCell>
-              {trans('representative')}
-            </TableCell>
-            <TableCell>
-              {trans('email')}
+              {trans('customer')}
             </TableCell>
             <TableCell>
               {trans('partner')}
             </TableCell>
+            <TableCell>
+              {trans('status')}
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {suppliers.map((supplier: Supplier) => (
+          {purchaseOrders.map((purchaseOrder: PurchaseOrder) => (
             <TableRow
               sx={{
                 height: 60,
               }}
               hover
-              key={supplier.id}
+              key={purchaseOrder.id}
             >
               <TableCell>
-                <Checkbox sx={{ mr: '1.5rem' }} onChange={(_, checked) => { onChecked({ id: supplier.id, checked }); }} />
-                {supplier.id}
+                <Checkbox sx={{ mr: '1.5rem' }} onChange={(_, checked) => { onChecked({ id: purchaseOrder.id, checked }); }} />
+                {purchaseOrder.order_nr}
               </TableCell>
               <TableCell>
-                <b>{supplier.name}</b>
+                {moment(purchaseOrder.order_date).format('Y:MM:DD')}
               </TableCell>
               <TableCell>
-                {supplier.representative}
+                {purchaseOrder.order_nr}
               </TableCell>
               <TableCell>
-                {supplier.email}
+                {purchaseOrder.order_nr}
               </TableCell>
               <TableCell>
-                {supplier.partner}
+                status
               </TableCell>
             </TableRow>
           ))}
@@ -87,4 +91,4 @@ function SuppliersList({
   );
 }
 
-export default SuppliersList;
+export default PurchaseOrdersList;

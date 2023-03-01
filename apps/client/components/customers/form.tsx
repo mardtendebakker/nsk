@@ -46,7 +46,6 @@ function CustomerForm({
                 name="name"
                 onChange={(e) => setValue({ field: 'name', value: e.target.value })}
                 value={formRepresentation.name.value}
-                variant="outlined"
               />
               <Box sx={{ mx: 0.5, my: 0.5 }} />
               <TextField
@@ -57,7 +56,6 @@ function CustomerForm({
                 name="representative"
                 onChange={(e) => setValue({ field: 'representative', value: e.target.value })}
                 value={formRepresentation.representative.value}
-                variant="outlined"
               />
               <Box sx={{ mx: 0.5, my: 0.5 }} />
               <TextField
@@ -68,7 +66,6 @@ function CustomerForm({
                 name="kvk_nr"
                 onChange={(e) => setValue({ field: 'kvk_nr', value: e.target.value })}
                 value={formRepresentation.kvk_nr.value}
-                variant="outlined"
               />
               <Box sx={{ mx: 0.5, my: 0.5 }} />
               <TextField
@@ -79,7 +76,6 @@ function CustomerForm({
                 name="is_partner"
                 onChange={(e) => setValue({ field: 'is_partner', value: e.target.value })}
                 value={formRepresentation.is_partner.value}
-                variant="outlined"
               />
             </Grid>
           </Grid>
@@ -102,7 +98,6 @@ function CustomerForm({
                 name="email"
                 onChange={(e) => setValue({ field: 'email', value: e.target.value })}
                 value={formRepresentation.email.value}
-                variant="outlined"
               />
               <Box sx={{ mx: 0.5, my: 0.5 }} />
               <TextField
@@ -113,7 +108,6 @@ function CustomerForm({
                 name="phone"
                 onChange={(e) => setValue({ field: 'phone', value: e.target.value })}
                 value={formRepresentation.phone.value}
-                variant="outlined"
               />
               <Box sx={{ mx: 0.5, my: 0.5 }} />
               <TextField
@@ -124,7 +118,6 @@ function CustomerForm({
                 name="phone2"
                 onChange={(e) => setValue({ field: 'phone2', value: e.target.value })}
                 value={formRepresentation.phone2.value}
-                variant="outlined"
               />
             </Grid>
           </Grid>
@@ -154,7 +147,6 @@ function CustomerForm({
                 name="street"
                 onChange={(e) => setValue({ field: 'street', value: e.target.value })}
                 value={formRepresentation.street.value}
-                variant="outlined"
               />
               <Box sx={{ mx: 0.5, my: 0.5 }} />
               <TextField
@@ -165,7 +157,6 @@ function CustomerForm({
                 name="street_extra"
                 onChange={(e) => setValue({ field: 'street_extra', value: e.target.value })}
                 value={formRepresentation.street_extra.value}
-                variant="outlined"
               />
               <Box sx={{ mx: 0.5, my: 0.5 }} />
               <TextField
@@ -176,7 +167,6 @@ function CustomerForm({
                 name="city"
                 onChange={(e) => setValue({ field: 'city', value: e.target.value })}
                 value={formRepresentation.city.value}
-                variant="outlined"
               />
             </Grid>
 
@@ -193,7 +183,6 @@ function CustomerForm({
                 name="country"
                 onChange={(e) => setValue({ field: 'country', value: e.target.value })}
                 value={formRepresentation.country.value}
-                variant="outlined"
               />
               <Box sx={{ mx: 0.5, my: 0.5 }} />
               <TextField
@@ -204,7 +193,6 @@ function CustomerForm({
                 name="state"
                 onChange={(e) => setValue({ field: 'state', value: e.target.value })}
                 value={formRepresentation.state.value}
-                variant="outlined"
               />
               <Box sx={{ mx: 0.5, my: 0.5 }} />
               <TextField
@@ -215,7 +203,6 @@ function CustomerForm({
                 name="zip"
                 onChange={(e) => setValue({ field: 'zip', value: e.target.value })}
                 value={formRepresentation.zip.value}
-                variant="outlined"
               />
             </Grid>
           </Grid>
@@ -246,7 +233,6 @@ function CustomerForm({
                 name="street2"
                 onChange={(e) => setValue({ field: 'street2', value: e.target.value })}
                 value={formRepresentation.street2.value}
-                variant="outlined"
               />
               <Box sx={{ mx: 0.5, my: 0.5 }} />
               <TextField
@@ -257,7 +243,6 @@ function CustomerForm({
                 name="street_extra2"
                 onChange={(e) => setValue({ field: 'street_extra2', value: e.target.value })}
                 value={formRepresentation.street_extra2.value}
-                variant="outlined"
               />
               <Box sx={{ mx: 0.5, my: 0.5 }} />
               <TextField
@@ -268,7 +253,6 @@ function CustomerForm({
                 name="city2"
                 onChange={(e) => setValue({ field: 'city2', value: e.target.value })}
                 value={formRepresentation.city2.value}
-                variant="outlined"
               />
             </Grid>
             <Grid
@@ -284,7 +268,6 @@ function CustomerForm({
                 name="country2"
                 onChange={(e) => setValue({ field: 'country2', value: e.target.value })}
                 value={formRepresentation.country2.value}
-                variant="outlined"
               />
               <Box sx={{ mx: 0.5, my: 0.5 }} />
               <TextField
@@ -295,7 +278,6 @@ function CustomerForm({
                 name="state2"
                 onChange={(e) => setValue({ field: 'state2', value: e.target.value })}
                 value={formRepresentation.state2.value}
-                variant="outlined"
               />
               <Box sx={{ mx: 0.5, my: 0.5 }} />
               <TextField
@@ -306,7 +288,6 @@ function CustomerForm({
                 name="zip2"
                 onChange={(e) => setValue({ field: 'zip2', value: e.target.value })}
                 value={formRepresentation.zip2.value}
-                variant="outlined"
               />
             </Grid>
           </Grid>

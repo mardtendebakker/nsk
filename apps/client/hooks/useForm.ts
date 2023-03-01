@@ -73,7 +73,7 @@ const useForm = (formRepresentation: FormRepresentation) : {
 
 export default useForm;
 
-interface Field {
+export interface Field {
   value: string | number;
   validator?: (formRepresentation: FormRepresentation) => string | undefined | null;
   required?: boolean;

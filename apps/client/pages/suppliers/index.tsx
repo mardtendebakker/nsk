@@ -31,8 +31,6 @@ function Suppliers() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
-  const onEdit = (supplierId: number) => router.push(SUPPLIERS_PATH.replace(':id', supplierId.toString()));
-
   return (
     <DashboardLayout>
       <Head>
@@ -55,11 +53,11 @@ function Suppliers() {
           </Box>
           <Box sx={{ mt: 3 }}>
             <List
-              onEdit={onEdit}
               suppliers={data}
               count={Math.floor(count / 10)}
-              page={page - 1}
-              onChange={(newPage) => setPage(newPage + 1)}
+              page={page}
+              onChecked={() => {}}
+              onPageChanged={(newPage) => setPage(newPage)}
             />
           </Box>
         </Container>

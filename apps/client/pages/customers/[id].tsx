@@ -98,10 +98,7 @@ function UpdateCustomer() {
               mb: 2,
             }}
           >
-            <Typography
-              sx={{ m: 1 }}
-              variant="h4"
-            >
+            <Typography variant="h4">
               <IconButton onClick={() => router.push(CUSTOMERS.replace(':id', ''))}>
                 <ArrowBack />
               </IconButton>
