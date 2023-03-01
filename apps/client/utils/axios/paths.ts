@@ -10,4 +10,4 @@ export const CHANGE_PASSWORD_PATH = '/user/changepassword';
 export const FORGOT_PASSWORD_PATH = '/auth/forgot';
 export const CONFIRM_PASSWORD_PATH = '/auth/confirmpassword';
 export const SALES_ORDERS_PATH = '/sales/:id';
-export const PURCHASE_ORDERS_PATH = '/purcahses/:id';
+export const PURCHASE_ORDERS_PATH = '/purchases/:id';

@@ -15,7 +15,7 @@
         "tsConfig": "apps/server/tsconfig.app.json",
         "tsPlugins": [
           {
-            "name": "@nestjs/waggser/plugin",
+            "name": "@nestjs/swagger/plugin",
             "options": {
               "dtoFileNameSuffix": [".entity.ts", ".dto.ts"],
               "controllerFileNameSuffix": [".controller.ts"],
