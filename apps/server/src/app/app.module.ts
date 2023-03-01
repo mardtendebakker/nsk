@@ -9,7 +9,7 @@ import { AppService } from './app.service';
 import { AuthModule } from '../auth/auth.module';
 import { UserModule } from '../user/user.module';
 import { SaleModule } from '../sale/sale.module';
-import { PurcahseModule } from '../purchase/purcahse.module';
+import { PurchaseModule } from '../purchase/purchase.module';
 
 @Module({
   imports: [
@@ -34,7 +34,7 @@ import { PurcahseModule } from '../purchase/purcahse.module';
     CustomerModule,
     SupplierModule,
     SaleModule,
-    PurcahseModule
+    PurchaseModule
   ],
   controllers: [AppController],
   providers: [AppService],

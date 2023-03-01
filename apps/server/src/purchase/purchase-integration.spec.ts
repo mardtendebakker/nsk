@@ -1,13 +1,13 @@
 import * as request from 'supertest';
 import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import { PurcahseModule } from './purcahse.module';
-import { PurcahseService } from './purcahse.service';
+import { PurchaseModule } from './purchase.module';
+import { PurchaseService } from './purchase.service';
 import { OrderDiscrimination } from '../order/types/order-discrimination.enum';
 
-describe('Purcahse', () => {
+describe('Purchase', () => {
   let app: INestApplication;
-  const findPurcahseResponse =  {
+  const findPurchaseResponse =  {
     "count": 2,
     "data": [
       {
@@ -36,7 +36,7 @@ describe('Purcahse', () => {
       }
     ]
   };
-  const purcahse = {
+  const purchase = {
     "id": 1,
     "status_id": null,
     "customer_id": null,
@@ -54,39 +54,39 @@ describe('Purcahse', () => {
     "delivery_date": null,
     "delivery_instructions": null,
   };
-  const purcahseService = { 
-    findAll: () => findPurcahseResponse,
-    create: () => purcahse 
+  const purchaseService = { 
+    findAll: () => findPurchaseResponse,
+    create: () => purchase 
   };
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
-      imports: [PurcahseModule],
+      imports: [PurchaseModule],
     })
-      .overrideProvider(PurcahseService)
-      .useValue(purcahseService)
+      .overrideProvider(PurchaseService)
+      .useValue(purchaseService)
       .compile();
 
     app = moduleRef.createNestApplication();
     await app.init();
   });
 
-  it(`/GET purcahses`, () => {
+  it(`/GET purchases`, () => {
     return request(app.getHttpServer())
-      .get('/purcahses')
+      .get('/purchases')
       .expect(200)
-      .expect(purcahseService.findAll());
+      .expect(purchaseService.findAll());
   });
 
-  it(`/POST purcahses`, () => {
+  it(`/POST purchases`, () => {
     return request(app.getHttpServer())
-      .post('/purcahses')
+      .post('/purchases')
       .send({
-        order_nr: purcahse.order_nr,
-        order_date: purcahse.order_date,
+        order_nr: purchase.order_nr,
+        order_date: purchase.order_date,
       })
       .expect(201)
-      .expect(purcahseService.create())
+      .expect(purchaseService.create())
   });
 
   afterAll(async () => {
