@@ -1,5 +1,4 @@
 import {
-  Card,
   Table,
   TableBody,
   TableCell,
@@ -8,10 +7,10 @@ import {
   Pagination,
   Checkbox,
 } from '@mui/material';
-import useTranslation from '../../hooks/useTranslation';
-import { Customer } from '../../utils/axios';
+import useTranslation from '../../../../hooks/useTranslation';
+import { Customer } from '../../../../utils/axios';
 
-function CustomersList({
+export default function List({
   customers = [],
   count,
   page,
@@ -27,13 +26,10 @@ function CustomersList({
   const { trans } = useTranslation();
 
   return (
-    <Card sx={{ overflowX: 'auto', p: '1.5rem' }}>
+    <>
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>
-              {trans('id')}
-            </TableCell>
             <TableCell>
               {trans('name')}
             </TableCell>
@@ -59,9 +55,6 @@ function CustomersList({
             >
               <TableCell>
                 <Checkbox sx={{ mr: '1.5rem' }} onChange={(_, checked) => { onChecked({ id: customer.id, checked }); }} />
-                {customer.id}
-              </TableCell>
-              <TableCell>
                 <b>{customer.name}</b>
               </TableCell>
               <TableCell>
@@ -84,8 +77,6 @@ function CustomersList({
         onChange={(_, newPage) => onPageChanged(newPage)}
         page={page}
       />
-    </Card>
+    </>
   );
 }
-
-export default CustomersList;

@@ -5,7 +5,7 @@ import {
 import { useRouter } from 'next/router';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import { SyntheticEvent } from 'react';
-import Form from '../../components/customers/form';
+import Form from '../../components/customers/contact/form';
 import DashboardLayout from '../../layouts/dashboard';
 import useAxios from '../../hooks/useAxios';
 import { Customer, CUSTOMERS_PATH } from '../../utils/axios';
