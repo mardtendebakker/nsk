@@ -53,6 +53,7 @@ export class OrderService {
       order_date: true,
       order_status: {
         select: {
+          id: true,
           name: true
         }
       }
