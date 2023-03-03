@@ -9,10 +9,10 @@ import {
   Checkbox,
 } from '@mui/material';
 import moment from 'moment';
-import useTranslation from '../../../hooks/useTranslation';
-import { PurchaseOrder } from '../../../utils/axios';
+import useTranslation from '../../../../hooks/useTranslation';
+import { PurchaseOrder } from '../../../../utils/axios';
 
-function PurchaseOrdersList({
+export default function List({
   purchaseOrders = [],
   count,
   page,
@@ -90,5 +90,3 @@ function PurchaseOrdersList({
     </Card>
   );
 }
-
-export default PurchaseOrdersList;

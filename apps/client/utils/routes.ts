@@ -1,8 +1,9 @@
 export const DASHBOARD = '/';
 export const SIGN_IN = '/sign-in';
-export const CUSTOMERS = '/customers/:id';
+export const CUSTOMERS_CONTACTS = '/customers/contacts';
+export const CUSTOMERS_EMAILS = '/customers/emails';
 export const SUPPLIERS = '/suppliers/:id';
 export const ACCOUNT_VERIFICATION = '/account-verification';
 export const SETTINGS = '/settings';
-export const PURCHASE_ORDERS = '/orders/purchase';
-export const SALES_ORDERS = '/orders/sales';
+export const ORDERS_PURCHASES = '/orders/purchases';
+export const ORDERS_SALES = '/orders/sales';

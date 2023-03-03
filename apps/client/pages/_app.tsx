@@ -23,7 +23,6 @@ function App({ Component, pageProps }: AppProps) {
         </Head>
         <TopLinearProgress />
         <SnackbarProvider>
-          {/* eslint-disable-next-line react/jsx-props-no-spreading */}
           <Component {...pageProps} />
         </SnackbarProvider>
       </ThemeProvider>

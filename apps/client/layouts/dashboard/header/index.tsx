@@ -7,7 +7,12 @@ import { useRouter } from 'next/router';
 import AccountPopover from './accountPopover';
 import LanguagePopover from './languagePopover';
 import {
-  DASHBOARD, CUSTOMERS, SUPPLIERS, PURCHASE_ORDERS, SALES_ORDERS,
+  DASHBOARD,
+  ORDERS_PURCHASES,
+  ORDERS_SALES,
+  SUPPLIERS,
+  CUSTOMERS_CONTACTS,
+  CUSTOMERS_EMAILS,
 } from '../../../utils/routes';
 import useTranslation from '../../../hooks/useTranslation';
 
@@ -56,14 +61,14 @@ export default function Header() {
             },
             {
               title: trans('orders'),
-              path: PURCHASE_ORDERS.replace('/:id', ''),
-              active: router.pathname === PURCHASE_ORDERS.replace('/:id', '')
-              || router.pathname === SALES_ORDERS.replace('/:id', ''),
+              path: ORDERS_PURCHASES,
+              active: router.pathname === ORDERS_PURCHASES || router.pathname === ORDERS_SALES,
             },
             {
               title: trans('customers'),
-              path: CUSTOMERS.replace('/:id', ''),
-              active: router.pathname === CUSTOMERS.replace('/:id', ''),
+              path: CUSTOMERS_CONTACTS,
+              active: router.pathname === CUSTOMERS_CONTACTS
+               || router.pathname === CUSTOMERS_EMAILS,
             },
             {
               title: trans('suppliers'),

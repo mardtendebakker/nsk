@@ -1,25 +1,23 @@
 import {
-  Card,
   Table,
   TableBody,
   TableCell,
   TableHead,
-  Pagination,
   TableRow,
+  Pagination,
   Checkbox,
 } from '@mui/material';
-import moment from 'moment';
-import useTranslation from '../../../hooks/useTranslation';
-import { SalesOrder } from '../../../utils/axios';
+import useTranslation from '../../../../hooks/useTranslation';
+import { Customer } from '../../../../utils/axios';
 
-function SalesOrdersList({
-  salesOrders = [],
+export default function List({
+  customers = [],
   count,
   page,
   onPageChanged,
   onChecked,
 }: {
-  salesOrders: SalesOrder[],
+  customers: Customer[],
   count: number,
   page: number,
   onPageChanged: (newPage: number)=>void,
@@ -28,53 +26,45 @@ function SalesOrdersList({
   const { trans } = useTranslation();
 
   return (
-    <Card sx={{ overflowX: 'auto', p: '1.5rem' }}>
+    <>
       <Table>
         <TableHead>
           <TableRow>
             <TableCell>
-              {trans('orderNumber')}
+              {trans('name')}
             </TableCell>
             <TableCell>
-              {trans('orderDate')}
-              {' '}
-              (yy/mm/dd)
+              {trans('representative')}
             </TableCell>
             <TableCell>
-              {trans('customer')}
+              {trans('email')}
             </TableCell>
             <TableCell>
-              {trans('partner')}
-            </TableCell>
-            <TableCell>
-              {trans('status')}
+              {trans('isPartner')}
             </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {salesOrders.map((salesOrder: SalesOrder) => (
+          {customers.map((customer: Customer) => (
             <TableRow
               sx={{
                 height: 60,
               }}
               hover
-              key={salesOrder.id}
+              key={customer.id}
             >
               <TableCell>
-                <Checkbox sx={{ mr: '1.5rem' }} onChange={(_, checked) => { onChecked({ id: salesOrder.id, checked }); }} />
-                {salesOrder.order_nr}
+                <Checkbox sx={{ mr: '1.5rem' }} onChange={(_, checked) => { onChecked({ id: customer.id, checked }); }} />
+                <b>{customer.name}</b>
               </TableCell>
               <TableCell>
-                {moment(salesOrder.order_date).format('Y:MM:DD')}
+                {customer.representative}
               </TableCell>
               <TableCell>
-                {salesOrder.order_nr}
+                {customer.email}
               </TableCell>
               <TableCell>
-                {salesOrder.order_nr}
-              </TableCell>
-              <TableCell>
-                status
+                {Boolean(customer.is_partner)}
               </TableCell>
             </TableRow>
           ))}
@@ -87,8 +77,6 @@ function SalesOrdersList({
         onChange={(_, newPage) => onPageChanged(newPage)}
         page={page}
       />
-    </Card>
+    </>
   );
 }
-
-export default SalesOrdersList;
