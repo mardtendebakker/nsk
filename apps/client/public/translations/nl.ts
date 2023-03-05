@@ -78,12 +78,12 @@ const translation = {
   searchByCustomerNameOrEmail: 'Zoeken op klantnaam of e-mail',
   contact: 'Contact',
   bulkEmail: 'Bulk email',
-  listName: 'Lijstnaam',
   basicDetails: 'Basisgegevens',
   addressDetails: 'Adresgegevens',
   optionalAddressDetails: 'Optionele adresgegevens',
   list: 'Lijst',
   tag: 'Label',
+  tags: 'Labels',
   saveContact: 'Contact opslaan',
   saveEmail: 'E-mail opslaan',
   content: 'Inhoud',
@@ -123,7 +123,7 @@ const translation = {
       label: 'Kamer van Koophandel nr.',
     },
     representative: {
-      placeholder: 'Vertegenwoordiger selecteren',
+      placeholder: 'Typ vertegenwoordiger',
       label: 'Vertegenwoordiger',
     },
     email: {

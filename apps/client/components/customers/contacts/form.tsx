@@ -64,20 +64,15 @@ function Form({
                 onChange={(e) => setValue({ field: 'kvk_nr', value: e.target.value })}
                 value={formRepresentation.kvk_nr.value}
               />
-              <Autocomplete
+              <TextField
                 sx={{ flex: 0.33 }}
-                disabled={disabled}
-                options={[]}
-                filterSelectedOptions
-                renderInput={
-                (params) => (
-                  <BaseTextField
-                    {...params}
-                    label={trans('newContactForm.representative.label')}
-                    placeholder={trans('newContactForm.representative.placeholder')}
-                  />
-                )
-               }
+                error={Boolean(formRepresentation.representative.error)}
+                helperText={formRepresentation.representative.error}
+                label={trans('newContactForm.representative.label')}
+                placeholder={trans('newContactForm.representative.placeholder')}
+                name="representative"
+                onChange={(e) => setValue({ field: 'representative', value: e.target.value })}
+                value={formRepresentation.representative.value}
               />
             </Grid>
             <Grid

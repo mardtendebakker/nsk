@@ -68,7 +68,7 @@ export default function Filter({
                 (params) => (
                   <TextField
                     {...params}
-                    label={trans('listName')}
+                    label={trans('list')}
                     sx={{
                       fieldset: {
                         display: 'none',
@@ -100,7 +100,7 @@ export default function Filter({
                 (params) => (
                   <TextField
                     {...params}
-                    label={trans('status')}
+                    label={trans('tags')}
                     sx={{
                       fieldset: {
                         display: 'none',
@@ -109,6 +109,24 @@ export default function Filter({
                   />
                 )
             }
+              />
+              <Box sx={(theme) => ({
+                m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.grey[30],
+              })}
+              />
+              <MemoizedTextField
+                disabled={disabled}
+                name="search"
+                label={trans('representative')}
+                fullWidth
+                value={formRepresentation.representative.value}
+                onChange={(e) => setValue({ field: 'representative', value: e.target.value })}
+                type="text"
+                sx={{
+                  fieldset: {
+                    display: 'none',
+                  },
+                }}
               />
               <Box sx={(theme) => ({
                 m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.grey[30],
