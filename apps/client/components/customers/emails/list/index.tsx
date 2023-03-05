@@ -75,12 +75,12 @@ export default function ListContainer() {
   );
 
   useEffect(() => {
-    debouncedRefreshList({
+    /* debouncedRefreshList({
       page,
       formRepresentation,
       router,
       call,
-    });
+    }); */
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     page,
@@ -98,7 +98,7 @@ export default function ListContainer() {
       />
       <Box sx={{ m: '1rem' }} />
       <List
-        customers={data}
+        emails={[]}
         count={Math.floor(count / 10)}
         page={page}
         onChecked={() => {}}

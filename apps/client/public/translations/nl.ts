@@ -18,7 +18,7 @@ const translation = {
   logout: 'Uitloggen',
   suppliers: 'Leveranciers',
   customers: 'Klanten',
-  isPartner: 'Partner',
+  isPartner: 'Is vennoot',
   partner: 'Partner',
   email: 'E-mail',
   name: 'Naam',
@@ -30,7 +30,7 @@ const translation = {
   street_extra: 'Toevoeging',
   zipcode: 'Postcode',
   state: 'Provincie',
-  representative: 'Contactpersoon',
+  representative: 'Vertegenwoordiger',
   save: 'Opslaan',
   address: 'Adres',
   extraAddress: 'Bijkomend adres',
@@ -79,6 +79,98 @@ const translation = {
   contact: 'Contact',
   bulkEmail: 'Bulk email',
   listName: 'Lijstnaam',
+  basicDetails: 'Basisgegevens',
+  addressDetails: 'Adresgegevens',
+  optionalAddressDetails: 'Optionele adresgegevens',
+  list: 'Lijst',
+  tag: 'Label',
+  saveContact: 'Contact opslaan',
+  saveEmail: 'E-mail opslaan',
+  content: 'Inhoud',
+  recipients: 'Ontvangers',
+  openRate: 'Open ratio',
+  clickRate: 'Klik op Beoordeel',
+  unsubscribes: 'Uitschrijft',
+  newEmailForm: {
+    name: {
+      placeholder: 'Typ naam',
+      label: 'Naam',
+    },
+    subject: {
+      placeholder: 'Typ e-mailonderwerp',
+      label: 'E-mailonderwerp (Dit verschijnt in de inbox van de ontvanger)',
+    },
+    senderName: {
+      placeholder: 'Typ naam',
+      label: 'Naam afzender (E-mail is ondertekend met deze naam)',
+    },
+    senderEmail: {
+      placeholder: 'Selecteer een afzender e-mail',
+      label: 'Stuur e-mail',
+    },
+    recipients: {
+      placeholder: 'Selecteer een of meerdere ontvangers',
+      label: 'Ontvangers (u kunt een of meerdere lijsten toevoegen of handmatig e-mail typen)',
+    },
+  },
+  newContactForm: {
+    name: {
+      placeholder: 'Typ naam',
+      label: 'Naam',
+    },
+    kvkNr: {
+      placeholder: 'Typ nummer',
+      label: 'Kamer van Koophandel nr.',
+    },
+    representative: {
+      placeholder: 'Vertegenwoordiger selecteren',
+      label: 'Vertegenwoordiger',
+    },
+    email: {
+      placeholder: 'xyz@abcdomain.com',
+      label: 'E-mailen',
+    },
+    phone: {
+      placeholder: 'Typ telefoonnummer',
+      label: 'telefoon',
+    },
+    phone2: {
+      placeholder: 'Typ telefoonnummer',
+      label: 'telefoon 2',
+    },
+    list: {
+      placeholder: 'U kunt dit contact aan meerdere lijsten toevoegen',
+      label: 'Lijst',
+    },
+    tag: {
+      placeholder: 'Selecteer label',
+      label: 'Label',
+    },
+    street: {
+      placeholder: 'Typ Straatnaam',
+      label: 'Straat',
+    },
+    extraStreet: {
+      placeholder: 'Typ Straatnaam',
+      label: 'Straat 2',
+    },
+    city: {
+      placeholder: 'Typ stad',
+      label: 'Stad',
+    },
+    zipcode: {
+      placeholder: 'Typ postcode',
+      label: 'Postcode',
+    },
+    state: {
+      placeholder: 'Typ staat',
+      label: 'Staat',
+    },
+    country: {
+      placeholder: 'Typ land',
+      label: 'Land',
+    },
+  },
   // http status
   200: 'Actie succesvol afgerond',
   201: 'Bron gemaakt',

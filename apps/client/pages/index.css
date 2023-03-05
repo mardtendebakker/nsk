@@ -18,3 +18,7 @@
 div#__next {
   height: 100%;
 }
+
+.newCustomerEmailEditorWrapper {
+  height: 400px !important;
+}
