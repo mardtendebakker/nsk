@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import {
-  Box, Button, Checkbox, Container, IconButton, Typography,
+  Box, Button, Container, IconButton, Typography,
 } from '@mui/material';
 import { useRouter } from 'next/router';
 import ArrowBack from '@mui/icons-material/ArrowBack';
@@ -99,7 +99,7 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
     country2: formRepresentation.country2.value || undefined,
     state2: formRepresentation.state2.value || undefined,
     zip2: formRepresentation.zip2.value || undefined,
-    is_partner: formRepresentation.is_partner.value || false,
+    is_partner: formRepresentation.is_partner.value || undefined,
   };
 }
 
@@ -166,8 +166,6 @@ function NewCustomerContact() {
               {trans('newContact')}
             </Typography>
             <Box>
-              <Checkbox checked={!!formRepresentation.is_partner.value} onChange={(_, checked) => setValue({ field: 'is_partner', value: checked })} />
-              {trans('isPartner')}
               <Button
                 sx={{ ml: '1.5rem' }}
                 variant="contained"

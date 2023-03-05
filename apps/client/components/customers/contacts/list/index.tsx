@@ -24,6 +24,10 @@ function refreshList({
 
   if (formRepresentation.search.value) {
     const search = formRepresentation.search.value.toString();
+    where.OR = [
+      { email: { contains: search } },
+      { name: { contains: search } },
+    ];
     params.append('search', search);
   }
 
@@ -32,14 +36,15 @@ function refreshList({
     params.append('createdAt', createdAt);
   }
 
-  if (formRepresentation.status.value || formRepresentation.status.value === 0) {
-    const status = formRepresentation.status.value.toString();
-    params.append('status', status);
+  if (formRepresentation.representative.value) {
+    const representative = formRepresentation.representative.value.toString();
+    where.representative = { contains: representative };
+    params.append('representative', representative);
   }
 
-  if (formRepresentation.listName.value || formRepresentation.listName.value === 0) {
-    const listName = formRepresentation.listName.value.toString();
-    params.append('listName', listName);
+  if (formRepresentation.list.value || formRepresentation.list.value === 0) {
+    const list = formRepresentation.list.value.toString();
+    params.append('list', list);
   }
 
   call({
@@ -58,8 +63,7 @@ const debouncedRefreshList = _.debounce(refreshList, 500);
 export default function ListContainer() {
   const router = useRouter();
   const [page, setPage] = useState<number>(parseInt(router.query?.page?.toString() || '1', 10));
-  const status = parseInt(router.query?.status?.toString(), 10);
-  const listName = parseInt(router.query?.listName?.toString(), 10);
+  const list = parseInt(router.query?.list?.toString(), 10);
 
   const { formRepresentation, setValue } = useForm({
     search: {
@@ -68,11 +72,11 @@ export default function ListContainer() {
     createdAt: {
       value: router.query?.createdAt?.toString() || null,
     },
-    status: {
-      value: Number.isInteger(status) ? status : null,
+    representative: {
+      value: router.query?.representative?.toString() || '',
     },
-    listName: {
-      value: Number.isInteger(listName) ? listName : null,
+    list: {
+      value: Number.isInteger(list) ? list : null,
     },
   });
 
@@ -95,9 +99,9 @@ export default function ListContainer() {
   }, [
     page,
     formRepresentation.search.value,
-    formRepresentation.status.value,
-    formRepresentation.listName.value,
     formRepresentation.createdAt.value,
+    formRepresentation.representative.value,
+    formRepresentation.list.value,
   ]);
 
   return (
