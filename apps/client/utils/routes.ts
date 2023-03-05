@@ -1,6 +1,8 @@
 export const DASHBOARD = '/';
 export const SIGN_IN = '/sign-in';
 export const CUSTOMERS_CONTACTS = '/customers/contacts';
+export const CUSTOMERS_CONTACTS_NEW = '/customers/contacts/new';
+export const CUSTOMERS_EMAILS_NEW = '/customers/emails/new';
 export const CUSTOMERS_EMAILS = '/customers/emails';
 export const SUPPLIERS = '/suppliers/:id';
 export const ACCOUNT_VERIFICATION = '/account-verification';

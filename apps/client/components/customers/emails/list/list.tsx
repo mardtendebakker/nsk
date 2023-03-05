@@ -8,16 +8,15 @@ import {
   Checkbox,
 } from '@mui/material';
 import useTranslation from '../../../../hooks/useTranslation';
-import { Customer } from '../../../../utils/axios';
 
 export default function List({
-  customers = [],
+  emails = [],
   count,
   page,
   onPageChanged,
   onChecked,
 }: {
-  customers: Customer[],
+  emails: any[],
   count: number,
   page: number,
   onPageChanged: (newPage: number)=>void,
@@ -34,41 +33,23 @@ export default function List({
               {trans('name')}
             </TableCell>
             <TableCell>
-              {trans('representative')}
+              {trans('recipients')}
             </TableCell>
             <TableCell>
-              {trans('email')}
+              {trans('openRate')}
             </TableCell>
             <TableCell>
-              {trans('isPartner')}
+              {trans('clickRate')}
+            </TableCell>
+            <TableCell>
+              {trans('unsubscribes')}
+            </TableCell>
+            <TableCell>
+              {trans('status')}
             </TableCell>
           </TableRow>
         </TableHead>
-        <TableBody>
-          {customers.map((customer: Customer) => (
-            <TableRow
-              sx={{
-                height: 60,
-              }}
-              hover
-              key={customer.id}
-            >
-              <TableCell>
-                <Checkbox sx={{ mr: '1.5rem' }} onChange={(_, checked) => { onChecked({ id: customer.id, checked }); }} />
-                <b>{customer.name}</b>
-              </TableCell>
-              <TableCell>
-                {customer.representative}
-              </TableCell>
-              <TableCell>
-                {customer.email}
-              </TableCell>
-              <TableCell>
-                {Boolean(customer.is_partner)}
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
+        <TableBody />
       </Table>
       <Pagination
         sx={{ display: 'flex', justifyContent: 'end', mt: '2rem' }}

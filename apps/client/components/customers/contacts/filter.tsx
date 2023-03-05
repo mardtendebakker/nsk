@@ -119,7 +119,7 @@ export default function Filter({
                 label={trans('createdAt')}
                 inputFormat="YYYY/MM/DD"
                 value={formRepresentation.createdAt.value}
-                onChange={(value) => setValue({ field: 'createdAt', value: moment(value).format('YYYY/MM/DD') })}
+                onChange={(value) => setValue({ field: 'createdAt', value: moment(value.toString()).format('YYYY/MM/DD') })}
                 renderInput={(params) => (
                   <TextField
                     fullWidth

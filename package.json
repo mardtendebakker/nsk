@@ -25,6 +25,7 @@
     "axios": "^1.2.6",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
+    "draft-js": "^0.11.7",
     "itranslator": "^3.0.6",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
@@ -33,6 +34,7 @@
     "prop-types": "^15.8.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-draft-wysiwyg": "^1.15.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.0.0",
     "tslib": "^2.3.0"

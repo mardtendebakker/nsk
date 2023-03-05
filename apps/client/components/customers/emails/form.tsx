@@ -1,18 +1,26 @@
 import {
-  Box,
-  Button,
   Card,
   CardContent,
   Divider,
   Grid,
   Typography,
+  TextField as BaseTextField,
 } from '@mui/material';
 import { SyntheticEvent } from 'react';
+import dynamic from 'next/dynamic';
+import { EditorProps } from 'react-draft-wysiwyg';
 import useTranslation from '../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../hooks/useForm';
 import TextField from '../../memoizedFormInput/TextField';
+import Autocomplete from '../../memoizedFormInput/Autocomplete';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
-function CustomerForm({
+const Editor = dynamic<EditorProps>(
+  () => import('react-draft-wysiwyg').then((mod) => mod.Editor),
+  { ssr: false },
+);
+
+function Form({
   formRepresentation,
   disabled,
   onSubmit,
@@ -29,6 +37,12 @@ function CustomerForm({
     <form onSubmit={onSubmit}>
       <Card>
         <CardContent>
+          <Typography
+            sx={{ mb: '2rem' }}
+            variant="h4"
+          >
+            {trans('basicDetails')}
+          </Typography>
           <Grid
             container
             spacing={3}
@@ -39,279 +53,98 @@ function CustomerForm({
               sx={{ display: 'flex', flex: 1, flexDirection: { xs: 'column', md: 'row' } }}
             >
               <TextField
-                fullWidth
-                error={Boolean(formRepresentation.name.error)}
-                helperText={formRepresentation.name.error}
-                label={trans('name')}
+                sx={{ flex: 0.5, mr: '1rem' }}
+                // error={Boolean(formRepresentation.name.error)}
+                // helperText={formRepresentation.name.error}
+                label={trans('newEmailForm.name.label')}
+                placeholder={trans('newEmailForm.name.placeholder')}
                 name="name"
                 onChange={(e) => setValue({ field: 'name', value: e.target.value })}
-                value={formRepresentation.name.value}
+                // value={formRepresentation.name.value}
               />
-              <Box sx={{ mx: 0.5, my: 0.5 }} />
               <TextField
-                fullWidth
-                error={Boolean(formRepresentation.representative.error)}
-                helperText={formRepresentation.representative.error}
-                label={trans('representative')}
-                name="representative"
-                onChange={(e) => setValue({ field: 'representative', value: e.target.value })}
-                value={formRepresentation.representative.value}
-              />
-              <Box sx={{ mx: 0.5, my: 0.5 }} />
-              <TextField
-                fullWidth
-                error={Boolean(formRepresentation.kvk_nr.error)}
-                helperText={formRepresentation.kvk_nr.error}
-                label={trans('kvkNr')}
-                name="kvk_nr"
-                onChange={(e) => setValue({ field: 'kvk_nr', value: e.target.value })}
-                value={formRepresentation.kvk_nr.value}
-              />
-              <Box sx={{ mx: 0.5, my: 0.5 }} />
-              <TextField
-                fullWidth
-                error={Boolean(formRepresentation.is_partner.error)}
-                helperText={formRepresentation.is_partner.error}
-                label={trans('isPartner')}
-                name="is_partner"
-                onChange={(e) => setValue({ field: 'is_partner', value: e.target.value })}
-                value={formRepresentation.is_partner.value}
+                sx={{ flex: 0.5 }}
+                // error={Boolean(formRepresentation.kvk_nr.error)}
+                // helperText={formRepresentation.kvk_nr.error}
+                label={trans('newEmailForm.subject.label')}
+                placeholder={trans('newEmailForm.subject.placeholder')}
+                name="subject"
+                onChange={(e) => setValue({ field: 'subject', value: e.target.value })}
+                // value={formRepresentation.kvk_nr.value}
               />
             </Grid>
-          </Grid>
-        </CardContent>
-        <CardContent>
-          <Grid
-            container
-            spacing={3}
-          >
             <Grid
               item
               xs={12}
               sx={{ display: 'flex', flex: 1, flexDirection: { xs: 'column', md: 'row' } }}
             >
-              <TextField
-                fullWidth
-                error={Boolean(formRepresentation.email.error)}
-                helperText={formRepresentation.email.error}
-                label={trans('email')}
-                name="email"
-                onChange={(e) => setValue({ field: 'email', value: e.target.value })}
-                value={formRepresentation.email.value}
+              <Autocomplete
+                sx={{ flex: 0.5, mr: '1rem' }}
+                multiple
+                disabled={disabled}
+                options={[]}
+                filterSelectedOptions
+                renderInput={
+                (params) => (
+                  <BaseTextField
+                    {...params}
+                    name="senderEmail"
+                    label={trans('newEmailForm.senderEmail.label')}
+                    placeholder={trans('newEmailForm.senderEmail.placeholder')}
+                  />
+                )
+               }
               />
-              <Box sx={{ mx: 0.5, my: 0.5 }} />
               <TextField
-                fullWidth
-                error={Boolean(formRepresentation.phone.error)}
-                helperText={formRepresentation.phone.error}
-                label={trans('phone')}
-                name="phone"
-                onChange={(e) => setValue({ field: 'phone', value: e.target.value })}
-                value={formRepresentation.phone.value}
+                sx={{ flex: 0.5 }}
+                // error={Boolean(formRepresentation.phone.error)}
+                // helperText={formRepresentation.phone.error}
+                label={trans('newEmailForm.senderName.label')}
+                placeholder={trans('newEmailForm.senderName.placeholder')}
+                name="senderName"
+                onChange={(e) => setValue({ field: 'senderName', value: e.target.value })}
+                // value={formRepresentation.phone.value}
               />
-              <Box sx={{ mx: 0.5, my: 0.5 }} />
-              <TextField
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              sx={{ display: 'flex', flex: 1, flexDirection: { xs: 'column', md: 'row' } }}
+            >
+              <Autocomplete
                 fullWidth
-                error={Boolean(formRepresentation.phone2.error)}
-                helperText={formRepresentation.phone2.error}
-                label={trans('phone2')}
-                name="phone2"
-                onChange={(e) => setValue({ field: 'phone2', value: e.target.value })}
-                value={formRepresentation.phone2.value}
+                multiple
+                disabled={disabled}
+                options={[]}
+                filterSelectedOptions
+                renderInput={
+                (params) => (
+                  <BaseTextField
+                    {...params}
+                    label={trans('newEmailForm.recipients.label')}
+                    placeholder={trans('newEmailForm.recipients.placeholder')}
+                  />
+                )
+               }
               />
             </Grid>
           </Grid>
         </CardContent>
-        <Divider />
+        <Divider sx={{ mx: '1.5rem' }} />
         <CardContent>
           <Typography
-            sx={{ m: 1 }}
+            sx={{ mb: '2rem' }}
             variant="h4"
           >
-            {trans('address')}
+            {trans('content')}
           </Typography>
-          <Grid
-            container
-            spacing={3}
-          >
-            <Grid
-              item
-              xs={12}
-              sx={{ display: 'flex', flex: 1, flexDirection: { xs: 'column', md: 'row' } }}
-            >
-              <TextField
-                fullWidth
-                error={Boolean(formRepresentation.street.error)}
-                helperText={formRepresentation.street.error}
-                label={trans('street')}
-                name="street"
-                onChange={(e) => setValue({ field: 'street', value: e.target.value })}
-                value={formRepresentation.street.value}
-              />
-              <Box sx={{ mx: 0.5, my: 0.5 }} />
-              <TextField
-                fullWidth
-                error={Boolean(formRepresentation.street_extra.error)}
-                helperText={formRepresentation.street_extra.error}
-                label={trans('street_extra')}
-                name="street_extra"
-                onChange={(e) => setValue({ field: 'street_extra', value: e.target.value })}
-                value={formRepresentation.street_extra.value}
-              />
-              <Box sx={{ mx: 0.5, my: 0.5 }} />
-              <TextField
-                fullWidth
-                error={Boolean(formRepresentation.city.error)}
-                helperText={formRepresentation.city.error}
-                label={trans('city')}
-                name="city"
-                onChange={(e) => setValue({ field: 'city', value: e.target.value })}
-                value={formRepresentation.city.value}
-              />
-            </Grid>
-
-            <Grid
-              item
-              xs={12}
-              sx={{ display: 'flex', flex: 1, flexDirection: { xs: 'column', md: 'row' } }}
-            >
-              <TextField
-                fullWidth
-                error={Boolean(formRepresentation.country.error)}
-                helperText={formRepresentation.country.error}
-                label={trans('country')}
-                name="country"
-                onChange={(e) => setValue({ field: 'country', value: e.target.value })}
-                value={formRepresentation.country.value}
-              />
-              <Box sx={{ mx: 0.5, my: 0.5 }} />
-              <TextField
-                fullWidth
-                error={Boolean(formRepresentation.state.error)}
-                helperText={formRepresentation.state.error}
-                label={trans('state')}
-                name="state"
-                onChange={(e) => setValue({ field: 'state', value: e.target.value })}
-                value={formRepresentation.state.value}
-              />
-              <Box sx={{ mx: 0.5, my: 0.5 }} />
-              <TextField
-                fullWidth
-                error={Boolean(formRepresentation.zip.error)}
-                helperText={formRepresentation.zip.error}
-                label={trans('zipcode')}
-                name="zip"
-                onChange={(e) => setValue({ field: 'zip', value: e.target.value })}
-                value={formRepresentation.zip.value}
-              />
-            </Grid>
-          </Grid>
-
+          <Editor
+            editorClassName="newCustomerEmailEditorWrapper"
+          />
         </CardContent>
-        <Divider />
-        <CardContent>
-          <Typography
-            sx={{ m: 1 }}
-            variant="h4"
-          >
-            {trans('extraAddress')}
-          </Typography>
-          <Grid
-            container
-            spacing={3}
-          >
-            <Grid
-              item
-              xs={12}
-              sx={{ display: 'flex', flex: 1, flexDirection: { xs: 'column', md: 'row' } }}
-            >
-              <TextField
-                fullWidth
-                error={Boolean(formRepresentation.street2.error)}
-                helperText={formRepresentation.street2.error}
-                label={trans('street')}
-                name="street2"
-                onChange={(e) => setValue({ field: 'street2', value: e.target.value })}
-                value={formRepresentation.street2.value}
-              />
-              <Box sx={{ mx: 0.5, my: 0.5 }} />
-              <TextField
-                fullWidth
-                error={Boolean(formRepresentation.street_extra2.error)}
-                helperText={formRepresentation.street_extra2.error}
-                label={trans('street_extra')}
-                name="street_extra2"
-                onChange={(e) => setValue({ field: 'street_extra2', value: e.target.value })}
-                value={formRepresentation.street_extra2.value}
-              />
-              <Box sx={{ mx: 0.5, my: 0.5 }} />
-              <TextField
-                fullWidth
-                error={Boolean(formRepresentation.city2.error)}
-                helperText={formRepresentation.city2.error}
-                label={trans('city')}
-                name="city2"
-                onChange={(e) => setValue({ field: 'city2', value: e.target.value })}
-                value={formRepresentation.city2.value}
-              />
-            </Grid>
-            <Grid
-              item
-              xs={12}
-              sx={{ display: 'flex', flex: 1, flexDirection: { xs: 'column', md: 'row' } }}
-            >
-              <TextField
-                fullWidth
-                error={Boolean(formRepresentation.country2.error)}
-                helperText={formRepresentation.country2.error}
-                label={trans('country')}
-                name="country2"
-                onChange={(e) => setValue({ field: 'country2', value: e.target.value })}
-                value={formRepresentation.country2.value}
-              />
-              <Box sx={{ mx: 0.5, my: 0.5 }} />
-              <TextField
-                fullWidth
-                error={Boolean(formRepresentation.state2.error)}
-                helperText={formRepresentation.state2.error}
-                label={trans('state')}
-                name="state2"
-                onChange={(e) => setValue({ field: 'state2', value: e.target.value })}
-                value={formRepresentation.state2.value}
-              />
-              <Box sx={{ mx: 0.5, my: 0.5 }} />
-              <TextField
-                fullWidth
-                error={Boolean(formRepresentation.zip2.error)}
-                helperText={formRepresentation.zip2.error}
-                label={trans('zipcode')}
-                name="zip2"
-                onChange={(e) => setValue({ field: 'zip2', value: e.target.value })}
-                value={formRepresentation.zip2.value}
-              />
-            </Grid>
-          </Grid>
-        </CardContent>
-        <Divider />
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'flex-end',
-            p: 2,
-          }}
-        >
-          <Button
-            type="submit"
-            disabled={disabled}
-            color="primary"
-            variant="contained"
-          >
-            {trans('save')}
-          </Button>
-        </Box>
       </Card>
     </form>
   );
 }
 
-export default CustomerForm;
+export default Form;

@@ -2,7 +2,9 @@ import Add from '@mui/icons-material/Add';
 import { Box, Button, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import useTranslation from '../../hooks/useTranslation';
-import { CUSTOMERS_CONTACTS, CUSTOMERS_EMAILS } from '../../utils/routes';
+import {
+  CUSTOMERS_CONTACTS, CUSTOMERS_CONTACTS_NEW, CUSTOMERS_EMAILS, CUSTOMERS_EMAILS_NEW,
+} from '../../utils/routes';
 
 export default function Navigation() {
   const router = useRouter();
@@ -44,7 +46,14 @@ export default function Navigation() {
           ))}
         </Box>
       </Box>
-      <Button variant="contained" onClick={() => {}}>
+      <Button
+        variant="contained"
+        onClick={
+        () => router.push(
+          router.pathname === CUSTOMERS_CONTACTS ? CUSTOMERS_CONTACTS_NEW : CUSTOMERS_EMAILS_NEW,
+        )
+        }
+      >
         <Add />
         {trans(router.pathname === CUSTOMERS_CONTACTS ? 'newContact' : 'newEmail')}
       </Button>
