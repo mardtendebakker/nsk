@@ -4,9 +4,14 @@ import { INestApplication } from '@nestjs/common';
 import { PurchaseModule } from './purchase.module';
 import { PurchaseService } from './purchase.service';
 import { OrderDiscrimination } from '../order/types/order-discrimination.enum';
+import { CognitoTestingModule } from '@nestjs-cognito/testing';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 describe('Purchase', () => {
   let app: INestApplication;
+  let config: ConfigService;
+  let token: string;
+
   const findPurchaseResponse =  {
     "count": 2,
     "data": [
@@ -60,20 +65,53 @@ describe('Purchase', () => {
   };
 
   beforeAll(async () => {
+    const mockCognitoClient = {
+      initiateAuth: async () => {
+        return request(app.getHttpServer())
+          .post("/cognito-testing-login")
+          .send({
+            username: config.get("COGNITO_USER_EMAIL"),
+            password: config.get("COGNITO_USER_PASSWORD"),
+            clientId: config.get("COGNITO_CLIENT_ID"),
+          });
+      },
+    };
     const moduleRef = await Test.createTestingModule({
-      imports: [PurchaseModule],
+      imports: [
+        PurchaseModule,
+        ConfigModule.forRoot(),
+        CognitoTestingModule.registerAsync({
+          imports: [ConfigModule.forRoot()],
+          useFactory: async (configService: ConfigService) => ({
+            jwtVerifier: {
+              userPoolId: configService.get<string>("COGNITO_USER_POOL_ID"),
+              clientId: configService.get<string>("COGNITO_CLIENT_ID"),
+              tokenUse: "id",
+            },
+            identityProvider: {
+              region: configService.get<string>("COGNITO_REGION"),
+            },
+          }),
+          inject: [ConfigService],
+        }),
+      ],
     })
       .overrideProvider(PurchaseService)
       .useValue(purchaseService)
       .compile();
 
     app = moduleRef.createNestApplication();
+    config = moduleRef.get<ConfigService>(ConfigService);
     await app.init();
+    
+    const authenticationResult = await mockCognitoClient.initiateAuth();
+    token = authenticationResult.body.IdToken;
   });
 
   it(`/GET purchases`, () => {
     return request(app.getHttpServer())
       .get('/purchases')
+      .set({ Authorization: `Bearer ${token}` })
       .expect(200)
       .expect(purchaseService.findAll());
   });
@@ -81,6 +119,7 @@ describe('Purchase', () => {
   it(`/POST purchases`, () => {
     return request(app.getHttpServer())
       .post('/purchases')
+      .set({ Authorization: `Bearer ${token}` })
       .send({
         order_nr: purchase.order_nr,
         order_date: purchase.order_date,
