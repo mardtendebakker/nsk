@@ -3,9 +3,14 @@ import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { SupplierModule } from './supplier.module';
 import { SupplierService } from './supplier.service';
+import { CognitoTestingModule } from '@nestjs-cognito/testing';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 describe('Supplier', () => {
   let app: INestApplication;
+  let config: ConfigService;
+  let token: string;
+
   const findSupplierResponse =  [
     {
       "id": 39,
@@ -54,20 +59,53 @@ describe('Supplier', () => {
   };
 
   beforeAll(async () => {
+    const mockCognitoClient = {
+      initiateAuth: async () => {
+        return request(app.getHttpServer())
+          .post("/cognito-testing-login")
+          .send({
+            username: config.get("COGNITO_USER_EMAIL"),
+            password: config.get("COGNITO_USER_PASSWORD"),
+            clientId: config.get("COGNITO_CLIENT_ID"),
+          });
+      },
+    };
     const moduleRef = await Test.createTestingModule({
-      imports: [SupplierModule],
+      imports: [
+        SupplierModule,
+        ConfigModule.forRoot(),
+        CognitoTestingModule.registerAsync({
+          imports: [ConfigModule.forRoot()],
+          useFactory: async (configService: ConfigService) => ({
+            jwtVerifier: {
+              userPoolId: configService.get<string>("COGNITO_USER_POOL_ID"),
+              clientId: configService.get<string>("COGNITO_CLIENT_ID"),
+              tokenUse: "id",
+            },
+            identityProvider: {
+              region: configService.get<string>("COGNITO_REGION"),
+            },
+          }),
+          inject: [ConfigService],
+        }),
+      ],
     })
       .overrideProvider(SupplierService)
       .useValue(supplierService)
       .compile();
 
     app = moduleRef.createNestApplication();
+    config = moduleRef.get<ConfigService>(ConfigService);
     await app.init();
+
+    const authenticationResult = await mockCognitoClient.initiateAuth();
+    token = authenticationResult.body.IdToken;
   });
 
   it(`/GET suppliers`, () => {
     return request(app.getHttpServer())
       .get('/suppliers')
+      .set({ Authorization: `Bearer ${token}` })
       .expect(200)
       .expect(supplierService.findAll());
   });
@@ -75,6 +113,7 @@ describe('Supplier', () => {
   it(`/POST supplier`, () => {
     return request(app.getHttpServer())
       .post('/suppliers')
+      .set({ Authorization: `Bearer ${token}` })
       .send({name: supplier.name})
       .expect(201)
       .expect(supplierService.create())
