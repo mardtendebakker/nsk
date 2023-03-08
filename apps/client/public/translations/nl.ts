@@ -132,11 +132,11 @@ const translation = {
     },
     phone: {
       placeholder: 'Typ telefoonnummer',
-      label: 'telefoon',
+      label: 'Telefoon',
     },
     phone2: {
       placeholder: 'Typ telefoonnummer',
-      label: 'telefoon 2',
+      label: 'Telefoon 2',
     },
     list: {
       placeholder: 'U kunt dit contact aan meerdere lijsten toevoegen',

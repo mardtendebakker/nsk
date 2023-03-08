@@ -1,5 +1,5 @@
 import {
-  Accordion, Box, TextField, AccordionSummary, AccordionDetails, Button, Divider,
+  Accordion, Box, AccordionSummary, AccordionDetails, Button, Divider,
 } from '@mui/material';
 import Search from '@mui/icons-material/Search';
 import ChevronRight from '@mui/icons-material/ChevronRight';
@@ -10,6 +10,7 @@ import MemoizedTextField from '../../memoizedFormInput/TextField';
 import Autocomplete from '../../memoizedFormInput/Autocomplete';
 import useTranslation from '../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../hooks/useForm';
+import TextField from '../../textField';
 
 export default function Filter({
   disabled,
@@ -38,7 +39,7 @@ export default function Filter({
               <MemoizedTextField
                 disabled={disabled}
                 name="search"
-                label={trans('searchByCustomerNameOrEmail')}
+                placeholder={trans('searchByCustomerNameOrEmail')}
                 fullWidth
                 value={formRepresentation.search.value}
                 onChange={(e) => setValue({ field: 'search', value: e.target.value })}
@@ -68,7 +69,7 @@ export default function Filter({
                 (params) => (
                   <TextField
                     {...params}
-                    label={trans('list')}
+                    placeholder={trans('list')}
                     sx={{
                       fieldset: {
                         display: 'none',
@@ -100,7 +101,7 @@ export default function Filter({
                 (params) => (
                   <TextField
                     {...params}
-                    label={trans('tags')}
+                    placeholder={trans('tags')}
                     sx={{
                       fieldset: {
                         display: 'none',
@@ -117,7 +118,7 @@ export default function Filter({
               <MemoizedTextField
                 disabled={disabled}
                 name="search"
-                label={trans('representative')}
+                placeholder={trans('representative')}
                 fullWidth
                 value={formRepresentation.representative.value}
                 onChange={(e) => setValue({ field: 'representative', value: e.target.value })}
@@ -134,15 +135,19 @@ export default function Filter({
               />
               <DesktopDatePicker
                 disabled={disabled}
-                label={trans('createdAt')}
                 inputFormat="YYYY/MM/DD"
                 value={formRepresentation.createdAt.value}
                 onChange={(value) => setValue({ field: 'createdAt', value: moment(value.toString()).format('YYYY/MM/DD') })}
                 renderInput={(params) => (
                   <TextField
+                    placeholder={trans('createdAt')}
                     fullWidth
                     size="small"
                     {...params}
+                    inputProps={{
+                      ...params.inputProps,
+                      placeholder: trans('createdAt'),
+                    }}
                     sx={{
                       fieldset: {
                         display: 'none',

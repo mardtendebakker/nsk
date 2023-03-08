@@ -1,5 +1,5 @@
 import {
-  Button, Typography, Stack, IconButton, InputAdornment, TextField, Card, CardContent, Box,
+  Button, Typography, Stack, IconButton, InputAdornment, Card, CardContent, Box,
 } from '@mui/material';
 import { SyntheticEvent, useState } from 'react';
 import RemoveRedEye from '@mui/icons-material/RemoveRedEye';
@@ -9,6 +9,7 @@ import useAxios from '../../hooks/useAxios';
 import { CHANGE_PASSWORD_PATH } from '../../utils/axios';
 import useForm, { FormRepresentation } from '../../hooks/useForm';
 import useTranslation from '../../hooks/useTranslation';
+import TextField from '../textField';
 
 function PasswordForm() {
   const { trans } = useTranslation();
