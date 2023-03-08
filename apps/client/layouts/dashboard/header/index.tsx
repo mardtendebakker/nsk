@@ -13,6 +13,8 @@ import {
   SUPPLIERS,
   CUSTOMERS_CONTACTS,
   CUSTOMERS_EMAILS,
+  STOCKS_PRODUCTS,
+  STOCKS_REPAIR_SERVICES,
 } from '../../../utils/routes';
 import useTranslation from '../../../hooks/useTranslation';
 
@@ -58,6 +60,12 @@ export default function Header() {
               title: trans('dashboard'),
               path: DASHBOARD,
               active: router.pathname === DASHBOARD,
+            },
+            {
+              title: trans('stock'),
+              path: STOCKS_PRODUCTS,
+              active: router.pathname === STOCKS_PRODUCTS
+              || router.pathname === STOCKS_REPAIR_SERVICES,
             },
             {
               title: trans('orders'),
