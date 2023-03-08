@@ -1,4 +1,4 @@
-import { Box, TextField } from '@mui/material';
+import { Box } from '@mui/material';
 import Search from '@mui/icons-material/Search';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import moment from 'moment';
@@ -6,6 +6,7 @@ import MemoizedTextField from '../../memoizedFormInput/TextField';
 import Autocomplete from '../../memoizedFormInput/Autocomplete';
 import useTranslation from '../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../hooks/useForm';
+import TextField from '../../textField';
 
 export default function Filter({
   disabled,
@@ -31,7 +32,7 @@ export default function Filter({
           <MemoizedTextField
             disabled={disabled}
             name="search"
-            label={trans('search')}
+            placeholder={trans('search')}
             fullWidth
             value={formRepresentation.search.value}
             onChange={(e) => setValue({ field: 'search', value: e.target.value })}
@@ -44,7 +45,6 @@ export default function Filter({
           />
           <DesktopDatePicker
             disabled={disabled}
-            label={trans('createdAt')}
             inputFormat="YYYY/MM/DD"
             value={formRepresentation.createdAt.value}
             onChange={(value) => setValue({ field: 'createdAt', value: moment(value.toString()).format('YYYY/MM/DD') })}
@@ -52,6 +52,9 @@ export default function Filter({
               <TextField
                 size="small"
                 {...params}
+                inputProps={{
+                  placeholder: trans('createdAt'),
+                }}
               />
             )}
           />
@@ -74,7 +77,7 @@ export default function Filter({
             // isOptionEqualToValue={(option, value) => option.id === value?.id}
             filterSelectedOptions
             renderInput={
-                (params) => <TextField {...params} label={trans('status')} sx={{ width: '13.75rem' }} />
+                (params) => <TextField {...params} placeholder={trans('status')} sx={{ width: '13.75rem' }} />
             }
           />
         </Box>

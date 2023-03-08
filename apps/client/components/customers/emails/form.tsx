@@ -4,7 +4,6 @@ import {
   Divider,
   Grid,
   Typography,
-  TextField as BaseTextField,
 } from '@mui/material';
 import { SyntheticEvent } from 'react';
 import dynamic from 'next/dynamic';
@@ -12,6 +11,7 @@ import { EditorProps } from 'react-draft-wysiwyg';
 import useTranslation from '../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../hooks/useForm';
 import TextField from '../../memoizedFormInput/TextField';
+import BaseTextField from '../../textField';
 import Autocomplete from '../../memoizedFormInput/Autocomplete';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 

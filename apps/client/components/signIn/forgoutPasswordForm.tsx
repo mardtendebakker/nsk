@@ -1,11 +1,12 @@
 import { SyntheticEvent } from 'react';
 import {
-  Stack, TextField, Typography, Button,
+  Stack, Typography, Button,
 } from '@mui/material';
 import useTranslation from '../../hooks/useTranslation';
 import useForm from '../../hooks/useForm';
 import useSecurity from '../../hooks/useSecurity';
 import { SetSelectedForm } from './types';
+import TextField from '../textField';
 
 function ForgotPasswordForm(
   { onFormSelected }:

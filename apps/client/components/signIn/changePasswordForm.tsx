@@ -1,6 +1,6 @@
 import { SyntheticEvent, useState } from 'react';
 import {
-  Stack, TextField, Typography, Button, IconButton, InputAdornment,
+  Stack, Typography, Button, IconButton, InputAdornment,
 } from '@mui/material';
 import RemoveRedEye from '@mui/icons-material/RemoveRedEye';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -9,6 +9,7 @@ import useTranslation from '../../hooks/useTranslation';
 import useForm, { FormRepresentation } from '../../hooks/useForm';
 import useSecurity from '../../hooks/useSecurity';
 import { SetSelectedForm } from './types';
+import TextField from '../textField';
 
 function ChangePasswordForm(
   { onFormSelected }:
