@@ -1,0 +1,7 @@
+export enum ServiceStatus {
+  STATUS_TODO,
+  STATUS_HOLD,
+  STATUS_BUSY,
+  STATUS_DONE,
+  STATUS_CANCEL
+}
