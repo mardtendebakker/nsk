@@ -5,19 +5,20 @@ import { OrderDiscrimination } from "../order/types/order-discrimination.enum";
 import { ProductRepository } from "./product.repository";
 
 export class ProductProcess {
-  private rest: Partial<product>;
-  private locationName: string;
-  private aserviceDone: number;
-  private taskCount: number;
-  
   private isPurchaseOrder: boolean;
   private isSaleOrder: boolean;
   private isSaleable: boolean;
   private isSaleAndRepair: boolean;
   
+  private locationName: string;
+  private aserviceDone: number;
+  private taskCount: number;
+  private rest: Partial<product>;
+  private splittable: boolean;
+
   private attributedQuantity: number = null;
   private quantitySold: number = null;
-  private quantityPurchase: number = null;
+  private quantityPurchased: number = null;
   private quantitySaleable: number = null;
   private quantityInStock: number = null;
   private quantityOnHold: number = null;
@@ -56,21 +57,23 @@ export class ProductProcess {
   
   public async run() {
     this.quantitySold = await this.getQuantitySold();
-    this.quantityPurchase = this.getQuantityPurchase();
+    this.quantityPurchased = this.getQuantityPurchased();
     this.quantitySaleable = await this.getQuantitySaleable();
     this.quantityInStock = await this.getQuantityInStock();
     this.quantityOnHold = await this.getQuantityOnHold();
+    this.splittable = this.quantityPurchased > 1;
     
     return {
       ...this.rest,
       location: this.locationName,
-      purch: this.quantityPurchase,
+      purch: this.quantityPurchased,
       stock: this.quantityInStock,
       hold: this.quantityOnHold,
       sale: this.quantitySaleable,
       sold: this.quantitySold,
       done: this.aserviceDone,
       tasks: this.taskCount,
+      splittable: this.splittable,
     };
   }
 
@@ -132,23 +135,23 @@ export class ProductProcess {
     return this.quantitySold;
   }
 
-  private getQuantityPurchase() {
+  private getQuantityPurchased() {
     const  { product_order } = this.product;
-    let quantityPurchase = 0;
+    let quantityPurchased = 0;
 
     if (this.isPurchaseOrder) {
-      quantityPurchase = product_order?.[0]?.quantity ?? 1;
+      quantityPurchased = product_order?.[0]?.quantity ?? 1;
     }
 
-    this.quantityPurchase = quantityPurchase;
-    return this.quantityPurchase;
+    this.quantityPurchased = quantityPurchased;
+    return this.quantityPurchased;
   }
 
   private async getQuantitySaleable() {
     let quantitySaleable = 0;
 
     if (this.isSaleable) {
-      quantitySaleable = this.getQuantityPurchase();
+      quantitySaleable = this.getQuantityPurchased();
     }
 
     this.quantitySaleable = quantitySaleable - this.quantitySold ?? await this.getQuantitySold();

@@ -81,6 +81,7 @@ export class ProductService {
     };
 
     const productSelect: Prisma.productSelect = {
+      id: true,
       sku: true,
       name: true,
       product_type: {

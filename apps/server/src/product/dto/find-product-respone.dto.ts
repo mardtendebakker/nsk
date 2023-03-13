@@ -3,6 +3,7 @@ import { IFindManyRespone } from "../../common/interface/find-many-respone";
 import { ProductEntity } from "../entities/product.entity";
 
 export class FindProductResponeDto extends PickType(ProductEntity, [
+  "id",
   "sku",
   "name",
   "price",
@@ -32,6 +33,9 @@ export class FindProductResponeDto extends PickType(ProductEntity, [
   
   @ApiProperty()
   tasks: number;
+
+  @ApiProperty()
+  splittable: boolean;
 }
 
 export class FindProductsResponseDto implements IFindManyRespone<FindProductResponeDto> {
