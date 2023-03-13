@@ -108,17 +108,11 @@ export class ProductService {
     // this where is the top line logic transformation
     const productwhere: Prisma.productWhereInput = {
       OR: [{
-        product_status: { 
-          product: {
-            none: {}
-          }
-         }
+        status_id: null,
       }, {
         product_status: {
           OR: [{
-              is_stock: {
-                equals: null
-              }
+              is_stock: null
           }, {
               is_stock: true
           }]

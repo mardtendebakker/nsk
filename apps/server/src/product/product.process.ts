@@ -1,14 +1,14 @@
 
-import { Prisma, product } from "@prisma/client";
+import { Prisma, product, product_order } from "@prisma/client";
 import { AttributeType } from "../attribute/enum/attribute-type.enum";
 import { OrderDiscrimination } from "../order/types/order-discrimination.enum";
 import { ProductRepository } from "./product.repository";
 
 export class ProductProcess {
-  private isPurchaseOrder: boolean;
-  private isSaleOrder: boolean;
   private isSaleable: boolean;
   private isSaleAndRepair: boolean;
+  private productPurchaseOrder: product_order; //TODO: Prisma.PromiseReturnType<typeof product_order_repository.findOne>
+  private productSaleOrders: product_order[]; //TODO: Prisma.PromiseReturnType<typeof product_order_repository.findOne>[]
   
   private locationName: string;
   private aserviceDone: number;
@@ -42,17 +42,16 @@ export class ProductProcess {
       ...rest
     } = this.product;
 
-    const aorder = product_order?.[0]?.['aorder'];
-
     this.rest = rest;
     this.locationName = location?.name;
     this.aserviceDone = product_order?.[0]?.['aservice']?.length;
     this.taskCount = product_type?.['_count']?.product_type_task;
 
-    this.isPurchaseOrder = (aorder?.discr === OrderDiscrimination.PURCHASE);
-    this.isSaleOrder = (aorder?.discr === OrderDiscrimination.SALE);
+    this.productPurchaseOrder = product_order.find(po => po['aorder']?.discr == OrderDiscrimination.PURCHASE);
+    this.productSaleOrders = product_order.filter(po => po['aorder']?.discr == OrderDiscrimination.SALE);
+    
     this.isSaleable = product_status ? product_status?.is_saleable ?? true : false;
-    this.isSaleAndRepair = this.isSaleOrder ? aorder?.repair?.id ? true : false : false;
+    this.isSaleAndRepair = this.productSaleOrders.length == 1 && this.productSaleOrders?.[0]['aorder']?.repair?.id;
   }
   
   public async run() {
@@ -93,15 +92,13 @@ export class ProductProcess {
   }
 
   private async getQuantitySold() {
-    const { product_order, product_attribute_product_attribute_value_product_idToproduct } = this.product;
+    const { product_attribute_product_attribute_value_product_idToproduct } = this.product;
     const product_attributeds = product_attribute_product_attribute_value_product_idToproduct;
     let quantitySold = 0;
 
     if (this.isSaleable) {
       
-      if (this.isSaleOrder) {
-        quantitySold += product_order.reduce((acc, cur) => acc + cur.quantity, 0);
-      }
+      quantitySold += this.productSaleOrders.reduce((acc, cur) => acc + cur.quantity, 0);
       
       for (let i = 0; i < product_attributeds.length; i++) {
 
@@ -136,12 +133,9 @@ export class ProductProcess {
   }
 
   private getQuantityPurchased() {
-    const  { product_order } = this.product;
     let quantityPurchased = 0;
 
-    if (this.isPurchaseOrder) {
-      quantityPurchased = product_order?.[0]?.quantity ?? 1;
-    }
+    quantityPurchased = this.productPurchaseOrder?.quantity ?? 1;
 
     this.quantityPurchased = quantityPurchased;
     return this.quantityPurchased;
@@ -159,13 +153,12 @@ export class ProductProcess {
   }
 
   private async getQuantityInStock() {
-    const { product_order } = this.product;
     let quantityInStock = 0;
 
-    if (this.isPurchaseOrder) {
-      quantityInStock = product_order?.[0]?.quantity || 0;
-    } else if (this.isSaleAndRepair) {
-      quantityInStock = product_order?.[0]?.quantity || 0;
+    quantityInStock = this.productPurchaseOrder?.quantity || 0;
+
+    if (this.isSaleAndRepair) {
+      quantityInStock = this.productSaleOrders?.[0]?.quantity || 0;
     }
 
     this.quantityInStock = quantityInStock - this.quantitySold ?? await this.getQuantitySold();
