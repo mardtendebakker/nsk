@@ -5,8 +5,8 @@ import { FindManyDto } from '../common/dto/find-many.dto';
 import { FindProductsResponseDto } from './dto/find-product-respone.dto';
 import { ProductService } from './product.service';
 
-@ApiTags('product')
-@Controller('product')
+@ApiTags('products')
+@Controller('products')
 @ApiBearerAuth()
 @Authentication()
 export class ProductController {
