@@ -6,11 +6,12 @@ import ChevronRight from '@mui/icons-material/ChevronRight';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import moment from 'moment';
 import { useState } from 'react';
-import MemoizedTextField from '../../memoizedFormInput/TextField';
-import Autocomplete from '../../memoizedFormInput/Autocomplete';
-import useTranslation from '../../../hooks/useTranslation';
-import { FormRepresentation, SetValue } from '../../../hooks/useForm';
-import TextField from '../../textField';
+import MemoizedTextField from '../../../memoizedFormInput/TextField';
+import Autocomplete from '../../../memoizedFormInput/Autocomplete';
+import useTranslation from '../../../../hooks/useTranslation';
+import { FormRepresentation, SetValue } from '../../../../hooks/useForm';
+import TextField from '../../../textField';
+import ListFilterContainer from '../../../listFilterContainer';
 
 export default function Filter({
   disabled,
@@ -26,12 +27,7 @@ export default function Filter({
 
   return (
     <form>
-      <Box sx={(theme) => ({
-        border: `1px solid ${theme.palette.grey[30]}`,
-        borderRadius: '0.5rem',
-        px: '.5rem',
-      })}
-      >
+      <ListFilterContainer>
         <Accordion expanded={showFilter}>
           <AccordionSummary sx={{ background: 'transparent !important' }}>
             <Box sx={{ flex: 1, display: 'flex', alignItems: 'center' }}>
@@ -80,7 +76,7 @@ export default function Filter({
             }
               />
               <Box sx={(theme) => ({
-                m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.grey[30],
+                m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.divider,
               })}
               />
               <Autocomplete
@@ -112,7 +108,7 @@ export default function Filter({
             }
               />
               <Box sx={(theme) => ({
-                m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.grey[30],
+                m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.divider,
               })}
               />
               <MemoizedTextField
@@ -130,7 +126,7 @@ export default function Filter({
                 }}
               />
               <Box sx={(theme) => ({
-                m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.grey[30],
+                m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.divider,
               })}
               />
               <DesktopDatePicker
@@ -159,7 +155,7 @@ export default function Filter({
             </Box>
           </AccordionDetails>
         </Accordion>
-      </Box>
+      </ListFilterContainer>
     </form>
   );
 }

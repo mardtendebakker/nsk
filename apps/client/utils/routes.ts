@@ -9,3 +9,5 @@ export const ACCOUNT_VERIFICATION = '/account-verification';
 export const SETTINGS = '/settings';
 export const ORDERS_PURCHASES = '/orders/purchases';
 export const ORDERS_SALES = '/orders/sales';
+export const STOCKS_PRODUCTS = '/stock/products';
+export const STOCKS_REPAIR_SERVICES = '/stock/repair-services';

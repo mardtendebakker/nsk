@@ -16,6 +16,7 @@ export default function Table(theme) {
         head: {
           color: theme.palette.text.secondary,
           padding: '0.45rem 1rem',
+          borderBottom: `1px solid ${theme.palette.grey[30]}`,
         },
       },
     },
