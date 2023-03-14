@@ -8,6 +8,7 @@ import useAxios from '../../../../hooks/useAxios';
 import { STOCKS_PRODUCTS } from '../../../../utils/routes';
 import useForm from '../../../../hooks/useForm';
 import Filter from './filter';
+import Action from './action';
 
 function refreshList({
   page,
@@ -57,6 +58,7 @@ const debouncedRefreshList = _.debounce(refreshList, 500);
 export default function ListContainer() {
   const router = useRouter();
   const [page, setPage] = useState<number>(parseInt(router.query?.page?.toString() || '1', 10));
+  const [checkedProductIds, setCheckedProductIds] = useState<number[]>([]);
   const availability = parseInt(router.query?.availability?.toString(), 10);
   const type = parseInt(router.query?.type?.toString(), 10);
   const location = parseInt(router.query?.location?.toString(), 10);
@@ -107,6 +109,18 @@ export default function ListContainer() {
     formRepresentation.type.value,
   ]);
 
+  const handleAllChecked = (checked: boolean) => {
+    setCheckedProductIds(checked ? data.map(({ id }) => id) : []);
+  };
+
+  const handleRowChecked = ({ id, checked }: { id: number, checked: boolean }) => {
+    if (checked) {
+      setCheckedProductIds((oldValue) => [...oldValue, id]);
+    } else {
+      setCheckedProductIds((oldValue) => oldValue.filter((currentId) => currentId !== id));
+    }
+  };
+
   return (
     <Card sx={{ overflowX: 'auto', p: '1.5rem' }}>
       <Filter
@@ -114,13 +128,27 @@ export default function ListContainer() {
         formRepresentation={formRepresentation}
         setValue={setValue}
       />
+      <Box sx={{ m: '1.5rem' }} />
+      <Action
+        disabled={performing}
+        allChecked={checkedProductIds.length === data.length && data.length > 0}
+        checkedProductsCount={checkedProductIds.length}
+        onAllChecked={handleAllChecked}
+        onChangeLocation={() => {}}
+        onChangeAvailability={() => {}}
+        onAssign={() => {}}
+        onPrint={() => {}}
+        onDelete={() => {}}
+
+      />
       <Box sx={{ m: '1rem' }} />
       <List
         products={data}
         count={Math.floor(count / 10)}
         page={page}
-        onChecked={() => {}}
-        onPageChanged={(newPage) => setPage(newPage)}
+        onChecked={handleRowChecked}
+        checkedProductIds={checkedProductIds}
+        onPageChanged={(newPage) => { setPage(newPage); setCheckedProductIds([]); }}
       />
     </Card>
   );
