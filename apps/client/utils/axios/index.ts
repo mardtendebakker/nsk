@@ -15,6 +15,7 @@ export {
   FORGOT_PASSWORD_PATH,
   SALES_ORDERS_PATH,
   PURCHASE_ORDERS_PATH,
+  PRODUCTS_PATH,
 } from './paths';
 export { AxiosError } from 'axios';
 export type { AxiosPromise, AxiosResponse } from 'axios';
@@ -29,4 +30,5 @@ export type { default as Customer } from './model/customer';
 export type { default as Supplier } from './model/supplier';
 export type { default as SalesOrder } from './model/salesOrder';
 export type { default as Product } from './model/product';
+export type { default as RepairService } from './model/repairService';
 export type { default as PurchaseOrder } from './model/purchaseOrder';

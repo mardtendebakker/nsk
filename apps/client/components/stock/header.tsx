@@ -17,7 +17,7 @@ export default function Navigation() {
     {
       active: router.pathname === STOCKS_REPAIR_SERVICES,
       text: trans('repairServices'),
-      onClick: () => router.push(STOCKS_REPAIR_SERVICES),
+      onClick: () => {},
     },
   ];
 

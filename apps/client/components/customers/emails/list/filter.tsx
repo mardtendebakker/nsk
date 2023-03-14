@@ -2,11 +2,12 @@ import { Box } from '@mui/material';
 import Search from '@mui/icons-material/Search';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import moment from 'moment';
-import MemoizedTextField from '../../memoizedFormInput/TextField';
-import Autocomplete from '../../memoizedFormInput/Autocomplete';
-import useTranslation from '../../../hooks/useTranslation';
-import { FormRepresentation, SetValue } from '../../../hooks/useForm';
-import TextField from '../../textField';
+import MemoizedTextField from '../../../memoizedFormInput/TextField';
+import Autocomplete from '../../../memoizedFormInput/Autocomplete';
+import useTranslation from '../../../../hooks/useTranslation';
+import { FormRepresentation, SetValue } from '../../../../hooks/useForm';
+import TextField from '../../../textField';
+import ListFilterContainer from '../../../listFilterContainer';
 
 export default function Filter({
   disabled,
@@ -21,12 +22,7 @@ export default function Filter({
 
   return (
     <form>
-      <Box sx={(theme) => ({
-        border: `1px solid ${theme.palette.grey[30]}`,
-        borderRadius: '0.5rem',
-        p: '.1rem 1.5rem',
-      })}
-      >
+      <ListFilterContainer>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Search sx={{ color: '#7F8FA4' }} />
           <MemoizedTextField
@@ -59,7 +55,7 @@ export default function Filter({
             )}
           />
           <Box sx={(theme) => ({
-            m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.grey[30],
+            m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.divider,
           })}
           />
           <Autocomplete
@@ -81,7 +77,7 @@ export default function Filter({
             }
           />
         </Box>
-      </Box>
+      </ListFilterContainer>
     </form>
   );
 }

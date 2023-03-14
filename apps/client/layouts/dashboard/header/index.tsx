@@ -96,7 +96,7 @@ export default function Header() {
         >
           <LanguagePopover />
           <Box sx={(theme) => ({
-            m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.grey[30],
+            m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.divider,
           })}
           />
           <AccountPopover />

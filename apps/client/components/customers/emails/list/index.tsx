@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import _ from 'lodash';
 import List from './list';
-import Filter from '../filter';
+import Filter from './filter';
 import useAxios from '../../../../hooks/useAxios';
 import { CUSTOMERS_PATH } from '../../../../utils/axios';
 import { CUSTOMERS_EMAILS } from '../../../../utils/routes';

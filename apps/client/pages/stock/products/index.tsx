@@ -5,7 +5,7 @@ import List from '../../../components/stock/products/list';
 import DashboardLayout from '../../../layouts/dashboard';
 import Header from '../../../components/stock/header';
 
-function StockProducts() {
+function Products() {
   const { trans } = useTranslation();
 
   return (
@@ -30,4 +30,4 @@ function StockProducts() {
   );
 }
 
-export default StockProducts;
+export default Products;

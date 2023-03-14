@@ -1,11 +1,13 @@
-import { Card } from '@mui/material';
+import { Box, Card } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import _ from 'lodash';
+import { PRODUCTS_PATH } from '../../../../utils/axios';
 import List from './list';
 import useAxios from '../../../../hooks/useAxios';
 import { STOCKS_PRODUCTS } from '../../../../utils/routes';
 import useForm from '../../../../hooks/useForm';
+import Filter from './filter';
 
 function refreshList({
   page,
@@ -19,6 +21,25 @@ function refreshList({
   if (page) {
     params.append('page', page.toString());
   }
+
+  if (formRepresentation.search.value) {
+    const search = formRepresentation.search.value.toString();
+    where.name = { contains: search };
+    params.append('search', search);
+  }
+
+  [
+    'availability',
+    'type',
+    'location',
+    'taskStatus',
+    'assignedTo',
+  ].forEach((keyword) => {
+    if (formRepresentation[keyword].value || formRepresentation[keyword].value === 0) {
+      const value = formRepresentation[keyword].value.toString();
+      params.append(keyword, value);
+    }
+  });
 
   call({
     params: {
@@ -36,45 +57,66 @@ const debouncedRefreshList = _.debounce(refreshList, 500);
 export default function ListContainer() {
   const router = useRouter();
   const [page, setPage] = useState<number>(parseInt(router.query?.page?.toString() || '1', 10));
-  const list = parseInt(router.query?.list?.toString(), 10);
+  const availability = parseInt(router.query?.availability?.toString(), 10);
+  const type = parseInt(router.query?.type?.toString(), 10);
+  const location = parseInt(router.query?.location?.toString(), 10);
+  const taskStatus = parseInt(router.query?.taskStatus?.toString(), 10);
+  const assignedTo = parseInt(router.query?.assignedTo?.toString(), 10);
 
-  const { formRepresentation } = useForm({
+  const { formRepresentation, setValue } = useForm({
     search: {
       value: router.query?.search?.toString() || '',
     },
-    createdAt: {
-      value: router.query?.createdAt?.toString() || null,
+    availability: {
+      value: Number.isInteger(availability) ? availability : null,
     },
-    representative: {
-      value: router.query?.representative?.toString() || '',
+    type: {
+      value: Number.isInteger(type) ? type : null,
     },
-    list: {
-      value: Number.isInteger(list) ? list : null,
+    location: {
+      value: Number.isInteger(location) ? location : null,
+    },
+    taskStatus: {
+      value: Number.isInteger(taskStatus) ? taskStatus : null,
+    },
+    assignedTo: {
+      value: Number.isInteger(assignedTo) ? assignedTo : null,
     },
   });
 
-  const { data: { data = [], count = 0 } = {}, call } = useAxios(
+  const { data: { data = [], count = 0 } = {}, call, performing } = useAxios(
     'get',
-    'PRODUCTS_PATH'.replace(':id', ''),
+    PRODUCTS_PATH.replace(':id', ''),
     {
       withProgressBar: true,
     },
   );
 
   useEffect(() => {
-    /* debouncedRefreshList({
+    debouncedRefreshList({
       page,
       formRepresentation,
       router,
       call,
-    }); */
+    });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [
+    page,
+    formRepresentation.search.value,
+    formRepresentation.availability.value,
+    formRepresentation.type.value,
+  ]);
 
   return (
     <Card sx={{ overflowX: 'auto', p: '1.5rem' }}>
+      <Filter
+        disabled={performing}
+        formRepresentation={formRepresentation}
+        setValue={setValue}
+      />
+      <Box sx={{ m: '1rem' }} />
       <List
-        customers={data}
+        products={data}
         count={Math.floor(count / 10)}
         page={page}
         onChecked={() => {}}
