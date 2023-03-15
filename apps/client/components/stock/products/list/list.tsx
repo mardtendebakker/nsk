@@ -18,12 +18,14 @@ export default function List({
   page,
   onPageChanged,
   onChecked,
+  checkedProductIds,
 }: {
   products: Product[],
   count: number,
   page: number,
   onPageChanged: (newPage: number)=>void,
   onChecked: (object: { id: number, checked: boolean })=>void,
+  checkedProductIds: number[]
 }) {
   const { trans } = useTranslation();
 
@@ -72,7 +74,11 @@ export default function List({
                 key={product.id}
               >
                 <TableCell>
-                  <Checkbox sx={{ mr: '1.5rem' }} onChange={(_, checked) => { onChecked({ id: product.id, checked }); }} />
+                  <Checkbox
+                    checked={Boolean(checkedProductIds.find((id) => id === product.id))}
+                    sx={{ mr: '1.5rem' }}
+                    onChange={(_, checked) => { onChecked({ id: product.id, checked }); }}
+                  />
                   {product.sku}
                 </TableCell>
                 <TableCell>
