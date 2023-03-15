@@ -13,6 +13,8 @@ import {
   SUPPLIERS,
   CUSTOMERS_CONTACTS,
   CUSTOMERS_EMAILS,
+  STOCKS_PRODUCTS,
+  STOCKS_REPAIR_SERVICES,
 } from '../../../utils/routes';
 import useTranslation from '../../../hooks/useTranslation';
 
@@ -60,6 +62,12 @@ export default function Header() {
               active: router.pathname === DASHBOARD,
             },
             {
+              title: trans('stock'),
+              path: STOCKS_PRODUCTS,
+              active: router.pathname === STOCKS_PRODUCTS
+              || router.pathname === STOCKS_REPAIR_SERVICES,
+            },
+            {
               title: trans('orders'),
               path: ORDERS_PURCHASES,
               active: router.pathname === ORDERS_PURCHASES || router.pathname === ORDERS_SALES,
@@ -88,7 +96,7 @@ export default function Header() {
         >
           <LanguagePopover />
           <Box sx={(theme) => ({
-            m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.grey[30],
+            m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.divider,
           })}
           />
           <AccountPopover />
