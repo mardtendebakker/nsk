@@ -5,10 +5,14 @@ import { FindOneDto } from '../common/dto/find-one.dto';
 import { ServiceStatus } from '../service/enum/service-status.enum';
 import { ProductRepository } from './product.repository';
 import { ProductProcess } from './product.process';
+import { LocationService } from '../location/location.service';
 
 @Injectable()
 export class ProductService {
-  constructor(protected readonly repository: ProductRepository) {}
+  constructor(
+    protected readonly repository: ProductRepository,
+    protected readonly locationService: LocationService
+  ) {}
 
   async findAll(query: FindManyDto) {
     const productTypeSelect: Prisma.product_typeSelect = {
@@ -81,6 +85,7 @@ export class ProductService {
     };
 
     const productSelect: Prisma.productSelect = {
+      ...query.select,
       id: true,
       sku: true,
       name: true,
@@ -107,6 +112,7 @@ export class ProductService {
     // const isStock = product_status ? product_status?.is_stock ?? true : true;
     // this where is the top line logic transformation
     const productwhere: Prisma.productWhereInput = {
+      ...query.where,
       OR: [{
         status_id: null,
       }, {
@@ -120,17 +126,17 @@ export class ProductService {
       }]
     }
 
-    const orderBy: Prisma.productOrderByWithRelationInput[] = [
+    const productOrderBy: Prisma.productOrderByWithRelationInput[] = query.orderBy || [
       {
         id: 'desc',
       },
     ];
-
+    
     const result = await this.repository.findAll({
       ...query,
       select: productSelect,
       where: productwhere,
-      orderBy,
+      orderBy: productOrderBy,
     });
 
     const data = await Promise.all(result.data.map(async product => {
@@ -145,6 +151,96 @@ export class ProductService {
   }
 
   async findOne(query: FindOneDto) {
-    return this.repository.findOne({ ...query });
+    const locationSelect: Prisma.locationSelect = {
+      id: true,
+    };
+    const productStatusSelect: Prisma.product_statusSelect = {
+      id: true,
+    }
+    const attributeOptionSelect: Prisma.attribute_optionSelect = {
+      id: true,
+      name: true,
+    };
+    const attributeSelect: Prisma.attributeSelect = {
+      id: true,
+      name: true,
+      attribute_option: {
+        select: attributeOptionSelect
+      },
+    };
+    const productTypeAttributeSelect: Prisma.product_type_attributeSelect = {
+      attribute: {
+        select: attributeSelect,
+      },
+    };
+    const productTypeSelect: Prisma.product_typeSelect = {
+      id: true,
+      product_type_attribute: {
+        select: productTypeAttributeSelect,
+      },
+    };
+    const acompanySelect: Prisma.acompanySelect = {
+      name: true,
+    };
+    const orderStatus: Prisma.order_statusSelect = {
+      name: true,
+    };
+    const aorderSelect: Prisma.aorderSelect = {
+      id: true,
+      order_nr: true,
+      order_date: true,
+      acompany_aorder_customer_idToacompany: {
+        select: acompanySelect,
+      },
+      acompany_aorder_supplier_idToacompany: {
+        select: acompanySelect,
+      },
+      order_status: {
+        select: orderStatus,
+      },
+    };
+    const productOrderSelect: Prisma.product_orderSelect = {
+      aorder: {
+        select: aorderSelect,
+      },
+    };
+    const afileSelect: Prisma.afileSelect = {
+      unique_server_filename: true,
+    };
+    const productSelect: Prisma.productSelect = {
+      id: true,
+      sku: true,
+      name: true,
+      price: true,
+      created_at: true,
+      updated_at: true,
+      location: {
+        select: locationSelect
+      },
+      product_status: {
+        select: productStatusSelect,
+      },
+      product_type: {
+        select: productTypeSelect,
+      },
+      product_order: {
+        select: productOrderSelect,
+      },
+      afile: {
+        select: afileSelect,
+      },
+      product_attribute_product_attribute_product_idToproduct: true
+    };
+    
+    const product = this.repository.findOne({ ...query, select: productSelect });
+    const locations = this.locationService.getAll();
+    const statuses = this.repository.getAllStatus();
+    const types = this.repository.getAllTypes();
+    return {
+      ...await product,
+      locations: await locations,
+      product_statuses: await statuses,
+      product_types: await types,
+    };
   }
 }
