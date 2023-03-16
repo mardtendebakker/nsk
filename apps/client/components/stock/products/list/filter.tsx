@@ -4,12 +4,16 @@ import {
 import Search from '@mui/icons-material/Search';
 import ChevronRight from '@mui/icons-material/ChevronRight';
 import { useState } from 'react';
-import ListFilterContainer from '../../../listFilterContainer';
-import MemoizedTextField from '../../../memoizedFormInput/TextField';
-import Autocomplete from '../../../memoizedFormInput/Autocomplete';
+import ProductAvailabilityPicker from '../../../memoizedFormInput/productAvailabilityPicker';
+import ProductLocationPicker from '../../../memoizedFormInput/productLocationPicker';
+import BorderedBox from '../../../borderedBox';
+import MemoizedTextField from '../../../memoizedFormInput/textField';
+import Autocomplete from '../../../memoizedFormInput/autocomplete';
 import useTranslation from '../../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../../hooks/useForm';
 import TextField from '../../../textField';
+import ProductTypePicker from '../../../memoizedFormInput/productTypePicker';
+import TastStatusPicker from '../../../memoizedFormInput/taskStatusPicker';
 
 export default function Filter({
   disabled,
@@ -25,7 +29,7 @@ export default function Filter({
 
   return (
     <form>
-      <ListFilterContainer>
+      <BorderedBox>
         <Accordion expanded={showFilter}>
           <AccordionSummary sx={{ background: 'transparent !important' }}>
             <Box sx={{ flex: 1, display: 'flex', alignItems: 'center' }}>
@@ -53,129 +57,45 @@ export default function Filter({
           <Divider />
           <AccordionDetails>
             <Box sx={{ flex: 1, display: 'flex', alignItems: 'center' }}>
-              <Autocomplete
-                disabled={disabled}
+              <ProductAvailabilityPicker
+                displayFieldset={false}
+                label=""
                 fullWidth
-                size="small"
-                options={[]}
-            /*
-            onChange={
-            (_, option) => setValue({
-               field: 'status', value: option?.id === undefined ? null : option.id }
-               )}
-           */
+                disabled={disabled}
                 value={[].find(({ id }) => id === formRepresentation.availability.value) || null}
-                // isOptionEqualToValue={(option, value) => option.id === value?.id}
-                filterSelectedOptions
-                renderInput={
-                (params) => (
-                  <TextField
-                    {...params}
-                    placeholder={trans('availability')}
-                    sx={{
-                      fieldset: {
-                        display: 'none',
-                      },
-                    }}
-                  />
-                )
-            }
               />
               <Box sx={(theme) => ({
                 m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.divider,
               })}
               />
-              <Autocomplete
-                disabled={disabled}
+              <ProductTypePicker
+                displayFieldset={false}
+                label=""
                 fullWidth
-                size="small"
-                options={[]}
-            /*
-            onChange={
-            (_, option) => setValue({
-               field: 'status', value: option?.id === undefined ? null : option.id }
-               )}
-           */
+                disabled={disabled}
                 value={[].find(({ id }) => id === formRepresentation.type.value) || null}
-                // isOptionEqualToValue={(option, value) => option.id === value?.id}
-                filterSelectedOptions
-                renderInput={
-                (params) => (
-                  <TextField
-                    {...params}
-                    placeholder={trans('productType')}
-                    sx={{
-                      fieldset: {
-                        display: 'none',
-                      },
-                    }}
-                  />
-                )
-            }
               />
               <Box sx={(theme) => ({
                 m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.divider,
               })}
               />
-              <Autocomplete
-                disabled={disabled}
+              <ProductLocationPicker
+                displayFieldset={false}
+                label=""
                 fullWidth
-                size="small"
-                options={[]}
-            /*
-            onChange={
-            (_, option) => setValue({
-               field: 'status', value: option?.id === undefined ? null : option.id }
-               )}
-           */
+                disabled={disabled}
                 value={[].find(({ id }) => id === formRepresentation.location.value) || null}
-                // isOptionEqualToValue={(option, value) => option.id === value?.id}
-                filterSelectedOptions
-                renderInput={
-                (params) => (
-                  <TextField
-                    {...params}
-                    placeholder={trans('location')}
-                    sx={{
-                      fieldset: {
-                        display: 'none',
-                      },
-                    }}
-                  />
-                )
-            }
               />
               <Box sx={(theme) => ({
                 m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.divider,
               })}
               />
-              <Autocomplete
-                disabled={disabled}
+              <TastStatusPicker
+                displayFieldset={false}
+                label=""
                 fullWidth
-                size="small"
-                options={[]}
-            /*
-            onChange={
-            (_, option) => setValue({
-               field: 'status', value: option?.id === undefined ? null : option.id }
-               )}
-           */
-                value={[].find(({ id }) => id === formRepresentation.taskStatus.value) || null}
-                // isOptionEqualToValue={(option, value) => option.id === value?.id}
-                filterSelectedOptions
-                renderInput={
-                (params) => (
-                  <TextField
-                    {...params}
-                    placeholder={trans('taskStatus')}
-                    sx={{
-                      fieldset: {
-                        display: 'none',
-                      },
-                    }}
-                  />
-                )
-            }
+                disabled={disabled}
+                value={[].find(({ id }) => id === formRepresentation.location.value) || null}
               />
               <Box sx={(theme) => ({
                 m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.divider,
@@ -212,7 +132,7 @@ export default function Filter({
             </Box>
           </AccordionDetails>
         </Accordion>
-      </ListFilterContainer>
+      </BorderedBox>
     </form>
   );
 }

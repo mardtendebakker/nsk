@@ -10,7 +10,7 @@ import {
 import { SyntheticEvent } from 'react';
 import useTranslation from '../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../hooks/useForm';
-import TextField from '../memoizedFormInput/TextField';
+import TextField from '../memoizedFormInput/textField';
 
 function SupplierForm({
   formRepresentation,

@@ -9,6 +9,7 @@ import { STOCKS_PRODUCTS } from '../../../../utils/routes';
 import useForm from '../../../../hooks/useForm';
 import Filter from './filter';
 import Action from './action';
+import Edit from '../edit';
 
 function refreshList({
   page,
@@ -58,6 +59,7 @@ const debouncedRefreshList = _.debounce(refreshList, 500);
 export default function ListContainer() {
   const router = useRouter();
   const [page, setPage] = useState<number>(parseInt(router.query?.page?.toString() || '1', 10));
+  const [editProductId, setEditProductId] = useState<number | undefined>();
   const [checkedProductIds, setCheckedProductIds] = useState<number[]>([]);
   const availability = parseInt(router.query?.availability?.toString(), 10);
   const type = parseInt(router.query?.type?.toString(), 10);
@@ -129,11 +131,13 @@ export default function ListContainer() {
         setValue={setValue}
       />
       <Box sx={{ m: '1.5rem' }} />
+      <Edit onClose={() => setEditProductId(undefined)} open={!!editProductId} />
       <Action
         disabled={performing}
         allChecked={checkedProductIds.length === data.length && data.length > 0}
         checkedProductsCount={checkedProductIds.length}
         onAllChecked={handleAllChecked}
+        onEdit={() => setEditProductId(checkedProductIds[0])}
         onChangeLocation={() => {}}
         onChangeAvailability={() => {}}
         onAssign={() => {}}

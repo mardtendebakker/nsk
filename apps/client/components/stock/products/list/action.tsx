@@ -16,6 +16,7 @@ export default function Action({
   onAllChecked,
   onChangeLocation,
   onChangeAvailability,
+  onEdit,
   onAssign,
   onPrint,
   onDelete,
@@ -26,6 +27,7 @@ export default function Action({
   onAllChecked: (checked: boolean) => void,
   onChangeLocation: (location: string) => void,
   onChangeAvailability: (availability: string) => void,
+  onEdit: () => void,
   onAssign: (assigned: string) => void,
   onPrint: () => void,
   onDelete: () => void,
@@ -49,7 +51,7 @@ export default function Action({
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         {checkedProductsCount > 0 && <ChangeLocationButton onClick={() => {}} sx={{ mr: '1rem' }} disabled={disabled} />}
         {checkedProductsCount > 0 && <ChangeAvailabilityButton onClick={() => {}} sx={{ mr: '1rem' }} disabled={disabled} />}
-        {checkedProductsCount === 1 && <EditProductButton onClick={() => {}} sx={{ mr: '1rem' }} disabled={disabled} />}
+        {checkedProductsCount === 1 && <EditProductButton onClick={onEdit} sx={{ mr: '1rem' }} disabled={disabled} />}
         {checkedProductsCount > 0 && <AssignButton onClick={() => {}} sx={{ mr: '1rem' }} disabled={disabled} />}
         {checkedProductsCount > 0 && <PrintButton onClick={() => {}} sx={{ mr: '1rem' }} disabled={disabled} />}
         {checkedProductsCount > 0 && <DeleteButton onClick={() => {}} disabled={disabled} />}

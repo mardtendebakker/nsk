@@ -2,12 +2,12 @@ import { Box } from '@mui/material';
 import Search from '@mui/icons-material/Search';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import moment from 'moment';
-import MemoizedTextField from '../../../memoizedFormInput/TextField';
-import Autocomplete from '../../../memoizedFormInput/Autocomplete';
+import MemoizedTextField from '../../../memoizedFormInput/textField';
+import Autocomplete from '../../../memoizedFormInput/autocomplete';
 import useTranslation from '../../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../../hooks/useForm';
 import TextField from '../../../textField';
-import ListFilterContainer from '../../../listFilterContainer';
+import BorderedBox from '../../../borderedBox';
 
 export default function Filter({
   disabled,
@@ -22,7 +22,7 @@ export default function Filter({
 
   return (
     <form>
-      <ListFilterContainer>
+      <BorderedBox>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Search sx={{ color: '#7F8FA4' }} />
           <MemoizedTextField
@@ -77,7 +77,7 @@ export default function Filter({
             }
           />
         </Box>
-      </ListFilterContainer>
+      </BorderedBox>
     </form>
   );
 }

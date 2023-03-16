@@ -10,9 +10,9 @@ import dynamic from 'next/dynamic';
 import { EditorProps } from 'react-draft-wysiwyg';
 import useTranslation from '../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../hooks/useForm';
-import TextField from '../../memoizedFormInput/TextField';
+import TextField from '../../memoizedFormInput/textField';
 import BaseTextField from '../../textField';
-import Autocomplete from '../../memoizedFormInput/Autocomplete';
+import Autocomplete from '../../memoizedFormInput/autocomplete';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 const Editor = dynamic<EditorProps>(
@@ -56,8 +56,8 @@ function Form({
                 sx={{ flex: 0.5, mr: '1rem' }}
                 // error={Boolean(formRepresentation.name.error)}
                 // helperText={formRepresentation.name.error}
-                label={trans('newEmailForm.name.label')}
-                placeholder={trans('newEmailForm.name.placeholder')}
+                label={trans('emailForm.name.label')}
+                placeholder={trans('emailForm.name.placeholder')}
                 name="name"
                 onChange={(e) => setValue({ field: 'name', value: e.target.value })}
                 // value={formRepresentation.name.value}
@@ -66,8 +66,8 @@ function Form({
                 sx={{ flex: 0.5 }}
                 // error={Boolean(formRepresentation.kvk_nr.error)}
                 // helperText={formRepresentation.kvk_nr.error}
-                label={trans('newEmailForm.subject.label')}
-                placeholder={trans('newEmailForm.subject.placeholder')}
+                label={trans('emailForm.subject.label')}
+                placeholder={trans('emailForm.subject.placeholder')}
                 name="subject"
                 onChange={(e) => setValue({ field: 'subject', value: e.target.value })}
                 // value={formRepresentation.kvk_nr.value}
@@ -89,8 +89,8 @@ function Form({
                   <BaseTextField
                     {...params}
                     name="senderEmail"
-                    label={trans('newEmailForm.senderEmail.label')}
-                    placeholder={trans('newEmailForm.senderEmail.placeholder')}
+                    label={trans('emailForm.senderEmail.label')}
+                    placeholder={trans('emailForm.senderEmail.placeholder')}
                   />
                 )
                }
@@ -99,8 +99,8 @@ function Form({
                 sx={{ flex: 0.5 }}
                 // error={Boolean(formRepresentation.phone.error)}
                 // helperText={formRepresentation.phone.error}
-                label={trans('newEmailForm.senderName.label')}
-                placeholder={trans('newEmailForm.senderName.placeholder')}
+                label={trans('emailForm.senderName.label')}
+                placeholder={trans('emailForm.senderName.placeholder')}
                 name="senderName"
                 onChange={(e) => setValue({ field: 'senderName', value: e.target.value })}
                 // value={formRepresentation.phone.value}
@@ -121,8 +121,8 @@ function Form({
                 (params) => (
                   <BaseTextField
                     {...params}
-                    label={trans('newEmailForm.recipients.label')}
-                    placeholder={trans('newEmailForm.recipients.placeholder')}
+                    label={trans('emailForm.recipients.label')}
+                    placeholder={trans('emailForm.recipients.placeholder')}
                   />
                 )
                }

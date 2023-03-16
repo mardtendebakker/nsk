@@ -17,6 +17,7 @@ const translation = {
   newPurchaseOrder: 'Nieuwe inkooporder',
   newPurchase: 'Nieuwe aankoop',
   editCustomer: 'Klant wijzigen',
+  editProduct: 'Product bewerken',
   availability: 'Beschikbaarheid',
   selectAll: 'Selecteer alles',
   selected: 'Geselecteerd',
@@ -101,7 +102,7 @@ const translation = {
   openRate: 'Open ratio',
   clickRate: 'Klik op Beoordeel',
   unsubscribes: 'Uitschrijft',
-  newEmailForm: {
+  emailForm: {
     name: {
       placeholder: 'Typ naam',
       label: 'Naam',
@@ -123,7 +124,7 @@ const translation = {
       label: 'Ontvangers (u kunt een of meerdere lijsten toevoegen of handmatig e-mail typen)',
     },
   },
-  newContactForm: {
+  contactForm: {
     name: {
       placeholder: 'Typ naam',
       label: 'Naam',
@@ -186,7 +187,8 @@ const translation = {
   delivered: 'Afgeleverd',
   repairServices: 'Reparatie diensten',
   serialNumber: 'Serienummer',
-  'productName/Type': 'Productnaam / Type',
+  'productName/type': 'Productnaam / Type',
+  productName: 'Productnaam',
   location: 'Plaats',
   price: 'Prijs',
   purchased: 'Gekocht',
@@ -197,6 +199,14 @@ const translation = {
   dueBy: 'Verschuldigd door',
   taskStatus: 'Taakstatus',
   assignedTo: 'Toegewezen aan',
+  sku: 'SKU',
+  description: 'Beschrijving',
+  basicInfo: 'Basis informatie',
+  productInfo: 'Product informatie',
+  actions: 'Acties',
+  'supplier/customer': 'Leverancier/Klant',
+  saveChanges: 'Wijzigingen opslaan',
+  cancel: 'Annuleren',
   // http status
   200: 'Actie succesvol afgerond',
   201: 'Bron gemaakt',
