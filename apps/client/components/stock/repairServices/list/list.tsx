@@ -7,25 +7,25 @@ import {
   Pagination,
   Checkbox,
   Collapse,
+  Box,
+  Typography,
 } from '@mui/material';
 import useTranslation from '../../../../hooks/useTranslation';
-import { Product } from '../../../../utils/axios';
+import { Product, RepairService } from '../../../../utils/axios';
 import Status from '../../status';
 
 export default function List({
-  products = [],
+  repairServices = [],
   count,
   page,
   onPageChanged,
   onChecked,
-  checkedProductIds,
 }: {
-  products: Product[],
+  repairServices: RepairService[],
   count: number,
   page: number,
   onPageChanged: (newPage: number)=>void,
   onChecked: (object: { id: number, checked: boolean })=>void,
-  checkedProductIds: number[]
 }) {
   const { trans } = useTranslation();
 
@@ -35,7 +35,7 @@ export default function List({
         <TableHead>
           <TableRow>
             <TableCell>
-              {trans('serialNumber')}
+              {trans('salesOrderNumber')}
             </TableCell>
             <TableCell>
               {trans('productName/type')}
@@ -44,10 +44,7 @@ export default function List({
               {trans('location')}
             </TableCell>
             <TableCell>
-              {trans('price')}
-            </TableCell>
-            <TableCell>
-              {trans('purchased')}
+              {trans('orderDate')}
             </TableCell>
             <TableCell>
               {trans('inStock')}
@@ -56,7 +53,7 @@ export default function List({
               {trans('ready')}
             </TableCell>
             <TableCell>
-              {trans('sold')}
+              {trans('delivered')}
             </TableCell>
             <TableCell>
               {trans('status')}
@@ -64,52 +61,29 @@ export default function List({
           </TableRow>
         </TableHead>
         <TableBody>
-          {products.map((product: Product) => (
+          {repairServices.map((repairService: Product) => (
             <>
               <TableRow
                 sx={{
                   height: 60,
                 }}
                 hover
-                key={product.id}
+                key={repairService.id}
               >
                 <TableCell>
-                  <Checkbox
-                    checked={Boolean(checkedProductIds.find((id) => id === product.id))}
-                    sx={{ mr: '1.5rem' }}
-                    onChange={(_, checked) => { onChecked({ id: product.id, checked }); }}
-                  />
-                  {product.sku}
+                  <Checkbox sx={{ mr: '1.5rem' }} onChange={(_, checked) => { onChecked({ id: repairService.id, checked }); }} />
                 </TableCell>
-                <TableCell>
-                  {product.name}
-                </TableCell>
-                <TableCell>
-                  {product.location}
-                </TableCell>
-                <TableCell>
-                  €
-                  {product.price.toFixed(2)}
-                </TableCell>
-                <TableCell>
-                  {product.purch}
-                </TableCell>
-                <TableCell>
-                  {product.stock}
-                </TableCell>
-                <TableCell>
-                  {product.done}
-                </TableCell>
-                <TableCell>
-                  {product.sold}
-                </TableCell>
-                <TableCell>
-                  <Status status="0" />
-                </TableCell>
+                <TableCell />
+                <TableCell />
+                <TableCell />
+                <TableCell />
+                <TableCell />
+                <TableCell />
+                <TableCell />
               </TableRow>
               <TableRow sx={(theme) => ({ backgroundColor: theme.palette.grey[10] })}>
-                <TableCell sx={{ padding: 0 }} colSpan={9}>
-                  <Collapse in={false} unmountOnExit>
+                <TableCell sx={{ padding: 0 }} colSpan={8}>
+                  <Collapse in unmountOnExit>
                     <Table sx={{ borderRadius: 0 }}>
                       <TableHead>
                         <TableRow>

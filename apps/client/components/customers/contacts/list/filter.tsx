@@ -6,12 +6,12 @@ import ChevronRight from '@mui/icons-material/ChevronRight';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import moment from 'moment';
 import { useState } from 'react';
-import MemoizedTextField from '../../../memoizedFormInput/TextField';
-import Autocomplete from '../../../memoizedFormInput/Autocomplete';
+import MemoizedTextField from '../../../memoizedFormInput/textField';
+import Autocomplete from '../../../memoizedFormInput/autocomplete';
 import useTranslation from '../../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../../hooks/useForm';
 import TextField from '../../../textField';
-import ListFilterContainer from '../../../listFilterContainer';
+import BorderedBox from '../../../borderedBox';
 
 export default function Filter({
   disabled,
@@ -27,7 +27,7 @@ export default function Filter({
 
   return (
     <form>
-      <ListFilterContainer>
+      <BorderedBox>
         <Accordion expanded={showFilter}>
           <AccordionSummary sx={{ background: 'transparent !important' }}>
             <Box sx={{ flex: 1, display: 'flex', alignItems: 'center' }}>
@@ -155,7 +155,7 @@ export default function Filter({
             </Box>
           </AccordionDetails>
         </Accordion>
-      </ListFilterContainer>
+      </BorderedBox>
     </form>
   );
 }
