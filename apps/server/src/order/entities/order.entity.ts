@@ -6,47 +6,47 @@ export class OrderEntity implements aorder {
   id: number;
 
   @ApiPropertyOptional()
-  status_id: number;
+  status_id: number | null;
 
   @ApiPropertyOptional()
-  customer_id: number;
+  customer_id: number | null;
 
   @ApiPropertyOptional()
-  supplier_id: number;
+  supplier_id: number | null;
 
   @ApiPropertyOptional()
-  order_nr: string;
+  order_nr: string | null;
 
   @ApiPropertyOptional()
-  remarks: string;
+  remarks: string | null;
 
   @ApiProperty()
   order_date: Date;
 
   @ApiPropertyOptional()
-  discount: number;
+  discount: number | null;
 
   @ApiPropertyOptional()
-  transport: number;
+  transport: number | null;
 
   @ApiPropertyOptional()
-  is_gift: boolean;
+  is_gift: boolean | null;
 
   @ApiProperty()
   discr: string;
 
   @ApiPropertyOptional()
-  backingPurchaseOrder_id: number;
+  backingPurchaseOrder_id: number | null;
 
   @ApiPropertyOptional()
-  external_id: number;
+  external_id: number | null;
 
   @ApiPropertyOptional()
-  delivery_type: number;
+  delivery_type: number | null;
 
   @ApiPropertyOptional()
-  delivery_date: Date;
+  delivery_date: Date | null;
 
   @ApiPropertyOptional()
-  delivery_instructions: string; 
+  delivery_instructions: string | null; 
 }

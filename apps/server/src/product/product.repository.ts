@@ -7,7 +7,7 @@ export class ProductRepository {
   constructor(private readonly prisma: PrismaService) {
     // TODO: prisma middleware for updateAt
     prisma.$use(async (params, next) => {
-      if (params.model == 'product' && params.action == 'create') {
+      if (params.model == 'product' && params.action == 'create' && params.args.data?.price) {
         params.args.data.price *= 100;
         return  await next(params);
       }
@@ -15,7 +15,8 @@ export class ProductRepository {
     });
 
     prisma.$use(async (params, next) => {
-      if (params.model == 'product' && ['findFirst', 'findUnique'].includes(params.action) ) {
+      if (params.model == 'product' && ['findFirst', 'findUnique'].includes(params.action) && 
+      (params.args.select?.price || params.args.include?.price)) {
         const product = await next(params);
         return {
           ...product,
@@ -26,7 +27,8 @@ export class ProductRepository {
     });
 
     prisma.$use(async (params, next) => {
-      if (params.model == 'product' && params.action == 'findMany' ) {
+      if (params.model == 'product' && params.action == 'findMany' &&
+      (params.args.select?.price || params.args.include?.price) ) {
         const products = await next(params);
         return products.map(product => ({
           ...product,
@@ -59,6 +61,9 @@ export class ProductRepository {
   
   findOne(params: Prisma.productFindUniqueArgs) {
     const { where, select, include } = params;
+    if (include) {
+      return this.prisma.product.findUnique({ where, include });
+    }
     return this.prisma.product.findUnique({ where, select });
   }
   
@@ -70,6 +75,24 @@ export class ProductRepository {
     return this.prisma.product.update({
       data,
       where,
+    });
+  }
+  
+  getAllStatus() {
+    return this.prisma.product_status.findMany({
+      select: {
+        id: true,
+        name: true
+      }
+    });
+  }
+  
+  getAllTypes() {
+    return this.prisma.product_type.findMany({
+      select: {
+        id: true,
+        name: true
+      }
     });
   }
 }
