@@ -124,7 +124,7 @@ function PostSupplier() {
       },
       (err) => {
         if (!err) {
-          router.push(SUPPLIERS.replace(':id', ''));
+          router.push(SUPPLIERS);
         }
       },
     );
@@ -155,7 +155,7 @@ function PostSupplier() {
             }}
           >
             <Typography variant="h4">
-              <IconButton onClick={() => router.push(SUPPLIERS.replace(':id', ''))}>
+              <IconButton onClick={() => router.push(SUPPLIERS)}>
                 <ArrowBack />
               </IconButton>
               {trans('newSupplier')}

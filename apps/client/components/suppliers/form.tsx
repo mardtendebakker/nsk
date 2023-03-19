@@ -36,7 +36,7 @@ function SupplierForm({
             <Grid
               item
               xs={12}
-              sx={{ display: 'flex', flex: 1, flexDirection: { xs: 'column', md: 'row' } }}
+              sx={{ display: 'flex', flex: 1 }}
             >
               <TextField
                 fullWidth
@@ -78,7 +78,7 @@ function SupplierForm({
             <Grid
               item
               xs={12}
-              sx={{ display: 'flex', flex: 1, flexDirection: { xs: 'column', md: 'row' } }}
+              sx={{ display: 'flex', flex: 1 }}
             >
               <TextField
                 fullWidth
@@ -127,7 +127,7 @@ function SupplierForm({
             <Grid
               item
               xs={12}
-              sx={{ display: 'flex', flex: 1, flexDirection: { xs: 'column', md: 'row' } }}
+              sx={{ display: 'flex', flex: 1 }}
             >
               <TextField
                 fullWidth
@@ -163,7 +163,7 @@ function SupplierForm({
             <Grid
               item
               xs={12}
-              sx={{ display: 'flex', flex: 1, flexDirection: { xs: 'column', md: 'row' } }}
+              sx={{ display: 'flex', flex: 1 }}
             >
               <TextField
                 fullWidth
@@ -213,7 +213,7 @@ function SupplierForm({
             <Grid
               item
               xs={12}
-              sx={{ display: 'flex', flex: 1, flexDirection: { xs: 'column', md: 'row' } }}
+              sx={{ display: 'flex', flex: 1 }}
             >
               <TextField
                 fullWidth
@@ -248,7 +248,7 @@ function SupplierForm({
             <Grid
               item
               xs={12}
-              sx={{ display: 'flex', flex: 1, flexDirection: { xs: 'column', md: 'row' } }}
+              sx={{ display: 'flex', flex: 1 }}
             >
               <TextField
                 fullWidth

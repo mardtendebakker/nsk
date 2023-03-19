@@ -5,7 +5,7 @@ export default function Table(theme) {
     MuiTable: {
       styleOverrides: {
         root: {
-          border: `1px solid ${theme.palette.grey[30]}`,
+          border: `1px solid ${theme.palette.divider}`,
           borderRadius: '0.5rem',
           borderCollapse: 'separate',
         },
@@ -16,7 +16,7 @@ export default function Table(theme) {
         head: {
           color: theme.palette.text.secondary,
           padding: '0.45rem 1rem',
-          borderBottom: `1px solid ${theme.palette.grey[30]}`,
+          borderBottom: `1px solid ${theme.palette.divider}`,
         },
       },
     },

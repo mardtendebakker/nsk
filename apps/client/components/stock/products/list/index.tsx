@@ -2,7 +2,7 @@ import { Box, Card } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import _ from 'lodash';
-import { PRODUCTS_PATH } from '../../../../utils/axios';
+import { STOCK_PRODUCTS_PATH } from '../../../../utils/axios';
 import List from './list';
 import useAxios from '../../../../hooks/useAxios';
 import { STOCKS_PRODUCTS } from '../../../../utils/routes';
@@ -90,7 +90,7 @@ export default function ListContainer() {
 
   const { data: { data = [], count = 0 } = {}, call, performing } = useAxios(
     'get',
-    PRODUCTS_PATH.replace(':id', ''),
+    STOCK_PRODUCTS_PATH.replace(':id', ''),
     {
       withProgressBar: true,
     },
@@ -147,7 +147,7 @@ export default function ListContainer() {
       />
       <Box sx={{ m: '1rem' }} />
       <List
-        products={data}
+        stockProducts={data}
         count={Math.floor(count / 10)}
         page={page}
         onChecked={handleRowChecked}

@@ -12,7 +12,7 @@ export default function BorderedBox(
       }
 
       return {
-        border: `1px solid ${theme.palette.grey[30]}`,
+        border: `1px solid ${theme.palette.divider}`,
         borderRadius: '0.5rem',
         px: '.5rem',
         ...overrideStyle,

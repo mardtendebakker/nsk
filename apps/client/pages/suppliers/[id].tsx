@@ -10,7 +10,7 @@ import Form from '../../components/suppliers/form';
 import DashboardLayout from '../../layouts/dashboard';
 import useAxios from '../../hooks/useAxios';
 import { SUPPLIERS_PATH } from '../../utils/axios';
-import { SUPPLIERS } from '../../utils/routes';
+import { SUPPLIERS_NEW, SUPPLIERS } from '../../utils/routes';
 import useForm from '../../hooks/useForm';
 import { dataInputsFormatter, formRepresentationToBody } from './new';
 
@@ -67,7 +67,7 @@ function UpdateSupplier() {
       },
       (err) => {
         if (!err) {
-          router.push(SUPPLIERS.replace(':id', ''));
+          router.push(SUPPLIERS_NEW);
         }
       },
     );
@@ -98,7 +98,7 @@ function UpdateSupplier() {
             }}
           >
             <Typography variant="h4">
-              <IconButton onClick={() => router.push(SUPPLIERS.replace(':id', ''))}>
+              <IconButton onClick={() => router.push(SUPPLIERS)}>
                 <ArrowBack />
               </IconButton>
               {trans('editSupplier')}

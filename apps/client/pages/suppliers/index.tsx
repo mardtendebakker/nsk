@@ -9,7 +9,7 @@ import List from '../../components/suppliers/list';
 import DashboardLayout from '../../layouts/dashboard';
 import useAxios from '../../hooks/useAxios';
 import { SUPPLIERS_PATH } from '../../utils/axios';
-import { SUPPLIERS } from '../../utils/routes';
+import { SUPPLIERS, SUPPLIERS_NEW } from '../../utils/routes';
 import useTranslation from '../../hooks/useTranslation';
 
 function Suppliers() {
@@ -26,7 +26,7 @@ function Suppliers() {
   );
 
   useEffect(() => {
-    router.replace(`${SUPPLIERS.replace(':id', '')}?page=${page}`);
+    router.replace(`${SUPPLIERS}?page=${page}`);
     call({ params: { take: TAKE, skip: (page - 1) * TAKE } });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
@@ -46,7 +46,7 @@ function Suppliers() {
         <Container maxWidth={false}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <Typography variant="h3">{trans('suppliers')}</Typography>
-            <Button variant="contained" onClick={() => router.push(SUPPLIERS.replace(':id', 'new'))}>
+            <Button variant="contained" onClick={() => router.push(SUPPLIERS_NEW)}>
               <Add />
               {trans('newSupplier')}
             </Button>

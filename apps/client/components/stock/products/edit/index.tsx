@@ -51,7 +51,7 @@ export default function Edit({ open, onClose }: { open: boolean, onClose: () => 
               <Grid
                 item
                 xs={12}
-                sx={{ display: 'flex', flex: 1, flexDirection: { xs: 'column', md: 'row' } }}
+                sx={{ display: 'flex', flex: 1 }}
               >
                 <TextField
                   sx={{ flex: 0.33, mr: '1rem' }}
@@ -75,7 +75,7 @@ export default function Edit({ open, onClose }: { open: boolean, onClose: () => 
               <Grid
                 item
                 xs={12}
-                sx={{ display: 'flex', flex: 1, flexDirection: { xs: 'column', md: 'row' } }}
+                sx={{ display: 'flex', flex: 1 }}
               >
                 <ProductLocationPicker sx={{ flex: 0.33, mr: '1rem' }} placeholder="" />
                 <ProductAvailabilityPicker sx={{ flex: 0.33, mr: '1rem' }} placeholder="" />
@@ -89,13 +89,13 @@ export default function Edit({ open, onClose }: { open: boolean, onClose: () => 
               </Grid>
               <Grid
                 item
-                sx={{ display: 'flex', flex: 1, flexDirection: { xs: 'column', md: 'row' } }}
+                sx={{ display: 'flex', flex: 1 }}
               >
                 <TextField
                   fullWidth
                   size="medium"
                   multiline
-                  maxRows={3}
+                  rows={3}
                   label={trans('description')}
                   name="description"
                   onChange={(e) => setValue({ field: 'description', value: e.target.value })}

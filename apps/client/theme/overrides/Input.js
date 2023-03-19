@@ -31,9 +31,9 @@ export default function Input(theme) {
     MuiFilledInput: {
       styleOverrides: {
         root: {
-          backgroundColor: alpha(theme.palette.grey[40], 0.12),
+          backgroundColor: theme.palette.grey[40],
           '&:hover': {
-            backgroundColor: alpha(theme.palette.grey[40], 0.16),
+            backgroundColor: theme.palette.grey[40],
           },
           '&.Mui-focused': {
             backgroundColor: theme.palette.action.focus,
@@ -44,7 +44,7 @@ export default function Input(theme) {
         },
         underline: {
           '&:before': {
-            borderBottomColor: alpha(theme.palette.grey[40], 0.56),
+            borderBottomColor: theme.palette.grey[40],
           },
         },
       },
@@ -52,8 +52,9 @@ export default function Input(theme) {
     MuiOutlinedInput: {
       styleOverrides: {
         root: {
+          borderRadius: '.5rem',
           '& .MuiOutlinedInput-notchedOutline': {
-            borderColor: alpha(theme.palette.grey[40], 0.32),
+            borderColor: theme.palette.grey[40],
           },
           '&.Mui-disabled': {
             '& .MuiOutlinedInput-notchedOutline': {
