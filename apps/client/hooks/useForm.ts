@@ -85,7 +85,7 @@ export interface FormRepresentation {
   [key: string]: Field;
 }
 
-interface FieldPayload {
+export interface FieldPayload {
   field: string;
   value: string | number | boolean;
 }

@@ -6,7 +6,7 @@ import { STOCK_PRODUCTS_PATH } from '../../../../utils/axios';
 import List from './list';
 import useAxios from '../../../../hooks/useAxios';
 import { STOCKS_PRODUCTS } from '../../../../utils/routes';
-import useForm from '../../../../hooks/useForm';
+import useForm, { FieldPayload } from '../../../../hooks/useForm';
 import Filter from './filter';
 import Action from './action';
 import Edit from '../edit';
@@ -128,7 +128,10 @@ export default function ListContainer() {
       <Filter
         disabled={performing}
         formRepresentation={formRepresentation}
-        setValue={setValue}
+        setValue={(payload: FieldPayload) => {
+          setValue(payload);
+          setPage(1);
+        }}
       />
       <Box sx={{ m: '1.5rem' }} />
       <Edit onClose={() => setEditProductId(undefined)} open={!!editProductId} />

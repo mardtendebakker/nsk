@@ -7,7 +7,7 @@ import Filter from './filter';
 import useAxios from '../../../../hooks/useAxios';
 import { CUSTOMERS_PATH } from '../../../../utils/axios';
 import { CUSTOMERS_CONTACTS } from '../../../../utils/routes';
-import useForm from '../../../../hooks/useForm';
+import useForm, { FieldPayload } from '../../../../hooks/useForm';
 
 function refreshList({
   page,
@@ -109,7 +109,10 @@ export default function ListContainer() {
       <Filter
         disabled={performing}
         formRepresentation={formRepresentation}
-        setValue={setValue}
+        setValue={(payload: FieldPayload) => {
+          setValue(payload);
+          setPage(1);
+        }}
       />
       <Box sx={{ m: '1rem' }} />
       <List
