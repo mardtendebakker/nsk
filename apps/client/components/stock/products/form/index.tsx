@@ -13,7 +13,7 @@ import {
   Typography,
   Box,
 } from '@mui/material';
-import { SyntheticEvent } from 'react';
+import { SyntheticEvent, useState } from 'react';
 import Add from '@mui/icons-material/Add';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import useTranslation from '../../../../hooks/useTranslation';
@@ -23,6 +23,7 @@ import Autocomplete from '../../../memoizedFormInput/autocomplete';
 import BaseTextField from '../../../textField';
 import StatusPicker from './statusPicker';
 import SupplierTypePicker from './supplierTypePicker';
+import Create from '../create';
 
 function Form({
   formRepresentation,
@@ -36,6 +37,7 @@ function Form({
   setValue: SetValue
 }) {
   const { trans } = useTranslation();
+  const [showProductForm, setShowProductForm] = useState<boolean>(false);
 
   return (
     <form onSubmit={onSubmit}>
@@ -237,7 +239,7 @@ function Form({
                   </TableRow>
                   <TableRow>
                     <TableCell>
-                      <Button>
+                      <Button onClick={() => setShowProductForm(true)}>
                         <Add />
                         {trans('addAnotherProduct')}
                       </Button>
@@ -245,7 +247,7 @@ function Form({
                   </TableRow>
                 </TableBody>
               </Table>
-
+              <Create onClose={() => setShowProductForm(false)} open={showProductForm} />
             </Grid>
           </Grid>
         </CardContent>
