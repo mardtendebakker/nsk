@@ -9,18 +9,18 @@ import {
   Collapse,
 } from '@mui/material';
 import useTranslation from '../../../../hooks/useTranslation';
-import { Product } from '../../../../utils/axios';
+import { StockProduct } from '../../../../utils/axios';
 import Status from '../../status';
 
 export default function List({
-  products = [],
+  stockProducts = [],
   count,
   page,
   onPageChanged,
   onChecked,
   checkedProductIds,
 }: {
-  products: Product[],
+  stockProducts: StockProduct[],
   count: number,
   page: number,
   onPageChanged: (newPage: number)=>void,
@@ -64,44 +64,44 @@ export default function List({
           </TableRow>
         </TableHead>
         <TableBody>
-          {products.map((product: Product) => (
+          {stockProducts.map((stockProduct: StockProduct) => (
             <>
               <TableRow
                 sx={{
                   height: 60,
                 }}
                 hover
-                key={product.id}
+                key={stockProduct.id}
               >
                 <TableCell>
                   <Checkbox
-                    checked={Boolean(checkedProductIds.find((id) => id === product.id))}
+                    checked={Boolean(checkedProductIds.find((id) => id === stockProduct.id))}
                     sx={{ mr: '1.5rem' }}
-                    onChange={(_, checked) => { onChecked({ id: product.id, checked }); }}
+                    onChange={(_, checked) => { onChecked({ id: stockProduct.id, checked }); }}
                   />
-                  {product.sku}
+                  {stockProduct.sku}
                 </TableCell>
                 <TableCell>
-                  {product.name}
+                  {stockProduct.name}
                 </TableCell>
                 <TableCell>
-                  {product.location}
+                  {stockProduct.location}
                 </TableCell>
                 <TableCell>
                   €
-                  {product.price.toFixed(2)}
+                  {stockProduct.price.toFixed(2)}
                 </TableCell>
                 <TableCell>
-                  {product.purch}
+                  {stockProduct.purch}
                 </TableCell>
                 <TableCell>
-                  {product.stock}
+                  {stockProduct.stock}
                 </TableCell>
                 <TableCell>
-                  {product.done}
+                  {stockProduct.done}
                 </TableCell>
                 <TableCell>
-                  {product.sold}
+                  {stockProduct.sold}
                 </TableCell>
                 <TableCell>
                   <Status status="0" />

@@ -65,7 +65,7 @@ export default function List({
                 {salesOrder.order_nr}
               </TableCell>
               <TableCell>
-                {moment(salesOrder.order_date).format('Y:MM:DD')}
+                {moment(salesOrder.order_date).format('Y/MM/DD')}
               </TableCell>
               <TableCell>
                 {salesOrder.order_nr}

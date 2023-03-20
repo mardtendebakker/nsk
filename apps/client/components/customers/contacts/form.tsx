@@ -42,7 +42,7 @@ function Form({
             <Grid
               item
               xs={12}
-              sx={{ display: 'flex', flex: 1, flexDirection: { xs: 'column', md: 'row' } }}
+              sx={{ display: 'flex', flex: 1 }}
             >
               <TextField
                 sx={{ flex: 0.33, mr: '1rem' }}
@@ -78,7 +78,7 @@ function Form({
             <Grid
               item
               xs={12}
-              sx={{ display: 'flex', flex: 1, flexDirection: { xs: 'column', md: 'row' } }}
+              sx={{ display: 'flex', flex: 1 }}
             >
               <TextField
                 sx={{ flex: 0.5, mr: '1rem' }}
@@ -115,7 +115,7 @@ function Form({
             <Grid
               item
               xs={12}
-              sx={{ display: 'flex', flex: 1, flexDirection: { xs: 'column', md: 'row' } }}
+              sx={{ display: 'flex', flex: 1 }}
             >
               <Autocomplete
                 sx={{ flex: 0.66, mr: '1rem' }}
@@ -166,7 +166,7 @@ function Form({
             <Grid
               item
               xs={12}
-              sx={{ display: 'flex', flex: 1, flexDirection: { xs: 'column', md: 'row' } }}
+              sx={{ display: 'flex', flex: 1 }}
             >
               <TextField
                 sx={{ flex: 0.5, mr: '1rem' }}
@@ -192,7 +192,7 @@ function Form({
             <Grid
               item
               xs={12}
-              sx={{ display: 'flex', flex: 1, flexDirection: { xs: 'column', md: 'row' } }}
+              sx={{ display: 'flex', flex: 1 }}
             >
               <TextField
                 sx={{ flex: 0.25, mr: '1rem' }}
@@ -252,7 +252,7 @@ function Form({
             <Grid
               item
               xs={12}
-              sx={{ display: 'flex', flex: 1, flexDirection: { xs: 'column', md: 'row' } }}
+              sx={{ display: 'flex', flex: 1 }}
             >
               <TextField
                 sx={{ flex: 0.5, mr: '1rem' }}
@@ -278,7 +278,7 @@ function Form({
             <Grid
               item
               xs={12}
-              sx={{ display: 'flex', flex: 1, flexDirection: { xs: 'column', md: 'row' } }}
+              sx={{ display: 'flex', flex: 1 }}
             >
               <TextField
                 sx={{ flex: 0.25, mr: '1rem' }}

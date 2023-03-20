@@ -15,6 +15,7 @@ import {
   CUSTOMERS_EMAILS,
   STOCKS_PRODUCTS,
   STOCKS_REPAIR_SERVICES,
+  SUPPLIERS_NEW,
 } from '../../../utils/routes';
 import useTranslation from '../../../hooks/useTranslation';
 
@@ -80,8 +81,8 @@ export default function Header() {
             },
             {
               title: trans('suppliers'),
-              path: SUPPLIERS.replace('/:id', ''),
-              active: router.pathname === SUPPLIERS.replace('/:id', ''),
+              path: SUPPLIERS,
+              active: router.pathname === SUPPLIERS || router.pathname === SUPPLIERS_NEW,
             },
           ].map((item) => (
             <MenuItem key={item.title} item={item} />

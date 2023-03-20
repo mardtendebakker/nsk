@@ -2,7 +2,7 @@ import Add from '@mui/icons-material/Add';
 import { Box, Button, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import useTranslation from '../../hooks/useTranslation';
-import { STOCKS_PRODUCTS, STOCKS_REPAIR_SERVICES } from '../../utils/routes';
+import { STOCKS_PRODUCTS, STOCKS_REPAIR_SERVICES, STOCKS_PRODUCTS_NEW } from '../../utils/routes';
 
 export default function Navigation() {
   const router = useRouter();
@@ -46,7 +46,7 @@ export default function Navigation() {
       </Box>
       <Button
         variant="contained"
-        onClick={() => {}}
+        onClick={() => router.push(STOCKS_PRODUCTS_NEW)}
       >
         <Add />
         {trans('newPurchase')}

@@ -68,7 +68,7 @@ const palette = {
   warning: WARNING,
   error: ERROR,
   grey: GREY,
-  divider: alpha(GREY[40], 0.24),
+  divider: GREY[30],
   text: {
     primary: GREY[70],
     secondary: GREY[50],

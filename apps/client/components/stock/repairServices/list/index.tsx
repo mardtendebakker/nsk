@@ -74,7 +74,7 @@ export default function ListContainer() {
   return (
     <Card sx={{ overflowX: 'auto', p: '1.5rem' }}>
       <List
-        repairServices={data}
+        stockRepairServices={data}
         count={Math.floor(count / 10)}
         page={page}
         onChecked={() => {}}

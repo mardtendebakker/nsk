@@ -11,17 +11,17 @@ import {
   Typography,
 } from '@mui/material';
 import useTranslation from '../../../../hooks/useTranslation';
-import { Product, RepairService } from '../../../../utils/axios';
+import { StockRepairService } from '../../../../utils/axios';
 import Status from '../../status';
 
 export default function List({
-  repairServices = [],
+  stockRepairServices = [],
   count,
   page,
   onPageChanged,
   onChecked,
 }: {
-  repairServices: RepairService[],
+  stockRepairServices: StockRepairService[],
   count: number,
   page: number,
   onPageChanged: (newPage: number)=>void,
@@ -61,17 +61,17 @@ export default function List({
           </TableRow>
         </TableHead>
         <TableBody>
-          {repairServices.map((repairService: Product) => (
+          {stockRepairServices.map((stockRepairService: StockRepairService) => (
             <>
               <TableRow
                 sx={{
                   height: 60,
                 }}
                 hover
-                key={repairService.id}
+                key={stockRepairService.id}
               >
                 <TableCell>
-                  <Checkbox sx={{ mr: '1.5rem' }} onChange={(_, checked) => { onChecked({ id: repairService.id, checked }); }} />
+                  <Checkbox sx={{ mr: '1.5rem' }} onChange={(_, checked) => { onChecked({ id: stockRepairService.id, checked }); }} />
                 </TableCell>
                 <TableCell />
                 <TableCell />
