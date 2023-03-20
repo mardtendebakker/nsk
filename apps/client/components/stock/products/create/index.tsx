@@ -16,7 +16,7 @@ function makeFormRepresentation(product: Product) {
   return {};
 }
 
-export default function Edit({ open, onClose }: { open: boolean, onClose: () => void }) {
+export default function Create({ open, onClose }: { open: boolean, onClose: () => void }) {
   const { trans } = useTranslation();
   const {
     formRepresentation,
@@ -27,7 +27,7 @@ export default function Edit({ open, onClose }: { open: boolean, onClose: () => 
     <Dialog open={open} onClose={onClose} maxWidth={false}>
       <DialogTitle>
         <Box sx={{ justifyContent: 'space-between', alignItems: 'center', display: 'flex' }}>
-          {trans('editProduct')}
+          {trans('createProduct')}
           <IconButton>
             <Close />
           </IconButton>
