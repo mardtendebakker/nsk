@@ -8,7 +8,7 @@ import { FindManyDto } from '../common/dto/find-many.dto';
 export class OrderService {
   constructor(
     protected readonly repository: OrderRepository,
-    protected type: OrderDiscrimination
+    protected readonly type: OrderDiscrimination
   ) {}
 
   async getOrders(order_nr: string) {

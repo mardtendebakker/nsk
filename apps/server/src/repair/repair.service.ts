@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { LocationService } from '../location/location.service';
 import { StockService } from '../stock/stock.service';
-import { ProductRepository } from './product.repository';
+import { RepairRepository } from './repair.repository';
 
 @Injectable()
-export class ProductService extends StockService {
+export class RepairService extends StockService {
   constructor(
-    protected readonly repository: ProductRepository, 
+    protected readonly repository: RepairRepository, 
     protected readonly locationService: LocationService
   ) {
     super(repository, locationService);

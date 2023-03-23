@@ -1,22 +1,16 @@
 import { CompanyRepository } from './company.repository';
 import { CreateCompanyDto } from './dto/create-company.dto';
-import { CompanyDiscrimination } from './types/company-discrimination.enum';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 import { FindManyDto } from '../common/dto/find-many.dto';
 
 export class CompanyService {
   constructor(
     protected readonly repository: CompanyRepository,
-    protected type: CompanyDiscrimination
   ) {}
 
   findAll(query: FindManyDto) {
     return this.repository.findAll({
       ...query,
-      where: {
-        ...query.where,
-        discr: this.type
-      },
       select: {
         ...query.select,
         id: true,
@@ -30,8 +24,7 @@ export class CompanyService {
 
   async create(comapny: CreateCompanyDto) {
     return this.repository.create({
-      ...comapny,
-      discr: this.type
+      ...comapny
     });
   }
 
