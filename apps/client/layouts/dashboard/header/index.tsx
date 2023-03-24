@@ -16,6 +16,7 @@ import {
   STOCKS_PRODUCTS,
   STOCKS_REPAIR_SERVICES,
   SUPPLIERS_NEW,
+  MY_TASKS,
 } from '../../../utils/routes';
 import useTranslation from '../../../hooks/useTranslation';
 
@@ -95,6 +96,13 @@ export default function Header() {
             alignItems: 'center',
           }}
         >
+          <MenuItem item={{
+            title: trans('myTasks'),
+            path: MY_TASKS,
+            active: router.pathname === MY_TASKS,
+          }}
+          />
+          <Box sx={{ mr: '2rem' }} />
           <LanguagePopover />
           <Box sx={(theme) => ({
             m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.divider,
