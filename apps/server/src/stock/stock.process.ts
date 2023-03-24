@@ -2,9 +2,9 @@
 import { Prisma, product, product_order } from "@prisma/client";
 import { AttributeType } from "../attribute/enum/attribute-type.enum";
 import { OrderDiscrimination } from "../order/types/order-discrimination.enum";
-import { ProductRepository } from "./product.repository";
+import { StockRepository } from "./stock.repository";
 
-export class ProductProcess {
+export class StockProcess {
   private isSaleable: boolean;
   private isSaleAndRepair: boolean;
   private productPurchaseOrder: product_order; //TODO: Prisma.PromiseReturnType<typeof product_order_repository.findOne>
@@ -24,7 +24,7 @@ export class ProductProcess {
   private quantityOnHold: number = null;
 
   constructor(
-    private readonly repository: ProductRepository,
+    private readonly repository: StockRepository,
     private readonly product: Prisma.PromiseReturnType<typeof repository.findOne>,
     private readonly productSelect: Prisma.productSelect
   ) {
@@ -44,12 +44,13 @@ export class ProductProcess {
 
     this.rest = rest;
     this.locationName = location?.name;
+    
     this.aserviceDone = product_order?.[0]?.['aservice']?.length;
     this.taskCount = product_type?.['_count']?.product_type_task;
 
     this.productPurchaseOrder = product_order.find(po => po['aorder']?.discr == OrderDiscrimination.PURCHASE);
     this.productSaleOrders = product_order.filter(po => po['aorder']?.discr == OrderDiscrimination.SALE);
-    
+
     this.isSaleable = product_status ? product_status?.is_saleable ?? true : false;
     this.isSaleAndRepair = this.productSaleOrders.length == 1 && this.productSaleOrders?.[0]['aorder']?.repair?.id;
   }
@@ -115,7 +116,7 @@ export class ProductProcess {
             select: this.productSelect,
           });
 
-          const newProductProcess = new ProductProcess(
+          const newProductProcess = new StockProcess(
             this.repository,
             newProduct,
             this.productSelect
@@ -135,7 +136,7 @@ export class ProductProcess {
   private getQuantityPurchased() {
     let quantityPurchased = 0;
 
-    quantityPurchased = this.productPurchaseOrder?.quantity ?? 1;
+    quantityPurchased = this.productPurchaseOrder ? this.productPurchaseOrder?.quantity ?? 1 : 0;
 
     this.quantityPurchased = quantityPurchased;
     return this.quantityPurchased;

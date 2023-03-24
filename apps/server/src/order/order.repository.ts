@@ -2,7 +2,7 @@ import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 
 export class OrderRepository {
-  constructor(protected prisma: PrismaService) {}
+  constructor(protected readonly prisma: PrismaService) {}
 
   async getOrders(params: {
     skip?: number;

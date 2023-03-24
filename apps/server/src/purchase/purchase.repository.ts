@@ -4,7 +4,7 @@ import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class PurchaseRepository extends OrderRepository{
-  constructor(protected prisma: PrismaService) {
+  constructor(protected readonly prisma: PrismaService) {
     super(prisma);
   }
 }
