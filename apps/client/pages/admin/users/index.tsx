@@ -1,17 +1,17 @@
 import Head from 'next/head';
 import { Box, Container } from '@mui/material';
 import useTranslation from '../../../hooks/useTranslation';
-import List from '../../../components/stock/repairServices/list';
+import List from '../../../components/admin/users/list';
 import DashboardLayout from '../../../layouts/dashboard';
-import Header from '../../../components/stock/header';
+import Header from '../../../components/admin/header';
 
-function RepairServices() {
+function AdminUsers() {
   const { trans } = useTranslation();
 
   return (
     <DashboardLayout>
       <Head>
-        <title>{trans('stock')}</title>
+        <title>{trans('admin')}</title>
       </Head>
       <Box
         component="main"
@@ -27,4 +27,4 @@ function RepairServices() {
   );
 }
 
-export default RepairServices;
+export default AdminUsers;

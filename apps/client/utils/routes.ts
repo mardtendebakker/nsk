@@ -15,3 +15,4 @@ export const STOCKS_PRODUCTS = '/stock/products';
 export const STOCKS_PRODUCTS_NEW = '/stock/products/new';
 export const STOCKS_REPAIR_SERVICES = '/stock/repair-services';
 export const MY_TASKS = '/my-tasks';
+export const ADMIN_USERS = '/admin/users';
