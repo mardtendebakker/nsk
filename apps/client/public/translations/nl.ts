@@ -222,6 +222,7 @@ const translation = {
   ready: 'Klaar',
   sold: 'Verkocht',
   taskName: 'Opdrachtnaam',
+  taskInfo: 'Taak info',
   dueBy: 'Verschuldigd door',
   taskStatus: 'Taakstatus',
   assignedTo: 'Toegewezen aan',
@@ -243,6 +244,10 @@ const translation = {
   numberOfTasks: 'Aantal taken',
   resourceManagement: 'Middelenbeheer',
   dueToday: 'Vandaag uitgerekend',
+  allMyTasks: 'Al mijn taken',
+  hideDoneTasks: 'Verberg voltooide taken',
+  myTasks: 'Mijn taken',
+  checkForDamagesAndCleanDevices: 'Controleer op schade en schone apparaten',
   // http status
   200: 'Actie succesvol afgerond',
   201: 'Bron gemaakt',
