@@ -15,7 +15,7 @@ function SalesOrders() {
       </Head>
       <Box
         component="main"
-        sx={{ py: 8  }}
+        sx={{ py: 8 }}
       >
         <Container maxWidth={false}>
           <Header />

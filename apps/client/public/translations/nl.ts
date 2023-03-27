@@ -21,6 +21,9 @@ const translation = {
   availability: 'Beschikbaarheid',
   selectAll: 'Selecteer alles',
   selected: 'Geselecteerd',
+  selectRole: 'Kies een rol',
+  createUser: 'Maak een gebruiker aan',
+  admin: 'Beheerder',
   productType: 'Product type',
   orders: 'Bestellingen',
   editSupplier: 'Leverancier wijzigen',
@@ -117,6 +120,32 @@ const translation = {
   openRate: 'Open ratio',
   clickRate: 'Klik op Beoordeel',
   unsubscribes: 'Uitschrijft',
+  userForm: {
+    username: {
+      label: 'Gebruikersnaam',
+      placeholder: 'Typ gebruikersnaam',
+    },
+    firstName: {
+      label: 'Voornaam',
+      placeholder: 'Typ Voornaam',
+    },
+    lastName: {
+      label: 'Achternaam',
+      placeholder: 'Type Achternaam',
+    },
+    email: {
+      label: 'E-mail',
+      placeholder: 'Typ het e-mailadres',
+    },
+    permission: {
+      placeholder: 'Toestemming',
+    },
+    permissionDetail: {
+      placeholder: 'Toestemmingsdetail',
+    },
+    permissions: 'Machtigingen (U kunt meerdere machtigingen voor deze rol selecteren)',
+  },
+  addAnother: 'Een andere toevoegen',
   emailForm: {
     name: {
       placeholder: 'Typ naam',
@@ -154,7 +183,7 @@ const translation = {
     },
     email: {
       placeholder: 'xyz@abcdomain.com',
-      label: 'E-mailen',
+      label: 'E-mail',
     },
     phone: {
       placeholder: 'Typ telefoonnummer',
@@ -248,6 +277,11 @@ const translation = {
   hideDoneTasks: 'Verberg voltooide taken',
   myTasks: 'Mijn taken',
   checkForDamagesAndCleanDevices: 'Controleer op schade en schone apparaten',
+  adminCenter: 'Administratief centrum',
+  manageUsers: 'Gebruikers beheren',
+  lastActive: 'Laatst actief',
+  newUser: 'Nieuwe gebruiker',
+  createdBy: 'Gemaakt door',
   // http status
   200: 'Actie succesvol afgerond',
   201: 'Bron gemaakt',
