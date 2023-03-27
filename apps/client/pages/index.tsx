@@ -31,7 +31,7 @@ function Dashboard() {
             <Typography variant="h3">
               {trans('hello')}
               {', '}
-              {user.username}
+              {user?.username}
               !
             </Typography>
             <Button variant="contained">
