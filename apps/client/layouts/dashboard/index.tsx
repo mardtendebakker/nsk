@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Box } from '@mui/material';
+import { Box, Container } from '@mui/material';
 import { useRouter } from 'next/router';
 import useSecurity from '../../hooks/useSecurity';
 import Header from './header';
@@ -27,11 +27,19 @@ export default function DashboardLayout({ children }: { children: JSX.Element | 
   return user?.emailVerified && (
     <>
       <Header />
-      <Box sx={(theme) => ({
-        minHeight: '100%', pt: 15, pb: 3, px: 3, background: theme.palette.grey[10],
-      })}
+      <Box
+        sx={(theme) => ({
+          minHeight: '100%', pt: 15, pb: 3, px: 3, background: theme.palette.grey[10],
+        })}
       >
-        {children}
+        <Box
+          component="main"
+          sx={{ py: 8 }}
+        >
+          <Container maxWidth={false}>
+            {children}
+          </Container>
+        </Box>
       </Box>
     </>
   );

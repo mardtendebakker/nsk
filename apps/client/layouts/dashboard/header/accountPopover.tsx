@@ -4,7 +4,7 @@ import {
 } from '@mui/material';
 import ChevronRight from '@mui/icons-material/ChevronRight';
 import { useRouter } from 'next/router';
-import { SETTINGS } from '../../../utils/routes';
+import { ADMIN_USERS, SETTINGS } from '../../../utils/routes';
 import useSecurity from '../../../hooks/useSecurity';
 import useTranslation from '../../../hooks/useTranslation';
 
@@ -58,6 +58,9 @@ export default function AccountPopover() {
         <Stack sx={{ p: 1 }}>
           <MenuItem onClick={() => router.push(SETTINGS)}>
             {trans('settings')}
+          </MenuItem>
+          <MenuItem onClick={() => router.push(ADMIN_USERS)}>
+            {trans('admin')}
           </MenuItem>
         </Stack>
         <Divider sx={{ borderStyle: 'dashed' }} />

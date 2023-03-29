@@ -1,9 +1,9 @@
 import Add from '@mui/icons-material/Add';
 import { Box, Button, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
 import useTranslation from '../../hooks/useTranslation';
-import { ADMIN_USERS } from '../../utils/routes';
+import { useState } from 'react';
+import { ADMIN_USERS , ADMIN_SETTINGS, ADMIN_SETTINGS_LOCATIONS } from '../../utils/routes';
 import Create from './users/create';
 
 export default function Navigation() {
@@ -16,6 +16,11 @@ export default function Navigation() {
       active: router.pathname === ADMIN_USERS,
       text: trans('manageUsers'),
       onClick: () => router.push(ADMIN_USERS),
+    },
+    {
+      active: router.pathname.includes(ADMIN_SETTINGS),
+      text: trans('manageAppSettings'),
+      onClick: () => router.push(ADMIN_SETTINGS_LOCATIONS),
     },
   ];
 
