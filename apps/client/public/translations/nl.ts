@@ -306,6 +306,9 @@ const translation = {
   customerTags: 'Klantentags',
   tagName: 'Label naam',
   newCustomerTag: 'Nieuwe klantenkaart',
+  toDo: 'Te doen',
+  inProgress: 'Bezig',
+  done: 'Klaar',
   // http status
   200: 'Actie succesvol afgerond',
   201: 'Bron gemaakt',

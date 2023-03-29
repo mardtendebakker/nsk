@@ -98,13 +98,13 @@ export default function List({
                   {stockProduct.stock}
                 </TableCell>
                 <TableCell>
-                  {stockProduct.done}
+                  {stockProduct.sale}
                 </TableCell>
                 <TableCell>
                   {stockProduct.sold}
                 </TableCell>
                 <TableCell>
-                  <Status status="0" />
+                  <Status done={stockProduct.done} tasks={stockProduct.tasks} />
                 </TableCell>
               </TableRow>
               <TableRow sx={(theme) => ({ backgroundColor: theme.palette.grey[10] })}>

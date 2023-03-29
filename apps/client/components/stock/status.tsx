@@ -1,29 +1,40 @@
-import { Box } from '@mui/material';
+import { Box, Theme } from '@mui/material';
 import useTranslation from '../../hooks/useTranslation';
 
-const WORDING = {
-  0: 'toDo',
-  1: 'inProgress',
-  2: 'done',
-};
+const TO_DO = 'toDo';
+const IN_PROGRESS = 'inProgress';
+const DONE = 'done';
 
-const colors = (theme) => ({
-  0: {
+function getStatus(value: number) {
+  if (value <= 0) {
+    return TO_DO;
+  }
+
+  if (value < 1) {
+    return IN_PROGRESS;
+  }
+
+  return DONE;
+}
+
+const colors = (theme: Theme) => ({
+  [TO_DO]: {
     color: theme.palette.primary.main,
     bgColor: theme.palette.grey[30],
   },
-  1: {
+  [IN_PROGRESS]: {
     color: theme.palette.warning.main,
     bgColor: theme.palette.warning.light,
   },
-  2: {
+  [DONE]: {
     color: theme.palette.success.main,
     bgColor: theme.palette.success.light,
   },
 });
 
-export default function Status({ status }: { status: '0' | '1' | '2' }) {
+export default function Status({ done, tasks }: { done: number, tasks:number }) {
   const { trans } = useTranslation();
+  const status = getStatus(done / tasks);
 
   return (
     <Box sx={(theme) => ({
@@ -34,7 +45,7 @@ export default function Status({ status }: { status: '0' | '1' | '2' }) {
       width: 'fit-content',
     })}
     >
-      {`${trans(WORDING[status])} (${status}/2)`}
+      {`${trans(status)} (${done}/${tasks})`}
     </Box>
   );
 }
