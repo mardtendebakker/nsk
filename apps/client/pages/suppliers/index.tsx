@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import {
-  Box, Button, Container, Typography,
+  Box, Button, Typography,
 } from '@mui/material';
 import Add from '@mui/icons-material/Add';
 import { useEffect, useState } from 'react';
@@ -36,28 +36,21 @@ function Suppliers() {
       <Head>
         <title>{trans('suppliers')}</title>
       </Head>
-      <Box
-        component="main"
-        sx={{ py: 8 }}
-      >
-        <Container maxWidth={false}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Typography variant="h3">{trans('suppliers')}</Typography>
-            <Button variant="contained" onClick={() => router.push(SUPPLIERS_NEW)}>
-              <Add />
-              {trans('newSupplier')}
-            </Button>
-          </Box>
-          <Box sx={{ mt: 3 }}>
-            <List
-              suppliers={data}
-              count={Math.floor(count / 10)}
-              page={page}
-              onChecked={() => {}}
-              onPageChanged={(newPage) => setPage(newPage)}
-            />
-          </Box>
-        </Container>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Typography variant="h3">{trans('suppliers')}</Typography>
+        <Button variant="contained" onClick={() => router.push(SUPPLIERS_NEW)}>
+          <Add />
+          {trans('newSupplier')}
+        </Button>
+      </Box>
+      <Box sx={{ mt: 3 }}>
+        <List
+          suppliers={data}
+          count={Math.floor(count / 10)}
+          page={page}
+          onChecked={() => {}}
+          onPageChanged={(newPage) => setPage(newPage)}
+        />
       </Box>
     </DashboardLayout>
   );

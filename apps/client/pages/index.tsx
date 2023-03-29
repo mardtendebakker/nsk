@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import {
-  Box, Button, Container, Typography,
+  Box, Button, Typography,
 } from '@mui/material';
 import ChevronRight from '@mui/icons-material/ChevronRight';
 import useSecurity from '../hooks/useSecurity';
@@ -22,40 +22,33 @@ function Dashboard() {
       <Head>
         <title>{trans('customers')}</title>
       </Head>
-      <Box
-        component="main"
-        sx={{ py: 8 }}
-      >
-        <Container maxWidth={false}>
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <Typography variant="h3">
-              {trans('hello')}
-              {', '}
-              {user?.username}
-              !
-            </Typography>
-            <Button variant="contained">
-              {trans('createOrder')}
-              <ChevronRight sx={{ transform: 'rotate(90deg)' }} />
-            </Button>
-          </Box>
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Typography variant="h3">
+          {trans('hello')}
+          {', '}
+          {user?.username}
+          !
+        </Typography>
+        <Button variant="contained">
+          {trans('createOrder')}
+          <ChevronRight sx={{ transform: 'rotate(90deg)' }} />
+        </Button>
+      </Box>
+      <Box sx={{ m: '2rem' }} />
+      <IndicatorRow />
+      <Box sx={{ mt: '2rem', display: 'flex' }}>
+        <Box sx={{ flex: '.8', mr: '2rem' }}>
+          <TaskAnalytics />
           <Box sx={{ m: '2rem' }} />
-          <IndicatorRow />
-          <Box sx={{ mt: '2rem', display: 'flex' }}>
-            <Box sx={{ flex: '.8', mr: '2rem' }}>
-              <TaskAnalytics />
-              <Box sx={{ m: '2rem' }} />
-              <LocationCapacity />
-              <Box sx={{ m: '2rem' }} />
-              <ResourceManagement />
-              <Box sx={{ m: '2rem' }} />
-              <DueToday />
-            </Box>
-            <Box sx={{ flex: '.2' }}>
-              <UpcomingDeliveries />
-            </Box>
-          </Box>
-        </Container>
+          <LocationCapacity />
+          <Box sx={{ m: '2rem' }} />
+          <ResourceManagement />
+          <Box sx={{ m: '2rem' }} />
+          <DueToday />
+        </Box>
+        <Box sx={{ flex: '.2' }}>
+          <UpcomingDeliveries />
+        </Box>
       </Box>
     </DashboardLayout>
   );

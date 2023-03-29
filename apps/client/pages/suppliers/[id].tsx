@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import {
-  Box, Container, IconButton, Typography,
+  Box, IconButton, Typography,
 } from '@mui/material';
 import { useRouter } from 'next/router';
 import ArrowBack from '@mui/icons-material/ArrowBack';
@@ -81,34 +81,27 @@ function UpdateSupplier() {
         </title>
       </Head>
       <Box
-        component="main"
-        sx={{ py: 8 }}
+        sx={{
+          alignItems: 'center',
+          display: 'flex',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          mb: 2,
+        }}
       >
-        <Container maxWidth={false}>
-          <Box
-            sx={{
-              alignItems: 'center',
-              display: 'flex',
-              justifyContent: 'space-between',
-              flexWrap: 'wrap',
-              mb: 2,
-            }}
-          >
-            <Typography variant="h4">
-              <IconButton onClick={() => router.push(SUPPLIERS)}>
-                <ArrowBack />
-              </IconButton>
-              {trans('editSupplier')}
-            </Typography>
-          </Box>
-          <Form
-            formRepresentation={formRepresentation}
-            disabled={!canSubmit()}
-            onSubmit={handleSubmit}
-            setValue={setValue}
-          />
-        </Container>
+        <Typography variant="h4">
+          <IconButton onClick={() => router.push(SUPPLIERS)}>
+            <ArrowBack />
+          </IconButton>
+          {trans('editSupplier')}
+        </Typography>
       </Box>
+      <Form
+        formRepresentation={formRepresentation}
+        disabled={!canSubmit()}
+        onSubmit={handleSubmit}
+        setValue={setValue}
+      />
     </DashboardLayout>
   );
 }

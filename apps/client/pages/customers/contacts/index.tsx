@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { Box, Container } from '@mui/material';
+import { Box } from '@mui/material';
 import useTranslation from '../../../hooks/useTranslation';
 import DashboardLayout from '../../../layouts/dashboard';
 import Header from '../../../components/customers/header';
@@ -13,16 +13,9 @@ function CustomersContacts() {
       <Head>
         <title>{trans('customers')}</title>
       </Head>
-      <Box
-        component="main"
-        sx={{ py: 8 }}
-      >
-        <Container maxWidth={false}>
-          <Header />
-          <Box sx={{ mt: '1.5rem' }} />
-          <List />
-        </Container>
-      </Box>
+      <Header />
+      <Box sx={{ mt: '1.5rem' }} />
+      <List />
     </DashboardLayout>
   );
 }

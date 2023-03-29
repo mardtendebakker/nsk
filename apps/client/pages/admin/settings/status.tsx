@@ -1,23 +1,24 @@
 import Head from 'next/head';
 import { Box } from '@mui/material';
 import useTranslation from '../../../hooks/useTranslation';
-import List from '../../../components/stock/repairServices/list';
 import DashboardLayout from '../../../layouts/dashboard';
-import Header from '../../../components/stock/header';
+import Header from '../../../components/admin/header';
+import SettingsContainer from '../../../components/admin/settings/settingsContainer';
+import List from '../../../components/admin/settings/status/list';
 
-function RepairServices() {
+export default function AdminSettingsStatus() {
   const { trans } = useTranslation();
 
   return (
     <DashboardLayout>
       <Head>
-        <title>{trans('stock')}</title>
+        <title>{trans('admin')}</title>
       </Head>
       <Header />
       <Box sx={{ mt: '1.5rem' }} />
-      <List />
+      <SettingsContainer>
+        <List />
+      </SettingsContainer>
     </DashboardLayout>
   );
 }
-
-export default RepairServices;

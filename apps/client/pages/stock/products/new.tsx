@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import {
-  Box, Button, Container, IconButton, Typography,
+  Box, Button, IconButton, Typography,
 } from '@mui/material';
 import { useRouter } from 'next/router';
 import ArrowBack from '@mui/icons-material/ArrowBack';
@@ -64,59 +64,52 @@ function NewStockProduct() {
         </title>
       </Head>
       <Box
-        component="main"
-        sx={{ py: 8 }}
+        sx={{
+          alignItems: 'center',
+          display: 'flex',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          mb: 2,
+        }}
       >
-        <Container maxWidth={false}>
-          <Box
-            sx={{
-              alignItems: 'center',
-              display: 'flex',
-              justifyContent: 'space-between',
-              flexWrap: 'wrap',
-              mb: 2,
-            }}
+        <Typography variant="h4">
+          <IconButton onClick={() => router.push(STOCKS_PRODUCTS)}>
+            <ArrowBack />
+          </IconButton>
+          {trans('newPurchase')}
+        </Typography>
+        <Box>
+          <Button
+            sx={{ ml: '1.5rem' }}
+            color="inherit"
+            variant="outlined"
+            onClick={() => router.push(STOCKS_PRODUCTS)}
           >
-            <Typography variant="h4">
-              <IconButton onClick={() => router.push(STOCKS_PRODUCTS)}>
-                <ArrowBack />
-              </IconButton>
-              {trans('newPurchase')}
-            </Typography>
-            <Box>
-              <Button
-                sx={{ ml: '1.5rem' }}
-                color="inherit"
-                variant="outlined"
-                onClick={() => router.push(STOCKS_PRODUCTS)}
-              >
-                {trans('cancel')}
-              </Button>
-              <Button
-                sx={{ ml: '1.5rem' }}
-                variant="outlined"
-                onClick={() => {}}
-              >
-                {trans('print')}
-              </Button>
-              <Button
-                sx={{ ml: '1.5rem' }}
-                variant="contained"
-                onClick={handleSubmit}
-              >
-                <Check />
-                {trans('savePurchase')}
-              </Button>
-            </Box>
-          </Box>
-          <Form
-            formRepresentation={formRepresentation}
-            disabled={performing}
-            onSubmit={handleSubmit}
-            setValue={setValue}
-          />
-        </Container>
+            {trans('cancel')}
+          </Button>
+          <Button
+            sx={{ ml: '1.5rem' }}
+            variant="outlined"
+            onClick={() => {}}
+          >
+            {trans('print')}
+          </Button>
+          <Button
+            sx={{ ml: '1.5rem' }}
+            variant="contained"
+            onClick={handleSubmit}
+          >
+            <Check />
+            {trans('savePurchase')}
+          </Button>
+        </Box>
       </Box>
+      <Form
+        formRepresentation={formRepresentation}
+        disabled={performing}
+        onSubmit={handleSubmit}
+        setValue={setValue}
+      />
     </DashboardLayout>
   );
 }
