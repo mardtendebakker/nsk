@@ -104,7 +104,8 @@ export default function List({
                   {stockProduct.sold}
                 </TableCell>
                 <TableCell>
-                  <Status done={stockProduct.done} tasks={stockProduct.tasks} />
+                  {stockProduct.tasks > 0
+                   && <Status done={stockProduct.done} tasks={stockProduct.tasks} />}
                 </TableCell>
               </TableRow>
               <TableRow sx={(theme) => ({ backgroundColor: theme.palette.grey[10] })}>
