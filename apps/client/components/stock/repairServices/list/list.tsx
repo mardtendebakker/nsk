@@ -11,7 +11,7 @@ import {
   Typography,
 } from '@mui/material';
 import useTranslation from '../../../../hooks/useTranslation';
-import { StockRepairService } from '../../../../utils/axios';
+import { StockProduct } from '../../../../utils/axios';
 import Status from '../../status';
 
 export default function List({
@@ -21,7 +21,7 @@ export default function List({
   onPageChanged,
   onChecked,
 }: {
-  stockRepairServices: StockRepairService[],
+  stockRepairServices: StockProduct[],
   count: number,
   page: number,
   onPageChanged: (newPage: number)=>void,
@@ -61,53 +61,41 @@ export default function List({
           </TableRow>
         </TableHead>
         <TableBody>
-          {stockRepairServices.map((stockRepairService: StockRepairService) => (
-            <>
-              <TableRow
-                sx={{
-                  height: 60,
-                }}
-                hover
-                key={stockRepairService.id}
-              >
-                <TableCell>
-                  <Checkbox sx={{ mr: '1.5rem' }} onChange={(_, checked) => { onChecked({ id: stockRepairService.id, checked }); }} />
-                </TableCell>
-                <TableCell />
-                <TableCell />
-                <TableCell />
-                <TableCell />
-                <TableCell />
-                <TableCell />
-                <TableCell />
-              </TableRow>
-              <TableRow sx={(theme) => ({ backgroundColor: theme.palette.grey[10] })}>
-                <TableCell sx={{ padding: 0 }} colSpan={8}>
-                  <Collapse in unmountOnExit>
-                    <Table sx={{ borderRadius: 0 }}>
-                      <TableHead>
-                        <TableRow>
-                          <TableCell>{trans('taskName')}</TableCell>
-                          <TableCell>{trans('orderNumber')}</TableCell>
-                          <TableCell>{trans('dueBy')}</TableCell>
-                          <TableCell>{trans('taskStatus')}</TableCell>
-                          <TableCell>{trans('assignedTo')}</TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        <TableRow>
-                          <TableCell />
-                          <TableCell />
-                          <TableCell />
-                          <TableCell />
-                          <TableCell />
-                        </TableRow>
-                      </TableBody>
-                    </Table>
-                  </Collapse>
-                </TableCell>
-              </TableRow>
-            </>
+          {stockRepairServices.map((stockRepairService: StockProduct) => (
+            <TableRow
+              sx={{
+                height: 60,
+              }}
+              hover
+              key={stockRepairService.id}
+            >
+              <TableCell>
+                <Checkbox
+                  sx={{ mr: '1.5rem' }}
+                  onChange={(_, checked) => { onChecked({ id: stockRepairService.id, checked }); }}
+                />
+                {stockRepairService.sku}
+              </TableCell>
+              <TableCell>
+                {stockRepairService.name}
+              </TableCell>
+              <TableCell>
+                {stockRepairService.location}
+              </TableCell>
+              <TableCell />
+              <TableCell>
+                {stockRepairService.stock}
+              </TableCell>
+              <TableCell>
+                {stockRepairService.sale}
+              </TableCell>
+              <TableCell>
+                {stockRepairService.sold}
+              </TableCell>
+              <TableCell>
+                <Status done={stockRepairService.done} tasks={stockRepairService.hold} />
+              </TableCell>
+            </TableRow>
           ))}
         </TableBody>
       </Table>
