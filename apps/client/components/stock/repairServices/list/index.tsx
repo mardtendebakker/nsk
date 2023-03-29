@@ -2,6 +2,7 @@ import { Card } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import _ from 'lodash';
+import { STOCK_REPAIR_SERVICES_PATH } from '../../../../utils/axios';
 import List from './list';
 import useAxios from '../../../../hooks/useAxios';
 import { STOCKS_REPAIR_SERVICES } from '../../../../utils/routes';
@@ -55,21 +56,20 @@ export default function ListContainer() {
 
   const { data: { data = [], count = 0 } = {}, call } = useAxios(
     'get',
-    'REPAIR_SERVICES_PATH'.replace(':id', ''),
+    STOCK_REPAIR_SERVICES_PATH.replace(':id', ''),
     {
       withProgressBar: true,
     },
   );
 
   useEffect(() => {
-    /* debouncedRefreshList({
+    debouncedRefreshList({
       page,
       formRepresentation,
       router,
       call,
-    }); */
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    });
+  }, [page]);
 
   return (
     <Card sx={{ overflowX: 'auto', p: '1.5rem' }}>

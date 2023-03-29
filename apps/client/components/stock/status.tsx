@@ -32,7 +32,7 @@ const colors = (theme: Theme) => ({
   },
 });
 
-export default function Status({ done, tasks }: { done: number, tasks:number }) {
+function Status({ done, tasks }: { done?: number, tasks?: number }) {
   const { trans } = useTranslation();
   const status = getStatus(done / tasks);
 
@@ -49,3 +49,7 @@ export default function Status({ done, tasks }: { done: number, tasks:number }) 
     </Box>
   );
 }
+
+Status.defaultProps = { done: 0, tasks: 0 };
+
+export default Status;

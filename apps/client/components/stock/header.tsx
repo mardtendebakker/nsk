@@ -17,7 +17,7 @@ export default function Navigation() {
     {
       active: router.pathname === STOCKS_REPAIR_SERVICES,
       text: trans('repairServices'),
-      onClick: () => {},
+      onClick: () => router.push(STOCKS_REPAIR_SERVICES),
     },
   ];
 
@@ -46,7 +46,7 @@ export default function Navigation() {
       </Box>
       <Button
         variant="contained"
-        onClick={() => router.push(STOCKS_PRODUCTS_NEW)}
+        onClick={() => router.pathname === STOCKS_PRODUCTS && router.push(STOCKS_PRODUCTS_NEW)}
       >
         <Add />
         {trans('newPurchase')}
