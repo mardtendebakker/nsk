@@ -3,16 +3,15 @@ import {
 } from '@mui/material';
 import Search from '@mui/icons-material/Search';
 import ChevronRight from '@mui/icons-material/ChevronRight';
-import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-import moment from 'moment';
 import { useState } from 'react';
-import UserRolePicker from '../../../memoizedFormInput/userRolePicker';
-import MemoizedTextField from '../../../memoizedFormInput/textField';
-import Autocomplete from '../../../memoizedFormInput/autocomplete';
-import useTranslation from '../../../../hooks/useTranslation';
-import { FormRepresentation, SetValue } from '../../../../hooks/useForm';
-import TextField from '../../../textField';
-import BorderedBox from '../../../borderedBox';
+import { DesktopDatePicker } from '@mui/x-date-pickers';
+import moment from 'moment';
+import BorderedBox from '../borderedBox';
+import MemoizedTextField from '../memoizedFormInput/textField';
+import Autocomplete from '../memoizedFormInput/autocomplete';
+import useTranslation from '../../hooks/useTranslation';
+import { FormRepresentation, SetValue } from '../../hooks/useForm';
+import TextField from '../textField';
 
 export default function Filter({
   disabled,
@@ -36,7 +35,7 @@ export default function Filter({
               <MemoizedTextField
                 disabled={disabled}
                 name="search"
-                placeholder={trans('searchByCustomerNameOrEmail')}
+                placeholder={trans('search')}
                 fullWidth
                 value={formRepresentation.search.value}
                 onChange={(e) => setValue({ field: 'search', value: e.target.value })}
@@ -56,39 +55,28 @@ export default function Filter({
           <Divider />
           <AccordionDetails>
             <Box sx={{ flex: 1, display: 'flex', alignItems: 'center' }}>
-              <UserRolePicker
-                label=" "
+              <DesktopDatePicker
                 disabled={disabled}
-                fullWidth
-                sx={{
-                  fieldset: {
-                    display: 'none',
-                  },
-                }}
-              />
-              <Box sx={(theme) => ({
-                m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.divider,
-              })}
-              />
-              <Autocomplete
-                disabled={disabled}
-                fullWidth
-                size="small"
-                options={[]}
-                filterSelectedOptions
-                renderInput={
-                (params) => (
+                inputFormat="YYYY/MM/DD"
+                value={formRepresentation.createdAt.value}
+                onChange={(value) => setValue({ field: 'createdAt', value: moment(value.toString()).format('YYYY/MM/DD') })}
+                renderInput={(params) => (
                   <TextField
+                    placeholder={trans('createdAt')}
+                    fullWidth
+                    size="small"
                     {...params}
-                    placeholder={trans('lastActive')}
+                    inputProps={{
+                      ...params.inputProps,
+                      placeholder: trans('createdAt'),
+                    }}
                     sx={{
                       fieldset: {
                         display: 'none',
                       },
                     }}
                   />
-                )
-            }
+                )}
               />
               <Box sx={(theme) => ({
                 m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.divider,
@@ -118,28 +106,73 @@ export default function Filter({
                 m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.divider,
               })}
               />
-              <DesktopDatePicker
+              <Autocomplete
                 disabled={disabled}
-                inputFormat="YYYY/MM/DD"
-                value={formRepresentation.createdAt.value}
-                onChange={(value) => setValue({ field: 'createdAt', value: moment(value.toString()).format('YYYY/MM/DD') })}
-                renderInput={(params) => (
+                fullWidth
+                size="small"
+                options={[]}
+                filterSelectedOptions
+                renderInput={
+                (params) => (
                   <TextField
-                    placeholder={trans('createdAt')}
-                    fullWidth
-                    size="small"
                     {...params}
-                    inputProps={{
-                      ...params.inputProps,
-                      placeholder: trans('createdAt'),
-                    }}
+                    placeholder={trans('sortBy')}
                     sx={{
                       fieldset: {
                         display: 'none',
                       },
                     }}
                   />
-                )}
+                )
+            }
+              />
+              <Box sx={(theme) => ({
+                m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.divider,
+              })}
+              />
+              <Autocomplete
+                disabled={disabled}
+                fullWidth
+                size="small"
+                options={[]}
+                filterSelectedOptions
+                renderInput={
+                (params) => (
+                  <TextField
+                    {...params}
+                    placeholder={trans('status')}
+                    sx={{
+                      fieldset: {
+                        display: 'none',
+                      },
+                    }}
+                  />
+                )
+            }
+              />
+              <Box sx={(theme) => ({
+                m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.divider,
+              })}
+              />
+              <Autocomplete
+                disabled={disabled}
+                fullWidth
+                size="small"
+                options={[]}
+                filterSelectedOptions
+                renderInput={
+                (params) => (
+                  <TextField
+                    {...params}
+                    placeholder={trans('partner')}
+                    sx={{
+                      fieldset: {
+                        display: 'none',
+                      },
+                    }}
+                  />
+                )
+            }
               />
             </Box>
           </AccordionDetails>

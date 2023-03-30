@@ -1,5 +1,4 @@
 import {
-  Card,
   Table,
   TableBody,
   TableCell,
@@ -28,7 +27,7 @@ export default function List({
   const { trans } = useTranslation();
 
   return (
-    <Card sx={{ overflowX: 'auto', p: '1.5rem' }}>
+    <>
       <Table>
         <TableHead>
           <TableRow>
@@ -87,6 +86,6 @@ export default function List({
         onChange={(_, newPage) => onPageChanged(newPage)}
         page={page}
       />
-    </Card>
+    </>
   );
 }
