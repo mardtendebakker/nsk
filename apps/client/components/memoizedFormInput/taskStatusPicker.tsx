@@ -1,9 +1,10 @@
 import { SxProps } from '@mui/material';
+import { memo } from 'react';
 import useTranslation from '../../hooks/useTranslation';
 import TextField from '../textField';
 import Autocomplete from './autocomplete';
 
-export default function TastStatusPicker(
+function TastStatusPicker(
   {
     disabled, value, sx, fullWidth, label, placeholder, displayFieldset,
   }: {
@@ -54,3 +55,5 @@ TastStatusPicker.defaultProps = {
   placeholder: undefined,
   displayFieldset: true,
 };
+
+export default memo(TastStatusPicker);

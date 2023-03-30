@@ -309,6 +309,7 @@ const translation = {
   toDo: 'Te doen',
   inProgress: 'Bezig',
   done: 'Klaar',
+  sortBy: 'Sorteer op',
   // http status
   200: 'Actie succesvol afgerond',
   201: 'Bron gemaakt',
