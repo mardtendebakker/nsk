@@ -93,8 +93,8 @@ export default function List({
                 {stockRepairService.sold}
               </TableCell>
               <TableCell>
-                {stockRepairService.hold > 0
-                && <Status done={stockRepairService.done} tasks={stockRepairService.hold} />}
+                {stockRepairService.tasks > 0
+                && <Status done={stockRepairService.done} tasks={stockRepairService.tasks} />}
               </TableCell>
             </TableRow>
           ))}
