@@ -1,6 +1,7 @@
 import { getUser, clear, signIn } from '../../utils/storage';
 import EventEmitter from '../../utils/eventEmitter';
 import { State, User } from './types';
+import { hideProgress } from '../../components/topLinearProgress';
 
 export const SIGN_IN_REQUEST = 'SIGN_IN_REQUEST';
 export const SIGN_OUT = 'SIGN_OUT';
@@ -74,6 +75,7 @@ function reducer(
     case CONFIRM_ACCOUNT_REQUEST_SUCCEEDED:
     case SIGN_OUT:
       clear();
+      hideProgress();
       return { user: null, loading: false };
     default:
       return currentState;

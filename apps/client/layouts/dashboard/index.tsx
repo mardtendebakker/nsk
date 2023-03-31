@@ -19,7 +19,7 @@ export default function DashboardLayout({ children }: { children: JSX.Element | 
 
   useEffect(() => {
     if (user?.emailVerified) {
-      refreshUserInfo();
+      refreshUserInfo().catch(() => {});
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

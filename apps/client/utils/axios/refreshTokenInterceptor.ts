@@ -42,7 +42,8 @@ export default async (err: AxiosError): Promise<any> => {
         subscribers = [];
         refreshRequested = false;
       } catch {
-        return securityStore.emit(SIGN_OUT);
+        securityStore.emit(SIGN_OUT);
+        return Promise.reject(err);
       }
     }
 
