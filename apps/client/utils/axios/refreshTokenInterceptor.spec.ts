@@ -89,13 +89,20 @@ describe('refreshTokenInterceptor', () => {
   it('logs the user out if token refresh fails', async () => {
     const error = { config, response: originalResponse };
     mockedClient.post.mockRejectedValueOnce(new Error());
+    let thrown = false;
 
-    await refreshTokenInterceptor(error as AxiosError);
+    try {
+      await refreshTokenInterceptor(error as AxiosError);
+    } catch (e) {
+      thrown = true;
+    }
 
+    expect(thrown).toBeTruthy();
     expect(mockedClient.post).toHaveBeenCalledWith(
       '/auth/refresh',
       { emailOrUsername: user.username, token: user.refreshToken },
     );
+
     expect(securityStore.emit).toHaveBeenCalledWith('SIGN_OUT');
   });
   it('rejects error if status is not 401', async () => {
