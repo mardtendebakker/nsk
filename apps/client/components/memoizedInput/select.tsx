@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import Select from '../select';
+import Select from '../input/select';
 
 export default memo(
   Select,

@@ -7,9 +7,9 @@ import {
 import Close from '@mui/icons-material/Close';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import useTranslation from '../../../hooks/useTranslation';
-import Autocomplete from '../../memoizedFormInput/autocomplete';
-import TextField from '../../memoizedFormInput/textField';
-import BaseTextField from '../../textField';
+import Autocomplete from '../../memoizedInput/autocomplete';
+import TextField from '../../memoizedInput/textField';
+import BaseTextField from '../../input/textField';
 
 export default function Edit({ open, onClose }: { open: boolean, onClose: () => void }) {
   const { trans } = useTranslation();

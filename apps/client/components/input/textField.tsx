@@ -24,7 +24,7 @@ export default function TextField({
         sx: { transform: 'unset', position: 'relative', mb: '.5rem' },
       }}
       size={size}
-      error={Boolean(error)}
+      error={error}
       helperText={helperText}
       label={label}
       placeholder={placeholder}

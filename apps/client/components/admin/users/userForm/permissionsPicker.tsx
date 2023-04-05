@@ -2,7 +2,7 @@ import Add from '@mui/icons-material/Add';
 import { Box, Button, Typography } from '@mui/material';
 import { memo, useState } from 'react';
 import useTranslation from '../../../../hooks/useTranslation';
-import Select from '../../../memoizedFormInput/select';
+import Select from '../../../memoizedInput/select';
 
 function Permission({ id, permission, detail }:
 { id: number, permission: number, detail: number }) {

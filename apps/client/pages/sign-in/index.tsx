@@ -9,11 +9,11 @@ import { DASHBOARD } from '../../utils/routes';
 import useSecurity from '../../hooks/useSecurity';
 import SignInForm from '../../components/signIn/signInForm';
 import SignUpForm from '../../components/signIn/signUpForm';
-import ForgotPasswordForm from '../../components/signIn/forgoutPasswordForm';
+import ForgotPasswordForm from '../../components/signIn/forgotPasswordForm';
 import { FormValues } from '../../components/signIn/types';
 import ChangePasswordForm from '../../components/signIn/changePasswordForm';
 
-export default function LoginPage() {
+export default function SignIn() {
   const { trans } = useTranslation();
   const { state: { user } } = useSecurity();
   const [selectedForm, setSelectedForm] = useState<{ form: FormValues }>({ form: 'signIn' });

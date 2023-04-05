@@ -6,11 +6,11 @@ import ChevronRight from '@mui/icons-material/ChevronRight';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import moment from 'moment';
 import { useState } from 'react';
-import MemoizedTextField from '../../../memoizedFormInput/textField';
-import Autocomplete from '../../../memoizedFormInput/autocomplete';
+import MemoizedTextField from '../../../memoizedInput/textField';
+import Autocomplete from '../../../memoizedInput/autocomplete';
 import useTranslation from '../../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../../hooks/useForm';
-import TextField from '../../../textField';
+import TextField from '../../../input/textField';
 import BorderedBox from '../../../borderedBox';
 
 export default function Filter({

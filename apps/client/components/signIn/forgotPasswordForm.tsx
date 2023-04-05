@@ -6,7 +6,7 @@ import useTranslation from '../../hooks/useTranslation';
 import useForm from '../../hooks/useForm';
 import useSecurity from '../../hooks/useSecurity';
 import { SetSelectedForm } from './types';
-import TextField from '../textField';
+import TextField from '../input/textField';
 
 function ForgotPasswordForm(
   { onFormSelected }:
@@ -59,7 +59,7 @@ function ForgotPasswordForm(
           {trans('signIn')}
         </Typography>
       </Stack>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} name="forgotPassword">
         <Stack spacing={1} sx={{ mb: 2 }}>
           <TextField
             error={Boolean(formRepresentation.emailOrUsername.error)}

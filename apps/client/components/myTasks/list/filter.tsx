@@ -4,7 +4,7 @@ import {
 import Search from '@mui/icons-material/Search';
 import useTranslation from '../../../hooks/useTranslation';
 import BorderedBox from '../../borderedBox';
-import MemoizedTextField from '../../memoizedFormInput/textField';
+import MemoizedTextField from '../../memoizedInput/textField';
 
 export default function Filter() {
   const { trans } = useTranslation();

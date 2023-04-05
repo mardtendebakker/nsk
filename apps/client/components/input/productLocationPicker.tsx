@@ -1,10 +1,9 @@
 import { SxProps } from '@mui/material';
-import { memo } from 'react';
 import useTranslation from '../../hooks/useTranslation';
-import TextField from '../textField';
-import Autocomplete from './autocomplete';
+import TextField from './textField';
+import Autocomplete from '../memoizedInput/autocomplete';
 
-function ProductTypePicker(
+export default function ProductLocationPicker(
   {
     disabled, value, sx, fullWidth, label, placeholder, displayFieldset,
   }: {
@@ -32,8 +31,8 @@ function ProductTypePicker(
                 (params) => (
                   <TextField
                     {...params}
-                    placeholder={typeof placeholder === 'string' ? placeholder : trans('productType')}
-                    label={typeof label === 'string' ? label : trans('productType')}
+                    placeholder={typeof placeholder === 'string' ? placeholder : trans('location')}
+                    label={typeof label === 'string' ? label : trans('location')}
                     sx={{
                       fieldset: {
                         display: !displayFieldset && 'none',
@@ -46,7 +45,7 @@ function ProductTypePicker(
   );
 }
 
-ProductTypePicker.defaultProps = {
+ProductLocationPicker.defaultProps = {
   disabled: false,
   value: undefined,
   sx: undefined,
@@ -55,5 +54,3 @@ ProductTypePicker.defaultProps = {
   placeholder: undefined,
   displayFieldset: true,
 };
-
-export default memo(ProductTypePicker);

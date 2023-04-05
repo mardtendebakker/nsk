@@ -22,8 +22,8 @@ export default function Delivery() {
       />
       <Box sx={{ mt: '2rem' }}>
         <ul style={{ listStyleType: 'none' }}>
-          {[{}, {}, {}].map((_, key) => (
-            <li>
+          {[{ id: 1 }, { id: 2 }, { id: 3 }].map(({ id }, i) => (
+            <li key={id}>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <Box sx={(theme) => ({
                   mr: '1rem',
@@ -40,7 +40,7 @@ export default function Delivery() {
                   0:00 pm
                 </Typography>
               </Box>
-              {key !== 2 && (
+              {i !== 2 && (
               <Box sx={(theme) => ({
                 height: '3rem',
                 width: '.2rem',
