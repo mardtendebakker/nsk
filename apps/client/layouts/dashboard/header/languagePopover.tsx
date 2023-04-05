@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { alpha } from '@mui/material/styles';
 import {
   Box, MenuItem, Stack, IconButton, Popover,
 } from '@mui/material';
@@ -51,7 +50,6 @@ export default function LanguagePopover() {
               height: '100%',
               borderRadius: '50%',
               position: 'absolute',
-              bgcolor: (theme) => alpha(theme.palette.grey[70], 0.8),
             },
           }),
         }}
