@@ -18,7 +18,7 @@ function refreshList({
   const params = new URLSearchParams();
   const where : { [key: string]: object; } = {};
 
-  if (page) {
+  if (page > 1) {
     params.append('page', page.toString());
   }
 
@@ -42,7 +42,12 @@ function refreshList({
       where: JSON.stringify(where),
     },
   }).then(() => {
-    router.replace(`${ORDERS_PURCHASES}?${params.toString()}`);
+    const paramsString = params.toString();
+    const newPath = paramsString ? `${ORDERS_PURCHASES}?${params.toString()}` : ORDERS_PURCHASES;
+
+    if (newPath !== router.pathname) {
+      router.replace(newPath);
+    }
   });
 }
 

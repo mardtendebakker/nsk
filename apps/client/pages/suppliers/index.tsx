@@ -26,7 +26,7 @@ function Suppliers() {
   );
 
   useEffect(() => {
-    router.replace(`${SUPPLIERS}?page=${page}`);
+    router.replace(page > 1 ? `${SUPPLIERS}?page=${page}}` : SUPPLIERS);
     call({ params: { take: TAKE, skip: (page - 1) * TAKE } });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
