@@ -1,5 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { afile } from "@prisma/client";
+import { IsString } from "class-validator";
+import { FileDiscrimination } from "../types/file-discrimination.enum";
 
 export class FileEntity implements afile {
   @ApiProperty()
@@ -18,7 +20,8 @@ export class FileEntity implements afile {
   unique_server_filename: string;
   
   @ApiProperty()
-  discr: string;
+  @IsString()
+  discr: FileDiscrimination;
 
   @ApiPropertyOptional()
   external_id: number | null;

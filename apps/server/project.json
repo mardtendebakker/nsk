@@ -27,7 +27,9 @@
           }
         ],
         "assets": ["apps/server/src/assets"],
-        "webpackConfig": "apps/server/webpack.config.js"
+        "webpackConfig": "apps/server/webpack.config.js",
+        "isolatedConfig": true,
+        "babelUpwardRootMode": true
       },
       "configurations": {
         "production": {
