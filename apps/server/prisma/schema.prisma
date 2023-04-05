@@ -207,8 +207,8 @@ model product {
   name                                                          String              @db.VarChar(255)
   description                                                   String?             @db.LongText
   price                                                         Int?
-  created_at                                                    DateTime            @db.DateTime(0)
-  updated_at                                                    DateTime            @db.DateTime(0)
+  created_at                                                    DateTime            @db.DateTime(0) @default(now())
+  updated_at                                                    DateTime            @db.DateTime(0) @updatedAt
   external_id                                                   Int?
   afile                                                         afile[]
   location                                                      location            @relation(fields: [location_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_D34A04AD64D218E")
