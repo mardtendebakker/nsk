@@ -1,9 +1,8 @@
 import { TextFieldProps } from '@mui/material';
-import { memo } from 'react';
 import useTranslation from '../../hooks/useTranslation';
-import Select from '../select';
+import Select from './select';
 
-function UserRolePicker({ label, sx, fullWidth } : TextFieldProps) {
+export default function UserRolePicker({ label, sx, fullWidth } : TextFieldProps) {
   const { trans } = useTranslation();
 
   return (
@@ -17,8 +16,3 @@ function UserRolePicker({ label, sx, fullWidth } : TextFieldProps) {
     />
   );
 }
-
-export default memo(
-  UserRolePicker,
-  (prevProps, nextProps) => JSON.stringify(prevProps) === JSON.stringify(nextProps),
-);

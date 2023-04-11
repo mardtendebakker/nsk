@@ -62,6 +62,7 @@
     "@nrwl/webpack": "15.9.2",
     "@nrwl/workspace": "15.9.2",
     "@nx-tools/nx-prisma": "^4.0.3",
+    "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "13.4.0",
     "@types/jest": "29.4.4",
     "@types/multer": "^1.4.7",

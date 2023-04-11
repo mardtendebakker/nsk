@@ -1,10 +1,10 @@
 import { Grid, Typography } from '@mui/material';
 import { FormRepresentation, SetValue } from '../../../hooks/useForm';
-import ProductAvailabilityPicker from '../../memoizedFormInput/productAvailabilityPicker';
+import ProductAvailabilityPicker from '../../memoizedInput/productAvailabilityPicker';
 import useTranslation from '../../../hooks/useTranslation';
 import BorderedBox from '../../borderedBox';
-import TextField from '../../memoizedFormInput/textField';
-import ProductLocationPicker from '../../memoizedFormInput/productLocationPicker';
+import TextField from '../../memoizedInput/textField';
+import ProductLocationPicker from '../../memoizedInput/productLocationPicker';
 
 export default function ProductForm({
   setValue,

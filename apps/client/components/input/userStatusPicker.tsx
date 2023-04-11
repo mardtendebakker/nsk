@@ -1,9 +1,8 @@
 import { TextFieldProps } from '@mui/material';
-import { memo } from 'react';
 import useTranslation from '../../hooks/useTranslation';
-import Select from '../select';
+import Select from './select';
 
-function UserStatusPicker({ label, sx } : TextFieldProps) {
+export default function UserStatusPicker({ label, sx } : TextFieldProps) {
   const { trans } = useTranslation();
 
   return (
@@ -16,8 +15,3 @@ function UserStatusPicker({ label, sx } : TextFieldProps) {
     />
   );
 }
-
-export default memo(
-  UserStatusPicker,
-  (prevProps, nextProps) => JSON.stringify(prevProps) === JSON.stringify(nextProps),
-);

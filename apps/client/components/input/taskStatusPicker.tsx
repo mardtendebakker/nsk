@@ -1,10 +1,9 @@
 import { SxProps } from '@mui/material';
-import { memo } from 'react';
 import useTranslation from '../../hooks/useTranslation';
-import TextField from '../textField';
-import Autocomplete from './autocomplete';
+import TextField from './textField';
+import Autocomplete from '../memoizedInput/autocomplete';
 
-function ProductAvailabilityPicker(
+export default function TaskStatusPicker(
   {
     disabled, value, sx, fullWidth, label, placeholder, displayFieldset,
   }: {
@@ -32,8 +31,8 @@ function ProductAvailabilityPicker(
                 (params) => (
                   <TextField
                     {...params}
-                    placeholder={typeof placeholder === 'string' ? placeholder : trans('availability')}
-                    label={typeof label === 'string' ? label : trans('availability')}
+                    placeholder={typeof placeholder === 'string' ? placeholder : trans('taskStatus')}
+                    label={typeof label === 'string' ? label : trans('taskStatus')}
                     sx={{
                       fieldset: {
                         display: !displayFieldset && 'none',
@@ -46,7 +45,7 @@ function ProductAvailabilityPicker(
   );
 }
 
-ProductAvailabilityPicker.defaultProps = {
+TaskStatusPicker.defaultProps = {
   disabled: false,
   value: undefined,
   sx: undefined,
@@ -55,5 +54,3 @@ ProductAvailabilityPicker.defaultProps = {
   placeholder: undefined,
   displayFieldset: true,
 };
-
-export default memo(ProductAvailabilityPicker);

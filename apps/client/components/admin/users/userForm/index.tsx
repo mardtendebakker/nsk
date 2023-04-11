@@ -2,9 +2,9 @@ import { Grid, Typography } from '@mui/material';
 import { FormRepresentation, SetValue } from '../../../../hooks/useForm';
 import useTranslation from '../../../../hooks/useTranslation';
 import BorderedBox from '../../../borderedBox';
-import TextField from '../../../memoizedFormInput/textField';
-import UserRolePicker from '../../../memoizedFormInput/userRolePicker';
-import UserStatusPicker from '../../../memoizedFormInput/userStatusPicker';
+import TextField from '../../../memoizedInput/textField';
+import UserRolePicker from '../../../memoizedInput/userRolePicker';
+import UserStatusPicker from '../../../memoizedInput/userStatusPicker';
 import PermissionsPicker from './permissionsPicker';
 
 export default function UserForm({

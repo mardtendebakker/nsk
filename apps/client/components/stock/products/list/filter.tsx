@@ -4,16 +4,16 @@ import {
 import Search from '@mui/icons-material/Search';
 import ChevronRight from '@mui/icons-material/ChevronRight';
 import { useState } from 'react';
-import ProductAvailabilityPicker from '../../../memoizedFormInput/productAvailabilityPicker';
-import ProductLocationPicker from '../../../memoizedFormInput/productLocationPicker';
+import ProductAvailabilityPicker from '../../../memoizedInput/productAvailabilityPicker';
+import ProductLocationPicker from '../../../memoizedInput/productLocationPicker';
 import BorderedBox from '../../../borderedBox';
-import MemoizedTextField from '../../../memoizedFormInput/textField';
-import Autocomplete from '../../../memoizedFormInput/autocomplete';
+import MemoizedTextField from '../../../memoizedInput/textField';
+import Autocomplete from '../../../memoizedInput/autocomplete';
 import useTranslation from '../../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../../hooks/useForm';
-import TextField from '../../../textField';
-import ProductTypePicker from '../../../memoizedFormInput/productTypePicker';
-import TastStatusPicker from '../../../memoizedFormInput/taskStatusPicker';
+import TextField from '../../../input/textField';
+import ProductTypePicker from '../../../memoizedInput/productTypePicker';
+import TastStatusPicker from '../../../memoizedInput/taskStatusPicker';
 
 export default function Filter({
   disabled,

@@ -7,11 +7,11 @@ import { useState } from 'react';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
 import moment from 'moment';
 import BorderedBox from '../borderedBox';
-import MemoizedTextField from '../memoizedFormInput/textField';
-import Autocomplete from '../memoizedFormInput/autocomplete';
+import MemoizedTextField from '../memoizedInput/textField';
+import Autocomplete from '../memoizedInput/autocomplete';
 import useTranslation from '../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../hooks/useForm';
-import TextField from '../textField';
+import TextField from '../input/textField';
 
 export default function Filter({
   disabled,

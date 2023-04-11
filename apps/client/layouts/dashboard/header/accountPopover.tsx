@@ -13,6 +13,7 @@ export default function AccountPopover() {
   const [open, setOpen] = useState(null);
   const { trans } = useTranslation();
   const { signOut, state: { user } } = useSecurity();
+
   const handleOpen = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     setOpen(event.currentTarget);
   };

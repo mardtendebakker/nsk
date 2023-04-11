@@ -1,7 +1,7 @@
 import { memo } from 'react';
-import TextField from '../textField';
+import UserRolePicker from '../input/userRolePicker';
 
 export default memo(
-  TextField,
+  UserRolePicker,
   (prevProps, nextProps) => JSON.stringify(prevProps) === JSON.stringify(nextProps),
 );

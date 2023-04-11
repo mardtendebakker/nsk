@@ -9,7 +9,7 @@ import useSecurity from '../hooks/useSecurity';
 import useForm from '../hooks/useForm';
 import { DASHBOARD, SIGN_IN } from '../utils/routes';
 
-export default function LoginPage() {
+export default function AccountVerification() {
   const { trans } = useTranslation();
   const {
     confirmAccount, sendVerificationCode, state: { user, loading }, signOut,

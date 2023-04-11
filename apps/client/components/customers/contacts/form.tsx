@@ -8,9 +8,9 @@ import {
 import { SyntheticEvent } from 'react';
 import useTranslation from '../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../hooks/useForm';
-import TextField from '../../memoizedFormInput/textField';
-import Autocomplete from '../../memoizedFormInput/autocomplete';
-import BaseTextField from '../../textField';
+import TextField from '../../memoizedInput/textField';
+import Autocomplete from '../../memoizedInput/autocomplete';
+import BaseTextField from '../../input/textField';
 
 function Form({
   formRepresentation,

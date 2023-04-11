@@ -1,0 +1,94 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`account-verification matches snapshot 1`] = `
+<DocumentFragment>
+  <main
+    class="MuiBox-root css-3pjj5b"
+  >
+    <button
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textError MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textError MuiButton-sizeMedium MuiButton-textSizeMedium css-1d3mlpq-MuiButtonBase-root-MuiButton-root"
+      tabindex="0"
+      type="button"
+    >
+      logout
+      <span
+        class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+      />
+    </button>
+    <h4
+      class="MuiTypography-root MuiTypography-h4 MuiTypography-gutterBottom css-1jjz4e9-MuiTypography-root"
+    >
+      accountVerificationMessage
+    </h4>
+    <form>
+      <div
+        class="css-1okj3ks-MuiStack-root"
+      >
+        <div
+          class="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+        >
+          <label
+            class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root"
+            data-shrink="false"
+            for=":r0:"
+            id=":r0:-label"
+          >
+            code
+          </label>
+          <div
+            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root"
+          >
+            <input
+              aria-invalid="false"
+              class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputAdornedEnd css-nxo287-MuiInputBase-input-MuiOutlinedInput-input"
+              id=":r0:"
+              name="code"
+              type="text"
+              value=""
+            />
+            <div
+              class="MuiInputAdornment-root MuiInputAdornment-positionEnd MuiInputAdornment-outlined MuiInputAdornment-sizeMedium css-1laqsz7-MuiInputAdornment-root"
+            >
+              <button
+                class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1e6y48t-MuiButtonBase-root-MuiButton-root"
+                tabindex="0"
+                type="button"
+              >
+                sendCode
+                <span
+                  class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                />
+              </button>
+            </div>
+            <fieldset
+              aria-hidden="true"
+              class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+            >
+              <legend
+                class="css-yjsfm1"
+              >
+                <span>
+                  code
+                </span>
+              </legend>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+      <div
+        class="css-1ulybn8-MuiStack-root"
+      />
+      <button
+        class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeLarge MuiButton-containedSizeLarge MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeLarge MuiButton-containedSizeLarge MuiButton-fullWidth css-189e9pj-MuiButtonBase-root-MuiButton-root"
+        tabindex="0"
+        type="submit"
+      >
+        confirm
+        <span
+          class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+        />
+      </button>
+    </form>
+  </main>
+</DocumentFragment>
+`;

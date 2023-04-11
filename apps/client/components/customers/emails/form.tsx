@@ -10,9 +10,9 @@ import dynamic from 'next/dynamic';
 import { EditorProps } from 'react-draft-wysiwyg';
 import useTranslation from '../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../hooks/useForm';
-import TextField from '../../memoizedFormInput/textField';
-import BaseTextField from '../../textField';
-import Autocomplete from '../../memoizedFormInput/autocomplete';
+import TextField from '../../memoizedInput/textField';
+import BaseTextField from '../../input/textField';
+import Autocomplete from '../../memoizedInput/autocomplete';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 const Editor = dynamic<EditorProps>(

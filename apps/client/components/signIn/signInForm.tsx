@@ -9,7 +9,7 @@ import useTranslation from '../../hooks/useTranslation';
 import useForm, { FormRepresentation } from '../../hooks/useForm';
 import useSecurity from '../../hooks/useSecurity';
 import { SetSelectedForm } from './types';
-import TextField from '../textField';
+import TextField from '../input/textField';
 
 function SignInForm(
   { onFormSelected }:
@@ -67,7 +67,7 @@ function SignInForm(
           {trans('signUp')}
         </Typography>
       </Stack>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} name="signIn">
         <Stack spacing={1} sx={{ mb: 2 }}>
           <TextField
             error={Boolean(formRepresentation.emailOrUsername.error)}

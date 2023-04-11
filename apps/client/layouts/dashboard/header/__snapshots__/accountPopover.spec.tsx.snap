@@ -1,0 +1,44 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AccountPopover matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="MuiAvatar-root MuiAvatar-circular MuiAvatar-colorDefault css-1dnh70-MuiAvatar-root"
+  >
+    <svg
+      aria-hidden="true"
+      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiAvatar-fallback css-10mi8st-MuiSvgIcon-root-MuiAvatar-fallback"
+      data-testid="PersonIcon"
+      focusable="false"
+      viewBox="0 0 24 24"
+    >
+      <path
+        d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+      />
+    </svg>
+  </div>
+  <h6
+    class="MuiTypography-root MuiTypography-h6 css-1qj4wb3-MuiTypography-root"
+  />
+  <button
+    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+    tabindex="0"
+    type="button"
+  >
+    <svg
+      aria-hidden="true"
+      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-uym7v6-MuiSvgIcon-root"
+      data-testid="ChevronRightIcon"
+      focusable="false"
+      viewBox="0 0 24 24"
+    >
+      <path
+        d="M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"
+      />
+    </svg>
+    <span
+      class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+    />
+  </button>
+</DocumentFragment>
+`;

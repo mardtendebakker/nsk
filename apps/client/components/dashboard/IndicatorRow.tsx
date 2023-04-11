@@ -18,12 +18,12 @@ export default function IndicatorRow() {
         {
         [
           { title: 'Test Test 1', value: '€100.00' },
-          { title: 'Test Test 1', value: '€100.00' },
-          { title: 'Test Test 1', value: '€100.00' },
-          { title: 'Test Test 1', value: '€100.00' },
-          { title: 'Test Test 1', value: '€100.00' },
+          { title: 'Test Test 2', value: '€100.00' },
+          { title: 'Test Test 3', value: '€100.00' },
+          { title: 'Test Test 4', value: '€100.00' },
+          { title: 'Test Test 5', value: '€100.00' },
         ]
-          .map(({ title, value }) => <Indicator title={title} value={value} />)
+          .map(({ title, value }) => <Indicator key={title} title={title} value={value} />)
         }
       </CardContent>
     </Card>

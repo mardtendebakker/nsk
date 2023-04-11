@@ -9,7 +9,7 @@ import useAxios from '../../hooks/useAxios';
 import { CHANGE_PASSWORD_PATH } from '../../utils/axios';
 import useForm, { FormRepresentation } from '../../hooks/useForm';
 import useTranslation from '../../hooks/useTranslation';
-import TextField from '../textField';
+import TextField from '../input/textField';
 
 function PasswordForm() {
   const { trans } = useTranslation();
