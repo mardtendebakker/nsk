@@ -23,7 +23,7 @@ export class StockRepository {
         const product = await next(params);
         return {
           ...product,
-          price: product.price / 100,
+          ...(product?.price && {price: (product.price / 100).toFixed(2)}),
         };
       }
       return next(params);
@@ -35,7 +35,7 @@ export class StockRepository {
         const products = await next(params);
         return products.map(product => ({
           ...product,
-          price: product.price / 100,
+          ...(product?.price && {price: (product.price / 100).toFixed(2)}),
         }));
       }
       return next(params);
@@ -82,14 +82,14 @@ export class StockRepository {
     return this.prisma.product.findUnique({ where, select });
   }
   
-  update(params: {
+  updateOne(params: {
     where: Prisma.productWhereUniqueInput;
     data: Prisma.productUpdateInput;
   }) {
     const { where, data } = params;
     return this.prisma.product.update({
-      data,
       where,
+      data,
     });
   }
   

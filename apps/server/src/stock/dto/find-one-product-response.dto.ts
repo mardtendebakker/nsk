@@ -5,6 +5,7 @@ import { ProductOrderEntity } from "../entities/product-order.entity";
 import { ProductStatusEntity } from "../entities/product-status.entity";
 import { ProductTypeEntity } from "../entities/product-type.entity";
 import { ProductEntity } from "../entities/product.entity";
+import { AttributeEntity } from "../../attribute/entities/attribute.entity";
 
 export class FindOneProductResponeDto extends PickType(ProductEntity, [
   "id",
@@ -15,13 +16,10 @@ export class FindOneProductResponeDto extends PickType(ProductEntity, [
   "updated_at",
 ] as const) {
   @ApiProperty()
-  location: LocationEntity;
+  attributes: AttributeEntity[];
 
   @ApiProperty()
-  product_status: ProductStatusEntity;
-  
-  @ApiProperty()
-  product_type: ProductTypeEntity;
+  listPrice: string;
   
   @ApiProperty()
   product_order: ProductOrderEntity[];

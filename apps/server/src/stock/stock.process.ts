@@ -39,6 +39,8 @@ export class StockProcess {
       location,
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       product_attribute_product_attribute_value_product_idToproduct,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      product_attribute_product_attribute_product_idToproduct,
       ...rest
     } = this.product;
 
@@ -78,8 +80,8 @@ export class StockProcess {
   }
 
   private getAttributedQuantity() {
-    const { product_attribute_product_attribute_value_product_idToproduct } = this.product;
-    const product_attributed = product_attribute_product_attribute_value_product_idToproduct[0];
+    const { product_attribute_product_attribute_value_product_idToproduct: product_attributeds } = this.product;
+    const product_attributed = product_attributeds[0];
     let attributedQuantity = 1;
     
     if (product_attributed['attribute'].type == AttributeType.TYPE_PRODUCT &&
@@ -93,8 +95,7 @@ export class StockProcess {
   }
 
   private async getQuantitySold() {
-    const { product_attribute_product_attribute_value_product_idToproduct } = this.product;
-    const product_attributeds = product_attribute_product_attribute_value_product_idToproduct;
+    const { product_attribute_product_attribute_value_product_idToproduct: product_attributeds } = this.product;
     let quantitySold = 0;
 
     if (this.isSaleable) {
@@ -174,3 +175,4 @@ export class StockProcess {
     return this.quantityOnHold;
   }
 }
+
