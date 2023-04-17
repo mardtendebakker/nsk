@@ -3,7 +3,7 @@ import { Prisma } from "@prisma/client";
 
 export class PrismaCompanyUpdateInputDto implements Prisma.acompanyUpdateInput {
   @ApiPropertyOptional()
-  name: string;
+  name?: string;
 
   @ApiPropertyOptional()
   kvk_nr?: number;

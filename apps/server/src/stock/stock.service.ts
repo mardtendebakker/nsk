@@ -5,6 +5,8 @@ import { LocationService } from "../location/location.service";
 import { StockRepository } from "./stock.repository";
 import { ServiceStatus } from "../service/enum/service-status.enum";
 import { StockProcess } from "./stock.process";
+import { UpdateOneDto } from "../common/dto/update-one.dto";
+import { FindStockProcess } from "./find-stock.process";
 
 export class StockService {
   constructor(
@@ -158,10 +160,13 @@ export class StockService {
     const attributeOptionSelect: Prisma.attribute_optionSelect = {
       id: true,
       name: true,
+      price: true
     };
     const attributeSelect: Prisma.attributeSelect = {
       id: true,
       name: true,
+      type: true,
+      has_quantity: true,
       attribute_option: {
         select: attributeOptionSelect
       },
@@ -198,12 +203,18 @@ export class StockService {
       },
     };
     const productOrderSelect: Prisma.product_orderSelect = {
+      quantity: true,
       aorder: {
         select: aorderSelect,
       },
     };
     const afileSelect: Prisma.afileSelect = {
       unique_server_filename: true,
+    };
+    const productAttributeSelect: Prisma.product_attributeSelect = {
+      quantity: true,
+      value: true,
+      attribute_id: true,
     };
     const productSelect: Prisma.productSelect = {
       id: true,
@@ -227,18 +238,34 @@ export class StockService {
       afile: {
         select: afileSelect,
       },
-      product_attribute_product_attribute_product_idToproduct: true
+      product_attribute_product_attribute_product_idToproduct: {
+        select: productAttributeSelect
+      },
     };
+
+    const productPromise = this.repository.findOne({ ...query, select: productSelect });
+    const locationsPromise = this.locationService.getAll();
+    const product_statusesPromise = this.repository.getAllStatus();
+    const product_typesPromise = this.repository.getAllTypes();
     
-    const product = this.repository.findOne({ ...query, select: productSelect });
-    const locations = this.locationService.getAll();
-    const statuses = this.repository.getAllStatus();
-    const types = this.repository.getAllTypes();
-    return {
-      ...await product,
-      locations: await locations,
-      product_statuses: await statuses,
-      product_types: await types,
-    };
+    const product = await productPromise;
+    const locations = await locationsPromise;
+    const product_statuses = await product_statusesPromise;
+    const product_types = await product_typesPromise;
+
+    return new FindStockProcess(
+      product,
+      locations,
+      product_statuses,
+      product_types
+    ).run();
+  }
+
+  updateOne(params: UpdateOneDto) {
+    const { where, data }  = params;
+    return this.repository.updateOne({
+      where,
+      data
+    });
   }
 }
