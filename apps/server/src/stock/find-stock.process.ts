@@ -72,16 +72,17 @@ export class FindStockProcess {
 
   private processAttribute(): ProcessedAttributePayload[] {
     const processedAttributes: ProcessedAttributePayload[] = [];
-
-    // add new attributes to this product
+    
     for (let i = 0; i < this.product_type_attributes.length; i++) {
       const attribute = <AttributePayload>this.product_type_attributes[i].attribute;
-      let processedAttribute: ProcessedAttributePayload;
+      
+      const processedAttribute: ProcessedAttributePayload = {
+        ...attribute,
+      };
+
       for (let j = 0; j < this.product_attributes.length; j++) {
         const product_attribute = this.product_attributes[j];
-        processedAttribute = {
-          ...attribute,
-        }
+
         if (attribute.id === product_attribute.attribute_id) {
           switch (attribute.type) {
             case AttributeType.TYPE_SELECT:
@@ -96,8 +97,10 @@ export class FindStockProcess {
           }
         }
       }
+      
       processedAttributes.push(processedAttribute);
     }
+
     return processedAttributes;
   }
 

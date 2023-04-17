@@ -1,27 +1,32 @@
 import { ApiPropertyOptional } from "@nestjs/swagger";
 import { Prisma } from "@prisma/client";
+import { IsNumber, IsOptional, IsString } from "class-validator";
 
 export class UpdateStockDto implements Prisma.productUpdateInput {
   @ApiPropertyOptional()
-  sku: string | Prisma.StringFieldUpdateOperationsInput;
+  @IsOptional()
+  @IsString()
+  sku?: string;
 
   @ApiPropertyOptional()
-  name?: string | Prisma.StringFieldUpdateOperationsInput;
+  @IsOptional()
+  @IsString()
+  name?: string;
   
   @ApiPropertyOptional()
-  description?: string | Prisma.NullableStringFieldUpdateOperationsInput;
+  @IsOptional()
+  @IsString()
+  description?: string;
   
   @ApiPropertyOptional()
-  price?: number | Prisma.NullableIntFieldUpdateOperationsInput;
+  @IsOptional()
+  @IsNumber()
+  price?: number;
   
   @ApiPropertyOptional()
-  created_at?: string | Date | Prisma.DateTimeFieldUpdateOperationsInput;
-  
-  @ApiPropertyOptional()
-  updated_at?: string | Date | Prisma.DateTimeFieldUpdateOperationsInput;
-  
-  @ApiPropertyOptional()
-  external_id?: number | Prisma.NullableIntFieldUpdateOperationsInput;
+  @IsOptional()
+  @IsNumber()
+  external_id?: number;
   
   @ApiPropertyOptional()
   afile?: Prisma.afileUpdateManyWithoutProductNestedInput;
