@@ -47,9 +47,7 @@ function UpdateSupplier() {
             router.push(SUPPLIERS_PATH.replace(':id', 'new'));
           }
         });
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+    }}, [id]);
 
   const canSubmit = () => !performing && !performingFetchSupplier;
 

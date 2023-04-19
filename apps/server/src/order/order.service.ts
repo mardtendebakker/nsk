@@ -3,7 +3,7 @@ import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { OrderDiscrimination } from './types/order-discrimination.enum';
 import { Prisma } from '@prisma/client';
-import { FindManyDto } from '../common/dto/find-many.dto';
+import { FindManyDto } from './dto/find-many.dto';
 
 export class OrderService {
   constructor(
@@ -70,12 +70,26 @@ export class OrderService {
       }
     }
 
+    let where = {
+        ...query.where,
+        discr: this.type,
+        order_nr: {
+          contains: query.search
+        }
+    }
+
+    if(query.status) {
+      where = {
+        ...where,
+        status_id: {
+          equals: query.status
+        }
+      }
+    }
+
     return this.repository.findAll({
       ...query,
-      where: {
-        ...query.where,
-        discr: this.type
-      },
+      where,
       select
     });
   }

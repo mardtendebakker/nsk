@@ -30,9 +30,9 @@ export default axiosClient;
 
 export type { default as Customer } from './model/customer';
 export type { default as Supplier } from './model/supplier';
-export type { default as SalesOrder } from './model/salesOrder';
+export type { default as Order } from './model/order';
 export type { default as Product } from './model/product';
 export type { default as StockProduct } from './model/stockProduct';
 export type { default as RepairService } from './model/repairService';
-export type { default as PurchaseOrder } from './model/purchaseOrder';
+export type { default as PurchaseOrder } from './model/order';
 export type { default as User } from './model/user';

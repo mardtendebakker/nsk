@@ -1,7 +1,6 @@
 import { Box, Card } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import _ from 'lodash';
 import { STOCK_PRODUCTS_PATH } from '../../../../utils/axios';
 import List from './list';
 import useAxios from '../../../../hooks/useAxios';
@@ -10,6 +9,7 @@ import useForm, { FieldPayload } from '../../../../hooks/useForm';
 import Filter from './filter';
 import Action from './action';
 import Edit from '../edit';
+import debounce from '../../../../utils/debounce';
 
 function refreshList({
   page,
@@ -53,13 +53,13 @@ function refreshList({
     const paramsString = params.toString();
     const newPath = paramsString ? `${STOCKS_PRODUCTS}?${params.toString()}` : STOCKS_PRODUCTS;
 
-    if (newPath !== router.pathname) {
+    if (newPath != router.asPath) {
       router.replace(newPath);
     }
   });
 }
 
-const debouncedRefreshList = _.debounce(refreshList, 500);
+const debouncedRefreshList = debounce(refreshList);
 
 export default function ListContainer() {
   const router = useRouter();
@@ -108,7 +108,6 @@ export default function ListContainer() {
       router,
       call,
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     page,
     formRepresentation.search.value,

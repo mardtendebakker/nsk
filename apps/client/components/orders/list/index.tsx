@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Box, Card } from '@mui/material';
-import _ from 'lodash';
-import useForm, { FieldPayload } from '../../../../hooks/useForm';
+import useForm, { FieldPayload } from '../../../hooks/useForm';
 import List from './list';
-import useAxios from '../../../../hooks/useAxios';
-import { SALES_ORDERS_PATH } from '../../../../utils/axios';
-import { ORDERS_SALES } from '../../../../utils/routes';
-import Filter from '../../filter';
+import useAxios from '../../../hooks/useAxios';
+import { PURCHASE_ORDERS_PATH, SALES_ORDERS_PATH } from '../../../utils/axios';
+import { ORDERS_PURCHASES, ORDERS_SALES } from '../../../utils/routes';
+import Filter from '../filter';
+import debounce from '../../../utils/debounce';
 
 function refreshList({
   page,
@@ -16,20 +16,13 @@ function refreshList({
   call,
 }) {
   const params = new URLSearchParams();
-  const where : { [key: string]: object; } = {};
 
   if (page > 1) {
     params.append('page', page.toString());
   }
 
-  if (formRepresentation.search.value) {
-    const search = formRepresentation.search.value.toString();
-    where.name = { contains: search };
-    params.append('search', search);
-  }
-
-  [].forEach((keyword) => {
-    if (formRepresentation[keyword].value || formRepresentation[keyword].value === 0) {
+  ['status', 'search'].forEach((keyword) => {
+    if (formRepresentation[keyword].value) {
       const value = formRepresentation[keyword].value.toString();
       params.append(keyword, value);
     }
@@ -39,19 +32,20 @@ function refreshList({
     params: {
       take: 10,
       skip: (page - 1) * 10,
-      where: JSON.stringify(where),
+      status: formRepresentation.status.value,
+      search: formRepresentation.search.value,
     },
   }).then(() => {
     const paramsString = params.toString();
-    const newPath = paramsString ? `${ORDERS_SALES}?${params.toString()}` : ORDERS_SALES;
+    const newPath = paramsString ? `${router.pathname}?${params.toString()}` : router.pathname;
 
-    if (newPath !== router.pathname) {
+    if (newPath != router.asPath) {
       router.replace(newPath);
     }
   });
 }
 
-const debouncedRefreshList = _.debounce(refreshList, 500);
+const debouncedRefreshList = debounce(refreshList);
 
 export default function ListContainer() {
   const router = useRouter();
@@ -60,8 +54,10 @@ export default function ListContainer() {
   const createdAt = parseInt(router.query?.createdAt?.toString(), 10);
   const createdBy = parseInt(router.query?.createdBy?.toString(), 10);
   const sortBy = parseInt(router.query?.sortBy?.toString(), 10);
-  const status = parseInt(router.query?.status?.toString(), 10);
+  const status = router.query?.status?.toString();
   const partner = parseInt(router.query?.partner?.toString(), 10);
+
+  const isPurchasePage = router.pathname == ORDERS_PURCHASES;
 
   const { formRepresentation, setValue } = useForm({
     search: {
@@ -77,7 +73,7 @@ export default function ListContainer() {
       value: Number.isInteger(sortBy) ? sortBy : null,
     },
     status: {
-      value: Number.isInteger(status) ? status : null,
+      value: status || undefined,
     },
     partner: {
       value: Number.isInteger(partner) ? partner : null,
@@ -86,7 +82,7 @@ export default function ListContainer() {
 
   const { data: { data = [], count = 0 } = {}, call, performing } = useAxios(
     'get',
-    SALES_ORDERS_PATH.replace(':id', ''),
+    (isPurchasePage ? PURCHASE_ORDERS_PATH : SALES_ORDERS_PATH).replace(':id', ''),
     {
       withProgressBar: true,
     },
@@ -99,10 +95,10 @@ export default function ListContainer() {
       router,
       call,
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     page,
     formRepresentation.search.value,
+    formRepresentation.status.value?.toString(),
   ]);
 
   return (
@@ -117,7 +113,7 @@ export default function ListContainer() {
       />
       <Box sx={{ m: '1.5rem' }} />
       <List
-        salesOrders={data}
+        orders={data}
         count={Math.floor(count / 10)}
         page={page}
         onChecked={() => {}}

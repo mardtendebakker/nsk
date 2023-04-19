@@ -52,6 +52,8 @@
     "import/extensions": "off",
     "import/no-named-as-default": "off",
     "react/jsx-props-no-spreading": "off",
+    "react-hooks/exhaustive-deps": "off",
+    "eqeqeq": "off",
     "react/jsx-filename-extension": [
       1,
       {

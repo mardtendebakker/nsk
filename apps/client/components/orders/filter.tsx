@@ -12,6 +12,8 @@ import Autocomplete from '../memoizedInput/autocomplete';
 import useTranslation from '../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../hooks/useForm';
 import TextField from '../input/textField';
+import DataSourcePicker from '../memoizedInput/dataSourcePicker';
+import { ORDER_STATUSES_PATH } from '../../utils/axios/paths';
 
 export default function Filter({
   disabled,
@@ -130,25 +132,14 @@ export default function Filter({
                 m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.divider,
               })}
               />
-              <Autocomplete
+              <DataSourcePicker
+                url={ORDER_STATUSES_PATH.replace(':id', '')}
                 disabled={disabled}
                 fullWidth
-                size="small"
-                options={[]}
-                filterSelectedOptions
-                renderInput={
-                (params) => (
-                  <TextField
-                    {...params}
-                    placeholder={trans('status')}
-                    sx={{
-                      fieldset: {
-                        display: 'none',
-                      },
-                    }}
-                  />
-                )
-            }
+                displayFieldset={false}
+                placeholder={trans('status')}
+                onChange={(value) => setValue({ field: 'status', value })}
+                value={formRepresentation.status.value}
               />
               <Box sx={(theme) => ({
                 m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.divider,
