@@ -1,13 +1,13 @@
 import { Box, Card } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import _ from 'lodash';
 import List from './list';
 import Filter from './filter';
 import useAxios from '../../../../hooks/useAxios';
 import { USERS_PATH } from '../../../../utils/axios';
 import { ADMIN_USERS } from '../../../../utils/routes';
 import useForm, { FieldPayload } from '../../../../hooks/useForm';
+import debounce from '../../../../utils/debounce';
 
 function refreshList({
   page,
@@ -61,13 +61,13 @@ function refreshList({
     const paramsString = params.toString();
     const newPath = paramsString ? `${ADMIN_USERS}?${params.toString()}` : ADMIN_USERS;
 
-    if (newPath !== router.pathname) {
+    if (newPath != router.asPath) {
       router.replace(newPath);
     }
   });
 }
 
-const debouncedRefreshList = _.debounce(refreshList, 500);
+const debouncedRefreshList = debounce(refreshList);
 
 export default function ListContainer() {
   const router = useRouter();
@@ -109,7 +109,6 @@ export default function ListContainer() {
       router,
       call,
     }); */
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     page,
     formRepresentation.search.value,

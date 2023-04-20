@@ -1,17 +1,17 @@
 import { ApiPropertyOptional } from "@nestjs/swagger";
+import { FindManyDto as BaseFindManyDto } from "../../common/dto/find-many.dto";
+import { IsInt, IsString, ValidateIf } from "class-validator";
 import { Type } from "class-transformer";
-import { IsInt, ValidateIf } from "class-validator";
 
-export class PaginationDto {
+export class FindManyDto extends BaseFindManyDto {
   @ApiPropertyOptional()
-  @IsInt()
-  @Type(() => Number)
+  @IsString()
   @ValidateIf((_, value) => value !== undefined)
-  take?: number;
+  search?: string
   
   @ApiPropertyOptional()
   @IsInt()
   @Type(() => Number)
   @ValidateIf((_, value) => value !== undefined)
-  skip?: number;
+  status?: number;
 }

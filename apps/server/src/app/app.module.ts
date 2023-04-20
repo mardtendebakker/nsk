@@ -13,6 +13,7 @@ import { PurchaseModule } from '../purchase/purchase.module';
 import { ProductModule } from '../product/product.module';
 import { RepairModule } from '../repair/repair.module';
 import { FileModule } from '../file/file.module';
+import { OrderStatusModule } from '../order-status/order.module';
 
 @Module({
   imports: [
@@ -40,7 +41,8 @@ import { FileModule } from '../file/file.module';
     PurchaseModule,
     ProductModule,
     RepairModule,
-    FileModule
+    FileModule,
+    OrderStatusModule
   ],
   controllers: [AppController],
   providers: [AppService],

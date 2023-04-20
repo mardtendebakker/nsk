@@ -24,9 +24,7 @@ const useForm = (formRepresentation: FormRepresentation) : {
   useEffect(() => {
     if (formRepresentation) {
       setData(formRepresentation);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify(formRepresentation)]);
+    }}, [JSON.stringify(formRepresentation)]);
 
   return {
     formRepresentation: data,

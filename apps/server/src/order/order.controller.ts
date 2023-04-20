@@ -6,7 +6,7 @@ import { CreateOrderDto } from "./dto/create-order.dto";
 import { FindOrdersResponeDto } from "./dto/find-order-response.dto";
 import { UpdateOrderDto } from "./dto/update-order.dto";
 import { OrderEntity } from "./entities/order.entity";
-import { FindManyDto } from "../common/dto/find-many.dto";
+import { FindManyDto } from "./dto/find-many.dto";
 
 @ApiBearerAuth()
 @Authentication()
