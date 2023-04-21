@@ -1,9 +1,18 @@
-import { AdminCreateUserCommandInput, AdminGetUserCommandInput, AdminSetUserPasswordCommandInput, AdminUpdateUserAttributesCommandInput, CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
+import { 
+  AdminCreateUserCommandInput,
+  AdminGetUserCommandInput,
+  AdminSetUserPasswordCommandInput,
+  AdminUpdateUserAttributesCommandInput,
+  CognitoIdentityProvider,
+  ListUsersCommandInput
+} from '@aws-sdk/client-cognito-identity-provider';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { AdminUsernameDto } from './dto/admin-get-user.dto';
+import { AdminUsernameDto } from './dto/admin-username.dto';
 import { AdminCreateUserDto } from './dto/admin-create-user.dto';
 import { AdminSetUserPasswordDto } from './dto/admin-set-user-pasword.dto';
+import { ListUserDto } from './dto/list-user.dto';
+import { AdminEmailDto } from './dto/admin-email.dto';
 
 @Injectable()
 export class AdminUserService {
@@ -21,8 +30,8 @@ export class AdminUserService {
 
   getUser(adminGetUserDto: AdminUsernameDto) {
     const adminCreateUserCommandInput: AdminGetUserCommandInput = {
-      Username: adminGetUserDto.username,
       UserPoolId: this.userPoolId,
+      Username: adminGetUserDto.username,
     };
 
     return this.cognitoClient.adminGetUser(adminCreateUserCommandInput)
@@ -30,8 +39,8 @@ export class AdminUserService {
 
   createUser(adminCreateUserDto: AdminCreateUserDto) {
     const adminCreateUserCommandInput: AdminCreateUserCommandInput = {
-      Username: adminCreateUserDto.username,
       UserPoolId: this.userPoolId,
+      Username: adminCreateUserDto.username,
       UserAttributes: [{
         Name: 'email',
         Value: adminCreateUserDto.email
@@ -43,8 +52,8 @@ export class AdminUserService {
 
   setUserPassword(adminSetUserPasswordDto: AdminSetUserPasswordDto) {
     const adminSetUserPasswordCommandInput: AdminSetUserPasswordCommandInput = {
-      Username: adminSetUserPasswordDto.username,
       UserPoolId: this.userPoolId,
+      Username: adminSetUserPasswordDto.username,
       Password: adminSetUserPasswordDto.password,
       Permanent: adminSetUserPasswordDto.permanent,
     }
@@ -54,8 +63,8 @@ export class AdminUserService {
 
   verifyEmail(adminUsernameDto: AdminUsernameDto) {
     const adminUpdateUserAttributesCommandInput: AdminUpdateUserAttributesCommandInput = {
-      Username: adminUsernameDto.username,
       UserPoolId: this.userPoolId,
+      Username: adminUsernameDto.username,
       UserAttributes: [{
         Name: 'email_verified',
         Value: 'True'
@@ -63,5 +72,25 @@ export class AdminUserService {
     }
 
     return this.cognitoClient.adminUpdateUserAttributes(adminUpdateUserAttributesCommandInput);
+  }
+
+  listUsers(listUserDto: ListUserDto) {
+    const listUsersCommandInput: ListUsersCommandInput = {
+      UserPoolId: this.userPoolId,
+      Filter: listUserDto.filter,
+      AttributesToGet: listUserDto.attributes,
+      Limit: listUserDto.limit,
+      PaginationToken: listUserDto.pagination
+    };
+
+    return this.cognitoClient.listUsers(listUsersCommandInput);
+  }
+
+  async findUsernameByEmail(adminEmailDto: AdminEmailDto) {
+    const results = await this.listUsers({
+      filter: `email="${adminEmailDto.email}"`,
+    });
+    
+    return results?.Users?.[0]?.Username;
   }
 }

@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
   AuthenticationDetails,
@@ -29,37 +29,45 @@ export class AuthService {
     });
   }
 
-  authenticateUser(user: UserAuthenticationRequestDto): Promise<CognitoUserSession> {
-    const { emailOrUsername, password } = user;
+  async authenticateUser(user: UserAuthenticationRequestDto): Promise<CognitoUserSession> {
+    const { password } = user;
+    let username: string;
+    if (/(.+)@(.+){2,}\.(.+){2,}/.test(user.emailOrUsername)) {
+      username = await this.adminUserService.findUsernameByEmail({
+        email: user.emailOrUsername,
+      }) ?? user.emailOrUsername;
+    } else {
+      username = user.emailOrUsername;
+    }
 
     const authenticationDetails = new AuthenticationDetails({
-      Username: emailOrUsername,
+      Username: username,
       Password: password,
     });
     
     const userData = {
-      Username: emailOrUsername,
+      Username: username,
       Pool: this.userPool,
     };
 
     const newUser = new CognitoUser(userData);
-
+    
     return new Promise((resolve, reject) => {
       return newUser.authenticateUser(authenticationDetails, {
         onSuccess: result => {
           resolve(result);
         },
         onFailure: err => {
-          reject(new BadRequestException(err.message));
+          reject(new UnauthorizedException(err.message));
         },
         newPasswordRequired: async () => {
           await this.adminUserService.setUserPassword({
-            username: emailOrUsername,
+            username: username,
             password: password,
             permanent: true
           });
           await this.adminUserService.verifyEmail({
-            username: emailOrUsername,
+            username: username,
           });
           // reAuthenticateUser
           return newUser.authenticateUser(authenticationDetails, {
@@ -67,7 +75,7 @@ export class AuthService {
               resolve(result);
             },
             onFailure: err => {
-              reject(new BadRequestException(err.message));
+              reject(new UnauthorizedException(err.message));
             },
           });
         },

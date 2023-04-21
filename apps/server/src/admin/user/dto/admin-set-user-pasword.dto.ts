@@ -1,4 +1,4 @@
-import { AdminUsernameDto } from "./admin-get-user.dto";
+import { AdminUsernameDto } from "./admin-username.dto";
 
 export class AdminSetUserPasswordDto extends AdminUsernameDto {
   password: string;

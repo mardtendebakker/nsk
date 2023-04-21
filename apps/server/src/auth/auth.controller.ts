@@ -1,5 +1,5 @@
 import { Body, Controller, HttpCode, Post } from '@nestjs/common';
-import { ApiBadRequestResponse, ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiCreatedResponse, ApiOkResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { CognitoUser, CognitoUserSession } from 'amazon-cognito-identity-js';
 import { AuthService } from './auth.service';
 import { ConfirmPasswordRequestDto } from './dto/confirm-password-request.dto';
@@ -17,6 +17,7 @@ export class AuthController {
   @Post('login')
   @HttpCode(200)
   @ApiBadRequestResponse(({ description: 'Password attempts exceeded'}))
+  @ApiUnauthorizedResponse(({ description: 'Incorrect username or password.'}))
   @ApiOkResponse({type: CognitoUserSession})
   authenticateUser(@Body() userAuthentication: UserAuthenticationRequestDto) {
     return this.authService.authenticateUser(userAuthentication);
