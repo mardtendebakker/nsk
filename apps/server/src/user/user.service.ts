@@ -8,9 +8,10 @@ import { ChanngePasswordRequestDto } from './dto/change-password-request.dto';
 @Injectable()
 export class UserService {
   private userPool: CognitoUserPool;
+
   constructor(
     private readonly congigService: ConfigService,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
   ) {
     this.userPool = new CognitoUserPool({
       UserPoolId: this.congigService.get<string>('COGNITO_USER_POOL_ID'),
@@ -31,7 +32,7 @@ export class UserService {
     };
 
     const cognitoUSerSession = await this.authService.authenticateUser(userAuthenticationRequestDto);
-    
+
     const user = new CognitoUser(userData);
     user.setSignInUserSession(cognitoUSerSession);
 
