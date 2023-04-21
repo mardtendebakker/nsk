@@ -80,7 +80,7 @@ export class AdminUserService {
       Filter: listUserDto.filter,
       AttributesToGet: listUserDto.attributes,
       Limit: listUserDto.limit,
-      PaginationToken: listUserDto.pagination
+      PaginationToken: listUserDto.pagetoken
     };
 
     return this.cognitoClient.listUsers(listUsersCommandInput);
