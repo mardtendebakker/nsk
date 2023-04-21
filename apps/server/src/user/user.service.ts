@@ -4,10 +4,13 @@ import { CognitoUser, CognitoUserPool } from 'amazon-cognito-identity-js';
 import { AuthService } from '../auth/auth.service';
 import { UserAuthenticationRequestDto } from '../auth/dto/user-authentication-request.dto';
 import { ChanngePasswordRequestDto } from './dto/change-password-request.dto';
+import { AdminGetUserCommandInput, CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
+import { AdminGetUserDto } from './dto/admin-get-user.dto';
 
 @Injectable()
 export class UserService {
   private userPool: CognitoUserPool;
+  private cognitoClient: CognitoIdentityProvider;
   constructor(
     private readonly congigService: ConfigService,
     private readonly authService: AuthService
@@ -15,6 +18,9 @@ export class UserService {
     this.userPool = new CognitoUserPool({
       UserPoolId: this.congigService.get<string>('COGNITO_USER_POOL_ID'),
       ClientId: this.congigService.get<string>('COGNITO_CLIENT_ID'),
+    });
+    this.cognitoClient = new CognitoIdentityProvider({
+      region: this.congigService.get<string>('COGNITO_REGION'),
     });
   }
 
@@ -31,7 +37,7 @@ export class UserService {
     };
 
     const cognitoUSerSession = await this.authService.authenticateUser(userAuthenticationRequestDto);
-    
+
     const user = new CognitoUser(userData);
     user.setSignInUserSession(cognitoUSerSession);
 
@@ -50,5 +56,14 @@ export class UserService {
         }
       );
     });
+  }
+
+  adminGetUser(adminGetUserDto: AdminGetUserDto) {
+    const adminCreateUserCommandInput: AdminGetUserCommandInput = {
+      Username: adminGetUserDto.username,
+      UserPoolId: this.congigService.get<string>('COGNITO_USER_POOL_ID'),
+    };
+
+    return this.cognitoClient.adminGetUser(adminCreateUserCommandInput)
   }
 }
