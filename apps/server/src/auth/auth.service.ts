@@ -14,12 +14,14 @@ import { EmailOrUsernameDto } from './dto/email-or-username.dto';
 import { RefreshSesionRequestDto } from './dto/refresh-session-request.dto';
 import { UserAuthenticationRequestDto } from './dto/user-authentication-request.dto';
 import { UserRegisterRequestDto } from './dto/user-register-request.dto';
+import { AdminUserService } from '../admin/user/user.service';
 
 @Injectable()
 export class AuthService {
   private userPool: CognitoUserPool;
   constructor(
-    private readonly congigService: ConfigService
+    private readonly congigService: ConfigService,
+    private readonly adminUserService: AdminUserService,
   ) {
     this.userPool = new CognitoUserPool({
       UserPoolId: this.congigService.get<string>('COGNITO_USER_POOL_ID'),
@@ -49,6 +51,25 @@ export class AuthService {
         },
         onFailure: err => {
           reject(new BadRequestException(err.message));
+        },
+        newPasswordRequired: async () => {
+          await this.adminUserService.setUserPassword({
+            username: emailOrUsername,
+            password: password,
+            permanent: true
+          });
+          await this.adminUserService.verifyEmail({
+            username: emailOrUsername,
+          });
+          // reAuthenticateUser
+          return newUser.authenticateUser(authenticationDetails, {
+            onSuccess: result => {
+              resolve(result);
+            },
+            onFailure: err => {
+              reject(new BadRequestException(err.message));
+            },
+          });
         },
       });
     });
