@@ -21,7 +21,7 @@ function refreshList({
     params.append('page', page.toString());
   }
 
-  ['status', 'search', 'partner'].forEach((keyword) => {
+  ['status', 'search', 'partner', 'createdBy'].forEach((keyword) => {
     if (formRepresentation[keyword].value) {
       const value = formRepresentation[keyword].value.toString();
       params.append(keyword, value);
@@ -35,6 +35,7 @@ function refreshList({
       status: formRepresentation.status.value,
       search: formRepresentation.search.value,
       partner: formRepresentation.partner.value,
+      createdBy: formRepresentation.createdBy.value,
     },
   }).then(() => {
     const paramsString = params.toString();
@@ -53,10 +54,10 @@ export default function ListContainer() {
   const [page, setPage] = useState<number>(parseInt(router.query?.page?.toString() || '1', 10));
 
   const createdAt = parseInt(router.query?.createdAt?.toString(), 10);
-  const createdBy = parseInt(router.query?.createdBy?.toString(), 10);
   const sortBy = parseInt(router.query?.sortBy?.toString(), 10);
   const status = router.query?.status?.toString();
   const partner = router.query?.partner?.toString();
+  const createdBy = router.query?.createdBy?.toString();
 
   const isPurchasePage = router.pathname == ORDERS_PURCHASES;
 
@@ -67,9 +68,6 @@ export default function ListContainer() {
     createdAt: {
       value: Number.isInteger(createdAt) ? createdAt : null,
     },
-    createdBy: {
-      value: Number.isInteger(createdBy) ? createdBy : null,
-    },
     sortBy: {
       value: Number.isInteger(sortBy) ? sortBy : null,
     },
@@ -78,6 +76,9 @@ export default function ListContainer() {
     },
     partner: {
       value: partner || undefined,
+    },
+    createdBy: {
+      value: createdBy || undefined,
     },
   });
 
@@ -101,6 +102,7 @@ export default function ListContainer() {
     formRepresentation.search.value,
     formRepresentation.status.value?.toString(),
     formRepresentation.partner.value?.toString(),
+    formRepresentation.createdBy.value?.toString(),
   ]);
 
   return (

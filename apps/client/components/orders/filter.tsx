@@ -84,25 +84,14 @@ export default function Filter({
                 m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.divider,
               })}
               />
-              <Autocomplete
+              <DataSourcePicker
+                url={COMPANIES_PATH.replace(':id', '')}
                 disabled={disabled}
                 fullWidth
-                size="small"
-                options={[]}
-                filterSelectedOptions
-                renderInput={
-                (params) => (
-                  <TextField
-                    {...params}
-                    placeholder={trans('createdBy')}
-                    sx={{
-                      fieldset: {
-                        display: 'none',
-                      },
-                    }}
-                  />
-                )
-            }
+                displayFieldset={false}
+                placeholder={trans('createdBy')}
+                onChange={(value) => setValue({ field: 'createdBy', value })}
+                value={formRepresentation.createdBy.value}
               />
               <Box sx={(theme) => ({
                 m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.divider,

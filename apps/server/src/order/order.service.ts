@@ -96,6 +96,21 @@ export class OrderService {
       }
     }
 
+    if(query.createdBy !== undefined) {
+      where.OR = [
+        {
+          acompany_aorder_customer_idToacompany : {
+            id: query.createdBy
+          }
+        },
+        {
+          acompany_aorder_supplier_idToacompany : {
+            id: query.createdBy
+          }
+        }
+      ];
+    }
+
     return this.repository.findAll({
       ...query,
       where,
