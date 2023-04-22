@@ -8,6 +8,7 @@ import debounce from '../../utils/debounce';
 export default function DataSourcePicker(
   {
     disabled,
+    params,
     value,
     sx,
     fullWidth,
@@ -20,6 +21,7 @@ export default function DataSourcePicker(
     searchKey,
   }: {
     disabled?: boolean,
+    params?: { [key: string]: string },
     value?: any,
     sx?: SxProps,
     fullWidth?: boolean,
@@ -36,7 +38,7 @@ export default function DataSourcePicker(
   const debouncedCall = useCallback(debounce(call), []);
 
   useEffect(() => {
-    call();
+    call({ params });
   }, []);
 
   let options = data?.data || [];
@@ -55,9 +57,9 @@ export default function DataSourcePicker(
       onChange={(_, selected: { id: number }) => onChange(selected?.id)}
       filterSelectedOptions
       renderInput={
-                (params) => (
+                (inputParams) => (
                   <TextField
-                    {...params}
+                    {...inputParams}
                     placeholder={placeholder}
                     label={label}
                     sx={{
@@ -66,7 +68,9 @@ export default function DataSourcePicker(
                       },
                     }}
                     onChange={(e) => {
-                      debouncedCall({ params: { [searchKey]: e.target.value } });
+                      debouncedCall({
+                        params: { [searchKey]: e.target.value, ...params },
+                      });
                     }}
                   />
                 )
@@ -77,6 +81,7 @@ export default function DataSourcePicker(
 
 DataSourcePicker.defaultProps = {
   searchKey: 'nameContains',
+  params: {},
   disabled: false,
   value: undefined,
   sx: undefined,
