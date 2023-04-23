@@ -114,7 +114,8 @@ export class OrderService {
     return this.repository.findAll({
       ...query,
       where,
-      select
+      select,
+      orderBy: query.orderBy
     });
   }
 
