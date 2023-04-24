@@ -20,4 +20,10 @@ export class FindManyDto extends BaseFindManyDto {
   @Type(() => Number)
   @ValidateIf((_, value) => value !== undefined)
   partner?: number;
+  
+  @ApiPropertyOptional()
+  @IsInt()
+  @Type(() => Number)
+  @ValidateIf((_, value) => value !== undefined)
+  createdBy?: number;
 }
