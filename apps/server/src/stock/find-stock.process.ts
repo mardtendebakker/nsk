@@ -104,11 +104,11 @@ export class FindStockProcess {
     return processedAttributes;
   }
 
-  private getListPrice(): string {
+  private getListPrice(): number {
     const listPrice = this.product_attributes.reduce((acc, product_attribute) => {
       return acc += this.getTotalStandardPrice(product_attribute);
     }, 0) || 0;
-    return (listPrice / 100).toFixed(2);
+    return (listPrice / 100);
   }
 
   private getTotalStandardPrice(product_attribute: ProductAttributePayload) {
