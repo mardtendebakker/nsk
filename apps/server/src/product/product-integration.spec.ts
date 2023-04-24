@@ -302,7 +302,7 @@ describe('Products', () => {
         "attribute_option": []
       }
     ],
-    "listPrice": "15.00",
+    "listPrice": 15,
     "locations": {
       "0": {
         "id": 1,

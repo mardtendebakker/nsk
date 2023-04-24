@@ -12,7 +12,7 @@ export class StockRepository {
     prisma.$use(async (params, next) => {
       if (params.model == 'product' && params.action == 'create' && params.args.data?.price) {
         params.args.data.price *= 100;
-        return  await next(params);
+        return await next(params);
       }
       return next(params);
     });
@@ -23,7 +23,7 @@ export class StockRepository {
         const product = await next(params);
         return {
           ...product,
-          ...(product?.price && {price: (product.price / 100).toFixed(2)}),
+          ...{price: (product.price || 0 / 100)},
         };
       }
       return next(params);
@@ -35,7 +35,7 @@ export class StockRepository {
         const products = await next(params);
         return products.map(product => ({
           ...product,
-          ...(product?.price && {price: (product.price / 100).toFixed(2)}),
+          ...({price: (product.price || 0 / 100)}),
         }));
       }
       return next(params);

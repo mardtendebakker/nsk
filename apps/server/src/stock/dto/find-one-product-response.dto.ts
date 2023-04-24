@@ -19,7 +19,7 @@ export class FindOneProductResponeDto extends PickType(ProductEntity, [
   attributes: AttributeEntity[];
 
   @ApiProperty()
-  listPrice: string;
+  listPrice: number;
   
   @ApiProperty()
   product_order: ProductOrderEntity[];
