@@ -28,6 +28,17 @@ function refreshList({
     }
   });
 
+  const orderBy = {};
+
+  ['orderBy'].forEach((keyword) => {
+    if (formRepresentation[keyword].value) {
+      const value = formRepresentation[keyword].value.toString();
+      const [property, direction = 'desc'] = value.split(':');
+      orderBy[property] = direction;
+      params.append(keyword, value);
+    }
+  });
+
   call({
     params: {
       take: 10,
@@ -36,6 +47,7 @@ function refreshList({
       search: formRepresentation.search.value,
       partner: formRepresentation.partner.value,
       createdBy: formRepresentation.createdBy.value,
+      orderBy: JSON.stringify(orderBy),
     },
   }).then(() => {
     const paramsString = params.toString();
@@ -54,7 +66,7 @@ export default function ListContainer() {
   const [page, setPage] = useState<number>(parseInt(router.query?.page?.toString() || '1', 10));
 
   const createdAt = parseInt(router.query?.createdAt?.toString(), 10);
-  const sortBy = parseInt(router.query?.sortBy?.toString(), 10);
+  const orderBy = router.query?.orderBy?.toString();
   const status = router.query?.status?.toString();
   const partner = router.query?.partner?.toString();
   const createdBy = router.query?.createdBy?.toString();
@@ -68,8 +80,8 @@ export default function ListContainer() {
     createdAt: {
       value: Number.isInteger(createdAt) ? createdAt : null,
     },
-    sortBy: {
-      value: Number.isInteger(sortBy) ? sortBy : null,
+    orderBy: {
+      value: orderBy || undefined,
     },
     status: {
       value: status || undefined,
@@ -103,6 +115,7 @@ export default function ListContainer() {
     formRepresentation.status.value?.toString(),
     formRepresentation.partner.value?.toString(),
     formRepresentation.createdBy.value?.toString(),
+    formRepresentation.orderBy.value,
   ]);
 
   return (

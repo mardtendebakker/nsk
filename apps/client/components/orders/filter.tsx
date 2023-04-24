@@ -26,6 +26,16 @@ export default function Filter({
 }) {
   const { trans } = useTranslation();
   const [showFilter, setShowFilter] = useState(false);
+  const ORDER_BY_OPTIONS = [
+    {
+      id: 'order_date:desc',
+      name: trans('orderDate'),
+    },
+    {
+      id: 'order_nr:desc',
+      name: trans('orderNumber'),
+    },
+  ];
 
   return (
     <form>
@@ -101,7 +111,13 @@ export default function Filter({
                 disabled={disabled}
                 fullWidth
                 size="small"
-                options={[]}
+                getOptionLabel={({ name }: { name:string }) => name}
+                value={
+                  ORDER_BY_OPTIONS.find(({ id }) => id == formRepresentation.orderBy.value)
+                  || null
+                }
+                onChange={(_, selected: { id: number }) => setValue({ field: 'orderBy', value: selected?.id })}
+                options={ORDER_BY_OPTIONS}
                 filterSelectedOptions
                 renderInput={
                 (params) => (
