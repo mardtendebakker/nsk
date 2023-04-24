@@ -13,7 +13,7 @@ import useTranslation from '../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../hooks/useForm';
 import TextField from '../input/textField';
 import DataSourcePicker from '../memoizedInput/dataSourcePicker';
-import { ORDER_STATUSES_PATH } from '../../utils/axios/paths';
+import { ORDER_STATUSES_PATH, COMPANIES_PATH } from '../../utils/axios/paths';
 
 export default function Filter({
   disabled,
@@ -145,25 +145,15 @@ export default function Filter({
                 m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.divider,
               })}
               />
-              <Autocomplete
+              <DataSourcePicker
+                url={COMPANIES_PATH.replace(':id', '')}
+                params={{ partnerOnly: '1' }}
                 disabled={disabled}
                 fullWidth
-                size="small"
-                options={[]}
-                filterSelectedOptions
-                renderInput={
-                (params) => (
-                  <TextField
-                    {...params}
-                    placeholder={trans('partner')}
-                    sx={{
-                      fieldset: {
-                        display: 'none',
-                      },
-                    }}
-                  />
-                )
-            }
+                displayFieldset={false}
+                placeholder={trans('partner')}
+                onChange={(value) => setValue({ field: 'partner', value })}
+                value={formRepresentation.partner.value}
               />
             </Box>
           </AccordionDetails>

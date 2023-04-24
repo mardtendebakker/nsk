@@ -15,3 +15,4 @@ export const STOCK_PRODUCTS_PATH = '/products/:id';
 export const USERS_PATH = '/users';
 export const STOCK_REPAIR_SERVICES_PATH = '/repairs/:id';
 export const ORDER_STATUSES_PATH = '/order-statuses/:id';
+export const COMPANIES_PATH = '/companies/:id';

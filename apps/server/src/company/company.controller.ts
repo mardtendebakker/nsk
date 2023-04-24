@@ -1,15 +1,17 @@
 import { Authentication } from "@nestjs-cognito/auth";
-import { Body, Get, Param, Post, Put, Query } from "@nestjs/common";
-import { ApiBearerAuth, ApiResponse } from "@nestjs/swagger";
-import { FindManyDto } from "../common/dto/find-many.dto";
+import { Body, Controller, Get, Param, Post, Put, Query } from "@nestjs/common";
+import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { CompanyService } from "./company.service";
-import { CreateCompanyDto } from "./dto/create-company.dto";
 import { FindCompaniesResponeDto } from "./dto/find-company-response.dto";
 import { UpdateCompanyDto } from "./dto/update-company.dto";
 import { CompanyEntity } from "./entities/company.entity";
+import { CreateCompanyDto } from "./dto/create-company.dto";
+import { FindManyDto } from "./dto/find-many.dto";
 
 @ApiBearerAuth()
 @Authentication()
+@ApiTags('companies')
+@Controller('companies')
 export class CompanyController {
   constructor(protected readonly companyService: CompanyService) {}
   @Get('')

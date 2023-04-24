@@ -1,20 +1,13 @@
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateCompanyDto } from './dto/create-company.dto';
-import { CompanyDiscrimination } from './types/company-discrimination.enum';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class CompanyRepository {
-  constructor(
-    protected readonly prisma: PrismaService,
-    protected readonly discr: CompanyDiscrimination
-  ) {}
+  constructor(protected readonly prisma: PrismaService) {}
 
   async findAll(params: Prisma.acompanyFindManyArgs) {
-    const { skip, cursor, select, orderBy } = params;
-    const where = {
-      ...params.where,
-      discr: this.discr
-    };
+    const { skip, cursor, select, orderBy, where } = params;
     const take = params.take ? params.take : 20;
     const submission = await this.prisma.$transaction([
       this.prisma.acompany.count({where}),
@@ -27,11 +20,8 @@ export class CompanyRepository {
     };
   }
   
-  create(createCompanyDto: CreateCompanyDto) {
-    const data: Prisma.acompanyCreateInput = {
-      ...createCompanyDto,
-      discr: this.discr,
-    };
+  create(createCompanyDto: Prisma.acompanyCreateInput) {
+    const data: Prisma.acompanyCreateInput = createCompanyDto;
     return this.prisma.acompany.create({
       data
     });

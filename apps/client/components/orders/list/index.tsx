@@ -5,7 +5,7 @@ import useForm, { FieldPayload } from '../../../hooks/useForm';
 import List from './list';
 import useAxios from '../../../hooks/useAxios';
 import { PURCHASE_ORDERS_PATH, SALES_ORDERS_PATH } from '../../../utils/axios';
-import { ORDERS_PURCHASES, ORDERS_SALES } from '../../../utils/routes';
+import { ORDERS_PURCHASES } from '../../../utils/routes';
 import Filter from '../filter';
 import debounce from '../../../utils/debounce';
 
@@ -21,7 +21,7 @@ function refreshList({
     params.append('page', page.toString());
   }
 
-  ['status', 'search'].forEach((keyword) => {
+  ['status', 'search', 'partner'].forEach((keyword) => {
     if (formRepresentation[keyword].value) {
       const value = formRepresentation[keyword].value.toString();
       params.append(keyword, value);
@@ -34,6 +34,7 @@ function refreshList({
       skip: (page - 1) * 10,
       status: formRepresentation.status.value,
       search: formRepresentation.search.value,
+      partner: formRepresentation.partner.value,
     },
   }).then(() => {
     const paramsString = params.toString();
@@ -55,7 +56,7 @@ export default function ListContainer() {
   const createdBy = parseInt(router.query?.createdBy?.toString(), 10);
   const sortBy = parseInt(router.query?.sortBy?.toString(), 10);
   const status = router.query?.status?.toString();
-  const partner = parseInt(router.query?.partner?.toString(), 10);
+  const partner = router.query?.partner?.toString();
 
   const isPurchasePage = router.pathname == ORDERS_PURCHASES;
 
@@ -76,7 +77,7 @@ export default function ListContainer() {
       value: status || undefined,
     },
     partner: {
-      value: Number.isInteger(partner) ? partner : null,
+      value: partner || undefined,
     },
   });
 
@@ -99,6 +100,7 @@ export default function ListContainer() {
     page,
     formRepresentation.search.value,
     formRepresentation.status.value?.toString(),
+    formRepresentation.partner.value?.toString(),
   ]);
 
   return (

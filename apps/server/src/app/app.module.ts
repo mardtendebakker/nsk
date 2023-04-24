@@ -14,6 +14,7 @@ import { ProductModule } from '../product/product.module';
 import { RepairModule } from '../repair/repair.module';
 import { FileModule } from '../file/file.module';
 import { OrderStatusModule } from '../order-status/order.module';
+import { CompanyModule } from '../company/company.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { OrderStatusModule } from '../order-status/order.module';
     ProductModule,
     RepairModule,
     FileModule,
+    CompanyModule,
     OrderStatusModule
   ],
   controllers: [AppController],

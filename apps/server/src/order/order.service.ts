@@ -70,7 +70,7 @@ export class OrderService {
       }
     }
 
-    let where = {
+    const where = {
         ...query.where,
         discr: this.type,
         order_nr: {
@@ -78,11 +78,20 @@ export class OrderService {
         }
     }
 
-    if(query.status) {
-      where = {
-        ...where,
-        status_id: {
-          equals: query.status
+    if(query.status !== undefined) {
+      where.status_id = {
+        equals: query.status
+      }
+    }
+
+    if(query.partner !== undefined) {
+      if(this.type === OrderDiscrimination.PURCHASE) {
+        where.acompany_aorder_customer_idToacompany = {
+          partner_id: query.partner
+        }
+      } else if (this.type === OrderDiscrimination.SALE) {
+        where.acompany_aorder_supplier_idToacompany = {
+          partner_id: query.partner
         }
       }
     }
