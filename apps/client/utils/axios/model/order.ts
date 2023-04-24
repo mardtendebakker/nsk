@@ -1,3 +1,9 @@
+interface Company {
+  id: string,
+  name: string,
+  acompany?: { id: string, name: string }
+}
+
 export default interface PurchaseOrder {
   id?: number,
   order_nr?: string
@@ -7,15 +13,16 @@ export default interface PurchaseOrder {
   transport?: number,
   is_gift?: boolean,
   delivery_instructions?: string
+  order_status: { name: string, color: string }
+  acompany_aorder_supplier_idToacompany?: Company,
+  acompany_aorder_customer_idToacompany?: Company,
   /* 'external_id': 0,
   'delivery_type': 0,
   'delivery_date': {},
   'afile': {},
-  'acompany_aorder_supplier_idToacompany': {},
   'aorder': {},
   'other_aorder': {},
   'order_status': {},
-  'acompany_aorder_customer_idToacompany': {},
   'pickup': {},
   'product_order': {},
   'repair': {} */

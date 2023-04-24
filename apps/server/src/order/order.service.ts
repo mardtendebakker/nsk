@@ -40,11 +40,18 @@ export class OrderService {
     const companySelect: Prisma.acompanyArgs = {
       select: {
         name: true,
+        acompany: {
+          select: {
+            id: true,
+            name: true,
+          }
+        },
         other_acompany: {
           select: {
+            id: true,
             name: true
           }
-        }
+        },
       }
     }
     let select: Prisma.aorderSelect = {
@@ -54,7 +61,8 @@ export class OrderService {
       order_status: {
         select: {
           id: true,
-          name: true
+          name: true,
+          color: true
         }
       }
     }
