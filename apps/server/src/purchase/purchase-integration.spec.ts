@@ -89,7 +89,7 @@ describe('Purchase', () => {
               tokenUse: "id",
             },
             identityProvider: {
-              region: configService.get<string>("COGNITO_REGION"),
+              region: configService.get<string>("MAIN_REGION"),
             },
           }),
           inject: [ConfigService],

@@ -1,7 +1,6 @@
 import 'multer';
 import { Injectable } from '@nestjs/common';
 import { FileRepository } from './file.repository';
-import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
 import { v4 as uuidv4 } from 'uuid';
 import { ConfigService } from '@nestjs/config';
 import { afile } from '@prisma/client';

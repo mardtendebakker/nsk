@@ -16,8 +16,8 @@ describe('UserService', () => {
               if (key === 'COGNITO_USER_POOL_ID') {
                 return 'YOUR_COGNITO_USER_POOL_ID';
               }
-              if (key === 'COGNITO_REGION') {
-                return 'YOUR_COGNITO_REGION';
+              if (key === 'MAIN_REGION') {
+                return 'YOUR_MAIN_REGION';
               }
               return null;
             })
