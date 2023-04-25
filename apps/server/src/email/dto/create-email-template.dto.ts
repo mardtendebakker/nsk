@@ -1,5 +1,3 @@
-import { Subject, TextOrHtml } from "./types";
+import { Subject, BulkTemplate, TextOrHtml } from "./types";
 
-export type EmailTemplateDto = {
-  name: string,
-} & Subject & TextOrHtml;
+export type EmailTemplateDto = BulkTemplate & Subject & TextOrHtml;

@@ -4,6 +4,7 @@ import { SendEmailDto } from './dto/send-email.dto';
 import { EmailSES } from './email.ses';
 import { EmailTemplateDto } from './dto/create-email-template.dto';
 import { BulkEmailDto } from './dto/send-bulk-email.dto';
+import { BulkTemplate } from './dto/types';
 
 @Injectable()
 export class EmailService {
@@ -41,6 +42,10 @@ export class EmailService {
     }
     
     return this.emailSES.createTemplate(params);
+  }
+
+  deleteTemplate(bulkTemplate: BulkTemplate) {
+    return this.emailSES.deleteTemplate(bulkTemplate.name);
   }
 
   bulk(bulkEmailDto: BulkEmailDto) {

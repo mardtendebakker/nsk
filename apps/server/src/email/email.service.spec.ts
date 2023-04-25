@@ -29,6 +29,10 @@ describe('EmailService', () => {
     })
   };
 
+  const bulkTemplateDto = {
+    name: "template01"
+  };
+
   const emailSESSendResult = {
     "$metadata": {
       "httpStatusCode": 200,
@@ -43,6 +47,15 @@ describe('EmailService', () => {
     "$metadata": {
       "httpStatusCode": 200,
       "requestId": "e8cf6abb-cae8-4093-9ee5-af18d436fb63",
+      "attempts": 1,
+      "totalRetryDelay": 0
+    }
+  };
+
+  const emailSESDeleteTemplateResult = {
+    "$metadata": {
+      "httpStatusCode": 200,
+      "requestId": "570231bc-9242-4220-93a3-df1b684ed2f6",
       "attempts": 1,
       "totalRetryDelay": 0
     }
@@ -66,6 +79,7 @@ describe('EmailService', () => {
   const emailSES = {
     send: jest.fn(() => Promise.resolve(emailSESSendResult)),
     createTemplate: jest.fn(() => Promise.resolve(emailSESCreateTemplateResult)),
+    deleteTemplate: jest.fn(() => Promise.resolve(emailSESDeleteTemplateResult)),
     bulk: jest.fn(() => Promise.resolve(emailSESBulkResult)),
   };
 
@@ -104,6 +118,10 @@ describe('EmailService', () => {
 
   it('should create an template', async () => {
     expect(await service.createTemplate(createTemplateDto)).toBe(emailSESCreateTemplateResult);
+  });
+
+  it('should delete an template', async () => {
+    expect(await service.deleteTemplate(bulkTemplateDto)).toBe(emailSESDeleteTemplateResult);
   });
 
   it('should send bulk email', async () => {
