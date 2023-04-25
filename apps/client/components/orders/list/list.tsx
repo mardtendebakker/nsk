@@ -6,8 +6,11 @@ import {
   Pagination,
   TableRow,
   Checkbox,
+  Box,
 } from '@mui/material';
 import moment from 'moment';
+import { useRouter } from 'next/router';
+import { ORDERS_PURCHASES } from '../../../utils/routes';
 import useTranslation from '../../../hooks/useTranslation';
 import { Order } from '../../../utils/axios';
 
@@ -25,6 +28,7 @@ export default function List({
   onChecked: (object: { id: number, checked: boolean })=>void,
 }) {
   const { trans } = useTranslation();
+  const router = useRouter();
 
   return (
     <>
@@ -40,7 +44,7 @@ export default function List({
               (yy/mm/dd)
             </TableCell>
             <TableCell>
-              {trans('customer')}
+              {trans(router.pathname == ORDERS_PURCHASES ? 'supplier' : 'customer')}
             </TableCell>
             <TableCell>
               {trans('partner')}
@@ -67,13 +71,30 @@ export default function List({
                 {moment(order.order_date).format('Y/MM/DD')}
               </TableCell>
               <TableCell>
-                {order.order_nr}
+                {router.pathname == ORDERS_PURCHASES
+                  ? order.acompany_aorder_supplier_idToacompany?.name
+                  : order.acompany_aorder_customer_idToacompany?.name}
               </TableCell>
               <TableCell>
-                {order.order_nr}
+                {router.pathname == ORDERS_PURCHASES
+                  ? order.acompany_aorder_supplier_idToacompany?.acompany?.name
+                  : order.acompany_aorder_customer_idToacompany?.acompany?.name}
               </TableCell>
               <TableCell>
-                status
+                <Box>
+                  <Box sx={{
+                    px: '1rem',
+                    py: '.5rem',
+                    bgcolor: `${order.order_status.color}25`,
+                    color: order.order_status.color,
+                    borderRadius: '.3rem',
+                    width: 'fit-content',
+                    fontWeight: 500,
+                  }}
+                  >
+                    {order.order_status.name}
+                  </Box>
+                </Box>
               </TableCell>
             </TableRow>
           ))}
