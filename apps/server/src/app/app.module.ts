@@ -15,6 +15,7 @@ import { RepairModule } from '../repair/repair.module';
 import { FileModule } from '../file/file.module';
 import { OrderStatusModule } from '../order-status/order.module';
 import { CompanyModule } from '../company/company.module';
+import { EmailModule } from '../email/email.module';
 
 @Module({
   imports: [
@@ -44,7 +45,8 @@ import { CompanyModule } from '../company/company.module';
     RepairModule,
     FileModule,
     CompanyModule,
-    OrderStatusModule
+    OrderStatusModule,
+    EmailModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -24,7 +24,7 @@ export class AdminUserService {
   ) {
     this.userPoolId = this.congigService.get<string>('COGNITO_USER_POOL_ID');
     this.cognitoClient = new CognitoIdentityProvider({
-      region: this.congigService.get<string>('COGNITO_REGION'),
+      region: this.congigService.get<string>('MAIN_REGION'),
     });
   }
 

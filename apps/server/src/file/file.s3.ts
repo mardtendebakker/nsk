@@ -7,7 +7,7 @@ export class FileS3 {
   private readonly client: S3Client;
   constructor( private readonly configService: ConfigService ) {
     this.client = new S3Client({
-      region: this.configService.get<string>('COGNITO_REGION')
+      region: this.configService.get<string>('MAIN_REGION')
     });
   }
 
