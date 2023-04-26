@@ -16,12 +16,14 @@ import { Order } from '../../../utils/axios';
 
 export default function List({
   orders = [],
+  checkedOrderIds = [],
   count,
   page,
   onPageChanged,
   onChecked,
 }: {
   orders: Order[],
+  checkedOrderIds: number[],
   count: number,
   page: number,
   onPageChanged: (newPage: number)=>void,
@@ -64,7 +66,11 @@ export default function List({
               key={order.id}
             >
               <TableCell>
-                <Checkbox sx={{ mr: '1.5rem' }} onChange={(_, checked) => { onChecked({ id: order.id, checked }); }} />
+                <Checkbox
+                  checked={Boolean(checkedOrderIds.find((id) => id === order.id))}
+                  sx={{ mr: '1.5rem' }}
+                  onChange={(_, checked) => { onChecked({ id: order.id, checked }); }}
+                />
                 {order.order_nr}
               </TableCell>
               <TableCell>

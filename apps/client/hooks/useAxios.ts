@@ -47,7 +47,7 @@ const useAxios = (
       });
     }
 
-    return axios[method](explicitPath, { cancelToken: source.current.token, params });
+    return axios[method](explicitPath, { cancelToken: source.current.token, params, data: body });
   }
 
   function handleSuccess(handledResponse: AxiosResponse) {

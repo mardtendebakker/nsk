@@ -156,7 +156,6 @@ export default function ListContainer() {
         onAssign={() => {}}
         onPrint={() => {}}
         onDelete={() => {}}
-
       />
       <Box sx={{ m: '1rem' }} />
       <List

@@ -18,6 +18,8 @@ export {
   STOCK_PRODUCTS_PATH,
   USERS_PATH,
   STOCK_REPAIR_SERVICES_PATH,
+  ORDER_STATUSES_PATH,
+  COMPANIES_PATH,
 } from './paths';
 export { AxiosError } from 'axios';
 export type { AxiosPromise, AxiosResponse } from 'axios';
