@@ -310,6 +310,12 @@ const translation = {
   inProgress: 'Bezig',
   done: 'Klaar',
   sortBy: 'Sorteer op',
+  deleteOrderQuestion: 'Deze bestelling verwijderen?',
+  deleteOrderContent: 'This action cannot be undone and all members will lose access to it.',
+  deleteOrderConfirm: 'Ja, verwijderen!',
+  changeStatus: 'Verander status',
+  changeStatusContent: 'Statusinhoud wijzigen',
+  selectStatus: 'Selecteer status',
   // http status
   200: 'Actie succesvol afgerond',
   201: 'Bron gemaakt',

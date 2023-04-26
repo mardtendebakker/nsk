@@ -13,7 +13,7 @@ import useTranslation from '../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../hooks/useForm';
 import TextField from '../input/textField';
 import DataSourcePicker from '../memoizedInput/dataSourcePicker';
-import { ORDER_STATUSES_PATH, COMPANIES_PATH } from '../../utils/axios/paths';
+import { ORDER_STATUSES_PATH, COMPANIES_PATH } from '../../utils/axios';
 
 export default function Filter({
   disabled,

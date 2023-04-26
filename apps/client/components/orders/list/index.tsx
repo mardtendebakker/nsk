@@ -1,13 +1,18 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Box, Card } from '@mui/material';
+import Delete from '@mui/icons-material/Delete';
 import useForm, { FieldPayload } from '../../../hooks/useForm';
 import List from './list';
 import useAxios from '../../../hooks/useAxios';
-import { PURCHASE_ORDERS_PATH, SALES_ORDERS_PATH } from '../../../utils/axios';
+import { PURCHASE_ORDERS_PATH, SALES_ORDERS_PATH, ORDER_STATUSES_PATH } from '../../../utils/axios';
 import { ORDERS_PURCHASES } from '../../../utils/routes';
 import Filter from '../filter';
 import debounce from '../../../utils/debounce';
+import Action from './action';
+import ConfirmationDialog from '../../confirmationDialog';
+import useTranslation from '../../../hooks/useTranslation';
+import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
 
 function refreshList({
   page,
@@ -62,8 +67,13 @@ function refreshList({
 const debouncedRefreshList = debounce(refreshList);
 
 export default function ListContainer() {
+  const { trans } = useTranslation();
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showChangeStatusModal, setShowChangeStatusModal] = useState(false);
+  const [changeStatusValue, setChangeStatusValue] = useState<number | undefined>();
   const router = useRouter();
   const [page, setPage] = useState<number>(parseInt(router.query?.page?.toString() || '1', 10));
+  const [checkedOrderIds, setCheckedOrderIds] = useState<number[]>([]);
 
   const createdAt = parseInt(router.query?.createdAt?.toString(), 10);
   const orderBy = router.query?.orderBy?.toString();
@@ -102,6 +112,22 @@ export default function ListContainer() {
     },
   );
 
+  const { call: callDelete, performing: performingDelete } = useAxios(
+    'delete',
+    (isPurchasePage ? PURCHASE_ORDERS_PATH : SALES_ORDERS_PATH).replace(':id', ''),
+    {
+      withProgressBar: true,
+    },
+  );
+
+  const { call: callPatch, performing: performingPatch } = useAxios(
+    'patch',
+    (isPurchasePage ? PURCHASE_ORDERS_PATH : SALES_ORDERS_PATH).replace(':id', ''),
+    {
+      withProgressBar: true,
+    },
+  );
+
   useEffect(() => {
     debouncedRefreshList({
       page,
@@ -118,10 +144,59 @@ export default function ListContainer() {
     formRepresentation.orderBy.value,
   ]);
 
+  const handleAllChecked = (checked: boolean) => {
+    setCheckedOrderIds(checked ? data.map(({ id }) => id) : []);
+  };
+
+  const handleRowChecked = ({ id, checked }: { id: number, checked: boolean }) => {
+    if (checked) {
+      setCheckedOrderIds((oldValue) => [...oldValue, id]);
+    } else {
+      setCheckedOrderIds((oldValue) => oldValue.filter((currentId) => currentId !== id));
+    }
+  };
+
+  const disabled = (): boolean => performing || performingDelete || performingPatch;
+
+  const handleDelete = () => {
+    callDelete({ body: checkedOrderIds })
+      .then(() => {
+        setCheckedOrderIds([]);
+        debouncedRefreshList({
+          page,
+          formRepresentation,
+          router,
+          call,
+        });
+      })
+      .catch(() => {})
+      .finally(() => {
+        setShowDeleteModal(false);
+      });
+  };
+
+  const handlePatchStatus = () => {
+    callPatch({ body: checkedOrderIds })
+      .then(() => {
+        setCheckedOrderIds([]);
+        debouncedRefreshList({
+          page,
+          formRepresentation,
+          router,
+          call,
+        });
+      })
+      .catch(() => {})
+      .finally(() => {
+        setShowChangeStatusModal(false);
+        setChangeStatusValue(undefined);
+      });
+  };
+
   return (
     <Card sx={{ overflowX: 'auto', p: '1.5rem' }}>
       <Filter
-        disabled={performing}
+        disabled={disabled()}
         formRepresentation={formRepresentation}
         setValue={(payload: FieldPayload) => {
           setValue(payload);
@@ -129,13 +204,72 @@ export default function ListContainer() {
         }}
       />
       <Box sx={{ m: '1.5rem' }} />
+      <Action
+        disabled={disabled()}
+        allChecked={checkedOrderIds.length === data.length && data.length > 0}
+        checkedProductsCount={checkedOrderIds.length}
+        onAllChecked={handleAllChecked}
+        onChangeStatus={() => setShowChangeStatusModal(true)}
+        onPrint={() => {}}
+        onDelete={() => setShowDeleteModal(true)}
+      />
+      <Box sx={{ m: '1.5rem' }} />
       <List
         orders={data}
         count={Math.floor(count / 10)}
         page={page}
-        onChecked={() => {}}
+        onChecked={handleRowChecked}
+        checkedOrderIds={checkedOrderIds}
         onPageChanged={(newPage) => setPage(newPage)}
       />
+      {showDeleteModal && (
+      <ConfirmationDialog
+        title={(
+          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+            <Delete
+              color="error"
+              sx={{
+                mb: '1rem',
+                padding: '.5rem',
+                fontSize: '2.5rem',
+                borderRadius: '50%',
+                bgcolor: (theme) => theme.palette.error.light,
+              }}
+            />
+            {trans('deleteOrderQuestion')}
+          </Box>
+        )}
+        content={<>{trans('deleteOrderContent')}</>}
+        onConfirm={handleDelete}
+        onClose={() => setShowDeleteModal(false)}
+        confirmButtonColor="error"
+        confirmButtonVariant="outlined"
+        confirmButtonText={trans('deleteOrderConfirm')}
+      />
+      )}
+      {showChangeStatusModal && (
+      <ConfirmationDialog
+        disabled={!changeStatusValue}
+        title={<>{trans('changeStatus')}</>}
+        content={(
+          <Box>
+            {trans('changeStatusContent')}
+            <Box sx={{ pb: '2rem' }} />
+            <DataSourcePicker
+              url={ORDER_STATUSES_PATH.replace(':id', '')}
+              disabled={disabled()}
+              fullWidth
+              placeholder={trans('selectStatus')}
+              onChange={(value) => setChangeStatusValue(value)}
+              value={changeStatusValue}
+            />
+          </Box>
+        )}
+        onConfirm={handlePatchStatus}
+        onClose={() => setShowChangeStatusModal(false)}
+        confirmButtonText={trans('saveChanges')}
+      />
+      )}
     </Card>
   );
 }

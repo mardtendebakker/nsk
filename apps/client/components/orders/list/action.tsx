@@ -1,23 +1,17 @@
 import {
   Box, Button, Checkbox, Typography,
 } from '@mui/material';
-import Delete from '@mui/icons-material/Delete';
+import Loop from '@mui/icons-material/Loop';
 import ChevronRight from '@mui/icons-material/ChevronRight';
-import useTranslation from '../../../../hooks/useTranslation';
-import ChangeLocationButton from '../../changeLocationButton';
-import ChangeAvailabilityButton from '../../changeAvailabilityButton';
-import AssignButton from '../../assignButton';
-import EditProductButton from '../../editProductButton';
+import Delete from '@mui/icons-material/Delete';
+import useTranslation from '../../../hooks/useTranslation';
 
 export default function Action({
   disabled,
   allChecked,
   checkedProductsCount,
   onAllChecked,
-  onChangeLocation,
-  onChangeAvailability,
-  onEdit,
-  onAssign,
+  onChangeStatus,
   onPrint,
   onDelete,
 }:{
@@ -25,10 +19,7 @@ export default function Action({
   allChecked: boolean,
   checkedProductsCount: number,
   onAllChecked: (checked: boolean) => void,
-  onChangeLocation: (location: string) => void,
-  onChangeAvailability: (availability: string) => void,
-  onEdit: () => void,
-  onAssign: (assigned: string) => void,
+  onChangeStatus: () => void,
   onPrint: () => void,
   onDelete: () => void,
 }) {
@@ -49,10 +40,13 @@ export default function Action({
         </Typography>
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        {checkedProductsCount > 0 && <ChangeLocationButton onClick={() => {}} sx={{ mr: '1rem' }} disabled={disabled} />}
-        {checkedProductsCount > 0 && <ChangeAvailabilityButton onClick={() => {}} sx={{ mr: '1rem' }} disabled={disabled} />}
-        {checkedProductsCount === 1 && <EditProductButton onClick={onEdit} sx={{ mr: '1rem' }} disabled={disabled} />}
-        {checkedProductsCount > 0 && <AssignButton onClick={() => {}} sx={{ mr: '1rem' }} disabled={disabled} />}
+        {checkedProductsCount > 0
+        && (
+        <Button onClick={onChangeStatus} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
+          <Loop sx={{ mr: '.1rem' }} />
+          {trans('changeStatus')}
+        </Button>
+        )}
         {checkedProductsCount > 0
         && (
         <Button onClick={onPrint} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
