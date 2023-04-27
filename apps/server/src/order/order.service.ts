@@ -4,6 +4,7 @@ import { UpdateOrderDto } from './dto/update-order.dto';
 import { OrderDiscrimination } from './types/order-discrimination.enum';
 import { Prisma } from '@prisma/client';
 import { FindManyDto } from './dto/find-many.dto';
+import { UpdateManyOrderDto } from './dto/update-many-order.dto';
 
 export class OrderService {
   constructor(
@@ -143,5 +144,18 @@ export class OrderService {
       data: comapny,
       where: { id }
     });
+  }
+
+  async updateMany(updateManyOrderDto: UpdateManyOrderDto) {
+    return this.repository.updateMany({
+      data: updateManyOrderDto.order,
+      where: { 
+        id: {in: updateManyOrderDto.ids}
+       }
+    });
+  }
+
+  async deleteMany(ids: number[]) {
+    return this.repository.deleteMany(ids);
   }
 }

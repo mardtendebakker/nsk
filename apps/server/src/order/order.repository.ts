@@ -1,5 +1,6 @@
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
+import { Order } from './dto/update-many-order.dto';
 
 export class OrderRepository {
   constructor(protected readonly prisma: PrismaService) {}
@@ -51,5 +52,20 @@ export class OrderRepository {
       data,
       where,
     });
+  }
+  
+  updateMany(params: {
+    where: Prisma.aorderWhereInput;
+    data: Order;
+  }) {
+    const { where, data } = params;
+    return this.prisma.aorder.updateMany({
+      data,
+      where,
+    });
+  }
+
+  deleteMany(ids: number[]) {
+    return this.prisma.aorder.deleteMany({where: {id : {in: ids}}})
   }
 }
