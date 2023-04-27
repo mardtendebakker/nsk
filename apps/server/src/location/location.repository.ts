@@ -34,4 +34,18 @@ export class LocationRepository {
       where,
     });
   }
+  
+  async findAll(params: Prisma.locationFindManyArgs) {
+    const { skip, cursor, where, select, orderBy } = params;
+    const take = params.take ? params.take : 20;
+    const submission = await this.prisma.$transaction([
+      this.prisma.location.count({where}),
+      this.prisma.location.findMany({ skip, take, cursor, where, select, orderBy })
+    ]);
+  
+    return {
+      count: submission[0] ?? 0,
+      data: submission[1],
+    };
+  }
 }

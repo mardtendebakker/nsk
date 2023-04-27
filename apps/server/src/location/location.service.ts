@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { LocationRepository } from './location.repository';
+import { FindManyDto } from './dto/find-many.dto';
 
 @Injectable()
 export class LocationService {
@@ -7,5 +8,16 @@ export class LocationService {
 
   getAll() {
     return this.repository.getAll();
+  }
+
+  findAll(query: FindManyDto) {
+    return this.repository.findAll({
+      ...query,
+      where: {
+        name: {
+          contains: query.nameContains
+        }
+      }
+    });
   }
 }
