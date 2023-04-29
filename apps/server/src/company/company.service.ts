@@ -19,7 +19,7 @@ export class CompanyService {
       }
     }
 
-    if(query.partnerOnly > 0) {
+    if(query.partnerOnly == 1) {
       where.is_partner = {
           gt: 0
       }
