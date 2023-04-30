@@ -17,6 +17,7 @@ import { OrderStatusModule } from '../order-status/order-status.module';
 import { CompanyModule } from '../company/company.module';
 import { EmailModule } from '../email/email.module';
 import { ProductTypeModule } from '../product-type/product-type.module';
+import { ProductStatusModule } from '../product-status/product-status.module';
 
 @Module({
   imports: [
@@ -48,7 +49,8 @@ import { ProductTypeModule } from '../product-type/product-type.module';
     CompanyModule,
     OrderStatusModule,
     EmailModule,
-    ProductTypeModule
+    ProductTypeModule,
+    ProductStatusModule
   ],
   controllers: [AppController],
   providers: [AppService],
