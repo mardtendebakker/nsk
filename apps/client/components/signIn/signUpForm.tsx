@@ -48,7 +48,7 @@ function SignUpForm(
         });
         onFormSelected({ form: 'signIn' });
       // eslint-disable-next-line no-empty
-      } catch (ee) { console.log(ee); }
+      } catch {}
     }
   };
 

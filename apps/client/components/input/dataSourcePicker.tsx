@@ -22,14 +22,14 @@ export default function DataSourcePicker(
   }: {
     disabled?: boolean,
     params?: { [key: string]: string },
-    value?: any,
+    value?: string,
     sx?: SxProps,
     fullWidth?: boolean,
     label?: string,
     placeholder?: string,
     displayFieldset?: boolean,
     formatter?: (arg0: object) => object,
-    onChange: (id?: number)=>void,
+    onChange: (arg0: object)=>void,
     url: string,
     searchKey?: string
   },
@@ -54,7 +54,7 @@ export default function DataSourcePicker(
       sx={sx}
       options={options}
       value={options.find(({ id }) => id == value) || null}
-      onChange={(_, selected: { id: number }) => onChange(selected?.id)}
+      onChange={(_, selected: { id: number }) => onChange(selected)}
       filterSelectedOptions
       renderInput={
                 (inputParams) => (

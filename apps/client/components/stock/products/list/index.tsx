@@ -18,21 +18,15 @@ function refreshList({
   call,
 }) {
   const params = new URLSearchParams();
-  const where : { [key: string]: object; } = {};
 
   if (page > 1) {
     params.append('page', page.toString());
   }
 
-  if (formRepresentation.search.value) {
-    const search = formRepresentation.search.value.toString();
-    where.name = { contains: search };
-    params.append('search', search);
-  }
-
   [
+    'search',
     'availability',
-    'type',
+    'productType',
     'location',
     'taskStatus',
     'assignedTo',
@@ -47,7 +41,10 @@ function refreshList({
     params: {
       take: 10,
       skip: (page - 1) * 10,
-      where: JSON.stringify(where),
+      availability: formRepresentation.availability.value,
+      productType: formRepresentation.productType.value,
+      location: formRepresentation.location.value,
+      search: formRepresentation.search.value,
     },
   }).then(() => {
     const paramsString = params.toString();
@@ -66,24 +63,24 @@ export default function ListContainer() {
   const [page, setPage] = useState<number>(parseInt(router.query?.page?.toString() || '1', 10));
   const [editProductId, setEditProductId] = useState<number | undefined>();
   const [checkedProductIds, setCheckedProductIds] = useState<number[]>([]);
-  const availability = parseInt(router.query?.availability?.toString(), 10);
-  const type = parseInt(router.query?.type?.toString(), 10);
-  const location = parseInt(router.query?.location?.toString(), 10);
-  const taskStatus = parseInt(router.query?.taskStatus?.toString(), 10);
-  const assignedTo = parseInt(router.query?.assignedTo?.toString(), 10);
+  const availability = router.query?.availability?.toString();
+  const productType = router.query?.productType?.toString();
+  const location = router.query?.location?.toString();
+  const taskStatus = router.query?.taskStatus?.toString();
+  const assignedTo = router.query?.assignedTo?.toString();
 
   const { formRepresentation, setValue } = useForm({
     search: {
       value: router.query?.search?.toString() || '',
     },
     availability: {
-      value: Number.isInteger(availability) ? availability : null,
+      value: availability || undefined,
     },
-    type: {
-      value: Number.isInteger(type) ? type : null,
+    productType: {
+      value: productType || undefined,
     },
     location: {
-      value: Number.isInteger(location) ? location : null,
+      value: location || undefined,
     },
     taskStatus: {
       value: Number.isInteger(taskStatus) ? taskStatus : null,
@@ -102,7 +99,7 @@ export default function ListContainer() {
   );
 
   useEffect(() => {
-    debouncedRefreshList({
+    refreshList({
       page,
       formRepresentation,
       router,
@@ -110,10 +107,19 @@ export default function ListContainer() {
     });
   }, [
     page,
-    formRepresentation.search.value,
-    formRepresentation.availability.value,
-    formRepresentation.type.value,
+    formRepresentation.availability.value?.toString(),
+    formRepresentation.productType.value?.toString(),
+    formRepresentation.location.value?.toString(),
   ]);
+
+  useEffect(() => {
+    debouncedRefreshList({
+      page,
+      formRepresentation,
+      router,
+      call,
+    });
+  }, [formRepresentation.search.value]);
 
   const handleAllChecked = (checked: boolean) => {
     setCheckedProductIds(checked ? data.map(({ id }) => id) : []);

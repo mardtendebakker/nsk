@@ -109,9 +109,17 @@ export default function ListContainer() {
       router,
       call,
     });
+  }, [formRepresentation.search.value]);
+
+  useEffect(() => {
+    refreshList({
+      page,
+      formRepresentation,
+      router,
+      call,
+    });
   }, [
     page,
-    formRepresentation.search.value,
     formRepresentation.status.value?.toString(),
     formRepresentation.partner.value?.toString(),
     formRepresentation.createdBy.value?.toString(),

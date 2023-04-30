@@ -100,8 +100,8 @@ export default function Filter({
                 fullWidth
                 displayFieldset={false}
                 placeholder={trans('createdBy')}
-                onChange={(value) => setValue({ field: 'createdBy', value })}
-                value={formRepresentation.createdBy.value}
+                onChange={(selected: { id: number }) => setValue({ field: 'createdBy', value: selected?.id })}
+                value={formRepresentation.createdBy.value?.toString()}
               />
               <Box sx={(theme) => ({
                 m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.divider,
@@ -143,8 +143,8 @@ export default function Filter({
                 fullWidth
                 displayFieldset={false}
                 placeholder={trans('status')}
-                onChange={(value) => setValue({ field: 'status', value })}
-                value={formRepresentation.status.value}
+                onChange={(selected: { id: number }) => setValue({ field: 'status', value: selected?.id })}
+                value={formRepresentation.status.value?.toString()}
               />
               <Box sx={(theme) => ({
                 m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.divider,
@@ -157,8 +157,8 @@ export default function Filter({
                 fullWidth
                 displayFieldset={false}
                 placeholder={trans('partner')}
-                onChange={(value) => setValue({ field: 'partner', value })}
-                value={formRepresentation.partner.value}
+                onChange={(selected: { id: number }) => setValue({ field: 'partner', value: selected?.id })}
+                value={formRepresentation.partner.value?.toString()}
               />
             </Box>
           </AccordionDetails>

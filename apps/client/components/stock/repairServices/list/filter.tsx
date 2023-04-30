@@ -10,8 +10,9 @@ import Autocomplete from '../../../memoizedInput/autocomplete';
 import useTranslation from '../../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../../hooks/useForm';
 import TextField from '../../../input/textField';
-import ProductTypePicker from '../../../memoizedInput/productTypePicker';
+import DataSourcePicker from '../../../memoizedInput/dataSourcePicker';
 import TastStatusPicker from '../../../memoizedInput/taskStatusPicker';
+import { PRODUCT_TYPES_PATH } from '../../../../utils/axios/paths';
 
 export default function Filter({
   disabled,
@@ -24,6 +25,13 @@ export default function Filter({
 }) {
   const { trans } = useTranslation();
   const [showFilter, setShowFilter] = useState(false);
+
+  const ORDER_BY_OPTIONS = [
+    {
+      id: 'order.due_date:desc',
+      name: trans('dueDate'),
+    },
+  ];
 
   return (
     <form>
@@ -55,12 +63,14 @@ export default function Filter({
           <Divider />
           <AccordionDetails>
             <Box sx={{ flex: 1, display: 'flex', alignItems: 'center' }}>
-              <ProductTypePicker
-                displayFieldset={false}
-                label=""
-                fullWidth
+              <DataSourcePicker
+                url={PRODUCT_TYPES_PATH.replace(':id', '')}
                 disabled={disabled}
-                value={[].find(({ id }) => id === formRepresentation.type.value) || null}
+                fullWidth
+                displayFieldset={false}
+                placeholder={trans('productType')}
+                onChange={(selected: { id: number }) => setValue({ field: 'productType', value: selected?.id })}
+                value={formRepresentation.productType.value?.toString()}
               />
               <Box sx={(theme) => ({
                 m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.divider,
@@ -106,8 +116,13 @@ export default function Filter({
                 disabled={disabled}
                 fullWidth
                 size="small"
-                options={[]}
-                value={[].find(({ id }) => id === formRepresentation.sortBy.value) || null}
+                getOptionLabel={({ name }: { name:string }) => name}
+                value={
+                  ORDER_BY_OPTIONS.find(({ id }) => id == formRepresentation.orderBy.value)
+                  || null
+                }
+                onChange={(_, selected: { id: number }) => setValue({ field: 'orderBy', value: selected?.id })}
+                options={ORDER_BY_OPTIONS}
                 filterSelectedOptions
                 renderInput={
                 (params) => (
