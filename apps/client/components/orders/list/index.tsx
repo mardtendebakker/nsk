@@ -135,17 +135,9 @@ export default function ListContainer() {
       router,
       call,
     });
-  }, [formRepresentation.search.value]);
-
-  useEffect(() => {
-    refreshList({
-      page,
-      formRepresentation,
-      router,
-      call,
-    });
   }, [
     page,
+    formRepresentation.search.value,
     formRepresentation.status.value?.toString(),
     formRepresentation.partner.value?.toString(),
     formRepresentation.createdBy.value?.toString(),
@@ -184,7 +176,7 @@ export default function ListContainer() {
   };
 
   const handlePatchStatus = () => {
-    callPatch({ body: checkedOrderIds })
+    callPatch({ body: { ids: checkedOrderIds, order: { status_id: changeStatusValue } } })
       .then(() => {
         setCheckedOrderIds([]);
         debouncedRefreshList({
@@ -244,15 +236,15 @@ export default function ListContainer() {
                 bgcolor: (theme) => theme.palette.error.light,
               }}
             />
-            {trans('deleteOrderQuestion')}
+            {trans('deleteResourceQuestion')}
           </Box>
         )}
-        content={<>{trans('deleteOrderContent')}</>}
+        content={<>{trans('deleteResourceContent')}</>}
         onConfirm={handleDelete}
         onClose={() => setShowDeleteModal(false)}
         confirmButtonColor="error"
         confirmButtonVariant="outlined"
-        confirmButtonText={trans('deleteOrderConfirm')}
+        confirmButtonText={trans('deleteConfirm')}
       />
       )}
       {showChangeStatusModal && (
@@ -268,8 +260,8 @@ export default function ListContainer() {
               disabled={disabled()}
               fullWidth
               placeholder={trans('selectStatus')}
-              onChange={(value) => setChangeStatusValue(value)}
-              value={changeStatusValue}
+              onChange={(value: { id: number }) => setChangeStatusValue(value?.id)}
+              value={changeStatusValue?.toString()}
             />
           </Box>
         )}

@@ -1,7 +1,6 @@
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import Dialog from '@mui/material/Dialog';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Button } from '@mui/material';
 import useTranslation from '../hooks/useTranslation';
@@ -49,9 +48,7 @@ export default function ConfirmationDialog(
         {title}
       </DialogTitle>
       <DialogContent>
-        <DialogContentText>
-          {content}
-        </DialogContentText>
+        {content}
       </DialogContent>
       <DialogActions sx={{ mt: '1rem', p: '24px' }}>
         <Button onClick={onClose} variant={cancelButtonVariant} color={cancelButtonColor}>

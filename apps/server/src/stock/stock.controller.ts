@@ -1,5 +1,5 @@
 import { Authentication } from "@nestjs-cognito/auth";
-import { Body, Get, Param, Put, Query } from "@nestjs/common";
+import { Body, Delete, Get, Param, Put, Query } from "@nestjs/common";
 import { ApiBearerAuth, ApiResponse } from "@nestjs/swagger";
 import { FindManyDto } from "../common/dto/find-many.dto";
 import { FindOneProductResponeDto } from "./dto/find-one-product-response.dto";
@@ -33,5 +33,10 @@ export class StockController {
       where: { id },
       data: updateStockDto
     });
+  }
+
+  @Delete('')
+  deleteMany(@Body() ids: number[]) {
+    return this.stockService.deleteMany(ids);
   }
 }

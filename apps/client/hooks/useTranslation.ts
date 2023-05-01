@@ -39,7 +39,8 @@ const useTranslation = () => {
     localeStore.on(LOCALE_UPDATED, setLocale);
     return () => {
       localeStore.removeListener(LOCALE_UPDATED, setLocale);
-    };}, [setLocale]);
+    };
+  }, [setLocale]);
 
   const updateLocale = (newLocale: string) => {
     localeStore.emit(LOCALE_UPDATED, newLocale);

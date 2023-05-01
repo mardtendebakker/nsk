@@ -1,15 +1,18 @@
 import { Box, Card } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import Delete from '@mui/icons-material/Delete';
 import { STOCK_PRODUCTS_PATH } from '../../../../utils/axios';
 import List from './list';
 import useAxios from '../../../../hooks/useAxios';
 import { STOCKS_PRODUCTS } from '../../../../utils/routes';
 import useForm, { FieldPayload } from '../../../../hooks/useForm';
 import Filter from './filter';
-import Action from './action';
+import Action from '../../action';
 import Edit from '../edit';
 import debounce from '../../../../utils/debounce';
+import ConfirmationDialog from '../../../confirmationDialog';
+import useTranslation from '../../../../hooks/useTranslation';
 
 function refreshList({
   page,
@@ -59,7 +62,9 @@ function refreshList({
 const debouncedRefreshList = debounce(refreshList);
 
 export default function ListContainer() {
+  const { trans } = useTranslation();
   const router = useRouter();
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [page, setPage] = useState<number>(parseInt(router.query?.page?.toString() || '1', 10));
   const [editProductId, setEditProductId] = useState<number | undefined>();
   const [checkedProductIds, setCheckedProductIds] = useState<number[]>([]);
@@ -98,19 +103,13 @@ export default function ListContainer() {
     },
   );
 
-  useEffect(() => {
-    refreshList({
-      page,
-      formRepresentation,
-      router,
-      call,
-    });
-  }, [
-    page,
-    formRepresentation.availability.value?.toString(),
-    formRepresentation.productType.value?.toString(),
-    formRepresentation.location.value?.toString(),
-  ]);
+  const { call: callDelete, performing: performingDelete } = useAxios(
+    'delete',
+    STOCK_PRODUCTS_PATH.replace(':id', ''),
+    {
+      withProgressBar: true,
+    },
+  );
 
   useEffect(() => {
     debouncedRefreshList({
@@ -119,7 +118,13 @@ export default function ListContainer() {
       router,
       call,
     });
-  }, [formRepresentation.search.value]);
+  }, [
+    page,
+    formRepresentation.search.value,
+    formRepresentation.availability.value?.toString(),
+    formRepresentation.productType.value?.toString(),
+    formRepresentation.location.value?.toString(),
+  ]);
 
   const handleAllChecked = (checked: boolean) => {
     setCheckedProductIds(checked ? data.map(({ id }) => id) : []);
@@ -133,10 +138,29 @@ export default function ListContainer() {
     }
   };
 
+  const handleDelete = () => {
+    callDelete({ body: checkedProductIds })
+      .then(() => {
+        setCheckedProductIds([]);
+        debouncedRefreshList({
+          page,
+          formRepresentation,
+          router,
+          call,
+        });
+      })
+      .catch(() => {})
+      .finally(() => {
+        setShowDeleteModal(false);
+      });
+  };
+
+  const disabled = (): boolean => performing || performingDelete;
+
   return (
     <Card sx={{ overflowX: 'auto', p: '1.5rem' }}>
       <Filter
-        disabled={performing}
+        disabled={disabled()}
         formRepresentation={formRepresentation}
         setValue={(payload: FieldPayload) => {
           setValue(payload);
@@ -146,7 +170,7 @@ export default function ListContainer() {
       <Box sx={{ m: '1.5rem' }} />
       <Edit onClose={() => setEditProductId(undefined)} open={!!editProductId} />
       <Action
-        disabled={performing}
+        disabled={disabled()}
         allChecked={checkedProductIds.length === data.length && data.length > 0}
         checkedProductsCount={checkedProductIds.length}
         onAllChecked={handleAllChecked}
@@ -155,7 +179,7 @@ export default function ListContainer() {
         onChangeAvailability={() => {}}
         onAssign={() => {}}
         onPrint={() => {}}
-        onDelete={() => {}}
+        onDelete={() => setShowDeleteModal(true)}
       />
       <Box sx={{ m: '1rem' }} />
       <List
@@ -166,6 +190,31 @@ export default function ListContainer() {
         checkedProductIds={checkedProductIds}
         onPageChanged={(newPage) => { setPage(newPage); setCheckedProductIds([]); }}
       />
+      {showDeleteModal && (
+      <ConfirmationDialog
+        title={(
+          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+            <Delete
+              color="error"
+              sx={{
+                mb: '1rem',
+                padding: '.5rem',
+                fontSize: '2.5rem',
+                borderRadius: '50%',
+                bgcolor: (theme) => theme.palette.error.light,
+              }}
+            />
+            {trans('deleteResourceQuestion')}
+          </Box>
+        )}
+        content={<>{trans('deleteResourceContent')}</>}
+        onConfirm={handleDelete}
+        onClose={() => setShowDeleteModal(false)}
+        confirmButtonColor="error"
+        confirmButtonVariant="outlined"
+        confirmButtonText={trans('deleteConfirm')}
+      />
+      )}
     </Card>
   );
 }
