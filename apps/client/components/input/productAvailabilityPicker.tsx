@@ -3,20 +3,31 @@ import useTranslation from '../../hooks/useTranslation';
 import TextField from './textField';
 import Autocomplete from '../memoizedInput/autocomplete';
 
+type Availability = 'inStock' | 'onHold' | 'saleable' | 'sold';
+type Option = { id: Availability, label: string };
+
 export default function ProductAvailabilityPicker(
   {
-    disabled, value, sx, fullWidth, label, placeholder, displayFieldset,
+    disabled, value, sx, fullWidth, label, placeholder, displayFieldset, onChange,
   }: {
     disabled?: boolean,
-    value?: number,
+    value?: string,
     sx?: SxProps,
     fullWidth?: boolean,
     label?: string,
     placeholder?: string,
-    displayFieldset?: boolean
+    displayFieldset?: boolean,
+    onChange: (arg0: Option) => void
   },
 ) {
   const { trans } = useTranslation();
+
+  const OPTIONS: Option[] = [
+    { id: 'inStock', label: trans('inStock') },
+    { id: 'onHold', label: trans('onHold') },
+    { id: 'saleable', label: trans('saleable') },
+    { id: 'sold', label: trans('sold') },
+  ];
 
   return (
     <Autocomplete
@@ -24,9 +35,10 @@ export default function ProductAvailabilityPicker(
       disabled={disabled}
       size="small"
       sx={sx}
-      options={[]}
-      value={[].find(({ id }) => id === value) || null}
+      options={OPTIONS}
+      value={OPTIONS.find(({ id }) => id == value) || null}
       filterSelectedOptions
+      onChange={(_, selected: Option) => onChange(selected)}
       renderInput={
                 (params) => (
                   <TextField

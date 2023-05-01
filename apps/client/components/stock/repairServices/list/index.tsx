@@ -16,23 +16,36 @@ function refreshList({
   call,
 }) {
   const params = new URLSearchParams();
-  const where : { [key: string]: object; } = {};
 
   if (page > 1) {
     params.append('page', page.toString());
   }
 
-  if (formRepresentation.search.value) {
-    const search = formRepresentation.search.value.toString();
-    where.name = { contains: search };
-    params.append('search', search);
-  }
+  ['search', 'productType'].forEach((keyword) => {
+    if (formRepresentation[keyword].value || formRepresentation[keyword].value === 0) {
+      const value = formRepresentation[keyword].value.toString();
+      params.append(keyword, value);
+    }
+  });
+
+  const orderBy = {};
+
+  ['orderBy'].forEach((keyword) => {
+    if (formRepresentation[keyword].value) {
+      const value = formRepresentation[keyword].value.toString();
+      const [property, direction = 'desc'] = value.split(':');
+      orderBy[property] = direction;
+      params.append(keyword, value);
+    }
+  });
 
   call({
     params: {
       take: 10,
       skip: (page - 1) * 10,
-      where: JSON.stringify(where),
+      orderBy: JSON.stringify(orderBy),
+      productType: formRepresentation.productType.value,
+      search: formRepresentation.search.value,
     },
   }).then(() => {
     const paramsString = params.toString();
@@ -49,26 +62,26 @@ const debouncedRefreshList = debounce(refreshList);
 export default function ListContainer() {
   const router = useRouter();
   const [page, setPage] = useState<number>(parseInt(router.query?.page?.toString() || '1', 10));
-  const type = parseInt(router.query?.type?.toString(), 10);
-  const taskStatus = parseInt(router.query?.taskStatus?.toString(), 10);
-  const assignedTo = parseInt(router.query?.assignedTo?.toString(), 10);
-  const sortBy = parseInt(router.query?.sortBy?.toString(), 10);
+  const productType = router.query?.productType?.toString();
+  const taskStatus = router.query?.taskStatus?.toString();
+  const assignedTo = router.query?.assignedTo?.toString();
+  const orderBy = router.query?.orderBy?.toString();
 
   const { formRepresentation, setValue } = useForm({
     search: {
       value: router.query?.search?.toString() || '',
     },
-    sortBy: {
-      value: Number.isInteger(sortBy) ? sortBy : null,
+    orderBy: {
+      value: orderBy || undefined,
     },
     assignedTo: {
-      value: Number.isInteger(assignedTo) ? assignedTo : null,
+      value: assignedTo || undefined,
     },
-    type: {
-      value: Number.isInteger(type) ? type : null,
+    productType: {
+      value: productType || undefined,
     },
     taskStatus: {
-      value: Number.isInteger(taskStatus) ? taskStatus : null,
+      value: taskStatus || undefined,
     },
   });
 
@@ -87,11 +100,19 @@ export default function ListContainer() {
       router,
       call,
     });
+  }, [formRepresentation.search.value]);
+
+  useEffect(() => {
+    refreshList({
+      page,
+      formRepresentation,
+      router,
+      call,
+    });
   }, [
     page,
-    formRepresentation.search.value,
-    formRepresentation.sortBy.value,
-    formRepresentation.type.value,
+    formRepresentation.orderBy.value,
+    formRepresentation.productType.value?.toString(),
   ]);
 
   return (

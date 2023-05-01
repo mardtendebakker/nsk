@@ -16,3 +16,6 @@ export const USERS_PATH = '/users';
 export const STOCK_REPAIR_SERVICES_PATH = '/repairs/:id';
 export const ORDER_STATUSES_PATH = '/order-statuses/:id';
 export const COMPANIES_PATH = '/companies/:id';
+export const PRODUCT_STATUSES_PATH = '/product-statuses/:id';
+export const PRODUCT_TYPES_PATH = '/product-types/:id';
+export const LOCATIONS_PATH = '/locations/:id';

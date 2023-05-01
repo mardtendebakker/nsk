@@ -1,10 +1,8 @@
 import { Grid, Typography } from '@mui/material';
 import { FormRepresentation, SetValue } from '../../../hooks/useForm';
-import ProductAvailabilityPicker from '../../memoizedInput/productAvailabilityPicker';
 import useTranslation from '../../../hooks/useTranslation';
 import BorderedBox from '../../borderedBox';
 import TextField from '../../memoizedInput/textField';
-import ProductLocationPicker from '../../memoizedInput/productLocationPicker';
 
 export default function ProductForm({
   setValue,
@@ -57,8 +55,8 @@ export default function ProductForm({
             xs={12}
             sx={{ display: 'flex', flex: 1 }}
           >
-            <ProductLocationPicker sx={{ flex: 0.33, mr: '1rem' }} placeholder="" />
-            <ProductAvailabilityPicker sx={{ flex: 0.33, mr: '1rem' }} placeholder="" />
+            {/* <ProductLocationPicker sx={{ flex: 0.33, mr: '1rem' }} placeholder="" />
+            <ProductAvailabilityPicker sx={{ flex: 0.33, mr: '1rem' }} placeholder="" /> */}
             <TextField
               sx={{ flex: 0.33 }}
               label={trans('price')}
