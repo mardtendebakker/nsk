@@ -100,17 +100,9 @@ export default function ListContainer() {
       router,
       call,
     });
-  }, [formRepresentation.search.value]);
-
-  useEffect(() => {
-    refreshList({
-      page,
-      formRepresentation,
-      router,
-      call,
-    });
   }, [
     page,
+    formRepresentation.search.value,
     formRepresentation.orderBy.value,
     formRepresentation.productType.value?.toString(),
   ]);

@@ -3,11 +3,11 @@ import {
 } from '@mui/material';
 import Delete from '@mui/icons-material/Delete';
 import ChevronRight from '@mui/icons-material/ChevronRight';
-import useTranslation from '../../../../hooks/useTranslation';
-import ChangeLocationButton from '../../changeLocationButton';
-import ChangeAvailabilityButton from '../../changeAvailabilityButton';
-import AssignButton from '../../assignButton';
-import EditProductButton from '../../editProductButton';
+import useTranslation from '../../hooks/useTranslation';
+import ChangeLocationButton from './changeLocationButton';
+import ChangeAvailabilityButton from './changeAvailabilityButton';
+import AssignButton from './assignButton';
+import EditProductButton from './editProductButton';
 
 export default function Action({
   disabled,

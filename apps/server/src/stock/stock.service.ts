@@ -268,4 +268,8 @@ export class StockService {
       data
     });
   }
+
+  async deleteMany(ids: number[]) {
+    return this.repository.deleteMany(ids);
+  }
 }
