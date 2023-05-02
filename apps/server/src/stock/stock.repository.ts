@@ -2,6 +2,7 @@ import { Prisma } from "@prisma/client";
 import { PrismaService } from "../prisma/prisma.service";
 import { IsRepairService } from "./types/is-repair-service.enum";
 import { RepairProductName } from "./types/repair-product-name.enum";
+import { Product } from "./dto/update-many-product.dto";
 
 export class StockRepository {
   constructor(
@@ -113,5 +114,16 @@ export class StockRepository {
 
   deleteMany(ids: number[]) {
     return this.prisma.product.deleteMany({where: {id : {in: ids}}})
+  }
+  
+  updateMany(params: {
+    where: Prisma.aorderWhereInput;
+    data: Product;
+  }) {
+    const { where, data } = params;
+    return this.prisma.product.updateMany({
+      data,
+      where,
+    });
   }
 }

@@ -7,6 +7,7 @@ import { ServiceStatus } from "../service/enum/service-status.enum";
 import { StockProcess } from "./stock.process";
 import { UpdateOneDto } from "../common/dto/update-one.dto";
 import { FindStockProcess } from "./find-stock.process";
+import { UpdateManyProductDto } from "./dto/update-many-product.dto";
 
 export class StockService {
   constructor(
@@ -271,5 +272,14 @@ export class StockService {
 
   async deleteMany(ids: number[]) {
     return this.repository.deleteMany(ids);
+  }
+
+  async updateMany(updateManyProductDto: UpdateManyProductDto) {
+    return this.repository.updateMany({
+      data: updateManyProductDto.product,
+      where: { 
+        id: {in: updateManyProductDto.ids}
+       }
+    });
   }
 }

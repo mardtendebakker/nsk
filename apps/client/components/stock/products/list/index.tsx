@@ -2,7 +2,7 @@ import { Box, Card } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Delete from '@mui/icons-material/Delete';
-import { STOCK_PRODUCTS_PATH } from '../../../../utils/axios';
+import { STOCK_PRODUCTS_PATH, LOCATIONS_PATH } from '../../../../utils/axios';
 import List from './list';
 import useAxios from '../../../../hooks/useAxios';
 import { STOCKS_PRODUCTS } from '../../../../utils/routes';
@@ -13,6 +13,7 @@ import Edit from '../edit';
 import debounce from '../../../../utils/debounce';
 import ConfirmationDialog from '../../../confirmationDialog';
 import useTranslation from '../../../../hooks/useTranslation';
+import DataSourcePicker from '../../../memoizedInput/dataSourcePicker';
 
 function refreshList({
   page,
@@ -65,6 +66,8 @@ export default function ListContainer() {
   const { trans } = useTranslation();
   const router = useRouter();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showChangeLocationModal, setShowChangeLocationModal] = useState(false);
+  const [changeLocationValue, setChangeLocationValue] = useState<number | undefined>();
   const [page, setPage] = useState<number>(parseInt(router.query?.page?.toString() || '1', 10));
   const [editProductId, setEditProductId] = useState<number | undefined>();
   const [checkedProductIds, setCheckedProductIds] = useState<number[]>([]);
@@ -108,6 +111,16 @@ export default function ListContainer() {
     STOCK_PRODUCTS_PATH.replace(':id', ''),
     {
       withProgressBar: true,
+      showSuccessMessage: true,
+    },
+  );
+
+  const { call: callPatch, performing: performingPatch } = useAxios(
+    'patch',
+    STOCK_PRODUCTS_PATH.replace(':id', ''),
+    {
+      withProgressBar: true,
+      showSuccessMessage: true,
     },
   );
 
@@ -155,7 +168,25 @@ export default function ListContainer() {
       });
   };
 
-  const disabled = (): boolean => performing || performingDelete;
+  const disabled = (): boolean => performing || performingDelete || performingPatch;
+
+  const handlePatchLocation = () => {
+    callPatch({ body: { ids: checkedProductIds, product: { location_id: changeLocationValue } } })
+      .then(() => {
+        setCheckedProductIds([]);
+        debouncedRefreshList({
+          page,
+          formRepresentation,
+          router,
+          call,
+        });
+      })
+      .catch(() => {})
+      .finally(() => {
+        setShowChangeLocationModal(false);
+        setChangeLocationValue(undefined);
+      });
+  };
 
   return (
     <Card sx={{ overflowX: 'auto', p: '1.5rem' }}>
@@ -175,7 +206,7 @@ export default function ListContainer() {
         checkedProductsCount={checkedProductIds.length}
         onAllChecked={handleAllChecked}
         onEdit={() => setEditProductId(checkedProductIds[0])}
-        onChangeLocation={() => {}}
+        onChangeLocation={() => setShowChangeLocationModal(true)}
         onChangeAvailability={() => {}}
         onAssign={() => {}}
         onPrint={() => {}}
@@ -213,6 +244,29 @@ export default function ListContainer() {
         confirmButtonColor="error"
         confirmButtonVariant="outlined"
         confirmButtonText={trans('deleteConfirm')}
+      />
+      )}
+      {showChangeLocationModal && (
+      <ConfirmationDialog
+        disabled={!changeLocationValue}
+        title={<>{trans('changeLocation')}</>}
+        content={(
+          <Box>
+            {trans('changeLocationContent')}
+            <Box sx={{ pb: '2rem' }} />
+            <DataSourcePicker
+              url={LOCATIONS_PATH.replace(':id', '')}
+              disabled={disabled()}
+              fullWidth
+              placeholder={trans('selectLocation')}
+              onChange={(value: { id: number }) => setChangeLocationValue(value?.id)}
+              value={changeLocationValue?.toString()}
+            />
+          </Box>
+        )}
+        onConfirm={handlePatchLocation}
+        onClose={() => setShowChangeLocationModal(false)}
+        confirmButtonText={trans('saveChanges')}
       />
       )}
     </Card>

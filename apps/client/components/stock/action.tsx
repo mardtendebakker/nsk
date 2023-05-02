@@ -3,11 +3,10 @@ import {
 } from '@mui/material';
 import Delete from '@mui/icons-material/Delete';
 import ChevronRight from '@mui/icons-material/ChevronRight';
+import Edit from '@mui/icons-material/Edit';
+import EditLocation from '@mui/icons-material/EditLocation';
+import PersonAddAlt1 from '@mui/icons-material/PersonAddAlt1';
 import useTranslation from '../../hooks/useTranslation';
-import ChangeLocationButton from './changeLocationButton';
-import ChangeAvailabilityButton from './changeAvailabilityButton';
-import AssignButton from './assignButton';
-import EditProductButton from './editProductButton';
 
 export default function Action({
   disabled,
@@ -25,10 +24,10 @@ export default function Action({
   allChecked: boolean,
   checkedProductsCount: number,
   onAllChecked: (checked: boolean) => void,
-  onChangeLocation: (location: string) => void,
-  onChangeAvailability: (availability: string) => void,
+  onChangeLocation: () => void,
+  onChangeAvailability: () => void,
   onEdit: () => void,
-  onAssign: (assigned: string) => void,
+  onAssign: () => void,
   onPrint: () => void,
   onDelete: () => void,
 }) {
@@ -49,10 +48,34 @@ export default function Action({
         </Typography>
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        {checkedProductsCount > 0 && <ChangeLocationButton onClick={() => {}} sx={{ mr: '1rem' }} disabled={disabled} />}
-        {checkedProductsCount > 0 && <ChangeAvailabilityButton onClick={() => {}} sx={{ mr: '1rem' }} disabled={disabled} />}
-        {checkedProductsCount === 1 && <EditProductButton onClick={onEdit} sx={{ mr: '1rem' }} disabled={disabled} />}
-        {checkedProductsCount > 0 && <AssignButton onClick={() => {}} sx={{ mr: '1rem' }} disabled={disabled} />}
+        {checkedProductsCount > 0
+        && (
+        <Button onClick={onChangeLocation} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
+          <EditLocation sx={{ mr: '.1rem' }} />
+          {trans('changeLocation')}
+        </Button>
+        )}
+        {checkedProductsCount > 0
+        && (
+        <Button onClick={onChangeAvailability} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
+          <Edit sx={{ mr: '.1rem' }} />
+          {trans('changeAvailability')}
+        </Button>
+        )}
+        {checkedProductsCount === 1
+        && (
+        <Button onClick={onEdit} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
+          <Edit sx={{ mr: '.1rem' }} />
+          {trans('editProduct')}
+        </Button>
+        )}
+        {checkedProductsCount > 0
+        && (
+        <Button onClick={onAssign} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
+          <PersonAddAlt1 sx={{ mr: '.3rem' }} />
+          {trans('assign')}
+        </Button>
+        )}
         {checkedProductsCount > 0
         && (
         <Button onClick={onPrint} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
