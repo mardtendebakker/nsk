@@ -117,6 +117,7 @@ export default function ListContainer() {
     (isPurchasePage ? PURCHASE_ORDERS_PATH : SALES_ORDERS_PATH).replace(':id', ''),
     {
       withProgressBar: true,
+      showSuccessMessage: true,
     },
   );
 
@@ -125,6 +126,7 @@ export default function ListContainer() {
     (isPurchasePage ? PURCHASE_ORDERS_PATH : SALES_ORDERS_PATH).replace(':id', ''),
     {
       withProgressBar: true,
+      showSuccessMessage: true,
     },
   );
 

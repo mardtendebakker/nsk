@@ -316,6 +316,8 @@ const translation = {
   deleteResourceQuestion: 'Deze bestelling verwijderen?',
   deleteResourceContent: 'Deze actie kan niet ongedaan worden gemaakt en alle leden verliezen de toegang ertoe.',
   deleteConfirm: 'Ja, verwijderen!',
+  changeLocationContent: 'U kunt de locatie van de geselecteerde producten wijzigen',
+  selectLocation: 'Selecteer een locatie',
   changeStatus: 'Verander status',
   changeStatusContent: 'Statusinhoud wijzigen',
   selectStatus: 'Selecteer status',
