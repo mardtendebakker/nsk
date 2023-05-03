@@ -3,6 +3,8 @@ import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { AuthService } from './auth.service';
 import { AuthModule } from './auth.module';
+import { ConfigService } from '@nestjs/config';
+import { AdminUserService } from '../admin/user/user.service';
 
 describe('Auth', () => {
   let app: INestApplication;
@@ -24,14 +26,36 @@ describe('Auth', () => {
     authenticateUser: () => cognitoUserSession,
   };
 
+  const adminUserService = {
+    findUsernameByEmail: () => 'USERNAME'
+  }
+
   beforeAll(async () => {
     const moduleFixture = await Test.createTestingModule({
       imports: [
         AuthModule,
       ],
+      providers: [
+        {
+          provide: ConfigService,
+          useValue: {
+            get: jest.fn((key: string) => {
+              if (key === 'COGNITO_USER_POOL_ID') {
+                return 'YOUR_COGNITO_USER_POOL_ID';
+              }
+              if (key === 'MAIN_REGION') {
+                return 'YOUR_MAIN_REGION';
+              }
+              return null;
+            })
+          }
+        },
+      ],
     })
     .overrideProvider(AuthService)
     .useValue(authService)
+    .overrideProvider(AdminUserService)
+    .useValue(adminUserService)
     .compile();
 
     app = moduleFixture.createNestApplication();
