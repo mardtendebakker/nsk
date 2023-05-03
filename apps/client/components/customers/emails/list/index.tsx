@@ -7,7 +7,6 @@ import useAxios from '../../../../hooks/useAxios';
 import { CUSTOMERS_PATH } from '../../../../utils/axios';
 import { CUSTOMERS_EMAILS } from '../../../../utils/routes';
 import useForm from '../../../../hooks/useForm';
-import debounce from '../../../../utils/debounce';
 
 function refreshList({
   page,
@@ -16,33 +15,28 @@ function refreshList({
   call,
 }) {
   const params = new URLSearchParams();
-  const where : { [key: string]: object; } = {};
 
   if (page > 1) {
     params.append('page', page.toString());
   }
 
-  if (formRepresentation.search.value) {
-    const search = formRepresentation.search.value.toString();
-    params.append('search', search);
-  }
+  const paramsToSend = {};
 
-  if (formRepresentation.createdAt.value) {
-    const createdAt = formRepresentation.createdAt.value.toString();
-    params.append('createdAt', createdAt);
-  }
+  ['search', 'createdAt', 'status'].forEach((filter) => {
+    if (formRepresentation[filter].value || formRepresentation[filter].value === 0) {
+      const value = formRepresentation[filter].value.toString();
+      params.append(filter, value);
+      paramsToSend[filter] = formRepresentation[filter].value;
+    }
+  });
 
-  if (formRepresentation.status.value || formRepresentation.status.value === 0) {
-    const status = formRepresentation.status.value.toString();
-    params.append('status', status);
-  }
   call({
     params: {
       take: 10,
       skip: (page - 1) * 10,
-      where: JSON.stringify(where),
+      ...paramsToSend,
     },
-  }).then(() => {
+  }).finally(() => {
     const paramsString = params.toString();
     const newPath = paramsString ? `${CUSTOMERS_EMAILS}?${params.toString()}` : CUSTOMERS_EMAILS;
 
@@ -52,12 +46,10 @@ function refreshList({
   });
 }
 
-const debouncedRefreshList = debounce(refreshList);
-
 export default function ListContainer() {
   const router = useRouter();
   const [page, setPage] = useState<number>(parseInt(router.query?.page?.toString() || '1', 10));
-  const status = parseInt(router.query?.status?.toString(), 10);
+  const status = router.query?.status?.toString();
 
   const { formRepresentation, setValue } = useForm({
     search: {
@@ -67,7 +59,7 @@ export default function ListContainer() {
       value: router.query?.createdAt?.toString() || null,
     },
     status: {
-      value: Number.isInteger(status) ? status : null,
+      value: status || undefined,
     },
   });
 
@@ -80,7 +72,7 @@ export default function ListContainer() {
   );
 
   useEffect(() => {
-    /* debouncedRefreshList({
+    /* refreshList({
       page,
       formRepresentation,
       router,

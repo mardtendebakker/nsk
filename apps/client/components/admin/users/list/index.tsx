@@ -7,7 +7,6 @@ import useAxios from '../../../../hooks/useAxios';
 import { USERS_PATH } from '../../../../utils/axios';
 import { ADMIN_USERS } from '../../../../utils/routes';
 import useForm, { FieldPayload } from '../../../../hooks/useForm';
-import debounce from '../../../../utils/debounce';
 
 function refreshList({
   page,
@@ -16,48 +15,28 @@ function refreshList({
   call,
 }) {
   const params = new URLSearchParams();
-  const where : { [key: string]: object; } = {};
 
   if (page > 1) {
     params.append('page', page.toString());
   }
 
-  if (formRepresentation.search.value) {
-    const search = formRepresentation.search.value.toString();
-    where.OR = [
-      { email: { contains: search } },
-      { name: { contains: search } },
-    ];
-    params.append('search', search);
-  }
+  const paramsToSend = {};
 
-  if (formRepresentation.createdAt.value) {
-    const createdAt = formRepresentation.createdAt.value.toString();
-    params.append('createdAt', createdAt);
-  }
-
-  if (formRepresentation.createdBy.value || formRepresentation.createdBy.value === 0) {
-    const createdBy = formRepresentation.createdBy.value.toString();
-    params.append('createdBy', createdBy);
-  }
-
-  if (formRepresentation.lastActive.value || formRepresentation.lastActive.value === 0) {
-    const lastActive = formRepresentation.lastActive.value.toString();
-    params.append('lastActive', lastActive);
-  }
-
-  if (formRepresentation.role.value || formRepresentation.role.value === 0) {
-    const role = formRepresentation.role.value.toString();
-    params.append('role', role);
-  }
+  ['search', 'createdAt', 'createdBy', 'lastActive', 'role'].forEach((filter) => {
+    if (formRepresentation[filter].value || formRepresentation[filter].value === 0) {
+      const value = formRepresentation[filter].value.toString();
+      params.append(filter, value);
+      paramsToSend[filter] = formRepresentation[filter].value;
+    }
+  });
 
   call({
     params: {
       take: 10,
       skip: (page - 1) * 10,
-      where: JSON.stringify(where),
+      ...paramsToSend,
     },
-  }).then(() => {
+  }).finally(() => {
     const paramsString = params.toString();
     const newPath = paramsString ? `${ADMIN_USERS}?${params.toString()}` : ADMIN_USERS;
 
@@ -67,14 +46,12 @@ function refreshList({
   });
 }
 
-const debouncedRefreshList = debounce(refreshList);
-
 export default function ListContainer() {
   const router = useRouter();
   const [page, setPage] = useState<number>(parseInt(router.query?.page?.toString() || '1', 10));
-  const createdBy = parseInt(router.query?.createdBy?.toString(), 10);
-  const lastActive = parseInt(router.query?.createdBy?.toString(), 10);
-  const role = parseInt(router.query?.role?.toString(), 10);
+  const createdBy = router.query?.createdBy?.toString();
+  const lastActive = router.query?.createdBy?.toString();
+  const role = router.query?.role?.toString();
 
   const { formRepresentation, setValue } = useForm({
     search: {
@@ -84,13 +61,13 @@ export default function ListContainer() {
       value: router.query?.createdAt?.toString() || null,
     },
     createdBy: {
-      value: Number.isInteger(createdBy) ? createdBy : null,
+      value: createdBy || undefined,
     },
     lastActive: {
-      value: Number.isInteger(lastActive) ? lastActive : null,
+      value: lastActive || undefined,
     },
     role: {
-      value: Number.isInteger(role) ? role : null,
+      value: role || undefined,
     },
   });
 
@@ -103,12 +80,12 @@ export default function ListContainer() {
   );
 
   useEffect(() => {
-    /* debouncedRefreshList({
+    refreshList({
       page,
       formRepresentation,
       router,
       call,
-    }); */
+    });
   }, [
     page,
     formRepresentation.search.value,

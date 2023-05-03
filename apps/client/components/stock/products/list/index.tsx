@@ -10,7 +10,6 @@ import useForm, { FieldPayload } from '../../../../hooks/useForm';
 import Filter from './filter';
 import Action from '../../action';
 import Edit from '../edit';
-import debounce from '../../../../utils/debounce';
 import ConfirmationDialog from '../../../confirmationDialog';
 import useTranslation from '../../../../hooks/useTranslation';
 import DataSourcePicker from '../../../memoizedInput/dataSourcePicker';
@@ -27,6 +26,8 @@ function refreshList({
     params.append('page', page.toString());
   }
 
+  const paramsToSend = {};
+
   [
     'search',
     'availability',
@@ -34,10 +35,11 @@ function refreshList({
     'location',
     'taskStatus',
     'assignedTo',
-  ].forEach((keyword) => {
-    if (formRepresentation[keyword].value || formRepresentation[keyword].value === 0) {
-      const value = formRepresentation[keyword].value.toString();
-      params.append(keyword, value);
+  ].forEach((filter) => {
+    if (formRepresentation[filter].value || formRepresentation[filter].value === 0) {
+      const value = formRepresentation[filter].value.toString();
+      params.append(filter, value);
+      paramsToSend[filter] = formRepresentation[filter].value;
     }
   });
 
@@ -45,12 +47,9 @@ function refreshList({
     params: {
       take: 10,
       skip: (page - 1) * 10,
-      availability: formRepresentation.availability.value,
-      productType: formRepresentation.productType.value,
-      location: formRepresentation.location.value,
-      search: formRepresentation.search.value,
+      ...paramsToSend,
     },
-  }).then(() => {
+  }).finally(() => {
     const paramsString = params.toString();
     const newPath = paramsString ? `${STOCKS_PRODUCTS}?${params.toString()}` : STOCKS_PRODUCTS;
 
@@ -59,8 +58,6 @@ function refreshList({
     }
   });
 }
-
-const debouncedRefreshList = debounce(refreshList);
 
 export default function ListContainer() {
   const { trans } = useTranslation();
@@ -125,7 +122,7 @@ export default function ListContainer() {
   );
 
   useEffect(() => {
-    debouncedRefreshList({
+    refreshList({
       page,
       formRepresentation,
       router,
@@ -155,7 +152,7 @@ export default function ListContainer() {
     callDelete({ body: checkedProductIds })
       .then(() => {
         setCheckedProductIds([]);
-        debouncedRefreshList({
+        refreshList({
           page,
           formRepresentation,
           router,
@@ -174,7 +171,7 @@ export default function ListContainer() {
     callPatch({ body: { ids: checkedProductIds, product: { location_id: changeLocationValue } } })
       .then(() => {
         setCheckedProductIds([]);
-        debouncedRefreshList({
+        refreshList({
           page,
           formRepresentation,
           router,

@@ -8,7 +8,6 @@ import useAxios from '../../../hooks/useAxios';
 import { PURCHASE_ORDERS_PATH, SALES_ORDERS_PATH, ORDER_STATUSES_PATH } from '../../../utils/axios';
 import { ORDERS_PURCHASES } from '../../../utils/routes';
 import Filter from '../filter';
-import debounce from '../../../utils/debounce';
 import Action from './action';
 import ConfirmationDialog from '../../confirmationDialog';
 import useTranslation from '../../../hooks/useTranslation';
@@ -26,10 +25,13 @@ function refreshList({
     params.append('page', page.toString());
   }
 
-  ['status', 'search', 'partner', 'createdBy'].forEach((keyword) => {
-    if (formRepresentation[keyword].value) {
-      const value = formRepresentation[keyword].value.toString();
-      params.append(keyword, value);
+  const paramsToSend = {};
+
+  ['status', 'search', 'partner', 'createdBy'].forEach((filter) => {
+    if (formRepresentation[filter].value) {
+      const value = formRepresentation[filter].value.toString();
+      params.append(filter, value);
+      paramsToSend[filter] = formRepresentation[filter].value;
     }
   });
 
@@ -48,13 +50,10 @@ function refreshList({
     params: {
       take: 10,
       skip: (page - 1) * 10,
-      status: formRepresentation.status.value,
-      search: formRepresentation.search.value,
-      partner: formRepresentation.partner.value,
-      createdBy: formRepresentation.createdBy.value,
+      ...paramsToSend,
       orderBy: JSON.stringify(orderBy),
     },
-  }).then(() => {
+  }).finally(() => {
     const paramsString = params.toString();
     const newPath = paramsString ? `${router.pathname}?${params.toString()}` : router.pathname;
 
@@ -63,8 +62,6 @@ function refreshList({
     }
   });
 }
-
-const debouncedRefreshList = debounce(refreshList);
 
 export default function ListContainer() {
   const { trans } = useTranslation();
@@ -131,7 +128,7 @@ export default function ListContainer() {
   );
 
   useEffect(() => {
-    debouncedRefreshList({
+    refreshList({
       page,
       formRepresentation,
       router,
@@ -164,7 +161,7 @@ export default function ListContainer() {
     callDelete({ body: checkedOrderIds })
       .then(() => {
         setCheckedOrderIds([]);
-        debouncedRefreshList({
+        refreshList({
           page,
           formRepresentation,
           router,
@@ -181,7 +178,7 @@ export default function ListContainer() {
     callPatch({ body: { ids: checkedOrderIds, order: { status_id: changeStatusValue } } })
       .then(() => {
         setCheckedOrderIds([]);
-        debouncedRefreshList({
+        refreshList({
           page,
           formRepresentation,
           router,
