@@ -14,7 +14,6 @@ import { ProductModule } from '../product/product.module';
 import { RepairModule } from '../repair/repair.module';
 import { FileModule } from '../file/file.module';
 import { OrderStatusModule } from '../order-status/order-status.module';
-import { CompanyModule } from '../company/company.module';
 import { EmailModule } from '../email/email.module';
 import { ProductTypeModule } from '../product-type/product-type.module';
 import { ProductStatusModule } from '../product-status/product-status.module';
@@ -46,7 +45,6 @@ import { ProductStatusModule } from '../product-status/product-status.module';
     ProductModule,
     RepairModule,
     FileModule,
-    CompanyModule,
     OrderStatusModule,
     EmailModule,
     ProductTypeModule,

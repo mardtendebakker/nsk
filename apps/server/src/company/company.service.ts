@@ -1,30 +1,16 @@
 import { CompanyRepository } from './company.repository';
 import { UpdateCompanyDto } from './dto/update-company.dto';
-import { Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { FindManyDto } from './dto/find-many.dto';
+import { CompanyDiscrimination } from './types/company-discrimination.enum';
 
-@Injectable()
 export class CompanyService {
   constructor(
     protected readonly repository: CompanyRepository,
+    protected readonly type: CompanyDiscrimination,
   ) {}
 
   findAll(query: FindManyDto) {
-    const where = {
-      ...query.where,
-      name: {
-        contains: query.nameContains
-      }
-    }
-
-    if(query.partnerOnly == 1) {
-      where.is_partner = {
-          gt: 0
-      }
-    }
-
     return this.repository.findAll({
       ...query,
       select: {
@@ -35,12 +21,22 @@ export class CompanyService {
         email: true,
         partner_id: true
       },
-      where
+      where: {
+        ...query.where,
+        discr: this.type,
+        name: {
+          contains: query.nameContains
+        },
+        ...(query.partnerOnly == 1 && {is_partner: {gt: 0}})
+      }
     });
   }
 
   async create(comapny: CreateCompanyDto) {
-    return this.repository.create(comapny as Prisma.acompanyCreateInput);
+    return this.repository.create({
+      ...comapny,
+      discr: this.type,
+    });
   }
 
   async findOne(id: number) {
