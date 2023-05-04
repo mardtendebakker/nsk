@@ -8,6 +8,37 @@ import { STOCKS_REPAIR_SERVICES } from '../../../../utils/routes';
 import useForm, { FieldPayload } from '../../../../hooks/useForm';
 import Filter from './filter';
 
+function initFormState(
+  {
+    search, orderBy, assignedTo, productType, taskStatus,
+  }:
+  {
+    search?: string,
+    orderBy?: string,
+    assignedTo?: string
+    productType?: string,
+    taskStatus?: string,
+  },
+) {
+  return {
+    search: {
+      value: search || '',
+    },
+    orderBy: {
+      value: orderBy || undefined,
+    },
+    assignedTo: {
+      value: assignedTo || undefined,
+    },
+    productType: {
+      value: productType || undefined,
+    },
+    taskStatus: {
+      value: taskStatus || undefined,
+    },
+  };
+}
+
 function refreshList({
   page,
   formRepresentation,
@@ -61,28 +92,14 @@ function refreshList({
 export default function ListContainer() {
   const router = useRouter();
   const [page, setPage] = useState<number>(parseInt(router.query?.page?.toString() || '1', 10));
-  const productType = router.query?.productType?.toString();
-  const taskStatus = router.query?.taskStatus?.toString();
-  const assignedTo = router.query?.assignedTo?.toString();
-  const orderBy = router.query?.orderBy?.toString();
 
-  const { formRepresentation, setValue } = useForm({
-    search: {
-      value: router.query?.search?.toString() || '',
-    },
-    orderBy: {
-      value: orderBy || undefined,
-    },
-    assignedTo: {
-      value: assignedTo || undefined,
-    },
-    productType: {
-      value: productType || undefined,
-    },
-    taskStatus: {
-      value: taskStatus || undefined,
-    },
-  });
+  const { formRepresentation, setValue, setData } = useForm(initFormState({
+    search: router.query?.search?.toString(),
+    orderBy: router.query?.orderBy?.toString(),
+    assignedTo: router.query?.assignedTo?.toString(),
+    productType: router.query?.productType?.toString(),
+    taskStatus: router.query?.taskStatus?.toString(),
+  }));
 
   const { data: { data = [], count = 0 } = {}, call, performing } = useAxios(
     'get',
@@ -106,9 +123,15 @@ export default function ListContainer() {
     formRepresentation.productType.value?.toString(),
   ]);
 
+  const handleReset = () => {
+    setData(initFormState({}));
+    setPage(1);
+  };
+
   return (
     <Card sx={{ overflowX: 'auto', p: '1.5rem' }}>
       <Filter
+        onReset={handleReset}
         disabled={performing}
         formRepresentation={formRepresentation}
         setValue={(payload: FieldPayload) => {

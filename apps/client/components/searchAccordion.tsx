@@ -3,26 +3,27 @@ import {
 } from '@mui/material';
 import Search from '@mui/icons-material/Search';
 import ChevronRight from '@mui/icons-material/ChevronRight';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import useTranslation from '../hooks/useTranslation';
 import MemoizedTextField from './memoizedInput/textField';
 import debounce from '../utils/debounce';
 
 export default function SearchAccordion({
   children,
-  debounceSearchChanged,
   disabled,
   searchValue,
   searchLabel,
   onSearchChanged,
+  onReset,
 }: {
   children: JSX.Element,
-  debounceSearchChanged?: boolean,
   disabled?: boolean,
   searchValue: string,
   searchLabel?: string,
-  onSearchChanged: (searchValue: string) => void
+  onSearchChanged: (searchValue: string) => void,
+  onReset: () => void
 }) {
+  const inputRef = useRef<HTMLInputElement>(null);
   const [showFilter, setShowFilter] = useState(false);
   const handleSearchChanged = debounce(onSearchChanged.bind(null));
   const { trans } = useTranslation();
@@ -33,19 +34,13 @@ export default function SearchAccordion({
         <Box sx={{ flex: 1, display: 'flex', alignItems: 'center' }}>
           <Search sx={{ color: '#7F8FA4' }} />
           <MemoizedTextField
+            inputRef={inputRef}
             defaultValue={searchValue}
-            value={debounceSearchChanged ? undefined : searchValue}
             disabled={disabled}
             name="search"
             placeholder={searchLabel || trans('search')}
             fullWidth
-            onChange={(e) => {
-              if (debounceSearchChanged) {
-                handleSearchChanged(e.target.value);
-              } else {
-                onSearchChanged(e.target.value);
-              }
-            }}
+            onChange={(e) => { handleSearchChanged(e.target.value); }}
             type="text"
             sx={{
               fieldset: {
@@ -53,6 +48,19 @@ export default function SearchAccordion({
               },
             }}
           />
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={() => {
+              onReset();
+              if (inputRef?.current?.value) {
+                inputRef.current.value = '';
+              }
+            }}
+            sx={{ mr: '1rem' }}
+          >
+            {trans('reset')}
+          </Button>
           <Button variant="outlined" color="primary" onClick={() => setShowFilter((oldValue) => !oldValue)}>
             {trans('filter')}
             <ChevronRight sx={{ transform: `rotate(${showFilter ? '-90deg' : '90deg'})` }} />
@@ -70,5 +78,4 @@ export default function SearchAccordion({
 SearchAccordion.defaultProps = {
   searchLabel: undefined,
   disabled: false,
-  debounceSearchChanged: false,
 };
