@@ -35,6 +35,7 @@ export class StockService {
 
     const aorderSelect: Prisma.aorderSelect = {
       discr: true,
+      order_date: true,
       repair: {
         select: repairSelect,
       }
@@ -147,7 +148,7 @@ export class StockService {
 
     return {
       count: result.count,
-      data: data//.filter(d => d.stock != 0)
+      data: data//.filter(d => d.stock != 0) // TODO: the out of stock products should be removed by cron job not here by filtering
     };
   }
 
