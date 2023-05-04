@@ -7,7 +7,6 @@ import useAxios from '../../../../hooks/useAxios';
 import { STOCKS_REPAIR_SERVICES } from '../../../../utils/routes';
 import useForm, { FieldPayload } from '../../../../hooks/useForm';
 import Filter from './filter';
-import debounce from '../../../../utils/debounce';
 
 function refreshList({
   page,
@@ -21,10 +20,13 @@ function refreshList({
     params.append('page', page.toString());
   }
 
-  ['search', 'productType'].forEach((keyword) => {
-    if (formRepresentation[keyword].value || formRepresentation[keyword].value === 0) {
-      const value = formRepresentation[keyword].value.toString();
-      params.append(keyword, value);
+  const paramsToSend = {};
+
+  ['search', 'productType'].forEach((filter) => {
+    if (formRepresentation[filter].value || formRepresentation[filter].value === 0) {
+      const value = formRepresentation[filter].value.toString();
+      params.append(filter, value);
+      paramsToSend[filter] = formRepresentation[filter].value;
     }
   });
 
@@ -43,11 +45,10 @@ function refreshList({
     params: {
       take: 10,
       skip: (page - 1) * 10,
+      ...paramsToSend,
       orderBy: JSON.stringify(orderBy),
-      productType: formRepresentation.productType.value,
-      search: formRepresentation.search.value,
     },
-  }).then(() => {
+  }).finally(() => {
     const paramsString = params.toString();
     const newPath = paramsString ? `${STOCKS_REPAIR_SERVICES}?${params.toString()}` : STOCKS_REPAIR_SERVICES;
 
@@ -56,8 +57,6 @@ function refreshList({
     }
   });
 }
-
-const debouncedRefreshList = debounce(refreshList);
 
 export default function ListContainer() {
   const router = useRouter();
@@ -94,7 +93,7 @@ export default function ListContainer() {
   );
 
   useEffect(() => {
-    debouncedRefreshList({
+    refreshList({
       page,
       formRepresentation,
       router,
