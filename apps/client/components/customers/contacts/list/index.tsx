@@ -8,6 +8,28 @@ import { CUSTOMERS_PATH } from '../../../../utils/axios';
 import { CUSTOMERS_CONTACTS } from '../../../../utils/routes';
 import useForm, { FieldPayload } from '../../../../hooks/useForm';
 
+function initFormState(
+  {
+    search, createdAt, representative, list,
+  }:
+  { search?: string, createdAt?: string, representative?: string, list?: string },
+) {
+  return {
+    search: {
+      value: search || '',
+    },
+    createdAt: {
+      value: createdAt || null,
+    },
+    representative: {
+      value: representative || '',
+    },
+    list: {
+      value: list || undefined,
+    },
+  };
+}
+
 function refreshList({
   page,
   formRepresentation,
@@ -49,22 +71,13 @@ function refreshList({
 export default function ListContainer() {
   const router = useRouter();
   const [page, setPage] = useState<number>(parseInt(router.query?.page?.toString() || '1', 10));
-  const list = router.query?.list?.toString();
 
-  const { formRepresentation, setValue } = useForm({
-    search: {
-      value: router.query?.search?.toString() || '',
-    },
-    createdAt: {
-      value: router.query?.createdAt?.toString() || null,
-    },
-    representative: {
-      value: router.query?.representative?.toString() || '',
-    },
-    list: {
-      value: list || undefined,
-    },
-  });
+  const { formRepresentation, setValue, setData } = useForm(initFormState({
+    search: router.query?.search?.toString(),
+    createdAt: router.query?.createdAt?.toString(),
+    representative: router.query?.representative?.toString(),
+    list: router.query?.list?.toString(),
+  }));
 
   const { data: { data = [], count = 0 } = {}, call, performing } = useAxios(
     'get',
@@ -86,12 +99,18 @@ export default function ListContainer() {
     formRepresentation.search.value,
     formRepresentation.createdAt.value,
     formRepresentation.representative.value,
-    formRepresentation.list.value,
+    formRepresentation.list.value?.toString(),
   ]);
+
+  const handleReset = () => {
+    setPage(1);
+    setData(initFormState({}));
+  };
 
   return (
     <Card sx={{ overflowX: 'auto', p: '1.5rem' }}>
       <Filter
+        onReset={handleReset}
         disabled={performing}
         formRepresentation={formRepresentation}
         setValue={(payload: FieldPayload) => {

@@ -8,6 +8,31 @@ import { USERS_PATH } from '../../../../utils/axios';
 import { ADMIN_USERS } from '../../../../utils/routes';
 import useForm, { FieldPayload } from '../../../../hooks/useForm';
 
+function initFormState(
+  {
+    search, createdAt, createdBy, lastActive, role,
+  }:
+  { search?: string, createdAt?: string, createdBy?: string, lastActive?: string, role?: string },
+) {
+  return {
+    search: {
+      value: search || '',
+    },
+    createdAt: {
+      value: createdAt || null,
+    },
+    createdBy: {
+      value: createdBy || undefined,
+    },
+    lastActive: {
+      value: lastActive || undefined,
+    },
+    role: {
+      value: role || undefined,
+    },
+  };
+}
+
 function refreshList({
   page,
   formRepresentation,
@@ -49,27 +74,14 @@ function refreshList({
 export default function ListContainer() {
   const router = useRouter();
   const [page, setPage] = useState<number>(parseInt(router.query?.page?.toString() || '1', 10));
-  const createdBy = router.query?.createdBy?.toString();
-  const lastActive = router.query?.createdBy?.toString();
-  const role = router.query?.role?.toString();
 
-  const { formRepresentation, setValue } = useForm({
-    search: {
-      value: router.query?.search?.toString() || '',
-    },
-    createdAt: {
-      value: router.query?.createdAt?.toString() || null,
-    },
-    createdBy: {
-      value: createdBy || undefined,
-    },
-    lastActive: {
-      value: lastActive || undefined,
-    },
-    role: {
-      value: role || undefined,
-    },
-  });
+  const { formRepresentation, setValue, setData } = useForm(initFormState({
+    search: router.query?.search?.toString(),
+    createdAt: router.query?.createdAt?.toString(),
+    createdBy: router.query?.createdBy?.toString(),
+    lastActive: router.query?.createdBy?.toString(),
+    role: router.query?.role?.toString(),
+  }));
 
   const { data: { data = [], count = 0 } = {}, call, performing } = useAxios(
     'get',
@@ -95,9 +107,15 @@ export default function ListContainer() {
     formRepresentation.createdBy.value,
   ]);
 
+  const handleReset = () => {
+    setPage(1);
+    setData(initFormState({}));
+  };
+
   return (
     <Card sx={{ overflowX: 'auto', p: '1.5rem' }}>
       <Filter
+        onReset={handleReset}
         disabled={performing}
         formRepresentation={formRepresentation}
         setValue={(payload: FieldPayload) => {

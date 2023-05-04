@@ -14,6 +14,41 @@ import ConfirmationDialog from '../../../confirmationDialog';
 import useTranslation from '../../../../hooks/useTranslation';
 import DataSourcePicker from '../../../memoizedInput/dataSourcePicker';
 
+function initFormState(
+  {
+    search, availability, productType, location, taskStatus, assignedTo,
+  }:
+  {
+    search?: string,
+    availability?: string,
+    productType?: string,
+    location?: string,
+    taskStatus?: string,
+    assignedTo?: string
+  },
+) {
+  return {
+    search: {
+      value: search || '',
+    },
+    availability: {
+      value: availability || undefined,
+    },
+    productType: {
+      value: productType || undefined,
+    },
+    location: {
+      value: location || undefined,
+    },
+    taskStatus: {
+      value: taskStatus || undefined,
+    },
+    assignedTo: {
+      value: assignedTo || undefined,
+    },
+  };
+}
+
 function refreshList({
   page,
   formRepresentation,
@@ -68,32 +103,15 @@ export default function ListContainer() {
   const [page, setPage] = useState<number>(parseInt(router.query?.page?.toString() || '1', 10));
   const [editProductId, setEditProductId] = useState<number | undefined>();
   const [checkedProductIds, setCheckedProductIds] = useState<number[]>([]);
-  const availability = router.query?.availability?.toString();
-  const productType = router.query?.productType?.toString();
-  const location = router.query?.location?.toString();
-  const taskStatus = router.query?.taskStatus?.toString();
-  const assignedTo = router.query?.assignedTo?.toString();
 
-  const { formRepresentation, setValue } = useForm({
-    search: {
-      value: router.query?.search?.toString() || '',
-    },
-    availability: {
-      value: availability || undefined,
-    },
-    productType: {
-      value: productType || undefined,
-    },
-    location: {
-      value: location || undefined,
-    },
-    taskStatus: {
-      value: Number.isInteger(taskStatus) ? taskStatus : null,
-    },
-    assignedTo: {
-      value: Number.isInteger(assignedTo) ? assignedTo : null,
-    },
-  });
+  const { formRepresentation, setValue, setData } = useForm(initFormState({
+    search: router.query?.search?.toString(),
+    availability: router.query?.availability?.toString(),
+    productType: router.query?.productType?.toString(),
+    location: router.query?.location?.toString(),
+    taskStatus: router.query?.taskStatus?.toString(),
+    assignedTo: router.query?.assignedTo?.toString(),
+  }));
 
   const { data: { data = [], count = 0 } = {}, call, performing } = useAxios(
     'get',
@@ -185,9 +203,15 @@ export default function ListContainer() {
       });
   };
 
+  const handleReset = () => {
+    setData(initFormState({}));
+    setPage(1);
+  };
+
   return (
     <Card sx={{ overflowX: 'auto', p: '1.5rem' }}>
       <Filter
+        onReset={handleReset}
         disabled={disabled()}
         formRepresentation={formRepresentation}
         setValue={(payload: FieldPayload) => {

@@ -14,10 +14,12 @@ export default function Filter({
   disabled,
   formRepresentation,
   setValue,
+  onReset,
 }: {
   disabled: boolean,
   formRepresentation : FormRepresentation,
-  setValue: SetValue
+  setValue: SetValue,
+  onReset: () => void
 }) {
   const { trans } = useTranslation();
 
@@ -36,10 +38,10 @@ export default function Filter({
     <form>
       <BorderedBox>
         <SearchAccordion
-          debounceSearchChanged
           disabled={disabled}
           onSearchChanged={(value: string) => setValue({ field: 'search', value })}
           searchValue={formRepresentation.search.value?.toString()}
+          onReset={onReset}
         >
           <Box sx={{ flex: 1, display: 'flex', alignItems: 'center' }}>
             <DesktopDatePicker

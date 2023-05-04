@@ -18,16 +18,19 @@ const useForm = (formRepresentation: FormRepresentation) : {
   setValue: SetValue,
   setError: (payload: FieldErrorPayload) => void,
   validate: () => boolean,
+  setData: (formRepresentation: FormRepresentation) => void
 } => {
   const [data, setData] = useState<FormRepresentation>(formRepresentation);
 
   useEffect(() => {
     if (formRepresentation) {
       setData(formRepresentation);
-    }}, [JSON.stringify(formRepresentation)]);
+    }
+  }, [JSON.stringify(formRepresentation)]);
 
   return {
     formRepresentation: data,
+    setData,
     setValue: ({ field, value }: FieldPayload): void => {
       setData((oldData: FormRepresentation) => ({
         ...oldData,

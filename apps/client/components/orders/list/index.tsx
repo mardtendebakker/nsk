@@ -13,6 +13,41 @@ import ConfirmationDialog from '../../confirmationDialog';
 import useTranslation from '../../../hooks/useTranslation';
 import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
 
+function initFormState(
+  {
+    search, createdAt, orderBy, status, partner, createdBy,
+  }:
+  {
+    search?: string,
+    createdAt?: string,
+    orderBy?: string,
+    status?: string,
+    partner?: string,
+    createdBy?:string
+  },
+) {
+  return {
+    search: {
+      value: search || '',
+    },
+    createdAt: {
+      value: createdAt || null,
+    },
+    orderBy: {
+      value: orderBy || undefined,
+    },
+    status: {
+      value: status || undefined,
+    },
+    partner: {
+      value: partner || undefined,
+    },
+    createdBy: {
+      value: createdBy || undefined,
+    },
+  };
+}
+
 function refreshList({
   page,
   formRepresentation,
@@ -72,38 +107,20 @@ export default function ListContainer() {
   const [page, setPage] = useState<number>(parseInt(router.query?.page?.toString() || '1', 10));
   const [checkedOrderIds, setCheckedOrderIds] = useState<number[]>([]);
 
-  const createdAt = parseInt(router.query?.createdAt?.toString(), 10);
-  const orderBy = router.query?.orderBy?.toString();
-  const status = router.query?.status?.toString();
-  const partner = router.query?.partner?.toString();
-  const createdBy = router.query?.createdBy?.toString();
+  const ajaxPath = router.pathname == ORDERS_PURCHASES ? PURCHASE_ORDERS_PATH : SALES_ORDERS_PATH;
 
-  const isPurchasePage = router.pathname == ORDERS_PURCHASES;
-
-  const { formRepresentation, setValue } = useForm({
-    search: {
-      value: router.query?.search?.toString() || '',
-    },
-    createdAt: {
-      value: Number.isInteger(createdAt) ? createdAt : null,
-    },
-    orderBy: {
-      value: orderBy || undefined,
-    },
-    status: {
-      value: status || undefined,
-    },
-    partner: {
-      value: partner || undefined,
-    },
-    createdBy: {
-      value: createdBy || undefined,
-    },
-  });
+  const { formRepresentation, setValue, setData } = useForm(initFormState({
+    search: router.query?.search?.toString(),
+    createdAt: router.query?.createdAt?.toString(),
+    orderBy: router.query?.orderBy?.toString(),
+    status: router.query?.status?.toString(),
+    partner: router.query?.partner?.toString(),
+    createdBy: router.query?.createdBy?.toString(),
+  }));
 
   const { data: { data = [], count = 0 } = {}, call, performing } = useAxios(
     'get',
-    (isPurchasePage ? PURCHASE_ORDERS_PATH : SALES_ORDERS_PATH).replace(':id', ''),
+    ajaxPath.replace(':id', ''),
     {
       withProgressBar: true,
     },
@@ -111,7 +128,7 @@ export default function ListContainer() {
 
   const { call: callDelete, performing: performingDelete } = useAxios(
     'delete',
-    (isPurchasePage ? PURCHASE_ORDERS_PATH : SALES_ORDERS_PATH).replace(':id', ''),
+    ajaxPath.replace(':id', ''),
     {
       withProgressBar: true,
       showSuccessMessage: true,
@@ -120,7 +137,7 @@ export default function ListContainer() {
 
   const { call: callPatch, performing: performingPatch } = useAxios(
     'patch',
-    (isPurchasePage ? PURCHASE_ORDERS_PATH : SALES_ORDERS_PATH).replace(':id', ''),
+    ajaxPath.replace(':id', ''),
     {
       withProgressBar: true,
       showSuccessMessage: true,
@@ -192,9 +209,15 @@ export default function ListContainer() {
       });
   };
 
+  const handleReset = () => {
+    setPage(1);
+    setData(initFormState({}));
+  };
+
   return (
     <Card sx={{ overflowX: 'auto', p: '1.5rem' }}>
       <Filter
+        onReset={handleReset}
         disabled={disabled()}
         formRepresentation={formRepresentation}
         setValue={(payload: FieldPayload) => {
