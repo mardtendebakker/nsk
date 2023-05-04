@@ -32,6 +32,9 @@ export class FindProductResponeDto extends PickType(ProductEntity, [
   done: number;
   
   @ApiProperty()
+  order_date: Date;
+  
+  @ApiProperty()
   tasks: number;
 
   @ApiProperty()

@@ -12,6 +12,7 @@ export class StockProcess {
   
   private locationName: string;
   private aserviceDone: number;
+  private orderDate: Date;
   private taskCount: number;
   private rest: Partial<product>;
   private splittable: boolean;
@@ -48,6 +49,7 @@ export class StockProcess {
     this.locationName = location?.name;
     
     this.aserviceDone = product_order?.[0]?.['aservice']?.length;
+    this.orderDate = product_order?.[0]?.['aorder']?.order_date;
     this.taskCount = product_type?.['_count']?.product_type_task;
 
     this.productPurchaseOrder = product_order.find(po => po['aorder']?.discr == OrderDiscrimination.PURCHASE);
@@ -74,6 +76,7 @@ export class StockProcess {
       sale: this.quantitySaleable,
       sold: this.quantitySold,
       done: this.aserviceDone,
+      order_date: this.orderDate,
       tasks: this.taskCount,
       splittable: this.splittable,
     };
