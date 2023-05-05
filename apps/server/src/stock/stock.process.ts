@@ -1,8 +1,10 @@
 
-import { Prisma, product, product_order } from "@prisma/client";
+import { Prisma, aservice, product, product_order, product_type_task } from "@prisma/client";
 import { AttributeType } from "../attribute/enum/attribute-type.enum";
 import { OrderDiscrimination } from "../order/types/order-discrimination.enum";
 import { StockRepository } from "./stock.repository";
+import { ServiceStatus } from "../service/enum/service-status.enum";
+import { ProcessedTask } from "./dto/find-product-respone.dto";
 
 export class StockProcess {
   private isSaleable: boolean;
@@ -11,18 +13,20 @@ export class StockProcess {
   private productSaleOrders: product_order[]; //TODO: Prisma.PromiseReturnType<typeof product_order_repository.findOne>[]
   
   private locationName: string;
-  private aserviceDone: number;
+  private aservices: aservice[];
   private orderDate: Date;
-  private taskCount: number;
+  private orderNumber: string;
+  private productTypeTasks: product_type_task[];
   private rest: Partial<product>;
-  private splittable: boolean;
 
+  private processedTasks: ProcessedTask[];
   private attributedQuantity: number = null;
   private quantitySold: number = null;
   private quantityPurchased: number = null;
   private quantitySaleable: number = null;
   private quantityInStock: number = null;
   private quantityOnHold: number = null;
+  private splittable: boolean;
 
   constructor(
     private readonly repository: StockRepository,
@@ -48,9 +52,10 @@ export class StockProcess {
     this.rest = rest;
     this.locationName = location?.name;
     
-    this.aserviceDone = product_order?.[0]?.['aservice']?.length;
+    this.aservices = product_order?.[0]?.['aservice'];
     this.orderDate = product_order?.[0]?.['aorder']?.order_date;
-    this.taskCount = product_type?.['_count']?.product_type_task;
+    this.orderNumber = product_order?.[0]?.['aorder']?.order_nr;
+    this.productTypeTasks = product_type?.['product_type_task'];
 
     this.productPurchaseOrder = product_order.find(po => po['aorder']?.discr == OrderDiscrimination.PURCHASE);
     this.productSaleOrders = product_order.filter(po => po['aorder']?.discr == OrderDiscrimination.SALE);
@@ -60,6 +65,7 @@ export class StockProcess {
   }
   
   public async run() {
+    this.processedTasks = this.processTasks();
     this.quantitySold = await this.getQuantitySold();
     this.quantityPurchased = this.getQuantityPurchased();
     this.quantitySaleable = await this.getQuantitySaleable();
@@ -75,11 +81,29 @@ export class StockProcess {
       hold: this.quantityOnHold,
       sale: this.quantitySaleable,
       sold: this.quantitySold,
-      done: this.aserviceDone,
       order_date: this.orderDate,
-      tasks: this.taskCount,
+      order_nr: this.orderNumber,
+      tasks: this.processedTasks,
       splittable: this.splittable,
     };
+  }
+
+  private processTasks(): ProcessedTask[] {
+    return this.productTypeTasks ? this.productTypeTasks.map(productTypeTask => {
+      const processedTask: ProcessedTask = {
+        name: productTypeTask['task'].name,
+        description: productTypeTask['task'].description,
+        status: ServiceStatus.STATUS_TODO,
+      };
+      for (let i = 0; i < this.aservices.length; i++) {
+        const service = this.aservices[i];
+        if (productTypeTask['task'].id === service.task_id) {
+          processedTask.status = service.status;
+          break;
+        }
+      }
+      return processedTask;
+    }) : [];
   }
 
   private getAttributedQuantity() {

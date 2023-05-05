@@ -2,7 +2,6 @@ import { Prisma } from "@prisma/client";
 import { FindOneDto } from "../common/dto/find-one.dto";
 import { LocationService } from "../location/location.service";
 import { StockRepository } from "./stock.repository";
-import { ServiceStatus } from "../service/enum/service-status.enum";
 import { StockProcess } from "./stock.process";
 import { UpdateOneDto } from "../common/dto/update-one.dto";
 import { FindStockProcess } from "./find-stock.process";
@@ -16,13 +15,15 @@ export class StockService {
   ) {}
 
   async findAll(query: FindManyDto) {
+    const productTypeTaskSelect: Prisma.product_type_taskSelect = {
+      task: true,
+    };
+
     const productTypeSelect: Prisma.product_typeSelect = {
       name: true,
-      _count: {
-        select: {
-          product_type_task: true,
-        }
-      }
+      product_type_task: {
+        select: productTypeTaskSelect
+      },
     };
 
     const locationSelect: Prisma.locationSelect = {
@@ -36,6 +37,7 @@ export class StockService {
     const aorderSelect: Prisma.aorderSelect = {
       discr: true,
       order_date: true,
+      order_nr: true,
       repair: {
         select: repairSelect,
       }
@@ -43,10 +45,8 @@ export class StockService {
 
     const serviceSelect: Prisma.aserviceSelect = {
       id: true,
-    };
-
-    const serviceDoneWhere: Prisma.aserviceWhereInput = {
-      status: ServiceStatus.STATUS_DONE,
+      task_id: true,
+      status: true,
     };
 
     const productOrderSelect: Prisma.product_orderSelect = {
@@ -56,7 +56,6 @@ export class StockService {
       },
       aservice: {
         select: serviceSelect,
-        where: serviceDoneWhere,
       }
     };
 

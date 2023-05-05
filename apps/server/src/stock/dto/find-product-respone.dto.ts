@@ -1,6 +1,18 @@
 import { ApiProperty, PickType } from "@nestjs/swagger";
 import { IFindManyRespone } from "../../common/interface/find-many-respone";
 import { ProductEntity } from "../entities/product.entity";
+import { ServiceStatus } from "../../service/enum/service-status.enum";
+
+export class ProcessedTask {
+  @ApiProperty()
+  name: string;
+
+  @ApiProperty()
+  description: string;
+
+  @ApiProperty()
+  status: ServiceStatus;
+}
 
 export class FindProductResponeDto extends PickType(ProductEntity, [
   "id",
@@ -29,13 +41,13 @@ export class FindProductResponeDto extends PickType(ProductEntity, [
   sold: number;
   
   @ApiProperty()
-  done: number;
-  
-  @ApiProperty()
   order_date: Date;
   
   @ApiProperty()
-  tasks: number;
+  order_nr: string;
+  
+  @ApiProperty()
+  tasks: ProcessedTask[];
 
   @ApiProperty()
   splittable: boolean;

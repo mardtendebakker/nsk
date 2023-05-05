@@ -93,8 +93,13 @@ export default function List({
                 {stockRepairService.sold}
               </TableCell>
               <TableCell>
-                {stockRepairService.tasks > 0
-                && <Status done={stockRepairService.done} tasks={stockRepairService.tasks} />}
+                {stockRepairService.tasks.length > 0
+                   && (
+                   <Status
+                     done={stockRepairService.tasks.filter((task) => task.status === 3).length}
+                     tasks={stockRepairService.tasks.length}
+                   />
+                   )}
               </TableCell>
             </TableRow>
           ))}

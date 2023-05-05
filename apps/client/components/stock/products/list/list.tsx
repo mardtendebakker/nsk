@@ -104,8 +104,13 @@ export default function List({
                   {stockProduct.sold}
                 </TableCell>
                 <TableCell>
-                  {stockProduct.tasks > 0
-                   && <Status done={stockProduct.done} tasks={stockProduct.tasks} />}
+                  {stockProduct.tasks.length > 0
+                   && (
+                   <Status
+                     done={stockProduct.tasks.filter((task) => task.status === 3).length}
+                     tasks={stockProduct.tasks.length}
+                   />
+                   )}
                 </TableCell>
               </TableRow>
               <TableRow sx={(theme) => ({ backgroundColor: theme.palette.grey[10] })}>
