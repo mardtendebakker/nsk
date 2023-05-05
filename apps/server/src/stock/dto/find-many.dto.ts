@@ -13,17 +13,17 @@ export class FindManyDto extends BaseFindManyDto {
   @IsInt()
   @Type(() => Number)
   @ValidateIf((_, value) => value !== undefined)
-  status?: number;
+  productType?: number;
   
+  @ApiPropertyOptional()
+  @IsString()
+  @Type(() => Number)
+  @ValidateIf((_, value) => value !== undefined)
+  productStatus?: number;
+
   @ApiPropertyOptional()
   @IsInt()
   @Type(() => Number)
   @ValidateIf((_, value) => value !== undefined)
-  partner?: number;
-  
-  @ApiPropertyOptional()
-  @IsInt()
-  @Type(() => Number)
-  @ValidateIf((_, value) => value !== undefined)
-  createdBy?: number;
+  location?: number;
 }
