@@ -16,7 +16,7 @@ import DataSourcePicker from '../../../memoizedInput/dataSourcePicker';
 
 function initFormState(
   {
-    search, availability, productType, location, taskStatus, assignedTo,
+    search, availability, productType, location, taskStatus,
   }:
   {
     search?: string,
@@ -24,7 +24,6 @@ function initFormState(
     productType?: string,
     location?: string,
     taskStatus?: string,
-    assignedTo?: string
   },
 ) {
   return {
@@ -42,9 +41,6 @@ function initFormState(
     },
     taskStatus: {
       value: taskStatus || undefined,
-    },
-    assignedTo: {
-      value: assignedTo || undefined,
     },
   };
 }
@@ -69,7 +65,6 @@ function refreshList({
     'productType',
     'location',
     'taskStatus',
-    'assignedTo',
   ].forEach((filter) => {
     if (formRepresentation[filter].value || formRepresentation[filter].value === 0) {
       const value = formRepresentation[filter].value.toString();
@@ -110,7 +105,6 @@ export default function ListContainer() {
     productType: router.query?.productType?.toString(),
     location: router.query?.location?.toString(),
     taskStatus: router.query?.taskStatus?.toString(),
-    assignedTo: router.query?.assignedTo?.toString(),
   }));
 
   const { data: { data = [], count = 0 } = {}, call, performing } = useAxios(
@@ -229,7 +223,6 @@ export default function ListContainer() {
         onEdit={() => setEditProductId(checkedProductIds[0])}
         onChangeLocation={() => setShowChangeLocationModal(true)}
         onChangeAvailability={() => {}}
-        onAssign={() => {}}
         onPrint={() => {}}
         onDelete={() => setShowDeleteModal(true)}
       />
