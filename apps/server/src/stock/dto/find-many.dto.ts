@@ -16,7 +16,7 @@ export class FindManyDto extends BaseFindManyDto {
   productType?: number;
   
   @ApiPropertyOptional()
-  @IsString()
+  @IsInt()
   @Type(() => Number)
   @ValidateIf((_, value) => value !== undefined)
   productStatus?: number;

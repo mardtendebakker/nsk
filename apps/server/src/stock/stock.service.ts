@@ -116,12 +116,12 @@ export class StockService {
       ...query.where,
       ...(query.search && {name: {contains: query.search}}),
       ...(query.productType && {type_id: query.productType}),
-      ...(query.productStatus && {product_status: query.productStatus}),
       ...(query.location && {location_id: query.location}),
       OR: [{
         status_id: null,
       }, {
         product_status: {
+          id: query.productStatus,
           OR: [{
               is_stock: null
           }, {

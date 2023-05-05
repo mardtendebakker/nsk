@@ -6,9 +6,6 @@ import {
   TableRow,
   Pagination,
   Checkbox,
-  Collapse,
-  Box,
-  Typography,
 } from '@mui/material';
 import useTranslation from '../../../../hooks/useTranslation';
 import { StockProduct } from '../../../../utils/axios';
@@ -56,7 +53,7 @@ export default function List({
               {trans('delivered')}
             </TableCell>
             <TableCell>
-              {trans('status')}
+              {trans('taskStatus')}
             </TableCell>
           </TableRow>
         </TableHead>

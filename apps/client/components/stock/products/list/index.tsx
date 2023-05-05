@@ -16,14 +16,14 @@ import DataSourcePicker from '../../../memoizedInput/dataSourcePicker';
 
 function initFormState(
   {
-    search, availability, productType, location, taskStatus, assignedTo,
+    search, availability, productType, location, productStatus, assignedTo,
   }:
   {
     search?: string,
     availability?: string,
     productType?: string,
     location?: string,
-    taskStatus?: string,
+    productStatus?: string,
     assignedTo?: string
   },
 ) {
@@ -40,8 +40,8 @@ function initFormState(
     location: {
       value: location || undefined,
     },
-    taskStatus: {
-      value: taskStatus || undefined,
+    productStatus: {
+      value: productStatus || undefined,
     },
     assignedTo: {
       value: assignedTo || undefined,
@@ -68,7 +68,7 @@ function refreshList({
     'availability',
     'productType',
     'location',
-    'taskStatus',
+    'productStatus',
     'assignedTo',
   ].forEach((filter) => {
     if (formRepresentation[filter].value || formRepresentation[filter].value === 0) {
@@ -109,7 +109,7 @@ export default function ListContainer() {
     availability: router.query?.availability?.toString(),
     productType: router.query?.productType?.toString(),
     location: router.query?.location?.toString(),
-    taskStatus: router.query?.taskStatus?.toString(),
+    productStatus: router.query?.productStatus?.toString(),
     assignedTo: router.query?.assignedTo?.toString(),
   }));
 
@@ -151,6 +151,7 @@ export default function ListContainer() {
     formRepresentation.search.value,
     formRepresentation.availability.value?.toString(),
     formRepresentation.productType.value?.toString(),
+    formRepresentation.productStatus.value?.toString(),
     formRepresentation.location.value?.toString(),
   ]);
 
