@@ -5,7 +5,6 @@ import {
   ADMIN_SETTINGS_PRODUCT_TYPES,
   ADMIN_SETTINGS_PRODUCT_ATTRIBUTES,
   ADMIN_SETTINGS_PRODUCT_TASKS,
-  ADMIN_SETTINGS_PRODUCT_AVAILABILITY,
   ADMIN_SETTINGS_STATUS,
   ADMIN_SETTINGS_MAILING_LISTS,
   ADMIN_SETTINGS_CUSTOMER_TAGS,
@@ -35,11 +34,6 @@ export default function Menu() {
       active: router.pathname === ADMIN_SETTINGS_PRODUCT_TASKS,
       text: trans('productTasks'),
       onClick: () => router.push(ADMIN_SETTINGS_PRODUCT_TASKS),
-    },
-    {
-      active: router.pathname === ADMIN_SETTINGS_PRODUCT_AVAILABILITY,
-      text: trans('productAvailability'),
-      onClick: () => router.push(ADMIN_SETTINGS_PRODUCT_AVAILABILITY),
     },
     {
       active: router.pathname === ADMIN_SETTINGS_STATUS,

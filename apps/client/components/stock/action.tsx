@@ -14,7 +14,6 @@ export default function Action({
   checkedProductsCount,
   onAllChecked,
   onChangeLocation,
-  onChangeAvailability,
   onEdit,
   onAssign,
   onPrint,
@@ -25,7 +24,6 @@ export default function Action({
   checkedProductsCount: number,
   onAllChecked: (checked: boolean) => void,
   onChangeLocation: () => void,
-  onChangeAvailability: () => void,
   onEdit: () => void,
   onAssign: () => void,
   onPrint: () => void,
@@ -53,13 +51,6 @@ export default function Action({
         <Button onClick={onChangeLocation} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
           <EditLocation sx={{ mr: '.1rem' }} />
           {trans('changeLocation')}
-        </Button>
-        )}
-        {checkedProductsCount > 0
-        && (
-        <Button onClick={onChangeAvailability} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
-          <Edit sx={{ mr: '.1rem' }} />
-          {trans('changeAvailability')}
         </Button>
         )}
         {checkedProductsCount === 1
