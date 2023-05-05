@@ -1,5 +1,4 @@
 import { Prisma } from "@prisma/client";
-import { FindManyDto } from "../common/dto/find-many.dto";
 import { FindOneDto } from "../common/dto/find-one.dto";
 import { LocationService } from "../location/location.service";
 import { StockRepository } from "./stock.repository";
@@ -8,6 +7,7 @@ import { StockProcess } from "./stock.process";
 import { UpdateOneDto } from "../common/dto/update-one.dto";
 import { FindStockProcess } from "./find-stock.process";
 import { UpdateManyProductDto } from "./dto/update-many-product.dto";
+import { FindManyDto } from "./dto/find-many.dto";
 
 export class StockService {
   constructor(
@@ -115,6 +115,10 @@ export class StockService {
     // this where is the top line logic transformation
     const productwhere: Prisma.productWhereInput = {
       ...query.where,
+      ...(query.search && {name: {contains: query.search}}),
+      ...(query.productType && {type_id: query.productType}),
+      ...(query.productStatus && {product_status: query.productStatus}),
+      ...(query.location && {location_id: query.location}),
       OR: [{
         status_id: null,
       }, {
