@@ -10,12 +10,11 @@ import Filter from './filter';
 
 function initFormState(
   {
-    search, orderBy, assignedTo, productType, taskStatus,
+    search, orderBy, productType, taskStatus,
   }:
   {
     search?: string,
     orderBy?: string,
-    assignedTo?: string
     productType?: string,
     taskStatus?: string,
   },
@@ -26,9 +25,6 @@ function initFormState(
     },
     orderBy: {
       value: orderBy || undefined,
-    },
-    assignedTo: {
-      value: assignedTo || undefined,
     },
     productType: {
       value: productType || undefined,
@@ -96,7 +92,6 @@ export default function ListContainer() {
   const { formRepresentation, setValue, setData } = useForm(initFormState({
     search: router.query?.search?.toString(),
     orderBy: router.query?.orderBy?.toString(),
-    assignedTo: router.query?.assignedTo?.toString(),
     productType: router.query?.productType?.toString(),
     taskStatus: router.query?.taskStatus?.toString(),
   }));

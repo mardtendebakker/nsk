@@ -5,7 +5,6 @@ import Delete from '@mui/icons-material/Delete';
 import ChevronRight from '@mui/icons-material/ChevronRight';
 import Edit from '@mui/icons-material/Edit';
 import EditLocation from '@mui/icons-material/EditLocation';
-import PersonAddAlt1 from '@mui/icons-material/PersonAddAlt1';
 import useTranslation from '../../hooks/useTranslation';
 
 export default function Action({
@@ -15,7 +14,6 @@ export default function Action({
   onAllChecked,
   onChangeLocation,
   onEdit,
-  onAssign,
   onPrint,
   onDelete,
 }:{
@@ -25,7 +23,6 @@ export default function Action({
   onAllChecked: (checked: boolean) => void,
   onChangeLocation: () => void,
   onEdit: () => void,
-  onAssign: () => void,
   onPrint: () => void,
   onDelete: () => void,
 }) {
@@ -58,13 +55,6 @@ export default function Action({
         <Button onClick={onEdit} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
           <Edit sx={{ mr: '.1rem' }} />
           {trans('editProduct')}
-        </Button>
-        )}
-        {checkedProductsCount > 0
-        && (
-        <Button onClick={onAssign} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
-          <PersonAddAlt1 sx={{ mr: '.3rem' }} />
-          {trans('assign')}
         </Button>
         )}
         {checkedProductsCount > 0
