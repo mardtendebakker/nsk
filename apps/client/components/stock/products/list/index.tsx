@@ -16,14 +16,13 @@ import DataSourcePicker from '../../../memoizedInput/dataSourcePicker';
 
 function initFormState(
   {
-    search, productType, location, productStatus, assignedTo,
+    search, productType, location, productStatus,
   }:
   {
     search?: string,
     productType?: string,
     location?: string,
     productStatus?: string,
-    assignedTo?: string
   },
 ) {
   return {
@@ -38,9 +37,6 @@ function initFormState(
     },
     productStatus: {
       value: productStatus || undefined,
-    },
-    assignedTo: {
-      value: assignedTo || undefined,
     },
   };
 }
@@ -64,7 +60,6 @@ function refreshList({
     'productType',
     'location',
     'productStatus',
-    'assignedTo',
   ].forEach((filter) => {
     if (formRepresentation[filter].value || formRepresentation[filter].value === 0) {
       const value = formRepresentation[filter].value.toString();
@@ -104,7 +99,6 @@ export default function ListContainer() {
     productType: router.query?.productType?.toString(),
     location: router.query?.location?.toString(),
     productStatus: router.query?.productStatus?.toString(),
-    assignedTo: router.query?.assignedTo?.toString(),
   }));
 
   const { data: { data = [], count = 0 } = {}, call, performing } = useAxios(
@@ -222,7 +216,6 @@ export default function ListContainer() {
         onAllChecked={handleAllChecked}
         onEdit={() => setEditProductId(checkedProductIds[0])}
         onChangeLocation={() => setShowChangeLocationModal(true)}
-        onAssign={() => {}}
         onPrint={() => {}}
         onDelete={() => setShowDeleteModal(true)}
       />

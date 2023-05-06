@@ -68,31 +68,6 @@ export default function Filter({
               disabled={disabled}
               fullWidth
               size="small"
-              options={[]}
-              value={[].find(({ id }) => id === formRepresentation.assignedTo.value) || null}
-              filterSelectedOptions
-              renderInput={
-                (params) => (
-                  <TextField
-                    {...params}
-                    placeholder={trans('assignedTo')}
-                    sx={{
-                      fieldset: {
-                        display: 'none',
-                      },
-                    }}
-                  />
-                )
-            }
-            />
-            <Box sx={(theme) => ({
-              m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.divider,
-            })}
-            />
-            <Autocomplete
-              disabled={disabled}
-              fullWidth
-              size="small"
               getOptionLabel={({ name }: { name:string }) => name}
               value={
                   ORDER_BY_OPTIONS.find(({ id }) => id == formRepresentation.orderBy.value)
