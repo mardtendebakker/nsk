@@ -21,7 +21,6 @@ export const ADMIN_SETTINGS_LOCATIONS = '/admin/settings/locations';
 export const ADMIN_SETTINGS_PRODUCT_TYPES = '/admin/settings/product-types';
 export const ADMIN_SETTINGS_PRODUCT_ATTRIBUTES = '/admin/settings/product-attributes';
 export const ADMIN_SETTINGS_PRODUCT_TASKS = '/admin/settings/product-tasks';
-export const ADMIN_SETTINGS_PRODUCT_AVAILABILITY = '/admin/settings/product-availability';
 export const ADMIN_SETTINGS_STATUS = '/admin/settings/status';
 export const ADMIN_SETTINGS_MAILING_LISTS = '/admin/settings/mailing-lists';
 export const ADMIN_SETTINGS_CUSTOMER_TAGS = '/admin/settings/customer-tags';
