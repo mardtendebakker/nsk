@@ -16,11 +16,10 @@ import DataSourcePicker from '../../../memoizedInput/dataSourcePicker';
 
 function initFormState(
   {
-    search, availability, productType, location, taskStatus,
+    search, productType, location, taskStatus,
   }:
   {
     search?: string,
-    availability?: string,
     productType?: string,
     location?: string,
     taskStatus?: string,
@@ -29,9 +28,6 @@ function initFormState(
   return {
     search: {
       value: search || '',
-    },
-    availability: {
-      value: availability || undefined,
     },
     productType: {
       value: productType || undefined,
@@ -61,7 +57,6 @@ function refreshList({
 
   [
     'search',
-    'availability',
     'productType',
     'location',
     'taskStatus',
@@ -101,7 +96,6 @@ export default function ListContainer() {
 
   const { formRepresentation, setValue, setData } = useForm(initFormState({
     search: router.query?.search?.toString(),
-    availability: router.query?.availability?.toString(),
     productType: router.query?.productType?.toString(),
     location: router.query?.location?.toString(),
     taskStatus: router.query?.taskStatus?.toString(),
@@ -143,7 +137,6 @@ export default function ListContainer() {
   }, [
     page,
     formRepresentation.search.value,
-    formRepresentation.availability.value?.toString(),
     formRepresentation.productType.value?.toString(),
     formRepresentation.location.value?.toString(),
   ]);
@@ -222,7 +215,6 @@ export default function ListContainer() {
         onAllChecked={handleAllChecked}
         onEdit={() => setEditProductId(checkedProductIds[0])}
         onChangeLocation={() => setShowChangeLocationModal(true)}
-        onChangeAvailability={() => {}}
         onPrint={() => {}}
         onDelete={() => setShowDeleteModal(true)}
       />

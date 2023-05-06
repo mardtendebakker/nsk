@@ -1,5 +1,4 @@
 import { Box } from '@mui/material';
-import ProductAvailabilityPicker from '../../../memoizedInput/productAvailabilityPicker';
 import BorderedBox from '../../../borderedBox';
 import useTranslation from '../../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../../hooks/useForm';
@@ -31,18 +30,6 @@ export default function Filter({
           onReset={onReset}
         >
           <Box sx={{ flex: 1, display: 'flex', alignItems: 'center' }}>
-            <ProductAvailabilityPicker
-              displayFieldset={false}
-              label=""
-              onChange={(selected) => setValue({ field: 'availability', value: selected?.id })}
-              value={formRepresentation.availability.value?.toString()}
-              fullWidth
-              disabled={disabled}
-            />
-            <Box sx={(theme) => ({
-              m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.divider,
-            })}
-            />
             <DataSourcePicker
               url={PRODUCT_TYPES_PATH.replace(':id', '')}
               disabled={disabled}
