@@ -10,13 +10,13 @@ import Filter from './filter';
 
 function initFormState(
   {
-    search, orderBy, productType, taskStatus,
+    search, orderBy, productType, productStatus,
   }:
   {
     search?: string,
     orderBy?: string,
     productType?: string,
-    taskStatus?: string,
+    productStatus?: string,
   },
 ) {
   return {
@@ -29,8 +29,8 @@ function initFormState(
     productType: {
       value: productType || undefined,
     },
-    taskStatus: {
-      value: taskStatus || undefined,
+    productStatus: {
+      value: productStatus || undefined,
     },
   };
 }
@@ -49,7 +49,7 @@ function refreshList({
 
   const paramsToSend = {};
 
-  ['search', 'productType'].forEach((filter) => {
+  ['search', 'productType', 'productStatus'].forEach((filter) => {
     if (formRepresentation[filter].value || formRepresentation[filter].value === 0) {
       const value = formRepresentation[filter].value.toString();
       params.append(filter, value);
@@ -93,7 +93,7 @@ export default function ListContainer() {
     search: router.query?.search?.toString(),
     orderBy: router.query?.orderBy?.toString(),
     productType: router.query?.productType?.toString(),
-    taskStatus: router.query?.taskStatus?.toString(),
+    productStatus: router.query?.productStatus?.toString(),
   }));
 
   const { data: { data = [], count = 0 } = {}, call, performing } = useAxios(
@@ -116,6 +116,7 @@ export default function ListContainer() {
     formRepresentation.search.value,
     formRepresentation.orderBy.value,
     formRepresentation.productType.value?.toString(),
+    formRepresentation.productStatus.value?.toString(),
   ]);
 
   const handleReset = () => {

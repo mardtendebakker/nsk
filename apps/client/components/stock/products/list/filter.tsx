@@ -2,9 +2,8 @@ import { Box } from '@mui/material';
 import BorderedBox from '../../../borderedBox';
 import useTranslation from '../../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../../hooks/useForm';
-import TastStatusPicker from '../../../memoizedInput/taskStatusPicker';
 import DataSourcePicker from '../../../memoizedInput/dataSourcePicker';
-import { PRODUCT_TYPES_PATH, LOCATIONS_PATH } from '../../../../utils/axios/paths';
+import { PRODUCT_TYPES_PATH, LOCATIONS_PATH, PRODUCT_STATUSES_PATH } from '../../../../utils/axios/paths';
 import SearchAccordion from '../../../searchAccordion';
 
 export default function Filter({
@@ -56,12 +55,14 @@ export default function Filter({
               m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.divider,
             })}
             />
-            <TastStatusPicker
-              displayFieldset={false}
-              label=""
-              fullWidth
+            <DataSourcePicker
+              url={PRODUCT_STATUSES_PATH.replace(':id', '')}
               disabled={disabled}
-              value={[].find(({ id }) => id === formRepresentation.location.value) || null}
+              fullWidth
+              displayFieldset={false}
+              placeholder={trans('productStatus')}
+              onChange={(selected: { id: number }) => setValue({ field: 'productStatus', value: selected?.id })}
+              value={formRepresentation.productStatus.value?.toString()}
             />
           </Box>
         </SearchAccordion>

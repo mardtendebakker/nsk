@@ -16,13 +16,13 @@ import DataSourcePicker from '../../../memoizedInput/dataSourcePicker';
 
 function initFormState(
   {
-    search, productType, location, taskStatus,
+    search, productType, location, productStatus,
   }:
   {
     search?: string,
     productType?: string,
     location?: string,
-    taskStatus?: string,
+    productStatus?: string,
   },
 ) {
   return {
@@ -35,8 +35,8 @@ function initFormState(
     location: {
       value: location || undefined,
     },
-    taskStatus: {
-      value: taskStatus || undefined,
+    productStatus: {
+      value: productStatus || undefined,
     },
   };
 }
@@ -59,7 +59,7 @@ function refreshList({
     'search',
     'productType',
     'location',
-    'taskStatus',
+    'productStatus',
   ].forEach((filter) => {
     if (formRepresentation[filter].value || formRepresentation[filter].value === 0) {
       const value = formRepresentation[filter].value.toString();
@@ -98,7 +98,7 @@ export default function ListContainer() {
     search: router.query?.search?.toString(),
     productType: router.query?.productType?.toString(),
     location: router.query?.location?.toString(),
-    taskStatus: router.query?.taskStatus?.toString(),
+    productStatus: router.query?.productStatus?.toString(),
   }));
 
   const { data: { data = [], count = 0 } = {}, call, performing } = useAxios(
@@ -138,6 +138,7 @@ export default function ListContainer() {
     page,
     formRepresentation.search.value,
     formRepresentation.productType.value?.toString(),
+    formRepresentation.productStatus.value?.toString(),
     formRepresentation.location.value?.toString(),
   ]);
 

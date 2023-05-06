@@ -59,7 +59,7 @@ export default function List({
               {trans('sold')}
             </TableCell>
             <TableCell>
-              {trans('status')}
+              {trans('taskStatus')}
             </TableCell>
           </TableRow>
         </TableHead>

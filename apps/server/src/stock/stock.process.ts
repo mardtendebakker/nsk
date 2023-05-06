@@ -52,10 +52,10 @@ export class StockProcess {
     this.rest = rest;
     this.locationName = location?.name;
     
-    this.aservices = product_order?.[0]?.['aservice'];
+    this.aservices = product_order?.[0]?.['aservice'] || [];
     this.orderDate = product_order?.[0]?.['aorder']?.order_date;
     this.orderNumber = product_order?.[0]?.['aorder']?.order_nr;
-    this.productTypeTasks = product_type?.['product_type_task'];
+    this.productTypeTasks = product_type?.['product_type_task'] || [];
 
     this.productPurchaseOrder = product_order.find(po => po['aorder']?.discr == OrderDiscrimination.PURCHASE);
     this.productSaleOrders = product_order.filter(po => po['aorder']?.discr == OrderDiscrimination.SALE);
@@ -89,7 +89,7 @@ export class StockProcess {
   }
 
   private processTasks(): ProcessedTask[] {
-    return this.productTypeTasks ? this.productTypeTasks.map(productTypeTask => {
+    return this.productTypeTasks.map(productTypeTask => {
       const processedTask: ProcessedTask = {
         name: productTypeTask['task'].name,
         description: productTypeTask['task'].description,
@@ -103,7 +103,7 @@ export class StockProcess {
         }
       }
       return processedTask;
-    }) : [];
+    });
   }
 
   private getAttributedQuantity() {
