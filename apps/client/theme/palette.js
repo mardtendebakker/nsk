@@ -37,7 +37,7 @@ const INFO = {
 };
 
 const SUCCESS = {
-  light: '#CAEAEB',
+  light: '#DCFAEA',
   main: '#008A40',
   contrastText: GREY[70],
 };
