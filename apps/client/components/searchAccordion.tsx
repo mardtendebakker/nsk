@@ -13,19 +13,19 @@ export default function SearchAccordion({
   disabled,
   searchValue,
   searchLabel,
-  onSearchChanged,
+  onSearchChange,
   onReset,
 }: {
   children: JSX.Element,
   disabled?: boolean,
   searchValue: string,
   searchLabel?: string,
-  onSearchChanged: (searchValue: string) => void,
+  onSearchChange: (searchValue: string) => void,
   onReset: () => void
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [showFilter, setShowFilter] = useState(false);
-  const handleSearchChanged = debounce(onSearchChanged.bind(null));
+  const handleSearchChange = debounce(onSearchChange.bind(null));
   const { trans } = useTranslation();
 
   return (
@@ -40,7 +40,7 @@ export default function SearchAccordion({
             name="search"
             placeholder={searchLabel || trans('search')}
             fullWidth
-            onChange={(e) => { handleSearchChanged(e.target.value); }}
+            onChange={(e) => { handleSearchChange(e.target.value); }}
             type="text"
             sx={{
               fieldset: {

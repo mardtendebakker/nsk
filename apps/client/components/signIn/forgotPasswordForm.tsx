@@ -9,8 +9,8 @@ import { SetSelectedForm } from './types';
 import TextField from '../input/textField';
 
 function ForgotPasswordForm(
-  { onFormSelected }:
-  { onFormSelected: SetSelectedForm },
+  { onFormSelect }:
+  { onFormSelect: SetSelectedForm },
 ) {
   const { trans } = useTranslation();
   const { formRepresentation, setValue, validate } = useForm({
@@ -29,7 +29,7 @@ function ForgotPasswordForm(
         await forgotPassword({
           emailOrUsername: formRepresentation.emailOrUsername.value.toString(),
         });
-        onFormSelected({ form: 'changePassword' });
+        onFormSelect({ form: 'changePassword' });
       // eslint-disable-next-line no-empty
       } catch { }
     }
@@ -53,7 +53,7 @@ function ForgotPasswordForm(
         <Typography
           variant="button"
           color="primary"
-          onClick={() => !loading && onFormSelected({ form: 'signIn' })}
+          onClick={() => !loading && onFormSelect({ form: 'signIn' })}
           sx={{ cursor: 'pointer' }}
         >
           {trans('signIn')}

@@ -17,16 +17,16 @@ import TasksProgress from './tasksProgress';
 import TaskStatusTableCell from './taskStatusTableCell';
 import { STOCKS_PRODUCTS } from '../../../utils/routes';
 
-type OnChecked = (object: { id: number, checked: boolean }) => void;
+type OnCheck = (object: { id: number, checked: boolean }) => void;
 type OnClick = (object: { id: number }) => void;
 
 function Row(
   {
-    product, onChecked, onClick, checkedProductIds, shownProductTasks,
+    product, onCheck, onClick, checkedProductIds, shownProductTasks,
   }
   : {
     product: Product,
-    onChecked: OnChecked,
+    onCheck: OnCheck,
     onClick: OnClick,
     checkedProductIds: number[],
     shownProductTasks: number | undefined
@@ -46,7 +46,7 @@ function Row(
           <Checkbox
             checked={Boolean(checkedProductIds.find((id) => id === product.id))}
             sx={{ mr: '1.5rem' }}
-            onChange={(_, checked) => onChecked({ id: product.id, checked })}
+            onChange={(_, checked) => onCheck({ id: product.id, checked })}
           />
           {stockProductsPage ? product.sku : product.order_nr}
         </TableCell>
@@ -134,15 +134,15 @@ export default function List({
   products = [],
   count,
   page,
-  onPageChanged,
-  onChecked,
+  onPageChange,
+  onCheck,
   checkedProductIds,
 }: {
   products: Product[],
   count: number,
   page: number,
-  onPageChanged: (newPage: number)=>void,
-  onChecked: OnChecked,
+  onPageChange: (newPage: number)=>void,
+  onCheck: OnCheck,
   checkedProductIds: number[]
 }) {
   const { trans } = useTranslation();
@@ -220,7 +220,7 @@ export default function List({
                 key={product.id}
                 checkedProductIds={checkedProductIds}
                 product={product}
-                onChecked={onChecked}
+                onCheck={onCheck}
               />
             ),
           )}
@@ -230,7 +230,7 @@ export default function List({
         sx={{ display: 'flex', justifyContent: 'end', mt: '2rem' }}
         shape="rounded"
         count={count}
-        onChange={(_, newPage) => onPageChanged(newPage)}
+        onChange={(_, newPage) => onPageChange(newPage)}
         page={page}
       />
     </>

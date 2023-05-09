@@ -217,7 +217,7 @@ export default function ListContainer() {
         disabled={disabled()}
         allChecked={checkedProductIds.length === data.length && data.length > 0}
         checkedProductsCount={checkedProductIds.length}
-        onAllChecked={handleAllChecked}
+        onAllCheck={handleAllChecked}
         onEdit={() => setEditProductId(checkedProductIds[0])}
         onChangeLocation={() => setShowChangeLocationModal(true)}
         onPrint={() => {}}
@@ -228,9 +228,9 @@ export default function ListContainer() {
         products={data}
         count={Math.floor(count / 10)}
         page={page}
-        onChecked={handleRowChecked}
+        onCheck={handleRowChecked}
         checkedProductIds={checkedProductIds}
-        onPageChanged={(newPage) => { setPage(newPage); setCheckedProductIds([]); }}
+        onPageChange={(newPage) => { setPage(newPage); setCheckedProductIds([]); }}
       />
       {showDeleteModal && (
       <ConfirmationDialog

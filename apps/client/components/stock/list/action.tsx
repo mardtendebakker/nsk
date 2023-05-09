@@ -11,7 +11,7 @@ export default function Action({
   disabled,
   allChecked,
   checkedProductsCount,
-  onAllChecked,
+  onAllCheck,
   onChangeLocation,
   onEdit,
   onPrint,
@@ -20,7 +20,7 @@ export default function Action({
   disabled: boolean,
   allChecked: boolean,
   checkedProductsCount: number,
-  onAllChecked: (checked: boolean) => void,
+  onAllCheck: (checked: boolean) => void,
   onChangeLocation: () => void,
   onEdit: () => void,
   onPrint: () => void,
@@ -34,7 +34,7 @@ export default function Action({
         <Checkbox
           disabled={disabled}
           checked={allChecked}
-          onChange={(_, checked) => onAllChecked(checked)}
+          onChange={(_, checked) => onAllCheck(checked)}
         />
         <Typography>
           {`${trans('selectAll')}`}

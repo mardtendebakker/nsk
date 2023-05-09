@@ -19,15 +19,15 @@ export default function List({
   checkedOrderIds = [],
   count,
   page,
-  onPageChanged,
-  onChecked,
+  onPageChange,
+  onCheck,
 }: {
   orders: Order[],
   checkedOrderIds: number[],
   count: number,
   page: number,
-  onPageChanged: (newPage: number)=>void,
-  onChecked: (object: { id: number, checked: boolean })=>void,
+  onPageChange: (newPage: number)=>void,
+  onCheck: (object: { id: number, checked: boolean })=>void,
 }) {
   const { trans } = useTranslation();
   const router = useRouter();
@@ -69,7 +69,7 @@ export default function List({
                 <Checkbox
                   checked={Boolean(checkedOrderIds.find((id) => id === order.id))}
                   sx={{ mr: '1.5rem' }}
-                  onChange={(_, checked) => { onChecked({ id: order.id, checked }); }}
+                  onChange={(_, checked) => { onCheck({ id: order.id, checked }); }}
                 />
                 {order.order_nr}
               </TableCell>
@@ -110,7 +110,7 @@ export default function List({
         sx={{ display: 'flex', justifyContent: 'end', mt: '2rem' }}
         shape="rounded"
         count={count}
-        onChange={(_, newPage) => onPageChanged(newPage)}
+        onChange={(_, newPage) => onPageChange(newPage)}
         page={page}
       />
     </>

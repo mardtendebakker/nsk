@@ -230,7 +230,7 @@ export default function ListContainer() {
         disabled={disabled()}
         allChecked={checkedOrderIds.length === data.length && data.length > 0}
         checkedProductsCount={checkedOrderIds.length}
-        onAllChecked={handleAllChecked}
+        onAllCheck={handleAllChecked}
         onChangeStatus={() => setShowChangeStatusModal(true)}
         onPrint={() => {}}
         onDelete={() => setShowDeleteModal(true)}
@@ -240,9 +240,9 @@ export default function ListContainer() {
         orders={data}
         count={Math.floor(count / 10)}
         page={page}
-        onChecked={handleRowChecked}
+        onCheck={handleRowChecked}
         checkedOrderIds={checkedOrderIds}
-        onPageChanged={(newPage) => setPage(newPage)}
+        onPageChange={(newPage) => setPage(newPage)}
       />
       {showDeleteModal && (
       <ConfirmationDialog
