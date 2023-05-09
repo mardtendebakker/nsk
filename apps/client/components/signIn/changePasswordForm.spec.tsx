@@ -29,20 +29,20 @@ describe('changePasswordForm', () => {
   });
 
   it('matches snapshot', () => {
-    const { asFragment } = render(<ChangePasswordForm onFormSelected={() => {}} />);
+    const { asFragment } = render(<ChangePasswordForm onFormSelect={() => {}} />);
     expect(asFragment()).toMatchSnapshot();
   });
 
-  it('calls onFormSelected with correct value', () => {
-    const onFormSelected = jest.fn();
-    const { getByText } = render(<ChangePasswordForm onFormSelected={onFormSelected} />);
+  it('calls onFormSelect with correct value', () => {
+    const onFormSelect = jest.fn();
+    const { getByText } = render(<ChangePasswordForm onFormSelect={onFormSelect} />);
 
     fireEvent.click(getByText('signIn'));
-    expect(onFormSelected).toBeCalledWith({ form: 'signIn' });
+    expect(onFormSelect).toBeCalledWith({ form: 'signIn' });
   });
 
   it("doesn't submit if form is invalid", () => {
-    const { container } = render(<ChangePasswordForm onFormSelected={() => {}} />);
+    const { container } = render(<ChangePasswordForm onFormSelect={() => {}} />);
 
     fillFormInput(container, { emailOrUsername, newPassword: 'password', verificationCode });
 
@@ -51,8 +51,8 @@ describe('changePasswordForm', () => {
   });
 
   it('submits if form is valid', () => {
-    const onFormSelected = jest.fn();
-    const { container } = render(<ChangePasswordForm onFormSelected={onFormSelected} />);
+    const onFormSelect = jest.fn();
+    const { container } = render(<ChangePasswordForm onFormSelect={onFormSelect} />);
 
     fillFormInput(container, { emailOrUsername, newPassword, verificationCode });
 
@@ -60,14 +60,14 @@ describe('changePasswordForm', () => {
     expect(mockUseSecurity.changePassword).toBeCalledWith({
       emailOrUsername, newPassword, verificationCode,
     });
-    waitFor(() => expect(onFormSelected).toHaveBeenCalledWith({ form: 'signIn' }));
+    waitFor(() => expect(onFormSelect).toHaveBeenCalledWith({ form: 'signIn' }));
   });
 
   it('performs no action when loading', () => {
-    const onFormSelected = jest.fn();
+    const onFormSelect = jest.fn();
     jest.spyOn(mockUseSecurity.state, 'loading', 'get').mockReturnValue(true);
 
-    const { container, getByText } = render(<ChangePasswordForm onFormSelected={onFormSelected} />);
+    const { container, getByText } = render(<ChangePasswordForm onFormSelect={onFormSelect} />);
     fillFormInput(container, { emailOrUsername, newPassword, verificationCode });
 
     fireEvent.submit(container.querySelector('form[name="changePassword"]'));
@@ -77,7 +77,7 @@ describe('changePasswordForm', () => {
     const submitButton = container.querySelector("button[type='submit']");
     fireEvent.click(submitButton);
 
-    expect(onFormSelected).not.toBeCalled();
+    expect(onFormSelect).not.toBeCalled();
     expect(mockUseSecurity.changePassword).not.toBeCalled();
   });
 });

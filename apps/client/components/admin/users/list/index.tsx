@@ -128,8 +128,8 @@ export default function ListContainer() {
         users={data}
         count={Math.floor(count / 10)}
         page={page}
-        onChecked={() => {}}
-        onPageChanged={(newPage) => setPage(newPage)}
+        onCheck={() => {}}
+        onPageChange={(newPage) => setPage(newPage)}
       />
     </Card>
   );

@@ -37,7 +37,7 @@ export default function Filter({
         <SearchAccordion
           searchLabel={trans('searchByCustomerNameOrEmail')}
           disabled={disabled}
-          onSearchChanged={(value: string) => setValue({ field: 'search', value })}
+          onSearchChange={(value: string) => setValue({ field: 'search', value })}
           searchValue={formRepresentation.search.value?.toString()}
           onReset={handleReset}
         >

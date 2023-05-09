@@ -76,13 +76,13 @@ export default function SignIn() {
             }}
           >
             {SignInForm.type === selectedForm.form
-            && <SignInForm onFormSelected={handleSelectForm} />}
+            && <SignInForm onFormSelect={handleSelectForm} />}
             {SignUpForm.type === selectedForm.form
-            && <SignUpForm onFormSelected={handleSelectForm} />}
+            && <SignUpForm onFormSelect={handleSelectForm} />}
             {ChangePasswordForm.type === selectedForm.form
-            && (<ChangePasswordForm onFormSelected={handleSelectForm} />)}
+            && (<ChangePasswordForm onFormSelect={handleSelectForm} />)}
             {ForgotPasswordForm.type === selectedForm.form
-            && (<ForgotPasswordForm onFormSelected={handleSelectForm} />)}
+            && (<ForgotPasswordForm onFormSelect={handleSelectForm} />)}
           </Box>
         </Container>
       </Box>

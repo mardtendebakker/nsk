@@ -12,8 +12,8 @@ import { SetSelectedForm } from './types';
 import TextField from '../input/textField';
 
 function SignUpForm(
-  { onFormSelected }:
-  { onFormSelected: SetSelectedForm },
+  { onFormSelect }:
+  { onFormSelect: SetSelectedForm },
 ) {
   const [showPassword, setShowPassword] = useState(false);
   const { trans } = useTranslation();
@@ -46,7 +46,7 @@ function SignUpForm(
           email: formRepresentation.email.value.toString(),
           password: formRepresentation.password.value.toString(),
         });
-        onFormSelected({ form: 'signIn' });
+        onFormSelect({ form: 'signIn' });
       // eslint-disable-next-line no-empty
       } catch {}
     }
@@ -70,7 +70,7 @@ function SignUpForm(
         <Typography
           variant="button"
           color="primary"
-          onClick={() => !loading && onFormSelected({ form: 'signIn' })}
+          onClick={() => !loading && onFormSelect({ form: 'signIn' })}
           sx={{ cursor: 'pointer' }}
         >
           {trans('signIn')}

@@ -15,15 +15,15 @@ function SuppliersList({
   suppliers = [],
   count,
   page,
-  onPageChanged,
-  onChecked,
+  onPageChange,
+  onCheck,
 
 }: {
   suppliers: Supplier[],
   count: number,
   page: number,
-  onPageChanged: (newPage: number)=>void,
-  onChecked: (object: { id: number, checked: boolean })=>void,
+  onPageChange: (newPage: number)=>void,
+  onCheck: (object: { id: number, checked: boolean })=>void,
 }) {
   return (
     <Card sx={{ overflowX: 'auto', p: '1.5rem' }}>
@@ -57,7 +57,7 @@ function SuppliersList({
               key={supplier.id}
             >
               <TableCell>
-                <Checkbox sx={{ mr: '1.5rem' }} onChange={(_, checked) => { onChecked({ id: supplier.id, checked }); }} />
+                <Checkbox sx={{ mr: '1.5rem' }} onChange={(_, checked) => { onCheck({ id: supplier.id, checked }); }} />
                 {supplier.id}
               </TableCell>
               <TableCell>
@@ -80,7 +80,7 @@ function SuppliersList({
         sx={{ display: 'flex', justifyContent: 'end', mt: '2rem' }}
         shape="rounded"
         count={count}
-        onChange={(_, newPage) => onPageChanged(newPage)}
+        onChange={(_, newPage) => onPageChange(newPage)}
         page={page}
       />
     </Card>

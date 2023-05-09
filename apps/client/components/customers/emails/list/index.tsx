@@ -97,8 +97,8 @@ export default function ListContainer() {
         emails={[]}
         count={Math.floor(count / 10)}
         page={page}
-        onChecked={() => {}}
-        onPageChanged={(newPage) => setPage(newPage)}
+        onCheck={() => {}}
+        onPageChange={(newPage) => setPage(newPage)}
       />
     </Card>
   );

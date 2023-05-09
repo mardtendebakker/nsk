@@ -25,23 +25,23 @@ describe('signInForm', () => {
   });
 
   it('matches snapshot', () => {
-    const { asFragment } = render(<SignInForm onFormSelected={() => {}} />);
+    const { asFragment } = render(<SignInForm onFormSelect={() => {}} />);
     expect(asFragment()).toMatchSnapshot();
   });
 
-  it('calls onFormSelected with correct value', () => {
-    const onFormSelected = jest.fn();
-    const { getByText } = render(<SignInForm onFormSelected={onFormSelected} />);
+  it('calls onFormSelect with correct value', () => {
+    const onFormSelect = jest.fn();
+    const { getByText } = render(<SignInForm onFormSelect={onFormSelect} />);
 
     fireEvent.click(getByText('signUp'));
-    expect(onFormSelected).toBeCalledWith({ form: 'signUp' });
+    expect(onFormSelect).toBeCalledWith({ form: 'signUp' });
 
     fireEvent.click(getByText('forgotPasswordQuestion'));
-    expect(onFormSelected).toBeCalledWith({ form: 'forgotPassword' });
+    expect(onFormSelect).toBeCalledWith({ form: 'forgotPassword' });
   });
 
   it("doesn't submit if form is invalid", () => {
-    const { container } = render(<SignInForm onFormSelected={() => {}} />);
+    const { container } = render(<SignInForm onFormSelect={() => {}} />);
 
     fillFormInput(container, { emailOrUsername, password: 'password' });
 
@@ -50,7 +50,7 @@ describe('signInForm', () => {
   });
 
   it('submits if form is valid', () => {
-    const { container } = render(<SignInForm onFormSelected={() => {}} />);
+    const { container } = render(<SignInForm onFormSelect={() => {}} />);
 
     fillFormInput(container, { emailOrUsername, password });
 
@@ -59,10 +59,10 @@ describe('signInForm', () => {
   });
 
   it('performs no action when loading', () => {
-    const onFormSelected = jest.fn();
+    const onFormSelect = jest.fn();
     jest.spyOn(mockUseSecurity.state, 'loading', 'get').mockReturnValue(true);
 
-    const { container, getByText } = render(<SignInForm onFormSelected={onFormSelected} />);
+    const { container, getByText } = render(<SignInForm onFormSelect={onFormSelect} />);
 
     fillFormInput(container, { emailOrUsername, password });
 
@@ -74,7 +74,7 @@ describe('signInForm', () => {
     const submitButton = container.querySelector("button[type='submit']");
     fireEvent.click(submitButton);
 
-    expect(onFormSelected).not.toBeCalled();
+    expect(onFormSelect).not.toBeCalled();
     expect(mockUseSecurity.signIn).not.toBeCalled();
   });
 });

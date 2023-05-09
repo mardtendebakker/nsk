@@ -13,14 +13,14 @@ export default function List({
   emails = [],
   count,
   page,
-  onPageChanged,
-  onChecked,
+  onPageChange,
+  onCheck,
 }: {
   emails: any[],
   count: number,
   page: number,
-  onPageChanged: (newPage: number)=>void,
-  onChecked: (object: { id: number, checked: boolean })=>void,
+  onPageChange: (newPage: number)=>void,
+  onCheck: (object: { id: number, checked: boolean })=>void,
 }) {
   const { trans } = useTranslation();
 
@@ -55,7 +55,7 @@ export default function List({
         sx={{ display: 'flex', justifyContent: 'end', mt: '2rem' }}
         shape="rounded"
         count={count}
-        onChange={(_, newPage) => onPageChanged(newPage)}
+        onChange={(_, newPage) => onPageChange(newPage)}
         page={page}
       />
     </>

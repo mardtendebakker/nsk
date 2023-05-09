@@ -12,8 +12,8 @@ import { SetSelectedForm } from './types';
 import TextField from '../input/textField';
 
 function SignInForm(
-  { onFormSelected }:
-  { onFormSelected: SetSelectedForm },
+  { onFormSelect }:
+  { onFormSelect: SetSelectedForm },
 ) {
   const [showPassword, setShowPassword] = useState(false);
   const { trans } = useTranslation();
@@ -61,7 +61,7 @@ function SignInForm(
         <Typography
           variant="button"
           color="primary"
-          onClick={() => !loading && onFormSelected({ form: 'signUp' })}
+          onClick={() => !loading && onFormSelect({ form: 'signUp' })}
           sx={{ cursor: 'pointer' }}
         >
           {trans('signUp')}
@@ -108,7 +108,7 @@ function SignInForm(
           <Typography
             variant="button"
             color="primary"
-            onClick={() => !loading && onFormSelected({ form: 'forgotPassword' })}
+            onClick={() => !loading && onFormSelect({ form: 'forgotPassword' })}
             sx={{ cursor: 'pointer' }}
           >
             {trans('forgotPasswordQuestion')}

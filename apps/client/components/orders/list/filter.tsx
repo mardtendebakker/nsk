@@ -39,7 +39,7 @@ export default function Filter({
       <BorderedBox>
         <SearchAccordion
           disabled={disabled}
-          onSearchChanged={(value: string) => setValue({ field: 'search', value })}
+          onSearchChange={(value: string) => setValue({ field: 'search', value })}
           searchValue={formRepresentation.search.value?.toString()}
           onReset={onReset}
         >
