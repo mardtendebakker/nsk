@@ -58,13 +58,13 @@ export default function List({
                 <b>{customer.name}</b>
               </TableCell>
               <TableCell>
-                {customer.representative}
+                {customer.representative || '--'}
               </TableCell>
               <TableCell>
-                {customer.email}
+                {customer.email || '--'}
               </TableCell>
               <TableCell>
-                {Boolean(customer.is_partner)}
+                {Boolean(customer.is_partner) || '--'}
               </TableCell>
             </TableRow>
           ))}

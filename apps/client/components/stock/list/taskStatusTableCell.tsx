@@ -1,7 +1,7 @@
 import {
   Theme, useTheme, Typography, TableCell,
 } from '@mui/material';
-import useTranslation from '../../hooks/useTranslation';
+import useTranslation from '../../../hooks/useTranslation';
 
 const getStatus = (status: number, theme: Theme) => ({
   0: {

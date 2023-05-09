@@ -6,10 +6,10 @@ import {
 } from '@mui/material';
 import Close from '@mui/icons-material/Close';
 import { useMemo } from 'react';
-import { Product } from '../../../../utils/axios';
-import useTranslation from '../../../../hooks/useTranslation';
-import useForm from '../../../../hooks/useForm';
-import BorderedBox from '../../../borderedBox';
+import { Product } from '../../../utils/axios';
+import useTranslation from '../../../hooks/useTranslation';
+import useForm from '../../../hooks/useForm';
+import BorderedBox from '../../borderedBox';
 import ProductForm from '../productForm';
 
 function makeFormRepresentation(product: Product) {

@@ -1,10 +1,10 @@
 import { Box } from '@mui/material';
-import BorderedBox from '../../../borderedBox';
-import useTranslation from '../../../../hooks/useTranslation';
-import { FormRepresentation, SetValue } from '../../../../hooks/useForm';
-import DataSourcePicker from '../../../memoizedInput/dataSourcePicker';
-import { PRODUCT_TYPES_PATH, LOCATIONS_PATH, PRODUCT_STATUSES_PATH } from '../../../../utils/axios/paths';
-import SearchAccordion from '../../../searchAccordion';
+import BorderedBox from '../../borderedBox';
+import useTranslation from '../../../hooks/useTranslation';
+import { FormRepresentation, SetValue } from '../../../hooks/useForm';
+import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
+import { PRODUCT_TYPES_PATH, LOCATIONS_PATH, PRODUCT_STATUSES_PATH } from '../../../utils/axios/paths';
+import SearchAccordion from '../../searchAccordion';
 
 export default function Filter({
   disabled,

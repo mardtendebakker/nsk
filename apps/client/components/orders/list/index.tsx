@@ -7,7 +7,7 @@ import List from './list';
 import useAxios from '../../../hooks/useAxios';
 import { PURCHASE_ORDERS_PATH, SALES_ORDERS_PATH, ORDER_STATUSES_PATH } from '../../../utils/axios';
 import { ORDERS_PURCHASES } from '../../../utils/routes';
-import Filter from '../filter';
+import Filter from './filter';
 import Action from './action';
 import ConfirmationDialog from '../../confirmationDialog';
 import useTranslation from '../../../hooks/useTranslation';

@@ -5,7 +5,7 @@ import Delete from '@mui/icons-material/Delete';
 import ChevronRight from '@mui/icons-material/ChevronRight';
 import Edit from '@mui/icons-material/Edit';
 import EditLocation from '@mui/icons-material/EditLocation';
-import useTranslation from '../../hooks/useTranslation';
+import useTranslation from '../../../hooks/useTranslation';
 
 export default function Action({
   disabled,

@@ -77,14 +77,14 @@ export default function List({
                 {moment(order.order_date).format('Y/MM/DD')}
               </TableCell>
               <TableCell>
-                {router.pathname == ORDERS_PURCHASES
+                {(router.pathname == ORDERS_PURCHASES
                   ? order.acompany_aorder_supplier_idToacompany?.name
-                  : order.acompany_aorder_customer_idToacompany?.name}
+                  : order.acompany_aorder_customer_idToacompany?.name) || '--'}
               </TableCell>
               <TableCell>
-                {router.pathname == ORDERS_PURCHASES
+                {(router.pathname == ORDERS_PURCHASES
                   ? order.acompany_aorder_supplier_idToacompany?.acompany?.name
-                  : order.acompany_aorder_customer_idToacompany?.acompany?.name}
+                  : order.acompany_aorder_customer_idToacompany?.acompany?.name) || '--'}
               </TableCell>
               <TableCell>
                 <Box>

@@ -1,8 +1,8 @@
 import { Grid, Typography } from '@mui/material';
-import { FormRepresentation, SetValue } from '../../../hooks/useForm';
-import useTranslation from '../../../hooks/useTranslation';
-import BorderedBox from '../../borderedBox';
-import TextField from '../../memoizedInput/textField';
+import { FormRepresentation, SetValue } from '../../hooks/useForm';
+import useTranslation from '../../hooks/useTranslation';
+import BorderedBox from '../borderedBox';
+import TextField from '../memoizedInput/textField';
 
 export default function ProductForm({
   setValue,
