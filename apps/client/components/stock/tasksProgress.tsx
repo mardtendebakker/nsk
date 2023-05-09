@@ -32,7 +32,7 @@ const colors = (theme: Theme) => ({
   },
 });
 
-function Status({ done, tasks }: { done?: number, tasks?: number }) {
+function TasksProgress({ done, tasks }: { done?: number, tasks?: number }) {
   const { trans } = useTranslation();
   const status = getStatus(done / tasks);
 
@@ -50,6 +50,6 @@ function Status({ done, tasks }: { done?: number, tasks?: number }) {
   );
 }
 
-Status.defaultProps = { done: 0, tasks: 0 };
+TasksProgress.defaultProps = { done: 0, tasks: 0 };
 
-export default Status;
+export default TasksProgress;

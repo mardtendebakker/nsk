@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import useTranslation from '../../../../hooks/useTranslation';
 import { StockProduct } from '../../../../utils/axios';
-import Status from '../../status';
+import TasksProgress from '../../tasksProgress';
 
 export default function List({
   stockRepairServices = [],
@@ -92,9 +92,9 @@ export default function List({
               <TableCell>
                 {stockRepairService.tasks.length > 0
                    && (
-                   <Status
-                     done={stockRepairService.tasks.filter((task) => task.status === 3).length}
-                     tasks={stockRepairService.tasks.length}
+                   <TasksProgress
+                     done={stockRepairService.tasks.filter((task) => task.status == 3).length}
+                     tasks={stockRepairService.tasks.filter((task) => task.status != 4).length}
                    />
                    )}
               </TableCell>
