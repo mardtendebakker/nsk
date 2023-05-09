@@ -2,17 +2,17 @@ import { Box, Card } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Delete from '@mui/icons-material/Delete';
-import { STOCK_PRODUCTS_PATH, LOCATIONS_PATH } from '../../../../utils/axios';
+import { STOCK_PRODUCTS_PATH, STOCK_REPAIR_SERVICES_PATH, LOCATIONS_PATH } from '../../../utils/axios';
 import List from './list';
-import useAxios from '../../../../hooks/useAxios';
-import { STOCKS_PRODUCTS } from '../../../../utils/routes';
-import useForm, { FieldPayload } from '../../../../hooks/useForm';
+import useAxios from '../../../hooks/useAxios';
+import { STOCKS_PRODUCTS } from '../../../utils/routes';
+import useForm, { FieldPayload } from '../../../hooks/useForm';
 import Filter from './filter';
-import Action from '../../action';
+import Action from './action';
 import Edit from '../edit';
-import ConfirmationDialog from '../../../confirmationDialog';
-import useTranslation from '../../../../hooks/useTranslation';
-import DataSourcePicker from '../../../memoizedInput/dataSourcePicker';
+import ConfirmationDialog from '../../confirmationDialog';
+import useTranslation from '../../../hooks/useTranslation';
+import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
 
 function initFormState(
   {
@@ -76,7 +76,7 @@ function refreshList({
     },
   }).finally(() => {
     const paramsString = params.toString();
-    const newPath = paramsString ? `${STOCKS_PRODUCTS}?${params.toString()}` : STOCKS_PRODUCTS;
+    const newPath = paramsString ? `${router.pathname}?${params.toString()}` : router.pathname;
 
     if (newPath != router.asPath) {
       router.replace(newPath);
@@ -94,6 +94,10 @@ export default function ListContainer() {
   const [editProductId, setEditProductId] = useState<number | undefined>();
   const [checkedProductIds, setCheckedProductIds] = useState<number[]>([]);
 
+  const ajaxPath = router.pathname == STOCKS_PRODUCTS
+    ? STOCK_PRODUCTS_PATH
+    : STOCK_REPAIR_SERVICES_PATH;
+
   const { formRepresentation, setValue, setData } = useForm(initFormState({
     search: router.query?.search?.toString(),
     productType: router.query?.productType?.toString(),
@@ -103,7 +107,7 @@ export default function ListContainer() {
 
   const { data: { data = [], count = 0 } = {}, call, performing } = useAxios(
     'get',
-    STOCK_PRODUCTS_PATH.replace(':id', ''),
+    ajaxPath.replace(':id', ''),
     {
       withProgressBar: true,
     },
@@ -111,7 +115,7 @@ export default function ListContainer() {
 
   const { call: callDelete, performing: performingDelete } = useAxios(
     'delete',
-    STOCK_PRODUCTS_PATH.replace(':id', ''),
+    ajaxPath.replace(':id', ''),
     {
       withProgressBar: true,
       showSuccessMessage: true,
@@ -120,7 +124,7 @@ export default function ListContainer() {
 
   const { call: callPatch, performing: performingPatch } = useAxios(
     'patch',
-    STOCK_PRODUCTS_PATH.replace(':id', ''),
+    ajaxPath.replace(':id', ''),
     {
       withProgressBar: true,
       showSuccessMessage: true,
@@ -221,7 +225,7 @@ export default function ListContainer() {
       />
       <Box sx={{ m: '1rem' }} />
       <List
-        stockProducts={data}
+        products={data}
         count={Math.floor(count / 10)}
         page={page}
         onChecked={handleRowChecked}

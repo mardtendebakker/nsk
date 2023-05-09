@@ -6,15 +6,15 @@ import { useRouter } from 'next/router';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import Check from '@mui/icons-material/Check';
 import { SyntheticEvent } from 'react';
-import Form from '../../../components/stock/products/form';
+import Form from '../../../components/stock/form';
 import DashboardLayout from '../../../layouts/dashboard';
 import useAxios from '../../../hooks/useAxios';
-import { StockProduct, STOCK_PRODUCTS_PATH } from '../../../utils/axios';
+import { Product, STOCK_PRODUCTS_PATH } from '../../../utils/axios';
 import useForm, { FormRepresentation } from '../../../hooks/useForm';
 import useTranslation from '../../../hooks/useTranslation';
 import { STOCKS_PRODUCTS } from '../../../utils/routes';
 
-export function dataInputsFormatter(stockProduct?: StockProduct) {
+export function dataInputsFormatter(product?: Product) {
   return { };
 }
 

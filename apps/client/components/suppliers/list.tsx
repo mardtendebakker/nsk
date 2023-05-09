@@ -64,13 +64,13 @@ function SuppliersList({
                 <b>{supplier.name}</b>
               </TableCell>
               <TableCell>
-                {supplier.representative}
+                {supplier.representative || '--'}
               </TableCell>
               <TableCell>
-                {supplier.email}
+                {supplier.email || '--'}
               </TableCell>
               <TableCell>
-                {supplier.partner}
+                {supplier.partner || '--'}
               </TableCell>
             </TableRow>
           ))}

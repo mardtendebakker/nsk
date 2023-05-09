@@ -2,7 +2,7 @@ import {
   FormControl, FormControlLabel, FormLabel, Radio, RadioGroup,
 } from '@mui/material';
 import { memo } from 'react';
-import useTranslation from '../../../../hooks/useTranslation';
+import useTranslation from '../../../hooks/useTranslation';
 
 function SupplierTypePicker() {
   const { trans } = useTranslation();

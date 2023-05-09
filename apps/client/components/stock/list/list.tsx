@@ -9,20 +9,23 @@ import {
   Collapse,
 } from '@mui/material';
 import { useState } from 'react';
-import useTranslation from '../../../../hooks/useTranslation';
-import { StockProduct } from '../../../../utils/axios';
-import TasksProgress from '../../tasksProgress';
-import TaskStatusTableCell from '../../taskStatusTableCell';
+import { useRouter } from 'next/router';
+import moment from 'moment';
+import useTranslation from '../../../hooks/useTranslation';
+import { Product } from '../../../utils/axios';
+import TasksProgress from './tasksProgress';
+import TaskStatusTableCell from './taskStatusTableCell';
+import { STOCKS_PRODUCTS } from '../../../utils/routes';
 
 type OnChecked = (object: { id: number, checked: boolean }) => void;
 type OnClick = (object: { id: number }) => void;
 
 function Row(
   {
-    stockProduct, onChecked, onClick, checkedProductIds, shownProductTasks,
+    product, onChecked, onClick, checkedProductIds, shownProductTasks,
   }
   : {
-    stockProduct: StockProduct,
+    product: Product,
     onChecked: OnChecked,
     onClick: OnClick,
     checkedProductIds: number[],
@@ -30,6 +33,8 @@ function Row(
   },
 ) {
   const { trans } = useTranslation();
+  const router = useRouter();
+  const stockProductsPage = router.pathname == STOCKS_PRODUCTS;
 
   return (
     <>
@@ -39,53 +44,62 @@ function Row(
       >
         <TableCell>
           <Checkbox
-            checked={Boolean(checkedProductIds.find((id) => id === stockProduct.id))}
+            checked={Boolean(checkedProductIds.find((id) => id === product.id))}
             sx={{ mr: '1.5rem' }}
-            onChange={(_, checked) => onChecked({ id: stockProduct.id, checked })}
+            onChange={(_, checked) => onChecked({ id: product.id, checked })}
           />
-          {stockProduct.sku}
+          {stockProductsPage ? product.sku : product.order_nr}
         </TableCell>
         <TableCell>
-          {stockProduct.name}
+          {product.name || '--'}
         </TableCell>
         <TableCell>
-          {stockProduct.location}
+          {product.location || '--'}
         </TableCell>
+        {stockProductsPage && (
         <TableCell>
           €
-          {stockProduct.price.toFixed(2)}
+          {product.price.toFixed(2)}
+        </TableCell>
+        )}
+        {!stockProductsPage && (
+        <TableCell>
+          {moment(product.order_date.toString()).format('YYYY/MM/DD')}
+        </TableCell>
+        )}
+        {stockProductsPage && (
+        <TableCell>
+          {product.purch || '--'}
+        </TableCell>
+        )}
+        <TableCell>
+          {product.stock || '--'}
         </TableCell>
         <TableCell>
-          {stockProduct.purch}
+          {product.sale || '--'}
         </TableCell>
         <TableCell>
-          {stockProduct.stock}
-        </TableCell>
-        <TableCell>
-          {stockProduct.sale}
-        </TableCell>
-        <TableCell>
-          {stockProduct.sold}
+          {product.sold || '--'}
         </TableCell>
         <TableCell
           sx={{ cursor: 'pointer' }}
-          onClick={() => onClick({ id: stockProduct.id })}
+          onClick={() => onClick({ id: product.id })}
         >
-          {stockProduct.tasks.length > 0
-                   && (
-                   <TasksProgress
-                     done={stockProduct.tasks.filter((task) => task.status == 3).length}
-                     tasks={stockProduct.tasks.filter((task) => task.status != 4).length}
-                   />
-                   )}
+          {product.tasks.length > 0
+            ? (
+              <TasksProgress
+                done={product.tasks.filter((task) => task.status == 3).length}
+                tasks={product.tasks.filter((task) => task.status != 4).length}
+              />
+            ) : '--'}
         </TableCell>
       </TableRow>
-      {stockProduct.tasks.length > 0 && (
+      {product.tasks.length > 0 && (
       <TableRow
         sx={(theme) => ({ backgroundColor: theme.palette.grey[10] })}
       >
         <TableCell colSpan={9} sx={{ padding: 0 }}>
-          <Collapse in={stockProduct.id == shownProductTasks} unmountOnExit mountOnEnter>
+          <Collapse in={product.id == shownProductTasks} unmountOnExit mountOnEnter>
             <Table sx={{ borderRadius: 0 }}>
               <TableHead>
                 <TableRow>
@@ -95,7 +109,7 @@ function Row(
                 </TableRow>
               </TableHead>
               <TableBody>
-                {stockProduct.tasks.map(({ name, status, description }) => (
+                {product.tasks.map(({ name, status, description }) => (
                   <TableRow key={name} sx={{ height: 60 }}>
                     <TableCell sx={{ padding: '0 16px' }}>
                       {name}
@@ -117,14 +131,14 @@ function Row(
 }
 
 export default function List({
-  stockProducts = [],
+  products = [],
   count,
   page,
   onPageChanged,
   onChecked,
   checkedProductIds,
 }: {
-  stockProducts: StockProduct[],
+  products: Product[],
   count: number,
   page: number,
   onPageChanged: (newPage: number)=>void,
@@ -133,6 +147,8 @@ export default function List({
 }) {
   const { trans } = useTranslation();
   const [shownProductTasks, setShownProductTasks] = useState<number | undefined>();
+  const router = useRouter();
+  const stockProductsPage = router.pathname == STOCKS_PRODUCTS;
 
   const handleClick = ({ id }) => {
     setShownProductTasks(id == shownProductTasks ? undefined : id);
@@ -143,44 +159,67 @@ export default function List({
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>
-              {trans('serialNumber')}
-            </TableCell>
+            {stockProductsPage && (
+              <TableCell>
+                {trans('serialNumber')}
+              </TableCell>
+            )}
+            {!stockProductsPage && (
+              <TableCell>
+                {trans('orderNumber')}
+              </TableCell>
+            )}
             <TableCell>
               {trans('productName/type')}
             </TableCell>
             <TableCell>
               {trans('location')}
             </TableCell>
+            {stockProductsPage && (
             <TableCell>
               {trans('price')}
             </TableCell>
+            )}
+            {!stockProductsPage && (
+            <TableCell>
+              {trans('orderDate')}
+            </TableCell>
+            )}
+            {stockProductsPage && (
             <TableCell>
               {trans('purchased')}
             </TableCell>
+            )}
             <TableCell>
               {trans('inStock')}
             </TableCell>
             <TableCell>
               {trans('ready')}
             </TableCell>
+            {stockProductsPage && (
             <TableCell>
               {trans('sold')}
             </TableCell>
+            )}
+            {!stockProductsPage && (
+            <TableCell>
+              {trans('delivered')}
+            </TableCell>
+            )}
             <TableCell>
               {trans('taskStatus')}
             </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {stockProducts.map(
-            (stockProduct: StockProduct) => (
+          {products.map(
+            (product: Product) => (
               <Row
                 shownProductTasks={shownProductTasks}
                 onClick={handleClick}
-                key={stockProduct.id}
+                key={product.id}
                 checkedProductIds={checkedProductIds}
-                stockProduct={stockProduct}
+                product={product}
                 onChecked={onChecked}
               />
             ),

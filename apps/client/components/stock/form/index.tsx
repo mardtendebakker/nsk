@@ -16,11 +16,11 @@ import {
 import { SyntheticEvent, useState } from 'react';
 import Add from '@mui/icons-material/Add';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-import useTranslation from '../../../../hooks/useTranslation';
-import { FormRepresentation, SetValue } from '../../../../hooks/useForm';
-import TextField from '../../../memoizedInput/textField';
-import Autocomplete from '../../../memoizedInput/autocomplete';
-import BaseTextField from '../../../input/textField';
+import useTranslation from '../../../hooks/useTranslation';
+import { FormRepresentation, SetValue } from '../../../hooks/useForm';
+import TextField from '../../memoizedInput/textField';
+import Autocomplete from '../../memoizedInput/autocomplete';
+import BaseTextField from '../../input/textField';
 import StatusPicker from './statusPicker';
 import SupplierTypePicker from './supplierTypePicker';
 import Create from '../create';
