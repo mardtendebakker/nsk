@@ -5,6 +5,7 @@ import { OrderDiscrimination } from './types/order-discrimination.enum';
 import { Prisma } from '@prisma/client';
 import { FindManyDto } from './dto/find-many.dto';
 import { UpdateManyOrderDto } from './dto/update-many-order.dto';
+import { OrderProcess } from './order.process';
 
 export class OrderService {
   constructor(
@@ -28,16 +29,17 @@ export class OrderService {
         },
       },
     });
+
     return orders.map(order => {
       const {acompany_aorder_supplier_idToacompany, ...rest} = order;
       return {
         ...rest,
         company_name: acompany_aorder_supplier_idToacompany?.name || '',
-      }
-    })
+      };
+    });
   }
 
-  findAll(query: FindManyDto) {
+  async findAll(query: FindManyDto) {
     const productSelect: Prisma.productSelect = {
       sku: true,
       name: true,
@@ -48,12 +50,20 @@ export class OrderService {
       },
     };
 
+    const serviceSelect: Prisma.aserviceSelect = {
+      status: true,
+      price: true
+    };
+
     const productOrderSelect: Prisma.product_orderSelect = {
       quantity:true,
       price: true,
       product: {
         select: productSelect,
       },
+      aservice: {
+        select: serviceSelect,
+      }
     };
     
     const companySelect: Prisma.acompanySelect = {
@@ -84,6 +94,9 @@ export class OrderService {
       delivery_type: true,
       delivery_date: true,
       delivery_instructions: true,
+      transport: true,
+      discount: true,
+      is_gift: true,
       order_status: {
         select: {
           id: true,
@@ -146,12 +159,22 @@ export class OrderService {
       ];
     }
 
-    return this.repository.findAll({
+    const result = await this.repository.findAll({
       ...query,
       where,
       select,
-      orderBy: query.orderBy
+      orderBy: query.orderBy,
     });
+
+    const data = await Promise.all(result.data.map(async order => {
+      const orderProcess = new OrderProcess(order);
+      return orderProcess.run();
+    }));
+
+    return {
+      count: result.count,
+      data: data,
+    };
   }
 
   async create(comapny: CreateOrderDto) {
