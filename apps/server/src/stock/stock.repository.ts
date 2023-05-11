@@ -8,40 +8,7 @@ export class StockRepository {
   constructor(
     protected readonly prisma: PrismaService,
     protected readonly isRepairService: IsRepairService
-  ) {
-    // TODO: prisma middleware for updateAt
-    prisma.$use(async (params, next) => {
-      if (params.model == 'product' && params.action == 'create' && params.args.data?.price) {
-        params.args.data.price *= 100;
-        return await next(params);
-      }
-      return next(params);
-    });
-
-    prisma.$use(async (params, next) => {
-      if (params.model == 'product' && ['findFirst', 'findUnique'].includes(params.action) && 
-      (params.args.select?.price || params.args.include?.price)) {
-        const product = await next(params);
-        return {
-          ...product,
-          ...{price: (product.price || 0 / 100)},
-        };
-      }
-      return next(params);
-    });
-
-    prisma.$use(async (params, next) => {
-      if (params.model == 'product' && params.action == 'findMany' &&
-      (params.args.select?.price || params.args.include?.price) ) {
-        const products = await next(params);
-        return products.map(product => ({
-          ...product,
-          ...({price: (product.price || 0 / 100)}),
-        }));
-      }
-      return next(params);
-    });
-  }
+  ) {}
 
   async findAll(params: Prisma.productFindManyArgs) {
     const { skip, cursor, select, orderBy } = params;

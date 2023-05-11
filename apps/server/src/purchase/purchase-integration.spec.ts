@@ -16,28 +16,91 @@ describe('Purchase', () => {
     "count": 2,
     "data": [
       {
-        "id": 7,
-        "order_nr": "3003601118171270",
-        "order_date": "2020-03-28T00:00:00.000Z",
-        "order_status": {
-          "name": "Aankoop bezorgd"
-        },
-        "acompany_aorder_supplier_idToacompany": {
-          "name": "SHENZHEN TP COMPANY",
-          "other_acompany": []
-        }
-      },
-      {
-        "id": 38,
-        "order_nr": "2020000038",
-        "order_date": "2020-03-31T00:00:00.000Z",
-        "order_status": {
-          "name": "Aankoop bezorgd"
-        },
-        "acompany_aorder_supplier_idToacompany": {
-          "name": "IT Gigant",
-          "other_acompany": []
-        }
+        "count": 2788,
+        "data": [
+          {
+            "id": 62,
+            "order_nr": "20211600",
+            "order_date": "2020-04-09T00:00:00.000Z",
+            "remarks": null,
+            "delivery_type": null,
+            "delivery_date": null,
+            "delivery_instructions": null,
+            "order_status": {
+              "id": 11,
+              "name": "Aankoop bezorgd",
+              "color": "#7d00fa"
+            },
+            "product_order": [
+              {
+                "quantity": 1,
+                "price": 199,
+                "product": {
+                  "sku": "1586422268",
+                  "name": "HP 820",
+                  "product_type": {
+                    "name": "Laptop"
+                  }
+                }
+              },
+            ],
+            "acompany_aorder_supplier_idToacompany": {
+              "name": "IT Plus",
+              "kvk_nr": 76697460,
+              "representative": "Makiato / Nasa",
+              "email": "info@itplus.nl",
+              "phone": "0111-111111",
+              "street": "Hogeweg 8",
+              "street_extra": null,
+              "city": "Enschede",
+              "zip": "7513 PG",
+              "state": null,
+              "country": "nl",
+              "acompany": null
+            }
+          },
+          {
+            "id": 63,
+            "order_nr": "2020000063",
+            "order_date": "2020-04-09T00:00:00.000Z",
+            "remarks": null,
+            "delivery_type": null,
+            "delivery_date": null,
+            "delivery_instructions": null,
+            "order_status": {
+              "id": 9,
+              "name": "Pickup ingeboekt",
+              "color": "#3e30a6"
+            },
+            "product_order": [
+              {
+                "quantity": 1,
+                "price": 0,
+                "product": {
+                  "sku": "1586424005",
+                  "name": "Dell Optiplex 790 - i3-2120",
+                  "product_type": {
+                    "name": "Computer"
+                  }
+                }
+              },
+            ],
+            "acompany_aorder_supplier_idToacompany": {
+              "name": "Rain BV",
+              "kvk_nr": null,
+              "representative": "Rain Kamran",
+              "email": "user@rain.nl",
+              "phone": "0611111111",
+              "street": "Laarastraat 12",
+              "street_extra": null,
+              "city": "Rijswijk",
+              "zip": "6050JR",
+              "state": null,
+              "country": null,
+              "acompany": null
+            }
+          }
+        ]
       }
     ]
   };

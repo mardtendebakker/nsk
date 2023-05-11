@@ -38,70 +38,96 @@ export class OrderService {
   }
 
   findAll(query: FindManyDto) {
-    const companySelect: Prisma.acompanyArgs = {
-      select: {
-        name: true,
-        acompany: {
-          select: {
-            id: true,
-            name: true,
-          }
-        },
-        other_acompany: {
-          select: {
-            id: true,
-            name: true
-          }
-        },
+    const productSelect: Prisma.productSelect = {
+      sku: true,
+      name: true,
+      product_type: {
+        select: {
+          name: true
+        }
+      },
+    };
+
+    const productOrderSelect: Prisma.product_orderSelect = {
+      quantity:true,
+      price: true,
+      product: {
+        select: productSelect,
+      },
+    };
+    
+    const companySelect: Prisma.acompanySelect = {
+      name: true,
+      kvk_nr: true,
+      representative: true,
+      email: true,
+      phone: true,
+      street: true,
+      street_extra: true,
+      city: true,
+      zip: true,
+      state: true,
+      country: true,
+      acompany: {
+        select: {
+          id: true,
+          name: true,
+        }
       }
-    }
+    };
+    
     let select: Prisma.aorderSelect = {
       id: true,
       order_nr: true,
       order_date: true,
+      remarks: true,
+      delivery_type: true,
+      delivery_date: true,
+      delivery_instructions: true,
       order_status: {
         select: {
           id: true,
           name: true,
-          color: true
+          color: true,
         }
-      }
-    }
+      },
+      product_order: {
+        select: productOrderSelect,
+      },
+    };
+
     if (this.type === OrderDiscrimination.SALE) {
       select = {
         ...select,
-        acompany_aorder_customer_idToacompany: companySelect
-      }
+        acompany_aorder_customer_idToacompany: {
+          select: companySelect,
+        },
+      };
     } else if (this.type === OrderDiscrimination.PURCHASE) {
       select = {
         ...select,
-        acompany_aorder_supplier_idToacompany: companySelect
-      }
+        acompany_aorder_supplier_idToacompany: {
+          select: companySelect,
+        },
+      };
     }
 
     const where = {
         ...query.where,
         discr: this.type,
-        order_nr: {
-          contains: query.search
-        }
-    }
-
-    if(query.status !== undefined) {
-      where.status_id = {
-        equals: query.status
-      }
-    }
+        ...(query.search && { order_nr: { contains: query.search }}),
+        ...(query.status && { status_id: { equals: query.status }})
+    };
 
     if(query.partner !== undefined) {
       if(this.type === OrderDiscrimination.PURCHASE) {
         where.acompany_aorder_customer_idToacompany = {
-          partner_id: query.partner
-        }
+          partner_id: query.partner,
+        };
       } else if (this.type === OrderDiscrimination.SALE) {
         where.acompany_aorder_supplier_idToacompany = {
-          partner_id: query.partner
-        }
+          partner_id: query.partner,
+        };
       }
     }
 
@@ -109,14 +135,14 @@ export class OrderService {
       where.OR = [
         {
           acompany_aorder_customer_idToacompany : {
-            id: query.createdBy
-          }
+            id: query.createdBy,
+          },
         },
         {
           acompany_aorder_supplier_idToacompany : {
-            id: query.createdBy
-          }
-        }
+            id: query.createdBy,
+          },
+        },
       ];
     }
 
