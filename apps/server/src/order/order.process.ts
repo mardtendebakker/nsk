@@ -2,13 +2,14 @@ import { Prisma } from "@prisma/client";
 import { OrderDiscrimination } from "./types/order-discrimination.enum";
 import { ServiceStatus } from "../service/enum/service-status.enum";
 export type OrderPayload = Prisma.aorderGetPayload<Record<'select', Prisma.aorderSelect>>;
+export type OrderTotalPrice = OrderPayload & {totalPrice: number};
 
 export class OrderProcess {
   private totalPrice: number = null;
 
   constructor( private readonly order: OrderPayload ) {}
 
-  public async run() {
+  public run() {
     this.totalPrice = this.calculateTotalPrice();
 
     return {

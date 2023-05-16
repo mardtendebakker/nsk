@@ -1,0 +1,290 @@
+<!Doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sales orders</title>
+  <style>
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+    }
+    
+    body {
+      font-size: 12px;
+      font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      color: #212529;
+    }
+
+    .container {
+      width: 100%;
+      padding-right: 15px;
+      padding-left: 15px;
+      margin-right: auto;
+      margin-left: auto;
+    }
+
+    .row {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      margin-top: 5px;
+      justify-content: space-between;
+    }
+
+    .col {}
+    .col-6 {
+      width: 48%;
+    }
+    .col-12 {
+      width: 100%;
+    }
+
+    @media screen and (max-width: 1000px) {
+      * {
+        font-size: 1em;
+      }
+    }
+
+    @media screen and (max-width: 630px) {
+      .row div {
+        padding: 1.5%;  
+      }    
+    } 
+
+    @media screen and (max-width: 500px) {
+      * {
+        font-size: 0.9em;
+      }
+    }
+
+    .panel-default {
+      border-color: #ecf0f1;
+    }
+    .panel {
+      margin-bottom: 21px;
+      border-radius: 4px;
+      -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    }
+    .panel-heading {
+      font-weight: bold;
+      padding: 10px 15px;
+      color: #2c3e50;
+      background-color: #ecf0f1;
+      border-bottom: 2px solid #000405;
+    }
+    .panel-body {
+      padding: 15px;
+    }
+
+    .table {
+      margin: 5px 15px 5px 15px;
+    }
+
+    .table-checklist td, .table-checklist th {
+      padding: 5px;
+    }
+
+    .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      line-height: 1.2;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+    }
+    h2 {
+      font-size: 2rem;
+    }
+    h3 {
+      font-size: 1.75rem;
+    }
+    h4 {
+      font-size: 1.5rem;
+    }
+    h5 {
+      font-size: 1.25rem;
+    }
+    h6 {
+      font-size: 1rem;
+    }
+
+    .table {
+      width: 100%;
+      max-width: 100%;
+      margin-bottom: 1rem;
+      padding-bottom: .2rem;
+      background-color: transparent;
+    }
+    .table thead tr th {
+      text-align: left;
+    }
+
+    thead { display: table-header-group; }
+    tfoot { display: table-row-group; }
+    tr { page-break-inside: avoid; }
+    
+    .pagebreak {
+      page-break-before: always;
+    }
+
+  </style>
+</head>
+<body>
+  {{#each this}}
+  <div class="container pagebreak">
+    <h2>{{#if customer}}Sales{{else}}Purchase{{/if}} order {{ order_nr }}</h2>
+    <div class="row">
+      <div class="col col-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <span></span>Order details
+          </div>
+          <div class="panel-body">
+            <img width="80%" height="80%" src="{{order_barcode}}">
+          </div>
+          <table class="table">
+            <tr><td width="50%">Order nr</td><td>{{ order_nr }}</td></tr>
+            <tr><td>Order date</td><td>{{ order_date }}</td></tr>
+            <tr><td>Status</td><td>{{ order_status.name }}</td></tr>
+            <tr><td>Remarks</td><td>{{ remarks }}</td></tr>
+          </table>
+        </div>
+        {{#if customer}}
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <span></span>Delivery
+          </div>
+          <table class="table">
+            <tr><td>Delivery date</td><td>{{ delivery_date }}</td></tr>
+            <tr><td>Delivery type</td><td> {{ delivery_type }}</td></tr>
+            <tr><td>Instructions</td><td>{{ delivery_instructions }}</td></tr>
+          </table>
+        </div>
+        {{/if}}
+        {{#ifCond supplier '&&' pickup}}
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <span></span>Pickup
+          </div>
+          <table class="table">
+            <tr>
+              <td width="50%">Pickup date</td>
+              <td>{{ pickup.real_pickup_date }}</td>
+            </tr>
+            <tr>
+                <td>Description</td>
+                <td>{{ pickup.description }}</td>
+            </tr>
+            <tr>
+                <td>Data destruction</td>
+                <td>{{ pickup.data_destruction }}</td>
+            </tr>
+            <tr>
+                <td>Agreement</td>
+                <td>{{ pickup.agreement.original_client_filename }}</td>
+            </tr>
+            <tr>
+                <td>Images</td>
+                <td>{{ pickup.images }}</td>
+            </tr>
+          </table>
+        </div>
+        {{/ifCond}}
+      </div>
+      <div class="col col-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <span></span>Pricing
+          </div>
+          <table class="table">
+            <tr><td width="50%"><h4>Total</h4></td><td><h4>{{ totalPrice }}</h4></td></tr>
+            <tr><td>&nbsp;</td><td></td></tr>
+            <tr><td>Transport</td><td>{{ transport }}</td></tr>
+            <tr><td>Discount</td><td>{{ discount }}</td></tr>
+            <tr><td>Gift</td><td>
+              {{#if isGift}}
+                Yes
+              {{else}}
+                No
+              {{/if}}
+            </td></tr>
+          </table>
+        </div>
+        {{#ifCond customer '||' supplier}}
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <span></span>{{#if customer}}Customer{{else}}Supplier{{/if}}
+          </div>
+          {{#if supplier}}
+          <div class="panel-body">
+            <img width="80%" height="80%" src="{{supplier.barcode}}">
+          </div>
+          {{/if}}
+          <table class="table">
+            <tr><td width="50%">Name</td><td>{{#if customer}}{{ customer.name }}{{else}}{{ supplier.name }}{{/if}}</td></tr>
+            <tr><td>KvK nr</td><td>{{#if customer}}{{ customer.kvk_nr }}{{else}}{{ supplier.kvk_nr }}{{/if}}</td></tr>
+            <tr><td>Representative</td><td>{{#if customer}}{{ customer.representative }}{{else}}{{ supplier.representative }}{{/if}}</td></tr>
+            <tr><td>E-mail</td><td>{{#if customer}}{{ customer.email }}{{else}}{{ supplier.email }}{{/if}}</td></tr>
+            <tr><td>Phone</td><td>{{#if customer}}{{ customer.phone }}{{else}}{{ supplier.phone }}{{/if}}</td></tr>
+            <tr><td>Street</td><td>{{#if customer}}{{ customer.street }}{{else}}{{ supplier.street }}{{/if}}</td></tr>
+            <tr><td>Street extra</td><td>{{#if customer}}{{ customer.street_extra }}{{else}}{{ supplier.street_extra }}{{/if}}</td></tr>
+            <tr><td>City</td><td>{{#if customer}}{{ customer.city }}{{else}}{{ supplier.city }}{{/if}}</td></tr>
+            <tr><td>Zip</td><td>{{#if customer}}{{ customer.zip }}{{else}}{{ supplier.zip }}{{/if}}</td></tr>
+            <tr><td>State</td><td>{{#if customer}}{{ customer.state }}{{else}}{{ supplier.state }}{{/if}}</td></tr>
+            <tr><td>Country</td><td>{{#if customer}}{{ customer.country }}{{else}}{{ supplier.country }}{{/if}}</td></tr>
+          </table>
+        </div>
+        {{/ifCond}}
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <span></span>Products
+      </div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>SKU</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th width="15%">Price p.u.</th>
+            <th width="10%">Qty</th>
+          </tr>
+          <tr></tr>
+        </thead>
+        <tbody>
+          {{#each product_order}}
+          <tr>
+            <td>{{ product.sku }}                             &nbsp;&nbsp;&nbsp;</td>
+            <td>{{ product.name }}                            &nbsp;&nbsp;&nbsp;</td>
+            <td>{{ product.product_type.name }}           &nbsp;&nbsp;&nbsp;</td>
+            <td>{{ price }} &nbsp;&nbsp;&nbsp;</td>
+            <td>{{ quantity }}</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <span></span> Sign for receipt
+      </div>
+      <table class="table">
+        <tr><td width="50%">Name:<br/><br/>&nbsp;</td>
+          <td rowspan="2" valign="top">Signature:</td></tr>
+        <tr><td>Date:<br/><br/>&nbsp;</td></tr>
+      </table>
+    </div>
+  </div>
+  {{/each}}
+</body>
+</html>

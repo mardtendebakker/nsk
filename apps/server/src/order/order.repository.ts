@@ -30,6 +30,11 @@ export class OrderRepository {
       data: submission[1],
     };
   }
+
+  findBy(params: Prisma.aorderFindManyArgs) {
+    const { where, select, orderBy } = params;
+    return this.prisma.aorder.findMany({ where, select, orderBy })
+  }
   
   create(data: Prisma.aorderCreateInput) {
     return this.prisma.aorder.create({
