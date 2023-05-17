@@ -42,10 +42,8 @@ export class UserService {
         newPassword,
         (err, result) => {
           if (err) {
-            console.log(err);
             reject(new BadRequestException(err.message));
           } else {
-            console.log(result);
             resolve(result);
           }
         }

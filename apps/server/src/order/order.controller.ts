@@ -1,5 +1,9 @@
 import { Authentication } from "@nestjs-cognito/auth";
-import { Body, Delete, Get, Param, Patch, Post, Put, Query } from "@nestjs/common";
+import { 
+  Get, Post, Put, Patch, Delete,
+  Body, Param, Query,
+  HttpStatus, Res, StreamableFile
+} from "@nestjs/common";
 import { ApiBearerAuth, ApiResponse } from "@nestjs/swagger";
 import { OrderService } from "./order.service";
 import { CreateOrderDto } from "./dto/create-order.dto";
@@ -9,6 +13,8 @@ import { OrderEntity } from "./entities/order.entity";
 import { FindManyDto } from "./dto/find-many.dto";
 import { UpdateManyOrderDto } from "./dto/update-many-order.dto";
 import { UpdateManyResponseOrderDto } from "./dto/update-many-order-response.dts";
+import type { Response } from 'express';
+import { BulkPrintDTO } from "./dto/bulk-print.dto";
 
 @ApiBearerAuth()
 @Authentication()
@@ -47,5 +53,28 @@ export class OrderController {
   @Delete('')
   deleteMany(@Body() ids: number[]) {
     return this.orderService.deleteMany(ids);
+  }
+
+  @Get('bulk/print')
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Orders pdf',
+    content: {
+      'application/octet-stream': {
+        schema: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  async printOrders(@Query() bulkPrintDTO: BulkPrintDTO, @Res({ passthrough: true }) res: Response) {
+    const { ids } = bulkPrintDTO;
+    const pdfStream = await this.orderService.printOrders(ids);
+    res.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': 'inline; filename="orders.pdf"',
+    });
+    return new StreamableFile(pdfStream);
   }
 }
