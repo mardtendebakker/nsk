@@ -20,9 +20,16 @@ export default function Select({
         { sx: { color: '#B7C2D1' } }
 }
     >
+      {placeholder && (
       <option value={0} disabled>
         {placeholder}
       </option>
+      )}
+      {options.map(({ title, value }) => (
+        <MenuItem value={value}>
+          {title}
+        </MenuItem>
+      ))}
     </TextField>
   );
 }

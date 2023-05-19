@@ -1,39 +1,49 @@
 import {
   FormControl, FormControlLabel, FormLabel, Radio, RadioGroup,
 } from '@mui/material';
-import { memo } from 'react';
 import useTranslation from '../../../hooks/useTranslation';
 
-function SupplierTypePicker() {
+export type SupplierType = 'existing' | 'new';
+
+function SupplierTypePicker(
+  { onChange, value }
+  : { onChange: (arg0: SupplierType) => void, value: SupplierType },
+) {
   const { trans } = useTranslation();
 
   return (
-    <FormControl>
+    <FormControl sx={{ flex: 1 }}>
       <FormLabel>{trans('supplierType')}</FormLabel>
-      <RadioGroup row>
+      <RadioGroup
+        row
+        defaultValue={value}
+        onChange={(e) => onChange(e.target.value as SupplierType)}
+        value={value}
+      >
         {
         [
           {
             label: trans('existing'),
-            value: '1',
+            value: 'existing',
           },
           {
             label: trans('new'),
-            value: '2',
+            value: 'new',
           },
-        ].map(({ label, value }, i) => (
+        ].map((element: { label: string, value: SupplierType }, i) => (
           <FormControlLabel
-            key={value}
+            key={element.value}
             sx={(theme) => ({
               border: `2px solid ${theme.palette.text.disabled}`,
               borderRadius: '.5rem',
               p: '.25rem .5rem',
-              ml: i === 0 ? 'unset' : '1.5rem',
+              mr: 0,
+              ml: i === 0 ? 'unset' : '1rem',
+              flex: 1,
             })}
-            value={value}
-            labelPlacement="start"
-            control={<Radio />}
-            label={label}
+            labelPlacement="end"
+            control={<Radio value={element.value} />}
+            label={element.label}
           />
         ))
         }
@@ -42,7 +52,4 @@ function SupplierTypePicker() {
   );
 }
 
-export default memo(
-  SupplierTypePicker,
-  (prevProps, nextProps) => JSON.stringify(prevProps) === JSON.stringify(nextProps),
-);
+export default SupplierTypePicker;

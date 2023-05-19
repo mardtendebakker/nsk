@@ -4,7 +4,7 @@ import TextField from '../input/textField';
 export default memo(
   TextField,
   (
-    { inputRef, ...prevProps },
-    { inputRef: inputRef2, ...nextProps },
+    { inputRef, InputProps, ...prevProps },
+    { inputRef: inputRef2, InputProps: InputProps2, ...nextProps },
   ) => JSON.stringify(prevProps) === JSON.stringify(nextProps),
 );

@@ -1,11 +1,15 @@
 import { useEffect, useState } from 'react';
+import useTranslation from './useTranslation';
 
 export type SetValue = (payload: FieldPayload) => void;
+interface ValidateResponse {
+  [key: string]: string
+}
 
-const getError = (field: Field, data: FormRepresentation): string | undefined => {
+const getError = (field: Field, data: FormRepresentation, trans): string | undefined => {
   switch (true) {
     case field.required && !field.value:
-      return field.requiredMessage || 'required field';
+      return field.requiredMessage || trans('requiredField');
     case typeof field.validator === 'function':
       return field.validator(data);
     default:
@@ -17,10 +21,11 @@ const useForm = (formRepresentation: FormRepresentation) : {
   formRepresentation: FormRepresentation,
   setValue: SetValue,
   setError: (payload: FieldErrorPayload) => void,
-  validate: () => boolean,
+  validate: () => undefined | ValidateResponse,
   setData: (formRepresentation: FormRepresentation) => void
 } => {
   const [data, setData] = useState<FormRepresentation>(formRepresentation);
+  const { trans } = useTranslation();
 
   useEffect(() => {
     if (formRepresentation) {
@@ -49,13 +54,13 @@ const useForm = (formRepresentation: FormRepresentation) : {
         },
       }));
     },
-    validate: () : boolean => {
-      let hasError = false;
+    validate: () : undefined | ValidateResponse => {
+      const errors = {};
 
       Object.keys(data).forEach((key) => {
-        const error = getError(data[key], data);
+        const error = getError(data[key], data, trans);
         if (error) {
-          hasError = true;
+          errors[key] = error;
         }
 
         setData((oldData: FormRepresentation) => ({
@@ -67,7 +72,7 @@ const useForm = (formRepresentation: FormRepresentation) : {
         }));
       });
 
-      return hasError;
+      return Object.keys(errors).length > 0 ? errors : undefined;
     },
   };
 };
@@ -75,7 +80,7 @@ const useForm = (formRepresentation: FormRepresentation) : {
 export default useForm;
 
 export interface Field {
-  value: string | number | boolean;
+  value?: any;
   validator?: (formRepresentation: FormRepresentation) => string | undefined | null;
   required?: boolean;
   requiredMessage?: string;
@@ -88,7 +93,7 @@ export interface FormRepresentation {
 
 export interface FieldPayload {
   field: string;
-  value: string | number | boolean;
+  value: any;
 }
 
 interface FieldErrorPayload {

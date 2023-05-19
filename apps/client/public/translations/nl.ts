@@ -101,9 +101,11 @@ const translation = {
   saleQuantity: 'Verkoop hoeveelheid',
   purchaseQuantity: 'Aankoop hoeveelheid',
   addAnotherProduct: 'Nog een product toevoegen',
+  addProducts: 'Producten toevoegen',
   stock: 'Voorraad',
   search: 'Zoekopdracht',
   createdAt: 'Gemaakt bij',
+  createProduct: 'Product maken',
   searchByCustomerNameOrEmail: 'Zoeken op klantnaam of e-mail',
   contact: 'Contact',
   bulkEmail: 'Bulk email',
@@ -226,10 +228,16 @@ const translation = {
       label: 'Land',
     },
   },
-  stockPoductForm: {
+  stockForm: {
     orderNr: {
       placeholder: 'U kunt leeg houden voor automatische generatie',
       label: 'Bestelnr',
+    },
+  },
+  productForm: {
+    sku: {
+      placeholder: 'Leeg houden voor automatische generatie',
+      label: 'SKU',
     },
   },
   supplierDetails: 'Leveranciers gegevens',
@@ -261,7 +269,6 @@ const translation = {
   sku: 'SKU',
   description: 'Beschrijving',
   basicInfo: 'Basis informatie',
-  productInfo: 'Product informatie',
   actions: 'Acties',
   'supplier/customer': 'Leverancier/Klant',
   saveChanges: 'Wijzigingen opslaan',
@@ -321,6 +328,8 @@ const translation = {
   changeStatus: 'Verander status',
   changeStatusContent: 'Statusinhoud wijzigen',
   selectStatus: 'Selecteer status',
+  selectProductType: 'Producttype selecteren',
+  requiredField: 'Verplicht veld',
   // http status
   200: 'Actie succesvol afgerond',
   201: 'Bron gemaakt',

@@ -1,7 +1,6 @@
-import { SxProps } from '@mui/material';
+import { SxProps, Autocomplete } from '@mui/material';
 import { useCallback, useEffect } from 'react';
 import TextField from './textField';
-import Autocomplete from '../memoizedInput/autocomplete';
 import useAxios from '../../hooks/useAxios';
 import debounce from '../../utils/debounce';
 
@@ -19,6 +18,8 @@ export default function DataSourcePicker(
     onChange,
     url,
     searchKey,
+    helperText,
+    error,
   }: {
     disabled?: boolean,
     params?: { [key: string]: string },
@@ -31,7 +32,9 @@ export default function DataSourcePicker(
     formatter?: (arg0: object) => object,
     onChange: (arg0: object)=>void,
     url: string,
-    searchKey?: string
+    searchKey?: string,
+    helperText?: string,
+    error?: boolean
   },
 ) {
   const { data, call } = useAxios('get', url, { showErrorMessage: false });
@@ -59,6 +62,8 @@ export default function DataSourcePicker(
       renderInput={
                 (inputParams) => (
                   <TextField
+                    helperText={helperText}
+                    error={error}
                     {...inputParams}
                     placeholder={placeholder}
                     label={label}
@@ -89,5 +94,7 @@ DataSourcePicker.defaultProps = {
   label: undefined,
   placeholder: undefined,
   displayFieldset: true,
-  formatter: ({ id, name }) => ({ id, label: name }),
+  formatter: ({ id, name, ...rest }) => ({ id, label: name, ...rest }),
+  helperText: undefined,
+  error: false,
 };
