@@ -1,42 +1,44 @@
-import {
-  CardContent,
-  Checkbox,
-  Divider,
-  Grid,
-  Typography,
-  Box,
-} from '@mui/material';
-import { SyntheticEvent } from 'react';
-import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { Box, Grid, Typography } from '@mui/material';
+import { useState } from 'react';
+import { SetValue, FormRepresentation } from '../../../hooks/useForm';
 import useTranslation from '../../../hooks/useTranslation';
-import { FormRepresentation, SetValue } from '../../../hooks/useForm';
+import BorderedBox from '../../borderedBox';
 import TextField from '../../memoizedInput/textField';
-import BaseTextField from '../../input/textField';
-import SupplierTypePicker from './supplierTypePicker';
 import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
-import { ORDER_STATUSES_PATH, SUPPLIERS_PATH } from '../../../utils/axios';
+import { LOCATIONS_PATH, PRODUCT_STATUSES_PATH, PRODUCT_TYPES_PATH } from '../../../utils/axios/paths';
+import { Attribute, ProductType } from '../../../utils/axios';
+import AutocompleteAttribute from './AutocompleteAttribute';
+import FileAttribute from './FileAttribute';
 
-function Form({
-  formRepresentation,
-  disabled,
-  onSubmit,
+export default function Form({
   setValue,
+  formRepresentation,
 }: {
-  formRepresentation : FormRepresentation,
-  disabled:boolean,
-  onSubmit: (e: SyntheticEvent) => void,
-  setValue: SetValue
+  setValue: SetValue,
+  formRepresentation: FormRepresentation
 }) {
   const { trans } = useTranslation();
+  const [productType, setProductType] = useState<ProductType | undefined>();
+
+  const handleAttributeChange = (attribute: Attribute, value: any) => {
+    setValue({
+      field: `attribute:${attribute.type}:${productType.id}:${attribute.id}`,
+      value,
+    });
+  };
+
+  const getAttributeValue = (attribute: Attribute) => (
+    formRepresentation[`attribute:${attribute.type}:${productType.id}:${attribute.id}`]?.value
+  );
 
   return (
-    <form onSubmit={onSubmit}>
-      <CardContent>
+    <form>
+      <BorderedBox sx={{ width: '80rem', p: '1rem' }}>
         <Typography
           sx={{ mb: '2rem' }}
           variant="h4"
         >
-          {trans('basicDetails')}
+          {trans('basicInfo')}
         </Typography>
         <Grid
           container
@@ -48,44 +50,31 @@ function Form({
             sx={{ display: 'flex', flex: 1 }}
           >
             <TextField
-              sx={{ flex: 1, mr: '1rem' }}
-              label={trans('stockForm.orderNr.label')}
-              placeholder={trans('stockForm.orderNr.placeholder')}
-              name="orderNr"
-              onChange={(e) => setValue({ field: 'orderNr', value: e.target.value })}
-              value={formRepresentation.orderNr.value || ''}
-              error={!!formRepresentation.orderNr.error}
-              helperText={formRepresentation.orderNr.error}
+              sx={{ flex: 0.33, mr: '1rem' }}
+              label={trans('productForm.sku.label')}
+              placeholder={trans('productForm.sku.placeholder')}
+              value={formRepresentation.sku.value}
+              onChange={(e) => setValue({ field: 'sku', value: e.target.value })}
             />
-            <DesktopDatePicker
-              onChange={(value) => setValue({ field: 'orderDate', value })}
-              value={formRepresentation.orderDate.value}
-              inputFormat="YYYY/MM/DD"
-              label={trans('orderDate')}
-              renderInput={(params) => (
-                <BaseTextField
-                  error={!!formRepresentation.orderDate.error}
-                  helperText={formRepresentation.orderDate.error}
-                  sx={{ flex: 1, mr: '1rem' }}
-                  {...params}
-                  inputProps={{
-                    ...params.inputProps,
-                    placeholder: trans('selectOrderDate'),
-                  }}
-                />
-              )}
+            <TextField
+              sx={{ flex: 0.33, mr: '1rem' }}
+              label={trans('productName')}
+              placeholder={trans('productName')}
+              value={formRepresentation.name.value}
+              helperText={formRepresentation.name.error}
+              error={!!formRepresentation.name.error}
+              onChange={(e) => setValue({ field: 'name', value: e.target.value })}
             />
             <DataSourcePicker
-              sx={{ flex: 1 }}
-              url={ORDER_STATUSES_PATH.replace(':id', '')}
-              disabled={disabled}
-              fullWidth
-              placeholder={trans('selectStatus')}
-              label={trans('purchaseOrderStatus')}
-              onChange={(selected: { id: number }) => setValue({ field: 'orderStatus', value: selected?.id })}
-              value={formRepresentation.orderStatus.value}
-              error={!!formRepresentation.orderStatus.error}
-              helperText={formRepresentation.orderStatus.error}
+              sx={{ flex: 0.33 }}
+              url={PRODUCT_TYPES_PATH.replace(':id', '')}
+              label={trans('productType')}
+              placeholder={trans('selectProductType')}
+              onChange={(selected: ProductType | undefined) => {
+                setProductType(selected);
+                setValue({ field: 'productType', value: selected?.id });
+              }}
+              value={formRepresentation.productType.value?.toString()}
             />
           </Grid>
           <Grid
@@ -93,252 +82,99 @@ function Form({
             xs={12}
             sx={{ display: 'flex', flex: 1 }}
           >
+            <DataSourcePicker
+              sx={{ flex: 0.33, mr: '1rem' }}
+              url={LOCATIONS_PATH.replace(':id', '')}
+              label={trans('location')}
+              placeholder={trans('selectLocation')}
+              onChange={(selected: { id: number }) => setValue({ field: 'location', value: selected?.id })}
+              value={formRepresentation.location.value?.toString()}
+              helperText={formRepresentation.location.error}
+              error={!!formRepresentation.location.error}
+            />
+            <DataSourcePicker
+              sx={{ flex: 0.33, mr: '1rem' }}
+              url={PRODUCT_STATUSES_PATH.replace(':id', '')}
+              label={trans('status')}
+              placeholder={trans('selectStatus')}
+              onChange={(selected: { id: number }) => setValue({ field: 'productStatus', value: selected?.id })}
+              value={formRepresentation.productStatus.value?.toString()}
+            />
+            <TextField
+              type="number"
+              sx={{ flex: 0.33 }}
+              label={trans('price')}
+              placeholder="0.00"
+              value={formRepresentation.price.value}
+              InputProps={{
+                startAdornment: (<Box sx={{ mr: '.2rem' }}>€</Box>),
+              }}
+              onChange={(e) => setValue({ field: 'price', value: e.target.value })}
+            />
+          </Grid>
+          <Grid
+            item
+            sx={{ display: 'flex', flex: 1 }}
+          >
             <TextField
               fullWidth
               size="medium"
               multiline
               rows={3}
-              label={trans('remarks')}
-              placeholder={trans('remarks')}
-              name="remarks"
-              type="text"
-              onChange={(e) => setValue({ field: 'remarks', value: e.target.value })}
-              value={formRepresentation.remarks.value || ''}
+              label={trans('description')}
+              name="description"
+              onChange={(e) => setValue({ field: 'description', value: e.target.value })}
             />
           </Grid>
         </Grid>
-      </CardContent>
-      <Divider sx={{ mx: '1.5rem' }} />
-      <CardContent sx={{ display: 'flex' }}>
-        <Box sx={{ flex: 1 }}>
-          <Typography
-            sx={{ mb: '2rem' }}
-            variant="h4"
-          >
-            {trans('pricingDetails')}
-          </Typography>
-          <Grid
-            container
-            spacing={3}
-          >
-            <Grid
-              item
-              xs={12}
-              sx={{ display: 'flex', flex: 1, alignItems: 'center' }}
-            >
-              <TextField
-                sx={{ flex: 0.33, mr: '1rem' }}
-                label={trans('transportCost')}
-                placeholder="0.00"
-                type="number"
-                onChange={(e) => setValue({ field: 'transportCost', value: e.target.value })}
-                value={formRepresentation.transportCost.value}
-              />
-              <TextField
-                sx={{ flex: 0.33, mr: '1rem' }}
-                label={trans('discount')}
-                placeholder="0.00"
-                type="number"
-                onChange={(e) => setValue({ field: 'discount', value: e.target.value })}
-                value={formRepresentation.discount.value}
-              />
-              <Checkbox
-                sx={{ m: 'revert', mb: '.4rem', alignSelf: 'end' }}
-                onChange={(_, checked) => setValue({ field: 'isGift', value: checked })}
-                checked={formRepresentation.isGift.value as boolean}
-              />
-              <Typography variant="inherit" sx={{ mt: '1.9rem' }}>
-                {trans('isAGift')}
-              </Typography>
-            </Grid>
-            <Grid item>
-              <Typography variant="h3">
-                {trans('total')}
-                :
-                {' '}
-                {
-                  ((formRepresentation.transportCost.value as number)
-                   - (formRepresentation.discount.value as number)).toFixed(2)
-                  }
-              </Typography>
-            </Grid>
-          </Grid>
-        </Box>
-        <Box sx={{ flex: 1 }}>
-          <Typography
-            sx={{ mb: '2rem' }}
-            variant="h4"
-          >
-            {trans('supplierDetails')}
-          </Typography>
-          <Grid
-            container
-            spacing={3}
-          >
-            <Grid
-              item
-              xs={12}
-              sx={{ display: 'flex', flex: 1, alignItems: 'center' }}
-            >
-              <SupplierTypePicker
-                onChange={(value) => setValue({ field: 'newSupplier', value: value == 'new' })}
-                value={formRepresentation.newSupplier.value ? 'new' : 'existing'}
-              />
-            </Grid>
-            <Grid
-              item
-              xs={12}
-              sx={{
-                display: 'flex', flex: 1, alignItems: 'center', flexDirection: 'column',
-              }}
-            >
-              {formRepresentation.newSupplier.value ? (
-                <>
-                  <Grid
-                    item
-                    xs={12}
-                    sx={{
-                      display: 'flex', mb: '1rem', width: '100%',
-                    }}
-                  >
-                    <TextField
-                      sx={{ mr: '1rem' }}
-                      fullWidth
-                      label={trans('name')}
-                      onChange={(e) => setValue({ field: 'name', value: e.target.value })}
-                      value={formRepresentation.name.value || ''}
-                      error={!!formRepresentation.name.error}
-                      helperText={formRepresentation.name.error}
-                    />
-                    <TextField
-                      sx={{ mr: '1rem' }}
-                      fullWidth
-                      label={trans('kvkNr')}
-                      onChange={(e) => setValue({ field: 'kvkNr', value: e.target.value })}
-                      value={formRepresentation.kvkNr.value || ''}
-                    />
-                    <TextField
-                      sx={{ mr: '1rem' }}
-                      fullWidth
-                      label={trans('representative')}
-                      onChange={(e) => setValue({ field: 'representative', value: e.target.value })}
-                      value={formRepresentation.representative.value || ''}
-                    />
-                  </Grid>
-                  <Grid
-                    item
-                    xs={12}
-                    sx={{
-                      display: 'flex', mb: '1rem', width: '100%',
-                    }}
-                  />
-                  <Grid
-                    item
-                    xs={12}
-                    sx={{
-                      display: 'flex', mb: '1rem', width: '100%',
-                    }}
-                  >
-                    <TextField
-                      sx={{ mr: '1rem' }}
-                      fullWidth
-                      label={trans('email')}
-                      type="email"
-                      onChange={(e) => setValue({ field: 'email', value: e.target.value })}
-                      value={formRepresentation.email.value || ''}
-                      error={!!formRepresentation.email.error}
-                      helperText={formRepresentation.email.error}
-                    />
-                    <TextField
-                      fullWidth
-                      label={trans('phone')}
-                      onChange={(e) => setValue({ field: 'phone', value: e.target.value })}
-                      value={formRepresentation.phone.value || ''}
-                      error={!!formRepresentation.phone.error}
-                      helperText={formRepresentation.phone.error}
-                    />
-                  </Grid>
-                  <Grid
-                    item
-                    xs={12}
-                    sx={{
-                      display: 'flex', mb: '1rem', width: '100%',
-                    }}
-                  >
-                    <TextField
-                      fullWidth
-                      sx={{ mr: '1rem' }}
-                      label={trans('street')}
-                      onChange={(e) => setValue({ field: 'street', value: e.target.value })}
-                      value={formRepresentation.street.value || ''}
-                      error={!!formRepresentation.street.error}
-                      helperText={formRepresentation.street.error}
-                    />
-                    <TextField
-                      sx={{ mr: '1rem' }}
-                      fullWidth
-                      label={trans('extraStreet')}
-                      onChange={(e) => setValue({ field: 'extraStreet', value: e.target.value })}
-                      value={formRepresentation.extraStreet.value || ''}
-                      error={!!formRepresentation.extraStreet.error}
-                      helperText={formRepresentation.extraStreet.error}
-                    />
-                    <TextField
-                      fullWidth
-                      label={trans('city')}
-                      onChange={(e) => setValue({ field: 'city', value: e.target.value })}
-                      value={formRepresentation.city.value || ''}
-                      error={!!formRepresentation.city.error}
-                      helperText={formRepresentation.city.error}
-                    />
-                  </Grid>
-                  <Grid
-                    item
-                    xs={12}
-                    sx={{
-                      display: 'flex', mb: '1rem', width: '100%',
-                    }}
-                  >
-                    <TextField
-                      sx={{ mr: '1rem' }}
-                      fullWidth
-                      label={trans('zipcode')}
-                      onChange={(e) => setValue({ field: 'zipcode', value: e.target.value })}
-                      value={formRepresentation.zipcode.value || ''}
-                    />
-                    <TextField
-                      sx={{ mr: '1rem' }}
-                      fullWidth
-                      label={trans('state')}
-                      onChange={(e) => setValue({ field: 'state', value: e.target.value })}
-                      value={formRepresentation.state.value || ''}
-                    />
-                    <TextField
-                      fullWidth
-                      label={trans('country')}
-                      onChange={(e) => setValue({ field: 'country', value: e.target.value })}
-                      value={formRepresentation.country.value || ''}
-                    />
-                  </Grid>
-                </>
-              ) : (
-                <DataSourcePicker
-                  url={SUPPLIERS_PATH.replace(':id', '')}
-                  disabled={disabled}
-                  fullWidth
-                  placeholder={trans('selectSupplier')}
-                  onChange={(selected: { id: number }) => setValue({ field: 'supplierId', value: selected?.id })}
-                  value={formRepresentation.supplierId.value?.toString() || ''}
-                  error={!!formRepresentation.supplierId.error}
-                  helperText={formRepresentation.supplierId.error}
+      </BorderedBox>
+      {productType?.attributes.length > 0 && (
+      <BorderedBox sx={{ width: '80rem', p: '1rem', mt: '1.5rem' }}>
+        <Typography
+          sx={{ mb: '2rem' }}
+          variant="h4"
+        >
+          {trans('attributes')}
+        </Typography>
+        <Grid sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-start' }}>
+          {
+          productType?.attributes?.map((attribute: Attribute) => {
+            if (attribute.type == 1 || attribute.type == 3) {
+              return (
+                <AutocompleteAttribute
+                  value={getAttributeValue(attribute)}
+                  onChange={(option) => { handleAttributeChange(attribute, option?.id); }}
+                  attribute={attribute}
+                  key={attribute.id}
                 />
-              )}
-            </Grid>
-          </Grid>
-        </Box>
-      </CardContent>
+              );
+            } if (attribute.type == 0) {
+              return (
+                <TextField
+                  key={attribute.id}
+                  sx={{ flex: '0 33%', pr: '1rem' }}
+                  label={attribute.name}
+                  value={getAttributeValue(attribute) || ''}
+                  onChange={(e) => { handleAttributeChange(attribute, e.target.value); }}
+                />
+              );
+            } if (attribute.type == 2) {
+              return (
+                <FileAttribute
+                  key={attribute.id}
+                  attribute={attribute}
+                  value={getAttributeValue(attribute) || []}
+                  onChange={(value) => handleAttributeChange(attribute, value)}
+                />
+              );
+            }
+
+            return undefined;
+          })
+        }
+        </Grid>
+      </BorderedBox>
+      )}
     </form>
   );
 }
-
-export default Form;

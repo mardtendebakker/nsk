@@ -2,7 +2,9 @@ import Add from '@mui/icons-material/Add';
 import { Box, Button, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import useTranslation from '../../hooks/useTranslation';
-import { ORDERS_PURCHASES, ORDERS_SALES } from '../../utils/routes';
+import {
+  ORDERS_PURCHASES, ORDERS_PURCHASES_NEW, ORDERS_SALES, ORDERS_SALES_NEW,
+} from '../../utils/routes';
 
 export default function Navigation() {
   const router = useRouter();
@@ -44,9 +46,9 @@ export default function Navigation() {
           ))}
         </Box>
       </Box>
-      <Button variant="contained" onClick={() => {}}>
+      <Button variant="contained" onClick={() => router.push(ORDERS_PURCHASES ? ORDERS_PURCHASES_NEW : ORDERS_SALES_NEW)}>
         <Add />
-        {trans('newPurchaseOrder')}
+        {trans(router.pathname == ORDERS_PURCHASES ? 'newPurchase' : 'newSale')}
       </Button>
     </Box>
 
