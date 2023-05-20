@@ -6,7 +6,7 @@ import {
 import Close from '@mui/icons-material/Close';
 import useTranslation from '../../../hooks/useTranslation';
 import useForm from '../../../hooks/useForm';
-import ProductForm from '../productForm';
+import Form from '../form';
 
 export default function CreateProductModal({ onClose, onSubmit }: { onClose: () => void, onSubmit: (formData: FormData) => void }) {
   const { trans } = useTranslation();
@@ -72,7 +72,7 @@ export default function CreateProductModal({ onClose, onSubmit }: { onClose: () 
         </Box>
       </DialogTitle>
       <DialogContent>
-        <ProductForm setValue={setValue} formRepresentation={formRepresentation} />
+        <Form setValue={setValue} formRepresentation={formRepresentation} />
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} variant="outlined" color="inherit">{trans('cancel')}</Button>

@@ -14,7 +14,6 @@ const translation = {
   delete: 'Verwijderen',
   newSupplier: 'Nieuwe leverancier',
   newSalesOrder: 'Nieuwe verkooporder',
-  newPurchaseOrder: 'Nieuwe inkooporder',
   newPurchase: 'Nieuwe aankoop',
   editCustomer: 'Klant wijzigen',
   editProduct: 'Product bewerken',
@@ -78,7 +77,7 @@ const translation = {
   deliveredOnLocation: 'Geleverd op locatie',
   pending: 'In behandeling',
   label: 'Etiket',
-  purchaseOrderStatus: 'Status inkooporder',
+  orderStatus: 'Bestelstatus',
   pricingDetails: 'Prijsdetails',
   transportCost: 'Transportkosten',
   forgotPasswordSuccessMessage: 'Er is een e-mail verzonden met een verificatiecode.',
@@ -228,7 +227,7 @@ const translation = {
       label: 'Land',
     },
   },
-  stockForm: {
+  orderForm: {
     orderNr: {
       placeholder: 'U kunt leeg houden voor automatische generatie',
       label: 'Bestelnr',

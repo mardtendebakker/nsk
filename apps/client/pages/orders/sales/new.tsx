@@ -6,10 +6,10 @@ import { useRouter } from 'next/router';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import Check from '@mui/icons-material/Check';
 import { SyntheticEvent, useMemo } from 'react';
-import Form from '../../../components/stock/form';
+import Form from '../../../components/orders/form';
 import DashboardLayout from '../../../layouts/dashboard';
 import useAxios from '../../../hooks/useAxios';
-import { PURCHASE_ORDERS_PATH } from '../../../utils/axios';
+import { SALES_ORDERS_PATH } from '../../../utils/axios';
 import useForm, { FormRepresentation } from '../../../hooks/useForm';
 import useTranslation from '../../../hooks/useTranslation';
 import { STOCKS_PRODUCTS } from '../../../utils/routes';
@@ -108,7 +108,7 @@ function NewStockProduct() {
     call(
       {
         body: formRepresentationToBody(formRepresentation),
-        path: PURCHASE_ORDERS_PATH.replace(':id', ''),
+        path: SALES_ORDERS_PATH.replace(':id', ''),
       },
       (err) => {
         if (!err) {
@@ -138,7 +138,7 @@ function NewStockProduct() {
           <IconButton onClick={() => router.push(STOCKS_PRODUCTS)}>
             <ArrowBack />
           </IconButton>
-          {trans('newPurchase')}
+          {trans('newSale')}
         </Typography>
         <Box>
           <Button
@@ -155,7 +155,7 @@ function NewStockProduct() {
             onClick={handleSubmit}
           >
             <Check />
-            {trans('savePurchase')}
+            {trans('saveSale')}
           </Button>
         </Box>
       </Box>
