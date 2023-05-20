@@ -15,67 +15,30 @@ import useTranslation from '../../hooks/useTranslation';
 
 export function dataInputsFormatter(supplier?: Supplier) {
   return {
-    name: {
-      value: supplier?.name || '',
-      required: true,
-    },
-    representative: {
-      value: supplier?.representative || '',
-    },
-    email: {
-      value: supplier?.email || '',
-    },
-    phone: {
-      value: supplier?.phone || '',
-    },
-    phone2: {
-      value: supplier?.phone2 || '',
-    },
-    street: {
-      value: supplier?.street || '',
-    },
-    street_extra: {
-      value: supplier?.street_extra || '',
-    },
-    city: {
-      value: supplier?.city || '',
-    },
-    country: {
-      value: supplier?.country || '',
-    },
-    state: {
-      value: supplier?.state || '',
-    },
-    zip: {
-      value: supplier?.zip || '',
-    },
-    street2: {
-      value: supplier?.street2 || '',
-    },
-    street_extra2: {
-      value: supplier?.street_extra2 || '',
-    },
-    city2: {
-      value: supplier?.city2 || '',
-    },
-    country2: {
-      value: supplier?.country2 || '',
-    },
-    state2: {
-      value: supplier?.state2 || '',
-    },
-    zip2: {
-      value: supplier?.zip2 || '',
-    },
-    partner: {
-      value: supplier?.partner || '',
-    },
+    name: { required: true },
+    representative: {},
+    email: {},
+    phone: {},
+    phone2: {},
+    street: {},
+    street_extra: {},
+    city: {},
+    country: {},
+    state: {},
+    zip: {},
+    street2: {},
+    street_extra2: {},
+    city2: {},
+    country2: {},
+    state2: {},
+    zip2: {},
+    partner: {},
   };
 }
 
 export function formRepresentationToBody(formRepresentation: FormRepresentation): object {
   return {
-    name: formRepresentation.name.value,
+    name: formRepresentation.name.value || undefined,
     representative: formRepresentation.representative.value || undefined,
     email: formRepresentation.email.value || undefined,
     phone: formRepresentation.phone.value || undefined,

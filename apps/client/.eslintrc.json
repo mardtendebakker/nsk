@@ -53,7 +53,9 @@
     "import/no-named-as-default": "off",
     "react/jsx-props-no-spreading": "off",
     "react-hooks/exhaustive-deps": "off",
+    "consistent-return": "warn",
     "eqeqeq": "off",
+    "max-len": "off",
     "react/jsx-filename-extension": [
       1,
       {

@@ -45,7 +45,7 @@ function SupplierForm({
                 label={trans('name')}
                 name="name"
                 onChange={(e) => setValue({ field: 'name', value: e.target.value })}
-                value={formRepresentation.name.value}
+                value={formRepresentation.name.value || ''}
               />
               <Box sx={{ mx: 0.5, my: 0.5 }} />
               <TextField
@@ -55,7 +55,7 @@ function SupplierForm({
                 label={trans('representative')}
                 name="representative"
                 onChange={(e) => setValue({ field: 'representative', value: e.target.value })}
-                value={formRepresentation.representative.value}
+                value={formRepresentation.representative.value || ''}
               />
               <Box sx={{ mx: 0.5, my: 0.5 }} />
               <TextField
@@ -65,7 +65,7 @@ function SupplierForm({
                 label={trans('partner')}
                 name="partner"
                 onChange={(e) => setValue({ field: 'partner', value: e.target.value })}
-                value={formRepresentation.partner.value}
+                value={formRepresentation.partner.value || ''}
               />
             </Grid>
           </Grid>
@@ -87,7 +87,7 @@ function SupplierForm({
                 label={trans('email')}
                 name="email"
                 onChange={(e) => setValue({ field: 'email', value: e.target.value })}
-                value={formRepresentation.email.value}
+                value={formRepresentation.email.value || ''}
               />
               <Box sx={{ mx: 0.5, my: 0.5 }} />
               <TextField
@@ -97,7 +97,7 @@ function SupplierForm({
                 label={trans('phone')}
                 name="phone"
                 onChange={(e) => setValue({ field: 'phone', value: e.target.value })}
-                value={formRepresentation.phone.value}
+                value={formRepresentation.phone.value || ''}
               />
               <Box sx={{ mx: 0.5, my: 0.5 }} />
               <TextField
@@ -107,7 +107,7 @@ function SupplierForm({
                 label={trans('phone2')}
                 name="phone2"
                 onChange={(e) => setValue({ field: 'phone2', value: e.target.value })}
-                value={formRepresentation.phone2.value}
+                value={formRepresentation.phone2.value || ''}
               />
             </Grid>
           </Grid>
@@ -136,7 +136,7 @@ function SupplierForm({
                 label={trans('street')}
                 name="street"
                 onChange={(e) => setValue({ field: 'street', value: e.target.value })}
-                value={formRepresentation.street.value}
+                value={formRepresentation.street.value || ''}
               />
               <Box sx={{ mx: 0.5, my: 0.5 }} />
               <TextField
@@ -146,7 +146,7 @@ function SupplierForm({
                 label={trans('street_extra')}
                 name="street_extra"
                 onChange={(e) => setValue({ field: 'street_extra', value: e.target.value })}
-                value={formRepresentation.street_extra.value}
+                value={formRepresentation.street_extra.value || ''}
               />
               <Box sx={{ mx: 0.5, my: 0.5 }} />
               <TextField
@@ -156,7 +156,7 @@ function SupplierForm({
                 label={trans('city')}
                 name="city"
                 onChange={(e) => setValue({ field: 'city', value: e.target.value })}
-                value={formRepresentation.city.value}
+                value={formRepresentation.city.value || ''}
               />
             </Grid>
 
@@ -172,7 +172,7 @@ function SupplierForm({
                 label={trans('country')}
                 name="country"
                 onChange={(e) => setValue({ field: 'country', value: e.target.value })}
-                value={formRepresentation.country.value}
+                value={formRepresentation.country.value || ''}
               />
               <Box sx={{ mx: 0.5, my: 0.5 }} />
               <TextField
@@ -182,7 +182,7 @@ function SupplierForm({
                 label={trans('state')}
                 name="state"
                 onChange={(e) => setValue({ field: 'state', value: e.target.value })}
-                value={formRepresentation.state.value}
+                value={formRepresentation.state.value || ''}
               />
               <Box sx={{ mx: 0.5, my: 0.5 }} />
               <TextField
@@ -192,7 +192,7 @@ function SupplierForm({
                 label={trans('zipcode')}
                 name="zip"
                 onChange={(e) => setValue({ field: 'zip', value: e.target.value })}
-                value={formRepresentation.zip.value}
+                value={formRepresentation.zip.value || ''}
               />
             </Grid>
           </Grid>
@@ -222,7 +222,7 @@ function SupplierForm({
                 label={trans('street')}
                 name="street2"
                 onChange={(e) => setValue({ field: 'street2', value: e.target.value })}
-                value={formRepresentation.street2.value}
+                value={formRepresentation.street2.value || ''}
               />
               <Box sx={{ mx: 0.5, my: 0.5 }} />
               <TextField
@@ -232,7 +232,7 @@ function SupplierForm({
                 label={trans('street_extra')}
                 name="street_extra2"
                 onChange={(e) => setValue({ field: 'street_extra2', value: e.target.value })}
-                value={formRepresentation.street_extra2.value}
+                value={formRepresentation.street_extra2.value || ''}
               />
               <Box sx={{ mx: 0.5, my: 0.5 }} />
               <TextField
@@ -242,7 +242,7 @@ function SupplierForm({
                 label={trans('city')}
                 name="city2"
                 onChange={(e) => setValue({ field: 'city2', value: e.target.value })}
-                value={formRepresentation.city2.value}
+                value={formRepresentation.city2.value || ''}
               />
             </Grid>
             <Grid
@@ -257,7 +257,7 @@ function SupplierForm({
                 label={trans('country')}
                 name="country2"
                 onChange={(e) => setValue({ field: 'country2', value: e.target.value })}
-                value={formRepresentation.country2.value}
+                value={formRepresentation.country2.value || ''}
               />
               <Box sx={{ mx: 0.5, my: 0.5 }} />
               <TextField
@@ -267,7 +267,7 @@ function SupplierForm({
                 label={trans('state')}
                 name="state2"
                 onChange={(e) => setValue({ field: 'state2', value: e.target.value })}
-                value={formRepresentation.state2.value}
+                value={formRepresentation.state2.value || ''}
               />
               <Box sx={{ mx: 0.5, my: 0.5 }} />
               <TextField
@@ -277,7 +277,7 @@ function SupplierForm({
                 label={trans('zipcode')}
                 name="zip2"
                 onChange={(e) => setValue({ field: 'zip2', value: e.target.value })}
-                value={formRepresentation.zip2.value}
+                value={formRepresentation.zip2.value || ''}
               />
             </Grid>
           </Grid>

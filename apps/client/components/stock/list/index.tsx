@@ -9,7 +9,6 @@ import { STOCKS_PRODUCTS } from '../../../utils/routes';
 import useForm, { FieldPayload } from '../../../hooks/useForm';
 import Filter from './filter';
 import Action from './action';
-import Edit from '../edit';
 import ConfirmationDialog from '../../confirmationDialog';
 import useTranslation from '../../../hooks/useTranslation';
 import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
@@ -212,7 +211,6 @@ export default function ListContainer() {
         }}
       />
       <Box sx={{ m: '1.5rem' }} />
-      <Edit onClose={() => setEditProductId(undefined)} open={!!editProductId} />
       <Action
         disabled={disabled()}
         allChecked={checkedProductIds.length === data.length && data.length > 0}

@@ -59,7 +59,7 @@ export default function Menu() {
           onClick={onClick}
           sx={(theme) => ({
             borderRadius: '.25rem',
-            fontWeight: 500,
+            fontWeight: theme.typography.fontWeightMedium,
             background: active ? '#D6E0FA' : undefined,
             color: active ? theme.palette.primary.main : undefined,
             mb: '1rem',

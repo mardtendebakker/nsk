@@ -95,7 +95,7 @@ export default function List({
                     color: order.order_status.color,
                     borderRadius: '.3rem',
                     width: 'fit-content',
-                    fontWeight: 500,
+                    fontWeight: (theme) => theme.typography.fontWeightMedium,
                   }}
                   >
                     {order.order_status.name}
