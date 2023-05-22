@@ -7,6 +7,8 @@ import { FindManyDto } from './dto/find-many.dto';
 import { UpdateManyOrderDto } from './dto/update-many-order.dto';
 import { OrderProcess } from './order.process';
 import { PrintService } from '../print/print.service';
+import { GroupBy } from './types/group-by.enum';
+import { ProductAnalyticsResultDto } from './dto/product-analytics-result.dto';
 
 export class OrderService {
   constructor(
@@ -269,5 +271,9 @@ export class OrderService {
   async printOrders(ids: number[]) {
     const orders = await this.findByIds(ids);
     return this.printService.printOrders(orders);
+  }
+
+  async productAnalytics(groupBy: GroupBy): Promise<ProductAnalyticsResultDto> {
+    return this.repository.productAnalytics(this.type, groupBy);
   }
 }
