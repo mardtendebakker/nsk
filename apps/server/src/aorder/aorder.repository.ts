@@ -1,9 +1,6 @@
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { AOrder } from './dto/update-many-aorder.dto';
-import { GroupBy } from './types/group-by.enum';
-import { Sql } from '@prisma/client/runtime';
-import { GroupByDateResult, ProductAnalyticsResultDto } from './dto/product-analytics-result.dto';
 
 export class AOrderRepository {
   constructor(protected readonly prisma: PrismaService) {}
@@ -75,63 +72,5 @@ export class AOrderRepository {
 
   deleteMany(ids: number[]) {
     return this.prisma.aorder.deleteMany({ where: { id: { in: ids } } })
-  }
-
-  async productAnalytics(discr: string, groupBy: GroupBy): Promise<ProductAnalyticsResultDto> {
-    const REPAIR_STATUS_ID = 45;
-    const LAST_THIRTY_DAYS = '30';
-    const LAST_TWELVE_MONTH = '12';
-    
-    let nonRepairQuery, repairQuery: Sql;
-    nonRepairQuery = Prisma.sql`
-      SELECT YEAR(o.order_date) year, MONTH(o.order_date) month, count(1) count
-      FROM nexxus_application.aorder o
-      WHERE o.discr = ${discr}
-      AND o.order_date > CURRENT_DATE - INTERVAL ${LAST_TWELVE_MONTH} MONTH
-      AND o.status_id <> ${REPAIR_STATUS_ID}
-      GROUP BY year, month
-      ORDER BY year, month;
-    `;
-    repairQuery = Prisma.sql`
-      SELECT YEAR(o.order_date) year, MONTH(o.order_date) month, count(1) count
-      FROM nexxus_application.aorder o
-      WHERE o.discr = ${discr}
-      AND o.order_date > CURRENT_DATE - INTERVAL ${LAST_TWELVE_MONTH} MONTH
-      AND o.status_id = ${REPAIR_STATUS_ID}
-      GROUP BY year, month
-      ORDER BY year, month;
-    `;
-    if (groupBy === GroupBy.DAYS) {
-      nonRepairQuery = Prisma.sql`
-        SELECT YEAR(o.order_date) year, MONTH(o.order_date) month, DAY(o.order_date) day, count(1) count
-        FROM nexxus_application.aorder o
-        WHERE o.discr = ${discr}
-        AND o.order_date > CURRENT_DATE - INTERVAL ${LAST_THIRTY_DAYS} DAY
-        AND o.status_id <> ${REPAIR_STATUS_ID}
-        GROUP BY year, month, day
-        ORDER BY year, month, day;
-      `;
-      repairQuery = Prisma.sql`
-        SELECT YEAR(o.order_date) year, MONTH(o.order_date) month, DAY(o.order_date) day, count(1) count
-        FROM nexxus_application.aorder o
-        WHERE o.discr = ${discr}
-        AND o.order_date > CURRENT_DATE - INTERVAL ${LAST_THIRTY_DAYS} DAY
-        AND o.status_id = ${REPAIR_STATUS_ID}
-        GROUP BY year, month, day
-        ORDER BY year, month, day;
-      `;
-    }
-
-    const submission = await this.prisma.$transaction([
-      this.prisma.$queryRaw(nonRepairQuery),
-      this.prisma.$queryRaw(repairQuery),
-    ]);
-
-    const result = {
-      nonrepair: submission[0] as GroupByDateResult[],
-      repair: submission[1] as GroupByDateResult[],
-    };
-
-    return result;
   }
 }

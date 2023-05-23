@@ -7,14 +7,12 @@ import { FindManyDto } from './dto/find-many.dto';
 import { UpdateManyAOrderDto } from './dto/update-many-aorder.dto';
 import { AOrderProcess } from './aorder.process';
 import { PrintService } from '../print/print.service';
-import { GroupBy } from './types/group-by.enum';
-import { ProductAnalyticsResultDto } from './dto/product-analytics-result.dto';
 
 export class AOrderService {
   constructor(
     protected readonly repository: AOrderRepository,
     protected readonly printService: PrintService,
-    protected readonly type: AOrderDiscrimination
+    protected readonly type?: AOrderDiscrimination
   ) {}
 
   async getAOrders(order_nr: string) {
@@ -67,17 +65,18 @@ export class AOrderService {
       },
     };
 
-    if (this.type === AOrderDiscrimination.SALE) {
-      select = {
-        ...select,
-        acompany_aorder_customer_idToacompany: {
-          select: companySelect,
-        },
-      };
-    } else if (this.type === AOrderDiscrimination.PURCHASE) {
+    if (this.type !== AOrderDiscrimination.SALE) {
       select = {
         ...select,
         acompany_aorder_supplier_idToacompany: {
+          select: companySelect,
+        },
+      };
+    } 
+    if (this.type !== AOrderDiscrimination.PURCHASE) {
+      select = {
+        ...select,
+        acompany_aorder_customer_idToacompany: {
           select: companySelect,
         },
       };
@@ -85,18 +84,19 @@ export class AOrderService {
 
     const where = {
       ...query.where,
-      discr: this.type,
+      ...(this.type && { discr: this.type }),
       ...(query.search && { order_nr: { contains: query.search } }),
       ...(query.status && { status_id: { equals: query.status } })
     };
 
     if (query.partner !== undefined) {
-      if (this.type === AOrderDiscrimination.PURCHASE) {
-        where.acompany_aorder_customer_idToacompany = {
+      if (this.type !== AOrderDiscrimination.PURCHASE) {
+        where.acompany_aorder_supplier_idToacompany = {
           partner_id: query.partner,
         };
-      } else if (this.type === AOrderDiscrimination.SALE) {
-        where.acompany_aorder_supplier_idToacompany = {
+      }
+      if (this.type !== AOrderDiscrimination.SALE) {
+        where.acompany_aorder_customer_idToacompany = {
           partner_id: query.partner,
         };
       }
@@ -126,6 +126,9 @@ export class AOrderService {
   }
 
   async create(comapny: CreateAOrderDto) {
+    if (this.type === undefined) {
+      throw new Error('discr is mandatory!');
+    }
     return this.repository.create({
       ...comapny,
       discr: this.type
@@ -236,17 +239,18 @@ export class AOrderService {
       }
     };
 
-    if (this.type === AOrderDiscrimination.SALE) {
-      select = {
-        ...select,
-        acompany_aorder_customer_idToacompany: {
-          select: companySelect,
-        },
-      };
-    } else if (this.type === AOrderDiscrimination.PURCHASE) {
+    if (this.type !== AOrderDiscrimination.SALE) {
       select = {
         ...select,
         acompany_aorder_supplier_idToacompany: {
+          select: companySelect,
+        },
+      };
+    }
+    if (this.type !== AOrderDiscrimination.PURCHASE) {
+      select = {
+        ...select,
+        acompany_aorder_customer_idToacompany: {
           select: companySelect,
         },
       };
@@ -271,9 +275,5 @@ export class AOrderService {
   async printAOrders(ids: number[]) {
     const aorders = await this.findByIds(ids);
     return this.printService.printAOrders(aorders);
-  }
-
-  async productAnalytics(groupBy: GroupBy): Promise<ProductAnalyticsResultDto> {
-    return this.repository.productAnalytics(this.type, groupBy);
   }
 }

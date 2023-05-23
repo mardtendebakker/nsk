@@ -14,9 +14,12 @@ export class GroupByDateResult {
   count: number;
 }
 
-export class ProductAnalyticsResultDto {
+export class AnalyticsResultDto {
   @ApiProperty()
-  nonrepair: GroupByDateResult[];
+  sale: GroupByDateResult[];
+
+  @ApiProperty()
+  purchase: GroupByDateResult[];
 
   @ApiProperty()
   repair: GroupByDateResult[];

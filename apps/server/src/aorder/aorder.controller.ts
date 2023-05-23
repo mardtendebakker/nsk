@@ -15,8 +15,6 @@ import { UpdateManyAOrderDto } from "./dto/update-many-aorder.dto";
 import { UpdateManyResponseAOrderDto } from "./dto/update-many-aorder-response.dts";
 import type { Response } from 'express';
 import { BulkPrintDTO } from "./dto/bulk-print.dto";
-import { ProductAnalyticsDto } from "./dto/product-analytics.dto";
-import { ProductAnalyticsResultDto } from "./dto/product-analytics-result.dto";
 
 @ApiBearerAuth()
 @Authentication()
@@ -78,11 +76,5 @@ export class AOrderController {
       'Content-Disposition': 'inline; filename="orders.pdf"',
     });
     return new StreamableFile(pdfStream);
-  }
-
-  @Get('product/analyttics')
-  @ApiResponse({type: ProductAnalyticsResultDto})
-  productAnalytics(@Query() query: ProductAnalyticsDto) {
-    return this.aorderService.productAnalytics(query.groupby);
   }
 }

@@ -3,7 +3,7 @@ import { IsEnum, ValidateIf } from "class-validator";
 import { Type } from "class-transformer";
 import { GroupBy } from "../types/group-by.enum";
 
-export class ProductAnalyticsDto {
+export class AnalyticsDto {
   @ApiPropertyOptional({
     enum: GroupBy,
     example: GroupBy.DAYS,
