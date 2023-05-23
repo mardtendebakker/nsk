@@ -3,8 +3,8 @@ import puppeteer, { Browser } from 'puppeteer';
 import * as Handlebars from 'handlebars';
 import { readFileSync } from 'fs';
 import { join } from 'path';
-import { OrderTotalPrice } from '../order/order.process';
-import { OrderProcess } from './order.process';
+import { AOrderTotalPrice } from '../aorder/aorder.process';
+import { AOrderProcess } from './aorder.process';
 
 @Injectable()
 export class PrintService {
@@ -37,12 +37,12 @@ export class PrintService {
     });
   }
 
-  async printOrders(orders: OrderTotalPrice[]): Promise<Buffer> {
+  async printAOrders(orders: AOrderTotalPrice[]): Promise<Buffer> {
     const source = readFileSync(join(process.cwd(), 'apps/server/src/print/templates/sale.hbs'), 'utf8');
     const template = Handlebars.compile(source);
 
     const data = await Promise.all(orders.map(async order => {
-      const orderPRocess = new OrderProcess(order);
+      const orderPRocess = new AOrderProcess(order);
       return orderPRocess.run();
     }));
 

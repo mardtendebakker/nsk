@@ -7,6 +7,13 @@ export class PrismaService extends PrismaClient {
     super();
     // TODO: prisma middleware for updateAt
     /**
+     * Solves the Do not know how to serialize a BigInt issue
+    */
+    (BigInt.prototype as any).toJSON = function () {
+      return Number(this);
+    };
+    
+    /**
      * product price
     */
     this.$use(async (params, next) => {

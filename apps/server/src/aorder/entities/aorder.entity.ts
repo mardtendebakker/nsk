@@ -1,7 +1,7 @@
 import { aorder } from '@prisma/client';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
-export class OrderEntity implements aorder {
+export class AOrderEntity implements aorder {
   @ApiProperty()
   id: number;
 

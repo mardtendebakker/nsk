@@ -3,7 +3,7 @@ import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { SaleModule } from './sale.module';
 import { SaleService } from './sale.service';
-import { OrderDiscrimination } from '../order/types/order-discrimination.enum';
+import { AOrderDiscrimination } from '../aorder/types/aorder-discrimination.enum';
 import { CognitoTestingModule } from '@nestjs-cognito/testing';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
@@ -117,7 +117,7 @@ describe('Sale', () => {
     "discount": null,
     "transport": null,
     "is_gift": null,
-    "discr": OrderDiscrimination.SALE,
+    "discr": AOrderDiscrimination.SALE,
     "backingPurchaseOrder_id": null,
     "external_id": null,
     "delivery_type": null,

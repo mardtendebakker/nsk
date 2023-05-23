@@ -1,17 +1,17 @@
 import { ApiProperty, PickType } from "@nestjs/swagger";
 import { IFindManyRespone } from "../../common/interface/find-many-respone";
-import { OrderEntity } from "../entities/order.entity";
+import { AOrderEntity } from "../entities/aorder.entity";
 
-class FindOrderResponeDto extends PickType(OrderEntity, [
+class FindAOrderResponeDto extends PickType(AOrderEntity, [
   "id",
   "order_nr",
   "order_date",
 ] as const) {}
 
-export class FindOrdersResponeDto implements IFindManyRespone<FindOrderResponeDto> {
+export class FindAOrdersResponeDto implements IFindManyRespone<FindAOrderResponeDto> {
   @ApiProperty()
   count: number;
   
   @ApiProperty()
-  data: FindOrderResponeDto[]
+  data: FindAOrderResponeDto[]
 }
