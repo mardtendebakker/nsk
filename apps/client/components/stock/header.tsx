@@ -3,7 +3,7 @@ import { Box, Button, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import useTranslation from '../../hooks/useTranslation';
 import {
-  STOCKS_PRODUCTS, STOCKS_REPAIR_SERVICES, ORDERS_PURCHASES_NEW, ORDERS_SALES_NEW,
+  STOCKS_PRODUCTS, STOCKS_REPAIR_SERVICES, ORDERS_PURCHASES_NEW,
 } from '../../utils/routes';
 
 export default function Navigation() {
@@ -48,10 +48,10 @@ export default function Navigation() {
       </Box>
       <Button
         variant="contained"
-        onClick={() => router.push(router.pathname === STOCKS_PRODUCTS ? ORDERS_PURCHASES_NEW : ORDERS_SALES_NEW)}
+        onClick={() => router.push(ORDERS_PURCHASES_NEW)}
       >
         <Add />
-        {trans(router.pathname == STOCKS_PRODUCTS ? 'newPurchase' : 'newSale')}
+        {trans('newPurchase')}
       </Button>
     </Box>
   );

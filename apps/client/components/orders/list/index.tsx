@@ -6,7 +6,9 @@ import useForm, { FieldPayload } from '../../../hooks/useForm';
 import List from './list';
 import useAxios from '../../../hooks/useAxios';
 import { PURCHASE_ORDERS_PATH, SALES_ORDERS_PATH, ORDER_STATUSES_PATH } from '../../../utils/axios';
-import { ORDERS_PURCHASES } from '../../../utils/routes';
+import {
+  ORDERS_PURCHASES, ORDERS_PURCHASES_EDIT, ORDERS_SALES_EDIT,
+} from '../../../utils/routes';
 import Filter from './filter';
 import Action from './action';
 import ConfirmationDialog from '../../confirmationDialog';
@@ -229,7 +231,10 @@ export default function ListContainer() {
       <Action
         disabled={disabled()}
         allChecked={checkedOrderIds.length === data.length && data.length > 0}
-        checkedProductsCount={checkedOrderIds.length}
+        checkedOrdersCount={checkedOrderIds.length}
+        onEdit={() => router.push(
+          (router.pathname == ORDERS_PURCHASES ? ORDERS_PURCHASES_EDIT : ORDERS_SALES_EDIT).replace(':id', checkedOrderIds[0].toString()),
+        )}
         onAllCheck={handleAllChecked}
         onChangeStatus={() => setShowChangeStatusModal(true)}
         onPrint={() => {}}

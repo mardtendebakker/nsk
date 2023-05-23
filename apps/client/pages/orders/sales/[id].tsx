@@ -5,7 +5,7 @@ import {
 import { useRouter } from 'next/router';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import Check from '@mui/icons-material/Check';
-import { SyntheticEvent, useMemo } from 'react';
+import { SyntheticEvent, useEffect, useMemo } from 'react';
 import Form from '../../../components/orders/form';
 import DashboardLayout from '../../../layouts/dashboard';
 import useAxios from '../../../hooks/useAxios';
@@ -15,35 +15,49 @@ import useTranslation from '../../../hooks/useTranslation';
 import { initFormState, formRepresentationToBody } from '../purchases/new';
 import { ORDERS_SALES } from '../../../utils/routes';
 
-function NewSalesOrder() {
+function UpdateSalesOrder() {
   const { trans } = useTranslation();
   const router = useRouter();
+  const { id } = router.query;
 
-  const { call, performing, data } = useAxios(
-    'post',
+  const { call, performing } = useAxios(
+    'patch',
     null,
     { withProgressBar: true, showSuccessMessage: true },
   );
 
-  const { formRepresentation, setValue, validate } = useForm(useMemo(() => initFormState(trans), []));
+  const { call: fetchSalesOrder, performing: performingFetchSalesOrder, data: salesOrder } = useAxios(
+    'get',
+    SALES_ORDERS_PATH.replace(':id', id.toString()),
+    { withProgressBar: true },
+  );
+
+  const { formRepresentation, setValue, validate } = useForm(useMemo(() => initFormState(trans, salesOrder), [salesOrder]));
+
+  useEffect(() => {
+    if (id) {
+      fetchSalesOrder()
+        .catch((error) => {
+          if (error && error?.status !== 200) {
+            router.push(SALES_ORDERS_PATH.replace(':id', 'new'));
+          }
+        });
+    }
+  }, [id]);
+
+  const canSubmit = () => !performing && !performingFetchSalesOrder;
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    if (validate() || performing) {
+
+    if (validate() || !canSubmit()) {
       return;
     }
 
-    call(
-      {
-        body: formRepresentationToBody(formRepresentation),
-        path: SALES_ORDERS_PATH.replace(':id', ''),
-      },
-      (err) => {
-        if (!err) {
-          router.push(SALES_ORDERS_PATH.replace(':id', data.id));
-        }
-      },
-    );
+    call({
+      body: formRepresentationToBody(formRepresentation),
+      path: SALES_ORDERS_PATH.replace(':id', id.toString()),
+    });
   };
 
   return (
@@ -90,13 +104,33 @@ function NewSalesOrder() {
       <Card>
         <Form
           formRepresentation={formRepresentation}
-          disabled={performing}
+          disabled={!canSubmit()}
           onSubmit={handleSubmit}
           setValue={setValue}
         />
+        {/* <Divider sx={{ mx: '1.5rem' }} />
+        <CardContent>
+          <Typography
+            sx={{ mb: '2rem' }}
+            variant="h4"
+          >
+            {trans('addProducts')}
+          </Typography>
+          <Grid
+            container
+            spacing={3}
+          >
+            <Grid
+              item
+              xs={12}
+            >
+              <ProductsTable formRepresentation={formRepresentation} setValue={setValue} />
+            </Grid>
+          </Grid>
+      </CardContent> */}
       </Card>
     </DashboardLayout>
   );
 }
 
-export default NewSalesOrder;
+export default UpdateSalesOrder;

@@ -16,6 +16,7 @@ const translation = {
   newSalesOrder: 'Nieuwe verkooporder',
   newPurchase: 'Nieuwe aankoop',
   editCustomer: 'Klant wijzigen',
+  editOrder: 'Volgorde bewerken',
   editProduct: 'Product bewerken',
   availability: 'Beschikbaarheid',
   selectAll: 'Selecteer alles',

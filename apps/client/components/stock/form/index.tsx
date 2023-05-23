@@ -10,6 +10,10 @@ import { Attribute, ProductType } from '../../../utils/axios';
 import AutocompleteAttribute from './AutocompleteAttribute';
 import FileAttribute from './FileAttribute';
 
+export const buildAttributeKey = (attribute: Attribute, productType: ProductType) => (
+  `attribute:${attribute.type}:${productType.id}:${attribute.id}`
+);
+
 export default function Form({
   setValue,
   formRepresentation,
@@ -22,13 +26,13 @@ export default function Form({
 
   const handleAttributeChange = (attribute: Attribute, value: any) => {
     setValue({
-      field: `attribute:${attribute.type}:${productType.id}:${attribute.id}`,
+      field: buildAttributeKey(attribute, productType),
       value,
     });
   };
 
   const getAttributeValue = (attribute: Attribute) => (
-    formRepresentation[`attribute:${attribute.type}:${productType.id}:${attribute.id}`]?.value
+    formRepresentation[buildAttributeKey(attribute, productType)]?.value
   );
 
   return (
@@ -53,14 +57,14 @@ export default function Form({
               sx={{ flex: 0.33, mr: '1rem' }}
               label={trans('productForm.sku.label')}
               placeholder={trans('productForm.sku.placeholder')}
-              value={formRepresentation.sku.value}
+              value={formRepresentation.sku.value || ''}
               onChange={(e) => setValue({ field: 'sku', value: e.target.value })}
             />
             <TextField
               sx={{ flex: 0.33, mr: '1rem' }}
               label={trans('productName')}
               placeholder={trans('productName')}
-              value={formRepresentation.name.value}
+              value={formRepresentation.name.value || ''}
               helperText={formRepresentation.name.error}
               error={!!formRepresentation.name.error}
               onChange={(e) => setValue({ field: 'name', value: e.target.value })}
@@ -105,7 +109,7 @@ export default function Form({
               sx={{ flex: 0.33 }}
               label={trans('price')}
               placeholder="0.00"
-              value={formRepresentation.price.value}
+              value={formRepresentation.price.value || ''}
               InputProps={{
                 startAdornment: (<Box sx={{ mr: '.2rem' }}>€</Box>),
               }}
@@ -123,6 +127,7 @@ export default function Form({
               rows={3}
               label={trans('description')}
               name="description"
+              value={formRepresentation.description.value || ''}
               onChange={(e) => setValue({ field: 'description', value: e.target.value })}
             />
           </Grid>
@@ -142,16 +147,16 @@ export default function Form({
             if (attribute.type == 1 || attribute.type == 3) {
               return (
                 <AutocompleteAttribute
+                  key={buildAttributeKey(attribute, productType)}
                   value={getAttributeValue(attribute)}
                   onChange={(option) => { handleAttributeChange(attribute, option?.id); }}
                   attribute={attribute}
-                  key={attribute.id}
                 />
               );
             } if (attribute.type == 0) {
               return (
                 <TextField
-                  key={attribute.id}
+                  key={buildAttributeKey(attribute, productType)}
                   sx={{ flex: '0 33%', pr: '1rem' }}
                   label={attribute.name}
                   value={getAttributeValue(attribute) || ''}
@@ -161,7 +166,7 @@ export default function Form({
             } if (attribute.type == 2) {
               return (
                 <FileAttribute
-                  key={attribute.id}
+                  key={buildAttributeKey(attribute, productType)}
                   attribute={attribute}
                   value={getAttributeValue(attribute) || []}
                   onChange={(value) => handleAttributeChange(attribute, value)}

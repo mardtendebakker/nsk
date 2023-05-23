@@ -25,66 +25,68 @@ export interface Customer extends BaseCustomer {
 }
 
 export interface Company {
-  id: string,
-  name: string,
-  acompany?: { id: string, name: string }
+  id?: string,
+  name?: string,
+  acompany?: { id?: string, name?: string }
 }
 
 export interface Order {
   id?: number,
   order_nr?: string
   remarks?: string,
-  order_date: string,
+  order_date?: string,
   discount?: number,
   transport?: number,
   is_gift?: boolean,
   delivery_instructions?: string
-  order_status: { name: string, color: string }
+  order_status?: { id:number, name?: string, color?: string }
+  status_id?: number,
+  supplier_id?: number,
   acompany_aorder_supplier_idToacompany?: Company,
   acompany_aorder_customer_idToacompany?: Company
 }
 
 export interface AttributeOption {
-  id: number,
-  name: string,
-  price: number
+  id?: number,
+  name?: string,
+  price?: number
 }
 
 export interface Attribute {
   id?: number,
-  name: string,
-  type: number,
-  options: AttributeOption[]
+  name?: string,
+  type?: number,
+  options?: AttributeOption[]
 }
 
 export interface ProductType {
   id?: number,
-  name: string,
-  attributes: Attribute[]
+  name?: string,
+  attributes?: Attribute[]
 }
 
 export interface Task {
-  name: string,
-  description: string,
-  status: number
+  name?: string,
+  description?: string,
+  status?: number
 }
 
 export interface Product {
   id?: number,
-  hold: number,
-  location: string,
-  name: string,
-  order_date: string,
-  order_nr: string,
-  price: number,
-  purch: number,
-  sale: number,
-  sku: string,
-  sold: number,
-  splittable: boolean,
-  stock: number,
-  tasks: Task[],
-  updated_at: string
+  hold?: number,
+  location?: string,
+  name?: string,
+  order_date?: string,
+  order_nr?: string,
+  price?: number,
+  purch?: number,
+  sale?: number,
+  sku?: string,
+  sold?: number,
+  splittable?: boolean,
+  stock?: number,
+  tasks?: Task[],
+  updated_at?: string
 }
 
 export interface Supplier extends BaseCustomer {

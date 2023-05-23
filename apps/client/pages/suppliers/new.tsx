@@ -13,7 +13,7 @@ import { SUPPLIERS } from '../../utils/routes';
 import useForm, { FormRepresentation } from '../../hooks/useForm';
 import useTranslation from '../../hooks/useTranslation';
 
-export function dataInputsFormatter(supplier?: Supplier) {
+export function initFormState(supplier?: Supplier) {
   return {
     name: { required: true },
     representative: {},
@@ -59,7 +59,7 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
   };
 }
 
-const initFormState = dataInputsFormatter();
+const formState = initFormState();
 
 function PostSupplier() {
   const router = useRouter();
@@ -71,7 +71,7 @@ function PostSupplier() {
     { withProgressBar: true, showSuccessMessage: true },
   );
 
-  const { formRepresentation, setValue, validate } = useForm(initFormState);
+  const { formRepresentation, setValue, validate } = useForm(formState);
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();

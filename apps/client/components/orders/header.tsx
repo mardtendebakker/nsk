@@ -46,7 +46,7 @@ export default function Navigation() {
           ))}
         </Box>
       </Box>
-      <Button variant="contained" onClick={() => router.push(ORDERS_PURCHASES ? ORDERS_PURCHASES_NEW : ORDERS_SALES_NEW)}>
+      <Button variant="contained" onClick={() => router.push(router.pathname == ORDERS_PURCHASES ? ORDERS_PURCHASES_NEW : ORDERS_SALES_NEW)}>
         <Add />
         {trans(router.pathname == ORDERS_PURCHASES ? 'newPurchase' : 'newSale')}
       </Button>

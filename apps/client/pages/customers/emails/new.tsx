@@ -14,12 +14,12 @@ import { CUSTOMERS_EMAILS } from '../../../utils/routes';
 import useForm, { FormRepresentation } from '../../../hooks/useForm';
 import useTranslation from '../../../hooks/useTranslation';
 
-export function dataInputsFormatter(customer?: Customer) {
+export function initFormState(customer?: Customer) {
   return {
   };
 }
 
-const initFormState = dataInputsFormatter();
+const formState = initFormState();
 
 export function formRepresentationToBody(formRepresentation: FormRepresentation): object {
   return {
@@ -36,7 +36,7 @@ function NewCustomerEmail() {
     { withProgressBar: true, showSuccessMessage: true },
   );
 
-  const { formRepresentation, setValue, validate } = useForm(initFormState);
+  const { formRepresentation, setValue, validate } = useForm(formState);
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
