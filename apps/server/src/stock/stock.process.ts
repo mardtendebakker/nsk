@@ -1,7 +1,7 @@
 
 import { Prisma, aservice, product, product_order, product_type_task } from "@prisma/client";
 import { AttributeType } from "../attribute/enum/attribute-type.enum";
-import { OrderDiscrimination } from "../order/types/order-discrimination.enum";
+import { AOrderDiscrimination } from "../aorder/types/aorder-discrimination.enum";
 import { StockRepository } from "./stock.repository";
 import { ServiceStatus } from "../service/enum/service-status.enum";
 import { ProcessedTask } from "./dto/find-product-respone.dto";
@@ -57,8 +57,8 @@ export class StockProcess {
     this.orderNumber = product_order?.[0]?.['aorder']?.order_nr;
     this.productTypeTasks = product_type?.['product_type_task'] || [];
 
-    this.productPurchaseOrder = product_order.find(po => po['aorder']?.discr == OrderDiscrimination.PURCHASE);
-    this.productSaleOrders = product_order.filter(po => po['aorder']?.discr == OrderDiscrimination.SALE);
+    this.productPurchaseOrder = product_order.find(po => po['aorder']?.discr == AOrderDiscrimination.PURCHASE);
+    this.productSaleOrders = product_order.filter(po => po['aorder']?.discr == AOrderDiscrimination.SALE);
 
     this.isSaleable = product_status ? product_status?.is_saleable ?? true : false;
     this.isSaleAndRepair = this.productSaleOrders.length == 1 && this.productSaleOrders?.[0]['aorder']?.repair?.id;

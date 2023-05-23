@@ -3,7 +3,7 @@ import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { PurchaseModule } from './purchase.module';
 import { PurchaseService } from './purchase.service';
-import { OrderDiscrimination } from '../order/types/order-discrimination.enum';
+import { AOrderDiscrimination } from '../aorder/types/aorder-discrimination.enum';
 import { CognitoTestingModule } from '@nestjs-cognito/testing';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
@@ -115,7 +115,7 @@ describe('Purchase', () => {
     "discount": null,
     "transport": null,
     "is_gift": null,
-    "discr": OrderDiscrimination.PURCHASE,
+    "discr": AOrderDiscrimination.PURCHASE,
     "backingPurchaseOrder_id": null,
     "external_id": null,
     "delivery_type": null,

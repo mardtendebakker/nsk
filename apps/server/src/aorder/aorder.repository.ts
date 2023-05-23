@@ -1,14 +1,14 @@
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
-import { Order } from './dto/update-many-order.dto';
+import { AOrder } from './dto/update-many-aorder.dto';
 import { GroupBy } from './types/group-by.enum';
 import { Sql } from '@prisma/client/runtime';
 import { GroupByDateResult, ProductAnalyticsResultDto } from './dto/product-analytics-result.dto';
 
-export class OrderRepository {
+export class AOrderRepository {
   constructor(protected readonly prisma: PrismaService) {}
 
-  async getOrders(params: {
+  async getAOrders(params: {
     skip?: number;
     take?: number;
     cursor?: Prisma.aorderWhereUniqueInput;
@@ -64,7 +64,7 @@ export class OrderRepository {
 
   updateMany(params: {
     where: Prisma.aorderWhereInput;
-    data: Order;
+    data: AOrder;
   }) {
     const { where, data } = params;
     return this.prisma.aorder.updateMany({

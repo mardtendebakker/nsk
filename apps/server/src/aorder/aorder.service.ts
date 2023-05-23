@@ -1,24 +1,24 @@
-import { OrderRepository } from './order.repository';
-import { CreateOrderDto } from './dto/create-order.dto';
-import { UpdateOrderDto } from './dto/update-order.dto';
-import { OrderDiscrimination } from './types/order-discrimination.enum';
+import { AOrderRepository } from './aorder.repository';
+import { CreateAOrderDto } from './dto/create-aorder.dto';
+import { UpdateAOrderDto } from './dto/update-aorder.dto';
+import { AOrderDiscrimination } from './types/aorder-discrimination.enum';
 import { Prisma } from '@prisma/client';
 import { FindManyDto } from './dto/find-many.dto';
-import { UpdateManyOrderDto } from './dto/update-many-order.dto';
-import { OrderProcess } from './order.process';
+import { UpdateManyAOrderDto } from './dto/update-many-aorder.dto';
+import { AOrderProcess } from './aorder.process';
 import { PrintService } from '../print/print.service';
 import { GroupBy } from './types/group-by.enum';
 import { ProductAnalyticsResultDto } from './dto/product-analytics-result.dto';
 
-export class OrderService {
+export class AOrderService {
   constructor(
-    protected readonly repository: OrderRepository,
+    protected readonly repository: AOrderRepository,
     protected readonly printService: PrintService,
-    protected readonly type: OrderDiscrimination
+    protected readonly type: AOrderDiscrimination
   ) {}
 
-  async getOrders(order_nr: string) {
-    const orders = await this.repository.getOrders({
+  async getAOrders(order_nr: string) {
+    const aorders = await this.repository.getAOrders({
       where: {
         order_nr
       },
@@ -34,8 +34,8 @@ export class OrderService {
       },
     });
 
-    return orders.map(order => {
-      const { acompany_aorder_supplier_idToacompany, ...rest } = order;
+    return aorders.map(aorder => {
+      const { acompany_aorder_supplier_idToacompany, ...rest } = aorder;
       return {
         ...rest,
         company_name: acompany_aorder_supplier_idToacompany?.name || '',
@@ -67,14 +67,14 @@ export class OrderService {
       },
     };
 
-    if (this.type === OrderDiscrimination.SALE) {
+    if (this.type === AOrderDiscrimination.SALE) {
       select = {
         ...select,
         acompany_aorder_customer_idToacompany: {
           select: companySelect,
         },
       };
-    } else if (this.type === OrderDiscrimination.PURCHASE) {
+    } else if (this.type === AOrderDiscrimination.PURCHASE) {
       select = {
         ...select,
         acompany_aorder_supplier_idToacompany: {
@@ -91,11 +91,11 @@ export class OrderService {
     };
 
     if (query.partner !== undefined) {
-      if (this.type === OrderDiscrimination.PURCHASE) {
+      if (this.type === AOrderDiscrimination.PURCHASE) {
         where.acompany_aorder_customer_idToacompany = {
           partner_id: query.partner,
         };
-      } else if (this.type === OrderDiscrimination.SALE) {
+      } else if (this.type === AOrderDiscrimination.SALE) {
         where.acompany_aorder_supplier_idToacompany = {
           partner_id: query.partner,
         };
@@ -125,7 +125,7 @@ export class OrderService {
     });
   }
 
-  async create(comapny: CreateOrderDto) {
+  async create(comapny: CreateAOrderDto) {
     return this.repository.create({
       ...comapny,
       discr: this.type
@@ -136,14 +136,14 @@ export class OrderService {
     return this.repository.findOne({ id });
   }
 
-  async update(id: number, comapny: UpdateOrderDto) {
+  async update(id: number, comapny: UpdateAOrderDto) {
     return this.repository.update({
       data: comapny,
       where: { id }
     });
   }
 
-  async updateMany(updateManyOrderDto: UpdateManyOrderDto) {
+  async updateMany(updateManyOrderDto: UpdateManyAOrderDto) {
     return this.repository.updateMany({
       data: updateManyOrderDto.order,
       where: {
@@ -236,14 +236,14 @@ export class OrderService {
       }
     };
 
-    if (this.type === OrderDiscrimination.SALE) {
+    if (this.type === AOrderDiscrimination.SALE) {
       select = {
         ...select,
         acompany_aorder_customer_idToacompany: {
           select: companySelect,
         },
       };
-    } else if (this.type === OrderDiscrimination.PURCHASE) {
+    } else if (this.type === AOrderDiscrimination.PURCHASE) {
       select = {
         ...select,
         acompany_aorder_supplier_idToacompany: {
@@ -262,15 +262,15 @@ export class OrderService {
       orderBy: { id: 'asc', },
     });
 
-    return result.map(order => {
-      const orderProcess = new OrderProcess(order);
-      return orderProcess.run();
+    return result.map(aorder => {
+      const aorderProcess = new AOrderProcess(aorder);
+      return aorderProcess.run();
     });;
   }
 
-  async printOrders(ids: number[]) {
-    const orders = await this.findByIds(ids);
-    return this.printService.printOrders(orders);
+  async printAOrders(ids: number[]) {
+    const aorders = await this.findByIds(ids);
+    return this.printService.printAOrders(aorders);
   }
 
   async productAnalytics(groupBy: GroupBy): Promise<ProductAnalyticsResultDto> {

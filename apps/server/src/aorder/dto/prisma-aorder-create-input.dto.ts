@@ -1,7 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Prisma } from "@prisma/client";
 
-export class PrismaOrderCreateInputDto implements Prisma.aorderCreateInput {
+export class PrismaAOrderCreateInputDto implements Prisma.aorderCreateInput {
   @ApiPropertyOptional()
   order_nr?: string;
 
