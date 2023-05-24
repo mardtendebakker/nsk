@@ -95,7 +95,7 @@ export default function ListContainer() {
       <Box sx={{ m: '1rem' }} />
       <List
         emails={[]}
-        count={Math.floor(count / 10)}
+        count={Math.ceil(count / 10)}
         page={page}
         onCheck={() => {}}
         onPageChange={(newPage) => setPage(newPage)}
