@@ -131,8 +131,8 @@ function Form({
                 label={trans('transportCost')}
                 placeholder="0.00"
                 type="number"
-                onChange={(e) => setValue({ field: 'transportCost', value: e.target.value })}
-                value={formRepresentation.transportCost.value}
+                onChange={(e) => setValue({ field: 'transport', value: e.target.value })}
+                value={formRepresentation.transport.value || ''}
               />
               <TextField
                 sx={{ flex: 0.33, mr: '1rem' }}
@@ -140,7 +140,7 @@ function Form({
                 placeholder="0.00"
                 type="number"
                 onChange={(e) => setValue({ field: 'discount', value: e.target.value })}
-                value={formRepresentation.discount.value}
+                value={formRepresentation.discount.value || ''}
               />
               <Checkbox
                 sx={{ m: 'revert', mb: '.4rem', alignSelf: 'end' }}
@@ -157,8 +157,8 @@ function Form({
                 :
                 {' '}
                 {
-                  ((formRepresentation.transportCost.value as number)
-                   - (formRepresentation.discount.value as number)).toFixed(2)
+                  ((formRepresentation.transport.value || 0 as number)
+                   - (formRepresentation.discount.value || 0 as number)).toFixed(2)
                   }
               </Typography>
             </Grid>
@@ -198,7 +198,7 @@ function Form({
                     item
                     xs={12}
                     sx={{
-                      display: 'flex', mb: '1rem', width: '100%',
+                      display: 'flex', width: '100%',
                     }}
                   >
                     <TextField

@@ -12,7 +12,7 @@ import useAxios from '../../../hooks/useAxios';
 import { PURCHASE_ORDERS_PATH } from '../../../utils/axios';
 import useForm, { FormRepresentation } from '../../../hooks/useForm';
 import useTranslation from '../../../hooks/useTranslation';
-import { STOCKS_PRODUCTS } from '../../../utils/routes';
+import { ORDERS_PURCHASES } from '../../../utils/routes';
 
 function requiredSupplierFieldValidator(field: string, trans) {
   return (formRepresentation: FormRepresentation) => {
@@ -22,21 +22,22 @@ function requiredSupplierFieldValidator(field: string, trans) {
   };
 }
 
-export function dataInputsFormatter(trans) {
+export function initFormState(trans, order?: any) {
   return {
-    orderNr: { required: true },
-    orderDate: { value: new Date(), required: true },
-    orderStatus: { required: true },
-    remarks: {},
-    transportCost: { value: '0' },
-    discount: { value: '0' },
-    isGift: { value: false },
+    orderNr: { required: true, value: order?.order_nr },
+    orderDate: { value: order?.order_date ? new Date(order?.order_date) : new Date(), required: true },
+    orderStatus: { required: true, value: order?.status_id },
+    remarks: { value: order?.remarks },
+    transport: { value: order?.transport },
+    discount: { value: order?.discount },
+    isGift: { value: !!order?.is_gift },
     supplierId: {
       validator: (formRepresentation: FormRepresentation) => {
         if (!formRepresentation.newSupplier.value && formRepresentation.supplierId.value == undefined) {
           return trans('requiredField');
         }
       },
+      value: order?.supplier_id,
     },
     newSupplier: { value: false },
     name: { validator: requiredSupplierFieldValidator('name', trans) },
@@ -59,7 +60,7 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
     orderDate: formRepresentation.orderDate.value || undefined,
     orderStatus: formRepresentation.orderStatus.value || undefined,
     remarks: formRepresentation.remarks.value || undefined,
-    transportCost: formRepresentation.transportCost.value || undefined,
+    transportCost: formRepresentation.transport.value || undefined,
     discount: formRepresentation.discount.value || undefined,
     isGift: formRepresentation.isGift.value || undefined,
   };
@@ -85,19 +86,17 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
   return payload;
 }
 
-function NewStockProduct() {
+function NewPurchaseOrder() {
   const { trans } = useTranslation();
   const router = useRouter();
 
-  const { call, performing } = useAxios(
+  const { call, performing, data } = useAxios(
     'post',
     null,
     { withProgressBar: true, showSuccessMessage: true },
   );
 
-  const initFormState = useMemo(dataInputsFormatter.bind(null, trans), []) as FormRepresentation;
-
-  const { formRepresentation, setValue, validate } = useForm(initFormState);
+  const { formRepresentation, setValue, validate } = useForm(useMemo(() => initFormState(trans), []));
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
@@ -112,7 +111,7 @@ function NewStockProduct() {
       },
       (err) => {
         if (!err) {
-          router.push(STOCKS_PRODUCTS);
+          router.push(PURCHASE_ORDERS_PATH.replace(':id', data.id));
         }
       },
     );
@@ -135,7 +134,7 @@ function NewStockProduct() {
         }}
       >
         <Typography variant="h4">
-          <IconButton onClick={() => router.push(STOCKS_PRODUCTS)}>
+          <IconButton onClick={() => router.push(ORDERS_PURCHASES)}>
             <ArrowBack />
           </IconButton>
           {trans('newPurchase')}
@@ -145,7 +144,7 @@ function NewStockProduct() {
             sx={{ ml: '1.5rem' }}
             color="inherit"
             variant="outlined"
-            onClick={() => router.push(STOCKS_PRODUCTS)}
+            onClick={() => router.push(ORDERS_PURCHASES)}
           >
             {trans('cancel')}
           </Button>
@@ -171,4 +170,4 @@ function NewStockProduct() {
   );
 }
 
-export default NewStockProduct;
+export default NewPurchaseOrder;

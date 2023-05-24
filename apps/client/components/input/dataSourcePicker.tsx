@@ -3,6 +3,7 @@ import { useCallback, useEffect } from 'react';
 import TextField from './textField';
 import useAxios from '../../hooks/useAxios';
 import debounce from '../../utils/debounce';
+import { AxiosResponse } from '../../utils/axios';
 
 export default function DataSourcePicker(
   {
@@ -40,14 +41,18 @@ export default function DataSourcePicker(
   const { data, call } = useAxios('get', url, { showErrorMessage: false });
   const debouncedCall = useCallback(debounce(call), []);
 
-  useEffect(() => {
-    call({ params });
-  }, []);
-
   let options = data?.data || [];
   if (formatter) {
     options = options.map(formatter);
   }
+
+  useEffect(() => {
+    call({ params }).then((response: AxiosResponse) => {
+      if (value != undefined && value !== null && response?.data) {
+        onChange(response.data.data.find((item) => item.id == value));
+      }
+    });
+  }, []);
 
   return (
     <Autocomplete

@@ -12,7 +12,7 @@ import useAxios from '../../hooks/useAxios';
 import { SUPPLIERS_PATH } from '../../utils/axios';
 import { SUPPLIERS_NEW, SUPPLIERS } from '../../utils/routes';
 import useForm from '../../hooks/useForm';
-import { dataInputsFormatter, formRepresentationToBody } from './new';
+import { initFormState, formRepresentationToBody } from './new';
 
 function UpdateSupplier() {
   const { trans } = useTranslation();
@@ -36,7 +36,7 @@ function UpdateSupplier() {
   );
 
   const { formRepresentation, setValue, validate } = useForm(
-    useMemo(() => dataInputsFormatter(supplier), [supplier]),
+    useMemo(() => initFormState(supplier), [supplier]),
   );
 
   useEffect(() => {
@@ -47,7 +47,8 @@ function UpdateSupplier() {
             router.push(SUPPLIERS_PATH.replace(':id', 'new'));
           }
         });
-    }}, [id]);
+    }
+  }, [id]);
 
   const canSubmit = () => !performing && !performingFetchSupplier;
 
