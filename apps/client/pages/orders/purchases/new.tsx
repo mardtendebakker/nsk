@@ -56,28 +56,28 @@ export function initFormState(trans, order?: any) {
 
 export function formRepresentationToBody(formRepresentation: FormRepresentation): object {
   const payload: any = {
-    orderNr: formRepresentation.orderNr.value || undefined,
-    orderDate: formRepresentation.orderDate.value || undefined,
-    orderStatus: formRepresentation.orderStatus.value || undefined,
+    order_nr: formRepresentation.orderNr.value || undefined,
+    order_date: formRepresentation.orderDate.value || undefined,
+    status_id: formRepresentation.orderStatus.value || undefined,
     remarks: formRepresentation.remarks.value || undefined,
-    transportCost: formRepresentation.transport.value || undefined,
+    transport: formRepresentation.transport.value || undefined,
     discount: formRepresentation.discount.value || undefined,
-    isGift: formRepresentation.isGift.value || undefined,
+    is_gift: formRepresentation.isGift.value || undefined,
   };
 
   if (!formRepresentation.newSupplier.value) {
-    payload.supplierId = formRepresentation.supplierId.value || undefined;
+    payload.supplier_id = formRepresentation.supplierId.value || undefined;
   } else {
     payload.supplier = {
       name: formRepresentation.name.value || undefined,
-      kvkNr: formRepresentation.kvkNr.value || undefined,
+      kvk_nr: formRepresentation.kvkNr.value || undefined,
       representative: formRepresentation.representative.value || undefined,
       email: formRepresentation.email.value || undefined,
       phone: formRepresentation.phone.value || undefined,
       street: formRepresentation.street.value || undefined,
-      extraStreet: formRepresentation.extraStreet.value || undefined,
+      street_extra: formRepresentation.extraStreet.value || undefined,
       city: formRepresentation.city.value || undefined,
-      zipcode: formRepresentation.zipcode.value || undefined,
+      zip: formRepresentation.zipcode.value || undefined,
       state: formRepresentation.state.value || undefined,
       country: formRepresentation.country.value || undefined,
     };
