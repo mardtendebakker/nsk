@@ -9,17 +9,17 @@ import { SyntheticEvent, useMemo } from 'react';
 import Form from '../../../components/orders/form';
 import DashboardLayout from '../../../layouts/dashboard';
 import useAxios from '../../../hooks/useAxios';
-import { SALES_ORDERS_PATH } from '../../../utils/axios';
+import { AxiosResponse, SALES_ORDERS_PATH } from '../../../utils/axios';
 import useForm from '../../../hooks/useForm';
 import useTranslation from '../../../hooks/useTranslation';
 import { initFormState, formRepresentationToBody } from '../purchases/new';
-import { ORDERS_SALES } from '../../../utils/routes';
+import { ORDERS_SALES, ORDERS_SALES_EDIT } from '../../../utils/routes';
 
 function NewSalesOrder() {
   const { trans } = useTranslation();
   const router = useRouter();
 
-  const { call, performing, data } = useAxios(
+  const { call, performing } = useAxios(
     'post',
     null,
     { withProgressBar: true, showSuccessMessage: true },
@@ -33,17 +33,12 @@ function NewSalesOrder() {
       return;
     }
 
-    call(
-      {
-        body: formRepresentationToBody(formRepresentation),
-        path: SALES_ORDERS_PATH.replace(':id', ''),
-      },
-      (err) => {
-        if (!err) {
-          router.push(SALES_ORDERS_PATH.replace(':id', data.id));
-        }
-      },
-    );
+    call({
+      body: formRepresentationToBody(formRepresentation),
+      path: SALES_ORDERS_PATH.replace(':id', ''),
+    }).then((response: AxiosResponse) => {
+      router.push(ORDERS_SALES_EDIT.replace(':id', response.data.id));
+    });
   };
 
   return (
