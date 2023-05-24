@@ -1,8 +1,8 @@
 import { Box, Typography } from '@mui/material';
 import { memo } from 'react';
-import Autocomplete from '../../memoizedInput/autocomplete';
-import { Attribute, AttributeOption } from '../../../utils/axios';
-import TextField from '../../input/textField';
+import Autocomplete from '../../../memoizedInput/autocomplete';
+import { Attribute, AttributeOption } from '../../../../utils/axios';
+import TextField from '../../../input/textField';
 
 function AutocompleteAttribute({ value, onChange, attribute }
 : {

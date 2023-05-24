@@ -7,7 +7,7 @@ import Close from '@mui/icons-material/Close';
 import { useMemo } from 'react';
 import useTranslation from '../../../hooks/useTranslation';
 import useForm from '../../../hooks/useForm';
-import Form, { buildAttributeKey } from '../form';
+import Form, { buildAttributeKey } from './form';
 
 export interface Product {
   id?: string | number,

@@ -9,10 +9,10 @@ import { SyntheticEvent, useMemo } from 'react';
 import Form from '../../../components/orders/form';
 import DashboardLayout from '../../../layouts/dashboard';
 import useAxios from '../../../hooks/useAxios';
-import { PURCHASE_ORDERS_PATH } from '../../../utils/axios';
+import { AxiosResponse, PURCHASE_ORDERS_PATH } from '../../../utils/axios';
 import useForm, { FormRepresentation } from '../../../hooks/useForm';
 import useTranslation from '../../../hooks/useTranslation';
-import { ORDERS_PURCHASES } from '../../../utils/routes';
+import { ORDERS_PURCHASES, ORDERS_PURCHASES_EDIT } from '../../../utils/routes';
 
 function requiredSupplierFieldValidator(field: string, trans) {
   return (formRepresentation: FormRepresentation) => {
@@ -90,7 +90,7 @@ function NewPurchaseOrder() {
   const { trans } = useTranslation();
   const router = useRouter();
 
-  const { call, performing, data } = useAxios(
+  const { call, performing } = useAxios(
     'post',
     null,
     { withProgressBar: true, showSuccessMessage: true },
@@ -104,17 +104,12 @@ function NewPurchaseOrder() {
       return;
     }
 
-    call(
-      {
-        body: formRepresentationToBody(formRepresentation),
-        path: PURCHASE_ORDERS_PATH.replace(':id', ''),
-      },
-      (err) => {
-        if (!err) {
-          router.push(PURCHASE_ORDERS_PATH.replace(':id', data.id));
-        }
-      },
-    );
+    call({
+      body: formRepresentationToBody(formRepresentation),
+      path: PURCHASE_ORDERS_PATH.replace(':id', ''),
+    }).then((response: AxiosResponse) => {
+      router.push(ORDERS_PURCHASES_EDIT.replace(':id', response.data.id));
+    });
   };
 
   return (
