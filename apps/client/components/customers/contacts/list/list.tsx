@@ -16,12 +16,14 @@ export default function List({
   page,
   onPageChange,
   onCheck,
+  disabled,
 }: {
   customers: Customer[],
   count: number,
   page: number,
   onPageChange: (newPage: number)=>void,
   onCheck: (object: { id: number, checked: boolean })=>void,
+  disabled: boolean
 }) {
   const { trans } = useTranslation();
 
@@ -76,6 +78,7 @@ export default function List({
         count={count}
         onChange={(_, newPage) => onPageChange(newPage)}
         page={page}
+        disabled={disabled}
       />
     </>
   );

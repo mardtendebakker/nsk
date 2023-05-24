@@ -21,6 +21,7 @@ export default function List({
   page,
   onPageChange,
   onCheck,
+  disabled,
 }: {
   orders: Order[],
   checkedOrderIds: number[],
@@ -28,6 +29,7 @@ export default function List({
   page: number,
   onPageChange: (newPage: number)=>void,
   onCheck: (object: { id: number, checked: boolean })=>void,
+  disabled: boolean
 }) {
   const { trans } = useTranslation();
   const router = useRouter();
@@ -67,6 +69,7 @@ export default function List({
             >
               <TableCell>
                 <Checkbox
+                  disabled={disabled}
                   checked={Boolean(checkedOrderIds.find((id) => id === order.id))}
                   sx={{ mr: '1.5rem' }}
                   onChange={(_, checked) => { onCheck({ id: order.id, checked }); }}
@@ -107,6 +110,7 @@ export default function List({
         </TableBody>
       </Table>
       <Pagination
+        disabled={disabled}
         sx={{ display: 'flex', justifyContent: 'end', mt: '2rem' }}
         shape="rounded"
         count={count}

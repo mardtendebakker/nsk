@@ -125,6 +125,7 @@ export default function ListContainer() {
       />
       <Box sx={{ m: '1rem' }} />
       <List
+        disabled={performing}
         users={data}
         count={Math.ceil(count / 10)}
         page={page}

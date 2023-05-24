@@ -13,6 +13,7 @@ export const DELETE = 'delete';
 export const PUT = 'put';
 
 type Method = 'get' | 'post' | 'patch' | 'delete' | 'put';
+type ResponseType = 'json' | 'blob';
 
 const useAxios = (
   method: Method,
@@ -38,16 +39,19 @@ const useAxios = (
 
   useEffect(() => source.current.cancel, []);
 
-  async function call(explicitPath: string, params?: object, body?: object)
+  async function call(explicitPath: string, params?: object, body?: object, responseType?: ResponseType)
     : AxiosPromise<AxiosResponse> {
     if (method === POST || method === PATCH || method === PUT) {
       return axios[method](explicitPath, body, {
         cancelToken: source.current.token,
         params,
+        responseType,
       });
     }
 
-    return axios[method](explicitPath, { cancelToken: source.current.token, params, data: body });
+    return axios[method](explicitPath, {
+      cancelToken: source.current.token, params, data: body, responseType,
+    });
   }
 
   function handleSuccess(handledResponse: AxiosResponse) {
@@ -70,8 +74,10 @@ const useAxios = (
     performing,
     /** @throws {Error} */
     call: async (
-      { params, body, path: explicitPath }
-      : { params?: object, body?: object, path?: string }
+      {
+        params, body, path: explicitPath, responseType,
+      }
+      : { params?: object, body?: object, path?: string, responseType?: ResponseType }
       = {},
       cb?: (e: Error, axiosResponse?: AxiosResponse) => void,
     ): Promise<AxiosResponse | void> => {
@@ -83,7 +89,7 @@ const useAxios = (
           showProgress();
         }
 
-        const resp = await call(finalPath, params, body);
+        const resp = await call(finalPath, params, body, responseType);
         setResponse(resp);
 
         if (showSuccessMessage || customSuccessMessage) {

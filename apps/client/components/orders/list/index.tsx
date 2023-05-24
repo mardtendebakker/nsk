@@ -2,10 +2,18 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Box, Card } from '@mui/material';
 import Delete from '@mui/icons-material/Delete';
+import saveBlob from '../../../utils/saveBlob';
 import useForm, { FieldPayload } from '../../../hooks/useForm';
 import List from './list';
 import useAxios from '../../../hooks/useAxios';
-import { PURCHASE_ORDERS_PATH, SALES_ORDERS_PATH, ORDER_STATUSES_PATH } from '../../../utils/axios';
+import {
+  PURCHASE_ORDERS_PATH,
+  SALES_ORDERS_PATH,
+  ORDER_STATUSES_PATH,
+  BULK_PRINT_PURCHASES_PATH,
+  BULK_PRINT_SALES_PATH,
+  AxiosResponse,
+} from '../../../utils/axios';
 import {
   ORDERS_PURCHASES, ORDERS_PURCHASES_EDIT, ORDERS_SALES_EDIT,
 } from '../../../utils/routes';
@@ -110,6 +118,7 @@ export default function ListContainer() {
   const [checkedOrderIds, setCheckedOrderIds] = useState<number[]>([]);
 
   const ajaxPath = router.pathname == ORDERS_PURCHASES ? PURCHASE_ORDERS_PATH : SALES_ORDERS_PATH;
+  const ajaxBulkPrintPath = router.pathname == ORDERS_PURCHASES ? BULK_PRINT_PURCHASES_PATH : BULK_PRINT_SALES_PATH;
 
   const { formRepresentation, setValue, setData } = useForm(initFormState({
     search: router.query?.search?.toString(),
@@ -135,6 +144,12 @@ export default function ListContainer() {
       withProgressBar: true,
       showSuccessMessage: true,
     },
+  );
+
+  const { call: callPrint, performing: performingPrint } = useAxios(
+    'get',
+    ajaxBulkPrintPath,
+    { withProgressBar: true },
   );
 
   const { call: callPatch, performing: performingPatch } = useAxios(
@@ -174,7 +189,7 @@ export default function ListContainer() {
     }
   };
 
-  const disabled = (): boolean => performing || performingDelete || performingPatch;
+  const disabled = (): boolean => performing || performingDelete || performingPatch || performingPrint;
 
   const handleDelete = () => {
     callDelete({ body: checkedOrderIds })
@@ -216,6 +231,13 @@ export default function ListContainer() {
     setData(initFormState({}));
   };
 
+  const handlePrint = () => {
+    callPrint({ params: { ids: checkedOrderIds }, responseType: 'blob' })
+      .then((response: AxiosResponse) => {
+        saveBlob(response.data, 'orders.pdf');
+      });
+  };
+
   return (
     <Card sx={{ overflowX: 'auto', p: '1.5rem' }}>
       <Filter
@@ -237,11 +259,12 @@ export default function ListContainer() {
         )}
         onAllCheck={handleAllChecked}
         onChangeStatus={() => setShowChangeStatusModal(true)}
-        onPrint={() => {}}
+        onPrint={handlePrint}
         onDelete={() => setShowDeleteModal(true)}
       />
       <Box sx={{ m: '1.5rem' }} />
       <List
+        disabled={disabled()}
         orders={data}
         count={Math.ceil(count / 10)}
         page={page}
