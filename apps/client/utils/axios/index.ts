@@ -21,6 +21,8 @@ export {
   ORDER_STATUSES_PATH,
   COMPANIES_PATH,
   LOCATIONS_PATH,
+  BULK_PRINT_SALES_PATH,
+  BULK_PRINT_PURCHASES_PATH,
 } from './paths';
 export { AxiosError } from 'axios';
 export type { AxiosPromise, AxiosResponse } from 'axios';

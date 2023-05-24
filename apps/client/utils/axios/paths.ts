@@ -19,3 +19,5 @@ export const COMPANIES_PATH = '/companies/:id';
 export const PRODUCT_STATUSES_PATH = '/product-statuses/:id';
 export const PRODUCT_TYPES_PATH = '/product-types/:id';
 export const LOCATIONS_PATH = '/locations/:id';
+export const BULK_PRINT_SALES_PATH = '/sales/bulk/print';
+export const BULK_PRINT_PURCHASES_PATH = '/purchases/bulk/print';
