@@ -7,6 +7,7 @@ import { FindManyDto } from './dto/find-many.dto';
 import { UpdateManyAOrderDto } from './dto/update-many-aorder.dto';
 import { AOrderProcess } from './aorder.process';
 import { PrintService } from '../print/print.service';
+import { CompanyDiscrimination } from '../company/types/company-discrimination.enum';
 
 export class AOrderService {
   constructor(
@@ -125,14 +126,31 @@ export class AOrderService {
     });
   }
 
-  async create(comapny: CreateAOrderDto) {
+  async create(orderDto: CreateAOrderDto) {
     if (this.type === undefined) {
       throw new Error('discr is mandatory!');
     }
-    return this.repository.create({
-      ...comapny,
-      discr: this.type
-    });
+
+    const {
+      status_id,
+      supplier_id,
+      supplier,
+      customer_id,
+      customer,
+      ...rest
+    } = orderDto;
+
+    const data: Prisma.aorderCreateInput = {
+      ...rest,
+      discr: this.type,
+      ...(status_id && {order_status: {connect: {id: status_id}}}),
+      ...(supplier_id && {acompany_aorder_supplier_idToacompany: {connect: {id: supplier_id}}}),
+      ...(supplier && {acompany_aorder_supplier_idToacompany: {create: {...supplier, discr: CompanyDiscrimination.SUPLLIER}}}),
+      ...(customer_id && {acompany_aorder_customer_idToacompany: {connect: {id: customer_id}}}),
+      ...(customer && {acompany_aorder_customer_idToacompany: {create: {...customer, discr: CompanyDiscrimination.CUSTOMER}}}),
+    };
+
+    return this.repository.create(data);
   }
 
   async findOne(id: number) {

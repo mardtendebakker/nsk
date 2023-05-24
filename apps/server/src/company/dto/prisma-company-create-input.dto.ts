@@ -1,11 +1,16 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Prisma } from "@prisma/client";
+import { Type } from "class-transformer";
+import { IsInt, ValidateIf } from "class-validator";
 
 export class PrismaCompanyCreateInputDto implements Prisma.acompanyCreateInput {
   @ApiProperty()
   name: string;
 
   @ApiPropertyOptional()
+  @IsInt()
+  @Type(() => Number)
+  @ValidateIf((_, value) => value !== undefined)
   kvk_nr?: number;
 
   @ApiPropertyOptional()
