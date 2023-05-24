@@ -243,7 +243,7 @@ export default function ListContainer() {
       <Box sx={{ m: '1.5rem' }} />
       <List
         orders={data}
-        count={Math.floor(count / 10)}
+        count={Math.ceil(count / 10)}
         page={page}
         onCheck={handleRowChecked}
         checkedOrderIds={checkedOrderIds}

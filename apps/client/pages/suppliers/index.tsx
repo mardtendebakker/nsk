@@ -26,7 +26,7 @@ function Suppliers() {
   );
 
   useEffect(() => {
-    router.replace(page > 1 ? `${SUPPLIERS}?page=${page}}` : SUPPLIERS);
+    router.replace(page > 1 ? `${SUPPLIERS}?page=${page}` : SUPPLIERS);
     call({ params: { take: TAKE, skip: (page - 1) * TAKE } });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
@@ -46,7 +46,7 @@ function Suppliers() {
       <Box sx={{ mt: 3 }}>
         <List
           suppliers={data}
-          count={Math.floor(count / 10)}
+          count={Math.ceil(count / 10)}
           page={page}
           onCheck={() => {}}
           onPageChange={(newPage) => setPage(newPage)}
