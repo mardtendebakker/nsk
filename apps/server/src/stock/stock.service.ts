@@ -4,7 +4,6 @@ import { LocationService } from "../location/location.service";
 import { StockRepository } from "./stock.repository";
 import { StockProcess } from "./stock.process";
 import { UpdateOneDto } from "../common/dto/update-one.dto";
-import { FindStockProcess } from "./find-stock.process";
 import { UpdateManyProductDto } from "./dto/update-many-product.dto";
 import { FindManyDto } from "./dto/find-many.dto";
 
@@ -160,34 +159,15 @@ export class StockService {
   async findOne(query: FindOneDto) {
     const locationSelect: Prisma.locationSelect = {
       id: true,
+      name: true,
     };
     const productStatusSelect: Prisma.product_statusSelect = {
       id: true,
+      name: true,
     }
-    const attributeOptionSelect: Prisma.attribute_optionSelect = {
-      id: true,
-      name: true,
-      price: true
-    };
-    const attributeSelect: Prisma.attributeSelect = {
-      id: true,
-      name: true,
-      type: true,
-      has_quantity: true,
-      attribute_option: {
-        select: attributeOptionSelect
-      },
-    };
-    const productTypeAttributeSelect: Prisma.product_type_attributeSelect = {
-      attribute: {
-        select: attributeSelect,
-      },
-    };
     const productTypeSelect: Prisma.product_typeSelect = {
       id: true,
-      product_type_attribute: {
-        select: productTypeAttributeSelect,
-      },
+      name: true,
     };
     const acompanySelect: Prisma.acompanySelect = {
       name: true,
@@ -211,12 +191,14 @@ export class StockService {
     };
     const productOrderSelect: Prisma.product_orderSelect = {
       quantity: true,
+      price: true,
       aorder: {
         select: aorderSelect,
       },
     };
     const afileSelect: Prisma.afileSelect = {
       unique_server_filename: true,
+      original_client_filename: true,
     };
     const productAttributeSelect: Prisma.product_attributeSelect = {
       quantity: true,
@@ -250,22 +232,15 @@ export class StockService {
       },
     };
 
-    const productPromise = this.repository.findOne({ ...query, select: productSelect });
-    const locationsPromise = this.locationService.getAll();
-    const product_statusesPromise = this.repository.getAllStatus();
-    const product_typesPromise = this.repository.getAllTypes();
-    
-    const product = await productPromise;
-    const locations = await locationsPromise;
-    const product_statuses = await product_statusesPromise;
-    const product_types = await product_typesPromise;
+    const {
+      product_attribute_product_attribute_product_idToproduct,
+      ...rest
+    } = await this.repository.findOne({ ...query, select: productSelect });
 
-    return new FindStockProcess(
-      product,
-      locations,
-      product_statuses,
-      product_types
-    ).run();
+    return {
+      ...rest,
+      product_attributes: product_attribute_product_attribute_product_idToproduct,
+    }
   }
 
   updateOne(params: UpdateOneDto) {
