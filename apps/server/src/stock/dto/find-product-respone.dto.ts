@@ -23,6 +23,12 @@ export class FindProductResponeDto extends PickType(ProductEntity, [
   "updated_at"
 ] as const) {
   @ApiProperty()
+  type: string;
+  
+  @ApiProperty()
+  retailPrice: number;
+
+  @ApiProperty()
   location: string;
 
   @ApiProperty()

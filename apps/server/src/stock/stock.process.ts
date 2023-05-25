@@ -13,6 +13,8 @@ export class StockProcess {
   private productSaleOrders: product_order[]; //TODO: Prisma.PromiseReturnType<typeof product_order_repository.findOne>[]
   
   private locationName: string;
+  private typeName: string;
+  private firstProductOrder: product_order;
   private aservices: aservice[];
   private orderDate: Date;
   private orderNumber: string;
@@ -51,10 +53,12 @@ export class StockProcess {
 
     this.rest = rest;
     this.locationName = location?.name;
+    this.typeName = product_type?.name;
     
-    this.aservices = product_order?.[0]?.['aservice'] || [];
-    this.orderDate = product_order?.[0]?.['aorder']?.order_date;
-    this.orderNumber = product_order?.[0]?.['aorder']?.order_nr;
+    this.firstProductOrder = product_order?.[0];
+    this.aservices = this.firstProductOrder?.['aservice'] || [];
+    this.orderDate = this.firstProductOrder?.['aorder']?.order_date;
+    this.orderNumber = this.firstProductOrder?.['aorder']?.order_nr;
     this.productTypeTasks = product_type?.['product_type_task'] || [];
 
     this.productPurchaseOrder = product_order.find(po => po['aorder']?.discr == AOrderDiscrimination.PURCHASE);
@@ -75,7 +79,9 @@ export class StockProcess {
     
     return {
       ...this.rest,
+      retailPrice: this.firstProductOrder?.price ?? 0,
       location: this.locationName,
+      type: this.typeName,
       purch: this.quantityPurchased,
       stock: this.quantityInStock,
       hold: this.quantityOnHold,
