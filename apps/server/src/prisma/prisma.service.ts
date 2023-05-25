@@ -12,9 +12,9 @@ export class PrismaService extends PrismaClient {
     (BigInt.prototype as any).toJSON = function () {
       return Number(this);
     };
-    
+    // TODO: separate these middleware into method
     /**
-     * product price
+     * product.price
     */
     this.$use(async (params, next) => {
       if (params.model == 'product' && params.action == 'create' && params.args.data?.price) {
@@ -25,12 +25,12 @@ export class PrismaService extends PrismaClient {
     });
 
     this.$use(async (params, next) => {
-      if (params.model == 'product' && ['findFirst', 'findUnique'].includes(params.action) && 
-      (params.args.select?.price || params.args.include?.price)) {
+      if (params.model == 'product' && ['findFirst', 'findUnique'].includes(params.action) &&
+        (params.args.select?.price || params.args.include?.price)) {
         const product = await next(params);
         return {
           ...product,
-          ...{price: ((product.price || 0) / 100)},
+          ...{ price: ((product.price || 0) / 100) },
         };
       }
       return next(params);
@@ -38,27 +38,54 @@ export class PrismaService extends PrismaClient {
 
     this.$use(async (params, next) => {
       if (params.model == 'product' && params.action == 'findMany' &&
-      (params.args.select?.price || params.args.include?.price) ) {
+        (params.args.select?.price || params.args.include?.price)) {
         const products = await next(params);
         return products.map(product => ({
           ...product,
-          ...{price: ((product.price || 0) / 100)},
+          ...{ price: ((product.price || 0) / 100) },
         }));
       }
       return next(params);
     });
 
     /**
-     * product_order price
+     * product.product_order.price
+    */
+    this.$use(async (params, next) => {
+      if (params.model == 'product' && params.action == 'findMany' &&
+        (
+          params.args.select?.product_order?.select?.price
+          || params.args.select?.product_order?.include?.price
+          || params.args.include?.product_order?.select?.price
+          || params.args.include?.product_order?.include?.price
+        )) {
+        const products = await next(params);
+        return products.map(product => ({
+          ...product,
+          ...(product.product_order && {
+            product_order: product.product_order.map(pOrder => {
+              return {
+                ...pOrder,
+                ...{ price: ((pOrder.price ?? 0) / 100) },
+              }
+            })
+          })
+        }));
+      }
+      return next(params);
+    });
+
+    /**
+     * aorder.product_order.price
     */
     this.$use(async (params, next) => {
       if (params.model == 'aorder' && params.action == 'findMany' &&
-      (
-        params.args.select?.product_order?.select?.price
-        || params.args.select?.product_order?.include?.price
-        || params.args.include?.product_order?.select?.price
-        || params.args.include?.product_order?.include?.price
-      ) ) {
+        (
+          params.args.select?.product_order?.select?.price
+          || params.args.select?.product_order?.include?.price
+          || params.args.include?.product_order?.select?.price
+          || params.args.include?.product_order?.include?.price
+        )) {
         const aorders = await next(params);
         return aorders.map(aorder => ({
           ...aorder,
@@ -66,11 +93,81 @@ export class PrismaService extends PrismaClient {
             product_order: aorder.product_order.map(pOrder => {
               return {
                 ...pOrder,
-                ...{price: ((pOrder.price ?? 0) / 100)},
+                ...{ price: ((pOrder.price ?? 0) / 100) },
               }
             })
           })
         }));
+      }
+      return next(params);
+    });
+
+    /**
+     * aorder.product_order.product.price
+    */
+    this.$use(async (params, next) => {
+      if (params.model == 'aorder' && params.action == 'findMany' &&
+        (
+          params.args.select?.product_order?.select?.product?.select?.price
+          || params.args.select?.product_order?.select?.product?.include?.price
+          || params.args.select?.product_order?.include?.product?.select?.price
+          || params.args.select?.product_order?.include?.product?.include?.price
+          || params.args.include?.product_order?.select?.product?.select?.price
+          || params.args.include?.product_order?.select?.product?.include?.price
+          || params.args.include?.product_order?.include?.product?.select?.price
+          || params.args.include?.product_order?.include?.product?.include?.price
+        )) {
+        const aorders = await next(params);
+        return aorders.map(aorder => ({
+          ...aorder,
+          ...(aorder.product_order && {
+            product_order: aorder.product_order.map(pOrder => {
+              return {
+                ...pOrder,
+                ...(pOrder.product && {
+                  product: {
+                    ...pOrder.product,
+                    ...{ price: ((pOrder.product.price ?? 0) / 100) },
+                  },
+                }),
+              };
+            }),
+          }),
+        }));
+      }
+      return next(params);
+    });
+
+    this.$use(async (params, next) => {
+      if (params.model == 'aorder' && ['findFirst', 'findUnique'].includes(params.action) &&
+        (
+          params.args.select?.product_order?.select?.product?.select?.price
+          || params.args.select?.product_order?.select?.product?.include?.price
+          || params.args.select?.product_order?.include?.product?.select?.price
+          || params.args.select?.product_order?.include?.product?.include?.price
+          || params.args.include?.product_order?.select?.product?.select?.price
+          || params.args.include?.product_order?.select?.product?.include?.price
+          || params.args.include?.product_order?.include?.product?.select?.price
+          || params.args.include?.product_order?.include?.product?.include?.price
+        )) {
+        const aorder = await next(params);
+
+        return {
+          ...aorder,
+          ...(aorder.product_order && {
+            product_order: aorder.product_order.map(pOrder => {
+              return {
+                ...pOrder,
+                ...(pOrder.product && {
+                  product: {
+                    ...pOrder.product,
+                    ...{ price: ((pOrder.product.price ?? 0) / 100) },
+                  },
+                }),
+              };
+            }),
+          }),
+        };
       }
       return next(params);
     });

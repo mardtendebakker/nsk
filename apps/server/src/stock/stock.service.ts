@@ -51,6 +51,7 @@ export class StockService {
 
     const productOrderSelect: Prisma.product_orderSelect = {
       quantity: true,
+      price: true,
       aorder: {
         select: aorderSelect,
       },
@@ -114,6 +115,7 @@ export class StockService {
     // this where is the top line logic transformation
     const productwhere: Prisma.productWhereInput = {
       ...query.where,
+      ...(query.orderId && {product_order: {some: {order_id: query.orderId}}}),
       ...(query.search && {name: {contains: query.search}}),
       ...(query.productType && {type_id: query.productType}),
       ...(query.location && {location_id: query.location}),
@@ -121,7 +123,7 @@ export class StockService {
         status_id: null,
       }, {
         product_status: {
-          id: query.productStatus,
+          ...(query.productStatus && {id: query.productStatus}),
           OR: [{
               is_stock: null
           }, {
