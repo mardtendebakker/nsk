@@ -154,7 +154,9 @@ export class AOrderService {
   }
 
   async findOne(id: number) {
-    return this.repository.findOne({ id });
+    return this.repository.findOne({ 
+      where: { id }
+     });
   }
 
   async update(id: number, comapny: UpdateAOrderDto) {

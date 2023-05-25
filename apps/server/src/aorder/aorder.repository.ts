@@ -42,7 +42,14 @@ export class AOrderRepository {
     });
   }
 
-  findOne(where: Prisma.aorderWhereUniqueInput) {
+  findOne(params: Prisma.aorderFindUniqueArgs) {
+    const { where, select, include } = params;
+    if (include) {
+      return this.prisma.aorder.findUnique({ where, include });
+    }
+    if (select) {
+      return this.prisma.aorder.findUnique({ where, select });
+    }
     return this.prisma.aorder.findUnique({
       where,
     });

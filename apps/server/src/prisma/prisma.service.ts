@@ -74,6 +74,47 @@ export class PrismaService extends PrismaClient {
       }
       return next(params);
     });
+
+    /**
+     * product_order.product price
+    */
+    this.$use(async (params, next) => {
+      if (params.model == 'aorder' && ['findFirst', 'findUnique'].includes(params.action) &&
+      (
+        params.args.select?.product_order?.select?.product?.select?.price
+        || params.args.select?.product_order?.select?.product?.include?.price
+        || params.args.select?.product_order?.include?.product?.select?.price
+        || params.args.select?.product_order?.include?.product?.include?.price
+        || params.args.include?.product_order?.select?.product?.select?.price
+        || params.args.include?.product_order?.select?.product?.include?.price
+        || params.args.include?.product_order?.include?.product?.select?.price
+        || params.args.include?.product_order?.include?.product?.include?.price
+      ) ) {
+
+        const aorder = await next(params);
+        
+        return {
+          ...aorder,
+          ...(aorder.product_order && {
+            product_order: aorder.product_order.map(pOrder => {
+              return {
+                ...pOrder,
+                ...(pOrder.product && {
+                  product: {
+                    ...pOrder.product,
+                    ...{price: ((pOrder.product.price ?? 0) / 100)},
+                  },
+                }),
+              };
+            }),
+          }),
+        };
+        
+      }
+      
+      return next(params);
+    });
+    
   }
 
   async enableShutdownHooks(app: INestApplication) {
