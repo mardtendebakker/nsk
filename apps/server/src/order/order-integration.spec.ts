@@ -5,6 +5,7 @@ import { CognitoTestingModule } from '@nestjs-cognito/testing';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { OrderModule } from './order.module'
 import { GroupBy } from './types/group-by.enum';
+import { OrderService } from './order.service';
 
 
 describe('Order', () => {
@@ -147,7 +148,7 @@ describe('Order', () => {
         }),
       ],
     })
-      .overrideProvider(orderService)
+      .overrideProvider(OrderService)
       .useValue(orderService)
       .compile();
 

@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CognitoAuthModule } from "@nestjs-cognito/auth";
+import { EventEmitterModule } from '@nestjs/event-emitter';
 import { CustomerModule } from '../customer/customer.module';
 import { DashboardModule } from '../dashboard/dashboard.module';
 import { SupplierModule } from '../supplier/supplier.module';
@@ -37,6 +38,7 @@ import { OrderModule } from '../order/order.module';
       }),
       inject: [ConfigService],
     }),
+    EventEmitterModule.forRoot(),
     AuthModule,
     UserModule,
     DashboardModule,

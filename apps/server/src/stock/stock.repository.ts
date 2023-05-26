@@ -93,4 +93,21 @@ export class StockRepository {
       where,
     });
   }
+
+  findProductAttributes(id: number, include: Prisma.product_attributeInclude) {
+    return this.prisma.product_attribute.findMany({
+      include,
+      where: {
+        product_id: id,
+      }
+    });
+  }
+
+  deleteAttributes(id: number) {
+    return this.prisma.product_attribute.deleteMany({
+      where: {
+        product_id: id,
+      }
+    });
+  }
 }

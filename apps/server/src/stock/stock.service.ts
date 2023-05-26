@@ -6,11 +6,14 @@ import { StockProcess } from "./stock.process";
 import { UpdateOneDto } from "../common/dto/update-one.dto";
 import { UpdateManyProductDto } from "./dto/update-many-product.dto";
 import { FindManyDto } from "./dto/find-many.dto";
+import { AttributeType } from "../attribute/enum/attribute-type.enum";
+import { EventEmitter2 } from "@nestjs/event-emitter";
 
 export class StockService {
   constructor(
     protected readonly repository: StockRepository,
-    protected readonly locationService: LocationService
+    protected readonly locationService: LocationService,
+    protected readonly eventEmitter: EventEmitter2
   ) {}
 
   async findAll(query: FindManyDto) {
@@ -262,5 +265,31 @@ export class StockService {
         id: {in: updateManyProductDto.ids}
        }
     });
+  }
+
+  async deleteAllAttributes(productId: number) {
+    const include: Prisma.product_attributeInclude = {
+      attribute: true
+    };
+
+    const productAttributes = await this.repository.findProductAttributes(productId, include);
+
+    const result = await this.repository.deleteAttributes(productId);
+
+    for (let i = 0; i < productAttributes.length; i++) {
+      const productAttribute = productAttributes[i];
+      if (productAttribute.attribute.type === AttributeType.TYPE_FILE) {
+        const fileIds = productAttribute.value.split(',');
+        for (let j = 0; j < fileIds.length; j++) {
+          const fileId = Number(fileIds[j]);
+          this.eventEmitter.emit(
+            'product_attribute.deleted',
+            fileId,
+          );
+        }
+      }
+    }
+    
+    return result;
   }
 }

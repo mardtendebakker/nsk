@@ -47,4 +47,9 @@ export class StockController {
   deleteMany(@Body() ids: number[]) {
     return this.stockService.deleteMany(ids);
   }
+
+  @Delete(':id/attributes')
+  deleteAttributes(@Param('id') id: number) {
+    return this.stockService.deleteAllAttributes(id);
+  }
 }
