@@ -157,9 +157,27 @@ export class AOrderService {
     return this.repository.findOne({ id });
   }
 
-  async update(id: number, comapny: UpdateAOrderDto) {
+  async update(id: number, orderDto: UpdateAOrderDto) {
+    const {
+      status_id,
+      supplier_id,
+      supplier,
+      customer_id,
+      customer,
+      ...rest
+    } = orderDto;
+
+    const data: Prisma.aorderUpdateInput = {
+      ...rest,
+      ...(status_id && {order_status: {connect: {id: status_id}}}),
+      ...(supplier_id && {acompany_aorder_supplier_idToacompany: {connect: {id: supplier_id}}}),
+      ...(supplier && {acompany_aorder_supplier_idToacompany: {create: {...supplier, discr: CompanyDiscrimination.SUPLLIER}}}),
+      ...(customer_id && {acompany_aorder_customer_idToacompany: {connect: {id: customer_id}}}),
+      ...(customer && {acompany_aorder_customer_idToacompany: {create: {...customer, discr: CompanyDiscrimination.CUSTOMER}}}),
+    };
+
     return this.repository.update({
-      data: comapny,
+      data: data,
       where: { id }
     });
   }

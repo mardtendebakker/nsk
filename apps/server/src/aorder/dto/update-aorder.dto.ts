@@ -1,3 +1,4 @@
-import { PrismaAOrderUpdateInputDto } from "./prisma-aorder-update-input.dto";
+import { PartialType } from "@nestjs/swagger";
+import { CreateAOrderDto } from "./create-aorder.dto";
 
-export class UpdateAOrderDto extends PrismaAOrderUpdateInputDto {}
+export class UpdateAOrderDto extends PartialType(CreateAOrderDto) {}
