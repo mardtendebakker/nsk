@@ -19,7 +19,6 @@ import { ORDER_STATUSES_PATH, SUPPLIERS_PATH } from '../../../utils/axios';
 function Form({
   formRepresentation,
   disabled,
-  onSubmit,
   setValue,
 }: {
   formRepresentation : FormRepresentation,
@@ -30,7 +29,7 @@ function Form({
   const { trans } = useTranslation();
 
   return (
-    <form onSubmit={onSubmit}>
+    <>
       <CardContent>
         <Typography
           sx={{ mb: '2rem' }}
@@ -348,7 +347,7 @@ function Form({
           </Grid>
         </Box>
       </CardContent>
-    </form>
+    </>
   );
 }
 

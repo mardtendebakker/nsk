@@ -1,12 +1,12 @@
 import { Box, Grid, Typography } from '@mui/material';
 import { useState } from 'react';
-import { SetValue, FormRepresentation } from '../../../../hooks/useForm';
-import useTranslation from '../../../../hooks/useTranslation';
-import BorderedBox from '../../../borderedBox';
-import TextField from '../../../memoizedInput/textField';
-import DataSourcePicker from '../../../memoizedInput/dataSourcePicker';
-import { LOCATIONS_PATH, PRODUCT_STATUSES_PATH, PRODUCT_TYPES_PATH } from '../../../../utils/axios/paths';
-import { Attribute, ProductType } from '../../../../utils/axios';
+import { SetValue, FormRepresentation } from '../../../hooks/useForm';
+import useTranslation from '../../../hooks/useTranslation';
+import BorderedBox from '../../borderedBox';
+import TextField from '../../memoizedInput/textField';
+import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
+import { LOCATIONS_PATH, PRODUCT_STATUSES_PATH, PRODUCT_TYPES_PATH } from '../../../utils/axios/paths';
+import { Attribute, ProductType } from '../../../utils/axios';
 import AutocompleteAttribute from './AutocompleteAttribute';
 import FileAttribute from './FileAttribute';
 
@@ -17,9 +17,11 @@ export const buildAttributeKey = (attribute: Attribute, productType: ProductType
 export default function Form({
   setValue,
   formRepresentation,
+  disabled,
 }: {
   setValue: SetValue,
   formRepresentation: FormRepresentation
+  disabled?: boolean
 }) {
   const { trans } = useTranslation();
   const [productType, setProductType] = useState<ProductType | undefined>();
@@ -59,6 +61,7 @@ export default function Form({
               placeholder={trans('productForm.sku.placeholder')}
               value={formRepresentation.sku.value || ''}
               onChange={(e) => setValue({ field: 'sku', value: e.target.value })}
+              disabled={disabled}
             />
             <TextField
               sx={{ flex: 0.33, mr: '1rem' }}
@@ -68,6 +71,7 @@ export default function Form({
               helperText={formRepresentation.name.error}
               error={!!formRepresentation.name.error}
               onChange={(e) => setValue({ field: 'name', value: e.target.value })}
+              disabled={disabled}
             />
             <DataSourcePicker
               sx={{ flex: 0.33 }}
@@ -79,6 +83,7 @@ export default function Form({
                 setValue({ field: 'productType', value: selected?.id });
               }}
               value={formRepresentation.productType.value?.toString()}
+              disabled={disabled}
             />
           </Grid>
           <Grid
@@ -95,6 +100,7 @@ export default function Form({
               value={formRepresentation.location.value?.toString()}
               helperText={formRepresentation.location.error}
               error={!!formRepresentation.location.error}
+              disabled={disabled}
             />
             <DataSourcePicker
               sx={{ flex: 0.33, mr: '1rem' }}
@@ -103,6 +109,7 @@ export default function Form({
               placeholder={trans('selectStatus')}
               onChange={(selected: { id: number }) => setValue({ field: 'productStatus', value: selected?.id })}
               value={formRepresentation.productStatus.value?.toString()}
+              disabled={disabled}
             />
             <TextField
               type="number"
@@ -114,6 +121,7 @@ export default function Form({
                 startAdornment: (<Box sx={{ mr: '.2rem' }}>€</Box>),
               }}
               onChange={(e) => setValue({ field: 'price', value: e.target.value })}
+              disabled={disabled}
             />
           </Grid>
           <Grid
@@ -129,6 +137,7 @@ export default function Form({
               name="description"
               value={formRepresentation.description.value || ''}
               onChange={(e) => setValue({ field: 'description', value: e.target.value })}
+              disabled={disabled}
             />
           </Grid>
         </Grid>
@@ -151,6 +160,7 @@ export default function Form({
                   value={getAttributeValue(attribute)}
                   onChange={(option) => { handleAttributeChange(attribute, option?.id); }}
                   attribute={attribute}
+                  disabled={disabled}
                 />
               );
             } if (attribute.type == 0) {
@@ -161,6 +171,7 @@ export default function Form({
                   label={attribute.name}
                   value={getAttributeValue(attribute) || ''}
                   onChange={(e) => { handleAttributeChange(attribute, e.target.value); }}
+                  disabled={disabled}
                 />
               );
             } if (attribute.type == 2) {
@@ -170,6 +181,7 @@ export default function Form({
                   attribute={attribute}
                   value={getAttributeValue(attribute) || []}
                   onChange={(value) => handleAttributeChange(attribute, value)}
+                  disabled={disabled}
                 />
               );
             }
@@ -183,3 +195,5 @@ export default function Form({
     </form>
   );
 }
+
+Form.defaultProps = { disabled: false };
