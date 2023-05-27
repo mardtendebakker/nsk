@@ -20,8 +20,11 @@ export class FileRepository {
     const { where, select, include } = params;
     if (include) {
       return this.prisma.afile.findUnique({ where, include });
+    } else if (select) {
+      return this.prisma.afile.findUnique({ where, select });
+    } else {
+      return this.prisma.afile.findUnique({ where });
     }
-    return this.prisma.afile.findUnique({ where, select });
   }
   
   update(params: {
@@ -33,5 +36,9 @@ export class FileRepository {
       data,
       where,
     });
+  }
+
+  delete(where: Prisma.afileWhereUniqueInput) {
+    return this.prisma.afile.delete({ where });
   }
 }

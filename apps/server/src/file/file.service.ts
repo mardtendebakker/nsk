@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { FileRepository } from './file.repository';
 import { v4 as uuidv4 } from 'uuid';
 import { ConfigService } from '@nestjs/config';
-import { afile } from '@prisma/client';
+import { Prisma, afile } from '@prisma/client';
 import { CreateFileDto } from './dto/upload-meta.dto';
 import { FileS3 } from './file.s3';
 
@@ -33,5 +33,17 @@ export class FileService {
       this.fileS3.delete(fileKey);
       throw e;
     }
+  }
+
+  async delete(id: number) {
+    const where: Prisma.afileWhereUniqueInput = { id };
+    const file = await this.repository.findOne({
+      where: { id }
+    });
+    
+    const fileKey = `${file.discr}/${file.original_client_filename}`;
+    this.fileS3.delete(fileKey);
+
+    return this.repository.delete(where);
   }
 }
