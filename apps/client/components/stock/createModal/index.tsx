@@ -82,7 +82,9 @@ export default function CreateModal({ onClose, onSubmit, type }: {
     },
   );
 
-  const handleSave = () => {
+  const handleSave = (e) => {
+    e.preventDefault();
+
     if (validate()) {
       return;
     }
@@ -96,21 +98,23 @@ export default function CreateModal({ onClose, onSubmit, type }: {
 
   return (
     <Dialog open onClose={onClose} maxWidth={false}>
-      <DialogTitle>
-        <Box sx={{ justifyContent: 'space-between', alignItems: 'center', display: 'flex' }}>
-          {trans('createProduct')}
-          <IconButton onClick={onClose} disabled={performing}>
-            <Close />
-          </IconButton>
-        </Box>
-      </DialogTitle>
-      <DialogContent>
-        <Form setValue={setValue} formRepresentation={formRepresentation} disabled={performing} />
-      </DialogContent>
-      <DialogActions>
-        <Button disabled={performing} onClick={onClose} variant="outlined" color="inherit">{trans('cancel')}</Button>
-        <Button disabled={performing} onClick={handleSave} variant="contained" color="primary">{trans('saveChanges')}</Button>
-      </DialogActions>
+      <form onSubmit={handleSave}>
+        <DialogTitle>
+          <Box sx={{ justifyContent: 'space-between', alignItems: 'center', display: 'flex' }}>
+            {trans('createProduct')}
+            <IconButton onClick={onClose} disabled={performing}>
+              <Close />
+            </IconButton>
+          </Box>
+        </DialogTitle>
+        <DialogContent>
+          <Form setValue={setValue} formRepresentation={formRepresentation} disabled={performing} />
+        </DialogContent>
+        <DialogActions>
+          <Button disabled={performing} onClick={onClose} variant="outlined" color="inherit">{trans('cancel')}</Button>
+          <Button type="submit" disabled={performing} onClick={handleSave} variant="contained" color="primary">{trans('saveChanges')}</Button>
+        </DialogActions>
+      </form>
     </Dialog>
   );
 }
