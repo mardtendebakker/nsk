@@ -68,68 +68,70 @@ function UpdateSalesOrder() {
           {trans('newSale')}
         </title>
       </Head>
-      <Box
-        sx={{
-          alignItems: 'center',
-          display: 'flex',
-          justifyContent: 'space-between',
-          flexWrap: 'wrap',
-          mb: 2,
-        }}
-      >
-        <Typography variant="h4">
-          <IconButton onClick={() => router.push(ORDERS_SALES)}>
-            <ArrowBack />
-          </IconButton>
-          {trans('newSale')}
-        </Typography>
-        <Box>
-          <Button
-            sx={{ ml: '1.5rem' }}
-            color="inherit"
-            variant="outlined"
-            onClick={() => router.push(ORDERS_SALES)}
-          >
-            {trans('cancel')}
-          </Button>
-          <Button
-            sx={{ ml: '1.5rem' }}
-            variant="contained"
-            onClick={handleSubmit}
-          >
-            <Check />
-            {trans('saveSale')}
-          </Button>
-        </Box>
-      </Box>
-      <Card>
-        <Form
-          formRepresentation={formRepresentation}
-          disabled={!canSubmit()}
-          onSubmit={handleSubmit}
-          setValue={setValue}
-        />
-        <Divider sx={{ mx: '1.5rem' }} />
-        <CardContent>
-          <Typography
-            sx={{ mb: '2rem' }}
-            variant="h4"
-          >
-            {trans('addProducts')}
+      <form>
+        <Box
+          sx={{
+            alignItems: 'center',
+            display: 'flex',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            mb: 2,
+          }}
+        >
+          <Typography variant="h4">
+            <IconButton onClick={() => router.push(ORDERS_SALES)}>
+              <ArrowBack />
+            </IconButton>
+            {trans('newSale')}
           </Typography>
-          <Grid
-            container
-            spacing={3}
-          >
-            <Grid
-              item
-              xs={12}
+          <Box>
+            <Button
+              sx={{ ml: '1.5rem' }}
+              color="inherit"
+              variant="outlined"
+              onClick={() => router.push(ORDERS_SALES)}
             >
-              <ProductsTable orderId={id.toString()} />
+              {trans('cancel')}
+            </Button>
+            <Button
+              sx={{ ml: '1.5rem' }}
+              variant="contained"
+              onClick={handleSubmit}
+            >
+              <Check />
+              {trans('saveSale')}
+            </Button>
+          </Box>
+        </Box>
+        <Card>
+          <Form
+            formRepresentation={formRepresentation}
+            disabled={!canSubmit()}
+            onSubmit={handleSubmit}
+            setValue={setValue}
+          />
+          <Divider sx={{ mx: '1.5rem' }} />
+          <CardContent>
+            <Typography
+              sx={{ mb: '2rem' }}
+              variant="h4"
+            >
+              {trans('addProducts')}
+            </Typography>
+            <Grid
+              container
+              spacing={3}
+            >
+              <Grid
+                item
+                xs={12}
+              >
+                <ProductsTable orderId={id.toString()} />
+              </Grid>
             </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </form>
     </DashboardLayout>
   );
 }

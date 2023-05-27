@@ -38,7 +38,7 @@ export default function Form({
   );
 
   return (
-    <form>
+    <>
       <BorderedBox sx={{ width: '80rem', p: '1rem' }}>
         <Typography
           sx={{ mb: '2rem' }}
@@ -192,7 +192,7 @@ export default function Form({
         </Grid>
       </BorderedBox>
       )}
-    </form>
+    </>
   );
 }
 

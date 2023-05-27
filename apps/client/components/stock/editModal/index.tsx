@@ -51,7 +51,9 @@ export default function EditModal(
     call().catch(onClose);
   }, []);
 
-  const handleSave = () => {
+  const handleSave = (e) => {
+    e.preventDefault();
+
     if (validate()) {
       return;
     }
@@ -67,21 +69,23 @@ export default function EditModal(
 
   return (
     <Dialog open onClose={onClose} maxWidth={false}>
-      <DialogTitle>
-        <Box sx={{ justifyContent: 'space-between', alignItems: 'center', display: 'flex' }}>
-          {trans('editProduct')}
-          <IconButton onClick={onClose} disabled={!canSubmit()}>
-            <Close />
-          </IconButton>
-        </Box>
-      </DialogTitle>
-      <DialogContent>
-        <Form setValue={setValue} formRepresentation={formRepresentation} disabled={!canSubmit()} />
-      </DialogContent>
-      <DialogActions>
-        <Button disabled={!canSubmit()} onClick={onClose} variant="outlined" color="inherit">{trans('cancel')}</Button>
-        <Button disabled={!canSubmit()} onClick={handleSave} variant="contained" color="primary">{trans('saveChanges')}</Button>
-      </DialogActions>
+      <form onSubmit={handleSave}>
+        <DialogTitle>
+          <Box sx={{ justifyContent: 'space-between', alignItems: 'center', display: 'flex' }}>
+            {trans('editProduct')}
+            <IconButton onClick={onClose} disabled={!canSubmit()}>
+              <Close />
+            </IconButton>
+          </Box>
+        </DialogTitle>
+        <DialogContent>
+          <Form setValue={setValue} formRepresentation={formRepresentation} disabled={!canSubmit()} />
+        </DialogContent>
+        <DialogActions>
+          <Button disabled={!canSubmit()} onClick={onClose} variant="outlined" color="inherit">{trans('cancel')}</Button>
+          <Button type="submit" disabled={!canSubmit()} onClick={handleSave} variant="contained" color="primary">{trans('saveChanges')}</Button>
+        </DialogActions>
+      </form>
     </Dialog>
   );
 }

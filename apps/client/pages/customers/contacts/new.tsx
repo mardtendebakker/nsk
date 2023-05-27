@@ -17,62 +17,62 @@ import useTranslation from '../../../hooks/useTranslation';
 export function initFormState(customer?: Customer) {
   return {
     name: {
-      value: customer?.name || '',
+      value: customer?.name,
       required: true,
     },
     representative: {
-      value: customer?.representative || '',
+      value: customer?.representative,
     },
     kvk_nr: {
-      value: customer?.kvk_nr || '',
+      value: customer?.kvk_nr,
     },
     email: {
-      value: customer?.email || '',
+      value: customer?.email,
     },
     phone: {
-      value: customer?.phone || '',
+      value: customer?.phone,
     },
     phone2: {
-      value: customer?.phone2 || '',
+      value: customer?.phone2,
     },
     street: {
-      value: customer?.street || '',
+      value: customer?.street,
     },
     street_extra: {
-      value: customer?.street_extra || '',
+      value: customer?.street_extra,
     },
     city: {
-      value: customer?.city || '',
+      value: customer?.city,
     },
     country: {
-      value: customer?.country || '',
+      value: customer?.country,
     },
     state: {
-      value: customer?.state || '',
+      value: customer?.state,
     },
     zip: {
-      value: customer?.zip || '',
+      value: customer?.zip,
     },
     street2: {
-      value: customer?.street2 || '',
+      value: customer?.street2,
     },
     street_extra2: {
-      value: customer?.street_extra2 || '',
+      value: customer?.street_extra2,
     },
     city2: {
-      value: customer?.city2 || '',
+      value: customer?.city2,
     },
     country2: {
-      value: customer?.country2 || '',
+      value: customer?.country2,
     },
     state2: {
-      value: customer?.state2 || '',
+      value: customer?.state2,
     },
     zip2: {
-      value: customer?.zip2 || '',
+      value: customer?.zip2,
     },
     is_partner: {
-      value: customer?.is_partner || '',
+      value: customer?.is_partner,
     },
   };
 }
@@ -142,38 +142,40 @@ function NewCustomerContact() {
           {trans('newContact')}
         </title>
       </Head>
-      <Box
-        sx={{
-          alignItems: 'center',
-          display: 'flex',
-          justifyContent: 'space-between',
-          flexWrap: 'wrap',
-          mb: 2,
-        }}
-      >
-        <Typography variant="h4">
-          <IconButton onClick={() => router.push(CUSTOMERS_CONTACTS)}>
-            <ArrowBack />
-          </IconButton>
-          {trans('newContact')}
-        </Typography>
-        <Box>
-          <Button
-            sx={{ ml: '1.5rem' }}
-            variant="contained"
-            onClick={handleSubmit}
-          >
-            <Check />
-            {trans('saveContact')}
-          </Button>
+      <form onSubmit={handleSubmit}>
+        <Box
+          sx={{
+            alignItems: 'center',
+            display: 'flex',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            mb: 2,
+          }}
+        >
+          <Typography variant="h4">
+            <IconButton onClick={() => router.push(CUSTOMERS_CONTACTS)}>
+              <ArrowBack />
+            </IconButton>
+            {trans('newContact')}
+          </Typography>
+          <Box>
+            <Button
+              type="submit"
+              sx={{ ml: '1.5rem' }}
+              variant="contained"
+              onClick={handleSubmit}
+            >
+              <Check />
+              {trans('saveContact')}
+            </Button>
+          </Box>
         </Box>
-      </Box>
-      <Form
-        formRepresentation={formRepresentation}
-        disabled={performing}
-        onSubmit={handleSubmit}
-        setValue={setValue}
-      />
+        <Form
+          formRepresentation={formRepresentation}
+          disabled={performing}
+          setValue={setValue}
+        />
+      </form>
     </DashboardLayout>
   );
 }

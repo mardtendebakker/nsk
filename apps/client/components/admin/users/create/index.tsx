@@ -23,21 +23,23 @@ export default function Create({ open, onClose }: { open: boolean, onClose: () =
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth={false}>
-      <DialogTitle>
-        <Box sx={{ justifyContent: 'space-between', alignItems: 'center', display: 'flex' }}>
-          {trans('createUser')}
-          <IconButton>
-            <Close />
-          </IconButton>
-        </Box>
-      </DialogTitle>
-      <DialogContent>
-        <UserForm setValue={setValue} formRepresentation={formRepresentation} />
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose} variant="outlined" color="inherit">{trans('cancel')}</Button>
-        <Button onClick={onClose} variant="contained" color="primary">{trans('saveChanges')}</Button>
-      </DialogActions>
+      <form>
+        <DialogTitle>
+          <Box sx={{ justifyContent: 'space-between', alignItems: 'center', display: 'flex' }}>
+            {trans('createUser')}
+            <IconButton>
+              <Close />
+            </IconButton>
+          </Box>
+        </DialogTitle>
+        <DialogContent>
+          <UserForm setValue={setValue} formRepresentation={formRepresentation} />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={onClose} variant="outlined" color="inherit">{trans('cancel')}</Button>
+          <Button type="submit" onClick={onClose} variant="contained" color="primary">{trans('saveChanges')}</Button>
+        </DialogActions>
+      </form>
     </Dialog>
   );
 }

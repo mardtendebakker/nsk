@@ -1,9 +1,9 @@
 import Add from '@mui/icons-material/Add';
 import { Box, Button, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
-import useTranslation from '../../hooks/useTranslation';
 import { useState } from 'react';
-import { ADMIN_USERS , ADMIN_SETTINGS, ADMIN_SETTINGS_LOCATIONS } from '../../utils/routes';
+import useTranslation from '../../hooks/useTranslation';
+import { ADMIN_USERS, ADMIN_SETTINGS, ADMIN_SETTINGS_LOCATIONS } from '../../utils/routes';
 import Create from './users/create';
 
 export default function Navigation() {
