@@ -2,17 +2,19 @@ import {
   Box, Typography,
 } from '@mui/material';
 import { memo } from 'react';
-import { Attribute } from '../../../../utils/axios';
-import ImageInput from '../../../input/imageInput';
+import { Attribute } from '../../../utils/axios';
+import ImageInput from '../../input/imageInput';
 
 function FileAttribute({
   attribute,
   value,
   onChange,
+  disabled,
 }: {
   attribute: Attribute,
   value: (string | File)[],
-  onChange: (arg0: (string | File)[]) => void
+  onChange: (arg0: (string | File)[]) => void,
+  disabled?: boolean
 }) {
   return (
     <Box sx={{
@@ -37,6 +39,7 @@ function FileAttribute({
             image={image}
             onChange={(file: File) => onChange([...value.filter((element) => element != image), file])}
             onClear={() => onChange(value.filter((element) => element != image))}
+            disabled={disabled}
           />
         ))
         }
@@ -47,11 +50,14 @@ function FileAttribute({
           image={undefined}
           onChange={(file: File) => onChange([...value, file])}
           onClear={() => {}}
+          disabled={disabled}
         />
       </Box>
     </Box>
   );
 }
+
+FileAttribute.defaultProps = { disabled: false };
 
 export default memo(
   FileAttribute,

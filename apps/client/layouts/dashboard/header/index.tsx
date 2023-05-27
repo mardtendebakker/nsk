@@ -15,7 +15,6 @@ import {
   CUSTOMERS_EMAILS,
   STOCKS_PRODUCTS,
   STOCKS_REPAIR_SERVICES,
-  SUPPLIERS_NEW,
   MY_TASKS,
 } from '../../../utils/routes';
 import useTranslation from '../../../hooks/useTranslation';
@@ -66,24 +65,24 @@ export default function Header() {
             {
               title: trans('stock'),
               path: STOCKS_PRODUCTS,
-              active: router.pathname === STOCKS_PRODUCTS
-              || router.pathname === STOCKS_REPAIR_SERVICES,
+              active: router.pathname.includes(STOCKS_PRODUCTS)
+              || router.pathname.includes(STOCKS_REPAIR_SERVICES),
             },
             {
               title: trans('orders'),
               path: ORDERS_PURCHASES,
-              active: router.pathname === ORDERS_PURCHASES || router.pathname === ORDERS_SALES,
+              active: router.pathname.includes(ORDERS_PURCHASES) || router.pathname.includes(ORDERS_SALES),
             },
             {
               title: trans('customers'),
               path: CUSTOMERS_CONTACTS,
-              active: router.pathname === CUSTOMERS_CONTACTS
-               || router.pathname === CUSTOMERS_EMAILS,
+              active: router.pathname.includes(CUSTOMERS_CONTACTS)
+               || router.pathname.includes(CUSTOMERS_EMAILS),
             },
             {
               title: trans('suppliers'),
               path: SUPPLIERS,
-              active: router.pathname === SUPPLIERS || router.pathname === SUPPLIERS_NEW,
+              active: router.pathname.includes(SUPPLIERS),
             },
           ].map((item) => (
             <MenuItem key={item.title} item={item} />

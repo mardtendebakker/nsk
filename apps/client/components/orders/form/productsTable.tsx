@@ -6,39 +6,51 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import { useState, Dispatch, SetStateAction } from 'react';
+import {
+  useState, useEffect, useCallback,
+} from 'react';
 import Add from '@mui/icons-material/Add';
+import { useRouter } from 'next/router';
+import { ProductListItem } from '../../../utils/axios/models/product';
+import debounce from '../../../utils/debounce';
 import TextField from '../../memoizedInput/textField';
-import CreateModal, { Product } from '../../stock/createModal';
+import CreateModal from '../../stock/createModal';
 import useTranslation from '../../../hooks/useTranslation';
+import useAxios from '../../../hooks/useAxios';
+import { ORDERS_PURCHASES } from '../../../utils/routes';
+import { STOCK_PRODUCTS_PATH, STOCK_REPAIR_SERVICES_PATH } from '../../../utils/axios';
+import EditModal from '../../stock/editModal';
 
-export default function ProductsTable(
-  { products, setProducts }:
-  { products: { [key:number]: Product }, setProducts: Dispatch<SetStateAction< { [key:number]: Product }>> },
-) {
+export default function ProductsTable({ orderId }:{ orderId: string }) {
   const [showForm, setShowForm] = useState<boolean>(false);
-  const [productToEdit, setProductToEdit] = useState<Product | undefined>();
+  const [editProductId, setEditProductId] = useState<number | undefined>();
+  const router = useRouter();
+
   const { trans } = useTranslation();
 
-  const handleProductPropertyChange = (product: Product, property: string, value) => {
-    products[product.id][property] = value;
-    setProducts({ ...products });
-  };
+  const ajaxPath = router.pathname.includes(ORDERS_PURCHASES) ? STOCK_PRODUCTS_PATH : STOCK_REPAIR_SERVICES_PATH;
+  const type = router.pathname.includes(ORDERS_PURCHASES) ? 'product' : 'repair';
 
-  const handleNewProduct = (product: Product) => {
-    product.id = `new${Math.random()}`;
-    product.price = 0;
-    product.quantity = 1;
-    products[product.id] = product;
-    setProducts(products);
-    setShowForm(false);
-  };
+  const { data: { data = [] } = {}, call } = useAxios(
+    'get',
+    ajaxPath.replace(':id', ''),
+    {
+      withProgressBar: true,
+    },
+  );
 
-  const handleEditProduct = (product: Product) => {
-    products[product.id] = product;
-    setProducts(products);
-    setProductToEdit(undefined);
-  };
+  const { call: callPut } = useAxios('patch', undefined, { withProgressBar: true });
+
+  const handleProductPropertyChange = useCallback(debounce((product, property: string, value) => {
+    callPut({
+      path: ajaxPath.replace(':id', product.id.toString()),
+      body: { [property]: value },
+    });
+  }), []);
+
+  useEffect(() => {
+    call({ params: { orderId } });
+  }, [orderId]);
 
   return (
     <>
@@ -72,23 +84,23 @@ export default function ProductsTable(
           </TableRow>
         </TableHead>
         <TableBody>
-          {Object.keys(products).map(
-            (key) => (
-              <TableRow key={key}>
-                <TableCell>{products[key].id?.includes('new') ? '--' : products[key].id}</TableCell>
-                <TableCell>{products[key].sku}</TableCell>
-                <TableCell>{products[key].name}</TableCell>
-                <TableCell>{products[key].productType}</TableCell>
+          {data.map(
+            (product: ProductListItem) => (
+              <TableRow key={product.id}>
+                <TableCell>{product.id}</TableCell>
+                <TableCell>{product.sku}</TableCell>
+                <TableCell>{product.name}</TableCell>
+                <TableCell>{product.type}</TableCell>
                 <TableCell>
-                  UNKNOWN
+                  {product.retailPrice}
                 </TableCell>
                 <TableCell>
                   <TextField
                     type="number"
                     placeholder="0.00"
-                    value={products[key].price.toString()}
+                    defaultValue={product.price.toString()}
                     onChange={(e) => handleProductPropertyChange(
-                      products[key],
+                      product,
                       'price',
                       e.target.value,
                     )}
@@ -98,16 +110,16 @@ export default function ProductsTable(
                   <TextField
                     type="number"
                     placeholder="1"
-                    value={products[key].quantity.toString()}
+                    defaultValue={product.stock.toString()}
                     onChange={(e) => handleProductPropertyChange(
-                      products[key],
-                      'quantity',
+                      product,
+                      'stock',
                       e.target.value,
                     )}
                   />
                 </TableCell>
                 <TableCell>
-                  <Button onClick={() => setProductToEdit(products[key])}>
+                  <Button onClick={() => setEditProductId(product.id)}>
                     {trans('edit')}
                   </Button>
                 </TableCell>
@@ -124,8 +136,8 @@ export default function ProductsTable(
           </TableRow>
         </TableBody>
       </Table>
-      {showForm && <CreateModal onClose={() => setShowForm(false)} onSubmit={handleNewProduct} />}
-      {productToEdit && <CreateModal product={productToEdit} onClose={() => setProductToEdit(undefined)} onSubmit={handleEditProduct} />}
+      {showForm && <CreateModal type={type} onClose={() => setShowForm(false)} onSubmit={() => { call({ params: { orderId } }); setShowForm(false); }} />}
+      {editProductId && <EditModal type={type} id={editProductId.toString()} onClose={() => setEditProductId(undefined)} onSubmit={() => setEditProductId(undefined)} />}
     </>
   );
 }

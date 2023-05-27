@@ -39,13 +39,20 @@ const useAxios = (
 
   useEffect(() => source.current.cancel, []);
 
-  async function call(explicitPath: string, params?: object, body?: object, responseType?: ResponseType)
+  async function call(
+    explicitPath: string,
+    params?: object,
+    body?: object,
+    responseType?: ResponseType,
+    headers?: object,
+  )
     : AxiosPromise<AxiosResponse> {
     if (method === POST || method === PATCH || method === PUT) {
       return axios[method](explicitPath, body, {
         cancelToken: source.current.token,
         params,
         responseType,
+        headers,
       });
     }
 
@@ -75,9 +82,9 @@ const useAxios = (
     /** @throws {Error} */
     call: async (
       {
-        params, body, path: explicitPath, responseType,
+        params, body, path: explicitPath, responseType, headers,
       }
-      : { params?: object, body?: object, path?: string, responseType?: ResponseType }
+      : { params?: object, body?: object, path?: string, responseType?: ResponseType, headers?: object }
       = {},
       cb?: (e: Error, axiosResponse?: AxiosResponse) => void,
     ): Promise<AxiosResponse | void> => {
@@ -89,7 +96,7 @@ const useAxios = (
           showProgress();
         }
 
-        const resp = await call(finalPath, params, body, responseType);
+        const resp = await call(finalPath, params, body, responseType, headers);
         setResponse(resp);
 
         if (showSuccessMessage || customSuccessMessage) {

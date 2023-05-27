@@ -12,6 +12,7 @@ import Action from './action';
 import ConfirmationDialog from '../../confirmationDialog';
 import useTranslation from '../../../hooks/useTranslation';
 import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
+import EditModal from '../editModal';
 
 function initFormState(
   {
@@ -254,6 +255,14 @@ export default function ListContainer() {
         confirmButtonVariant="outlined"
         confirmButtonText={trans('deleteConfirm')}
       />
+      )}
+      {editProductId && (
+        <EditModal
+          onClose={() => setEditProductId(undefined)}
+          onSubmit={() => setEditProductId(undefined)}
+          id={editProductId.toString()}
+          type={router.pathname == STOCKS_PRODUCTS ? 'product' : 'repair'}
+        />
       )}
       {showChangeLocationModal && (
       <ConfirmationDialog

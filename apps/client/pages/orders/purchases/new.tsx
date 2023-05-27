@@ -119,48 +119,51 @@ function NewPurchaseOrder() {
           {trans('newPurchase')}
         </title>
       </Head>
-      <Box
-        sx={{
-          alignItems: 'center',
-          display: 'flex',
-          justifyContent: 'space-between',
-          flexWrap: 'wrap',
-          mb: 2,
-        }}
-      >
-        <Typography variant="h4">
-          <IconButton onClick={() => router.push(ORDERS_PURCHASES)}>
-            <ArrowBack />
-          </IconButton>
-          {trans('newPurchase')}
-        </Typography>
-        <Box>
-          <Button
-            sx={{ ml: '1.5rem' }}
-            color="inherit"
-            variant="outlined"
-            onClick={() => router.push(ORDERS_PURCHASES)}
-          >
-            {trans('cancel')}
-          </Button>
-          <Button
-            sx={{ ml: '1.5rem' }}
-            variant="contained"
-            onClick={handleSubmit}
-          >
-            <Check />
-            {trans('savePurchase')}
-          </Button>
+      <form onSubmit={handleSubmit}>
+        <Box
+          sx={{
+            alignItems: 'center',
+            display: 'flex',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            mb: 2,
+          }}
+        >
+          <Typography variant="h4">
+            <IconButton onClick={() => router.push(ORDERS_PURCHASES)}>
+              <ArrowBack />
+            </IconButton>
+            {trans('newPurchase')}
+          </Typography>
+          <Box>
+            <Button
+              sx={{ ml: '1.5rem' }}
+              color="inherit"
+              variant="outlined"
+              onClick={() => router.push(ORDERS_PURCHASES)}
+            >
+              {trans('cancel')}
+            </Button>
+            <Button
+              type="submit"
+              sx={{ ml: '1.5rem' }}
+              variant="contained"
+              onClick={handleSubmit}
+            >
+              <Check />
+              {trans('savePurchase')}
+            </Button>
+          </Box>
         </Box>
-      </Box>
-      <Card>
-        <Form
-          formRepresentation={formRepresentation}
-          disabled={performing}
-          onSubmit={handleSubmit}
-          setValue={setValue}
-        />
-      </Card>
+        <Card>
+          <Form
+            formRepresentation={formRepresentation}
+            disabled={performing}
+            onSubmit={handleSubmit}
+            setValue={setValue}
+          />
+        </Card>
+      </form>
     </DashboardLayout>
   );
 }

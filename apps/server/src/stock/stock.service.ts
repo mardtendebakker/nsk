@@ -212,6 +212,7 @@ export class StockService {
       price: true,
       created_at: true,
       updated_at: true,
+      description: true,
       location: {
         select: locationSelect
       },

@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import Check from '@mui/icons-material/Check';
 import {
-  SyntheticEvent, useEffect, useMemo, useState,
+  SyntheticEvent, useEffect, useMemo,
 } from 'react';
 import Form from '../../../components/orders/form';
 import DashboardLayout from '../../../layouts/dashboard';
@@ -17,16 +17,14 @@ import useTranslation from '../../../hooks/useTranslation';
 import { initFormState, formRepresentationToBody } from './new';
 import { ORDERS_PURCHASES } from '../../../utils/routes';
 import ProductsTable from '../../../components/orders/form/productsTable';
-import { Product } from '../../../components/stock/createModal';
 
 function UpdatePurchaseOrder() {
   const { trans } = useTranslation();
   const router = useRouter();
   const { id } = router.query;
-  const [products, setProducts] = useState<{ [key:number]: Product }>({});
 
   const { call, performing } = useAxios(
-    'patch',
+    'put',
     null,
     { withProgressBar: true, showSuccessMessage: true },
   );
@@ -129,7 +127,7 @@ function UpdatePurchaseOrder() {
               item
               xs={12}
             >
-              <ProductsTable products={products} setProducts={setProducts} />
+              <ProductsTable orderId={id.toString()} />
             </Grid>
           </Grid>
         </CardContent>

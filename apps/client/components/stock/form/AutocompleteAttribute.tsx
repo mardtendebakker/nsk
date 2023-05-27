@@ -1,20 +1,24 @@
 import { Box, Typography } from '@mui/material';
 import { memo } from 'react';
-import Autocomplete from '../../../memoizedInput/autocomplete';
-import { Attribute, AttributeOption } from '../../../../utils/axios';
-import TextField from '../../../input/textField';
+import Autocomplete from '../../memoizedInput/autocomplete';
+import { Attribute, AttributeOption } from '../../../utils/axios';
+import TextField from '../../input/textField';
 
-function AutocompleteAttribute({ value, onChange, attribute }
+function AutocompleteAttribute({
+  value, onChange, attribute, disabled,
+}
 : {
   attribute: Attribute,
   value: number | undefined,
-  onChange: (arg0: AttributeOption | undefined) => void
+  onChange: (arg0: AttributeOption | undefined) => void,
+  disabled?: boolean
 }) {
   const selectedOption = attribute.options.find((option: AttributeOption) => option.id == value) || null;
 
   return (
     <Box sx={{ flex: '0 33%', pb: '1rem', pr: '1rem' }}>
       <Autocomplete
+        disabled={disabled}
         value={selectedOption}
         getOptionLabel={({ name }: { name: string }) => name}
         size="small"
@@ -42,6 +46,8 @@ function AutocompleteAttribute({ value, onChange, attribute }
     </Box>
   );
 }
+
+AutocompleteAttribute.defaultProps = { disabled: false };
 
 export default memo(
   AutocompleteAttribute,

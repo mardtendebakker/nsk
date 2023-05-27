@@ -11,11 +11,13 @@ export default function ImageInput({
   onChange,
   onClear,
   sx,
+  disabled,
 }: {
   image?: string | File,
   onChange: (arg0: File) => void,
   onClear?: () => void,
-  sx?: SxProps
+  sx?: SxProps,
+  disabled?: boolean
 }) {
   const ref = useRef<HTMLInputElement>();
   const [hovered, setHovered] = useState(false);
@@ -35,6 +37,10 @@ export default function ImageInput({
   }, [image]);
 
   const handleChange = (e: ChangeEvent) => {
+    if (disabled) {
+      return;
+    }
+
     const file = (e.target as HTMLInputElement).files[0];
 
     if (file) {
@@ -43,6 +49,9 @@ export default function ImageInput({
   };
 
   const handleClear = () => {
+    if (disabled) {
+      return;
+    }
     setPreview(undefined);
     onClear();
   };
@@ -115,4 +124,5 @@ ImageInput.defaultProps = {
   image: undefined,
   onClear: undefined,
   sx: undefined,
+  disabled: false,
 };

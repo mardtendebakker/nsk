@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import {
-  Box, Button, IconButton, Typography, Card,
+  Box, Button, IconButton, Typography, Card, Divider, CardContent, Grid,
 } from '@mui/material';
 import { useRouter } from 'next/router';
 import ArrowBack from '@mui/icons-material/ArrowBack';
@@ -14,6 +14,7 @@ import useForm from '../../../hooks/useForm';
 import useTranslation from '../../../hooks/useTranslation';
 import { initFormState, formRepresentationToBody } from '../purchases/new';
 import { ORDERS_SALES } from '../../../utils/routes';
+import ProductsTable from '../../../components/orders/form/productsTable';
 
 function UpdateSalesOrder() {
   const { trans } = useTranslation();
@@ -21,7 +22,7 @@ function UpdateSalesOrder() {
   const { id } = router.query;
 
   const { call, performing } = useAxios(
-    'patch',
+    'put',
     null,
     { withProgressBar: true, showSuccessMessage: true },
   );
@@ -108,7 +109,7 @@ function UpdateSalesOrder() {
           onSubmit={handleSubmit}
           setValue={setValue}
         />
-        {/* <Divider sx={{ mx: '1.5rem' }} />
+        <Divider sx={{ mx: '1.5rem' }} />
         <CardContent>
           <Typography
             sx={{ mb: '2rem' }}
@@ -124,10 +125,10 @@ function UpdateSalesOrder() {
               item
               xs={12}
             >
-              <ProductsTable formRepresentation={formRepresentation} setValue={setValue} />
+              <ProductsTable orderId={id.toString()} />
             </Grid>
           </Grid>
-      </CardContent> */}
+        </CardContent>
       </Card>
     </DashboardLayout>
   );

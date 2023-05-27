@@ -12,7 +12,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import moment from 'moment';
 import useTranslation from '../../../hooks/useTranslation';
-import { Product } from '../../../utils/axios';
+import { ProductListItem } from '../../../utils/axios/models/product';
 import TasksProgress from './tasksProgress';
 import TaskStatusTableCell from './taskStatusTableCell';
 import { STOCKS_PRODUCTS } from '../../../utils/routes';
@@ -25,7 +25,7 @@ function Row(
     product, onCheck, onClick, checkedProductIds, shownProductTasks,
   }
   : {
-    product: Product,
+    product: ProductListItem,
     onCheck: OnCheck,
     onClick: OnClick,
     checkedProductIds: number[],
@@ -138,7 +138,7 @@ export default function List({
   onCheck,
   checkedProductIds,
 }: {
-  products: Product[],
+  products: ProductListItem[],
   count: number,
   page: number,
   onPageChange: (newPage: number)=>void,
@@ -213,7 +213,7 @@ export default function List({
         </TableHead>
         <TableBody>
           {products.map(
-            (product: Product) => (
+            (product: ProductListItem) => (
               <Row
                 shownProductTasks={shownProductTasks}
                 onClick={handleClick}
