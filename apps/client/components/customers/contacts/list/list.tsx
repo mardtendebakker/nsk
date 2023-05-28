@@ -8,7 +8,7 @@ import {
   Checkbox,
 } from '@mui/material';
 import useTranslation from '../../../../hooks/useTranslation';
-import { Customer } from '../../../../utils/axios';
+import { CompanyListItem } from '../../../../utils/axios/models/company';
 
 export default function List({
   customers = [],
@@ -18,7 +18,7 @@ export default function List({
   onCheck,
   disabled,
 }: {
-  customers: Customer[],
+  customers: CompanyListItem[],
   count: number,
   page: number,
   onPageChange: (newPage: number)=>void,
@@ -47,7 +47,7 @@ export default function List({
           </TableRow>
         </TableHead>
         <TableBody>
-          {customers.map((customer: Customer) => (
+          {customers.map((customer: CompanyListItem) => (
             <TableRow
               sx={{
                 height: 60,

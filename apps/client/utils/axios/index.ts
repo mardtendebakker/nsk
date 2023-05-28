@@ -32,5 +32,3 @@ axiosClient.interceptors.response.use((response) => response, refreshToken);
 export const { CancelToken } = axios;
 
 export default axiosClient;
-
-export * from './models';

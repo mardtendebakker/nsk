@@ -8,7 +8,7 @@ import {
   Checkbox,
 } from '@mui/material';
 import useTranslation from '../../../../hooks/useTranslation';
-import { User } from '../../../../utils/axios';
+import { UserListItem } from '../../../../utils/axios/models/user';
 
 export default function List({
   users = [],
@@ -18,7 +18,7 @@ export default function List({
   onCheck,
   disabled,
 }: {
-  users: User[],
+  users: UserListItem[],
   count: number,
   page: number,
   onPageChange: (newPage: number)=>void,

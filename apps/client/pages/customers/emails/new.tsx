@@ -9,12 +9,13 @@ import { SyntheticEvent } from 'react';
 import Form from '../../../components/customers/emails/form';
 import DashboardLayout from '../../../layouts/dashboard';
 import useAxios from '../../../hooks/useAxios';
-import { Customer, CUSTOMERS_PATH } from '../../../utils/axios';
+import { CUSTOMERS_PATH } from '../../../utils/axios';
 import { CUSTOMERS_EMAILS } from '../../../utils/routes';
 import useForm, { FormRepresentation } from '../../../hooks/useForm';
 import useTranslation from '../../../hooks/useTranslation';
+import { Company } from '../../../utils/axios/models/company';
 
-export function initFormState(customer?: Customer) {
+export function initFormState(customer?: Company) {
   return {
   };
 }

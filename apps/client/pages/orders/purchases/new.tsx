@@ -13,6 +13,7 @@ import { AxiosResponse, PURCHASE_ORDERS_PATH } from '../../../utils/axios';
 import useForm, { FormRepresentation } from '../../../hooks/useForm';
 import useTranslation from '../../../hooks/useTranslation';
 import { ORDERS_PURCHASES, ORDERS_PURCHASES_EDIT } from '../../../utils/routes';
+import { Order } from '../../../utils/axios/models/order';
 
 function requiredSupplierFieldValidator(field: string, trans) {
   return (formRepresentation: FormRepresentation) => {
@@ -22,7 +23,7 @@ function requiredSupplierFieldValidator(field: string, trans) {
   };
 }
 
-export function initFormState(trans, order?: any) {
+export function initFormState(trans, order?: Order) {
   return {
     orderNr: { required: true, value: order?.order_nr },
     orderDate: { value: order?.order_date ? new Date(order?.order_date) : new Date(), required: true },

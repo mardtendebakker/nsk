@@ -12,7 +12,7 @@ import moment from 'moment';
 import { useRouter } from 'next/router';
 import { ORDERS_PURCHASES } from '../../../utils/routes';
 import useTranslation from '../../../hooks/useTranslation';
-import { Order } from '../../../utils/axios';
+import { OrderListItem } from '../../../utils/axios/models/order';
 
 export default function List({
   orders = [],
@@ -23,7 +23,7 @@ export default function List({
   onCheck,
   disabled,
 }: {
-  orders: Order[],
+  orders: OrderListItem[],
   checkedOrderIds: number[],
   count: number,
   page: number,
@@ -59,7 +59,7 @@ export default function List({
           </TableRow>
         </TableHead>
         <TableBody>
-          {orders.map((order: Order) => (
+          {orders.map((order: OrderListItem) => (
             <TableRow
               sx={{
                 height: 60,

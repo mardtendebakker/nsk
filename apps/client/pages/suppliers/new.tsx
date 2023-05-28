@@ -8,12 +8,13 @@ import { SyntheticEvent } from 'react';
 import Form from '../../components/suppliers/form';
 import DashboardLayout from '../../layouts/dashboard';
 import useAxios from '../../hooks/useAxios';
-import { Supplier, SUPPLIERS_PATH } from '../../utils/axios';
+import { SUPPLIERS_PATH } from '../../utils/axios';
 import { SUPPLIERS } from '../../utils/routes';
 import useForm, { FormRepresentation } from '../../hooks/useForm';
 import useTranslation from '../../hooks/useTranslation';
+import { Company } from '../../utils/axios/models/company';
 
-export function initFormState(supplier?: Supplier) {
+export function initFormState(supplier?: Company) {
   return {
     name: { required: true },
     representative: {},
