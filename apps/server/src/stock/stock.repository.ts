@@ -44,10 +44,13 @@ export class StockRepository {
       ...params.where,
       ...(this.isRepairService == IsRepairService.YES && {name: RepairProductName.REPAIR_PRODUCT_NAME})
     }
+    
     if (include) {
       return this.prisma.product.findUnique({ where, include });
+    } else if (select) {
+      return this.prisma.product.findUnique({ where, select });
     }
-    return this.prisma.product.findUnique({ where, select });
+    return this.prisma.product.findUnique({ where });
   }
   
   updateOne(params: {

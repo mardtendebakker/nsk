@@ -46,4 +46,18 @@ export class FileService {
 
     return this.repository.delete(where);
   }
+
+  async deleteMany(ids: number[]) {
+    const where: Prisma.afileWhereInput = { 
+      id: {
+        in: ids
+      }
+     };
+     
+    const files = await this.repository.getAll(where);
+    const fileKeys = files.map(file => `${file.discr}/${file.original_client_filename}`);
+    this.fileS3.deleteMany(fileKeys);
+
+    return this.repository.deleteMany(where);
+  }
 }

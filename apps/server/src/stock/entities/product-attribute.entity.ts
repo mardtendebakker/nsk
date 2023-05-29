@@ -1,22 +1,38 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { product_attribute } from "@prisma/client";
+import { Type } from "class-transformer";
+import { IsNumber, IsOptional, IsString } from "class-validator";
 
-export class ProductAttributeEntity implements product_attribute {
+export class ProductAttributeEntity {
   @ApiProperty()
+  @IsNumber()
+  @Type(() => Number)
   product_id: number;
 
   @ApiProperty()
+  @IsNumber()
+  @Type(() => Number)
   attribute_id: number;
 
   @ApiPropertyOptional()
-  value_product_id: number | null;
+  @IsOptional()
+  @IsNumber()
+  @Type(() => Number)
+  value_product_id?: number | null;
 
   @ApiProperty()
+  @IsString()
+  @Type(() => String)
   value: string;
 
   @ApiPropertyOptional()
-  quantity: number | null;
+  @IsOptional()
+  @IsNumber()
+  @Type(() => Number)
+  quantity?: number | null;
 
   @ApiPropertyOptional()
-  external_id: number | null;
+  @IsOptional()
+  @IsNumber()
+  @Type(() => Number)
+  external_id?: number | null;
 }

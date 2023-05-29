@@ -21,7 +21,6 @@
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.3.0",
     "@nestjs/core": "^9.0.0",
-    "@nestjs/event-emitter": "^1.4.1",
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/swagger": "^6.1.4",
     "@prisma/client": "^4.11.0",

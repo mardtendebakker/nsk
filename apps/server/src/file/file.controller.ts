@@ -1,8 +1,8 @@
 import { Express } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { Body, Controller, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileService } from './file.service';
-import { Prisma } from '@prisma/client';
+import { CreateFileDto } from './dto/upload-meta.dto';
 
 @Controller('files')
 export class FileController {
@@ -11,9 +11,16 @@ export class FileController {
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
   uploadFile(
-    @Body() body: Prisma.afileCreateInput,
+    @Body() body: CreateFileDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
+    console.log("body", body);
+    
     return this.fileService.create(body, file);
+  }
+
+  @Delete('')
+  deleteMany(@Body() ids: number[]) {
+    return this.fileService.deleteMany(ids);
   }
 }

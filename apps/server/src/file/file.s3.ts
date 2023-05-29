@@ -1,4 +1,4 @@
-import { DeleteObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { DeleteObjectCommand, DeleteObjectsCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 
@@ -16,6 +16,7 @@ export class FileS3 {
       Bucket: this.configService.get<string>('S3_FILE_BUCKET'),
       Key,
       Body,
+      ACL:'public-read', //TODO: should changed to authenticated-read
     });
 
     return this.client.send(putCommand);
@@ -28,5 +29,16 @@ export class FileS3 {
     });
 
     return this.client.send(delCommand);
+  }
+
+  async deleteMany(Keys: string[]) {
+    const delsCommand = new DeleteObjectsCommand({
+      Bucket: this.configService.get<string>('S3_FILE_BUCKET'),
+      Delete: {
+        Objects: Keys.map(Key => ({ Key })),
+      }
+    });
+
+    return this.client.send(delsCommand);
   }
 }

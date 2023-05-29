@@ -23,9 +23,9 @@ export function initFormState(product?: Product) {
   return {
     sku: { value: product?.sku },
     name: { value: product?.name, required: true },
-    productType: { value: product?.product_type?.id },
-    location: { value: product?.location?.id, required: true },
-    productStatus: { value: product?.product_status?.id },
+    type_id: { value: product?.product_type?.id },
+    location_id: { value: product?.location?.id, required: true },
+    status_id: { value: product?.product_status?.id },
     price: { value: product?.price },
     description: { value: product?.description },
     ...attributes,
@@ -34,6 +34,7 @@ export function initFormState(product?: Product) {
 
 export function formRepresentationToBody(formRepresentation: FormRepresentation): FormData {
   const formData = new FormData();
+  let prIndex = 0;
 
   Object.keys(formRepresentation).forEach((key) => {
     const { value } = formRepresentation[key];
@@ -49,10 +50,12 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
 
       if (Array.isArray(value)) {
         value.forEach((subValue) => {
-          formData.append(`attributes[${splitted[3]}][]`, subValue);
+          formData.append('images', subValue);
         });
       } else {
-        formData.append(`attributes[${splitted[3]}]`, value);
+        formData.append(`product_attributes[${prIndex}][attribute_id]`, splitted[3]);
+        formData.append(`product_attributes[${prIndex}][value]`, value);
+        prIndex += 1;
       }
     } else {
       formData.append(key, value);

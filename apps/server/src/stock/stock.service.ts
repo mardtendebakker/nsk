@@ -2,18 +2,22 @@ import { Prisma } from "@prisma/client";
 import { FindOneDto } from "../common/dto/find-one.dto";
 import { LocationService } from "../location/location.service";
 import { StockRepository } from "./stock.repository";
-import { StockProcess } from "./stock.process";
-import { UpdateOneDto } from "../common/dto/update-one.dto";
+import { ProductRelationGetPayload, StockProcess } from "./stock.process";
 import { UpdateManyProductDto } from "./dto/update-many-product.dto";
 import { FindManyDto } from "./dto/find-many.dto";
-import { AttributeType } from "../attribute/enum/attribute-type.enum";
-import { EventEmitter2 } from "@nestjs/event-emitter";
+import { UpdateBodyStockDto } from "./dto/update-body-stock.dto";
+import { FileService } from "../file/file.service";
+import { FileDiscrimination } from "../file/types/file-discrimination.enum";
+import { CreateFileDto } from "../file/dto/upload-meta.dto";
+
+const FILE_VALUE_SEPARATOR = ',';
+const FILE_ATTRIBUTE_ID = 15;
 
 export class StockService {
   constructor(
     protected readonly repository: StockRepository,
     protected readonly locationService: LocationService,
-    protected readonly eventEmitter: EventEmitter2
+    protected readonly fileService: FileService
   ) {}
 
   async findAll(query: FindManyDto) {
@@ -239,7 +243,7 @@ export class StockService {
     const {
       product_attribute_product_attribute_product_idToproduct,
       ...rest
-    } = await this.repository.findOne({ ...query, select: productSelect });
+    } = await <Promise<ProductRelationGetPayload>>this.repository.findOne({ ...query, select: productSelect });
 
     return {
       ...rest,
@@ -247,11 +251,64 @@ export class StockService {
     }
   }
 
-  updateOne(params: UpdateOneDto) {
-    const { where, data }  = params;
+  async updateOne(id: number, body: UpdateBodyStockDto, images: Express.Multer.File[]) {
+    const stock = await this.findOne({ where: { id } });
+    const old_photo_attribute = stock.product_attributes.find(product_attribute => product_attribute.attribute_id === FILE_ATTRIBUTE_ID);
+    const new_photo_attribute = body.product_attributes.find(product_attribute => product_attribute.attribute_id === FILE_ATTRIBUTE_ID);
+    const fileIdsOldUnique: number[] = old_photo_attribute.value.split(FILE_VALUE_SEPARATOR).map(Number).filter(
+      (fileId) => !new_photo_attribute.value.split(FILE_VALUE_SEPARATOR).map(Number).includes(fileId)
+    );
+    const fileIdsCommon: number[] = old_photo_attribute.value.split(FILE_VALUE_SEPARATOR).map(Number).filter(
+      (num) => new_photo_attribute.value.split(FILE_VALUE_SEPARATOR).map(Number).includes(num)
+    );
+
+    /**
+     * check if the product type has changed
+     */
+    if (body.type_id !== undefined && body.type_id !== stock.product_type.id) {
+      /**
+       * delete all product_attribute by product_id
+       * since we need a new set of product attributes
+       */
+      this.deleteAllAttributes(id);
+    } else {
+      /**
+       * otherwise check if user removes some photo
+       * then delete those photos
+       */
+      if (fileIdsOldUnique.length) {
+        this.fileService.deleteMany(fileIdsOldUnique);
+      }
+    }
+
+    /**
+     * upload all new images
+     */
+    const fileIdsUploaded: number[] = [];
+    for (let i = 0; i < images.length; i++) {
+      const image = images[i];
+      const createFileDto: CreateFileDto = {
+        discr: FileDiscrimination.PRODUCT_ATTRIBUTE_FILE,
+        product_id: id,
+      };
+      
+      const file = await this.fileService.create(createFileDto, image);
+      fileIdsUploaded.push(file.id);
+    }
+
+    /**
+     * join fileIdsCommon and fileIdsUploaded and store them
+     * to the product_attribute value in comma-separated format
+     */
+    for (let i = 0; i < body.product_attributes.length; i++) {
+      if (body.product_attributes[i].attribute_id === FILE_ATTRIBUTE_ID) {
+        body.product_attributes[i].value = [...fileIdsCommon, ...fileIdsUploaded].join(FILE_VALUE_SEPARATOR);
+      }
+    }
+    
     return this.repository.updateOne({
-      where,
-      data
+      where: { id },
+      data: body,
     });
   }
 
@@ -279,15 +336,9 @@ export class StockService {
 
     for (let i = 0; i < productAttributes.length; i++) {
       const productAttribute = productAttributes[i];
-      if (productAttribute.attribute.type === AttributeType.TYPE_FILE) {
-        const fileIds = productAttribute.value.split(',');
-        for (let j = 0; j < fileIds.length; j++) {
-          const fileId = Number(fileIds[j]);
-          this.eventEmitter.emit(
-            'product_attribute.deleted',
-            fileId,
-          );
-        }
+      if (productAttribute.attribute.id === FILE_ATTRIBUTE_ID) {
+        const fileIds = productAttribute.value.split(FILE_VALUE_SEPARATOR).map(Number);
+        this.fileService.deleteMany(fileIds);
       }
     }
     
