@@ -7,18 +7,20 @@ import {
   Pagination,
   Checkbox,
 } from '@mui/material';
+import { useRouter } from 'next/router';
+import { CUSTOMERS_CONTACTS } from 'apps/client/utils/routes';
 import useTranslation from '../../../../hooks/useTranslation';
 import { CompanyListItem } from '../../../../utils/axios/models/company';
 
 export default function List({
-  customers = [],
+  companies = [],
   count,
   page,
   onPageChange,
   onCheck,
   disabled,
 }: {
-  customers: CompanyListItem[],
+  companies: CompanyListItem[],
   count: number,
   page: number,
   onPageChange: (newPage: number)=>void,
@@ -26,6 +28,7 @@ export default function List({
   disabled: boolean
 }) {
   const { trans } = useTranslation();
+  const router = useRouter();
 
   return (
     <>
@@ -42,31 +45,33 @@ export default function List({
               {trans('email')}
             </TableCell>
             <TableCell>
-              {trans('isPartner')}
+              {trans(router.pathname == CUSTOMERS_CONTACTS ? 'isPartner' : 'partner')}
             </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {customers.map((customer: CompanyListItem) => (
+          {companies.map((company: CompanyListItem) => (
             <TableRow
               sx={{
                 height: 60,
               }}
               hover
-              key={customer.id}
+              key={company.id}
             >
               <TableCell>
-                <Checkbox sx={{ mr: '1.5rem' }} onChange={(_, checked) => { onCheck({ id: customer.id, checked }); }} />
-                <b>{customer.name}</b>
+                <Checkbox sx={{ mr: '1.5rem' }} onChange={(_, checked) => { onCheck({ id: company.id, checked }); }} />
+                <b>{company.name}</b>
               </TableCell>
               <TableCell>
-                {customer.representative || '--'}
+                {company.representative || '--'}
               </TableCell>
               <TableCell>
-                {customer.email || '--'}
+                {company.email || '--'}
               </TableCell>
               <TableCell>
-                {Boolean(customer.is_partner) || '--'}
+                {router.pathname == CUSTOMERS_CONTACTS
+                  ? (Boolean(company.is_partner) || '--')
+                  : company.partner?.name || '--'}
               </TableCell>
             </TableRow>
           ))}

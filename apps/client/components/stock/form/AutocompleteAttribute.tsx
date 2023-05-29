@@ -1,7 +1,7 @@
 import { Box, Typography } from '@mui/material';
 import { memo } from 'react';
 import Autocomplete from '../../memoizedInput/autocomplete';
-import { Attribute, AttributeOption } from '../../../utils/axios';
+import { Attribute, AttributeOption } from '../../../utils/axios/models/product';
 import TextField from '../../input/textField';
 
 function AutocompleteAttribute({

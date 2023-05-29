@@ -9,13 +9,13 @@ import { SyntheticEvent } from 'react';
 import Form from '../../../components/companies/emails/form';
 import DashboardLayout from '../../../layouts/dashboard';
 import useAxios from '../../../hooks/useAxios';
-import { CUSTOMERS_PATH } from '../../../utils/axios';
-import { CUSTOMERS_EMAILS } from '../../../utils/routes';
+import { SUPPLIERS_PATH } from '../../../utils/axios';
+import { SUPPLIERS_EMAILS } from '../../../utils/routes';
 import useForm, { FormRepresentation } from '../../../hooks/useForm';
 import useTranslation from '../../../hooks/useTranslation';
 import { Company } from '../../../utils/axios/models/company';
 
-export function initFormState(customer?: Company) {
+export function initFormState(company?: Company) {
   return {
   };
 }
@@ -27,7 +27,7 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
   };
 }
 
-function NewCustomerEmail() {
+function NewSupplierEmail() {
   const { trans } = useTranslation();
   const router = useRouter();
 
@@ -49,11 +49,11 @@ function NewCustomerEmail() {
     call(
       {
         body: formRepresentationToBody(formRepresentation),
-        path: CUSTOMERS_PATH.replace(':id', ''),
+        path: SUPPLIERS_PATH.replace(':id', ''),
       },
       (err) => {
         if (!err) {
-          router.push(CUSTOMERS_EMAILS);
+          router.push(SUPPLIERS_EMAILS);
         }
       },
     );
@@ -76,7 +76,7 @@ function NewCustomerEmail() {
         }}
       >
         <Typography variant="h4">
-          <IconButton onClick={() => router.push(CUSTOMERS_EMAILS)}>
+          <IconButton onClick={() => router.push(SUPPLIERS_EMAILS)}>
             <ArrowBack />
           </IconButton>
           {trans('newEmail')}
@@ -102,4 +102,4 @@ function NewCustomerEmail() {
   );
 }
 
-export default NewCustomerEmail;
+export default NewSupplierEmail;

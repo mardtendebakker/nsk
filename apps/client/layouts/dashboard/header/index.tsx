@@ -10,12 +10,13 @@ import {
   DASHBOARD,
   ORDERS_PURCHASES,
   ORDERS_SALES,
-  SUPPLIERS,
   CUSTOMERS_CONTACTS,
   CUSTOMERS_EMAILS,
   STOCKS_PRODUCTS,
   STOCKS_REPAIR_SERVICES,
   MY_TASKS,
+  SUPPLIERS_CONTACTS,
+  SUPPLIERS_EMAILS,
 } from '../../../utils/routes';
 import useTranslation from '../../../hooks/useTranslation';
 
@@ -81,8 +82,9 @@ export default function Header() {
             },
             {
               title: trans('suppliers'),
-              path: SUPPLIERS,
-              active: router.pathname.includes(SUPPLIERS),
+              path: SUPPLIERS_CONTACTS,
+              active: router.pathname.includes(SUPPLIERS_CONTACTS)
+               || router.pathname.includes(SUPPLIERS_EMAILS),
             },
           ].map((item) => (
             <MenuItem key={item.title} item={item} />

@@ -38,7 +38,7 @@ export default function Filter({
           searchLabel={trans('searchByCustomerNameOrEmail')}
           disabled={disabled}
           onSearchChange={(value: string) => setValue({ field: 'search', value })}
-          searchValue={formRepresentation.search.value?.toString()}
+          searchValue={formRepresentation.search.value?.toString() || ''}
           onReset={handleReset}
         >
           <Box sx={{ flex: 1, display: 'flex', alignItems: 'center' }}>
@@ -104,7 +104,7 @@ export default function Filter({
               name="search"
               placeholder={trans('representative')}
               fullWidth
-              defaultValue={formRepresentation.representative.value}
+              defaultValue={formRepresentation.representative.value || ''}
               onChange={(e) => debouncedSetValue({ field: 'representative', value: e.target.value })}
               type="text"
               sx={{

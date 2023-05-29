@@ -38,7 +38,7 @@ function initFormState(
 ) {
   return {
     search: {
-      value: search || '',
+      value: search,
     },
     createdAt: {
       value: createdAt || null,

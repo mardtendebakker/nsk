@@ -3,15 +3,15 @@ import { Box } from '@mui/material';
 import useTranslation from '../../../hooks/useTranslation';
 import List from '../../../components/companies/emails/list';
 import DashboardLayout from '../../../layouts/dashboard';
-import Header from '../../../components/companies/customers/header';
+import Header from '../../../components/companies/suppliers/header';
 
-function CustomersEmails() {
+function SuppliersEmails() {
   const { trans } = useTranslation();
 
   return (
     <DashboardLayout>
       <Head>
-        <title>{trans('customers')}</title>
+        <title>{trans('suppliers')}</title>
       </Head>
       <Header />
       <Box sx={{ mt: '1.5rem' }} />
@@ -20,4 +20,4 @@ function CustomersEmails() {
   );
 }
 
-export default CustomersEmails;
+export default SuppliersEmails;

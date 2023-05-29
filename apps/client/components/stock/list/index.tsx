@@ -27,7 +27,7 @@ function initFormState(
 ) {
   return {
     search: {
-      value: search || '',
+      value: search,
     },
     productType: {
       value: productType || undefined,

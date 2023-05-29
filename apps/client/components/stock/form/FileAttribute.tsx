@@ -2,7 +2,7 @@ import {
   Box, Typography,
 } from '@mui/material';
 import { memo } from 'react';
-import { Attribute } from '../../../utils/axios';
+import { Attribute } from '../../../utils/axios/models/product';
 import ImageInput from '../../input/imageInput';
 
 function FileAttribute({

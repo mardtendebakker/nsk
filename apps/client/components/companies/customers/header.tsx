@@ -1,10 +1,10 @@
 import Add from '@mui/icons-material/Add';
 import { Box, Button, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
-import useTranslation from '../../hooks/useTranslation';
+import useTranslation from '../../../hooks/useTranslation';
 import {
   CUSTOMERS_CONTACTS, CUSTOMERS_CONTACTS_NEW, CUSTOMERS_EMAILS, CUSTOMERS_EMAILS_NEW,
-} from '../../utils/routes';
+} from '../../../utils/routes';
 
 export default function Navigation() {
   const router = useRouter();

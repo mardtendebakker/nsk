@@ -6,7 +6,7 @@ import BorderedBox from '../../borderedBox';
 import TextField from '../../memoizedInput/textField';
 import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
 import { LOCATIONS_PATH, PRODUCT_STATUSES_PATH, PRODUCT_TYPES_PATH } from '../../../utils/axios/paths';
-import { Attribute, ProductType } from '../../../utils/axios';
+import { Attribute, ProductType } from '../../../utils/axios/models/product';
 import AutocompleteAttribute from './AutocompleteAttribute';
 import FileAttribute from './FileAttribute';
 

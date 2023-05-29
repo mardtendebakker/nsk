@@ -1,11 +1,11 @@
 import { Box, Card } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { CUSTOMERS_CONTACTS } from '../../../../utils/routes';
 import List from './list';
 import Filter from './filter';
 import useAxios from '../../../../hooks/useAxios';
-import { CUSTOMERS_PATH } from '../../../../utils/axios';
-import { CUSTOMERS_CONTACTS } from '../../../../utils/routes';
+import { CUSTOMERS_PATH, SUPPLIERS_PATH } from '../../../../utils/axios';
 import useForm, { FieldPayload } from '../../../../hooks/useForm';
 
 function initFormState(
@@ -16,13 +16,13 @@ function initFormState(
 ) {
   return {
     search: {
-      value: search || '',
+      value: search,
     },
     createdAt: {
       value: createdAt || null,
     },
     representative: {
-      value: representative || '',
+      value: representative,
     },
     list: {
       value: list || undefined,
@@ -60,7 +60,7 @@ function refreshList({
     },
   }).finally(() => {
     const paramsString = params.toString();
-    const newPath = paramsString ? `${CUSTOMERS_CONTACTS}?${params.toString()}` : CUSTOMERS_CONTACTS;
+    const newPath = paramsString ? `${router.pathname}?${params.toString()}` : router.pathname;
 
     if (newPath != router.asPath) {
       router.replace(newPath);
@@ -79,9 +79,11 @@ export default function ListContainer() {
     list: router.query?.list?.toString(),
   }));
 
+  const ajaxPath = router.pathname == CUSTOMERS_CONTACTS ? CUSTOMERS_PATH : SUPPLIERS_PATH;
+
   const { data: { data = [], count = 0 } = {}, call, performing } = useAxios(
     'get',
-    CUSTOMERS_PATH.replace(':id', ''),
+    ajaxPath.replace(':id', ''),
     {
       withProgressBar: true,
     },
@@ -121,7 +123,7 @@ export default function ListContainer() {
       <Box sx={{ m: '1rem' }} />
       <List
         disabled={performing}
-        customers={data}
+        companies={data}
         count={Math.ceil(count / 10)}
         page={page}
         onCheck={() => {}}

@@ -2,8 +2,8 @@ import Head from 'next/head';
 import { Box } from '@mui/material';
 import useTranslation from '../../../hooks/useTranslation';
 import DashboardLayout from '../../../layouts/dashboard';
-import Header from '../../../components/customers/header';
-import List from '../../../components/customers/contacts/list';
+import Header from '../../../components/companies/customers/header';
+import List from '../../../components/companies/contacts/list';
 
 function CustomersContacts() {
   const { trans } = useTranslation();
