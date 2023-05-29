@@ -9,7 +9,7 @@ import {
   Checkbox,
 } from '@mui/material';
 import { trans } from 'itranslator';
-import { Supplier } from '../../utils/axios';
+import { CompanyListItem } from '../../utils/axios/models/company';
 
 function SuppliersList({
   suppliers = [],
@@ -19,7 +19,7 @@ function SuppliersList({
   onCheck,
 
 }: {
-  suppliers: Supplier[],
+  suppliers: CompanyListItem[],
   count: number,
   page: number,
   onPageChange: (newPage: number)=>void,
@@ -48,7 +48,7 @@ function SuppliersList({
           </TableRow>
         </TableHead>
         <TableBody>
-          {suppliers.map((supplier: Supplier) => (
+          {suppliers.map((supplier: CompanyListItem) => (
             <TableRow
               sx={{
                 height: 60,
@@ -70,7 +70,7 @@ function SuppliersList({
                 {supplier.email || '--'}
               </TableCell>
               <TableCell>
-                {supplier.partner || '--'}
+                {supplier.partner?.name || '--'}
               </TableCell>
             </TableRow>
           ))}

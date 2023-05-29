@@ -37,3 +37,22 @@ export interface Task {
   description?: string,
   status?: number
 }
+
+export interface AttributeOption {
+  id?: number,
+  name?: string,
+  price?: number
+}
+
+export interface Attribute {
+  id?: number,
+  name?: string,
+  type?: number,
+  options?: AttributeOption[]
+}
+
+export interface ProductType {
+  id?: number,
+  name?: string,
+  attributes?: Attribute[]
+}

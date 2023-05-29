@@ -5,7 +5,7 @@ import {
 } from '@mui/material';
 import Close from '@mui/icons-material/Close';
 import { useMemo } from 'react';
-import { User } from '../../../../utils/axios';
+import { User } from '../../../../utils/axios/models/user';
 import useTranslation from '../../../../hooks/useTranslation';
 import useForm from '../../../../hooks/useForm';
 import UserForm from '../userForm';
