@@ -25,7 +25,7 @@ export default function Filter({
         <SearchAccordion
           disabled={disabled}
           onSearchChange={(value: string) => setValue({ field: 'search', value })}
-          searchValue={formRepresentation.search.value?.toString()}
+          searchValue={formRepresentation.search.value?.toString() || ''}
           onReset={onReset}
         >
           <Box sx={{ flex: 1, display: 'flex', alignItems: 'center' }}>

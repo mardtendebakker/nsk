@@ -1,24 +1,30 @@
 import {
+  Box,
   Card,
   CardContent,
+  Checkbox,
   Divider,
   Grid,
   Typography,
 } from '@mui/material';
+import { COMPANIES_PATH } from '../../../utils/axios/paths';
 import useTranslation from '../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../hooks/useForm';
 import TextField from '../../memoizedInput/textField';
 import Autocomplete from '../../memoizedInput/autocomplete';
 import BaseTextField from '../../input/textField';
+import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
 
 function Form({
   formRepresentation,
   disabled,
   setValue,
+  type,
 }: {
   formRepresentation : FormRepresentation,
   disabled:boolean,
-  setValue: SetValue
+  setValue: SetValue,
+  type: 'customer' | 'supplier'
 }) {
   const { trans } = useTranslation();
 
@@ -77,7 +83,7 @@ function Form({
             sx={{ display: 'flex', flex: 1 }}
           >
             <TextField
-              sx={{ flex: 0.5, mr: '1rem' }}
+              sx={{ flex: 0.33, mr: '1rem' }}
               error={Boolean(formRepresentation.email.error)}
               helperText={formRepresentation.email.error}
               label={trans('contactForm.email.label')}
@@ -88,7 +94,7 @@ function Form({
               value={formRepresentation.email.value || ''}
             />
             <TextField
-              sx={{ flex: 0.25, mr: '1rem' }}
+              sx={{ flex: 0.33, mr: '1rem' }}
               error={Boolean(formRepresentation.phone.error)}
               helperText={formRepresentation.phone.error}
               label={trans('contactForm.phone.label')}
@@ -98,7 +104,7 @@ function Form({
               value={formRepresentation.phone.value || ''}
             />
             <TextField
-              sx={{ flex: 0.25 }}
+              sx={{ flex: 0.33 }}
               error={Boolean(formRepresentation.phone2.error)}
               helperText={formRepresentation.phone2.error}
               label={trans('contactForm.phone2.label')}
@@ -111,10 +117,10 @@ function Form({
           <Grid
             item
             xs={12}
-            sx={{ display: 'flex', flex: 1 }}
+            sx={{ display: 'flex', flex: 1, alignItems: 'center' }}
           >
             <Autocomplete
-              sx={{ flex: 0.66, mr: '1rem' }}
+              sx={{ flex: 0.33, mr: '1rem' }}
               multiple
               disabled={disabled}
               options={[]}
@@ -130,7 +136,7 @@ function Form({
                }
             />
             <Autocomplete
-              sx={{ flex: 0.33 }}
+              sx={{ flex: 0.33, mr: '1rem' }}
               disabled={disabled}
               options={[]}
               filterSelectedOptions
@@ -144,6 +150,30 @@ function Form({
                 )
                }
             />
+            {type == 'supplier' ? (
+              <DataSourcePicker
+                sx={{ flex: 0.33 }}
+                url={COMPANIES_PATH.replace(':id', '')}
+                params={{ partnerOnly: '1' }}
+                disabled={disabled}
+                fullWidth
+                label={trans('contactForm.partner.label')}
+                placeholder={trans('contactForm.partner.placeholder')}
+                onChange={(value: { id: number }) => setValue({ field: 'partner', value: value?.id })}
+                value={formRepresentation.partner.value}
+              />
+            ) : (
+              <Box sx={{ flex: 0.33, display: 'flex', alignItems: 'center' }}>
+                <Checkbox
+                  sx={{ alignSelf: 'end' }}
+                  onChange={(_, checked) => setValue({ field: 'isPartner', value: checked })}
+                  checked={formRepresentation.is_partner.value as boolean}
+                />
+                <Typography variant="inherit">
+                  {trans('isPartner')}
+                </Typography>
+              </Box>
+            )}
           </Grid>
         </Grid>
       </CardContent>

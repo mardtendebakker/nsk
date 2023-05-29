@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import Check from '@mui/icons-material/Check';
 import { SyntheticEvent } from 'react';
-import Form from '../../../components/customers/contacts/form';
+import Form from '../../../components/companies/contacts/form';
 import DashboardLayout from '../../../layouts/dashboard';
 import useAxios from '../../../hooks/useAxios';
 import { CUSTOMERS_PATH } from '../../../utils/axios';
@@ -15,65 +15,68 @@ import useForm, { FormRepresentation } from '../../../hooks/useForm';
 import useTranslation from '../../../hooks/useTranslation';
 import { Company } from '../../../utils/axios/models/company';
 
-export function initFormState(customer?: Company) {
+export function initFormState(company?: Company) {
   return {
     name: {
-      value: customer?.name,
+      value: company?.name,
       required: true,
     },
     representative: {
-      value: customer?.representative,
+      value: company?.representative,
     },
     kvk_nr: {
-      value: customer?.kvk_nr,
+      value: company?.kvk_nr,
     },
     email: {
-      value: customer?.email,
+      value: company?.email,
     },
     phone: {
-      value: customer?.phone,
+      value: company?.phone,
     },
     phone2: {
-      value: customer?.phone2,
+      value: company?.phone2,
     },
     street: {
-      value: customer?.street,
+      value: company?.street,
     },
     street_extra: {
-      value: customer?.street_extra,
+      value: company?.street_extra,
     },
     city: {
-      value: customer?.city,
+      value: company?.city,
     },
     country: {
-      value: customer?.country,
+      value: company?.country,
     },
     state: {
-      value: customer?.state,
+      value: company?.state,
     },
     zip: {
-      value: customer?.zip,
+      value: company?.zip,
     },
     street2: {
-      value: customer?.street2,
+      value: company?.street2,
     },
     street_extra2: {
-      value: customer?.street_extra2,
+      value: company?.street_extra2,
     },
     city2: {
-      value: customer?.city2,
+      value: company?.city2,
     },
     country2: {
-      value: customer?.country2,
+      value: company?.country2,
     },
     state2: {
-      value: customer?.state2,
+      value: company?.state2,
     },
     zip2: {
-      value: customer?.zip2,
+      value: company?.zip2,
     },
     is_partner: {
-      value: customer?.is_partner,
+      value: company?.is_partner,
+    },
+    partner: {
+      value: company?.partner_id,
     },
   };
 }
@@ -101,6 +104,7 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
     state2: formRepresentation.state2.value || undefined,
     zip2: formRepresentation.zip2.value || undefined,
     is_partner: formRepresentation.is_partner.value || undefined,
+    partner_id: formRepresentation.partner.value || undefined,
   };
 }
 
@@ -123,17 +127,11 @@ function NewCustomerContact() {
       return;
     }
 
-    call(
-      {
-        body: formRepresentationToBody(formRepresentation),
-        path: CUSTOMERS_PATH.replace(':id', ''),
-      },
-      (err) => {
-        if (!err) {
-          router.push(CUSTOMERS_CONTACTS);
-        }
-      },
-    );
+    // TODO redirect to edit page
+    call({
+      body: formRepresentationToBody(formRepresentation),
+      path: CUSTOMERS_PATH.replace(':id', ''),
+    }).then(() => router.push(CUSTOMERS_CONTACTS));
   };
 
   return (
@@ -172,6 +170,7 @@ function NewCustomerContact() {
           </Box>
         </Box>
         <Form
+          type="customer"
           formRepresentation={formRepresentation}
           disabled={performing}
           setValue={setValue}

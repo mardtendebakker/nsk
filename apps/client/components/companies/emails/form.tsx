@@ -139,7 +139,7 @@ function Form({
             {trans('content')}
           </Typography>
           <Editor
-            editorClassName="newCustomerEmailEditorWrapper"
+            editorClassName="newCompanyEmailEditorWrapper"
           />
         </CardContent>
       </Card>
