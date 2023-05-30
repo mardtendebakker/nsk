@@ -5,26 +5,31 @@ import {
   TableHead,
   TableRow,
   Pagination,
-  Checkbox,
+  Button,
+  Tooltip,
 } from '@mui/material';
 import { useRouter } from 'next/router';
 import { CUSTOMERS_CONTACTS } from 'apps/client/utils/routes';
+import Edit from '@mui/icons-material/Edit';
+import Delete from '../../../button/delete';
 import useTranslation from '../../../../hooks/useTranslation';
 import { CompanyListItem } from '../../../../utils/axios/models/company';
 
 export default function List({
   companies = [],
+  onDelete,
+  onEdit,
   count,
   page,
   onPageChange,
-  onCheck,
   disabled,
 }: {
   companies: CompanyListItem[],
+  onDelete: (id: number)=>void,
+  onEdit: (id: number)=>void,
   count: number,
   page: number,
   onPageChange: (newPage: number)=>void,
-  onCheck: (object: { id: number, checked: boolean })=>void,
   disabled: boolean
 }) {
   const { trans } = useTranslation();
@@ -36,6 +41,9 @@ export default function List({
         <TableHead>
           <TableRow>
             <TableCell>
+              {trans('id')}
+            </TableCell>
+            <TableCell>
               {trans('name')}
             </TableCell>
             <TableCell>
@@ -46,6 +54,9 @@ export default function List({
             </TableCell>
             <TableCell>
               {trans(router.pathname == CUSTOMERS_CONTACTS ? 'isPartner' : 'partner')}
+            </TableCell>
+            <TableCell>
+              {trans('actions')}
             </TableCell>
           </TableRow>
         </TableHead>
@@ -59,7 +70,9 @@ export default function List({
               key={company.id}
             >
               <TableCell>
-                <Checkbox sx={{ mr: '1.5rem' }} onChange={(_, checked) => { onCheck({ id: company.id, checked }); }} />
+                <b>{company.id}</b>
+              </TableCell>
+              <TableCell>
                 <b>{company.name}</b>
               </TableCell>
               <TableCell>
@@ -72,6 +85,15 @@ export default function List({
                 {router.pathname == CUSTOMERS_CONTACTS
                   ? (Boolean(company.is_partner) || '--')
                   : company.partner?.name || '--'}
+              </TableCell>
+              <TableCell>
+                <Tooltip title={trans('edit')}>
+                  <Button onClick={() => onEdit(company.id)} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
+                    <Edit sx={{ mr: '.1rem' }} />
+                  </Button>
+                </Tooltip>
+                {company.orders?.length === 0
+                && (<Delete onDelete={() => onDelete(company.id)} disabled={disabled} tooltip />)}
               </TableCell>
             </TableRow>
           ))}

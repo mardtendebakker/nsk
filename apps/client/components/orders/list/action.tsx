@@ -3,9 +3,9 @@ import {
 } from '@mui/material';
 import Loop from '@mui/icons-material/Loop';
 import ChevronRight from '@mui/icons-material/ChevronRight';
-import Delete from '@mui/icons-material/Delete';
 import Edit from '@mui/icons-material/Edit';
 import useTranslation from '../../../hooks/useTranslation';
+import Delete from '../../button/delete';
 
 export default function Action({
   disabled,
@@ -64,13 +64,7 @@ export default function Action({
           <ChevronRight sx={{ transform: 'rotate(90deg)' }} />
         </Button>
         )}
-        {checkedOrdersCount > 0
-         && (
-         <Button onClick={onDelete} variant="outlined" color="error" disabled={disabled}>
-           <Delete sx={{ mr: '.1rem' }} />
-           {trans('delete')}
-         </Button>
-         )}
+        {checkedOrdersCount > 0 && (<Delete onDelete={onDelete} disabled={disabled} />)}
       </Box>
     </Box>
   );

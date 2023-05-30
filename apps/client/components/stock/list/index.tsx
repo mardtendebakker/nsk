@@ -1,7 +1,6 @@
 import { Box, Card } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import Delete from '@mui/icons-material/Delete';
 import { STOCK_PRODUCTS_PATH, STOCK_REPAIR_SERVICES_PATH, LOCATIONS_PATH } from '../../../utils/axios';
 import List from './list';
 import useAxios from '../../../hooks/useAxios';
@@ -87,7 +86,6 @@ function refreshList({
 export default function ListContainer() {
   const { trans } = useTranslation();
   const router = useRouter();
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showChangeLocationModal, setShowChangeLocationModal] = useState(false);
   const [changeLocationValue, setChangeLocationValue] = useState<number | undefined>();
   const [page, setPage] = useState<number>(parseInt(router.query?.page?.toString() || '1', 10));
@@ -168,10 +166,6 @@ export default function ListContainer() {
           router,
           call,
         });
-      })
-      .catch(() => {})
-      .finally(() => {
-        setShowDeleteModal(false);
       });
   };
 
@@ -188,7 +182,6 @@ export default function ListContainer() {
           call,
         });
       })
-      .catch(() => {})
       .finally(() => {
         setShowChangeLocationModal(false);
         setChangeLocationValue(undefined);
@@ -220,7 +213,7 @@ export default function ListContainer() {
         onEdit={() => setEditProductId(checkedProductIds[0])}
         onChangeLocation={() => setShowChangeLocationModal(true)}
         onPrint={() => {}}
-        onDelete={() => setShowDeleteModal(true)}
+        onDelete={handleDelete}
       />
       <Box sx={{ m: '1rem' }} />
       <List
@@ -231,31 +224,6 @@ export default function ListContainer() {
         checkedProductIds={checkedProductIds}
         onPageChange={(newPage) => { setPage(newPage); setCheckedProductIds([]); }}
       />
-      {showDeleteModal && (
-      <ConfirmationDialog
-        title={(
-          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-            <Delete
-              color="error"
-              sx={{
-                mb: '1rem',
-                padding: '.5rem',
-                fontSize: '2.5rem',
-                borderRadius: '50%',
-                bgcolor: (theme) => theme.palette.error.light,
-              }}
-            />
-            {trans('deleteResourceQuestion')}
-          </Box>
-        )}
-        content={<>{trans('deleteResourceContent')}</>}
-        onConfirm={handleDelete}
-        onClose={() => setShowDeleteModal(false)}
-        confirmButtonColor="error"
-        confirmButtonVariant="outlined"
-        confirmButtonText={trans('deleteConfirm')}
-      />
-      )}
       {editProductId && (
         <EditModal
           onClose={() => setEditProductId(undefined)}

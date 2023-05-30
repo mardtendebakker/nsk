@@ -1,5 +1,5 @@
 import { Authentication } from "@nestjs-cognito/auth";
-import { Body, Controller, Get, Param, Post, Put, Query } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from "@nestjs/common";
 import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { CompanyService } from "./company.service";
 import { FindCompaniesResponeDto } from "./dto/find-company-response.dto";
@@ -36,5 +36,10 @@ export class CompanyController {
   @ApiResponse({type: CompanyEntity})
   update(@Param('id') id: number, @Body() updateCompanyDto: UpdateCompanyDto) {
     return this.companyService.update(id, updateCompanyDto);
+  }
+
+  @Delete(':id')
+  delete(@Param('id') id: number) {
+    return this.companyService.delete(id);
   }
 }

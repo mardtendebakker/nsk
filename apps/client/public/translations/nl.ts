@@ -122,6 +122,7 @@ const translation = {
   openRate: 'Open ratio',
   clickRate: 'Klik op Beoordeel',
   unsubscribes: 'Uitschrijft',
+  edit: 'Bewerking',
   userForm: {
     username: {
       label: 'Gebruikersnaam',

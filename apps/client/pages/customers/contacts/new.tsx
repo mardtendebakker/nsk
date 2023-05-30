@@ -9,8 +9,8 @@ import { SyntheticEvent } from 'react';
 import Form from '../../../components/companies/contacts/form';
 import DashboardLayout from '../../../layouts/dashboard';
 import useAxios from '../../../hooks/useAxios';
-import { CUSTOMERS_PATH } from '../../../utils/axios';
-import { CUSTOMERS_CONTACTS } from '../../../utils/routes';
+import { AxiosResponse, CUSTOMERS_PATH } from '../../../utils/axios';
+import { CUSTOMERS_CONTACTS, CUSTOMERS_CONTACTS_EDIT } from '../../../utils/routes';
 import useForm, { FormRepresentation } from '../../../hooks/useForm';
 import useTranslation from '../../../hooks/useTranslation';
 import { Company } from '../../../utils/axios/models/company';
@@ -73,7 +73,7 @@ export function initFormState(company?: Company) {
       value: company?.zip2,
     },
     is_partner: {
-      value: company?.is_partner,
+      value: company?.is_partner > 0,
     },
     partner: {
       value: company?.partner_id,
@@ -103,7 +103,7 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
     country2: formRepresentation.country2.value || undefined,
     state2: formRepresentation.state2.value || undefined,
     zip2: formRepresentation.zip2.value || undefined,
-    is_partner: formRepresentation.is_partner.value || undefined,
+    is_partner: formRepresentation.is_partner.value ? 1 : 0,
     partner_id: formRepresentation.partner.value || undefined,
   };
 }
@@ -114,7 +114,7 @@ function NewCustomerContact() {
 
   const { call, performing } = useAxios(
     'post',
-    null,
+    CUSTOMERS_PATH.replace(':id', ''),
     { withProgressBar: true, showSuccessMessage: true },
   );
 
@@ -127,11 +127,11 @@ function NewCustomerContact() {
       return;
     }
 
-    // TODO redirect to edit page
     call({
       body: formRepresentationToBody(formRepresentation),
-      path: CUSTOMERS_PATH.replace(':id', ''),
-    }).then(() => router.push(CUSTOMERS_CONTACTS));
+    }).then((response: AxiosResponse) => {
+      router.push(CUSTOMERS_CONTACTS_EDIT.replace(':id', response.data.id));
+    });
   };
 
   return (
