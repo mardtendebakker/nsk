@@ -43,4 +43,9 @@ export class CompanyRepository {
       where,
     });
   }
+
+  delete(params: {where: Prisma.acompanyWhereUniqueInput}) {
+    const { where } = params;
+    return this.prisma.acompany.delete({where});
+  }
 }

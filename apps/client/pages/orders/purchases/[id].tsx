@@ -25,7 +25,7 @@ function UpdatePurchaseOrder() {
 
   const { call, performing } = useAxios(
     'put',
-    null,
+    PURCHASE_ORDERS_PATH.replace(':id', id.toString()),
     { withProgressBar: true, showSuccessMessage: true },
   );
 
@@ -57,10 +57,7 @@ function UpdatePurchaseOrder() {
       return;
     }
 
-    call({
-      body: formRepresentationToBody(formRepresentation),
-      path: PURCHASE_ORDERS_PATH.replace(':id', id.toString()),
-    });
+    call({ body: formRepresentationToBody(formRepresentation) });
   };
 
   return (

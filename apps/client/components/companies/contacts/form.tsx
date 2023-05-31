@@ -166,7 +166,7 @@ function Form({
               <Box sx={{ flex: 0.33, display: 'flex', alignItems: 'center' }}>
                 <Checkbox
                   sx={{ alignSelf: 'end' }}
-                  onChange={(_, checked) => setValue({ field: 'isPartner', value: checked })}
+                  onChange={(_, checked) => setValue({ field: 'is_partner', value: checked })}
                   checked={formRepresentation.is_partner.value as boolean}
                 />
                 <Typography variant="inherit">

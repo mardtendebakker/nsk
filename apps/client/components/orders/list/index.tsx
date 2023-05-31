@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Box, Card } from '@mui/material';
-import Delete from '@mui/icons-material/Delete';
 import saveBlob from '../../../utils/saveBlob';
 import useForm, { FieldPayload } from '../../../hooks/useForm';
 import List from './list';
@@ -110,7 +109,6 @@ function refreshList({
 
 export default function ListContainer() {
   const { trans } = useTranslation();
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showChangeStatusModal, setShowChangeStatusModal] = useState(false);
   const [changeStatusValue, setChangeStatusValue] = useState<number | undefined>();
   const router = useRouter();
@@ -192,7 +190,7 @@ export default function ListContainer() {
   const disabled = (): boolean => performing || performingDelete || performingPatch || performingPrint;
 
   const handleDelete = () => {
-    callDelete({ body: checkedOrderIds })
+    callDelete({ body: ['df'] })
       .then(() => {
         setCheckedOrderIds([]);
         refreshList({
@@ -201,10 +199,6 @@ export default function ListContainer() {
           router,
           call,
         });
-      })
-      .catch(() => {})
-      .finally(() => {
-        setShowDeleteModal(false);
       });
   };
 
@@ -219,7 +213,6 @@ export default function ListContainer() {
           call,
         });
       })
-      .catch(() => {})
       .finally(() => {
         setShowChangeStatusModal(false);
         setChangeStatusValue(undefined);
@@ -260,7 +253,7 @@ export default function ListContainer() {
         onAllCheck={handleAllChecked}
         onChangeStatus={() => setShowChangeStatusModal(true)}
         onPrint={handlePrint}
-        onDelete={() => setShowDeleteModal(true)}
+        onDelete={handleDelete}
       />
       <Box sx={{ m: '1.5rem' }} />
       <List
@@ -272,31 +265,6 @@ export default function ListContainer() {
         checkedOrderIds={checkedOrderIds}
         onPageChange={(newPage) => setPage(newPage)}
       />
-      {showDeleteModal && (
-      <ConfirmationDialog
-        title={(
-          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-            <Delete
-              color="error"
-              sx={{
-                mb: '1rem',
-                padding: '.5rem',
-                fontSize: '2.5rem',
-                borderRadius: '50%',
-                bgcolor: (theme) => theme.palette.error.light,
-              }}
-            />
-            {trans('deleteResourceQuestion')}
-          </Box>
-        )}
-        content={<>{trans('deleteResourceContent')}</>}
-        onConfirm={handleDelete}
-        onClose={() => setShowDeleteModal(false)}
-        confirmButtonColor="error"
-        confirmButtonVariant="outlined"
-        confirmButtonText={trans('deleteConfirm')}
-      />
-      )}
       {showChangeStatusModal && (
       <ConfirmationDialog
         disabled={!changeStatusValue}

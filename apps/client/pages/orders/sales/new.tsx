@@ -21,7 +21,7 @@ function NewSalesOrder() {
 
   const { call, performing } = useAxios(
     'post',
-    null,
+    SALES_ORDERS_PATH.replace(':id', ''),
     { withProgressBar: true, showSuccessMessage: true },
   );
 
@@ -35,7 +35,6 @@ function NewSalesOrder() {
 
     call({
       body: formRepresentationToBody(formRepresentation),
-      path: SALES_ORDERS_PATH.replace(':id', ''),
     }).then((response: AxiosResponse) => {
       router.push(ORDERS_SALES_EDIT.replace(':id', response.data.id));
     });

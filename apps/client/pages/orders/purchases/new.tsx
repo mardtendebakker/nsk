@@ -93,7 +93,7 @@ function NewPurchaseOrder() {
 
   const { call, performing } = useAxios(
     'post',
-    null,
+    PURCHASE_ORDERS_PATH.replace(':id', ''),
     { withProgressBar: true, showSuccessMessage: true },
   );
 
@@ -107,7 +107,6 @@ function NewPurchaseOrder() {
 
     call({
       body: formRepresentationToBody(formRepresentation),
-      path: PURCHASE_ORDERS_PATH.replace(':id', ''),
     }).then((response: AxiosResponse) => {
       router.push(ORDERS_PURCHASES_EDIT.replace(':id', response.data.id));
     });

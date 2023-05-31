@@ -1,7 +1,7 @@
 import { Box, Card } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { CUSTOMERS_CONTACTS } from '../../../../utils/routes';
+import { CUSTOMERS_CONTACTS, CUSTOMERS_CONTACTS_EDIT, SUPPLIERS_CONTACTS_EDIT } from '../../../../utils/routes';
 import List from './list';
 import Filter from './filter';
 import useAxios from '../../../../hooks/useAxios';
@@ -89,6 +89,15 @@ export default function ListContainer() {
     },
   );
 
+  const { call: callDelete, performing: performingDelete } = useAxios(
+    'delete',
+    ajaxPath.replace(':id', ''),
+    {
+      withProgressBar: true,
+      showSuccessMessage: true,
+    },
+  );
+
   useEffect(() => {
     refreshList({
       page,
@@ -109,11 +118,25 @@ export default function ListContainer() {
     setData(initFormState({}));
   };
 
+  const handleDelete = (id: number) => {
+    callDelete({ path: ajaxPath.replace(':id', id.toString()) })
+      .then(() => {
+        refreshList({
+          page,
+          formRepresentation,
+          router,
+          call,
+        });
+      });
+  };
+
+  const disabled = (): boolean => performing || performingDelete;
+
   return (
     <Card sx={{ overflowX: 'auto', p: '1.5rem' }}>
       <Filter
         onReset={handleReset}
-        disabled={performing}
+        disabled={disabled()}
         formRepresentation={formRepresentation}
         setValue={(payload: FieldPayload) => {
           setValue(payload);
@@ -122,11 +145,14 @@ export default function ListContainer() {
       />
       <Box sx={{ m: '1rem' }} />
       <List
-        disabled={performing}
+        disabled={disabled()}
         companies={data}
         count={Math.ceil(count / 10)}
         page={page}
-        onCheck={() => {}}
+        onDelete={handleDelete}
+        onEdit={(id) => router.push(
+          (router.pathname == CUSTOMERS_CONTACTS ? CUSTOMERS_CONTACTS_EDIT : SUPPLIERS_CONTACTS_EDIT).replace(':id', id.toString()),
+        )}
         onPageChange={(newPage) => setPage(newPage)}
       />
     </Card>

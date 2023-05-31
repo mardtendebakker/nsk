@@ -23,7 +23,7 @@ function UpdateSalesOrder() {
 
   const { call, performing } = useAxios(
     'put',
-    null,
+    SALES_ORDERS_PATH.replace(':id', id.toString()),
     { withProgressBar: true, showSuccessMessage: true },
   );
 
@@ -55,10 +55,7 @@ function UpdateSalesOrder() {
       return;
     }
 
-    call({
-      body: formRepresentationToBody(formRepresentation),
-      path: SALES_ORDERS_PATH.replace(':id', id.toString()),
-    });
+    call({ body: formRepresentationToBody(formRepresentation) });
   };
 
   return (

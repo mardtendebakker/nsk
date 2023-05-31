@@ -5,6 +5,7 @@ export interface CompanyListItem {
   representative?: string,
   partner?: { id: number, name: string },
   is_partner?: boolean,
+  orders?: [],
 }
 
 export interface Company {

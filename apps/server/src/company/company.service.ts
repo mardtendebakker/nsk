@@ -11,7 +11,7 @@ export class CompanyService {
     protected readonly repository: CompanyRepository,
   ) {}
 
-  findAll(query: FindManyDto) {
+  async findAll(query: FindManyDto) {
     const where = {
       ...query.where,
       name: {
@@ -25,7 +25,7 @@ export class CompanyService {
       }
     }
 
-    return this.repository.findAll({
+    const {count, data} = await this.repository.findAll({
       ...query,
       select: {
         ...query.select,
@@ -33,10 +33,21 @@ export class CompanyService {
         name: true,
         representative: true,
         email: true,
-        partner_id: true
+        partner_id: true,
+        customerOrders: true,
+        supplierOrders: true
       },
       where
     });
+
+    //TODO refacto response DTO
+    return {
+      count,
+      data: data.map(({customerOrders, supplierOrders, ...rest}) => ({
+        ...rest,
+        orders: customerOrders.length > 0 ? customerOrders : supplierOrders
+      }))
+    }
   }
 
   async create(comapny: CreateCompanyDto) {
@@ -45,6 +56,10 @@ export class CompanyService {
 
   async findOne(id: number) {
     return this.repository.findOne({ id });
+  }
+
+  async delete(id: number) {
+    return this.repository.delete({ where: {id} });
   }
 
   async update(id: number, comapny: UpdateCompanyDto) {
