@@ -10,6 +10,7 @@ export interface Product {
   description?: string,
   updated_at?: string,
   created_at?: string,
+  attributes?: Attribute[]
 }
 
 export interface ProductListItem {
@@ -48,7 +49,8 @@ export interface Attribute {
   id?: number,
   name?: string,
   type?: number,
-  options?: AttributeOption[]
+  options?: AttributeOption[],
+  value?: string
 }
 
 export interface ProductType {

@@ -7,25 +7,25 @@ import Close from '@mui/icons-material/Close';
 import useAxios from '../../../hooks/useAxios';
 import useTranslation from '../../../hooks/useTranslation';
 import useForm, { FormRepresentation } from '../../../hooks/useForm';
-import Form/* , { buildAttributeKey } */ from '../form';
+import Form, { buildAttributeKey } from '../form';
 import { STOCK_PRODUCTS_PATH, STOCK_REPAIR_SERVICES_PATH } from '../../../utils/axios/paths';
 import { Product } from '../../../utils/axios/models/product';
 
 export function initFormState(product?: Product) {
   const attributes = {};
 
-  /* product?.attributes?.forEach((attribute) => {
-    attributes[buildAttributeKey(attribute, { id: product.productType })] = {
+  product?.attributes?.forEach((attribute) => {
+    attributes[buildAttributeKey(attribute, { id: product.product_type.id })] = {
       value: attribute.value,
     };
-  }); */
+  });
 
   return {
     sku: { value: product?.sku },
     name: { value: product?.name, required: true },
-    productType: { value: product?.product_type?.id },
-    location: { value: product?.location?.id, required: true },
-    productStatus: { value: product?.product_status?.id },
+    type_id: { value: product?.product_type?.id },
+    location_id: { value: product?.location?.id, required: true },
+    status_id: { value: product?.product_status?.id },
     price: { value: product?.price },
     description: { value: product?.description },
     ...attributes,
@@ -42,9 +42,9 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
       return;
     }
 
-    if (key.includes('attribute:') && formRepresentation.productType.value >= 0) {
+    if (key.includes('attribute:') && formRepresentation.type_id.value >= 0) {
       const splitted = key.split(':');
-      if (formRepresentation.productType.value != splitted[2]) {
+      if (formRepresentation.type_id.value != splitted[2]) {
         return;
       }
 
@@ -57,12 +57,6 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
         formData.append(`product_attributes[${prIndex}][value]`, value);
         prIndex += 1;
       }
-    } else if (key == 'productType') {
-      formData.append('type_id', value);
-    } else if (key == 'location') {
-      formData.append('location_id', value);
-    } else if (key == 'productStatus') {
-      formData.append('status_id', value);
     } else {
       formData.append(key, value);
     }
