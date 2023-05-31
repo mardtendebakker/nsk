@@ -10,7 +10,7 @@ export interface Product {
   description?: string,
   updated_at?: string,
   created_at?: string,
-  attributes?: Attribute[]
+  product_attributes?: { quantity?: number, value: string, attribute_id: number }[]
 }
 
 export interface ProductListItem {

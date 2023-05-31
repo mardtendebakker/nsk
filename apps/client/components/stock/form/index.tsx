@@ -10,8 +10,8 @@ import { Attribute, ProductType } from '../../../utils/axios/models/product';
 import AutocompleteAttribute from './AutocompleteAttribute';
 import FileAttribute from './FileAttribute';
 
-export const buildAttributeKey = (attribute: Attribute, productType: ProductType) => (
-  `attribute:${attribute.type}:${productType.id}:${attribute.id}`
+export const buildAttributeKey = (attribute: { id?: number }, productType: { id?: number }) => (
+  `attribute:${productType.id}:${attribute.id}`
 );
 
 export default function Form({
