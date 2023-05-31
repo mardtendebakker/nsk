@@ -16,13 +16,16 @@ export class FileS3 {
       Bucket: this.configService.get<string>('S3_FILE_BUCKET'),
       Key,
       Body,
-      ACL:'public-read', //TODO: should changed to authenticated-read
     });
 
     return this.client.send(putCommand);
   }
 
   async delete(Key: string) {
+    if (Key === undefined) {
+      throw new Error("The Key must be provided");
+    }
+
     const delCommand = new DeleteObjectCommand({
       Bucket: this.configService.get<string>('S3_FILE_BUCKET'),
       Key
@@ -32,6 +35,10 @@ export class FileS3 {
   }
 
   async deleteMany(Keys: string[]) {
+    if (Keys.length === 0) {
+      throw new Error("At least one key must have provided");
+    }
+
     const delsCommand = new DeleteObjectsCommand({
       Bucket: this.configService.get<string>('S3_FILE_BUCKET'),
       Delete: {

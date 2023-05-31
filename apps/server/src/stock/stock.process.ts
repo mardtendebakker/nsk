@@ -7,6 +7,7 @@ import { ServiceStatus } from "../service/enum/service-status.enum";
 import { ProcessedTask } from "./dto/find-product-respone.dto";
 
 export type ProductRelationGetPayload = Prisma.productGetPayload<Record<'select', Prisma.productSelect>>;
+export type ProductAttributeIncludeAttributeGetPayload = Prisma.product_attributeGetPayload<Record<'include', Prisma.product_attributeInclude>>;
 
 export class StockProcess {
   private isSaleable: boolean;

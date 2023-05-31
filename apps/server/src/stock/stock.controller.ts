@@ -30,14 +30,14 @@ export class StockController {
   }
 
   @Put(':id')
-  @UseInterceptors(FilesInterceptor('images'))
+  @UseInterceptors(FilesInterceptor('files'))
   @ApiResponse({type: FindOneProductResponeDto})
   updateOne(
     @Param('id') id: number,
     @Body() body: UpdateBodyStockDto,
-    @UploadedFiles() images: Express.Multer.File[],
+    @UploadedFiles() files: Express.Multer.File[],
   ) {
-    return this.stockService.updateOne(id, body, images);
+    return this.stockService.updateOne(id, body, files);
   }
 
   @Patch('')

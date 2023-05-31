@@ -17,7 +17,7 @@ export class ProductAttributeEntity {
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
-  value_product_id?: number | null;
+  value_product_id: number | null;
 
   @ApiProperty()
   @IsString()
@@ -28,11 +28,11 @@ export class ProductAttributeEntity {
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
-  quantity?: number | null;
+  quantity: number | null;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
-  external_id?: number | null;
+  external_id: number | null;
 }

@@ -23,9 +23,9 @@ export function initFormState(product?: Product) {
   return {
     sku: { value: product?.sku },
     name: { value: product?.name, required: true },
-    type_id: { value: product?.product_type?.id },
-    location_id: { value: product?.location?.id, required: true },
-    status_id: { value: product?.product_status?.id },
+    productType: { value: product?.product_type?.id },
+    location: { value: product?.location?.id, required: true },
+    productStatus: { value: product?.product_status?.id },
     price: { value: product?.price },
     description: { value: product?.description },
     ...attributes,
@@ -50,13 +50,19 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
 
       if (Array.isArray(value)) {
         value.forEach((subValue) => {
-          formData.append('images', subValue);
+          formData.append('files', subValue, splitted[3]);
         });
       } else {
         formData.append(`product_attributes[${prIndex}][attribute_id]`, splitted[3]);
         formData.append(`product_attributes[${prIndex}][value]`, value);
         prIndex += 1;
       }
+    } else if (key == 'productType') {
+      formData.append('type_id', value);
+    } else if (key == 'location') {
+      formData.append('location_id', value);
+    } else if (key == 'productStatus') {
+      formData.append('status_id', value);
     } else {
       formData.append(key, value);
     }

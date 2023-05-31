@@ -16,7 +16,7 @@ export class FileService {
   ) {}
 
   async create(createFileDto: CreateFileDto, file: Express.Multer.File): Promise<afile> {
-    const fileName = uuidv4() + '.' + /(?:\.([^.]+))?$/.exec(file.originalname)[1] ?? '';
+    const fileName = uuidv4();
     const fileKey = `${createFileDto.discr}/${fileName}`;
 
     await this.fileS3.put(fileKey, file.buffer);

@@ -61,6 +61,9 @@ export class StockRepository {
     return this.prisma.product.update({
       where,
       data,
+      include: {
+        product_attribute_product_attribute_product_idToproduct: true
+      }
     });
   }
   
@@ -97,7 +100,11 @@ export class StockRepository {
     });
   }
 
-  findProductAttributes(id: number, include: Prisma.product_attributeInclude) {
+  findProductAttributesIncludeAttribute(id: number) {
+    const include: Prisma.product_attributeInclude = {
+      attribute: true
+    };
+
     return this.prisma.product_attribute.findMany({
       include,
       where: {
@@ -106,11 +113,30 @@ export class StockRepository {
     });
   }
 
-  deleteAttributes(id: number) {
+  deleteProductAttributes(id: number) {
     return this.prisma.product_attribute.deleteMany({
       where: {
         product_id: id,
       }
     });
+  }
+
+  async getAttributesByTypeId(typeId) {
+    const productTypeAttributes = await this.prisma.product_type_attribute.findMany({
+      where: {
+        product_type_id: typeId,
+      },
+      include: {
+        attribute: true
+      },
+    });
+    return productTypeAttributes.map(productTypeAttribute => productTypeAttribute.attribute);
+  }
+
+  addProductAttributes(data: Prisma.product_attributeCreateManyInput[]) {
+    return this.prisma.product_attribute.createMany({
+      data,
+      skipDuplicates: true
+    })
   }
 }

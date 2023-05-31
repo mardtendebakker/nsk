@@ -80,9 +80,9 @@ export default function Form({
               placeholder={trans('selectProductType')}
               onChange={(selected: ProductType | undefined) => {
                 setProductType(selected);
-                setValue({ field: 'type_id', value: selected?.id });
+                setValue({ field: 'productType', value: selected?.id });
               }}
-              value={formRepresentation.type_id.value?.toString()}
+              value={formRepresentation.productType.value?.toString()}
               disabled={disabled}
             />
           </Grid>
@@ -96,10 +96,10 @@ export default function Form({
               url={LOCATIONS_PATH.replace(':id', '')}
               label={trans('location')}
               placeholder={trans('selectLocation')}
-              onChange={(selected: { id: number }) => setValue({ field: 'location_id', value: selected?.id })}
-              value={formRepresentation.location_id.value?.toString()}
-              helperText={formRepresentation.location_id.error}
-              error={!!formRepresentation.location_id.error}
+              onChange={(selected: { id: number }) => setValue({ field: 'location', value: selected?.id })}
+              value={formRepresentation.location.value?.toString()}
+              helperText={formRepresentation.location.error}
+              error={!!formRepresentation.location.error}
               disabled={disabled}
             />
             <DataSourcePicker
@@ -107,8 +107,8 @@ export default function Form({
               url={PRODUCT_STATUSES_PATH.replace(':id', '')}
               label={trans('status')}
               placeholder={trans('selectStatus')}
-              onChange={(selected: { id: number }) => setValue({ field: 'status_id', value: selected?.id })}
-              value={formRepresentation.status_id.value?.toString()}
+              onChange={(selected: { id: number }) => setValue({ field: 'productStatus', value: selected?.id })}
+              value={formRepresentation.productStatus.value?.toString()}
               disabled={disabled}
             />
             <TextField

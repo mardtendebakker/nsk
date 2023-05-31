@@ -3,7 +3,7 @@ import { Type } from "class-transformer";
 import { IsNumber, IsOptional, IsString } from "class-validator";
 import { ProductAttributeEntity } from "../entities/product-attribute.entity";
 
-class ProductAttributeDto extends OmitType(ProductAttributeEntity, ['product_id']) {}
+export class ProductAttributeUpdateDto extends OmitType(ProductAttributeEntity, ['product_id']) {}
 
 export class UpdateBodyStockDto {
   @ApiPropertyOptional()
@@ -51,11 +51,8 @@ export class UpdateBodyStockDto {
   location_id?: number;
   
   @ApiPropertyOptional()
-  @IsNumber({}, {each: true})
-  file_ids?: number[];
-  
-  @ApiPropertyOptional()
-  product_attributes?: ProductAttributeDto[];
+  @Type(() => ProductAttributeUpdateDto)
+  product_attributes?: ProductAttributeUpdateDto[];
   
   @ApiPropertyOptional()
   @IsOptional()
