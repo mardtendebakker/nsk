@@ -239,10 +239,16 @@ export class StockService {
       unique_server_filename: true,
       original_client_filename: true,
     };
+    const attributeSelect: Prisma.attributeSelect = {
+      type: true,
+    };
     const productAttributeSelect: Prisma.product_attributeSelect = {
       quantity: true,
       value: true,
       attribute_id: true,
+      attribute: {
+        select: attributeSelect
+      }
     };
     const productSelect: Prisma.productSelect = {
       id: true,
