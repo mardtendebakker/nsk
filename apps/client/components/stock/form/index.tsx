@@ -6,7 +6,7 @@ import BorderedBox from '../../borderedBox';
 import TextField from '../../memoizedInput/textField';
 import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
 import { LOCATIONS_PATH, PRODUCT_STATUSES_PATH, PRODUCT_TYPES_PATH } from '../../../utils/axios/paths';
-import { Attribute, ProductType } from '../../../utils/axios/models/product';
+import { AFile, Attribute, ProductType } from '../../../utils/axios/models/product';
 import AutocompleteAttribute from './AutocompleteAttribute';
 import FileAttribute from './FileAttribute';
 
@@ -179,6 +179,7 @@ export default function Form({
                 <FileAttribute
                   key={buildAttributeKey(attribute, productType)}
                   attribute={attribute}
+                  afile={(formRepresentation.afile.value || []) as AFile[]}
                   value={getAttributeValue(attribute) || []}
                   onChange={(value) => handleAttributeChange(attribute, value)}
                   disabled={disabled}

@@ -2,17 +2,24 @@ import {
   Box, Typography,
 } from '@mui/material';
 import { memo } from 'react';
-import { Attribute } from '../../../utils/axios/models/product';
+import { AFile, Attribute } from '../../../utils/axios/models/product';
 import ImageInput from '../../input/imageInput';
+
+function buildImageLink(id: string, afile: AFile[]): string {
+  const file = afile.find(({ id: afileId }) => afileId.toString() == id);
+  return `https://${file.unique_server_filename}.s3.amazonaws.com/${file.discr}/${file.original_client_filename}`;
+}
 
 function FileAttribute({
   attribute,
   value,
+  afile,
   onChange,
   disabled,
 }: {
   attribute: Attribute,
   value: (string | File)[],
+  afile: AFile[],
   onChange: (arg0: (string | File)[]) => void,
   disabled?: boolean
 }) {
@@ -36,7 +43,7 @@ function FileAttribute({
             sx={{
               height: '7rem', flex: '0 31%', mr: (i + 1) % 3 !== 0 && '.5rem', mb: '1rem',
             }}
-            image={image}
+            image={image instanceof File ? image : buildImageLink(image, afile)}
             onChange={(file: File) => onChange([...value.filter((element) => element != image), file])}
             onClear={() => onChange(value.filter((element) => element != image))}
             disabled={disabled}

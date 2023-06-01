@@ -10,7 +10,8 @@ export interface Product {
   description?: string,
   updated_at?: string,
   created_at?: string,
-  product_attributes?: { quantity?: number, value: string, attribute_id: number }[]
+  product_attributes?: { quantity?: number, value: string, attribute_id: number, attribute: { type: number } }[],
+  afile?: AFile[]
 }
 
 export interface ProductListItem {
@@ -57,4 +58,11 @@ export interface ProductType {
   id?: number,
   name?: string,
   attributes?: Attribute[]
+}
+
+export interface AFile {
+  id: number,
+  unique_server_filename: string,
+  original_client_filename: string,
+  discr: string
 }

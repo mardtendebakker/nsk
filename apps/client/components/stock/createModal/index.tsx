@@ -14,13 +14,18 @@ import { Product } from '../../../utils/axios/models/product';
 export function initFormState(product?: Product) {
   const attributes = {};
 
-  product?.product_attributes?.forEach((attribute) => {
-    attributes[buildAttributeKey({ id: attribute.attribute_id }, { id: product.product_type.id })] = {
-      value: attribute.value,
+  product?.product_attributes?.forEach((productAttribute) => {
+    const value = productAttribute.attribute.type == 2
+      ? productAttribute.value.split(',')
+      : productAttribute.value;
+
+    attributes[buildAttributeKey({ id: productAttribute.attribute_id }, { id: product.product_type.id })] = {
+      value,
     };
   });
 
   return {
+    afile: { value: product?.afile },
     sku: { value: product?.sku },
     name: { value: product?.name, required: true },
     type_id: { value: product?.product_type?.id },
@@ -37,6 +42,10 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
   let prIndex = 0;
 
   Object.keys(formRepresentation).forEach((key) => {
+    if (key == 'afile') {
+      return;
+    }
+
     const value = formRepresentation[key].value || null;
 
     if (key.includes('attribute:') && formRepresentation.type_id.value >= 0) {
@@ -47,7 +56,7 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
 
       if (Array.isArray(value)) {
         value.forEach((subValue) => {
-          formData.append('files', subValue, splitted[2]);
+          formData.append(`files[${splitted[2]}]`, subValue);
         });
       } else {
         formData.append(`product_attributes[${prIndex}][attribute_id]`, splitted[2]);
