@@ -9,6 +9,9 @@ export class GroupByDateResult {
   
   @ApiPropertyOptional()
   day?: number;
+
+  @ApiProperty()
+  color: string;
   
   @ApiProperty()
   count: number;

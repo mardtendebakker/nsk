@@ -23,6 +23,7 @@ export {
   LOCATIONS_PATH,
   BULK_PRINT_SALES_PATH,
   BULK_PRINT_PURCHASES_PATH,
+  ORDERS_ANALYTICS_PATH,
 } from './paths';
 export { AxiosError } from 'axios';
 export type { AxiosPromise, AxiosResponse } from 'axios';
