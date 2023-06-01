@@ -236,8 +236,10 @@ export class StockService {
       },
     };
     const afileSelect: Prisma.afileSelect = {
+      id: true,
       unique_server_filename: true,
       original_client_filename: true,
+      discr: true,
     };
     const attributeSelect: Prisma.attributeSelect = {
       type: true,
