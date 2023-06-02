@@ -56,8 +56,15 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
 
       if (Array.isArray(value)) {
         value.forEach((subValue) => {
-          formData.append(`files[${splitted[2]}]`, subValue);
+          if (subValue instanceof Blob) {
+            formData.append(`${splitted[2]}`, subValue);
+          }
         });
+        if (!(value[0] instanceof Blob)) {
+          formData.append(`product_attributes[${prIndex}][attribute_id]`, splitted[2]);
+          formData.append(`product_attributes[${prIndex}][value]`, value.join(','));
+          prIndex += 1;
+        }
       } else {
         formData.append(`product_attributes[${prIndex}][attribute_id]`, splitted[2]);
         formData.append(`product_attributes[${prIndex}][value]`, value);

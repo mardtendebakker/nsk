@@ -20,38 +20,6 @@ export class StockService {
     protected readonly fileService: FileService
   ) {}
 
-  private addAttributeRelationToProductAttributes(
-    productId: number,
-    productAttributes: ProductAttributeUpdateDto[],
-    includeAttributes: ProductAttributeIncludeAttributeGetPayload[],
-  ): ProductAttributeIncludeAttributeGetPayload[] {
-
-    const newProductAttributesIncludeAttribute:
-      ProductAttributeIncludeAttributeGetPayload[] = [];
-
-    for (let i = 0; i < productAttributes.length; i++) {
-      const productAttributeBody = productAttributes[i];
-
-      for (let j = 0; j < includeAttributes.length; j++) {
-        const includeAttribute =
-          includeAttributes[j];
-
-        if (productAttributeBody.attribute_id
-          === includeAttribute.attribute_id) {
-
-          newProductAttributesIncludeAttribute.push({
-            product_id: productId,
-            ...productAttributeBody,
-            attribute: includeAttribute.attribute,
-          });
-
-        }
-      }
-    }
-
-    return newProductAttributesIncludeAttribute;
-  }
-
   async findAll(query: FindManyDto) {
     const productTypeTaskSelect: Prisma.product_type_taskSelect = {
       task: true,
@@ -291,7 +259,9 @@ export class StockService {
     }
   }
 
-  async updateOne(id: number, body: UpdateBodyStockDto, files: Record<string, Express.Multer.File[]>) {
+  async updateOne(id: number, body: UpdateBodyStockDto, files: Express.Multer.File[]) {
+    console.log(files);
+    
     const stock = await this.findOne({ where: { id } });
 
     const typeHasChanged = body.type_id !== undefined && body.type_id !== stock.product_type.id;
@@ -393,17 +363,49 @@ export class StockService {
     return fileIdsUploaded;
   }
 
+  private addAttributeRelationToProductAttributes(
+    productId: number,
+    productAttributes: ProductAttributeUpdateDto[],
+    includeAttributes: ProductAttributeIncludeAttributeGetPayload[],
+  ): ProductAttributeIncludeAttributeGetPayload[] {
+
+    const newProductAttributesIncludeAttribute:
+      ProductAttributeIncludeAttributeGetPayload[] = [];
+
+    for (let i = 0; i < productAttributes.length; i++) {
+      const productAttributeBody = productAttributes[i];
+
+      for (let j = 0; j < includeAttributes.length; j++) {
+        const includeAttribute =
+          includeAttributes[j];
+
+        if (productAttributeBody.attribute_id
+          === includeAttribute.attribute_id) {
+
+          newProductAttributesIncludeAttribute.push({
+            product_id: productId,
+            ...productAttributeBody,
+            attribute: includeAttribute.attribute,
+          });
+
+        }
+      }
+    }
+
+    return newProductAttributesIncludeAttribute;
+  }
+
   private async processProductAttributeUpdate(
     productId: number,
     product_attributes: ProductAttributeUpdateDto[] = [],
-    filesGroupByAttributeId: Record<string, Express.Multer.File[]>,
+    files: Express.Multer.File[],
     typeHasChanged: boolean,
   ): Promise<Prisma.product_attributeUpdateManyWithoutProduct_product_attribute_product_idToproductNestedInput> {
     
     if (productId === undefined) {
       throw new Error("productId must be provided");
     }
-    if (product_attributes.length === 0 && Object.keys(filesGroupByAttributeId).length === 0) {
+    if (product_attributes.length === 0 && files.length === 0) {
       return null;
     }
 
@@ -469,6 +471,16 @@ export class StockService {
         }
       }
     }
+
+    // join fileIdsCommon and fileIdsUploaded and 
+    const filesGroupByAttributeId: Record<string, Express.Multer.File[]> = files.reduce((acc, obj) => {
+      const { fieldname } = obj;
+      if (!acc[fieldname]) {
+        acc[fieldname] = [];
+      }
+      acc[fieldname].push(obj);
+      return acc;
+    }, {});
 
     const uploadedIdsGroupByAttributeId: Record<string, number[]> = {};
     for (const [fileAttributeId, files] of Object.entries(filesGroupByAttributeId)) {
