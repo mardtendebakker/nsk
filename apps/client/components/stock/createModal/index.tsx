@@ -40,6 +40,7 @@ export function initFormState(product?: Product) {
 export function formRepresentationToBody(formRepresentation: FormRepresentation): FormData {
   const formData = new FormData();
   let prIndex = 0;
+  const fileIds = [];
 
   Object.keys(formRepresentation).forEach((key) => {
     if (key == 'afile') {
@@ -58,13 +59,13 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
         value.forEach((subValue) => {
           if (subValue instanceof Blob) {
             formData.append(`${splitted[2]}`, subValue);
+          } else {
+            fileIds.push(subValue);
           }
         });
-        if (!(value[0] instanceof Blob)) {
-          formData.append(`product_attributes[${prIndex}][attribute_id]`, splitted[2]);
-          formData.append(`product_attributes[${prIndex}][value]`, value.filter(Boolean).join(','));
-          prIndex += 1;
-        }
+        formData.append(`product_attributes[${prIndex}][attribute_id]`, splitted[2]);
+        formData.append(`product_attributes[${prIndex}][value]`, fileIds.filter(Boolean).join(','));
+        prIndex += 1;
       } else {
         formData.append(`product_attributes[${prIndex}][attribute_id]`, splitted[2]);
         formData.append(`product_attributes[${prIndex}][value]`, value);
