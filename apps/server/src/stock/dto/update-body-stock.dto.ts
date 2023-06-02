@@ -1,62 +1,71 @@
 import { ApiPropertyOptional, OmitType } from "@nestjs/swagger";
-import { Type } from "class-transformer";
-import { IsNumber, IsOptional, IsString } from "class-validator";
-import { ProductAttributeEntity } from "../entities/product-attribute.entity";
-import { Transform } from "class-transformer";
+import { Transform, Type } from "class-transformer";
+import { ProductAttributeFormDto } from "./product-attribute-form.dto";
+import { formDataToNullTransform, formDataToStringTransform } from "../../common/transforms/form-date.transform";
+import { IsOptional, IsString, IsNumber } from "class-validator";
 
-export class ProductAttributeUpdateDto extends OmitType(ProductAttributeEntity, ['product_id']) {}
+export class ProductAttributeUpdateDto extends OmitType(ProductAttributeFormDto, ['product_id']) {}
 
 export class UpdateBodyStockDto {
   @ApiPropertyOptional()
+  @Transform(formDataToStringTransform)
   @IsOptional()
   @IsString()
   sku?: string;
 
   @ApiPropertyOptional()
+  @Transform(formDataToStringTransform)
   @IsOptional()
   @IsString()
   name?: string;
   
   @ApiPropertyOptional()
+  @Transform(formDataToStringTransform)
   @IsOptional()
   @IsString()
-  @Transform(({value}) => JSON.parse(value))
   description?: string;
   
   @ApiPropertyOptional()
+  @Transform(formDataToNullTransform)
   @IsOptional()
   @IsNumber()
-  @Transform(({value}) => JSON.parse(value))
+  @Type(() => Number)
   price?: number | null;
   
   @ApiPropertyOptional()
+  @Transform(formDataToNullTransform)
   @IsOptional()
   @IsNumber()
+  @Type(() => Number)
   external_id?: number;
   
   @ApiPropertyOptional()
+  @Transform(formDataToNullTransform)
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
   type_id?: number;
 
   @ApiPropertyOptional()
+  @Transform(formDataToNullTransform)
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
   status_id?: number;
 
   @ApiPropertyOptional()
+  @Transform(formDataToNullTransform)
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
   location_id?: number;
   
   @ApiPropertyOptional()
-  @Type(() => ProductAttributeUpdateDto)
-  product_attributes?: ProductAttributeUpdateDto[];
+  @Type(() => ProductAttributeFormDto)
+  product_attributes?: ProductAttributeFormDto[];
   
   @ApiPropertyOptional()
+  @Transform(formDataToNullTransform)
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
