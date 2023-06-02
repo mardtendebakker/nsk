@@ -16,7 +16,7 @@ export function initFormState(product?: Product) {
 
   product?.product_attributes?.forEach((productAttribute) => {
     const value = productAttribute.attribute.type == 2
-      ? productAttribute.value.split(',')
+      ? productAttribute.value.split(',').filter(Boolean)
       : productAttribute.value;
 
     attributes[buildAttributeKey({ id: productAttribute.attribute_id }, { id: product.product_type.id })] = {
@@ -62,7 +62,7 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
         });
         if (!(value[0] instanceof Blob)) {
           formData.append(`product_attributes[${prIndex}][attribute_id]`, splitted[2]);
-          formData.append(`product_attributes[${prIndex}][value]`, value.join(','));
+          formData.append(`product_attributes[${prIndex}][value]`, value.filter(Boolean).join(','));
           prIndex += 1;
         }
       } else {

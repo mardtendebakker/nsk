@@ -2,6 +2,8 @@ import { ApiPropertyOptional, OmitType } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import { IsNumber, IsOptional, IsString } from "class-validator";
 import { ProductAttributeEntity } from "../entities/product-attribute.entity";
+import { Transform } from "class-transformer";
+import { TransformFnParams } from "class-transformer";
 
 export class ProductAttributeUpdateDto extends OmitType(ProductAttributeEntity, ['product_id']) {}
 
@@ -19,13 +21,14 @@ export class UpdateBodyStockDto {
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
+  @Transform(({value}) => JSON.parse(value))
   description?: string;
   
   @ApiPropertyOptional()
   @IsOptional()
   @IsNumber()
-  @Type(() => Number)
-  price?: number;
+  @Transform(({value}) => JSON.parse(value))
+  price?: number | null;
   
   @ApiPropertyOptional()
   @IsOptional()
