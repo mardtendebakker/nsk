@@ -3,7 +3,6 @@ import { Type } from "class-transformer";
 import { IsNumber, IsOptional, IsString } from "class-validator";
 import { ProductAttributeEntity } from "../entities/product-attribute.entity";
 import { Transform } from "class-transformer";
-import { TransformFnParams } from "class-transformer";
 
 export class ProductAttributeUpdateDto extends OmitType(ProductAttributeEntity, ['product_id']) {}
 
