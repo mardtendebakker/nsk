@@ -47,13 +47,14 @@ export default function DataSourcePicker(
   }
 
   useEffect(() => {
-    if (value) {
-      call({ params }).then((response: AxiosResponse) => {
-        if (response?.data) {
-          onChange(response.data.data.find((item) => item.id == value));
+    call({ params }).then((response: AxiosResponse) => {
+      if (response?.data) {
+        const found = response.data.data.find((item) => item.id == value);
+        if (found) {
+          onChange(found);
         }
-      });
-    }
+      }
+    });
   }, [value]);
 
   return (
@@ -78,6 +79,9 @@ export default function DataSourcePicker(
                       fieldset: {
                         display: !displayFieldset && 'none',
                       },
+                    }}
+                    onBlur={() => {
+                      debouncedCall();
                     }}
                     onChange={(e) => {
                       debouncedCall({
