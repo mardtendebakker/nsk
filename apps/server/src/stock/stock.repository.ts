@@ -113,6 +113,20 @@ export class StockRepository {
     });
   }
 
+  getAttributesByProductTypeId(productTypeId: number) {
+    const where: Prisma.attributeWhereInput = {
+      product_type_attribute: {
+        some: {
+          product_type_id: productTypeId,
+        },
+      },
+    };
+
+    return this.prisma.attribute.findMany({
+      where
+    });
+  }
+
   deleteProductAttributes(id: number) {
     return this.prisma.product_attribute.deleteMany({
       where: {

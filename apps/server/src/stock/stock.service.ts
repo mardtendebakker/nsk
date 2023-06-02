@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma, attribute } from "@prisma/client";
 import { FindOneDto } from "../common/dto/find-one.dto";
 import { LocationService } from "../location/location.service";
 import { StockRepository } from "./stock.repository";
@@ -260,7 +260,14 @@ export class StockService {
   }
 
   async updateOne(id: number, body: UpdateBodyStockDto, files: Express.Multer.File[]) {
+    if (id === undefined) {
+      throw new Error("product id is required");
+    }
+
     const stock = await this.findOne({ where: { id } });
+    if (stock?.id === undefined) {
+      throw new Error("stock not found");
+    }
 
     const typeHasChanged = body.type_id !== undefined && body.type_id !== stock.product_type.id;
 
@@ -276,7 +283,8 @@ export class StockService {
       id,
       product_attributes,
       files,
-      typeHasChanged
+      typeHasChanged,
+      stock.product_type.id
     );
 
     return this.repository.updateOne({
@@ -363,30 +371,45 @@ export class StockService {
 
   private addAttributeRelationToProductAttributes(
     productId: number,
+    attributes: attribute[],
     productAttributes: ProductAttributeUpdateDto[],
-    includeAttributes: ProductAttributeIncludeAttributeGetPayload[],
+    inclusive = false,
   ): ProductAttributeIncludeAttributeGetPayload[] {
 
     const newProductAttributesIncludeAttribute:
       ProductAttributeIncludeAttributeGetPayload[] = [];
 
-    for (let i = 0; i < productAttributes.length; i++) {
-      const productAttributeBody = productAttributes[i];
+    for (let i = 0; i < attributes.length; i++) {
+      const attribute = attributes[i];
+      let attributeFound = false;
 
-      for (let j = 0; j < includeAttributes.length; j++) {
-        const includeAttribute =
-          includeAttributes[j];
+      for (let j = 0; j < productAttributes.length; j++) {
+        const productAttribute = productAttributes[j];
 
-        if (productAttributeBody.attribute_id
-          === includeAttribute.attribute_id) {
+        if (attribute.id === productAttribute.attribute_id) {
 
           newProductAttributesIncludeAttribute.push({
             product_id: productId,
-            ...productAttributeBody,
-            attribute: includeAttribute.attribute,
+            ...productAttribute,
+            attribute: attribute,
           });
 
+          attributeFound = true;
+          break;
+
         }
+      }
+
+      if (!attributeFound && inclusive) {
+        newProductAttributesIncludeAttribute.push({
+          product_id: productId,
+          attribute_id: attribute.id,
+          quantity: null,
+          value: '',
+          external_id: null,
+          value_product_id: null,
+          attribute: attribute,
+        });
       }
     }
 
@@ -398,6 +421,7 @@ export class StockService {
     product_attributes: ProductAttributeUpdateDto[] = [],
     files: Express.Multer.File[],
     typeHasChanged: boolean,
+    productTypeId: number,
   ): Promise<Prisma.product_attributeUpdateManyWithoutProduct_product_attribute_product_idToproductNestedInput> {
 
     if (productId === undefined) {
@@ -409,17 +433,20 @@ export class StockService {
 
     // add attribute to body.product_attributes
     // to be able to check the attribute.type
-    const productAttributesIncludeAttribute =
-      await this.repository.findProductAttributesIncludeAttribute(productId);
+    const attributes =
+      await this.repository.getAttributesByProductTypeId(productTypeId);
 
     const newProductAttributesIncludeAttribute =
       this.addAttributeRelationToProductAttributes(
         productId,
+        attributes,
         product_attributes,
-        productAttributesIncludeAttribute
       );
 
-    const oldFileProductAttributes = productAttributesIncludeAttribute
+    const oldProductAttributesIncludeAttribute =
+      await this.repository.findProductAttributesIncludeAttribute(productId);
+
+    const oldFileProductAttributes = oldProductAttributesIncludeAttribute
       .filter(product_attribute => product_attribute?.attribute?.type
         === AttributeType.TYPE_FILE);
     const newFileProductAttributes = newProductAttributesIncludeAttribute
@@ -489,39 +516,44 @@ export class StockService {
       uploadedIdsGroupByAttributeId[fileAttributeId] = fileIdsUploaded;
     }
 
-    // merge fileIdsKepts and uploadedIdsGroupByAttributeId
-    const mergedFileIds: Record<string, number[]> = Object.entries(fileIdsKepts).reduce(
-      (result, [key, value]) => {
-        result[key] = value.concat(uploadedIdsGroupByAttributeId[key] || []);
-        return result;
-      },
-      { ...fileIdsKepts }
-    );
+    // get all productAttributes
+    const productAttributesIncludeAttributeInclusive =
+      this.addAttributeRelationToProductAttributes(
+        productId,
+        attributes,
+        product_attributes,
+        true
+      );
 
-    // store the merged file ids to the product_attribute.value in comma-separated format
-    for (const [fileAttributeId, fileIds] of Object.entries(mergedFileIds)) {
-      let productAttributeFound = false;
-      for (let i = 0; i < newProductAttributesIncludeAttribute.length; i++) {
-        if (newProductAttributesIncludeAttribute[i].attribute_id === Number(fileAttributeId)) {
-          newProductAttributesIncludeAttribute[i].value = fileIds.filter(Boolean).join(FILE_VALUE_DELIMITER);
-          productAttributeFound = true;
-          break;
+    // store the all file ids to the product_attribute.value in comma-separated format
+    for (let i = 0; i < productAttributesIncludeAttributeInclusive.length; i++) {
+
+      if (productAttributesIncludeAttributeInclusive[i].attribute.type === AttributeType.TYPE_FILE) {
+        productAttributesIncludeAttributeInclusive[i].value = '';
+
+        for (const [fileAttributeId, fileIds] of Object.entries(fileIdsKepts)) {
+          if (productAttributesIncludeAttributeInclusive[i].attribute_id === Number(fileAttributeId)) {
+            productAttributesIncludeAttributeInclusive[i].value =
+              [...productAttributesIncludeAttributeInclusive[i].value.split(FILE_VALUE_DELIMITER)
+                .filter(Boolean).map(Number), ...fileIds].filter(Boolean).join(FILE_VALUE_DELIMITER);
+            break;
+          }
+        }
+
+        for (const [fileAttributeId, fileIds] of Object.entries(uploadedIdsGroupByAttributeId)) {
+          if (productAttributesIncludeAttributeInclusive[i].attribute_id === Number(fileAttributeId)) {
+            productAttributesIncludeAttributeInclusive[i].value =
+              [...productAttributesIncludeAttributeInclusive[i].value.split(FILE_VALUE_DELIMITER)
+                .filter(Boolean).map(Number), ...fileIds].filter(Boolean).join(FILE_VALUE_DELIMITER);
+            break;
+          }
         }
       }
-      if (!productAttributeFound) {
-        newProductAttributesIncludeAttribute.push({
-          product_id: productId,
-          attribute_id: Number(fileAttributeId),
-          value: fileIds.filter(Boolean).join(FILE_VALUE_DELIMITER),
-          value_product_id: null,
-          quantity: null,
-          external_id: null
-        });
-      }
+
     }
 
     const productAttributeUpdate: Prisma.product_attributeUpdateManyWithoutProduct_product_attribute_product_idToproductNestedInput = {
-      update: newProductAttributesIncludeAttribute.map(
+      upsert: productAttributesIncludeAttributeInclusive.map(
         newProductAttributeIncludeAttribute => ({
           where: {
             product_id_attribute_id: {
@@ -529,11 +561,15 @@ export class StockService {
               product_id: newProductAttributeIncludeAttribute.product_id
             },
           },
-          data: {
-            value: newProductAttributeIncludeAttribute.value
+          update: {
+            value: newProductAttributeIncludeAttribute.value,
+          },
+          create: {
+            attribute_id: newProductAttributeIncludeAttribute.attribute_id,
+            value: newProductAttributeIncludeAttribute.value,
           },
         })),
-    }
+    };
 
     return productAttributeUpdate;
   }
