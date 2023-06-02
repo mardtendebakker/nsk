@@ -1,7 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { Prisma } from "@prisma/client";
+import { FileDiscrimination } from "../types/file-discrimination.enum";
 
-export class PrismaCreateFileDto implements Prisma.afileCreateInput {
+export class PrismaCreateFileDto {
   @ApiProperty()
   original_client_filename: string;
 
@@ -9,17 +9,17 @@ export class PrismaCreateFileDto implements Prisma.afileCreateInput {
   unique_server_filename: string;
 
   @ApiProperty()
-  discr: string;
+  discr: FileDiscrimination;
 
   @ApiPropertyOptional()
   external_id?: number;
 
   @ApiPropertyOptional()
-  product?: Prisma.productCreateNestedOneWithoutAfileInput;
+  product_id?: number;
 
   @ApiPropertyOptional()
-  aorder?: Prisma.aorderCreateNestedOneWithoutAfileInput;
+  order_id?: number;
 
   @ApiPropertyOptional()
-  pickup?: Prisma.pickupCreateNestedOneWithoutAfileInput;
+  pickup_id?: number;
 }

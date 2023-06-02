@@ -7,25 +7,30 @@ import Close from '@mui/icons-material/Close';
 import useAxios from '../../../hooks/useAxios';
 import useTranslation from '../../../hooks/useTranslation';
 import useForm, { FormRepresentation } from '../../../hooks/useForm';
-import Form/* , { buildAttributeKey } */ from '../form';
+import Form, { buildAttributeKey } from '../form';
 import { STOCK_PRODUCTS_PATH, STOCK_REPAIR_SERVICES_PATH } from '../../../utils/axios/paths';
 import { Product } from '../../../utils/axios/models/product';
 
 export function initFormState(product?: Product) {
   const attributes = {};
 
-  /* product?.attributes?.forEach((attribute) => {
-    attributes[buildAttributeKey(attribute, { id: product.productType })] = {
-      value: attribute.value,
+  product?.product_attributes?.forEach((productAttribute) => {
+    const value = productAttribute.attribute.type == 2
+      ? productAttribute.value.split(',')
+      : productAttribute.value;
+
+    attributes[buildAttributeKey({ id: productAttribute.attribute_id }, { id: product.product_type.id })] = {
+      value,
     };
-  }); */
+  });
 
   return {
+    afile: { value: product?.afile },
     sku: { value: product?.sku },
     name: { value: product?.name, required: true },
-    productType: { value: product?.product_type?.id },
-    location: { value: product?.location?.id, required: true },
-    productStatus: { value: product?.product_status?.id },
+    type_id: { value: product?.product_type?.id },
+    location_id: { value: product?.location?.id, required: true },
+    status_id: { value: product?.product_status?.id },
     price: { value: product?.price },
     description: { value: product?.description },
     ...attributes,
@@ -34,25 +39,36 @@ export function initFormState(product?: Product) {
 
 export function formRepresentationToBody(formRepresentation: FormRepresentation): FormData {
   const formData = new FormData();
+  let prIndex = 0;
 
   Object.keys(formRepresentation).forEach((key) => {
-    const { value } = formRepresentation[key];
-    if (value == undefined) {
+    if (key == 'afile') {
       return;
     }
 
-    if (key.includes('attribute:') && formRepresentation.productType.value >= 0) {
+    const value = formRepresentation[key].value || null;
+
+    if (key.includes('attribute:') && formRepresentation.type_id.value >= 0) {
       const splitted = key.split(':');
-      if (formRepresentation.productType.value != splitted[2]) {
+      if (formRepresentation.type_id.value != splitted[1]) {
         return;
       }
 
       if (Array.isArray(value)) {
         value.forEach((subValue) => {
-          formData.append(`attributes[${splitted[3]}][]`, subValue);
+          if (subValue instanceof Blob) {
+            formData.append(`${splitted[2]}`, subValue);
+          }
         });
+        if (!(value[0] instanceof Blob)) {
+          formData.append(`product_attributes[${prIndex}][attribute_id]`, splitted[2]);
+          formData.append(`product_attributes[${prIndex}][value]`, value.join(','));
+          prIndex += 1;
+        }
       } else {
-        formData.append(`attributes[${splitted[3]}]`, value);
+        formData.append(`product_attributes[${prIndex}][attribute_id]`, splitted[2]);
+        formData.append(`product_attributes[${prIndex}][value]`, value);
+        prIndex += 1;
       }
     } else {
       formData.append(key, value);

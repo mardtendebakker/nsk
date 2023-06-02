@@ -6,12 +6,12 @@ import BorderedBox from '../../borderedBox';
 import TextField from '../../memoizedInput/textField';
 import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
 import { LOCATIONS_PATH, PRODUCT_STATUSES_PATH, PRODUCT_TYPES_PATH } from '../../../utils/axios/paths';
-import { Attribute, ProductType } from '../../../utils/axios/models/product';
+import { AFile, Attribute, ProductType } from '../../../utils/axios/models/product';
 import AutocompleteAttribute from './AutocompleteAttribute';
 import FileAttribute from './FileAttribute';
 
-export const buildAttributeKey = (attribute: Attribute, productType: ProductType) => (
-  `attribute:${attribute.type}:${productType.id}:${attribute.id}`
+export const buildAttributeKey = (attribute: { id?: number }, productType: { id?: number }) => (
+  `attribute:${productType.id}:${attribute.id}`
 );
 
 export default function Form({
@@ -80,9 +80,9 @@ export default function Form({
               placeholder={trans('selectProductType')}
               onChange={(selected: ProductType | undefined) => {
                 setProductType(selected);
-                setValue({ field: 'productType', value: selected?.id });
+                setValue({ field: 'type_id', value: selected?.id });
               }}
-              value={formRepresentation.productType.value?.toString()}
+              value={formRepresentation.type_id.value?.toString()}
               disabled={disabled}
             />
           </Grid>
@@ -96,10 +96,10 @@ export default function Form({
               url={LOCATIONS_PATH.replace(':id', '')}
               label={trans('location')}
               placeholder={trans('selectLocation')}
-              onChange={(selected: { id: number }) => setValue({ field: 'location', value: selected?.id })}
-              value={formRepresentation.location.value?.toString()}
-              helperText={formRepresentation.location.error}
-              error={!!formRepresentation.location.error}
+              onChange={(selected: { id: number }) => setValue({ field: 'location_id', value: selected?.id })}
+              value={formRepresentation.location_id.value?.toString()}
+              helperText={formRepresentation.location_id.error}
+              error={!!formRepresentation.location_id.error}
               disabled={disabled}
             />
             <DataSourcePicker
@@ -107,8 +107,8 @@ export default function Form({
               url={PRODUCT_STATUSES_PATH.replace(':id', '')}
               label={trans('status')}
               placeholder={trans('selectStatus')}
-              onChange={(selected: { id: number }) => setValue({ field: 'productStatus', value: selected?.id })}
-              value={formRepresentation.productStatus.value?.toString()}
+              onChange={(selected: { id: number }) => setValue({ field: 'status_id', value: selected?.id })}
+              value={formRepresentation.status_id.value?.toString()}
               disabled={disabled}
             />
             <TextField
@@ -179,6 +179,7 @@ export default function Form({
                 <FileAttribute
                   key={buildAttributeKey(attribute, productType)}
                   attribute={attribute}
+                  afile={(formRepresentation.afile.value || []) as AFile[]}
                   value={getAttributeValue(attribute) || []}
                   onChange={(value) => handleAttributeChange(attribute, value)}
                   disabled={disabled}

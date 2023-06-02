@@ -47,12 +47,14 @@ export default function DataSourcePicker(
   }
 
   useEffect(() => {
-    call({ params }).then((response: AxiosResponse) => {
-      if (value != undefined && value !== null && response?.data) {
-        onChange(response.data.data.find((item) => item.id == value));
-      }
-    });
-  }, []);
+    if (value) {
+      call({ params }).then((response: AxiosResponse) => {
+        if (response?.data) {
+          onChange(response.data.data.find((item) => item.id == value));
+        }
+      });
+    }
+  }, [value]);
 
   return (
     <Autocomplete

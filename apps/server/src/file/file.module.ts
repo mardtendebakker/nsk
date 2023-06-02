@@ -3,10 +3,10 @@ import { PrismaModule } from '../prisma/prisma.module';
 import { FileRepository } from './file.repository';
 import { FileService } from './file.service';
 import { FileS3 } from './file.s3';
-import { FileListener } from './file.listener';
 
 @Module({
-  providers: [FileService, FileRepository, FileS3, FileListener],
-  imports: [PrismaModule]
+  providers: [FileService, FileRepository, FileS3],
+  imports: [PrismaModule],
+  exports: [FileService]
 })
 export class FileModule {}

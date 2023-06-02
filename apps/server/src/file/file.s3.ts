@@ -1,4 +1,4 @@
-import { DeleteObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { DeleteObjectCommand, DeleteObjectsCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 
@@ -22,11 +22,30 @@ export class FileS3 {
   }
 
   async delete(Key: string) {
+    if (Key === undefined) {
+      throw new Error("The Key must be provided");
+    }
+
     const delCommand = new DeleteObjectCommand({
       Bucket: this.configService.get<string>('S3_FILE_BUCKET'),
       Key
     });
 
     return this.client.send(delCommand);
+  }
+
+  async deleteMany(Keys: string[]) {
+    if (Keys.length === 0) {
+      throw new Error("At least one key must have provided");
+    }
+
+    const delsCommand = new DeleteObjectsCommand({
+      Bucket: this.configService.get<string>('S3_FILE_BUCKET'),
+      Delete: {
+        Objects: Keys.map(Key => ({ Key })),
+      }
+    });
+
+    return this.client.send(delsCommand);
   }
 }

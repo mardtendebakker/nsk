@@ -6,8 +6,8 @@ import { PrismaService } from '../prisma/prisma.service';
 export class FileRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  getAll() {
-    return this.prisma.afile.findMany();
+  getAll(where: Prisma.afileWhereInput) {
+    return this.prisma.afile.findMany({ where });
   }
   
   create(data: Prisma.afileCreateInput) {
@@ -40,5 +40,9 @@ export class FileRepository {
 
   delete(where: Prisma.afileWhereUniqueInput) {
     return this.prisma.afile.delete({ where });
+  }
+
+  deleteMany(where: Prisma.afileWhereInput) {
+    return this.prisma.afile.deleteMany({ where });
   }
 }

@@ -25,6 +25,14 @@ export class PrismaService extends PrismaClient {
     });
 
     this.$use(async (params, next) => {
+      if (params.model == 'product' && params.action == 'update' && params.args.data?.price) {
+        params.args.data.price *= 100;
+        return await next(params);
+      }
+      return next(params);
+    });
+
+    this.$use(async (params, next) => {
       if (params.model == 'product' && ['findFirst', 'findUnique'].includes(params.action) &&
         (params.args.select?.price || params.args.include?.price)) {
         const product = await next(params);

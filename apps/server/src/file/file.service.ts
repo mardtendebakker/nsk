@@ -16,7 +16,7 @@ export class FileService {
   ) {}
 
   async create(createFileDto: CreateFileDto, file: Express.Multer.File): Promise<afile> {
-    const fileName = uuidv4() + '.' + /(?:\.([^.]+))?$/.exec(file.originalname)[1] ?? '';
+    const fileName = uuidv4();
     const fileKey = `${createFileDto.discr}/${fileName}`;
 
     await this.fileS3.put(fileKey, file.buffer);
@@ -45,5 +45,19 @@ export class FileService {
     this.fileS3.delete(fileKey);
 
     return this.repository.delete(where);
+  }
+
+  async deleteMany(ids: number[]) {
+    const where: Prisma.afileWhereInput = { 
+      id: {
+        in: ids
+      }
+     };
+     
+    const files = await this.repository.getAll(where);
+    const fileKeys = files.map(file => `${file.discr}/${file.original_client_filename}`);
+    this.fileS3.deleteMany(fileKeys);
+
+    return this.repository.deleteMany(where);
   }
 }
