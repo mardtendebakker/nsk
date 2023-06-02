@@ -291,7 +291,7 @@ export class StockService {
     }
   }
 
-  async updateOne(id: number, body: UpdateBodyStockDto, files: Express.Multer.File[]) {
+  async updateOne(id: number, body: UpdateBodyStockDto, files: Record<string, Express.Multer.File[]>) {
     const stock = await this.findOne({ where: { id } });
 
     const typeHasChanged = body.type_id !== undefined && body.type_id !== stock.product_type.id;
@@ -396,14 +396,14 @@ export class StockService {
   private async processProductAttributeUpdate(
     productId: number,
     product_attributes: ProductAttributeUpdateDto[] = [],
-    files: Express.Multer.File[] = [],
+    filesGroupByAttributeId: Record<string, Express.Multer.File[]>,
     typeHasChanged: boolean,
   ): Promise<Prisma.product_attributeUpdateManyWithoutProduct_product_attribute_product_idToproductNestedInput> {
     
     if (productId === undefined) {
       throw new Error("productId must be provided");
     }
-    if (product_attributes.length === 0 && files.length === 0) {
+    if (product_attributes.length === 0 && Object.keys(filesGroupByAttributeId).length === 0) {
       return null;
     }
 
@@ -469,17 +469,6 @@ export class StockService {
         }
       }
     }
-
-
-    // join fileIdsCommon and fileIdsUploaded and 
-    const filesGroupByAttributeId: Record<string, Express.Multer.File[]> = files.reduce((acc, obj) => {
-      const { originalname } = obj;
-      if (!acc[originalname]) {
-        acc[originalname] = [];
-      }
-      acc[originalname].push(obj);
-      return acc;
-    }, {});
 
     const uploadedIdsGroupByAttributeId: Record<string, number[]> = {};
     for (const [fileAttributeId, files] of Object.entries(filesGroupByAttributeId)) {

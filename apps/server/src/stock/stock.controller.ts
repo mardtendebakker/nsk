@@ -8,7 +8,7 @@ import { UpdateBodyStockDto } from "./dto/update-body-stock.dto";
 import { UpdateManyResponseProductDto } from "./dto/update-many-product-response.dts";
 import { UpdateManyProductDto } from "./dto/update-many-product.dto";
 import { FindManyDto } from "./dto/find-many.dto";
-import { FilesInterceptor } from "@nestjs/platform-express";
+import { AnyFilesInterceptor, FilesInterceptor } from "@nestjs/platform-express";
 
 @ApiBearerAuth()
 @Authentication()
@@ -30,12 +30,12 @@ export class StockController {
   }
 
   @Put(':id')
-  @UseInterceptors(FilesInterceptor('files'))
+  @UseInterceptors(AnyFilesInterceptor())
   @ApiResponse({type: FindOneProductResponeDto})
   updateOne(
     @Param('id') id: number,
     @Body() body: UpdateBodyStockDto,
-    @UploadedFiles() files: Express.Multer.File[],
+    @UploadedFiles() files: Record<string, Express.Multer.File[]>,
   ) {
     return this.stockService.updateOne(id, body, files);
   }
