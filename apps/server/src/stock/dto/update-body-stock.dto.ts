@@ -1,60 +1,60 @@
 import { ApiPropertyOptional, OmitType } from "@nestjs/swagger";
 import { Transform, Type } from "class-transformer";
 import { ProductAttributeFormDto } from "./product-attribute-form.dto";
-import { formDataToNullTransform, formDataToStringTransform } from "../../common/transforms/form-date.transform";
+import { formDataNumberTransform, formDataStringTransform } from "../../common/transforms/form-date.transform";
 import { IsOptional, IsString, IsNumber } from "class-validator";
 
 export class ProductAttributeUpdateDto extends OmitType(ProductAttributeFormDto, ['product_id']) {}
 
 export class UpdateBodyStockDto {
   @ApiPropertyOptional()
-  @Transform(formDataToStringTransform)
+  @Transform(formDataStringTransform)
   @IsOptional()
   @IsString()
   sku?: string;
 
   @ApiPropertyOptional()
-  @Transform(formDataToStringTransform)
+  @Transform(formDataStringTransform)
   @IsOptional()
   @IsString()
   name?: string;
   
   @ApiPropertyOptional()
-  @Transform(formDataToStringTransform)
+  @Transform(formDataStringTransform)
   @IsOptional()
   @IsString()
   description?: string;
   
   @ApiPropertyOptional()
-  @Transform(formDataToNullTransform)
+  @Transform(formDataNumberTransform)
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
   price?: number | null;
   
   @ApiPropertyOptional()
-  @Transform(formDataToNullTransform)
+  @Transform(formDataNumberTransform)
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
   external_id?: number;
   
   @ApiPropertyOptional()
-  @Transform(formDataToNullTransform)
+  @Transform(formDataNumberTransform)
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
   type_id?: number;
 
   @ApiPropertyOptional()
-  @Transform(formDataToNullTransform)
+  @Transform(formDataNumberTransform)
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
   status_id?: number;
 
   @ApiPropertyOptional()
-  @Transform(formDataToNullTransform)
+  @Transform(formDataNumberTransform)
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
@@ -65,7 +65,7 @@ export class UpdateBodyStockDto {
   product_attributes?: ProductAttributeFormDto[];
   
   @ApiPropertyOptional()
-  @Transform(formDataToNullTransform)
+  @Transform(formDataNumberTransform)
   @IsOptional()
   @IsNumber()
   @Type(() => Number)

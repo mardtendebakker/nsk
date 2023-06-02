@@ -1,6 +1,6 @@
 import { TransformFnParams } from 'class-transformer';
 
-export function formDataToNullTransform(params: TransformFnParams) {
+export function formDataNumberTransform(params: TransformFnParams) {
   const { value } = params;
 
   if (value === 'null' || isNaN(value)) {
@@ -10,7 +10,7 @@ export function formDataToNullTransform(params: TransformFnParams) {
   return value;
 }
 
-export function formDataToStringTransform(params: TransformFnParams) {
+export function formDataStringTransform(params: TransformFnParams) {
   const { value } = params;
 
   if (value === 'null') {
