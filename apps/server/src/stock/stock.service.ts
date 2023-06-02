@@ -260,8 +260,6 @@ export class StockService {
   }
 
   async updateOne(id: number, body: UpdateBodyStockDto, files: Express.Multer.File[]) {
-    console.log(files);
-    
     const stock = await this.findOne({ where: { id } });
 
     const typeHasChanged = body.type_id !== undefined && body.type_id !== stock.product_type.id;
@@ -315,7 +313,7 @@ export class StockService {
 
       if (productAttribute.attribute.type === AttributeType.TYPE_FILE
         && productAttribute.value !== '') {
-        const fileIds = productAttribute.value.split(FILE_VALUE_DELIMITER).map(Number);
+        const fileIds = productAttribute.value.split(FILE_VALUE_DELIMITER).filter(Boolean).map(Number);
         this.fileService.deleteMany(fileIds);
       }
     }
@@ -401,7 +399,7 @@ export class StockService {
     files: Express.Multer.File[],
     typeHasChanged: boolean,
   ): Promise<Prisma.product_attributeUpdateManyWithoutProduct_product_attribute_product_idToproductNestedInput> {
-    
+
     if (productId === undefined) {
       throw new Error("productId must be provided");
     }
@@ -442,15 +440,15 @@ export class StockService {
 
         if (oldFileProductAttribute.attribute_id === newFileProductAttribute.attribute_id) {
           // the file ids that must be deleted
-          fileIdsDeleteds[oldFileProductAttribute.attribute_id] = oldFileProductAttribute?.value
-            ? oldFileProductAttribute.value.split(FILE_VALUE_DELIMITER).map(Number).filter(
-              (fileId) => !newFileProductAttribute?.value?.split(FILE_VALUE_DELIMITER).map(Number).includes(fileId)
-            ) : [];
+          fileIdsDeleteds[oldFileProductAttribute.attribute_id] =
+            oldFileProductAttribute?.value.split(FILE_VALUE_DELIMITER).filter(Boolean).map(Number).filter(
+              (fileId) => !newFileProductAttribute?.value?.split(FILE_VALUE_DELIMITER).filter(Boolean).map(Number).includes(fileId)
+            );
           // the file ids that must be kept
-          fileIdsKepts[oldFileProductAttribute.attribute_id] = oldFileProductAttribute?.value
-            ? oldFileProductAttribute.value.split(FILE_VALUE_DELIMITER).map(Number).filter(
-              (fileId) => newFileProductAttribute?.value?.split(FILE_VALUE_DELIMITER).map(Number).includes(fileId)
-            ) : [];
+          fileIdsKepts[oldFileProductAttribute.attribute_id] =
+            oldFileProductAttribute.value.split(FILE_VALUE_DELIMITER).filter(Boolean).map(Number).filter(
+              (fileId) => newFileProductAttribute?.value?.split(FILE_VALUE_DELIMITER).filter(Boolean).map(Number).includes(fileId)
+            );
           productAttributeFound = true;
           break;
         }
@@ -458,7 +456,8 @@ export class StockService {
 
       if (!productAttributeFound) {
         // should be kept beacause the product_attribute was not provided
-        fileIdsKepts[oldFileProductAttribute.attribute_id] = oldFileProductAttribute.value.split(FILE_VALUE_DELIMITER).map(Number);
+        fileIdsKepts[oldFileProductAttribute.attribute_id] =
+          oldFileProductAttribute.value.split(FILE_VALUE_DELIMITER).filter(Boolean).map(Number);
       }
     }
 
@@ -498,13 +497,13 @@ export class StockService {
       },
       { ...fileIdsKepts }
     );
-    
+
     // store the merged file ids to the product_attribute.value in comma-separated format
     for (const [fileAttributeId, fileIds] of Object.entries(mergedFileIds)) {
       let productAttributeFound = false;
       for (let i = 0; i < newProductAttributesIncludeAttribute.length; i++) {
         if (newProductAttributesIncludeAttribute[i].attribute_id === Number(fileAttributeId)) {
-          newProductAttributesIncludeAttribute[i].value = fileIds.join(FILE_VALUE_DELIMITER);
+          newProductAttributesIncludeAttribute[i].value = fileIds.filter(Boolean).join(FILE_VALUE_DELIMITER);
           productAttributeFound = true;
           break;
         }
@@ -513,7 +512,7 @@ export class StockService {
         newProductAttributesIncludeAttribute.push({
           product_id: productId,
           attribute_id: Number(fileAttributeId),
-          value: fileIds.join(FILE_VALUE_DELIMITER),
+          value: fileIds.filter(Boolean).join(FILE_VALUE_DELIMITER),
           value_product_id: null,
           quantity: null,
           external_id: null
