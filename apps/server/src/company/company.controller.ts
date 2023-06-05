@@ -15,7 +15,7 @@ import { FindManyDto } from "./dto/find-many.dto";
 export class CompanyController {
   constructor(protected readonly companyService: CompanyService) {}
   @Get('')
-  @ApiResponse({isArray: true, type: FindCompaniesResponeDto})
+  @ApiResponse({type: FindCompaniesResponeDto})
   findAll(@Query() query: FindManyDto) {
     return this.companyService.findAll(query);
   }

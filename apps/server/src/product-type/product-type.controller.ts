@@ -12,7 +12,7 @@ import { FindManyDto } from "./dto/find-many.dto";
 export class ProductTypeController {
   constructor(protected readonly productTypeService: ProductTypeService) {}
   @Get('')
-  @ApiResponse({isArray: true, type: FindProductTypesResponeDto})
+  @ApiResponse({type: FindProductTypesResponeDto})
   findAll(@Query() query: FindManyDto) {
     return this.productTypeService.findAll(query);
   }

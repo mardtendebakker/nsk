@@ -16,7 +16,7 @@ export class StockController {
   constructor(protected readonly stockService: StockService) {}
 
   @Get('')
-  @ApiResponse({isArray: true, type: FindProductsResponseDto})
+  @ApiResponse({type: FindProductsResponseDto})
   findAll(@Query() query: FindManyDto) {
     return this.stockService.findAll(query);
   }
