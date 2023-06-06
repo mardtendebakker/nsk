@@ -13,7 +13,7 @@ export class SupplierController extends CompanyController {
   }
   
   @Get('')
-  @ApiResponse({isArray: true, type: FindCompaniesResponeDto})
+  @ApiResponse({type: FindCompaniesResponeDto})
   findAll(@Query() query: FindManyDto) {
     return this.companyService.findAll(query);
   }

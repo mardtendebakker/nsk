@@ -12,7 +12,7 @@ import { FindManyDto } from "./dto/find-many.dto";
 export class OrderStatusController {
   constructor(protected readonly orderStatusService: OrderStatusService) {}
   @Get('')
-  @ApiResponse({isArray: true, type: FindOrderStatusesResponeDto})
+  @ApiResponse({type: FindOrderStatusesResponeDto})
   findAll(@Query() query: FindManyDto) {
     return this.orderStatusService.findAll(query);
   }

@@ -21,7 +21,7 @@ import { BulkPrintDTO } from "./dto/bulk-print.dto";
 export class AOrderController {
   constructor(protected readonly aorderService: AOrderService) {}
   @Get('')
-  @ApiResponse({isArray: true, type: FindAOrdersResponeDto})
+  @ApiResponse({type: FindAOrdersResponeDto})
   findAll(@Query() query: FindManyDto) {
     return this.aorderService.findAll(query);
   }

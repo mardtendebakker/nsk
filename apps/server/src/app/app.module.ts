@@ -19,6 +19,7 @@ import { EmailModule } from '../email/email.module';
 import { ProductTypeModule } from '../product-type/product-type.module';
 import { ProductStatusModule } from '../product-status/product-status.module';
 import { OrderModule } from '../order/order.module';
+import { PickupModule } from '../pickup/pickup.module';
 
 @Module({
   imports: [
@@ -52,7 +53,8 @@ import { OrderModule } from '../order/order.module';
     EmailModule,
     ProductTypeModule,
     ProductStatusModule,
-    OrderModule
+    OrderModule,
+    PickupModule
   ],
   controllers: [AppController],
   providers: [AppService],

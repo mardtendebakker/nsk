@@ -12,7 +12,7 @@ import { FindManyDto } from "./dto/find-many.dto";
 export class LocationController {
   constructor(protected readonly locationService: LocationService) {}
   @Get('')
-  @ApiResponse({isArray: true, type: FindLocationsResponeDto})
+  @ApiResponse({type: FindLocationsResponeDto})
   findAll(@Query() query: FindManyDto) {
     return this.locationService.findAll(query);
   }
