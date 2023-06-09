@@ -5,12 +5,13 @@ import {
   TableHead,
   TableRow,
   Pagination,
-  Button,
   Tooltip,
+  IconButton,
+  Typography,
 } from '@mui/material';
 import { useRouter } from 'next/router';
-import { CUSTOMERS_CONTACTS } from 'apps/client/utils/routes';
 import Edit from '@mui/icons-material/Edit';
+import { CUSTOMERS_CONTACTS } from '../../../../utils/routes';
 import Delete from '../../../button/delete';
 import useTranslation from '../../../../hooks/useTranslation';
 import { CompanyListItem } from '../../../../utils/axios/models/company';
@@ -87,10 +88,10 @@ export default function List({
                   : company.partner?.name || '--'}
               </TableCell>
               <TableCell>
-                <Tooltip title={trans('edit')}>
-                  <Button onClick={() => onEdit(company.id)} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
+                <Tooltip title={<Typography>{trans('edit')}</Typography>}>
+                  <IconButton onClick={() => onEdit(company.id)} disabled={disabled} sx={{ borderRadius: 0, border: '1px solid', mr: '1rem' }}>
                     <Edit sx={{ mr: '.1rem' }} />
-                  </Button>
+                  </IconButton>
                 </Tooltip>
                 {company.orders?.length === 0
                 && (<Delete onDelete={() => onDelete(company.id)} disabled={disabled} tooltip />)}

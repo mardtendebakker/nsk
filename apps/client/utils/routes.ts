@@ -32,3 +32,4 @@ export const ADMIN_SETTINGS_PRODUCT_TASKS = '/admin/settings/product-tasks';
 export const ADMIN_SETTINGS_STATUS = '/admin/settings/status';
 export const ADMIN_SETTINGS_MAILING_LISTS = '/admin/settings/mailing-lists';
 export const ADMIN_SETTINGS_CUSTOMER_TAGS = '/admin/settings/customer-tags';
+export const LOGISTICS = '/logistics';

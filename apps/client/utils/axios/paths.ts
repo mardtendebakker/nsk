@@ -23,3 +23,4 @@ export const LOCATIONS_PATH = '/locations/:id';
 export const BULK_PRINT_SALES_PATH = '/sales/bulk/print';
 export const BULK_PRINT_PURCHASES_PATH = '/purchases/bulk/print';
 export const ORDERS_ANALYTICS_PATH = '/orders/analytics';
+export const PICKUPS_PATH = 'pickups/:id';

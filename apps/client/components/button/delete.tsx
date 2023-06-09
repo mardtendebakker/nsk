@@ -1,4 +1,6 @@
-import { Button, Box, Tooltip } from '@mui/material';
+import {
+  Button, Box, Tooltip, IconButton, Typography,
+} from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useState } from 'react';
 import useTranslation from '../../hooks/useTranslation';
@@ -18,11 +20,19 @@ export default function Delete({
 
   return (
     <>
-      <Tooltip title={tooltip ? trans('delete') : undefined}>
-        <Button onClick={() => setShowDeleteModal(true)} variant="outlined" color="error" disabled={disabled}>
-          <DeleteIcon />
-          {!tooltip && trans('delete')}
-        </Button>
+      <Tooltip title={tooltip ? <Typography>{trans('delete')}</Typography> : undefined}>
+        {tooltip
+          ? (
+            <IconButton sx={{ borderRadius: 0, border: '1px solid' }} onClick={() => setShowDeleteModal(true)} color="error" disabled={disabled}>
+              <DeleteIcon />
+            </IconButton>
+          )
+          : (
+            <Button onClick={() => setShowDeleteModal(true)} variant="outlined" color="error" disabled={disabled}>
+              <DeleteIcon />
+              {trans('delete')}
+            </Button>
+          )}
       </Tooltip>
       {showDeleteModal && (
       <ConfirmationDialog
