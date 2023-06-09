@@ -1,0 +1,74 @@
+{
+  "extends": [
+    "plugin:@nrwl/nx/react-typescript",
+    "next",
+    "next/core-web-vitals",
+    "../../.eslintrc.json",
+    "airbnb",
+    "airbnb/hooks",
+    "airbnb-typescript"
+  ],
+  "ignorePatterns": [
+    "!**/*",
+    ".next/**/*"
+  ],
+  "parserOptions": {
+    "project": "./apps/client/tsconfig.json"
+  },
+  "overrides": [
+    {
+      "files": [
+        "*.ts",
+        "*.tsx",
+        "*.js",
+        "*.jsx"
+      ],
+      "rules": {
+        "@next/next/no-html-link-for-pages": [
+          "error",
+          "apps/client/pages"
+        ]
+      }
+    },
+    {
+      "files": [
+        "*.ts",
+        "*.tsx"
+      ],
+      "rules": {}
+    },
+    {
+      "files": [
+        "*.js",
+        "*.jsx"
+      ],
+      "rules": {}
+    }
+  ],
+  "rules": {
+    "@next/next/no-html-link-for-pages": "off",
+    "require-jsdoc": "off",
+    "react/react-in-jsx-scope": "off",
+    "import/extensions": "off",
+    "import/no-named-as-default": "off",
+    "react/jsx-props-no-spreading": "off",
+    "react-hooks/exhaustive-deps": "off",
+    "consistent-return": "warn",
+    "no-param-reassign": "warn",
+    "no-plusplus": "off",
+    "eqeqeq": "off",
+    "max-len": "off",
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [
+          ".tsx",
+          ".jsx"
+        ]
+      }
+    ]
+  },
+  "env": {
+    "jest": true
+  }
+}
