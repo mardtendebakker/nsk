@@ -41,8 +41,9 @@ export default function Logistics() {
   const { data: { data = [] } = {}, call } = useAxios('get', PICKUPS_PATH.replace(':id', ''), { withProgressBar: true });
 
   useEffect(() => {
+    setSelectedLogisticIds([0]);
     call({ params: { startsAt: firstDate.format('Y-MM-DD'), endsAt: dates[6].format('Y-MM-DD') } });
-  }, []);
+  }, [firstDate]);
 
   useEffect(() => {
     setFirstDate(firstDate.clone());
