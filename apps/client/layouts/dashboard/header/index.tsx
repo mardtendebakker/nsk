@@ -17,6 +17,7 @@ import {
   MY_TASKS,
   SUPPLIERS_CONTACTS,
   SUPPLIERS_EMAILS,
+  LOGISTICS,
 } from '../../../utils/routes';
 import useTranslation from '../../../hooks/useTranslation';
 
@@ -85,6 +86,11 @@ export default function Header() {
               path: SUPPLIERS_CONTACTS,
               active: router.pathname.includes(SUPPLIERS_CONTACTS)
                || router.pathname.includes(SUPPLIERS_EMAILS),
+            },
+            {
+              title: trans('logistics'),
+              path: LOGISTICS,
+              active: router.pathname.includes(LOGISTICS),
             },
           ].map((item) => (
             <MenuItem key={item.title} item={item} />

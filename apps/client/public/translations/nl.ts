@@ -333,6 +333,21 @@ const translation = {
   selectStatus: 'Selecteer status',
   selectProductType: 'Producttype selecteren',
   requiredField: 'Verplicht veld',
+  monday: 'Maandag',
+  tuesday: 'Dinsdag',
+  wednesday: 'Woensdag',
+  thursday: 'Donderdag',
+  friday: 'Vrijdag',
+  saturday: 'Zaterdag',
+  sunday: 'Zondag',
+  pickup: 'Ophalen',
+  pickupsBy: 'Ophalen door',
+  everyone: 'Iedereen',
+  logisticsPage: {
+    search: {
+      placeholder: 'Zoek op Bestelnr. of beschrijving',
+    },
+  },
   // http status
   200: 'Actie succesvol afgerond',
   201: 'Bron gemaakt',

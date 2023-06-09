@@ -24,7 +24,7 @@ export default function Filter({
     <form>
       <BorderedBox>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Search sx={{ color: '#7F8FA4' }} />
+          <Search sx={{ color: (theme) => theme.palette.grey[40] }} />
           <MemoizedTextField
             disabled={disabled}
             name="search"

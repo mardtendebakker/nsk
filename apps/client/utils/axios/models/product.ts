@@ -1,5 +1,5 @@
 export interface Product {
-  id?: number,
+  id: number,
   name?: string,
   price?: number,
   sku?: string,
@@ -15,7 +15,7 @@ export interface Product {
 }
 
 export interface ProductListItem {
-  id?: number,
+  id: number,
   name?: string,
   price?: number,
   retailPrice?: number,
@@ -61,8 +61,8 @@ export interface ProductType {
 }
 
 export interface AFile {
-  id: number,
-  unique_server_filename: string,
-  original_client_filename: string,
-  discr: string
+  id?: number,
+  unique_server_filename?: string,
+  original_client_filename?: string,
+  discr?: string
 }

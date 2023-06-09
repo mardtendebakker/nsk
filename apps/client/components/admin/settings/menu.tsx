@@ -63,6 +63,7 @@ export default function Menu() {
             background: active ? '#D6E0FA' : undefined,
             color: active ? theme.palette.primary.main : undefined,
             mb: '1rem',
+            py: '1rem',
           })}
           key={text}
         >

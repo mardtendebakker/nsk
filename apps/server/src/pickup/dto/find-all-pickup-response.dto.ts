@@ -1,7 +1,7 @@
 import { ApiProperty , ApiPropertyOptional} from "@nestjs/swagger";
 import { IFindManyRespone } from "../../common/interface/find-many-respone";
 import { PickupEntity } from "../entities/pickup.entity";
-import { aorder, fos_user } from "@prisma/client";
+import { order_status } from "@prisma/client";
 
 class FindAllPickupResponeDto extends PickupEntity {
   @ApiProperty()
@@ -23,10 +23,10 @@ class FindAllPickupResponeDto extends PickupEntity {
   description: string | null;
 
   @ApiPropertyOptional()
-  aorder: aorder | null;
+  order:  {id: number, order_nr: string, order_status: order_status} | null;
   
   @ApiPropertyOptional()
-  fos_user: fos_user | null;
+  logistic: {id: number, username: string} | null;
 }
 
 export class FindPickupsResponeDto implements IFindManyRespone<FindAllPickupResponeDto> {
