@@ -44,3 +44,6 @@ Thumbs.db
 # Envirenment Variable
 .env
 .env.development
+
+#pm2
+ecosystem.config.js

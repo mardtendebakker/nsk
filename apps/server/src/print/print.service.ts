@@ -38,7 +38,7 @@ export class PrintService {
   }
 
   async printAOrders(orders: AOrderTotalPrice[]): Promise<Buffer> {
-    const source = readFileSync(join(process.cwd(), 'apps/server/src/print/templates/sale.hbs'), 'utf8');
+    const source = readFileSync(join(process.cwd(), 'apps/server/src/assets/templates/sale.hbs'), 'utf8');
     const template = Handlebars.compile(source);
 
     const data = await Promise.all(orders.map(async order => {
