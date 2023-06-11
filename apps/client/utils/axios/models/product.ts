@@ -35,6 +35,7 @@ export interface ProductListItem {
 }
 
 export interface Task {
+  id?: string,
   name?: string,
   description?: string,
   status?: number
@@ -57,7 +58,9 @@ export interface Attribute {
 export interface ProductType {
   id?: number,
   name?: string,
+  comment?: string,
   attributes?: Attribute[]
+  tasks?: Task[]
 }
 
 export interface AFile {

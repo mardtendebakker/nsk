@@ -5,12 +5,9 @@ import {
   TableHead,
   TableRow,
   Pagination,
-  Tooltip,
-  IconButton,
-  Typography,
 } from '@mui/material';
 import { useRouter } from 'next/router';
-import Edit from '@mui/icons-material/Edit';
+import Edit from '../../../button/edit';
 import { CUSTOMERS_CONTACTS } from '../../../../utils/routes';
 import Delete from '../../../button/delete';
 import useTranslation from '../../../../hooks/useTranslation';
@@ -88,11 +85,7 @@ export default function List({
                   : company.partner?.name || '--'}
               </TableCell>
               <TableCell>
-                <Tooltip title={<Typography>{trans('edit')}</Typography>}>
-                  <IconButton onClick={() => onEdit(company.id)} disabled={disabled} sx={{ borderRadius: 0, border: '1px solid', mr: '1rem' }}>
-                    <Edit sx={{ mr: '.1rem' }} />
-                  </IconButton>
-                </Tooltip>
+                <Edit onClick={() => onEdit(company.id)} disabled={disabled} sx={{ mr: '1rem' }} />
                 {company.orders?.length === 0
                 && (<Delete onDelete={() => onDelete(company.id)} disabled={disabled} tooltip />)}
               </TableCell>

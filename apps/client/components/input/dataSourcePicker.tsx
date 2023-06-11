@@ -21,21 +21,23 @@ export default function DataSourcePicker(
     searchKey,
     helperText,
     error,
+    multiple,
   }: {
     disabled?: boolean,
-    params?: { [key: string]: string },
-    value?: string,
+    params?: { [key: string]: string | number },
+    value?: string | string[],
     sx?: SxProps,
     fullWidth?: boolean,
     label?: string,
     placeholder?: string,
     displayFieldset?: boolean,
     formatter?: (arg0: object) => object,
-    onChange: (arg0: object)=>void,
+    onChange: (arg0: object | object[])=>void,
     url: string,
     searchKey?: string,
     helperText?: string,
-    error?: boolean
+    error?: boolean,
+    multiple?: boolean
   },
 ) {
   const { data, call } = useAxios('get', url, { showErrorMessage: false });
@@ -49,23 +51,31 @@ export default function DataSourcePicker(
   useEffect(() => {
     call({ params }).then((response: AxiosResponse) => {
       if (response?.data) {
-        const found = response.data.data.find((item) => item.id == value);
-        if (found) {
+        const found = multiple
+          ? response.data.data.filter((item) => !!(value as string[]).find((id) => id == item.id))
+          : response.data.data.find((item) => item.id == value);
+
+        if (multiple && found.length > 0) {
+          onChange(found);
+        } else if (found) {
           onChange(found);
         }
       }
     });
-  }, [value]);
+  }, [value?.toString()]);
 
   return (
     <Autocomplete
+      multiple={multiple}
       fullWidth={fullWidth}
       disabled={disabled}
       size="small"
       sx={sx}
       options={options}
-      value={options.find(({ id }) => id == value) || null}
-      onChange={(_, selected: { id: number }) => onChange(selected)}
+      value={(multiple
+        ? options.filter((item) => !!(value as string[]).find((id) => id == item.id))
+        : options.find(({ id }) => id == value)) || null}
+      onChange={(_, selected: { id: number } | { id: number }[]) => onChange(selected)}
       filterSelectedOptions
       renderInput={
                 (inputParams) => (
@@ -108,4 +118,5 @@ DataSourcePicker.defaultProps = {
   formatter: ({ id, name, ...rest }) => ({ id, label: name, ...rest }),
   helperText: undefined,
   error: false,
+  multiple: false,
 };

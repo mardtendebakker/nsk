@@ -8,7 +8,7 @@ import { useEffect, useMemo } from 'react';
 import useTranslation from '../../../hooks/useTranslation';
 import useForm from '../../../hooks/useForm';
 import Form from '../form';
-import { STOCK_PRODUCTS_PATH, STOCK_REPAIR_SERVICES_PATH } from '../../../utils/axios/paths';
+import { STOCK_PRODUCTS_PATH, STOCK_REPAIR_SERVICES_PATH } from '../../../utils/axios';
 import useAxios from '../../../hooks/useAxios';
 import { formRepresentationToBody, initFormState } from '../createModal';
 
@@ -29,21 +29,9 @@ export default function EditModal(
 
   const ajaxPath = type == 'product' ? STOCK_PRODUCTS_PATH : STOCK_REPAIR_SERVICES_PATH;
 
-  const { data: product, call, performing } = useAxios(
-    'get',
-    ajaxPath.replace(':id', id),
-    {
-      showErrorMessage: true,
-    },
-  );
+  const { data: product, call, performing } = useAxios('get', ajaxPath.replace(':id', id));
 
-  const { call: callPut, performing: performingPut } = useAxios(
-    'put',
-    ajaxPath.replace(':id', id),
-    {
-      showErrorMessage: true,
-    },
-  );
+  const { call: callPut, performing: performingPut } = useAxios('put', ajaxPath.replace(':id', id));
 
   const { formRepresentation, setValue, validate } = useForm(useMemo(() => initFormState(product), [product]));
 
@@ -51,10 +39,12 @@ export default function EditModal(
     call().catch(onClose);
   }, []);
 
+  const canSubmit = () => !performing && !performingPut;
+
   const handleSave = (e) => {
     e.preventDefault();
 
-    if (validate()) {
+    if (validate() && !canSubmit()) {
       return;
     }
 
@@ -64,8 +54,6 @@ export default function EditModal(
     })
       .then(onSubmit);
   };
-
-  const canSubmit = () => !performing && !performingPut;
 
   return (
     <Dialog open onClose={onClose} maxWidth={false}>
@@ -83,7 +71,7 @@ export default function EditModal(
         </DialogContent>
         <DialogActions>
           <Button disabled={!canSubmit()} onClick={onClose} variant="outlined" color="inherit">{trans('cancel')}</Button>
-          <Button type="submit" disabled={!canSubmit()} onClick={handleSave} variant="contained" color="primary">{trans('saveChanges')}</Button>
+          <Button type="submit" disabled={!canSubmit()} onClick={handleSave} variant="contained" color="primary">{trans('save')}</Button>
         </DialogActions>
       </form>
     </Dialog>
