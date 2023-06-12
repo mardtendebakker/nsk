@@ -1,5 +1,5 @@
 import { Authentication } from "@nestjs-cognito/auth";
-import { Body, Delete, Get, Param, Patch, Put, Query, UploadedFiles, UseInterceptors } from "@nestjs/common";
+import { Body, Delete, Get, Param, Patch, Post, Put, Query, UploadedFiles, UseInterceptors } from "@nestjs/common";
 import { ApiBearerAuth, ApiResponse } from "@nestjs/swagger";
 import { FindOneProductResponeDto } from "./dto/find-one-product-response.dto";
 import { FindProductsResponseDto } from "./dto/find-product-respone.dto";
@@ -9,6 +9,7 @@ import { UpdateManyResponseProductDto } from "./dto/update-many-product-response
 import { UpdateManyProductDto } from "./dto/update-many-product.dto";
 import { FindManyDto } from "./dto/find-many.dto";
 import { AnyFilesInterceptor } from "@nestjs/platform-express";
+import { CreateBodyStockDto } from "./dto/create-body-stock.dto";
 
 @ApiBearerAuth()
 @Authentication()
@@ -27,6 +28,16 @@ export class StockController {
     return this.stockService.findOne({
       where: { id }
     });
+  }
+
+  @Post('')
+  @UseInterceptors(AnyFilesInterceptor())
+  @ApiResponse({type: FindOneProductResponeDto})
+  create(
+    @Body() body: CreateBodyStockDto,
+    @UploadedFiles() files: Express.Multer.File[],
+  ) {
+    return this.stockService.create(body, files);
   }
 
   @Put(':id')

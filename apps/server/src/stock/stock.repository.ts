@@ -28,11 +28,12 @@ export class StockRepository {
     };
   }
   
-  create(createData: Prisma.productCreateInput) {
+  create(createData: Prisma.productUncheckedCreateInput) {
     const data = {
       ...createData,
       ...(this.isRepairService == IsRepairService.YES && {name: RepairProductName.REPAIR_PRODUCT_NAME})
     }
+    
     return this.prisma.product.create({
       data
     });

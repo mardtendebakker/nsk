@@ -64,6 +64,6 @@ export class PrintService {
       browser.close();
     }
     
-    return Promise.resolve(pdfStream);
+    return pdfStream;
   }
 }

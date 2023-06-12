@@ -14,9 +14,6 @@ export class PrismaAOrderCreateInputDto {
   @IsString()
   @ValidateIf((_, value) => value !== undefined)
   remarks?: string;
-  
-  @ApiProperty()
-  order_date: string | Date;
 
   @ApiPropertyOptional()
   @IsNumber()
