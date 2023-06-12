@@ -252,7 +252,7 @@ export default function ListContainer() {
         )}
         onConfirm={handlePatchLocation}
         onClose={() => setShowChangeLocationModal(false)}
-        confirmButtonText={trans('saveChanges')}
+        confirmButtonText={trans('save')}
       />
       )}
     </Card>

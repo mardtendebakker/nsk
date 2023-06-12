@@ -272,7 +272,6 @@ const translation = {
   basicInfo: 'Basis informatie',
   actions: 'Acties',
   'supplier/customer': 'Leverancier/Klant',
-  saveChanges: 'Wijzigingen opslaan',
   taskAnalytics: 'Taakanalyse',
   months: 'Maanden',
   days: 'Dagen',
@@ -315,6 +314,7 @@ const translation = {
   mailingLists: 'Mail lijst',
   listName: 'Lijstnaam',
   numberOfCustomers: 'Aantal klanten',
+  numberOfAttributes: 'Aantal attributen',
   newMailingList: 'Nieuwe mailinglijst',
   customerTags: 'Klantentags',
   tagName: 'Label naam',
@@ -348,6 +348,29 @@ const translation = {
       placeholder: 'Zoek op Bestelnr. of beschrijving',
     },
   },
+  productTypeForm: {
+    name: {
+      placeholder: 'Type naam',
+      label: 'Naam',
+    },
+    comment: {
+      placeholder: 'Typ je reactie hier...',
+      label: 'Comment',
+    },
+    tasks: {
+      placeholder: 'Selecteer mogelijke taken',
+      label: 'Taken',
+    },
+    attributes: {
+      placeholder: 'Selecteer mogelijke attributen',
+      label: 'Attributen',
+    },
+    isAttribute: {
+      label: 'Kan een attribuut zijn van een ander producttype',
+    },
+  },
+  createProductType: 'Producttype maken',
+  editProductType: 'Producttype bewerken',
   // http status
   200: 'Actie succesvol afgerond',
   201: 'Bron gemaakt',

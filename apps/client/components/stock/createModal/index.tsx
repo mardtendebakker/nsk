@@ -8,7 +8,7 @@ import useAxios from '../../../hooks/useAxios';
 import useTranslation from '../../../hooks/useTranslation';
 import useForm, { FormRepresentation } from '../../../hooks/useForm';
 import Form, { buildAttributeKey } from '../form';
-import { STOCK_PRODUCTS_PATH, STOCK_REPAIR_SERVICES_PATH } from '../../../utils/axios/paths';
+import { STOCK_PRODUCTS_PATH, STOCK_REPAIR_SERVICES_PATH } from '../../../utils/axios';
 import { Product } from '../../../utils/axios/models/product';
 
 export function initFormState(product?: Product) {
@@ -91,13 +91,7 @@ export default function CreateModal({ onClose, onSubmit, type }: {
 
   const ajaxPath = type == 'product' ? STOCK_PRODUCTS_PATH : STOCK_REPAIR_SERVICES_PATH;
 
-  const { call, performing } = useAxios(
-    'post',
-    ajaxPath.replace(':id', ''),
-    {
-      showErrorMessage: true,
-    },
-  );
+  const { call, performing } = useAxios('post', ajaxPath.replace(':id', ''));
 
   const handleSave = (e) => {
     e.preventDefault();
@@ -129,7 +123,7 @@ export default function CreateModal({ onClose, onSubmit, type }: {
         </DialogContent>
         <DialogActions>
           <Button disabled={performing} onClick={onClose} variant="outlined" color="inherit">{trans('cancel')}</Button>
-          <Button type="submit" disabled={performing} onClick={handleSave} variant="contained" color="primary">{trans('saveChanges')}</Button>
+          <Button type="submit" disabled={performing} onClick={handleSave} variant="contained" color="primary">{trans('save')}</Button>
         </DialogActions>
       </form>
     </Dialog>

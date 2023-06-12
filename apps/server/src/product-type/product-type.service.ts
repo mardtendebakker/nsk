@@ -30,6 +30,8 @@ export class ProductTypeService {
           }
         },
       },
+      skip: query.skip,
+      take: query.take,
       where: {
         name: {
           contains: query.nameContains
