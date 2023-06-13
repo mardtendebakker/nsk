@@ -49,19 +49,30 @@ export class PrintService {
     let browser: Browser;
     let pdfStream: Buffer;
     try {
-      browser = await puppeteer.launch();
+
+      browser = await puppeteer.launch({
+        headless: true,
+        args: ['--no-sandbox'],
+      });
+
       const page = await browser.newPage();
+
       const result = template(data);
+
       await page.setContent(result);
+
       pdfStream = await page.pdf({format: 'A4', margin: {
         top: 45,
         bottom: 45,
         left: 30,
         right: 30,
       }});
-      browser.close();
+
     } finally {
-      browser.close();
+      
+      if (browser) {
+        browser.close();
+      }
     }
     
     return pdfStream;
