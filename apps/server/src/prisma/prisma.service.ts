@@ -3,18 +3,9 @@ import { PrismaClient } from '@prisma/client';
 
 @Injectable()
 export class PrismaService extends PrismaClient {
-  constructor() {
-    super();
-    // TODO: prisma middleware for updateAt
-    /**
-     * Solves the Do not know how to serialize a BigInt issue
-    */
-    (BigInt.prototype as any).toJSON = function () {
-      return Number(this);
-    };
-    // TODO: separate these middleware into method
-    /**
-     * product.price
+  private initProductMiddlewares() {
+    /*
+      product.price
     */
     this.$use(async (params, next) => {
       if (params.model == 'product' && params.action == 'create' && params.args.data?.price) {
@@ -55,9 +46,11 @@ export class PrismaService extends PrismaClient {
       }
       return next(params);
     });
+  }
 
-    /**
-     * product.product_order.price
+  private initProductProductOrderMiddlewares() {
+    /*
+      product.product_order.price
     */
     this.$use(async (params, next) => {
       if (params.model == 'product' && params.action == 'findMany' &&
@@ -82,7 +75,9 @@ export class PrismaService extends PrismaClient {
       }
       return next(params);
     });
+  }
 
+  private initAOrderProductOrderMiddlewares() {
     /**
      * aorder.product_order.price
     */
@@ -109,9 +104,11 @@ export class PrismaService extends PrismaClient {
       }
       return next(params);
     });
+  }
 
-    /**
-     * aorder.product_order.product.price
+  private initAOrderProductOrderProductMiddlewares() {
+    /*
+      aorder.product_order.product.price
     */
     this.$use(async (params, next) => {
       if (params.model == 'aorder' && params.action == 'findMany' &&
@@ -179,6 +176,22 @@ export class PrismaService extends PrismaClient {
       }
       return next(params);
     });
+  }
+
+  constructor() {
+    super();
+    // TODO: prisma middleware for updateAt
+    /*
+      Solves the Do not know how to serialize a BigInt issue
+    */
+    (BigInt.prototype as any).toJSON = function () {
+      return Number(this);
+    };
+
+    this.initProductMiddlewares();
+    this.initProductProductOrderMiddlewares();
+    this.initAOrderProductOrderMiddlewares();
+    this.initAOrderProductOrderProductMiddlewares();
   }
 
   async enableShutdownHooks(app: INestApplication) {

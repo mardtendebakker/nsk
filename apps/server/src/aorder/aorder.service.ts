@@ -143,6 +143,7 @@ export class AOrderService {
     const data: Prisma.aorderCreateInput = {
       ...rest,
       discr: this.type,
+      order_date: new Date(),
       ...(status_id && {order_status: {connect: {id: status_id}}}),
       ...(supplier_id && {acompany_aorder_supplier_idToacompany: {connect: {id: supplier_id}}}),
       ...(supplier && {acompany_aorder_supplier_idToacompany: {create: {...supplier, discr: CompanyDiscrimination.SUPLLIER}}}),
@@ -150,7 +151,28 @@ export class AOrderService {
       ...(customer && {acompany_aorder_customer_idToacompany: {create: {...customer, discr: CompanyDiscrimination.CUSTOMER}}}),
     };
 
-    return this.repository.create(data);
+    let aorder = await this.repository.create(data);
+
+    if (rest.order_nr === undefined) {
+      const { 
+        id,
+        order_date,
+      } = aorder;
+  
+      const order_nr = order_date.getFullYear() + id.toString().padStart(6, "0");
+  
+      try {
+        aorder = await this.repository.update({
+          where: { id },
+          data: { order_nr },
+        });
+      } catch (e) {
+        this.repository.deleteMany([ id ]);
+        throw e;
+      }
+    }
+
+    return aorder;
   }
 
   async findOne(id: number) {
