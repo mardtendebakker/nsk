@@ -371,6 +371,8 @@ const translation = {
   },
   createProductType: 'Producttype maken',
   editProductType: 'Producttype bewerken',
+  createLocation: 'Plaats maken',
+  editLocation: 'Plaats bewerken',
   // http status
   200: 'Actie succesvol afgerond',
   201: 'Bron gemaakt',
