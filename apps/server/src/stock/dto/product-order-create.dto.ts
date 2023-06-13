@@ -1,16 +1,10 @@
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import { ApiProperty, ApiPropertyOptional, OmitType } from "@nestjs/swagger";
 import { IsNumber, IsOptional } from "class-validator";
 import { Transform, Type } from "class-transformer";
 import { formDataNumberTransform } from "../../common/transforms/form-date.transform";
 import { ProductOrderEntity } from "../entities/product-order.entity";
 
-export class ProductOrderFormDto extends ProductOrderEntity {
-  @ApiProperty()
-  @Transform(formDataNumberTransform)
-  @IsNumber()
-  @Type(() => Number)
-  id: number;
-
+export class ProductOrderCreateDto extends OmitType(ProductOrderEntity, ['id']) {
   @ApiPropertyOptional()
   @Transform(formDataNumberTransform)
   @IsOptional()

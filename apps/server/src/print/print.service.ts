@@ -49,7 +49,7 @@ export class PrintService {
     let browser: Browser;
     let pdfStream: Buffer;
     try {
-      browser = await puppeteer.launch({headless: 'new'});
+      browser = await puppeteer.launch();
       const page = await browser.newPage();
       const result = template(data);
       await page.setContent(result);

@@ -3,7 +3,7 @@ import { Transform, Type } from "class-transformer";
 import { ProductAttributeFormDto } from "./product-attribute-form.dto";
 import { formDataNumberTransform, formDataStringTransform } from "../../common/transforms/form-date.transform";
 import { IsOptional, IsString, IsNumber } from "class-validator";
-import { ProductOrderFormDto } from "./product-order-form.dto";
+import { ProductOrderCreateDto } from "./product-order-create.dto";
 
 export class CreateBodyStockDto {
   @ApiPropertyOptional()
@@ -64,8 +64,8 @@ export class CreateBodyStockDto {
   product_attributes?: ProductAttributeFormDto[];
   
   @ApiPropertyOptional()
-  @Type(() => ProductOrderFormDto)
-  product_orders?: ProductOrderFormDto[];
+  @Type(() => ProductOrderCreateDto)
+  product_orders?: ProductOrderCreateDto[];
   
   @ApiPropertyOptional()
   @Transform(formDataNumberTransform)

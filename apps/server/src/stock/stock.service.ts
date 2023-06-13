@@ -284,7 +284,7 @@ export class StockService {
 
     const stock = await this.repository.create(createInput);
 
-    if (product_attributes.length > 0) {
+    if (product_attributes?.length > 0) {
       return this.updateOne(stock.id, { product_attributes }, files);
     }
 
