@@ -4,9 +4,9 @@ import useTranslation from '../../../hooks/useTranslation';
 import DashboardLayout from '../../../layouts/dashboard';
 import Header from '../../../components/admin/header';
 import SettingsContainer from '../../../components/admin/settings/settingsContainer';
-import List from '../../../components/admin/settings/productTasks/list';
+import List from '../../../components/admin/settings/tasks/list';
 
-export default function AdminSettingsProductTypes() {
+export default function Tasks() {
   const { trans } = useTranslation();
 
   return (

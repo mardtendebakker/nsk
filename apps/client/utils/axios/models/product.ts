@@ -38,7 +38,8 @@ export interface Task {
   id?: string,
   name?: string,
   description?: string,
-  status?: number
+  status?: number,
+  productTypes?: ProductType[]
 }
 
 export interface AttributeOption {
@@ -51,8 +52,8 @@ export interface Attribute {
   id?: number,
   name?: string,
   type?: number,
+  attr_code?: number,
   options?: AttributeOption[],
-  value?: string
 }
 
 export interface ProductType {
