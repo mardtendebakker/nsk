@@ -14,6 +14,9 @@ export class CompanyService {
   async findAll(query: FindManyDto) {
     const where = {
       ...query.where,
+      id: {
+        in: query.ids
+      },
       name: {
         contains: query.nameContains
       }

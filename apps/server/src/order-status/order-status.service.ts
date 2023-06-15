@@ -10,6 +10,9 @@ export class OrderStatusService {
     return this.repository.findAll({
       ...query,
       where: {
+        id: {
+          in: query.ids
+        },
         name: {
           contains: query.nameContains
         }

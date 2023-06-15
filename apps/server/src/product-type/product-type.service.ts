@@ -33,6 +33,9 @@ export class ProductTypeService {
       skip: query.skip,
       take: query.take,
       where: {
+        id: {
+          in: query.ids
+        },
         name: {
           contains: query.nameContains
         },
