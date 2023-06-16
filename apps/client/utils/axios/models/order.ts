@@ -18,10 +18,12 @@ export interface Order {
   order_nr?: string
   remarks?: string,
   order_date?: string,
+  pickup_date?: string,
   discount?: number,
   transport?: number,
   is_gift?: boolean,
   order_status?: { id:number, name?: string, color?: string }
   status_id?: number,
   supplier_id?: number,
+  logistic_id?: number
 }

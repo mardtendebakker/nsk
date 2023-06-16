@@ -26,3 +26,4 @@ export const ORDERS_ANALYTICS_PATH = '/orders/analytics';
 export const PICKUPS_PATH = '/pickups/:id';
 export const TASKS_PATH = '/tasks/:id';
 export const ATTRIBUTES_PATH = '/attributes/:id';
+export const LOGISTICS_PATH = '/logistics/:id';

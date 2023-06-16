@@ -8,13 +8,14 @@ import {
 } from '@mui/material';
 import { SyntheticEvent } from 'react';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { DesktopDateTimePicker } from '@mui/x-date-pickers/DesktopDateTimePicker';
 import useTranslation from '../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../hooks/useForm';
 import TextField from '../../memoizedInput/textField';
 import BaseTextField from '../../input/textField';
 import SupplierTypePicker from './supplierTypePicker';
 import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
-import { ORDER_STATUSES_PATH, SUPPLIERS_PATH } from '../../../utils/axios';
+import { ORDER_STATUSES_PATH, SUPPLIERS_PATH, LOGISTICS_PATH } from '../../../utils/axios';
 
 function Form({
   formRepresentation,
@@ -346,6 +347,55 @@ function Form({
             </Grid>
           </Grid>
         </Box>
+      </CardContent>
+      <Divider sx={{ mx: '1.5rem' }} />
+      <CardContent>
+        <Typography
+          sx={{ mb: '2rem' }}
+          variant="h4"
+        >
+          {trans('pickupDetails')}
+        </Typography>
+        <Grid
+          container
+          spacing={3}
+        >
+          <Grid
+            sx={{ display: 'flex', flex: 0.5 }}
+            item
+          >
+            <DesktopDateTimePicker
+              onChange={(value) => setValue({ field: 'pickupDate', value })}
+              value={formRepresentation.pickupDate.value}
+              inputFormat="YYYY/MM/DD H:ss"
+              label={trans('pickupDate')}
+              renderInput={(params) => (
+                <BaseTextField
+                  sx={{ mr: '1rem' }}
+                  fullWidth
+                  error={!!formRepresentation.pickupDate.error}
+                  helperText={formRepresentation.pickupDate.error}
+                  {...params}
+                  inputProps={{
+                    ...params.inputProps,
+                    placeholder: trans('selectPickupDate'),
+                  }}
+                />
+              )}
+            />
+            <DataSourcePicker
+              fullWidth
+              disabled={disabled}
+              url={LOGISTICS_PATH.replace(':id', '')}
+              label={trans('logistic')}
+              placeholder={trans('selectLogistic')}
+              onChange={(value: { id: number }[]) => {
+                setValue({ field: 'logisticId', value: value.map(({ id }) => id) });
+              }}
+              value={formRepresentation.logisticId.value}
+            />
+          </Grid>
+        </Grid>
       </CardContent>
     </>
   );
