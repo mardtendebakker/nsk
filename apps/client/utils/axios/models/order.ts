@@ -25,8 +25,12 @@ export interface Order {
   order_status?: { id:number, name?: string, color?: string }
   status_id?: number,
   supplier_id?: number,
+  customer_id?: number,
   logistic_id?: number,
   pickup?: Pickup,
+  delivery_date?: string,
+  delivery_type?: number,
+  delivery_instructions?: string,
 }
 
 interface Pickup {

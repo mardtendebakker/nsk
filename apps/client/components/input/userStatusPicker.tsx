@@ -9,7 +9,6 @@ export default function UserStatusPicker({ label, sx } : TextFieldProps) {
     <Select
       options={[]}
       sx={sx}
-      name="status"
       label={label || trans('status')}
       placeholder={trans('selectStatus')}
     />

@@ -12,13 +12,11 @@ function Permission({ id, permission, detail }:
     <Box sx={{ display: 'flex', mb: '1rem' }}>
       <Select
         options={[]}
-        name="permission"
         placeholder={trans('userForm.permission.placeholder')}
         sx={{ flex: 0.75, mr: '1rem' }}
       />
       <Select
         options={[]}
-        name="permissionDetail"
         placeholder={trans('userForm.permissionDetail.placeholder')}
         sx={{ flex: 0.25 }}
       />
