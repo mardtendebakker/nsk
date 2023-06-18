@@ -8,7 +8,7 @@ import Check from '@mui/icons-material/Check';
 import {
   SyntheticEvent, useEffect, useMemo,
 } from 'react';
-import Form from '../../../components/orders/form';
+import Form from '../../../components/orders/form/purchase';
 import DashboardLayout from '../../../layouts/dashboard';
 import useAxios from '../../../hooks/useAxios';
 import { PURCHASE_ORDERS_PATH } from '../../../utils/axios';
@@ -104,9 +104,9 @@ function UpdatePurchaseOrder() {
         </Box>
         <Card>
           <Form
+            order={purchaseOrder}
             formRepresentation={formRepresentation}
             disabled={!canSubmit()}
-            onSubmit={handleSubmit}
             setValue={setValue}
           />
           <Divider sx={{ mx: '1.5rem' }} />

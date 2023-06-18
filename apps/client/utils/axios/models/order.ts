@@ -25,5 +25,17 @@ export interface Order {
   order_status?: { id:number, name?: string, color?: string }
   status_id?: number,
   supplier_id?: number,
-  logistic_id?: number
+  logistic_id?: number,
+  pickup?: Pickup,
+}
+
+interface Pickup {
+  id?: number,
+  pickup_date?: string,
+  real_pickup_date?: string,
+  description?: string,
+  origin?: string,
+  dataDestruction?: number,
+  agreement?: { id?: number, originalClientFilename?: string },
+  images?: { originalClientFilename?: string }[]
 }

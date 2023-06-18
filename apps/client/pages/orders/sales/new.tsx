@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import Check from '@mui/icons-material/Check';
 import { SyntheticEvent, useMemo } from 'react';
-import Form from '../../../components/orders/form';
+import Form from '../../../components/orders/form/purchase';
 import DashboardLayout from '../../../layouts/dashboard';
 import useAxios from '../../../hooks/useAxios';
 import { AxiosResponse, SALES_ORDERS_PATH } from '../../../utils/axios';
@@ -86,7 +86,6 @@ function NewSalesOrder() {
           <Form
             formRepresentation={formRepresentation}
             disabled={performing}
-            onSubmit={handleSubmit}
             setValue={setValue}
           />
         </Card>
