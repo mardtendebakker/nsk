@@ -31,6 +31,7 @@ export {
   PICKUPS_PATH,
   TASKS_PATH,
   ATTRIBUTES_PATH,
+  LOGISTICS_PATH,
 } from './paths';
 export { AxiosError } from 'axios';
 export type { AxiosPromise, AxiosResponse } from 'axios';
