@@ -6,27 +6,25 @@ type Options = { options: Option[] };
 export type Props = TextFieldProps & Options;
 
 export default function Select({
-  label, sx, fullWidth, options = [], placeholder, name,
+  label, sx, fullWidth, options = [], placeholder, onChange, value,
 } : Props) {
   return (
     <TextField
       fullWidth={fullWidth}
       select
-      name={name}
       label={label}
       sx={{ ...sx }}
-      defaultValue={0}
-      inputProps={
-        { sx: { color: '#B7C2D1' } }
-}
+      value={(value === undefined || value === null) ? 'none' : value}
+      onChange={onChange}
+      defaultValue="none"
     >
       {placeholder && (
-      <option value={0} disabled>
+      <option value="none" disabled style={{ color: '#B7C2D1', padding: '1rem .5rem' }}>
         {placeholder}
       </option>
       )}
-      {options.map(({ title, value }) => (
-        <MenuItem value={value}>
+      {options.map(({ title, value: optionValue }) => (
+        <MenuItem value={optionValue} key={title}>
           {title}
         </MenuItem>
       ))}

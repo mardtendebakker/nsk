@@ -15,8 +15,8 @@ import DataSourcePicker from '../../../memoizedInput/dataSourcePicker';
 import { LOGISTICS_PATH } from '../../../../utils/axios';
 import BasicDetails from '../basicDetails';
 import PricingDetails from '../pricingDetails';
-import CompanyDetails from '../companyDetails';
 import { Order } from '../../../../utils/axios/models/order';
+import SupplierDetails from './supplierDetails';
 
 function PurchaseForm({
   formRepresentation,
@@ -45,7 +45,7 @@ function PurchaseForm({
       <Divider sx={{ mx: '1.5rem' }} />
       <CardContent sx={{ display: 'flex' }}>
         <PricingDetails formRepresentation={formRepresentation} disabled={disabled} setValue={setValue} />
-        <CompanyDetails formRepresentation={formRepresentation} disabled={disabled} setValue={setValue} />
+        <SupplierDetails formRepresentation={formRepresentation} disabled={disabled} setValue={setValue} />
       </CardContent>
       {
       order && (
@@ -69,7 +69,7 @@ function PurchaseForm({
             >
               <DesktopDateTimePicker
                 onChange={(value) => setValue({ field: 'pickupDate', value })}
-                value={formRepresentation.pickupDate.value}
+                value={formRepresentation.pickupDate.value || null}
                 inputFormat="YYYY/MM/DD H:ss"
                 label={trans('pickupDate')}
                 renderInput={(params) => (
