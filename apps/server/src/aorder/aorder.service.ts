@@ -8,6 +8,8 @@ import { UpdateManyAOrderDto } from './dto/update-many-aorder.dto';
 import { AOrderProcess } from './aorder.process';
 import { PrintService } from '../print/print.service';
 import { CompanyDiscrimination } from '../company/types/company-discrimination.enum';
+type CommonAOrderDto = Partial<Omit<CreateAOrderDto, 'pickup'>>;
+type CommonAOrderInput = Partial<Omit<Prisma.aorderCreateInput, 'pickup'>>;
 
 export class AOrderService {
   constructor(
@@ -15,32 +17,6 @@ export class AOrderService {
     protected readonly printService: PrintService,
     protected readonly type?: AOrderDiscrimination
   ) {}
-
-  async getAOrders(order_nr: string) {
-    const aorders = await this.repository.getAOrders({
-      where: {
-        order_nr
-      },
-      select: {
-        id: true,
-        order_nr: true,
-        order_date: true,
-        acompany_aorder_supplier_idToacompany: {
-          select: {
-            name: true,
-          },
-        },
-      },
-    });
-
-    return aorders.map(aorder => {
-      const { acompany_aorder_supplier_idToacompany, ...rest } = aorder;
-      return {
-        ...rest,
-        company_name: acompany_aorder_supplier_idToacompany?.name || '',
-      };
-    });
-  }
 
   async findAll(query: FindManyDto) {
     const companySelect: Prisma.acompanySelect = {
@@ -126,34 +102,36 @@ export class AOrderService {
     });
   }
 
+  async findOne(id: number) {
+    const params: Prisma.aorderFindUniqueArgs = {
+      where: { id }
+    };
+
+    return this.repository.findOne(this.processSelectPart(params));
+  }
+
   async create(orderDto: CreateAOrderDto) {
     if (this.type === undefined) {
       throw new Error('discr is mandatory!');
     }
 
     const {
-      status_id,
-      supplier_id,
-      supplier,
-      customer_id,
-      customer,
-      ...rest
+      pickup
     } = orderDto;
 
-    const data: Prisma.aorderCreateInput = {
-      ...rest,
-      discr: this.type,
-      order_date: new Date(),
-      ...(status_id && {order_status: {connect: {id: status_id}}}),
-      ...(supplier_id && {acompany_aorder_supplier_idToacompany: {connect: {id: supplier_id}}}),
-      ...(supplier && {acompany_aorder_supplier_idToacompany: {create: {...supplier, discr: CompanyDiscrimination.SUPLLIER}}}),
-      ...(customer_id && {acompany_aorder_customer_idToacompany: {connect: {id: customer_id}}}),
-      ...(customer && {acompany_aorder_customer_idToacompany: {create: {...customer, discr: CompanyDiscrimination.CUSTOMER}}}),
+    const params: Prisma.aorderCreateArgs = {
+      data: {
+        ...this.processCreateOrUpdateOrderInput(orderDto),
+        order_nr: orderDto.order_nr || 'TEMP' + Math.floor(Date.now() / 1000).toString(),
+        discr: this.type,
+        order_date: new Date(),
+        ...(pickup && {pickup: {create: {...pickup}}}),
+      }
     };
 
-    let aorder = await this.repository.create(data);
+    let aorder = await this.repository.create(this.processSelectPart(params));
 
-    if (rest.order_nr === undefined) {
+    if (orderDto.order_nr === undefined) {
       const { 
         id,
         order_date,
@@ -175,33 +153,22 @@ export class AOrderService {
     return aorder;
   }
 
-  async findOne(id: number) {
-    return this.repository.findOne({ id });
-  }
-
   async update(id: number, orderDto: UpdateAOrderDto) {
     const {
-      status_id,
-      supplier_id,
-      supplier,
-      customer_id,
-      customer,
-      ...rest
+      pickup
     } = orderDto;
 
     const data: Prisma.aorderUpdateInput = {
-      ...rest,
-      ...(status_id && {order_status: {connect: {id: status_id}}}),
-      ...(supplier_id && {acompany_aorder_supplier_idToacompany: {connect: {id: supplier_id}}}),
-      ...(supplier && {acompany_aorder_supplier_idToacompany: {create: {...supplier, discr: CompanyDiscrimination.SUPLLIER}}}),
-      ...(customer_id && {acompany_aorder_customer_idToacompany: {connect: {id: customer_id}}}),
-      ...(customer && {acompany_aorder_customer_idToacompany: {create: {...customer, discr: CompanyDiscrimination.CUSTOMER}}}),
+      ...this.processCreateOrUpdateOrderInput(orderDto),
+      ...(pickup && {pickup: {upsert: {update: {...pickup}, create: {...pickup}}}}),
     };
 
-    return this.repository.update({
+    const params: Prisma.aorderUpdateArgs = {
       data: data,
       where: { id }
-    });
+    };
+
+    return this.repository.update(this.processSelectPart(params));
   }
 
   async updateMany(updateManyOrderDto: UpdateManyAOrderDto) {
@@ -333,5 +300,45 @@ export class AOrderService {
   async printAOrders(ids: number[]) {
     const aorders = await this.findByIds(ids);
     return this.printService.printAOrders(aorders);
+  }
+
+  private processCreateOrUpdateOrderInput(orderDto: CommonAOrderDto): CommonAOrderInput {
+    const {
+      status_id,
+      supplier_id,
+      supplier,
+      customer_id,
+      customer,
+      ...rest
+    } = orderDto;
+
+    const data: CommonAOrderInput = {
+      ...rest,
+      ...(status_id && {order_status: {connect: {id: status_id}}}),
+      ...(supplier_id && {acompany_aorder_supplier_idToacompany: {connect: {id: supplier_id}}}),
+      ...(supplier && {acompany_aorder_supplier_idToacompany: {create: {...supplier, discr: CompanyDiscrimination.SUPLLIER}}}),
+      ...(customer_id && {acompany_aorder_customer_idToacompany: {connect: {id: customer_id}}}),
+      ...(customer && {acompany_aorder_customer_idToacompany: {create: {...customer, discr: CompanyDiscrimination.CUSTOMER}}}),
+    };
+
+    return data;
+  }
+
+  private processSelectPart<T extends Prisma.aorderArgs>(params: T): T {
+    if (this.type === AOrderDiscrimination.PURCHASE) {
+      params.include = {
+        pickup: true,
+        afile: {
+          select: {
+            id: true,
+            unique_server_filename: true,
+            original_client_filename: true,
+            discr: true,
+          }
+        }
+      };
+    }
+
+    return params;
   }
 }

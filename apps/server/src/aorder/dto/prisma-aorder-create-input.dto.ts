@@ -3,6 +3,7 @@ import { Prisma } from "@prisma/client";
 import { Type } from "class-transformer";
 import { IsBoolean, IsInt, IsNumber, IsString, ValidateIf } from "class-validator";
 import { CreateCompanyDto } from "../../company/dto/create-company.dto";
+import { CreatePickupUncheckedWithoutAorderInputDto } from "../../pickup/dto/create-pickup-unchecked-without-aorder-input.dto";
 
 export class PrismaAOrderCreateInputDto {
   @ApiPropertyOptional()
@@ -84,6 +85,10 @@ export class PrismaAOrderCreateInputDto {
   customer?: CreateCompanyDto;
   
   @ApiPropertyOptional()
+  @Type(() => CreatePickupUncheckedWithoutAorderInputDto)
+  pickup?: CreatePickupUncheckedWithoutAorderInputDto;
+  
+  @ApiPropertyOptional()
   afile?: Prisma.afileCreateNestedManyWithoutAorderInput;
   
   @ApiPropertyOptional()
@@ -91,9 +96,6 @@ export class PrismaAOrderCreateInputDto {
   
   @ApiPropertyOptional()
   other_aorder?: Prisma.aorderCreateNestedManyWithoutAorderInput;
-  
-  @ApiPropertyOptional()
-  pickup?: Prisma.pickupCreateNestedOneWithoutAorderInput;
   
   @ApiPropertyOptional()
   product_order?: Prisma.product_orderCreateNestedManyWithoutAorderInput;
