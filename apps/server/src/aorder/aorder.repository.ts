@@ -5,18 +5,6 @@ import { AOrder } from './dto/update-many-aorder.dto';
 export class AOrderRepository {
   constructor(protected readonly prisma: PrismaService) {}
 
-  async getAOrders(params: {
-    skip?: number;
-    take?: number;
-    cursor?: Prisma.aorderWhereUniqueInput;
-    where?: Prisma.aorderWhereInput;
-    select?: Prisma.aorderSelect;
-    orderBy?: Prisma.aorderOrderByWithRelationInput;
-  }) {
-    const { skip, take, cursor, where, select, orderBy } = params;
-    return this.prisma.aorder.findMany({ skip, take, cursor, where, select, orderBy });
-  }
-
   async findAll(params: Prisma.aorderFindManyArgs) {
     const { skip, cursor, where, select, orderBy } = params;
     const take = params.take ? params.take : 20;
@@ -36,27 +24,17 @@ export class AOrderRepository {
     return this.prisma.aorder.findMany({ where, select, orderBy })
   }
 
-  create(data: Prisma.aorderCreateInput) {
-    return this.prisma.aorder.create({
-      data
-    });
+  create(params: Prisma.aorderCreateArgs) {
+    return this.prisma.aorder.create(params);
   }
 
-  findOne(where: Prisma.aorderWhereUniqueInput) {
-    return this.prisma.aorder.findUnique({
-      where,
-    });
+  findOne(params: Prisma.aorderFindUniqueArgs) {
+    return this.prisma.aorder.findUnique(params);
   }
 
-  update(params: {
-    where: Prisma.aorderWhereUniqueInput;
-    data: Prisma.aorderUpdateInput;
-  }) {
-    const { where, data } = params;
-    return this.prisma.aorder.update({
-      data,
-      where,
-    });
+  update(params: Prisma.aorderUpdateArgs) {
+
+    return this.prisma.aorder.update(params);
   }
 
   updateMany(params: {

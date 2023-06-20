@@ -380,7 +380,7 @@ export class StockService {
     return this.repository.addProductAttributes(productAttributes);
   }
 
-  async uploadFiles(productId: number, files: Express.Multer.File[] = []) {
+  private async uploadFiles(productId: number, files: Express.Multer.File[] = []) {
     if (productId === undefined) {
       throw new Error('productId must be provided');
     }
