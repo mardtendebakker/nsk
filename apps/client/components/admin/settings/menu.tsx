@@ -3,11 +3,8 @@ import { useRouter } from 'next/router';
 import {
   ADMIN_SETTINGS_LOCATIONS,
   ADMIN_SETTINGS_PRODUCT_TYPES,
-  ADMIN_SETTINGS_PRODUCT_ATTRIBUTES,
+  ADMIN_SETTINGS_ATTRIBUTES,
   ADMIN_SETTINGS_TASKS,
-  ADMIN_SETTINGS_STATUS,
-  ADMIN_SETTINGS_MAILING_LISTS,
-  ADMIN_SETTINGS_CUSTOMER_TAGS,
 } from '../../../utils/routes';
 import useTranslation from '../../../hooks/useTranslation';
 
@@ -26,29 +23,14 @@ export default function Menu() {
       onClick: () => router.push(ADMIN_SETTINGS_PRODUCT_TYPES),
     },
     {
-      active: router.pathname === ADMIN_SETTINGS_PRODUCT_ATTRIBUTES,
-      text: trans('productAttributes'),
-      onClick: () => router.push(ADMIN_SETTINGS_PRODUCT_ATTRIBUTES),
+      active: router.pathname === ADMIN_SETTINGS_ATTRIBUTES,
+      text: trans('attributes'),
+      onClick: () => router.push(ADMIN_SETTINGS_ATTRIBUTES),
     },
     {
       active: router.pathname === ADMIN_SETTINGS_TASKS,
       text: trans('tasks'),
       onClick: () => router.push(ADMIN_SETTINGS_TASKS),
-    },
-    {
-      active: router.pathname === ADMIN_SETTINGS_STATUS,
-      text: trans('status'),
-      onClick: () => router.push(ADMIN_SETTINGS_STATUS),
-    },
-    {
-      active: router.pathname === ADMIN_SETTINGS_MAILING_LISTS,
-      text: trans('mailingLists'),
-      onClick: () => router.push(ADMIN_SETTINGS_MAILING_LISTS),
-    },
-    {
-      active: router.pathname === ADMIN_SETTINGS_CUSTOMER_TAGS,
-      text: trans('customerTags'),
-      onClick: () => router.push(ADMIN_SETTINGS_CUSTOMER_TAGS),
     },
   ];
 

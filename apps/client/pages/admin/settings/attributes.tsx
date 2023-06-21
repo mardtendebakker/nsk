@@ -4,9 +4,9 @@ import useTranslation from '../../../hooks/useTranslation';
 import DashboardLayout from '../../../layouts/dashboard';
 import Header from '../../../components/admin/header';
 import SettingsContainer from '../../../components/admin/settings/settingsContainer';
-import List from '../../../components/admin/settings/status/list';
+import List from '../../../components/admin/settings/attributes/list';
 
-export default function AdminSettingsStatus() {
+export default function AdminSettingsAttributes() {
   const { trans } = useTranslation();
 
   return (

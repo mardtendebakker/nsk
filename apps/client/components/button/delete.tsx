@@ -10,10 +10,12 @@ export default function Delete({
   tooltip,
   onDelete,
   disabled,
+  borderless,
 }: {
   tooltip?: boolean,
   onDelete: () => void,
-  disabled:boolean
+  disabled: boolean,
+  borderless?: boolean
 }) {
   const { trans } = useTranslation();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -23,7 +25,7 @@ export default function Delete({
       <Tooltip title={tooltip ? <Typography>{trans('delete')}</Typography> : undefined}>
         {tooltip
           ? (
-            <IconButton sx={{ borderRadius: 0, border: '1px solid' }} onClick={() => setShowDeleteModal(true)} color="error" disabled={disabled}>
+            <IconButton sx={{ borderRadius: 0, border: borderless ? '0px' : '1px solid' }} onClick={() => setShowDeleteModal(true)} color="error" disabled={disabled}>
               <DeleteIcon />
             </IconButton>
           )
@@ -66,4 +68,4 @@ export default function Delete({
   );
 }
 
-Delete.defaultProps = { tooltip: false };
+Delete.defaultProps = { tooltip: false, borderless: false };

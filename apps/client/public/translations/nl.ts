@@ -308,8 +308,7 @@ const translation = {
   newLocation: 'Nieuwe locatie',
   productTypes: 'Productsoorten',
   attributes: 'Attributen',
-  productAttributes: 'Productkenmerken',
-  newProductAttribute: 'Nieuw productkenmerk',
+  newAttribute: 'Nieuw attribuut',
   newTask: 'Nieuwe taak',
   productAvailability: 'Product beschikbaarheid',
   statusName: 'Status naam',
@@ -404,6 +403,36 @@ const translation = {
   destructionStatement: 'Verklaring van vernietiging',
   shred: 'Versnipperen',
   killDisk: 'Schijf doden',
+  attributeForm: {
+    code: {
+      label: 'Code',
+      placeholder: 'Typ code',
+    },
+    name: {
+      label: 'Name',
+      placeholder: 'Typ naam',
+    },
+    productTypes: {
+      label: 'Productsoorten',
+      placeholder: 'Selecteer productsoorten',
+    },
+    type: {
+      label: 'Type',
+    },
+    optionName: {
+      placeholder: 'Geef attribuutoptie op',
+    },
+    productType: {
+      label: 'Product type',
+      placeholder: 'Selecteer producttype',
+    },
+  },
+  isPublic: 'Is openbaar',
+  text: 'Tekst',
+  select: 'Selecteer',
+  file: 'Bestand',
+  product: 'Product',
+  attributeOptions: 'Attribuut opties',
   // http status
   200: 'Actie succesvol afgerond',
   201: 'Bron gemaakt',
