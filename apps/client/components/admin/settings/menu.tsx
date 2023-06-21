@@ -5,6 +5,7 @@ import {
   ADMIN_SETTINGS_PRODUCT_TYPES,
   ADMIN_SETTINGS_ATTRIBUTES,
   ADMIN_SETTINGS_TASKS,
+  ADMIN_SETTINGS_PRODUCT_STATUSES,
 } from '../../../utils/routes';
 import useTranslation from '../../../hooks/useTranslation';
 
@@ -31,6 +32,11 @@ export default function Menu() {
       active: router.pathname === ADMIN_SETTINGS_TASKS,
       text: trans('tasks'),
       onClick: () => router.push(ADMIN_SETTINGS_TASKS),
+    },
+    {
+      active: router.pathname === ADMIN_SETTINGS_PRODUCT_STATUSES,
+      text: trans('productStatuses'),
+      onClick: () => router.push(ADMIN_SETTINGS_PRODUCT_STATUSES),
     },
   ];
 

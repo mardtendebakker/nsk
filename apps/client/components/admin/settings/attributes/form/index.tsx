@@ -77,7 +77,7 @@ export default function Form({
               checked={formRepresentation.isPublic.value as boolean}
             />
             <Typography variant="inherit" sx={{ mt: '.3rem' }}>
-              {trans('isPublic')}
+              {trans('public')}
             </Typography>
           </Box>
         </Grid>
