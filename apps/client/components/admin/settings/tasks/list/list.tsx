@@ -34,10 +34,10 @@ export default function List({
               {trans('name')}
             </TableCell>
             <TableCell>
-              {trans('numberOfAttributes')}
+              {trans('description')}
             </TableCell>
             <TableCell>
-              {trans('numberOfTasks')}
+              {trans('numberOfProductTypes')}
             </TableCell>
             <TableCell>
               {trans('actions')}
@@ -54,10 +54,10 @@ export default function List({
                 {task.name}
               </TableCell>
               <TableCell>
-                {task.attributes?.length || 0}
+                {task.description || '--'}
               </TableCell>
               <TableCell>
-                {task.tasks?.length || 0}
+                {task.productTypes?.length || 0}
               </TableCell>
               <TableCell>
                 <Edit onClick={() => onEdit(task.id)} disabled={disabled} />

@@ -43,7 +43,7 @@ export interface ProductListItem {
 }
 
 export interface Task {
-  id?: string,
+  id?: number,
   name?: string,
   description?: string,
   status?: number,
