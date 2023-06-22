@@ -10,6 +10,7 @@ import { FileService } from "../file/file.service";
 import { FileDiscrimination } from "../file/types/file-discrimination.enum";
 import { CreateFileDto } from "../file/dto/upload-meta.dto";
 import { AttributeType } from "../attribute/enum/attribute-type.enum";
+import { CreateBodyStockDto } from "./dto/create-body-stock.dto";
 
 const FILE_VALUE_DELIMITER = ',';
 
@@ -259,6 +260,37 @@ export class StockService {
     }
   }
 
+  async create(body: CreateBodyStockDto, files: Express.Multer.File[]) {
+    const {
+      product_attributes,
+      product_orders,
+      ...rest
+    } = body;
+
+    const createInput: Prisma.productUncheckedCreateInput = {
+      ...rest,
+      ...(!rest.sku && { sku: Math.floor(Date.now() / 1000).toString() }),
+      ...(product_orders.length > 0 && {
+        product_order: {
+          connectOrCreate: product_orders.map(product_order => ({
+            where: {
+              id: product_order.order_id
+            },
+            create: { ...product_order }
+          })),
+        },
+      })
+    };
+
+    const stock = await this.repository.create(createInput);
+
+    if (product_attributes?.length > 0) {
+      return this.updateOne(stock.id, { product_attributes }, files);
+    }
+
+    return stock;
+  }
+
   async updateOne(id: number, body: UpdateBodyStockDto, files: Express.Multer.File[]) {
     if (id === undefined) {
       throw new Error("product id is required");
@@ -329,7 +361,7 @@ export class StockService {
     return result;
   }
 
-  async generateAllAttributes(productId: number, typeId: number) {
+  private async generateAllAttributes(productId: number, typeId: number) {
     await this.deleteAllAttributes(productId);
     const allAttributes = await this.repository.getAttributesByTypeId(typeId);
     const productAttributes: Prisma.product_attributeCreateManyInput[] = [];
@@ -348,7 +380,7 @@ export class StockService {
     return this.repository.addProductAttributes(productAttributes);
   }
 
-  async uploadFiles(productId: number, files: Express.Multer.File[] = []) {
+  private async uploadFiles(productId: number, files: Express.Multer.File[] = []) {
     if (productId === undefined) {
       throw new Error('productId must be provided');
     }

@@ -6,13 +6,13 @@ import { useRouter } from 'next/router';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import Check from '@mui/icons-material/Check';
 import { SyntheticEvent, useEffect, useMemo } from 'react';
-import Form from '../../../components/orders/form';
+import Form from '../../../components/orders/form/sales';
 import DashboardLayout from '../../../layouts/dashboard';
 import useAxios from '../../../hooks/useAxios';
 import { SALES_ORDERS_PATH } from '../../../utils/axios';
 import useForm from '../../../hooks/useForm';
 import useTranslation from '../../../hooks/useTranslation';
-import { initFormState, formRepresentationToBody } from '../purchases/new';
+import { initFormState, formRepresentationToBody } from './new';
 import { ORDERS_SALES } from '../../../utils/routes';
 import ProductsTable from '../../../components/orders/form/productsTable';
 
@@ -62,7 +62,7 @@ function UpdateSalesOrder() {
     <DashboardLayout>
       <Head>
         <title>
-          {trans('newSale')}
+          {trans('editSales')}
         </title>
       </Head>
       <form>
@@ -79,7 +79,7 @@ function UpdateSalesOrder() {
             <IconButton onClick={() => router.push(ORDERS_SALES)}>
               <ArrowBack />
             </IconButton>
-            {trans('newSale')}
+            {trans('editSales')}
           </Typography>
           <Box>
             <Button
@@ -96,7 +96,7 @@ function UpdateSalesOrder() {
               onClick={handleSubmit}
             >
               <Check />
-              {trans('saveSale')}
+              {trans('saveSales')}
             </Button>
           </Box>
         </Box>
@@ -104,7 +104,6 @@ function UpdateSalesOrder() {
           <Form
             formRepresentation={formRepresentation}
             disabled={!canSubmit()}
-            onSubmit={handleSubmit}
             setValue={setValue}
           />
           <Divider sx={{ mx: '1.5rem' }} />

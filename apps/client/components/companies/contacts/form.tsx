@@ -7,7 +7,7 @@ import {
   Grid,
   Typography,
 } from '@mui/material';
-import { COMPANIES_PATH } from '../../../utils/axios/paths';
+import { COMPANIES_PATH } from '../../../utils/axios';
 import useTranslation from '../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../hooks/useForm';
 import TextField from '../../memoizedInput/textField';
@@ -170,7 +170,7 @@ function Form({
                   checked={formRepresentation.is_partner.value as boolean}
                 />
                 <Typography variant="inherit">
-                  {trans('isPartner')}
+                  {trans('partner')}
                 </Typography>
               </Box>
             )}

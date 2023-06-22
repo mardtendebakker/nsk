@@ -129,7 +129,7 @@ export default function Edit({ open, onClose }: { open: boolean, onClose: () => 
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} variant="outlined" color="inherit">{trans('cancel')}</Button>
-        <Button onClick={onClose} variant="contained" color="primary">{trans('saveChanges')}</Button>
+        <Button onClick={onClose} variant="contained" color="primary">{trans('save')}</Button>
       </DialogActions>
     </Dialog>
   );

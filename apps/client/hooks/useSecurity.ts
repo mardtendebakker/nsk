@@ -33,7 +33,7 @@ import axiosClient, {
 import useAxios from './useAxios';
 import useTranslation from './useTranslation';
 import buildUserFromResponse from '../utils/axios/buildUserFromResponse';
-import { CONFIRM_PASSWORD_PATH } from '../utils/axios/paths';
+import { CONFIRM_PASSWORD_PATH } from '../utils/axios';
 
 const useSecurity = (): {
   state: State,

@@ -37,7 +37,7 @@ export default function Create({ open, onClose }: { open: boolean, onClose: () =
         </DialogContent>
         <DialogActions>
           <Button onClick={onClose} variant="outlined" color="inherit">{trans('cancel')}</Button>
-          <Button type="submit" onClick={onClose} variant="contained" color="primary">{trans('saveChanges')}</Button>
+          <Button type="submit" onClick={onClose} variant="contained" color="primary">{trans('save')}</Button>
         </DialogActions>
       </form>
     </Dialog>

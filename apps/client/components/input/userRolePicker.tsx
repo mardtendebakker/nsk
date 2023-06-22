@@ -10,7 +10,6 @@ export default function UserRolePicker({ label, sx, fullWidth } : TextFieldProps
       options={[]}
       sx={sx}
       fullWidth={fullWidth}
-      name="role"
       label={label || trans('role')}
       placeholder={trans('selectRole')}
     />

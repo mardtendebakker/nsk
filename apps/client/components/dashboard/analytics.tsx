@@ -87,11 +87,9 @@ export default function Analytics({ path, label }: { path: string, label: string
             </Button>
           ))}
         </Box>
-        <Box sx={{ width: '100%', height: '40rem', p: '1rem' }}>
+        <Box sx={{ width: '100%', height: '30rem', p: '1rem' }}>
           <ResponsiveContainer width="100%">
             <LineChart
-              width={500}
-              height={400}
               data={chartData}
               margin={{
                 top: 5,

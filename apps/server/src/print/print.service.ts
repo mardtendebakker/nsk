@@ -38,7 +38,7 @@ export class PrintService {
   }
 
   async printAOrders(orders: AOrderTotalPrice[]): Promise<Buffer> {
-    const source = readFileSync(join(process.cwd(), 'apps/server/src/print/templates/sale.hbs'), 'utf8');
+    const source = readFileSync(join(process.cwd(), 'apps/server/src/assets/templates/sale.hbs'), 'utf8');
     const template = Handlebars.compile(source);
 
     const data = await Promise.all(orders.map(async order => {
@@ -49,21 +49,32 @@ export class PrintService {
     let browser: Browser;
     let pdfStream: Buffer;
     try {
-      browser = await puppeteer.launch({headless: 'new'});
+
+      browser = await puppeteer.launch({
+        headless: true,
+        args: ['--no-sandbox'],
+      });
+
       const page = await browser.newPage();
+
       const result = template(data);
+
       await page.setContent(result);
+
       pdfStream = await page.pdf({format: 'A4', margin: {
         top: 45,
         bottom: 45,
         left: 30,
         right: 30,
       }});
-      browser.close();
+
     } finally {
-      browser.close();
+      
+      if (browser) {
+        browser.close();
+      }
     }
     
-    return Promise.resolve(pdfStream);
+    return pdfStream;
   }
 }

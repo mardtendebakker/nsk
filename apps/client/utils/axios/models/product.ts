@@ -1,5 +1,5 @@
 export interface Product {
-  id?: number,
+  id: number,
   name?: string,
   price?: number,
   sku?: string,
@@ -14,8 +14,16 @@ export interface Product {
   afile?: AFile[]
 }
 
-export interface ProductListItem {
+export interface ProductStatus {
   id?: number,
+  name?: string,
+  is_stock?: boolean,
+  is_saleable?: boolean,
+  color?: string,
+}
+
+export interface ProductListItem {
+  id: number,
   name?: string,
   price?: number,
   retailPrice?: number,
@@ -35,9 +43,11 @@ export interface ProductListItem {
 }
 
 export interface Task {
+  id?: string,
   name?: string,
   description?: string,
-  status?: number
+  status?: number,
+  productTypes?: ProductType[]
 }
 
 export interface AttributeOption {
@@ -50,19 +60,25 @@ export interface Attribute {
   id?: number,
   name?: string,
   type?: number,
+  attr_code?: number,
+  is_public?: boolean,
+  product_type_id?: number,
+  price?: number,
   options?: AttributeOption[],
-  value?: string
+  productTypes?: ProductType[]
 }
 
 export interface ProductType {
   id?: number,
   name?: string,
+  comment?: string,
   attributes?: Attribute[]
+  tasks?: Task[]
 }
 
 export interface AFile {
-  id: number,
-  unique_server_filename: string,
-  original_client_filename: string,
-  discr: string
+  id?: number,
+  unique_server_filename?: string,
+  original_client_filename?: string,
+  discr?: string
 }

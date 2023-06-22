@@ -34,6 +34,7 @@
     "itranslator": "^3.0.6",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
+    "mui-chips-input": "^2.0.2",
     "next": "13.1.1",
     "notistack": "^2.0.8",
     "prop-types": "^15.8.1",

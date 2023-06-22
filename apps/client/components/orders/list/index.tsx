@@ -285,7 +285,7 @@ export default function ListContainer() {
         )}
         onConfirm={handlePatchStatus}
         onClose={() => setShowChangeStatusModal(false)}
-        confirmButtonText={trans('saveChanges')}
+        confirmButtonText={trans('save')}
       />
       )}
     </Card>
