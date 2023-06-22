@@ -288,6 +288,7 @@ const translation = {
   lastOrder: 'Laatste order',
   role: 'Rol',
   numberOfTasks: 'Aantal taken',
+  numberOfProductTypes: 'Aantal productsoorten',
   resourceManagement: 'Middelenbeheer',
   dueToday: 'Vandaag uitgerekend',
   allMyTasks: 'Al mijn taken',
