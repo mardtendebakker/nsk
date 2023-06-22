@@ -53,7 +53,11 @@ export interface Attribute {
   name?: string,
   type?: number,
   attr_code?: number,
+  is_public?: boolean,
+  product_type_id?: number,
+  price?: number,
   options?: AttributeOption[],
+  productTypes?: ProductType[]
 }
 
 export interface ProductType {
