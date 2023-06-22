@@ -61,7 +61,7 @@ export default function PricingDetails({
             checked={formRepresentation.isGift.value as boolean}
           />
           <Typography variant="inherit" sx={{ mt: '1.9rem' }}>
-            {trans('isAGift')}
+            {trans('gift')}
           </Typography>
         </Grid>
         <Grid item>

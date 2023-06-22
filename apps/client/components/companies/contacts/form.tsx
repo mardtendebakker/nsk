@@ -170,7 +170,7 @@ function Form({
                   checked={formRepresentation.is_partner.value as boolean}
                 />
                 <Typography variant="inherit">
-                  {trans('isPartner')}
+                  {trans('partner')}
                 </Typography>
               </Box>
             )}

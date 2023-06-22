@@ -14,6 +14,14 @@ export interface Product {
   afile?: AFile[]
 }
 
+export interface ProductStatus {
+  id?: number,
+  name?: string,
+  is_stock?: boolean,
+  is_saleable?: boolean,
+  color?: string,
+}
+
 export interface ProductListItem {
   id: number,
   name?: string,
