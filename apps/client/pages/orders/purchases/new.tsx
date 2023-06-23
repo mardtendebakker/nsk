@@ -27,7 +27,7 @@ export function initFormState(trans, order?: Order) {
   return {
     orderNr: { required: true, value: order?.order_nr },
     orderDate: { value: order?.order_date ? new Date(order?.order_date) : new Date(), required: true },
-    pickupDate: { value: order?.pickup_date ? new Date(order?.pickup_date) : new Date() },
+    pickupDate: { value: order?.pickup?.pickup_date ? new Date(order?.pickup?.pickup_date) : new Date() },
     orderStatus: { required: true, value: order?.status_id },
     remarks: { value: order?.remarks },
     transport: { value: order?.transport },
@@ -42,7 +42,7 @@ export function initFormState(trans, order?: Order) {
       value: order?.supplier_id,
     },
     logisticId: {
-      value: order?.pickup.logistics_id,
+      value: order?.pickup?.logistics_id,
     },
     newSupplier: { value: false },
     name: { validator: requiredSupplierFieldValidator('name', trans) },
