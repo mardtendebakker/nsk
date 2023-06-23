@@ -118,7 +118,7 @@ export default function Form({
             label={trans('attributeForm.productType.label')}
             placeholder={trans('attributeForm.productType.placeholder')}
             onChange={(value: { id: number }) => {
-              setValue({ field: 'productTypeId', value: value.id });
+              setValue({ field: 'productTypeId', value: value?.id });
             }}
             value={formRepresentation.productTypeId.value}
           />
