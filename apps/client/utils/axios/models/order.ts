@@ -4,11 +4,20 @@ export interface Company {
   acompany?: { id?: string, name?: string }
 }
 
+export interface OrderStatus {
+  id: number,
+  name?: string,
+  is_sale?: boolean,
+  is_purchase?: boolean,
+  color?: string,
+  mailbody?: string
+}
+
 export interface OrderListItem {
   id?: number,
   order_nr?: string
   order_date?: string,
-  order_status?: { id:number, name?: string, color?: string }
+  order_status?: { id: number, name?: string, color?: string }
   acompany_aorder_supplier_idToacompany?: Company,
   acompany_aorder_customer_idToacompany?: Company
 }

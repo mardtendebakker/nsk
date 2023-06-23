@@ -453,9 +453,18 @@ const translation = {
       placeholder: 'Typ naam',
     },
   },
+  orderStatusForm: {
+    mailBody: {
+      label: 'Post lichaam',
+      placeholder: 'Typ Post lichaam',
+    },
+  },
   productStatuses: 'Productstatussen',
   newProductStatus: 'Nieuwe productstatus',
   createProductStatus: 'Productstatus aanmaken',
+  orderStatuses: 'Bestelling statussen',
+  newOrderStatus: 'Nieuwe bestelstatus',
+  createOrderStatus: 'Bestelstatus aanmaken',
   // http status
   200: 'Actie succesvol afgerond',
   201: 'Bron gemaakt',
