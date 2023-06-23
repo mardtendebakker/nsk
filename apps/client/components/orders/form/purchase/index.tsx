@@ -93,7 +93,7 @@ function PurchaseForm({
                 label={trans('logistic')}
                 placeholder={trans('selectLogistic')}
                 onChange={(value: { id: number }) => {
-                  setValue({ field: 'logisticId', value: value.id });
+                  setValue({ field: 'logisticId', value: value?.id });
                 }}
                 value={formRepresentation.logisticId.value}
                 formatter={({ id, username, ...rest }: any) => ({
