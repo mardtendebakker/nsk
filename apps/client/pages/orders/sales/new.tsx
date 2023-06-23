@@ -67,9 +67,9 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
     transport: formRepresentation.transport.value || undefined,
     discount: formRepresentation.discount.value || undefined,
     is_gift: formRepresentation.isGift.value || undefined,
-    deliveryDate: formRepresentation.deliveryDate.value || undefined,
-    deliveryType: formRepresentation.deliveryType.value,
-    deliveryInstructions: formRepresentation.deliveryInstructions.value || undefined,
+    delivery_date: formRepresentation.deliveryDate.value || undefined,
+    delivery_type: formRepresentation.deliveryType.value,
+    delivery_instructions: formRepresentation.deliveryInstructions.value || undefined,
   };
 
   if (!formRepresentation.newCustomer.value) {
