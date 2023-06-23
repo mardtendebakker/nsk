@@ -35,7 +35,6 @@ export interface Order {
   status_id?: number,
   supplier_id?: number,
   customer_id?: number,
-  logistic_id?: number,
   pickup?: Pickup,
   delivery_date?: string,
   delivery_type?: number,
@@ -44,6 +43,7 @@ export interface Order {
 
 interface Pickup {
   id?: number,
+  logistics_id?: number,
   pickup_date?: string,
   real_pickup_date?: string,
   description?: string,
