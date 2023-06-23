@@ -92,10 +92,13 @@ function PurchaseForm({
                 url={LOGISTICS_PATH.replace(':id', '')}
                 label={trans('logistic')}
                 placeholder={trans('selectLogistic')}
-                onChange={(value: { id: number }[]) => {
-                  setValue({ field: 'logisticId', value: value.map(({ id }) => id) });
+                onChange={(value: { id: number }) => {
+                  setValue({ field: 'logisticId', value: value.id });
                 }}
                 value={formRepresentation.logisticId.value}
+                formatter={({ id, username, ...rest }: any) => ({
+                  id, label: username, username, ...rest,
+                })}
               />
             </Grid>
             <Grid
