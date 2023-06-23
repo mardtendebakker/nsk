@@ -42,7 +42,7 @@ export function initFormState(trans, order?: Order) {
       value: order?.supplier_id,
     },
     logisticId: {
-      value: order?.logistic_id,
+      value: order?.pickup.logistics_id,
     },
     newSupplier: { value: false },
     name: { validator: requiredSupplierFieldValidator('name', trans) },
@@ -63,13 +63,15 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
   const payload: any = {
     order_nr: formRepresentation.orderNr.value || undefined,
     order_date: formRepresentation.orderDate.value || undefined,
-    pickup_date: formRepresentation.pickupDate.value || undefined,
     status_id: formRepresentation.orderStatus.value || undefined,
     remarks: formRepresentation.remarks.value || undefined,
     transport: formRepresentation.transport.value || undefined,
     discount: formRepresentation.discount.value || undefined,
     is_gift: formRepresentation.isGift.value || undefined,
-    logistic_id: formRepresentation.logisticId.value || undefined,
+    pickup: {
+      logistics_id: formRepresentation.logisticId.value || undefined,
+      pickup_date: formRepresentation.pickupDate.value || undefined,
+    },
   };
 
   if (!formRepresentation.newSupplier.value) {
