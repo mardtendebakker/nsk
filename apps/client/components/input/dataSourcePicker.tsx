@@ -130,7 +130,9 @@ DataSourcePicker.defaultProps = {
   label: undefined,
   placeholder: undefined,
   displayFieldset: true,
-  formatter: ({ id, name, ...rest }) => ({ id, label: name, ...rest }),
+  formatter: ({ id, name, ...rest }) => ({
+    id, label: name, name, ...rest,
+  }),
   helperText: undefined,
   error: false,
   multiple: false,
