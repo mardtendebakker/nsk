@@ -1,6 +1,8 @@
+import { Prisma } from '@prisma/client';
 import { FindManyDto } from './dto/find-many.dto';
 import { OrderStatusRepository } from './order-status.repository';
 import { Injectable } from '@nestjs/common';
+import { UpdateOrderStatusDto } from './dto/update-order-status.dto';
 
 @Injectable()
 export class OrderStatusService {
@@ -17,6 +19,22 @@ export class OrderStatusService {
           contains: query.nameContains
         }
       }
+    });
+  }
+
+  async findOne(id: number) {
+    const params: Prisma.order_statusFindUniqueArgs = {
+      where: { id }
+    };
+
+    return this.repository.findOne(params);
+  }
+
+  update(id: number, updateOrderStatusDto: UpdateOrderStatusDto) {
+
+    return this.repository.update({
+      where: { id },
+      data: { ...updateOrderStatusDto }
     });
   }
 }
