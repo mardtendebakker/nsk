@@ -19,4 +19,13 @@ export class ProductStatusRepository {
       data: submission[1],
     };
   }
+  
+  findOne(params: Prisma.product_statusFindUniqueArgs) {
+    return this.prisma.product_status.findUnique(params);
+  }
+
+  update(params: Prisma.product_statusUpdateArgs) {
+
+    return this.prisma.product_status.update(params);
+  }
 }
