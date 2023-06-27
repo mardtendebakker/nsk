@@ -21,6 +21,7 @@ import { ProductStatusModule } from '../product-status/product-status.module';
 import { OrderModule } from '../order/order.module';
 import { PickupModule } from '../pickup/pickup.module';
 import { LogisticModule } from '../logistic/logistic.module';
+import { AttributeModule } from '../attribute/attribute.module';
 
 @Module({
   imports: [
@@ -57,6 +58,7 @@ import { LogisticModule } from '../logistic/logistic.module';
     OrderModule,
     PickupModule,
     LogisticModule,
+    AttributeModule,
   ],
   controllers: [AppController],
   providers: [AppService],
