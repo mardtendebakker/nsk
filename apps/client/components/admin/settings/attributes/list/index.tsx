@@ -8,6 +8,7 @@ import { ATTRIBUTES_PATH } from '../../../../../utils/axios';
 import useAxios from '../../../../../hooks/useAxios';
 import CreateModal from '../createModal';
 import EditModal from '../editModal';
+import refreshList from '../../refreshList';
 
 export default function ListContainer() {
   const { trans } = useTranslation();
@@ -25,15 +26,20 @@ export default function ListContainer() {
   );
 
   useEffect(() => {
-    call({
-      params: {
-        take: 5,
-        skip: (page - 1) * 5,
-      },
-    });
+    refreshList({ page, router, call });
   }, [page]);
 
   const disabled = () => performing;
+
+  const handleEdit = () => {
+    setEditAttributeId(undefined);
+    refreshList({ page, router, call });
+  };
+
+  const handleCreate = () => {
+    setShowForm(false);
+    refreshList({ page, router, call });
+  };
 
   return (
     <Box>
@@ -54,16 +60,16 @@ export default function ListContainer() {
       <List
         attributes={data}
         disabled={disabled()}
-        count={Math.ceil(count / 5)}
+        count={Math.ceil(count / 10)}
         page={page}
         onEdit={(id) => setEditAttributeId(id)}
         onPageChange={(newPage) => setPage(newPage)}
       />
-      {showForm && <CreateModal onClose={() => setShowForm(false)} onSubmit={() => setShowForm(false)} />}
+      {showForm && <CreateModal onClose={() => setShowForm(false)} onSubmit={handleCreate} />}
       {editAttributeId && (
       <EditModal
         onClose={() => setEditAttributeId(undefined)}
-        onSubmit={() => setEditAttributeId(undefined)}
+        onSubmit={handleEdit}
         id={editAttributeId.toString()}
       />
       )}

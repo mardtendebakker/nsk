@@ -56,7 +56,7 @@ export default function Form({
             onChange={(e) => setValue({ field: 'name', value: e.target.value })}
             disabled={disabled}
           />
-          { !formRepresentation.id.value && (
+          { formRepresentation.id.value && (
           <Select
             sx={{ flex: 0.25 }}
             value={formRepresentation.type.value}
