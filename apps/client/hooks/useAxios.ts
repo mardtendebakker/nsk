@@ -132,4 +132,9 @@ const useAxios = (
   };
 };
 
+export type Call = (
+  arg0: { params?: object, body?: object, path?: string, responseType?: ResponseType, headers?: object },
+  cb?: (e: Error, axiosResponse?: AxiosResponse) => void,
+) => Promise<AxiosResponse | void>;
+
 export default useAxios;

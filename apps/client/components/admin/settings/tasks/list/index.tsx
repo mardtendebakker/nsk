@@ -8,6 +8,7 @@ import { TASKS_PATH } from '../../../../../utils/axios';
 import useAxios from '../../../../../hooks/useAxios';
 import CreateModal from '../createModal';
 import EditModal from '../editModal';
+import refreshList from '../../refreshList';
 
 export default function ListContainer() {
   const { trans } = useTranslation();
@@ -25,15 +26,20 @@ export default function ListContainer() {
   );
 
   useEffect(() => {
-    call({
-      params: {
-        take: 5,
-        skip: (page - 1) * 5,
-      },
-    });
+    refreshList({ page, router, call });
   }, [page]);
 
   const disabled = () => performing;
+
+  const handleEdit = () => {
+    setEditTaskId(undefined);
+    refreshList({ page, router, call });
+  };
+
+  const handleCreate = () => {
+    setShowForm(false);
+    refreshList({ page, router, call });
+  };
 
   return (
     <Box>
@@ -54,16 +60,16 @@ export default function ListContainer() {
       <List
         tasks={data}
         disabled={disabled()}
-        count={Math.ceil(count / 5)}
+        count={Math.ceil(count / 10)}
         page={page}
         onEdit={(id) => setEditTaskId(id)}
         onPageChange={(newPage) => setPage(newPage)}
       />
-      {showForm && <CreateModal onClose={() => setShowForm(false)} onSubmit={() => setShowForm(false)} />}
+      {showForm && <CreateModal onClose={() => setShowForm(false)} onSubmit={handleCreate} />}
       {editTaskId && (
       <EditModal
         onClose={() => setEditTaskId(undefined)}
-        onSubmit={() => setEditTaskId(undefined)}
+        onSubmit={handleEdit}
         id={editTaskId.toString()}
       />
       )}
