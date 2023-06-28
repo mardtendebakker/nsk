@@ -25,7 +25,7 @@ function requiredSupplierFieldValidator(field: string, trans) {
 
 export function initFormState(trans, order?: Order) {
   return {
-    orderNr: { required: true, value: order?.order_nr },
+    orderNr: { value: order?.order_nr },
     orderDate: { value: order?.order_date ? new Date(order?.order_date) : new Date(), required: true },
     pickupDate: { value: order?.pickup?.real_pickup_date ? new Date(order?.pickup?.real_pickup_date) : '' },
     orderStatus: { required: true, value: order?.status_id },
