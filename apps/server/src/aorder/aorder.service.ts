@@ -49,7 +49,7 @@ export class AOrderService {
           select: companySelect,
         },
       };
-    } 
+    }
     if (this.type !== AOrderDiscrimination.PURCHASE) {
       select = {
         ...select,
@@ -59,7 +59,7 @@ export class AOrderService {
       };
     }
 
-    const where = {
+    const where: Prisma.aorderWhereInput = {
       ...query.where,
       ...(this.type && { discr: this.type }),
       ...(query.search && { order_nr: { contains: query.search } }),
@@ -94,11 +94,14 @@ export class AOrderService {
       ];
     }
 
+    const orderBy: Prisma.Enumerable<Prisma.aorderOrderByWithRelationInput> =
+      !Object.keys(query?.orderBy).length ? { id: 'desc' } : query.orderBy;
+
     return this.repository.findAll({
       ...query,
       where,
       select,
-      orderBy: query.orderBy,
+      orderBy,
     });
   }
 
@@ -125,27 +128,27 @@ export class AOrderService {
         order_nr: orderDto.order_nr || 'TEMP' + Math.floor(Date.now() / 1000).toString(),
         discr: this.type,
         order_date: new Date(),
-        ...(pickup && {pickup: {create: {...pickup}}}),
+        ...(pickup && { pickup: { create: { ...pickup } } }),
       }
     };
 
     let aorder = await this.repository.create(this.processSelectPart(params));
 
     if (orderDto.order_nr === undefined) {
-      const { 
+      const {
         id,
         order_date,
       } = aorder;
-  
+
       const order_nr = order_date.getFullYear() + id.toString().padStart(6, "0");
-  
+
       try {
         aorder = await this.repository.update({
           where: { id },
           data: { order_nr },
         });
       } catch (e) {
-        this.repository.deleteMany([ id ]);
+        this.repository.deleteMany([id]);
         throw e;
       }
     }
@@ -160,7 +163,7 @@ export class AOrderService {
 
     const data: Prisma.aorderUpdateInput = {
       ...this.processCreateOrUpdateOrderInput(orderDto),
-      ...(pickup && {pickup: {upsert: {update: {...pickup}, create: {...pickup}}}}),
+      ...(pickup && { pickup: { upsert: { update: { ...pickup }, create: { ...pickup } } } }),
     };
 
     const params: Prisma.aorderUpdateArgs = {
@@ -314,11 +317,11 @@ export class AOrderService {
 
     const data: CommonAOrderInput = {
       ...rest,
-      ...(status_id && {order_status: {connect: {id: status_id}}}),
-      ...(supplier_id && {acompany_aorder_supplier_idToacompany: {connect: {id: supplier_id}}}),
-      ...(supplier && {acompany_aorder_supplier_idToacompany: {create: {...supplier, discr: CompanyDiscrimination.SUPLLIER}}}),
-      ...(customer_id && {acompany_aorder_customer_idToacompany: {connect: {id: customer_id}}}),
-      ...(customer && {acompany_aorder_customer_idToacompany: {create: {...customer, discr: CompanyDiscrimination.CUSTOMER}}}),
+      ...(status_id && { order_status: { connect: { id: status_id } } }),
+      ...(supplier_id && { acompany_aorder_supplier_idToacompany: { connect: { id: supplier_id } } }),
+      ...(supplier && { acompany_aorder_supplier_idToacompany: { create: { ...supplier, discr: CompanyDiscrimination.SUPLLIER } } }),
+      ...(customer_id && { acompany_aorder_customer_idToacompany: { connect: { id: customer_id } } }),
+      ...(customer && { acompany_aorder_customer_idToacompany: { create: { ...customer, discr: CompanyDiscrimination.CUSTOMER } } }),
     };
 
     return data;
