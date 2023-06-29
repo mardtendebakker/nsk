@@ -248,6 +248,36 @@ const translation = {
       label: 'SKU',
     },
   },
+  locationsList: {
+    search: {
+      placeholder: 'Zoek op naam of postcodes',
+    },
+  },
+  productTypesList: {
+    search: {
+      placeholder: 'Zoek op naam',
+    },
+  },
+  attributesList: {
+    search: {
+      placeholder: 'Zoek op naam of code',
+    },
+  },
+  tasksList: {
+    search: {
+      placeholder: 'Zoek op naam of beschrijving',
+    },
+  },
+  productStatusesList: {
+    search: {
+      placeholder: 'Zoek op naam',
+    },
+  },
+  orderStatusesList: {
+    search: {
+      placeholder: 'Zoek op naam',
+    },
+  },
   supplierDetails: 'Leveranciers gegevens',
   supplierType: 'Soort leverancier',
   existing: 'Bestaand',
@@ -465,6 +495,7 @@ const translation = {
   orderStatuses: 'Bestelling statussen',
   newOrderStatus: 'Nieuwe bestelstatus',
   createOrderStatus: 'Bestelstatus aanmaken',
+  newProductType: 'Nieuwe productsoort',
   // http status
   200: 'Actie succesvol afgerond',
   201: 'Bron gemaakt',

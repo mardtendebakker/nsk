@@ -16,7 +16,7 @@ export class OrderStatusService {
           in: query.ids
         },
         name: {
-          contains: query.nameContains
+          contains: query.search
         }
       }
     });

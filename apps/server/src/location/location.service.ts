@@ -17,9 +17,10 @@ export class LocationService {
         id: {
           in: query.ids
         },
-        name: {
-          contains: query.nameContains
-        }
+        OR: [
+          {name: { contains: query.search }},
+          {zipcodes: { contains: query.search }},
+        ]
       }
     });
   }

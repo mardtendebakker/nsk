@@ -7,7 +7,7 @@ export class FindManyDto extends BaseFindManyDto {
   @ApiPropertyOptional()
   @IsString()
   @ValidateIf((_, value) => value !== undefined)
-  nameContains?: string
+  search?: string
 
 
   @Transform(({value}) => Array.isArray(value) ? value.map((id: string) => parseInt(id)) : parseInt(value))

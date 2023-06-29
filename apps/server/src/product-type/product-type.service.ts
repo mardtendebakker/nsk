@@ -37,7 +37,7 @@ export class ProductTypeService {
           in: query.ids
         },
         name: {
-          contains: query.nameContains
+          contains: query.search
         },
         is_attribute: query.attributeOnly == 1 ? true : undefined,
       }

@@ -5,10 +5,12 @@ export default function refreshList({
   page,
   router,
   call,
+  search,
 }: {
   page: number,
   router: NextRouter,
-  call: Call
+  call: Call,
+  search?: string
 }) {
   const params = new URLSearchParams();
 
@@ -16,10 +18,15 @@ export default function refreshList({
     params.append('page', page.toString());
   }
 
+  if (search) {
+    params.append('search', search.toString());
+  }
+
   call({
     params: {
       take: 10,
       skip: (page - 1) * 10,
+      search,
     },
   }).finally(() => {
     const paramsString = params.toString();
