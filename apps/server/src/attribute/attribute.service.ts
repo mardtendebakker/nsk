@@ -39,9 +39,10 @@ export class AttributeService {
         id: {
           in: query.ids
         },
-        name: {
-          contains: query.nameContains
-        }
+        OR: [
+          { name: { contains: query.search }},
+          { attr_code: { contains: query.search }},
+        ]
       }
     });
 

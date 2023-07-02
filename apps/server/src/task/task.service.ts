@@ -29,9 +29,10 @@ export class TaskService {
         id: {
           in: query.ids
         },
-        name: {
-          contains: query.nameContains
-        }
+        OR: [
+          { name: {contains: query.search }},
+          { description: {contains: query.search }},
+        ]
       }
     });
 

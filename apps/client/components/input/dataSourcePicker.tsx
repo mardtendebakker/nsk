@@ -121,7 +121,7 @@ export default function DataSourcePicker(
 }
 
 DataSourcePicker.defaultProps = {
-  searchKey: 'nameContains',
+  searchKey: 'search',
   params: {},
   disabled: false,
   value: undefined,

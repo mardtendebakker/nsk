@@ -23,18 +23,20 @@ export default function Delete({
   return (
     <>
       <Tooltip title={tooltip ? <Typography>{trans('delete')}</Typography> : undefined}>
-        {tooltip
-          ? (
-            <IconButton sx={{ borderRadius: 0, border: borderless ? '0px' : '1px solid' }} onClick={() => setShowDeleteModal(true)} color="error" disabled={disabled}>
-              <DeleteIcon />
-            </IconButton>
-          )
-          : (
-            <Button onClick={() => setShowDeleteModal(true)} variant="outlined" color="error" disabled={disabled}>
-              <DeleteIcon />
-              {trans('delete')}
-            </Button>
-          )}
+        <span>
+          {tooltip
+            ? (
+              <IconButton sx={{ borderRadius: 0, border: borderless ? '0px' : '1px solid' }} onClick={() => setShowDeleteModal(true)} color="error" disabled={disabled}>
+                <DeleteIcon />
+              </IconButton>
+            )
+            : (
+              <Button onClick={() => setShowDeleteModal(true)} variant="outlined" color="error" disabled={disabled}>
+                <DeleteIcon />
+                {trans('delete')}
+              </Button>
+            )}
+        </span>
       </Tooltip>
       {showDeleteModal && (
       <ConfirmationDialog
