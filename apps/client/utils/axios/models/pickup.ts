@@ -5,20 +5,38 @@ export interface PickupListItem {
   logistic?: Logistic,
 }
 
+export interface Supplier {
+  city?: string,
+  country?: string,
+  state?: string,
+  zip?: string,
+  street?: string,
+  phone?: string,
+  name?: string,
+  email?: string
+}
+
+export type Customer = Supplier;
+
 export interface OrderStatus {
   color?: string,
 }
 
 export interface Logistic {
   id?: number,
-  username?: string
+  username?: string,
+  firstname?: string,
+  lastname?: string,
+  email?: string,
 }
 
 export interface Order {
   id?: number,
   order_nr?: string,
   order_status?: OrderStatus,
-  products: Product[]
+  products?: Product[],
+  supplier?: Supplier,
+  customer?: Customer,
 }
 
 export interface Product {

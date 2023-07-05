@@ -496,6 +496,8 @@ const translation = {
   newOrderStatus: 'Nieuwe bestelstatus',
   createOrderStatus: 'Bestelstatus aanmaken',
   newProductType: 'Nieuwe productsoort',
+  pickupBy: 'Ophalen door',
+  estimatedTravelTime: 'Geschatte reistijd',
   // http status
   200: 'Actie succesvol afgerond',
   201: 'Bron gemaakt',
