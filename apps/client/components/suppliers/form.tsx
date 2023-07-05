@@ -291,6 +291,7 @@ function SupplierForm({
           }}
         >
           <Button
+            size="small"
             type="submit"
             disabled={disabled}
             color="primary"

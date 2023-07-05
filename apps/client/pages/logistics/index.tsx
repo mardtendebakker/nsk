@@ -108,8 +108,8 @@ export default function Logistics() {
                 fontWeight: theme.typography.fontWeightMedium,
                 background: selectedLogisticIds[0] === 0 ? '#D6E0FA' : undefined,
                 color: selectedLogisticIds[0] === 0 ? theme.palette.primary.main : undefined,
-                mb: '1rem',
-                py: '1rem',
+                mb: '.2rem',
+                p: '.5rem .75rem',
               })}
             >
               {trans('everyone')}
@@ -145,6 +145,7 @@ export default function Logistics() {
             >
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <IconButton
+                  size="small"
                   sx={{ borderRadius: 0, border: '1px solid', mr: '1rem' }}
                   onClick={() => {
                     setFirstDate(firstDate.clone().add(-5, 'days'));
@@ -152,10 +153,11 @@ export default function Logistics() {
                 >
                   <ChevronLeft />
                 </IconButton>
-                <Typography variant="h3">
+                <Typography variant="h4">
                   {firstDate.format('DD MMMM Y')}
                 </Typography>
                 <IconButton
+                  size="small"
                   sx={{ borderRadius: 0, border: '1px solid', ml: '1rem' }}
                   onClick={() => {
                     setFirstDate(firstDate.clone().add(5, 'days'));
@@ -168,7 +170,7 @@ export default function Logistics() {
                 InputProps={{
                   startAdornment: <Search sx={{ color: (theme) => theme.palette.grey[40] }} />,
                 }}
-                sx={{ width: '30rem' }}
+                sx={{ width: '20rem' }}
                 placeholder={trans('logisticsPage.search.placeholder')}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -180,7 +182,7 @@ export default function Logistics() {
               }}
               >
                 <TableHead>
-                  <TableRow sx={{ height: '5rem' }}>
+                  <TableRow sx={{ height: '2.5rem' }}>
                     <TableCell sx={{ borderBottom: 'unset', width: '10rem' }} />
                     {dates.map((date: Moment) => {
                       const formatted = date.format('dddd D');
@@ -189,7 +191,7 @@ export default function Logistics() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  <TableRow sx={{ height: '6rem' }}>
+                  <TableRow sx={{ height: '3rem' }}>
                     <TableCell sx={{ verticalAlign: 'baseline', borderBottom: 'unset' }}>
                       <Box sx={{ marginTop: '-1.67em' }}>{hours[0]}</Box>
                     </TableCell>
@@ -218,8 +220,8 @@ export default function Logistics() {
                               }}
                               pickup={pickup}
                               key={pickup.id}
-                              top={`${realPickupDate.diff(date, 'minutes') * 0.2}rem`}
-                              height="12rem"
+                              top={`${realPickupDate.diff(date, 'minutes') * 0.1}rem`}
+                              height="6rem"
                             />
                           );
                         })
@@ -234,7 +236,7 @@ export default function Logistics() {
                     }
 
                     return (
-                      <TableRow sx={{ height: '6rem' }} key={hour}>
+                      <TableRow sx={{ height: '3rem' }} key={hour}>
                         <TableCell sx={{ verticalAlign: 'baseline', borderBottom: 'unset' }}>
                           <Box sx={{ marginTop: '-1.67em' }}>{hour.includes(':00') && hour}</Box>
                         </TableCell>

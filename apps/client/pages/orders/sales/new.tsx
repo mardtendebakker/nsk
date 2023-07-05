@@ -143,6 +143,7 @@ function NewSalesOrder() {
           </Typography>
           <Box>
             <Button
+              size="small"
               sx={{ ml: '1.5rem' }}
               color="inherit"
               variant="outlined"
@@ -151,6 +152,7 @@ function NewSalesOrder() {
               {trans('cancel')}
             </Button>
             <Button
+              size="small"
               sx={{ ml: '1.5rem' }}
               variant="contained"
               onClick={handleSubmit}

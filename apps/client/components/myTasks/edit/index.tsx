@@ -128,8 +128,8 @@ export default function Edit({ open, onClose }: { open: boolean, onClose: () => 
         <Box sx={(theme) => ({ flex: 0.7, bgcolor: theme.palette.grey[10] })} />
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} variant="outlined" color="inherit">{trans('cancel')}</Button>
-        <Button onClick={onClose} variant="contained" color="primary">{trans('save')}</Button>
+        <Button size="small" onClick={onClose} variant="outlined" color="inherit">{trans('cancel')}</Button>
+        <Button size="small" onClick={onClose} variant="contained" color="primary">{trans('save')}</Button>
       </DialogActions>
     </Dialog>
   );

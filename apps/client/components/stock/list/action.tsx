@@ -45,21 +45,21 @@ export default function Action({
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         {checkedProductsCount > 0
         && (
-        <Button onClick={onChangeLocation} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
+        <Button size="small" onClick={onChangeLocation} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
           <EditLocation sx={{ mr: '.1rem' }} />
           {trans('changeLocation')}
         </Button>
         )}
         {checkedProductsCount === 1
         && (
-        <Button onClick={onEdit} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
+        <Button size="small" onClick={onEdit} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
           <Edit sx={{ mr: '.1rem' }} />
           {trans('editProduct')}
         </Button>
         )}
         {checkedProductsCount > 0
         && (
-        <Button onClick={onPrint} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
+        <Button size="small" onClick={onPrint} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
           {trans('print')}
           <ChevronRight sx={{ transform: 'rotate(90deg)' }} />
         </Button>

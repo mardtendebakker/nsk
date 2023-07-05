@@ -48,7 +48,7 @@ export default function SearchAccordion({
               },
             }}
           />
-          <Button
+          <Button size="small"
             variant="outlined"
             color="error"
             onClick={() => {
@@ -61,7 +61,7 @@ export default function SearchAccordion({
           >
             {trans('reset')}
           </Button>
-          <Button variant="outlined" color="primary" onClick={() => setShowFilter((oldValue) => !oldValue)}>
+          <Button size="small" variant="outlined" color="primary" onClick={() => setShowFilter((oldValue) => !oldValue)}>
             {trans('filter')}
             <ChevronRight sx={{ transform: `rotate(${showFilter ? '-90deg' : '90deg'})` }} />
           </Button>

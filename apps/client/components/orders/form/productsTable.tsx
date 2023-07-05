@@ -119,7 +119,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
                   />
                 </TableCell>
                 <TableCell>
-                  <Button onClick={() => setEditProductId(product.id)}>
+                  <Button size="small" onClick={() => setEditProductId(product.id)}>
                     {trans('edit')}
                   </Button>
                 </TableCell>
@@ -128,7 +128,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
           )}
           <TableRow>
             <TableCell>
-              <Button onClick={() => setShowForm(true)}>
+              <Button size="small" onClick={() => setShowForm(true)}>
                 <Add />
                 {trans('addAnotherProduct')}
               </Button>

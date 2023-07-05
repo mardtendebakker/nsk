@@ -26,13 +26,13 @@ export default function Navigation() {
   return (
     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <Typography variant="h3" sx={{ mr: '.5rem' }}>{trans('orders')}</Typography>
+        <Typography variant="h4" sx={{ mr: '.5rem' }}>{trans('orders')}</Typography>
         <Box sx={{ display: 'flex' }}>
           {ITEMS.map(({ text, active, onClick }) => (
             <Typography
               key={text}
               onClick={() => !active && onClick()}
-              variant="h4"
+              variant="h5"
               sx={(theme) => ({
                 cursor: 'pointer',
                 background: active ? '#D6E0FA' : undefined,
@@ -46,7 +46,7 @@ export default function Navigation() {
           ))}
         </Box>
       </Box>
-      <Button variant="contained" onClick={() => router.push(router.pathname == ORDERS_PURCHASES ? ORDERS_PURCHASES_NEW : ORDERS_SALES_NEW)}>
+      <Button size="small" variant="contained" onClick={() => router.push(router.pathname == ORDERS_PURCHASES ? ORDERS_PURCHASES_NEW : ORDERS_SALES_NEW)}>
         <Add />
         {trans(router.pathname == ORDERS_PURCHASES ? 'newPurchase' : 'newSale')}
       </Button>

@@ -10,7 +10,7 @@ export default function UpcomingDeliveries() {
   return (
     <Card>
       <CardContent>
-        <Typography variant="h6">
+        <Typography variant="h5">
           {trans('upcomingDeliveries')}
           {' '}
           1

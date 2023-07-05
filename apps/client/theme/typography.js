@@ -35,42 +35,36 @@ const typography = {
   h1: {
     fontWeight: 700,
     lineHeight: 1.6,
-    fontSize: '2rem',
+    fontSize: '1.6rem',
   },
   h2: {
     fontWeight: 700,
     lineHeight: 1.6,
-    fontSize: '2rem',
+    fontSize: '1.4rem',
   },
   h3: {
     fontWeight: 700,
     lineHeight: 1.5,
-    fontSize: '1.5rem',
+    fontSize: '1.2rem',
   },
   h4: {
-    fontWeight: 700,
-    lineHeight: 1.5,
-    fontSize: '1.25rem',
-  },
-  subtitle1: {
     fontWeight: 600,
     lineHeight: 1.5,
-    fontSize: pxToRem(16),
+    fontSize: '1rem',
   },
-  subtitle2: {
-    fontWeight: 600,
+  h5: {
+    fontWeight: 550,
     lineHeight: 1.5,
-    fontSize: pxToRem(14),
+    fontSize: '.8rem',
   },
   body1: {
     lineHeight: 1.5,
-    fontSize: '1.25rem',
+    fontSize: '.8rem',
   },
   body2: {
     lineHeight: 1.6,
-    fontSize: '1rem',
+    fontSize: '.7rem',
     fontWeight: 400,
-
   },
   caption: {
     lineHeight: 1.5,
@@ -85,7 +79,6 @@ const typography = {
   button: {
     fontWeight: 700,
     lineHeight: 24 / 14,
-    fontSize: pxToRem(14),
     textTransform: 'capitalize',
   },
 };

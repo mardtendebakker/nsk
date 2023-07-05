@@ -16,6 +16,9 @@ export default function Button(theme) {
         sizeLarge: {
           height: 48,
         },
+        sizeSmall: {
+          height: 33.5,
+        },
         containedInherit: {
           color: theme.palette.grey[70],
           '&:hover': {

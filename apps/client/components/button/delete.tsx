@@ -26,12 +26,12 @@ export default function Delete({
         <span>
           {tooltip
             ? (
-              <IconButton sx={{ borderRadius: 0, border: borderless ? '0px' : '1px solid' }} onClick={() => setShowDeleteModal(true)} color="error" disabled={disabled}>
-                <DeleteIcon />
+              <IconButton size="small" sx={{ borderRadius: 0, border: borderless ? '0px' : '1px solid' }} onClick={() => setShowDeleteModal(true)} color="error" disabled={disabled}>
+                <DeleteIcon sx={{ fontSize: '1rem' }} />
               </IconButton>
             )
             : (
-              <Button onClick={() => setShowDeleteModal(true)} variant="outlined" color="error" disabled={disabled}>
+              <Button size="small" onClick={() => setShowDeleteModal(true)} variant="outlined" color="error" disabled={disabled}>
                 <DeleteIcon />
                 {trans('delete')}
               </Button>

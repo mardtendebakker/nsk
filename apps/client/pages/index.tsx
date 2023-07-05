@@ -30,7 +30,7 @@ function Dashboard() {
           {user?.username}
           !
         </Typography>
-        <Button variant="contained">
+        <Button size="small" variant="contained">
           {trans('createOrder')}
           <ChevronRight sx={{ transform: 'rotate(90deg)' }} />
         </Button>

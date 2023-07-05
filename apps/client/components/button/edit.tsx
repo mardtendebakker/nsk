@@ -10,8 +10,8 @@ export default function Edit({ onClick, disabled, sx }: { onClick: () => void, d
   return (
     <Tooltip title={<Typography>{trans('edit')}</Typography>}>
       <span>
-        <IconButton onClick={onClick} disabled={disabled} sx={{ borderRadius: 0, border: '1px solid', ...sx }}>
-          <EditIcon sx={{ mr: '.1rem' }} />
+        <IconButton size="small" onClick={onClick} disabled={disabled} sx={{ borderRadius: 0, border: '1px solid', ...sx }}>
+          <EditIcon sx={{ mr: '.1rem', fontSize: '1rem' }} />
         </IconButton>
       </span>
     </Tooltip>

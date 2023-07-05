@@ -69,7 +69,7 @@ export default function Options({
             />
           </Grid>
         ))}
-      <Button onClick={() => {
+      <Button size="small" onClick={() => {
         setData({
           ...formRepresentation,
           [`option:new_${Math.random()}`]: { value: { name: '', price: 0 } },

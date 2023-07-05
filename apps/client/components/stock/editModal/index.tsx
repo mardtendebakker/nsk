@@ -70,8 +70,8 @@ export default function EditModal(
           <Form setValue={setValue} formRepresentation={formRepresentation} disabled={!canSubmit()} />
         </DialogContent>
         <DialogActions>
-          <Button disabled={!canSubmit()} onClick={onClose} variant="outlined" color="inherit">{trans('cancel')}</Button>
-          <Button type="submit" disabled={!canSubmit()} onClick={handleSave} variant="contained" color="primary">{trans('save')}</Button>
+          <Button size="small" disabled={!canSubmit()} onClick={onClose} variant="outlined" color="inherit">{trans('cancel')}</Button>
+          <Button size="small" type="submit" disabled={!canSubmit()} onClick={handleSave} variant="contained" color="primary">{trans('save')}</Button>
         </DialogActions>
       </form>
     </Dialog>

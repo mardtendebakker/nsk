@@ -103,8 +103,8 @@ export default function CreateModal({ onClose, onSubmit }: {
           <Form setData={setData} setValue={setValue} formRepresentation={formRepresentation} disabled={performing} />
         </DialogContent>
         <DialogActions>
-          <Button disabled={performing} onClick={onClose} variant="outlined" color="inherit">{trans('cancel')}</Button>
-          <Button type="submit" disabled={performing} onClick={handleSave} variant="contained" color="primary">{trans('save')}</Button>
+          <Button size="small" disabled={performing} onClick={onClose} variant="outlined" color="inherit">{trans('cancel')}</Button>
+          <Button size="small" type="submit" disabled={performing} onClick={handleSave} variant="contained" color="primary">{trans('save')}</Button>
         </DialogActions>
       </form>
     </Dialog>

@@ -1,5 +1,5 @@
 import {
-  Box, Divider, Drawer, Tooltip, Typography, Button,
+  Box, Divider, Drawer, Tooltip, Typography, Button, Avatar,
 } from '@mui/material';
 import TimerOutlined from '@mui/icons-material/TimerOutlined';
 import LocalShippingOutlined from '@mui/icons-material/LocalShippingOutlined';
@@ -158,23 +158,23 @@ export default function SideMap({ onClose, pickup, pickups }: {
       open
       onClose={onClose}
     >
-      <Box sx={{ px: '3rem', py: '2rem' }}>
-        <Typography variant="h6" sx={{ mb: '.5rem', display: 'flex', alignItems: 'center' }}>
-          <LocalShippingOutlined sx={{ mr: '.5rem' }} />
+      <Box sx={{ p: '1rem' }}>
+        <Typography variant="h5" sx={{ mb: '.5rem', display: 'flex', alignItems: 'center' }}>
+          <LocalShippingOutlined sx={{ mr: '.5rem', fontSize: '1.2rem' }} />
           {trans('pickupBy')}
           {': '}
           {pickup.logistic.username}
         </Typography>
         <Typography variant="body1" sx={{ mb: '1rem', display: 'flex', alignItems: 'center' }}>
-          <TimerOutlined sx={{ mr: '.5rem' }} />
+          <TimerOutlined sx={{ mr: '.5rem', fontSize: '1.2rem' }} />
           {' '}
           {trans('estimatedTravelTime')}
           {': '}
           {travelTime}
         </Typography>
-        <Box sx={{ width: '35rem', mb: '2rem' }}>
+        <Box sx={{ width: '20rem', mb: '1rem' }}>
           <ReactMapGL
-            height="35rem"
+            height="15rem"
             width="100%"
             mapStyle={mapStyle}
             {...viewport}
@@ -195,7 +195,7 @@ export default function SideMap({ onClose, pickup, pickups }: {
                 type: 'line',
                 paint: {
                   'line-color': '#ff1a1a',
-                  'line-width': 10,
+                  'line-width': 5,
                   'line-opacity': 0.5,
                 },
               }}
@@ -217,11 +217,13 @@ export default function SideMap({ onClose, pickup, pickups }: {
                     <Box sx={{
                       opacity: 0.5,
                       color: 'white',
-                      width: '2rem',
-                      height: '2rem',
+                      width: '1.5rem',
+                      height: '1.5rem',
                       bgcolor: '#000000',
                       borderRadius: '.3rem',
-                      textAlign: 'center',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
                       cursor: 'pointer',
                     }}
                     >
@@ -247,37 +249,45 @@ export default function SideMap({ onClose, pickup, pickups }: {
             }))}
         />
         {selectedWay?.pickup && (
-        <Box sx={{ mb: '1rem' }}>
-          <Typography color="divider" sx={{ mb: '1rem' }}>
+        <Box sx={{ mb: '.5rem', mt: '.5rem' }}>
+          <Typography color="divider" variant="body1" sx={{ mb: '.5rem' }}>
             {trans('supplierInfo')}
             :
           </Typography>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Badge>{selectedWay.pickup.order.supplier.name.charAt(0)?.toUpperCase()}</Badge>
+            <Avatar sx={{ mr: '1rem' }}>
+              <Typography variant="h5">
+                {selectedWay.pickup.order.supplier.name.charAt(0)?.toUpperCase()}
+              </Typography>
+            </Avatar>
             <Box>
-              <Typography variant="h6">
+              <Typography variant="h5">
                 {selectedWay.pickup.order.supplier.name}
               </Typography>
               <Typography variant="body1">{selectedWay.pickup.order.supplier.email}</Typography>
             </Box>
             <Box sx={{ flex: 1, textAlign: 'end' }}>
-              <Typography variant="h6" sx={{ justifySelf: 'flex-end' }}>
+              <Typography variant="h5" sx={{ justifySelf: 'flex-end' }}>
                 {selectedWay.pickup.order.supplier.phone}
               </Typography>
             </Box>
           </Box>
-          <Divider sx={{ mt: '1rem' }} />
+          <Divider sx={{ mt: '.5rem' }} />
         </Box>
         )}
-        <Box sx={{ mb: '1rem' }}>
-          <Typography color="divider" sx={{ mb: '1rem' }}>
+        <Box sx={{ mb: '.5rem' }}>
+          <Typography color="divider" variant="body1" sx={{ mb: '.5rem' }}>
             {trans('driverInfo')}
             :
           </Typography>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Badge>{(pickup.logistic.firstname.charAt(0)?.toUpperCase() || '') + (pickup.logistic.lastname.charAt(0)?.toUpperCase() || '')}</Badge>
+            <Avatar sx={{ mr: '1rem' }}>
+              <Typography variant="h5">
+                {(pickup.logistic.firstname.charAt(0)?.toUpperCase() || '') + (pickup.logistic.lastname.charAt(0)?.toUpperCase() || '')}
+              </Typography>
+            </Avatar>
             <Box>
-              <Typography variant="h6">
+              <Typography variant="h5">
                 {pickup.logistic.firstname}
                 {' '}
                 {pickup.logistic.lastname}
@@ -285,21 +295,21 @@ export default function SideMap({ onClose, pickup, pickups }: {
               <Typography variant="body1">{pickup.logistic.email}</Typography>
             </Box>
           </Box>
-          <Divider sx={{ mt: '1rem' }} />
+          <Divider sx={{ mt: '.5rem' }} />
         </Box>
-        <Box sx={{ mb: '1rem' }}>
-          <Typography color="divider" sx={{ mb: '1rem' }}>
+        <Box sx={{ mb: '.5rem' }}>
+          <Typography color="divider" variant="body1" sx={{ mb: '.5rem' }}>
             {trans('vehicleInfo')}
             :
           </Typography>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Badge><LocalShippingOutlined /></Badge>
-            <Typography variant="h6">
+            <Avatar sx={{ mr: '1rem' }}><LocalShippingOutlined sx={{ fontSize: '1.2rem' }} /></Avatar>
+            <Typography variant="h5">
               {pickup.logistic.username}
             </Typography>
           </Box>
         </Box>
-        <Button variant="contained" sx={{ width: '100%', mt: '1rem' }} onClick={() => router.push(ORDERS_PURCHASES_EDIT.replace(':id', pickup.order.id.toString()))}>
+        <Button size="small" variant="contained" sx={{ width: '100%', mt: '1rem' }} onClick={() => router.push(ORDERS_PURCHASES_EDIT.replace(':id', pickup.order.id.toString()))}>
           <VisibilityOutlined />
           {' '}
           {trans('viewOrder')}

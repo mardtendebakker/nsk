@@ -59,7 +59,7 @@ function SignInForm(
         sx={{ mb: 2 }}
       >
         <Typography
-          variant="button"
+          variant="h5"
           color="primary"
           onClick={() => !loading && onFormSelect({ form: 'signUp' })}
           sx={{ cursor: 'pointer' }}
@@ -106,7 +106,7 @@ function SignInForm(
           sx={{ mb: 2 }}
         >
           <Typography
-            variant="button"
+            variant="h5"
             color="primary"
             onClick={() => !loading && onFormSelect({ form: 'forgotPassword' })}
             sx={{ cursor: 'pointer' }}
@@ -115,9 +115,9 @@ function SignInForm(
           </Typography>
         </Stack>
         <Button
+          size="small"
           disabled={loading}
           fullWidth
-          size="large"
           type="submit"
           variant="contained"
           onClick={handleSubmit}

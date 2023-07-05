@@ -16,7 +16,7 @@ export default function DueToday() {
   return (
     <Card>
       <CardContent>
-        <Typography variant="h6" sx={{ mb: '2rem' }}>
+        <Typography variant="h5" sx={{ mb: '2rem' }}>
           {trans('dueToday')}
         </Typography>
         <Table>

@@ -51,7 +51,7 @@ function ForgotPasswordForm(
         sx={{ mb: 2 }}
       >
         <Typography
-          variant="button"
+          variant="h5"
           color="primary"
           onClick={() => !loading && onFormSelect({ form: 'signIn' })}
           sx={{ cursor: 'pointer' }}
@@ -71,9 +71,9 @@ function ForgotPasswordForm(
           />
         </Stack>
         <Button
+          size="small"
           disabled={loading}
           fullWidth
-          size="large"
           type="submit"
           variant="contained"
           onClick={handleSubmit}

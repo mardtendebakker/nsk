@@ -21,7 +21,7 @@ export default function List({ title }: { title: string }) {
     <Accordion expanded={expanded} onChange={() => setExpanded(!expanded)}>
       <AccordionSummary sx={{ background: 'transparent !important' }}>
         <ChevronRight sx={{ transform: `rotate(${expanded ? '90deg' : '0deg'})` }} />
-        <Typography variant="h6">
+        <Typography variant="h5">
           {title}
           {' / 2 '}
           {trans('tasks').toLowerCase()}

@@ -54,7 +54,7 @@ export default function LanguagePopover() {
           }),
         }}
       >
-        <img src={usedLocale.icon} alt={usedLocale.label} />
+        <img src={usedLocale.icon} alt={usedLocale.label} width={30} height={20} />
       </IconButton>
 
       <Popover

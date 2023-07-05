@@ -38,10 +38,7 @@ export default function Filter({
               onChange={(selected: { id: number }) => setValue({ field: 'productType', value: selected?.id })}
               value={formRepresentation.productType.value?.toString()}
             />
-            <Box sx={(theme) => ({
-              m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.divider,
-            })}
-            />
+            <Box sx={(theme) => ({ width: '1px', height: '2.5rem', background: theme.palette.divider })} />
             <DataSourcePicker
               url={LOCATIONS_PATH.replace(':id', '')}
               disabled={disabled}
@@ -51,10 +48,7 @@ export default function Filter({
               onChange={(selected: { id: number }) => setValue({ field: 'location', value: selected?.id })}
               value={formRepresentation.location.value?.toString()}
             />
-            <Box sx={(theme) => ({
-              m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.divider,
-            })}
-            />
+            <Box sx={(theme) => ({ width: '1px', height: '2.5rem', background: theme.palette.divider })} />
             <DataSourcePicker
               url={PRODUCT_STATUSES_PATH.replace(':id', '')}
               disabled={disabled}

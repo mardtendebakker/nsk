@@ -145,6 +145,7 @@ function NewPurchaseOrder() {
           </Typography>
           <Box>
             <Button
+              size="small"
               sx={{ ml: '1.5rem' }}
               color="inherit"
               variant="outlined"
@@ -153,7 +154,7 @@ function NewPurchaseOrder() {
               {trans('cancel')}
             </Button>
             <Button
-              type="submit"
+              size="small"
               sx={{ ml: '1.5rem' }}
               variant="contained"
               onClick={handleSubmit}

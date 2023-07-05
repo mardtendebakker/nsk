@@ -36,8 +36,8 @@ export default function Create({ open, onClose }: { open: boolean, onClose: () =
           <UserForm setValue={setValue} formRepresentation={formRepresentation} />
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose} variant="outlined" color="inherit">{trans('cancel')}</Button>
-          <Button type="submit" onClick={onClose} variant="contained" color="primary">{trans('save')}</Button>
+          <Button size="small" onClick={onClose} variant="outlined" color="inherit">{trans('cancel')}</Button>
+          <Button size="small" type="submit" onClick={onClose} variant="contained" color="primary">{trans('save')}</Button>
         </DialogActions>
       </form>
     </Dialog>

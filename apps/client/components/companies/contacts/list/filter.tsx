@@ -62,10 +62,7 @@ export default function Filter({
                 )
             }
             />
-            <Box sx={(theme) => ({
-              m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.divider,
-            })}
-            />
+            <Box sx={(theme) => ({ width: '1px', height: '2.5rem', background: theme.palette.divider })} />
             <Autocomplete
               disabled={disabled}
               fullWidth
@@ -94,10 +91,7 @@ export default function Filter({
                 )
             }
             />
-            <Box sx={(theme) => ({
-              m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.divider,
-            })}
-            />
+            <Box sx={(theme) => ({ width: '1px', height: '2.5rem', background: theme.palette.divider })} />
             <MemoizedTextField
               inputRef={representativeInputRef}
               disabled={disabled}
@@ -113,10 +107,7 @@ export default function Filter({
                 },
               }}
             />
-            <Box sx={(theme) => ({
-              m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.divider,
-            })}
-            />
+            <Box sx={(theme) => ({ width: '1px', height: '2.5rem', background: theme.palette.divider })} />
             <DesktopDatePicker
               disabled={disabled}
               inputFormat="YYYY/MM/DD"
