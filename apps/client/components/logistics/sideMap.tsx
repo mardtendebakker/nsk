@@ -22,26 +22,6 @@ const MAP_STYLE_URL = 'https://vectormaps-resources.myptv.com/styles/latest/stan
 const API_KEY = process.env.MY_PTV_API_KEY;
 const MAP_TILE_URL = 'https://api.myptv.com/maps/v1/vector-tiles/{z}/{x}/{y}';
 
-function Badge({ children }: { children: any }) {
-  return (
-    <Box sx={{
-      mr: '1rem',
-      width: '2rem',
-      height: '2rem',
-      borderRadius: '50%',
-      textAlign: 'center',
-      p: '2rem',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      border: (theme) => `1px solid ${theme.palette.divider}`,
-    }}
-    >
-      <Typography variant="body1">{children}</Typography>
-    </Box>
-  );
-}
-
 function buildHomeWay() {
   return {
     address: 'Televisiestraat 2E, 2525 KD Den Haag',
@@ -158,162 +138,166 @@ export default function SideMap({ onClose, pickup, pickups }: {
       open
       onClose={onClose}
     >
-      <Box sx={{ p: '1rem' }}>
-        <Typography variant="h5" sx={{ mb: '.5rem', display: 'flex', alignItems: 'center' }}>
-          <LocalShippingOutlined sx={{ mr: '.5rem', fontSize: '1.2rem' }} />
-          {trans('pickupBy')}
-          {': '}
-          {pickup.logistic.username}
-        </Typography>
-        <Typography variant="body1" sx={{ mb: '1rem', display: 'flex', alignItems: 'center' }}>
-          <TimerOutlined sx={{ mr: '.5rem', fontSize: '1.2rem' }} />
-          {' '}
-          {trans('estimatedTravelTime')}
-          {': '}
-          {travelTime}
-        </Typography>
-        <Box sx={{ width: '20rem', mb: '1rem' }}>
-          <ReactMapGL
-            height="15rem"
-            width="100%"
-            mapStyle={mapStyle}
-            {...viewport}
-            onViewportChange={setViewport}
-            transformRequest={(url, resourceType) => getTransformRequest(url, resourceType)}
+      <Box sx={{
+        width: '70vw', display: 'flex',
+      }}
+      >
+        <ReactMapGL
+          height="100vh"
+          width="100vw"
+          mapStyle={mapStyle}
+          {...viewport}
+          onViewportChange={setViewport}
+          transformRequest={(url, resourceType) => getTransformRequest(url, resourceType)}
+        >
+          <NavigationControl style={{ right: 10, top: 10 }} />
+          <Source
+            type="geojson"
+            data={{
+              type: 'Feature',
+              properties: {},
+              geometry,
+            }}
           >
-            <NavigationControl style={{ right: 10, top: 10 }} />
-            <Source
-              type="geojson"
-              data={{
-                type: 'Feature',
-                properties: {},
-                geometry,
-              }}
-            >
-              <Layer {...{
-                id: 'data',
-                type: 'line',
-                paint: {
-                  'line-color': '#ff1a1a',
-                  'line-width': 5,
-                  'line-opacity': 0.5,
-                },
-              }}
-              />
-            </Source>
-            {ways.map((way, i: number): JSX.Element | undefined => {
-              if (i == waysLength - 1) {
-                return undefined;
-              }
+            <Layer {...{
+              id: 'data',
+              type: 'line',
+              paint: {
+                'line-color': '#ff1a1a',
+                'line-width': 5,
+                'line-opacity': 0.5,
+              },
+            }}
+            />
+          </Source>
+          {ways.map((way, i: number): JSX.Element | undefined => {
+            if (i == waysLength - 1) {
+              return undefined;
+            }
 
-              return (
-                <Marker
-                  key={way.address}
-                  latitude={way.position.latitude}
-                  longitude={way.position.longitude}
-                  onClick={() => handleSelectedWay(way)}
-                >
-                  <Tooltip title={way.address}>
-                    <Box sx={{
-                      opacity: 0.5,
-                      color: 'white',
-                      width: '1.5rem',
-                      height: '1.5rem',
-                      bgcolor: '#000000',
-                      borderRadius: '.3rem',
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      cursor: 'pointer',
-                    }}
-                    >
-                      {i == 0 ? 'H' : i}
-                    </Box>
-                  </Tooltip>
-                </Marker>
-              );
-            })}
-          </ReactMapGL>
-        </Box>
-        <Select
-          sx={{ width: '100%' }}
-          label={trans('supplier')}
-          placeholder={trans('selectSupplier')}
-          value={selectedWay?.pickup?.id || 'none'}
-          onChange={(e) => handleSelectedWay(ways.find((way: Way) => e.target.value == way?.pickup?.id?.toString()))}
-          options={ways
-            .filter((way: Way) => !!way.pickup)
-            .map((way: Way) => ({
-              title: way.pickup.order.supplier.name,
-              value: way.pickup.id,
-            }))}
-        />
-        {selectedWay?.pickup && (
-        <Box sx={{ mb: '.5rem', mt: '.5rem' }}>
-          <Typography color="divider" variant="body1" sx={{ mb: '.5rem' }}>
-            {trans('supplierInfo')}
-            :
+            return (
+              <Marker
+                key={way.address}
+                latitude={way.position.latitude}
+                longitude={way.position.longitude}
+                onClick={() => handleSelectedWay(way)}
+              >
+                <Tooltip title={way.address}>
+                  <Box sx={{
+                    opacity: 0.5,
+                    color: 'white',
+                    width: '1.5rem',
+                    height: '1.5rem',
+                    bgcolor: '#000000',
+                    borderRadius: '.3rem',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    cursor: 'pointer',
+                  }}
+                  >
+                    {i == 0 ? 'H' : i}
+                  </Box>
+                </Tooltip>
+              </Marker>
+            );
+          })}
+        </ReactMapGL>
+        <Box sx={{ p: '1rem', maxWidth: '25rem', lineBreak: 'anywhere' }}>
+          <Typography variant="h5" sx={{ mb: '.5rem', display: 'flex', alignItems: 'center' }}>
+            <LocalShippingOutlined sx={{ mr: '.5rem', fontSize: '1.2rem' }} />
+            {trans('pickupBy')}
+            {': '}
+            {pickup.logistic.username}
           </Typography>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Avatar sx={{ mr: '1rem' }}>
-              <Typography variant="h5">
-                {selectedWay.pickup.order.supplier.name.charAt(0)?.toUpperCase()}
-              </Typography>
-            </Avatar>
-            <Box>
-              <Typography variant="h5">
-                {selectedWay.pickup.order.supplier.name}
-              </Typography>
-              <Typography variant="body1">{selectedWay.pickup.order.supplier.email}</Typography>
-            </Box>
-            <Box sx={{ flex: 1, textAlign: 'end' }}>
-              <Typography variant="h5" sx={{ justifySelf: 'flex-end' }}>
-                {selectedWay.pickup.order.supplier.phone}
-              </Typography>
-            </Box>
-          </Box>
+          <Typography variant="body1" sx={{ mb: '1rem', display: 'flex', alignItems: 'center' }}>
+            <TimerOutlined sx={{ mr: '.5rem', fontSize: '1.2rem' }} />
+            {' '}
+            {trans('estimatedTravelTime')}
+            {': '}
+            {travelTime}
+          </Typography>
           <Divider sx={{ mt: '.5rem' }} />
-        </Box>
-        )}
-        <Box sx={{ mb: '.5rem' }}>
-          <Typography color="divider" variant="body1" sx={{ mb: '.5rem' }}>
-            {trans('driverInfo')}
-            :
-          </Typography>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Avatar sx={{ mr: '1rem' }}>
-              <Typography variant="h5">
-                {(pickup.logistic.firstname.charAt(0)?.toUpperCase() || '') + (pickup.logistic.lastname.charAt(0)?.toUpperCase() || '')}
+          <Select
+            sx={{ width: '100%' }}
+            label={trans('supplier')}
+            placeholder={trans('selectSupplier')}
+            value={selectedWay?.pickup?.id || 'none'}
+            onChange={(e) => handleSelectedWay(ways.find((way: Way) => e.target.value == way?.pickup?.id?.toString()))}
+            options={ways
+              .filter((way: Way) => !!way.pickup)
+              .map((way: Way) => ({
+                title: way.pickup.order.supplier.name,
+                value: way.pickup.id,
+              }))}
+          />
+          {selectedWay?.pickup && (
+            <Box sx={{ mb: '.5rem', mt: '.5rem' }}>
+              <Typography color="divider" variant="body1" sx={{ mb: '.5rem' }}>
+                {trans('supplierInfo')}
+                :
               </Typography>
-            </Avatar>
-            <Box>
-              <Typography variant="h5">
-                {pickup.logistic.firstname}
-                {' '}
-                {pickup.logistic.lastname}
-              </Typography>
-              <Typography variant="body1">{pickup.logistic.email}</Typography>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Avatar sx={{ mr: '1rem' }}>
+                  <Typography variant="h5">
+                    {selectedWay.pickup.order.supplier.name.charAt(0)?.toUpperCase()}
+                  </Typography>
+                </Avatar>
+                <Box>
+                  <Typography variant="h5">
+                    {selectedWay.pickup.order.supplier.name}
+                  </Typography>
+                  <Typography variant="body1">{selectedWay.pickup.order.supplier.email}</Typography>
+                </Box>
+                <Box sx={{ flex: 1, textAlign: 'end' }}>
+                  <Typography variant="h5" sx={{ justifySelf: 'flex-end' }}>
+                    {selectedWay.pickup.order.supplier.phone}
+                  </Typography>
+                </Box>
+              </Box>
+              <Divider sx={{ mt: '.5rem' }} />
             </Box>
-          </Box>
-          <Divider sx={{ mt: '.5rem' }} />
-        </Box>
-        <Box sx={{ mb: '.5rem' }}>
-          <Typography color="divider" variant="body1" sx={{ mb: '.5rem' }}>
-            {trans('vehicleInfo')}
-            :
-          </Typography>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Avatar sx={{ mr: '1rem' }}><LocalShippingOutlined sx={{ fontSize: '1.2rem' }} /></Avatar>
-            <Typography variant="h5">
-              {pickup.logistic.username}
+          )}
+          <Box sx={{ mb: '.5rem' }}>
+            <Typography color="divider" variant="body1" sx={{ mb: '.5rem' }}>
+              {trans('driverInfo')}
+              :
             </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Avatar sx={{ mr: '1rem' }}>
+                <Typography variant="h5">
+                  {(pickup.logistic.firstname.charAt(0)?.toUpperCase() || '') + (pickup.logistic.lastname.charAt(0)?.toUpperCase() || '')}
+                </Typography>
+              </Avatar>
+              <Box>
+                <Typography variant="h5">
+                  {pickup.logistic.firstname}
+                  {' '}
+                  {pickup.logistic.lastname}
+                </Typography>
+                <Typography variant="body1">{pickup.logistic.email}</Typography>
+              </Box>
+            </Box>
+            <Divider sx={{ mt: '.5rem' }} />
           </Box>
+          <Box sx={{ mb: '.5rem' }}>
+            <Typography color="divider" variant="body1" sx={{ mb: '.5rem' }}>
+              {trans('vehicleInfo')}
+              :
+            </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Avatar sx={{ mr: '1rem' }}><LocalShippingOutlined sx={{ fontSize: '1.2rem' }} /></Avatar>
+              <Typography variant="h5">
+                {pickup.logistic.username}
+              </Typography>
+            </Box>
+          </Box>
+          <Button size="small" variant="contained" sx={{ width: '100%', mt: '1rem' }} onClick={() => router.push(ORDERS_PURCHASES_EDIT.replace(':id', pickup.order.id.toString()))}>
+            <VisibilityOutlined />
+            {' '}
+            {trans('viewOrder')}
+          </Button>
         </Box>
-        <Button size="small" variant="contained" sx={{ width: '100%', mt: '1rem' }} onClick={() => router.push(ORDERS_PURCHASES_EDIT.replace(':id', pickup.order.id.toString()))}>
-          <VisibilityOutlined />
-          {' '}
-          {trans('viewOrder')}
-        </Button>
       </Box>
     </Drawer>
   );

@@ -29,7 +29,7 @@ export default function Event({
     <Box
       onClick={onClick}
       sx={{
-        cursor: 'pointer',
+        cursor: pickup.logistic ? 'pointer' : 'not-allowed',
         top,
         height,
         bgcolor: 'white',

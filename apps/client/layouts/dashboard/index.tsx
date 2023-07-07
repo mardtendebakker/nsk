@@ -27,9 +27,7 @@ export default function DashboardLayout({ children }: { children: JSX.Element | 
     <>
       <Header />
       <Box
-        sx={(theme) => ({
-          minHeight: '100%', pt: 5, pb: 3, px: 3, background: theme.palette.grey[10],
-        })}
+        sx={(theme) => ({ minHeight: '100%', p: '1rem', background: theme.palette.grey[10] })}
       >
         <Box
           component="main"

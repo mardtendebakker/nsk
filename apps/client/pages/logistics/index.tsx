@@ -213,10 +213,12 @@ export default function Logistics() {
                           return (
                             <Event
                               onClick={() => {
-                                setClickedPickup({
-                                  pickup,
-                                  allPickups: thisDayPickups.filter((element) => element.logistic.id == pickup.logistic.id),
-                                });
+                                if (pickup.logistic) {
+                                  setClickedPickup({
+                                    pickup,
+                                    allPickups: thisDayPickups.filter((element) => element.logistic && (element.logistic.id == pickup.logistic.id)),
+                                  });
+                                }
                               }}
                               pickup={pickup}
                               key={pickup.id}
