@@ -82,7 +82,7 @@ function NewCustomerEmail() {
           {trans('newEmail')}
         </Typography>
         <Box>
-          <Button
+          <Button size="small"
             sx={{ ml: '1.5rem' }}
             variant="contained"
             onClick={handleSubmit}

@@ -498,6 +498,9 @@ const translation = {
   newProductType: 'Nieuwe productsoort',
   pickupBy: 'Ophalen door',
   estimatedTravelTime: 'Geschatte reistijd',
+  supplierInfo: 'Leverancier informatie',
+  driverInfo: 'Bestuurder informatie',
+  vehicleInfo: 'Voertuig informatie',
   // http status
   200: 'Actie succesvol afgerond',
   201: 'Bron gemaakt',

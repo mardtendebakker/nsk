@@ -45,14 +45,14 @@ export default function ListContainer() {
 
   return (
     <Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: '2rem' }}>
-        <Typography variant="h3">
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: '1rem' }}>
+        <Typography variant="h4">
           {trans('tasks')}
           {` (${count})`}
         </Typography>
         <Box>
           <TextField
-            sx={{ mr: '1rem' }}
+            sx={{ mr: '.5rem' }}
             onChange={(e) => {
               setSearch(e.target.value);
               handleSearchChange(e.target.value);
@@ -61,6 +61,7 @@ export default function ListContainer() {
             placeholder={trans('tasksList.search.placeholder')}
           />
           <Button
+            size="small"
             disabled={disabled()}
             variant="contained"
             onClick={() => setShowForm(true)}

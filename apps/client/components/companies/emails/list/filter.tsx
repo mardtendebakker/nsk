@@ -54,10 +54,7 @@ export default function Filter({
               />
             )}
           />
-          <Box sx={(theme) => ({
-            m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.divider,
-          })}
-          />
+          <Box sx={(theme) => ({ width: '1px', height: '2.5rem', background: theme.palette.divider })} />
           <Autocomplete
             disabled={disabled}
             sx={{ width: '13.75rem' }}

@@ -51,10 +51,10 @@ export default function ConfirmationDialog(
         {content}
       </DialogContent>
       <DialogActions sx={{ mt: '1rem', p: '24px' }}>
-        <Button onClick={onClose} variant={cancelButtonVariant} color={cancelButtonColor}>
+        <Button size="small" onClick={onClose} variant={cancelButtonVariant} color={cancelButtonColor}>
           {cancelButtonText || trans('cancel')}
         </Button>
-        <Button
+        <Button size="small"
           onClick={onConfirm}
           variant={confirmButtonVariant}
           color={confirmButtonColor}

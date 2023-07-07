@@ -144,8 +144,8 @@ function PasswordForm() {
           </Stack>
           <Box sx={{ display: 'flex', justifyContent: 'end' }}>
             <Button
+              size="small"
               disabled={performing}
-              size="large"
               type="submit"
               variant="contained"
               onClick={handleSubmit}

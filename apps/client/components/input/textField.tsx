@@ -17,7 +17,7 @@ export default function TextField({
       {...rest}
       sx={{
         ...sx,
-        legend: { display: 'none' },
+        legend: { width: 0 },
       }}
       InputLabelProps={{
         shrink: true,

@@ -53,7 +53,7 @@ export default function Analytics({ path, label }: { path: string, label: string
     <Card>
       <CardContent>
         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Typography variant="h6">
+          <Typography variant="h5">
             {label}
           </Typography>
           <Box>
@@ -74,7 +74,7 @@ export default function Analytics({ path, label }: { path: string, label: string
         </Box>
         <Box sx={{ display: 'flex', mt: '2rem' }}>
           {keys.map((key) => (
-            <Button variant="outlined" color="inherit" sx={{ mr: '1rem', cursor: 'unset' }} key={key} disableRipple>
+            <Button size="small" variant="outlined" color="inherit" sx={{ mr: '1rem', cursor: 'unset' }} key={key} disableRipple>
               <Box sx={{
                 mr: '.5rem',
                 bgcolor: COLORS[key],

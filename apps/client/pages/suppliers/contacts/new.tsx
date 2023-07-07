@@ -67,7 +67,7 @@ function NewSupplierContact() {
             {trans('newContact')}
           </Typography>
           <Box>
-            <Button
+            <Button size="small"
               type="submit"
               sx={{ ml: '1.5rem' }}
               variant="contained"

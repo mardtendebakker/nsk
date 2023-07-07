@@ -56,8 +56,8 @@ export default function Menu() {
             fontWeight: theme.typography.fontWeightMedium,
             background: active ? '#D6E0FA' : undefined,
             color: active ? theme.palette.primary.main : undefined,
-            mb: '1rem',
-            py: '1rem',
+            mb: '.2rem',
+            p: '.5rem .75rem',
           })}
           key={text}
         >

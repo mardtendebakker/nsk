@@ -51,21 +51,21 @@ export default function Event({
       }}
       >
         <Typography variant="inherit">{title}</Typography>
-        <Typography variant="h4">{body}</Typography>
+        <Typography variant="body2" fontWeight={700}>{body}</Typography>
         {username && (
         <Box sx={{
-          width: '2rem',
-          height: '2rem',
+          width: '1.2rem',
+          height: '1.2rem',
           borderRadius: '50%',
           bgcolor: 'white',
           textAlign: 'center',
           position: 'absolute',
-          right: '1rem',
-          bottom: '1rem',
+          right: '.5rem',
+          bottom: '.5rem',
         }}
         >
           <Tooltip title={<Typography>{username}</Typography>}>
-            <Typography variant="h4">{username.charAt(0)?.toUpperCase()}</Typography>
+            <Typography variant="h5">{username.charAt(0)?.toUpperCase()}</Typography>
           </Tooltip>
         </Box>
         )}

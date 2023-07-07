@@ -204,7 +204,7 @@ export default function ListContainer() {
           setPage(1);
         }}
       />
-      <Box sx={{ m: '1.5rem' }} />
+      <Box sx={{ m: '.5rem' }} />
       <Action
         disabled={disabled()}
         allChecked={checkedProductIds.length === data.length && data.length > 0}
@@ -215,7 +215,7 @@ export default function ListContainer() {
         onPrint={() => {}}
         onDelete={handleDelete}
       />
-      <Box sx={{ m: '1rem' }} />
+      <Box sx={{ m: '.5rem' }} />
       <List
         products={data}
         count={Math.ceil(count / 10)}

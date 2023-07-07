@@ -45,7 +45,7 @@ function PermissionsPicker() {
           detail={detail}
         />
       ))}
-      <Button onClick={() => setPermissions((currentValue) => [
+      <Button size="small" onClick={() => setPermissions((currentValue) => [
         ...currentValue,
         {
           id: parseInt((Math.random() * 10000).toString(2), 2),

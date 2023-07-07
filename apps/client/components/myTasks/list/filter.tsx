@@ -32,10 +32,7 @@ export default function Filter() {
           >
             <MenuItem value={0}>{trans('allMyTasks')}</MenuItem>
           </Select>
-          <Box sx={(theme) => ({
-            m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.divider,
-          })}
-          />
+          <Box sx={(theme) => ({ width: '1px', height: '2.5rem', background: theme.palette.divider })} />
           <Checkbox />
           <Typography variant="body1">
             {trans('hideDoneTasks')}

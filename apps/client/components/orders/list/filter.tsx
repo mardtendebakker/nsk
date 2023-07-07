@@ -67,10 +67,7 @@ export default function Filter({
                 />
               )}
             />
-            <Box sx={(theme) => ({
-              m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.divider,
-            })}
-            />
+            <Box sx={(theme) => ({ width: '1px', height: '2.5rem', background: theme.palette.divider })} />
             <DataSourcePicker
               url={COMPANIES_PATH.replace(':id', '')}
               disabled={disabled}
@@ -80,10 +77,7 @@ export default function Filter({
               onChange={(selected: { id: number }) => setValue({ field: 'createdBy', value: selected?.id })}
               value={formRepresentation.createdBy.value?.toString()}
             />
-            <Box sx={(theme) => ({
-              m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.divider,
-            })}
-            />
+            <Box sx={(theme) => ({ width: '1px', height: '2.5rem', background: theme.palette.divider })} />
             <Autocomplete
               disabled={disabled}
               fullWidth
@@ -110,10 +104,7 @@ export default function Filter({
                 )
             }
             />
-            <Box sx={(theme) => ({
-              m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.divider,
-            })}
-            />
+            <Box sx={(theme) => ({ width: '1px', height: '2.5rem', background: theme.palette.divider })} />
             <DataSourcePicker
               url={ORDER_STATUSES_PATH.replace(':id', '')}
               disabled={disabled}
@@ -123,10 +114,7 @@ export default function Filter({
               onChange={(selected: { id: number }) => setValue({ field: 'status', value: selected?.id })}
               value={formRepresentation.status.value?.toString()}
             />
-            <Box sx={(theme) => ({
-              m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.divider,
-            })}
-            />
+            <Box sx={(theme) => ({ width: '1px', height: '2.5rem', background: theme.palette.divider })} />
             <DataSourcePicker
               url={COMPANIES_PATH.replace(':id', '')}
               params={{ partnerOnly: '1' }}

@@ -55,8 +55,8 @@ export default function Header() {
       position="fixed"
       sx={{ display: 'flex' }}
     >
-      <Toolbar sx={{ height: 88 }}>
-        <Image src="/assets/logo.jpg" alt="logo" width={100} height={18} />
+      <Toolbar sx={{ height: 50 }}>
+        <Image src="/assets/logo.jpg" alt="logo" width={50} height={9} />
         <List sx={{ p: 1, display: 'flex' }}>
           {[
             {
@@ -112,7 +112,7 @@ export default function Header() {
           <Box sx={{ mr: '2rem' }} />
           <LanguagePopover />
           <Box sx={(theme) => ({
-            m: '1.25rem', width: '1px', height: '2.5rem', background: theme.palette.divider,
+            m: '.5rem', width: '1px', height: '1.5rem', background: theme.palette.divider,
           })}
           />
           <AccountPopover />

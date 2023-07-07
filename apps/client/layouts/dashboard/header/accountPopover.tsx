@@ -25,7 +25,7 @@ export default function AccountPopover() {
   return (
     <>
       <Avatar sx={{ mr: '0.6rem' }}>{user?.username?.charAt(0)?.toUpperCase()}</Avatar>
-      <Typography variant="h6" sx={{ mr: '0.6rem' }}>{user?.username}</Typography>
+      <Typography variant="h5" sx={{ mr: '0.6rem' }}>{user?.username}</Typography>
       <IconButton onClick={handleOpen}>
         <ChevronRight sx={{ transform: 'rotate(90deg)' }} />
       </IconButton>

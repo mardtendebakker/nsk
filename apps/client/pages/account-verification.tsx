@@ -58,7 +58,7 @@ export default function AccountVerification() {
           alignItems: 'center',
         }}
       >
-        <Button color="error" onClick={signOut} sx={{ position: 'absolute', right: 10, top: 10 }}>
+        <Button size="small" color="error" onClick={signOut} sx={{ position: 'absolute', right: 10, top: 10 }}>
           {trans('logout')}
         </Button>
         <Typography
@@ -81,6 +81,7 @@ export default function AccountVerification() {
                 endAdornment: (
                   <InputAdornment position="end">
                     <Button
+                      size="small"
                       disabled={loading}
                       onClick={sendVerificationCode}
                     >
@@ -98,9 +99,9 @@ export default function AccountVerification() {
             sx={{ my: 2 }}
           />
           <Button
+            size="small"
             disabled={loading}
             fullWidth
-            size="large"
             type="submit"
             variant="contained"
             onClick={handleSubmit}
