@@ -20,6 +20,8 @@ export class PickupService {
             id: true,
             order_nr: true,
             order_status: true,
+            acompany_aorder_customer_idToacompany: true,
+            acompany_aorder_supplier_idToacompany: true,
             product_order: {
               select: {
                 id: true,
@@ -33,12 +35,7 @@ export class PickupService {
             }
           }
         },
-        fos_user: {
-          select: {
-            id: true,
-            username : true,
-          }
-        },
+        fos_user: true,
       },
       where: {
         real_pickup_date: {
@@ -52,13 +49,24 @@ export class PickupService {
 
     return {
       count,
-      data: data.map(({aorder: {product_order, ...order}, fos_user, ...rest})=> ({
-        ...rest,
-        order: {
-          ...order,
-          products: product_order.map((element) => Object.values(element)[1])
+      data: data.map(({
+        aorder: {
+          product_order,
+          acompany_aorder_customer_idToacompany,
+          acompany_aorder_supplier_idToacompany,
+          ...order
         },
-        logistic: fos_user,
+        fos_user,
+        ...rest
+      })=> ({
+          ...rest,
+          order: {
+            ...order,
+            products: product_order.map((element) => Object.values(element)[1]),
+            customer: acompany_aorder_customer_idToacompany, 
+            supplier: acompany_aorder_supplier_idToacompany, 
+          },
+          logistic: fos_user,
       }))
     }
   }

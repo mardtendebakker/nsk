@@ -12,6 +12,9 @@ const nextConfig = {
     // See: https://github.com/gregberge/svgr
     svgr: false,
   },
+  env: {
+    MY_PTV_API_KEY: 'RVVfMjMyYTdmMDdlZjgwNDllMmI1YTUyNGQ0NWNlMTBhYjA6NjNmOTM4ZjAtNTMzZi00M2EwLWEwNDEtYjhjNmE4N2RiN2Iz',
+  },
 };
 
 module.exports = withNx(nextConfig);

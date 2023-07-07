@@ -14,6 +14,7 @@ import useAxios from '../../hooks/useAxios';
 import { PICKUPS_PATH } from '../../utils/axios';
 import TextField from '../../components/input/textField';
 import { Logistic, Order, PickupListItem } from '../../utils/axios/models/pickup';
+import SideMap from '../../components/logistics/sideMap';
 
 const hours = [];
 
@@ -27,6 +28,7 @@ export default function Logistics() {
   const [firstDate, setFirstDate] = useState<Moment>(moment().set('hour', 7).set('minute', 0));
   const [selectedLogisticIds, setSelectedLogisticIds] = useState<number[]>([0]);
   const [search, setSearch] = useState('');
+  const [clickedPickup, setClickedPickup] = useState<{ pickup: PickupListItem, allPickups: PickupListItem[] } | undefined>();
 
   const dates: Moment[] = [
     firstDate.clone(),
@@ -77,6 +79,14 @@ export default function Logistics() {
     const selected = selectedLogisticIds[0] === 0 || selectedLogisticIds.includes(logistic?.id);
 
     return selected && (formatPickupName(order)?.includes(search) || order.order_nr.includes(search));
+  }).sort((a: PickupListItem, b: PickupListItem) => {
+    if (a.real_pickup_date < b.real_pickup_date) {
+      return -1;
+    } if (a.real_pickup_date > b.real_pickup_date) {
+      return 1;
+    }
+
+    return 0;
   });
 
   return (
@@ -183,35 +193,40 @@ export default function Logistics() {
                     <TableCell sx={{ verticalAlign: 'baseline', borderBottom: 'unset' }}>
                       <Box sx={{ marginTop: '-1.67em' }}>{hours[0]}</Box>
                     </TableCell>
-                    {dates.map((date: Moment) => (
-                      <TableCell
-                        key={date.toString()}
-                        sx={{ position: 'relative', borderLeft: (theme) => `1px solid ${theme.palette.divider}` }}
-                      >
-                        { pickups
-                          .filter(({ real_pickup_date }) => {
-                            const realPickupDate = moment(real_pickup_date);
-                            return realPickupDate.format('Y-MM-DD') == date.format('Y-MM-DD');
-                          })
-                          .map(({
-                            id, real_pickup_date, order, logistic,
-                          }) => {
-                            const realPickupDate = moment(real_pickup_date);
+                    {dates.map((date: Moment) => {
+                      const thisDayPickups = pickups.filter(({ real_pickup_date }) => {
+                        const realPickupDate = moment(real_pickup_date);
+                        return realPickupDate.format('Y-MM-DD') == date.format('Y-MM-DD');
+                      });
 
-                            return (
-                              <Event
-                                key={id}
-                                top={`${realPickupDate.diff(date, 'minutes') * 0.2}rem`}
-                                height="12rem"
-                                color={order.order_status.color}
-                                title={`${realPickupDate.format('hh:mm')} - ${realPickupDate.add(1, 'hours').format('hh:mm')}`}
-                                body={formatPickupName(order)}
-                                username={logistic?.username || ''}
-                              />
-                            );
-                          })}
-                      </TableCell>
-                    ))}
+                      return (
+                        <TableCell
+                          key={date.toString()}
+                          sx={{ position: 'relative', borderLeft: (theme) => `1px solid ${theme.palette.divider}` }}
+                        >
+                          {
+                        thisDayPickups.map((pickup) => {
+                          const realPickupDate = moment(pickup.real_pickup_date);
+
+                          return (
+                            <Event
+                              onClick={() => {
+                                setClickedPickup({
+                                  pickup,
+                                  allPickups: thisDayPickups.filter((element) => element.logistic.id == pickup.logistic.id),
+                                });
+                              }}
+                              pickup={pickup}
+                              key={pickup.id}
+                              top={`${realPickupDate.diff(date, 'minutes') * 0.2}rem`}
+                              height="12rem"
+                            />
+                          );
+                        })
+}
+                        </TableCell>
+                      );
+                    })}
                   </TableRow>
                   {hours.map((hour, i) => {
                     if (i == 0) {
@@ -238,6 +253,13 @@ export default function Logistics() {
           </CardContent>
         </Card>
       </Box>
+      { clickedPickup && (
+      <SideMap
+        pickups={clickedPickup.allPickups}
+        pickup={clickedPickup.pickup}
+        onClose={() => setClickedPickup(undefined)}
+      />
+      )}
     </DashboardLayout>
   );
 }
