@@ -23,7 +23,10 @@ export default function Filter({
   return (
     <form>
       <BorderedBox>
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <Box sx={{
+          display: 'flex', alignItems: 'center', px: '1rem', py: '.6rem',
+        }}
+        >
           <Search sx={{ color: (theme) => theme.palette.grey[40] }} />
           <MemoizedTextField
             disabled={disabled}
@@ -54,7 +57,10 @@ export default function Filter({
               />
             )}
           />
-          <Box sx={(theme) => ({ width: '1px', height: '2.5rem', background: theme.palette.divider })} />
+          <Box sx={(theme) => ({
+            width: '1px', height: '2.5rem', mx: '.5rem', background: theme.palette.divider,
+          })}
+          />
           <Autocomplete
             disabled={disabled}
             sx={{ width: '13.75rem' }}

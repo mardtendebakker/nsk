@@ -48,7 +48,8 @@ export default function SearchAccordion({
               },
             }}
           />
-          <Button size="small"
+          <Button
+            size="small"
             variant="outlined"
             color="error"
             onClick={() => {
@@ -57,7 +58,7 @@ export default function SearchAccordion({
                 inputRef.current.value = '';
               }
             }}
-            sx={{ mr: '1rem' }}
+            sx={{ mr: '.5rem' }}
           >
             {trans('reset')}
           </Button>

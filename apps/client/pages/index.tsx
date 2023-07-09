@@ -2,7 +2,8 @@ import Head from 'next/head';
 import {
   Box, Button, Typography,
 } from '@mui/material';
-import ChevronRight from '@mui/icons-material/ChevronRight';
+import Add from '@mui/icons-material/Add';
+import { useRouter } from 'next/router';
 import useSecurity from '../hooks/useSecurity';
 import useTranslation from '../hooks/useTranslation';
 import DashboardLayout from '../layouts/dashboard';
@@ -13,10 +14,12 @@ import DueToday from '../components/dashboard/dueToday';
 import UpcomingDeliveries from '../components/dashboard/upcomingDeliveries';
 import Analytics from '../components/dashboard/analytics';
 import { ORDERS_ANALYTICS_PATH } from '../utils/axios';
+import { ORDERS_PURCHASES_NEW } from '../utils/routes';
 
 function Dashboard() {
   const { state: { user } } = useSecurity();
   const { trans } = useTranslation();
+  const router = useRouter();
 
   return (
     <DashboardLayout>
@@ -30,21 +33,25 @@ function Dashboard() {
           {user?.username}
           !
         </Typography>
-        <Button size="small" variant="contained">
-          {trans('createOrder')}
-          <ChevronRight sx={{ transform: 'rotate(90deg)' }} />
+        <Button
+          size="small"
+          variant="contained"
+          onClick={() => router.push(ORDERS_PURCHASES_NEW)}
+        >
+          <Add />
+          {trans('newPurchase')}
         </Button>
       </Box>
-      <Box sx={{ m: '2rem' }} />
+      <Box sx={{ m: '1rem' }} />
       <IndicatorRow />
-      <Box sx={{ mt: '2rem', display: 'flex' }}>
-        <Box sx={{ flex: '.8', mr: '2rem' }}>
+      <Box sx={{ mt: '1rem', display: 'flex' }}>
+        <Box sx={{ flex: '.8', mr: '1rem' }}>
           <Analytics label={trans('productAnalytics')} path={ORDERS_ANALYTICS_PATH} />
-          <Box sx={{ m: '2rem' }} />
+          <Box sx={{ m: '1rem' }} />
           <LocationCapacity />
-          <Box sx={{ m: '2rem' }} />
+          <Box sx={{ m: '1rem' }} />
           <ResourceManagement />
-          <Box sx={{ m: '2rem' }} />
+          <Box sx={{ m: '1rem' }} />
           <DueToday />
         </Box>
         <Box sx={{ flex: '.2' }}>

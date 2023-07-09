@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import {
-  Box, Divider, Typography, MenuItem, Avatar, Popover, Stack, IconButton,
+  Divider, Typography, MenuItem, Avatar, Popover, Stack, IconButton, Button,
 } from '@mui/material';
+import PowerSettingsNew from '@mui/icons-material/PowerSettingsNew';
 import ChevronRight from '@mui/icons-material/ChevronRight';
 import { useRouter } from 'next/router';
 import { ADMIN_USERS, SETTINGS } from '../../../utils/routes';
@@ -48,14 +49,6 @@ export default function AccountPopover() {
           },
         }}
       >
-        <Box sx={{ my: 1.5, px: 2.5 }}>
-          <Typography variant="subtitle2" noWrap>
-            {user?.username}
-          </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {user?.email}
-          </Typography>
-        </Box>
         <Stack sx={{ p: 1 }}>
           <MenuItem onClick={() => router.push(SETTINGS)}>
             {trans('settings')}
@@ -65,9 +58,21 @@ export default function AccountPopover() {
           </MenuItem>
         </Stack>
         <Divider sx={{ borderStyle: 'dashed' }} />
-        <MenuItem onClick={signOut} sx={{ m: 1 }}>
-          {trans('logout')}
-        </MenuItem>
+        <Stack sx={{ p: 1 }}>
+          <Button
+            size="small"
+            onClick={signOut}
+            sx={{
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'start',
+            }}
+            color="error"
+          >
+            <PowerSettingsNew sx={{ fontSize: '1rem' }} />
+            {trans('logout')}
+          </Button>
+        </Stack>
       </Popover>
     </>
   );
