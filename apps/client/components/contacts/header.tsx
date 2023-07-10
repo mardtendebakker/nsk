@@ -1,10 +1,13 @@
 import Add from '@mui/icons-material/Add';
 import { Box, Button, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
-import useTranslation from '../../../hooks/useTranslation';
+import useTranslation from '../../hooks/useTranslation';
 import {
-  SUPPLIERS_CONTACTS, SUPPLIERS_CONTACTS_NEW, SUPPLIERS_EMAILS, SUPPLIERS_EMAILS_NEW,
-} from '../../../utils/routes';
+  CONTACTS_CUSTOMERS,
+  CONTACTS_CUSTOMERS_NEW,
+  CONTACTS_SUPPLIERS,
+  CONTACTS_SUPPLIERS_NEW,
+} from '../../utils/routes';
 
 export default function Navigation() {
   const router = useRouter();
@@ -12,21 +15,21 @@ export default function Navigation() {
 
   const ITEMS = [
     {
-      active: router.pathname === SUPPLIERS_CONTACTS,
-      text: trans('contact'),
-      onClick: () => router.push(SUPPLIERS_CONTACTS),
+      active: router.pathname === CONTACTS_CUSTOMERS,
+      text: trans('customers'),
+      onClick: () => router.push(CONTACTS_CUSTOMERS),
     },
     {
-      active: router.pathname === SUPPLIERS_EMAILS,
-      text: trans('bulkEmail'),
-      onClick: () => router.push(SUPPLIERS_EMAILS),
+      active: router.pathname === CONTACTS_SUPPLIERS,
+      text: trans('suppliers'),
+      onClick: () => router.push(CONTACTS_SUPPLIERS),
     },
   ];
 
   return (
     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <Typography variant="h4" sx={{ mr: '.5rem' }}>{trans('suppliers')}</Typography>
+        <Typography variant="h4" sx={{ mr: '.5rem' }}>{trans('contacts')}</Typography>
         <Box sx={{ display: 'flex' }}>
           {ITEMS.map(({ text, active, onClick }) => (
             <Typography
@@ -46,16 +49,17 @@ export default function Navigation() {
           ))}
         </Box>
       </Box>
-      <Button size="small"
+      <Button
+        size="small"
         variant="contained"
         onClick={
         () => router.push(
-          router.pathname === SUPPLIERS_CONTACTS ? SUPPLIERS_CONTACTS_NEW : SUPPLIERS_EMAILS_NEW,
+          router.pathname === CONTACTS_SUPPLIERS ? CONTACTS_SUPPLIERS_NEW : CONTACTS_CUSTOMERS_NEW,
         )
         }
       >
         <Add />
-        {trans(router.pathname === SUPPLIERS_CONTACTS ? 'newContact' : 'newEmail')}
+        {trans('newContact')}
       </Button>
     </Box>
 

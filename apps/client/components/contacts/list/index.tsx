@@ -1,12 +1,12 @@
 import { Box, Card } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { CUSTOMERS_CONTACTS, CUSTOMERS_CONTACTS_EDIT, SUPPLIERS_CONTACTS_EDIT } from '../../../../utils/routes';
+import { CONTACTS_CUSTOMERS, CONTACTS_CUSTOMERS_EDIT, CONTACTS_SUPPLIERS_EDIT } from '../../../utils/routes';
 import List from './list';
 import Filter from './filter';
-import useAxios from '../../../../hooks/useAxios';
-import { CUSTOMERS_PATH, SUPPLIERS_PATH } from '../../../../utils/axios';
-import useForm, { FieldPayload } from '../../../../hooks/useForm';
+import useAxios from '../../../hooks/useAxios';
+import { CUSTOMERS_PATH, SUPPLIERS_PATH } from '../../../utils/axios';
+import useForm, { FieldPayload } from '../../../hooks/useForm';
 
 function initFormState(
   {
@@ -79,7 +79,7 @@ export default function ListContainer() {
     list: router.query?.list?.toString(),
   }));
 
-  const ajaxPath = router.pathname == CUSTOMERS_CONTACTS ? CUSTOMERS_PATH : SUPPLIERS_PATH;
+  const ajaxPath = router.pathname == CONTACTS_CUSTOMERS ? CUSTOMERS_PATH : SUPPLIERS_PATH;
 
   const { data: { data = [], count = 0 } = {}, call, performing } = useAxios(
     'get',
@@ -151,7 +151,7 @@ export default function ListContainer() {
         page={page}
         onDelete={handleDelete}
         onEdit={(id) => router.push(
-          (router.pathname == CUSTOMERS_CONTACTS ? CUSTOMERS_CONTACTS_EDIT : SUPPLIERS_CONTACTS_EDIT).replace(':id', id.toString()),
+          (router.pathname == CONTACTS_CUSTOMERS ? CONTACTS_CUSTOMERS_EDIT : CONTACTS_SUPPLIERS_EDIT).replace(':id', id.toString()),
         )}
         onPageChange={(newPage) => setPage(newPage)}
       />

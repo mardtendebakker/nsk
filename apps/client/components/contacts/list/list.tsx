@@ -7,11 +7,11 @@ import {
   Pagination,
 } from '@mui/material';
 import { useRouter } from 'next/router';
-import Edit from '../../../button/edit';
-import { CUSTOMERS_CONTACTS } from '../../../../utils/routes';
-import Delete from '../../../button/delete';
-import useTranslation from '../../../../hooks/useTranslation';
-import { CompanyListItem } from '../../../../utils/axios/models/company';
+import Edit from '../../button/edit';
+import { CONTACTS_CUSTOMERS } from '../../../utils/routes';
+import Delete from '../../button/delete';
+import useTranslation from '../../../hooks/useTranslation';
+import { CompanyListItem } from '../../../utils/axios/models/company';
 
 export default function List({
   companies = [],
@@ -51,7 +51,7 @@ export default function List({
               {trans('email')}
             </TableCell>
             <TableCell>
-              {trans(router.pathname == CUSTOMERS_CONTACTS ? 'isPartner' : 'partner')}
+              {trans(router.pathname == CONTACTS_CUSTOMERS ? 'isPartner' : 'partner')}
             </TableCell>
             <TableCell>
               {trans('actions')}
@@ -80,7 +80,7 @@ export default function List({
                 {company.email || '--'}
               </TableCell>
               <TableCell>
-                {router.pathname == CUSTOMERS_CONTACTS
+                {router.pathname == CONTACTS_CUSTOMERS
                   ? (Boolean(company.is_partner) || '--')
                   : company.partner?.name || '--'}
               </TableCell>

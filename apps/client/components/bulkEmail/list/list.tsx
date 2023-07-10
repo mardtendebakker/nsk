@@ -7,7 +7,7 @@ import {
   Pagination,
   Checkbox,
 } from '@mui/material';
-import useTranslation from '../../../../hooks/useTranslation';
+import useTranslation from '../../../hooks/useTranslation';
 
 export default function List({
   emails = [],

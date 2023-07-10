@@ -457,6 +457,7 @@ const translation = {
     },
   },
   isPublic: 'Openbaar',
+  isPartner: 'Is partner',
   text: 'Tekst',
   select: 'Selecteer',
   file: 'Bestand',
@@ -501,6 +502,7 @@ const translation = {
   supplierInfo: 'Leverancier informatie',
   driverInfo: 'Bestuurder informatie',
   vehicleInfo: 'Voertuig informatie',
+  contacts: 'Contacten',
   // http status
   200: 'Actie succesvol afgerond',
   201: 'Bron gemaakt',

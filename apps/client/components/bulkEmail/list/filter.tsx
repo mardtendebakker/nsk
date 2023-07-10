@@ -2,12 +2,12 @@ import { Box } from '@mui/material';
 import Search from '@mui/icons-material/Search';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import moment from 'moment';
-import MemoizedTextField from '../../../memoizedInput/textField';
-import Autocomplete from '../../../memoizedInput/autocomplete';
-import useTranslation from '../../../../hooks/useTranslation';
-import { FormRepresentation, SetValue } from '../../../../hooks/useForm';
-import TextField from '../../../input/textField';
-import BorderedBox from '../../../borderedBox';
+import MemoizedTextField from '../../memoizedInput/textField';
+import Autocomplete from '../../memoizedInput/autocomplete';
+import useTranslation from '../../../hooks/useTranslation';
+import { FormRepresentation, SetValue } from '../../../hooks/useForm';
+import TextField from '../../input/textField';
+import BorderedBox from '../../borderedBox';
 
 export default function Filter({
   disabled,
