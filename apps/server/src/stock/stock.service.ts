@@ -530,12 +530,14 @@ export class StockService {
       }
     }
 
-    // join fileIdsCommon and fileIdsUploaded and 
+    // group files by attribute id
     const filesGroupByAttributeId: Record<string, Express.Multer.File[]> = files.reduce((acc, obj) => {
       const { fieldname } = obj;
+
       if (!acc[fieldname]) {
         acc[fieldname] = [];
       }
+      
       acc[fieldname].push(obj);
       return acc;
     }, {});
