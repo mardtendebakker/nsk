@@ -6,14 +6,14 @@ import { useRouter } from 'next/router';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import Check from '@mui/icons-material/Check';
 import { SyntheticEvent } from 'react';
-import Form from '../../../components/companies/contacts/form';
+import Form from '../../../components/contacts/form';
 import DashboardLayout from '../../../layouts/dashboard';
 import useAxios from '../../../hooks/useAxios';
 import { AxiosResponse, SUPPLIERS_PATH } from '../../../utils/axios';
-import { SUPPLIERS_CONTACTS, SUPPLIERS_CONTACTS_EDIT } from '../../../utils/routes';
+import { CONTACTS_SUPPLIERS_EDIT, CONTACTS_SUPPLIERS } from '../../../utils/routes';
 import useForm from '../../../hooks/useForm';
 import useTranslation from '../../../hooks/useTranslation';
-import { initFormState, formRepresentationToBody } from '../../customers/contacts/new';
+import { initFormState, formRepresentationToBody } from '../customers/new';
 
 const formState = initFormState();
 
@@ -39,7 +39,7 @@ function NewSupplierContact() {
     call({
       body: formRepresentationToBody(formRepresentation),
     }).then((response: AxiosResponse) => {
-      router.push(SUPPLIERS_CONTACTS_EDIT.replace(':id', response.data.id));
+      router.push(CONTACTS_SUPPLIERS_EDIT.replace(':id', response.data.id));
     });
   };
 
@@ -61,13 +61,14 @@ function NewSupplierContact() {
           }}
         >
           <Typography variant="h4">
-            <IconButton onClick={() => router.push(SUPPLIERS_CONTACTS)}>
+            <IconButton onClick={() => router.push(CONTACTS_SUPPLIERS)}>
               <ArrowBack />
             </IconButton>
             {trans('newContact')}
           </Typography>
           <Box>
-            <Button size="small"
+            <Button
+              size="small"
               type="submit"
               sx={{ ml: '1.5rem' }}
               variant="contained"

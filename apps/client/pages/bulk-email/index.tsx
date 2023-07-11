@@ -1,11 +1,11 @@
 import Head from 'next/head';
 import { Box } from '@mui/material';
-import useTranslation from '../../../hooks/useTranslation';
-import List from '../../../components/companies/emails/list';
-import DashboardLayout from '../../../layouts/dashboard';
-import Header from '../../../components/companies/suppliers/header';
+import useTranslation from '../../hooks/useTranslation';
+import List from '../../components/bulkEmail/list';
+import DashboardLayout from '../../layouts/dashboard';
+import Header from '../../components/bulkEmail/header';
 
-function SuppliersEmails() {
+function BulkEmails() {
   const { trans } = useTranslation();
 
   return (
@@ -20,4 +20,4 @@ function SuppliersEmails() {
   );
 }
 
-export default SuppliersEmails;
+export default BulkEmails;

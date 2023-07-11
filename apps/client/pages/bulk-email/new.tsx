@@ -6,16 +6,16 @@ import { useRouter } from 'next/router';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import Check from '@mui/icons-material/Check';
 import { SyntheticEvent } from 'react';
-import Form from '../../../components/companies/emails/form';
-import DashboardLayout from '../../../layouts/dashboard';
-import useAxios from '../../../hooks/useAxios';
-import { SUPPLIERS_PATH } from '../../../utils/axios';
-import { SUPPLIERS_EMAILS } from '../../../utils/routes';
-import useForm, { FormRepresentation } from '../../../hooks/useForm';
-import useTranslation from '../../../hooks/useTranslation';
-import { Company } from '../../../utils/axios/models/company';
+import Form from '../../components/bulkEmail/form';
+import DashboardLayout from '../../layouts/dashboard';
+import useAxios from '../../hooks/useAxios';
+import { CUSTOMERS_PATH } from '../../utils/axios';
+import { BULK_EMAIL } from '../../utils/routes';
+import useForm, { FormRepresentation } from '../../hooks/useForm';
+import useTranslation from '../../hooks/useTranslation';
+import { Company } from '../../utils/axios/models/company';
 
-export function initFormState(company?: Company) {
+export function initFormState(customer?: Company) {
   return {
   };
 }
@@ -27,7 +27,7 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
   };
 }
 
-function NewSupplierEmail() {
+function NewBulkEmail() {
   const { trans } = useTranslation();
   const router = useRouter();
 
@@ -49,11 +49,11 @@ function NewSupplierEmail() {
     call(
       {
         body: formRepresentationToBody(formRepresentation),
-        path: SUPPLIERS_PATH.replace(':id', ''),
+        path: CUSTOMERS_PATH.replace(':id', ''),
       },
       (err) => {
         if (!err) {
-          router.push(SUPPLIERS_EMAILS);
+          router.push(BULK_EMAIL);
         }
       },
     );
@@ -76,13 +76,14 @@ function NewSupplierEmail() {
         }}
       >
         <Typography variant="h4">
-          <IconButton onClick={() => router.push(SUPPLIERS_EMAILS)}>
+          <IconButton onClick={() => router.push(BULK_EMAIL)}>
             <ArrowBack />
           </IconButton>
           {trans('newEmail')}
         </Typography>
         <Box>
-          <Button size="small"
+          <Button
+            size="small"
             sx={{ ml: '1.5rem' }}
             variant="contained"
             onClick={handleSubmit}
@@ -102,4 +103,4 @@ function NewSupplierEmail() {
   );
 }
 
-export default NewSupplierEmail;
+export default NewBulkEmail;

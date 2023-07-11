@@ -2,14 +2,14 @@ import { Box } from '@mui/material';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import moment from 'moment';
 import { useRef } from 'react';
-import MemoizedTextField from '../../../memoizedInput/textField';
-import Autocomplete from '../../../memoizedInput/autocomplete';
-import useTranslation from '../../../../hooks/useTranslation';
-import { FormRepresentation, SetValue } from '../../../../hooks/useForm';
-import TextField from '../../../input/textField';
-import BorderedBox from '../../../borderedBox';
-import SearchAccordion from '../../../searchAccordion';
-import debounce from '../../../../utils/debounce';
+import MemoizedTextField from '../../memoizedInput/textField';
+import Autocomplete from '../../memoizedInput/autocomplete';
+import useTranslation from '../../../hooks/useTranslation';
+import { FormRepresentation, SetValue } from '../../../hooks/useForm';
+import TextField from '../../input/textField';
+import BorderedBox from '../../borderedBox';
+import SearchAccordion from '../../searchAccordion';
+import debounce from '../../../utils/debounce';
 
 export default function Filter({
   disabled,

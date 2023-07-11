@@ -8,11 +8,11 @@ import {
 import { SyntheticEvent } from 'react';
 import dynamic from 'next/dynamic';
 import { EditorProps } from 'react-draft-wysiwyg';
-import useTranslation from '../../../hooks/useTranslation';
-import { FormRepresentation, SetValue } from '../../../hooks/useForm';
-import TextField from '../../memoizedInput/textField';
-import BaseTextField from '../../input/textField';
-import Autocomplete from '../../memoizedInput/autocomplete';
+import useTranslation from '../../hooks/useTranslation';
+import { FormRepresentation, SetValue } from '../../hooks/useForm';
+import TextField from '../memoizedInput/textField';
+import BaseTextField from '../input/textField';
+import Autocomplete from '../memoizedInput/autocomplete';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 const Editor = dynamic<EditorProps>(

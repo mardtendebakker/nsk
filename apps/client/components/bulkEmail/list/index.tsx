@@ -3,10 +3,10 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import List from './list';
 import Filter from './filter';
-import useAxios from '../../../../hooks/useAxios';
-import { CUSTOMERS_PATH } from '../../../../utils/axios';
-import { CUSTOMERS_EMAILS } from '../../../../utils/routes';
-import useForm from '../../../../hooks/useForm';
+import useAxios from '../../../hooks/useAxios';
+import { CUSTOMERS_PATH } from '../../../utils/axios';
+import { BULK_EMAIL } from '../../../utils/routes';
+import useForm from '../../../hooks/useForm';
 
 function refreshList({
   page,
@@ -38,7 +38,7 @@ function refreshList({
     },
   }).finally(() => {
     const paramsString = params.toString();
-    const newPath = paramsString ? `${CUSTOMERS_EMAILS}?${params.toString()}` : CUSTOMERS_EMAILS;
+    const newPath = paramsString ? `${BULK_EMAIL}?${params.toString()}` : BULK_EMAIL;
 
     if (newPath != router.asPath) {
       router.replace(newPath);

@@ -7,13 +7,13 @@ import {
   Grid,
   Typography,
 } from '@mui/material';
-import { COMPANIES_PATH } from '../../../utils/axios';
-import useTranslation from '../../../hooks/useTranslation';
-import { FormRepresentation, SetValue } from '../../../hooks/useForm';
-import TextField from '../../memoizedInput/textField';
-import Autocomplete from '../../memoizedInput/autocomplete';
-import BaseTextField from '../../input/textField';
-import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
+import { COMPANIES_PATH } from '../../utils/axios';
+import useTranslation from '../../hooks/useTranslation';
+import { FormRepresentation, SetValue } from '../../hooks/useForm';
+import TextField from '../memoizedInput/textField';
+import Autocomplete from '../memoizedInput/autocomplete';
+import BaseTextField from '../input/textField';
+import DataSourcePicker from '../memoizedInput/dataSourcePicker';
 
 function Form({
   formRepresentation,

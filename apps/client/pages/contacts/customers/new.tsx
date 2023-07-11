@@ -6,11 +6,11 @@ import { useRouter } from 'next/router';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import Check from '@mui/icons-material/Check';
 import { SyntheticEvent } from 'react';
-import Form from '../../../components/companies/contacts/form';
+import Form from '../../../components/contacts/form';
 import DashboardLayout from '../../../layouts/dashboard';
 import useAxios from '../../../hooks/useAxios';
 import { AxiosResponse, CUSTOMERS_PATH } from '../../../utils/axios';
-import { CUSTOMERS_CONTACTS, CUSTOMERS_CONTACTS_EDIT } from '../../../utils/routes';
+import { CONTACTS_CUSTOMERS_EDIT, CONTACTS_CUSTOMERS } from '../../../utils/routes';
 import useForm, { FormRepresentation } from '../../../hooks/useForm';
 import useTranslation from '../../../hooks/useTranslation';
 import { Company } from '../../../utils/axios/models/company';
@@ -81,8 +81,6 @@ export function initFormState(company?: Company) {
   };
 }
 
-const formState = initFormState();
-
 export function formRepresentationToBody(formRepresentation: FormRepresentation): object {
   return {
     name: formRepresentation.name.value,
@@ -108,6 +106,8 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
   };
 }
 
+const formState = initFormState();
+
 function NewCustomerContact() {
   const { trans } = useTranslation();
   const router = useRouter();
@@ -130,7 +130,7 @@ function NewCustomerContact() {
     call({
       body: formRepresentationToBody(formRepresentation),
     }).then((response: AxiosResponse) => {
-      router.push(CUSTOMERS_CONTACTS_EDIT.replace(':id', response.data.id));
+      router.push(CONTACTS_CUSTOMERS_EDIT.replace(':id', response.data.id));
     });
   };
 
@@ -152,13 +152,14 @@ function NewCustomerContact() {
           }}
         >
           <Typography variant="h4">
-            <IconButton onClick={() => router.push(CUSTOMERS_CONTACTS)}>
+            <IconButton onClick={() => router.push(CONTACTS_CUSTOMERS)}>
               <ArrowBack />
             </IconButton>
             {trans('newContact')}
           </Typography>
           <Box>
-            <Button size="small"
+            <Button
+              size="small"
               type="submit"
               sx={{ ml: '1.5rem' }}
               variant="contained"

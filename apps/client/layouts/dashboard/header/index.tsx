@@ -10,14 +10,13 @@ import {
   DASHBOARD,
   ORDERS_PURCHASES,
   ORDERS_SALES,
-  CUSTOMERS_CONTACTS,
-  CUSTOMERS_EMAILS,
   STOCKS_PRODUCTS,
   STOCKS_REPAIR_SERVICES,
   MY_TASKS,
-  SUPPLIERS_CONTACTS,
-  SUPPLIERS_EMAILS,
   LOGISTICS,
+  CONTACTS_CUSTOMERS,
+  CONTACTS_SUPPLIERS,
+  BULK_EMAIL,
 } from '../../../utils/routes';
 import useTranslation from '../../../hooks/useTranslation';
 
@@ -76,16 +75,15 @@ export default function Header() {
               active: router.pathname.includes(ORDERS_PURCHASES) || router.pathname.includes(ORDERS_SALES),
             },
             {
-              title: trans('customers'),
-              path: CUSTOMERS_CONTACTS,
-              active: router.pathname.includes(CUSTOMERS_CONTACTS)
-               || router.pathname.includes(CUSTOMERS_EMAILS),
+              title: trans('contacts'),
+              path: CONTACTS_CUSTOMERS,
+              active: router.pathname.includes(CONTACTS_CUSTOMERS)
+               || router.pathname.includes(CONTACTS_SUPPLIERS),
             },
             {
-              title: trans('suppliers'),
-              path: SUPPLIERS_CONTACTS,
-              active: router.pathname.includes(SUPPLIERS_CONTACTS)
-               || router.pathname.includes(SUPPLIERS_EMAILS),
+              title: trans('bulkEmail'),
+              path: BULK_EMAIL,
+              active: router.pathname.includes(BULK_EMAIL),
             },
             {
               title: trans('logistics'),

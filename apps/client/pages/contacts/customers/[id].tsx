@@ -6,33 +6,33 @@ import { useRouter } from 'next/router';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import Check from '@mui/icons-material/Check';
 import { SyntheticEvent, useEffect, useMemo } from 'react';
-import Form from '../../../components/companies/contacts/form';
+import Form from '../../../components/contacts/form';
 import DashboardLayout from '../../../layouts/dashboard';
 import useAxios from '../../../hooks/useAxios';
-import { SUPPLIERS_PATH } from '../../../utils/axios';
-import { SUPPLIERS_CONTACTS } from '../../../utils/routes';
+import { CUSTOMERS_PATH } from '../../../utils/axios';
+import { CONTACTS_CUSTOMERS_NEW, CONTACTS_CUSTOMERS } from '../../../utils/routes';
 import useForm from '../../../hooks/useForm';
 import useTranslation from '../../../hooks/useTranslation';
-import { formRepresentationToBody, initFormState } from '../../customers/contacts/new';
+import { initFormState, formRepresentationToBody } from './new';
 
-function EditSupplierContact() {
+function EditCustomerContact() {
   const { trans } = useTranslation();
   const router = useRouter();
   const { id } = router.query;
 
   const { call, performing } = useAxios(
     'put',
-    SUPPLIERS_PATH.replace(':id', id.toString()),
+    CUSTOMERS_PATH.replace(':id', id.toString()),
     { withProgressBar: true, showSuccessMessage: true },
   );
 
-  const { call: callGet, performing: performingGet, data: supplier } = useAxios(
+  const { call: callGet, performing: performingGet, data: customer } = useAxios(
     'get',
-    SUPPLIERS_PATH.replace(':id', id.toString()),
+    CUSTOMERS_PATH.replace(':id', id.toString()),
     { withProgressBar: true },
   );
 
-  const { formRepresentation, setValue, validate } = useForm(useMemo(() => initFormState(supplier), [supplier]));
+  const { formRepresentation, setValue, validate } = useForm(useMemo(() => initFormState(customer), [customer]));
 
   const canSubmit = () => !performing && !performingGet;
 
@@ -45,7 +45,7 @@ function EditSupplierContact() {
 
     call({
       body: formRepresentationToBody(formRepresentation),
-      path: SUPPLIERS_PATH.replace(':id', id.toString()),
+      path: CUSTOMERS_PATH.replace(':id', id.toString()),
     });
   };
 
@@ -54,7 +54,7 @@ function EditSupplierContact() {
       callGet()
         .catch((error) => {
           if (error && error?.status !== 200) {
-            router.push(SUPPLIERS_CONTACTS.replace(':id', 'new'));
+            router.push(CONTACTS_CUSTOMERS_NEW);
           }
         });
     }
@@ -78,13 +78,14 @@ function EditSupplierContact() {
           }}
         >
           <Typography variant="h4">
-            <IconButton onClick={() => router.push(SUPPLIERS_CONTACTS)}>
+            <IconButton onClick={() => router.push(CONTACTS_CUSTOMERS)}>
               <ArrowBack />
             </IconButton>
             {trans('editContact')}
           </Typography>
           <Box>
-            <Button size="small"
+            <Button
+              size="small"
               type="submit"
               sx={{ ml: '1.5rem' }}
               variant="contained"
@@ -96,7 +97,7 @@ function EditSupplierContact() {
           </Box>
         </Box>
         <Form
-          type="supplier"
+          type="customer"
           formRepresentation={formRepresentation}
           disabled={!canSubmit()}
           setValue={setValue}
@@ -106,4 +107,4 @@ function EditSupplierContact() {
   );
 }
 
-export default EditSupplierContact;
+export default EditCustomerContact;
