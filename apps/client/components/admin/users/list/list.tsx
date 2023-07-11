@@ -33,29 +33,43 @@ export default function List({
         <TableHead>
           <TableRow>
             <TableCell>
-              {trans('id')}
-            </TableCell>
-            <TableCell>
-              {trans('name')}
-            </TableCell>
-            <TableCell>
-              {trans('role')}
+              {trans('username')}
             </TableCell>
             <TableCell>
               {trans('status')}
             </TableCell>
             <TableCell>
+              {trans('enabled')}
+            </TableCell>
+            <TableCell>
               {trans('createdAt')}
             </TableCell>
             <TableCell>
-              {trans('lastActive')}
-            </TableCell>
-            <TableCell>
-              {trans('actions')}
+              {trans('lastModifiedAt')}
             </TableCell>
           </TableRow>
         </TableHead>
-        <TableBody />
+        <TableBody>
+          {users.map((user: UserListItem) => (
+            <TableRow key={user.Username}>
+              <TableCell>
+                {user.Username}
+              </TableCell>
+              <TableCell>
+                {user.UserStatus}
+              </TableCell>
+              <TableCell>
+                {user.Enabled ? 'True' : 'False'}
+              </TableCell>
+              <TableCell>
+                {user.UserCreateDate}
+              </TableCell>
+              <TableCell>
+                {user.UserLastModifiedDate}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
       </Table>
       <Pagination
         disabled={disabled}

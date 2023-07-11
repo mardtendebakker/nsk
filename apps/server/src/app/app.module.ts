@@ -23,6 +23,7 @@ import { PickupModule } from '../pickup/pickup.module';
 import { LogisticModule } from '../logistic/logistic.module';
 import { AttributeModule } from '../attribute/attribute.module';
 import { TaskModule } from '../task/task.module';
+import { AdminUserModule } from '../admin/user/user.module';
 
 @Module({
   imports: [
@@ -61,6 +62,7 @@ import { TaskModule } from '../task/task.module';
     LogisticModule,
     AttributeModule,
     TaskModule,
+    AdminUserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
