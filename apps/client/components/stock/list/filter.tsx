@@ -27,6 +27,7 @@ export default function Filter({
           onSearchChange={(value: string) => setValue({ field: 'search', value })}
           searchValue={formRepresentation.search.value?.toString() || ''}
           onReset={onReset}
+          searchLabel={trans('searchBySerialNumberOrName')}
         >
           <Box sx={{ flex: 1, display: 'flex', alignItems: 'center' }}>
             <DataSourcePicker

@@ -113,6 +113,7 @@ const translation = {
   createdAt: 'Gemaakt bij',
   createProduct: 'Product maken',
   searchByCustomerNameOrEmail: 'Zoeken op klantnaam of e-mail',
+  searchBySerialNumberOrName: 'Zoeken op serienummer of naam',
   contact: 'Contact',
   bulkEmail: 'Bulk email',
   basicDetails: 'Basisgegevens',

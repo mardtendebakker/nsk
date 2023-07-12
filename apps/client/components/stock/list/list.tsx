@@ -48,7 +48,7 @@ function Row(
             sx={{ mr: '1.5rem' }}
             onChange={(_, checked) => onCheck({ id: product.id, checked })}
           />
-          {stockProductsPage ? product.sku : product.order_nr}
+          {product.sku}
         </TableCell>
         <TableCell>
           {product.name || '--'}
@@ -64,7 +64,7 @@ function Row(
         )}
         {!stockProductsPage && (
         <TableCell>
-          {moment(product.order_date.toString()).format('YYYY/MM/DD')}
+          {product.order_date ? moment(product.order_date.toString()).format('YYYY/MM/DD') : '--'}
         </TableCell>
         )}
         {stockProductsPage && (
@@ -159,16 +159,9 @@ export default function List({
       <Table>
         <TableHead>
           <TableRow>
-            {stockProductsPage && (
-              <TableCell>
-                {trans('serialNumber')}
-              </TableCell>
-            )}
-            {!stockProductsPage && (
-              <TableCell>
-                {trans('orderNumber')}
-              </TableCell>
-            )}
+            <TableCell>
+              {trans('serialNumber')}
+            </TableCell>
             <TableCell>
               {trans('productName/type')}
             </TableCell>
