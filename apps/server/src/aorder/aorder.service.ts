@@ -67,12 +67,12 @@ export class AOrderService {
     };
 
     if (query.partner !== undefined) {
-      if (this.type !== AOrderDiscrimination.PURCHASE) {
+      if (this.type !== AOrderDiscrimination.SALE) {
         where.acompany_aorder_supplier_idToacompany = {
           partner_id: query.partner,
         };
       }
-      if (this.type !== AOrderDiscrimination.SALE) {
+      if (this.type !== AOrderDiscrimination.PURCHASE) {
         where.acompany_aorder_customer_idToacompany = {
           partner_id: query.partner,
         };
