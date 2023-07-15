@@ -21,6 +21,7 @@ import Action from './action';
 import ConfirmationDialog from '../../confirmationDialog';
 import useTranslation from '../../../hooks/useTranslation';
 import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
+import pushURLParams from '../../../utils/pushURLParams';
 
 function initFormState(
   {
@@ -59,6 +60,7 @@ function initFormState(
 
 function refreshList({
   page,
+  rowsPerPage = 10,
   formRepresentation,
   router,
   call,
@@ -68,6 +70,8 @@ function refreshList({
   if (page > 1) {
     params.append('page', page.toString());
   }
+
+  params.append('rowsPerPage', rowsPerPage.toString());
 
   const paramsToSend = {};
 
@@ -92,19 +96,12 @@ function refreshList({
 
   call({
     params: {
-      take: 10,
-      skip: (page - 1) * 10,
+      take: rowsPerPage,
+      skip: (page - 1) * rowsPerPage,
       ...paramsToSend,
       orderBy: JSON.stringify(orderBy),
     },
-  }).finally(() => {
-    const paramsString = params.toString();
-    const newPath = paramsString ? `${router.pathname}?${params.toString()}` : router.pathname;
-
-    if (newPath != router.asPath) {
-      router.replace(newPath);
-    }
-  });
+  }).finally(() => pushURLParams({ params, router }));
 }
 
 export default function ListContainer() {
@@ -113,6 +110,7 @@ export default function ListContainer() {
   const [changeStatusValue, setChangeStatusValue] = useState<number | undefined>();
   const router = useRouter();
   const [page, setPage] = useState<number>(parseInt(router.query?.page?.toString() || '1', 10));
+  const [rowsPerPage, setRowsPerPage] = useState<number>(parseInt(router.query?.rowsPerPage?.toString() || '10', 10));
   const [checkedOrderIds, setCheckedOrderIds] = useState<number[]>([]);
 
   const ajaxPath = router.pathname == ORDERS_PURCHASES ? PURCHASE_ORDERS_PATH : SALES_ORDERS_PATH;
@@ -162,12 +160,14 @@ export default function ListContainer() {
   useEffect(() => {
     refreshList({
       page,
+      rowsPerPage,
       formRepresentation,
       router,
       call,
     });
   }, [
     page,
+    rowsPerPage,
     formRepresentation.search.value,
     formRepresentation.status.value?.toString(),
     formRepresentation.partner.value?.toString(),
@@ -195,6 +195,7 @@ export default function ListContainer() {
         setCheckedOrderIds([]);
         refreshList({
           page,
+          rowsPerPage,
           formRepresentation,
           router,
           call,
@@ -208,6 +209,7 @@ export default function ListContainer() {
         setCheckedOrderIds([]);
         refreshList({
           page,
+          rowsPerPage,
           formRepresentation,
           router,
           call,
@@ -259,11 +261,16 @@ export default function ListContainer() {
       <List
         disabled={disabled()}
         orders={data}
-        count={Math.ceil(count / 10)}
+        count={Math.ceil(count / rowsPerPage)}
         page={page}
         onCheck={handleRowChecked}
         checkedOrderIds={checkedOrderIds}
         onPageChange={(newPage) => setPage(newPage)}
+        onRowsPerPageChange={(newRowsPerPage) => {
+          setRowsPerPage(newRowsPerPage);
+          setPage(1);
+        }}
+        rowsPerPage={rowsPerPage}
       />
       {showChangeStatusModal && (
       <ConfirmationDialog

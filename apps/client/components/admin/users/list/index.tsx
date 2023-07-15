@@ -5,14 +5,14 @@ import List from './list';
 import Filter from './filter';
 import useAxios from '../../../../hooks/useAxios';
 import { ADMIN_USERS_PATH } from '../../../../utils/axios';
-import { ADMIN_USERS } from '../../../../utils/routes';
 import useForm, { FieldPayload } from '../../../../hooks/useForm';
+import pushURLParams from '../../../../utils/pushURLParams';
 
 function initFormState(
   {
-    search, createdAt, createdBy, lastActive, role,
+    search, createdAt, createdBy, lastActive,
   }:
-  { search?: string, createdAt?: string, createdBy?: string, lastActive?: string, role?: string },
+  { search?: string, createdAt?: string, createdBy?: string, lastActive?: string },
 ) {
   return {
     search: {
@@ -27,14 +27,12 @@ function initFormState(
     lastActive: {
       value: lastActive || undefined,
     },
-    role: {
-      value: role || undefined,
-    },
   };
 }
 
 function refreshList({
   page,
+  rowsPerPage = 10,
   formRepresentation,
   router,
   call,
@@ -45,9 +43,11 @@ function refreshList({
     params.append('page', page.toString());
   }
 
+  params.append('rowsPerPage', page.toString());
+
   const paramsToSend = {};
 
-  ['search', 'createdAt', 'createdBy', 'lastActive', 'role'].forEach((filter) => {
+  ['search', 'createdAt', 'createdBy', 'lastActive'].forEach((filter) => {
     if (formRepresentation[filter].value || formRepresentation[filter].value === 0) {
       const value = formRepresentation[filter].value.toString();
       params.append(filter, value);
@@ -57,29 +57,23 @@ function refreshList({
 
   call({
     params: {
-      limit: 10,
+      limit: rowsPerPage,
+      skip: (page - 1) * rowsPerPage,
       ...paramsToSend,
     },
-  }).finally(() => {
-    const paramsString = params.toString();
-    const newPath = paramsString ? `${ADMIN_USERS}?${params.toString()}` : ADMIN_USERS;
-
-    if (newPath != router.asPath) {
-      router.replace(newPath);
-    }
-  });
+  }).finally(() => pushURLParams({ params, router }));
 }
 
 export default function ListContainer() {
   const router = useRouter();
   const [page, setPage] = useState<number>(parseInt(router.query?.page?.toString() || '1', 10));
+  const [rowsPerPage, setRowsPerPage] = useState<number>(parseInt(router.query?.rowsPerPage?.toString() || '10', 10));
 
   const { formRepresentation, setValue, setData } = useForm(initFormState({
     search: router.query?.search?.toString(),
     createdAt: router.query?.createdAt?.toString(),
     createdBy: router.query?.createdBy?.toString(),
     lastActive: router.query?.createdBy?.toString(),
-    role: router.query?.role?.toString(),
   }));
 
   const { data: { Users = [], count = 0 } = {}, call, performing } = useAxios(
@@ -93,15 +87,16 @@ export default function ListContainer() {
   useEffect(() => {
     refreshList({
       page,
+      rowsPerPage,
       formRepresentation,
       router,
       call,
     });
   }, [
     page,
+    rowsPerPage,
     formRepresentation.search.value,
     formRepresentation.createdAt.value,
-    formRepresentation.role.value,
     formRepresentation.lastActive.value,
     formRepresentation.createdBy.value,
   ]);
@@ -126,10 +121,14 @@ export default function ListContainer() {
       <List
         disabled={performing}
         users={Users}
-        count={Math.ceil(count / 10)}
+        count={count}
         page={page}
-        onCheck={() => {}}
         onPageChange={(newPage) => setPage(newPage)}
+        onRowsPerPageChange={(newRowsPerPage) => {
+          setRowsPerPage(newRowsPerPage);
+          setPage(1);
+        }}
+        rowsPerPage={rowsPerPage}
       />
     </Card>
   );

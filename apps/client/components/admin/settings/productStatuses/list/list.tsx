@@ -1,85 +1,82 @@
 import {
-  Table, TableBody, TableCell, TableHead, TableRow, Pagination, Box,
+  TableBody, TableCell, TableHead, TableRow, Box,
 } from '@mui/material';
 import Check from '@mui/icons-material/Check';
 import Edit from '../../../../button/edit';
 import { ProductStatus } from '../../../../../utils/axios/models/product';
 import useTranslation from '../../../../../hooks/useTranslation';
+import PaginatedTable from '../../../../paginatedTable';
 
 export default function List({
   productStatuses,
   onEdit,
   disabled,
   count,
-  onPageChange,
   page,
+  onPageChange,
+  onRowsPerPageChange,
+  rowsPerPage,
 }: {
   onEdit: (id: number) => void,
   productStatuses: ProductStatus[],
   count: number,
   page: number,
   onPageChange: (newPage: number)=>void,
+  onRowsPerPageChange: (rowsPerPage: number)=>void,
+  rowsPerPage: number,
   disabled: boolean
 }) {
   const { trans } = useTranslation();
 
   return (
-    <>
-      <Table>
-        <TableHead>
-          <TableRow>
+    <PaginatedTable
+      count={count}
+      page={page}
+      onPageChange={onPageChange}
+      onRowsPerPageChange={onRowsPerPageChange}
+      rowsPerPage={rowsPerPage}
+      disabled={disabled}
+    >
+      <TableHead>
+        <TableRow>
+          <TableCell>
+            {trans('name')}
+          </TableCell>
+          <TableCell>
+            {trans('saleable')}
+          </TableCell>
+          <TableCell>
+            {trans('stock')}
+          </TableCell>
+          <TableCell>
+            {trans('actions')}
+          </TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {productStatuses.map((productStatus: ProductStatus) => (
+          <TableRow key={productStatus.id}>
             <TableCell>
-              {trans('id')}
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                {productStatus.name}
+                <Box sx={{
+                  bgcolor: productStatus.color, width: '.7rem', height: '.7rem', borderRadius: '50%', ml: '.5rem',
+                }}
+                />
+              </Box>
             </TableCell>
             <TableCell>
-              {trans('name')}
+              {productStatus.is_saleable && <Check />}
             </TableCell>
             <TableCell>
-              {trans('saleable')}
+              {productStatus.is_stock && <Check />}
             </TableCell>
             <TableCell>
-              {trans('stock')}
-            </TableCell>
-            <TableCell>
-              {trans('actions')}
+              <Edit onClick={() => onEdit(productStatus.id)} disabled={disabled} />
             </TableCell>
           </TableRow>
-        </TableHead>
-        <TableBody>
-          {productStatuses.map((productStatus: ProductStatus) => (
-            <TableRow key={productStatus.id}>
-              <TableCell>
-                {productStatus.id}
-              </TableCell>
-              <TableCell>
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  {productStatus.name}
-                  <Box sx={{
-                    bgcolor: productStatus.color, width: '.7rem', height: '.7rem', borderRadius: '50%', ml: '.5rem',
-                  }}
-                  />
-                </Box>
-              </TableCell>
-              <TableCell>
-                {productStatus.is_saleable && <Check />}
-              </TableCell>
-              <TableCell>
-                {productStatus.is_stock && <Check />}
-              </TableCell>
-              <TableCell>
-                <Edit onClick={() => onEdit(productStatus.id)} disabled={disabled} />
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      <Pagination
-        sx={{ display: 'flex', justifyContent: 'end', mt: '2rem' }}
-        shape="rounded"
-        count={count}
-        onChange={(_, newPage) => onPageChange(newPage)}
-        page={page}
-      />
-    </>
+        ))}
+      </TableBody>
+    </PaginatedTable>
   );
 }

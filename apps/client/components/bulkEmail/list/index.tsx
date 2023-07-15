@@ -5,11 +5,12 @@ import List from './list';
 import Filter from './filter';
 import useAxios from '../../../hooks/useAxios';
 import { CUSTOMERS_PATH } from '../../../utils/axios';
-import { BULK_EMAIL } from '../../../utils/routes';
 import useForm from '../../../hooks/useForm';
+import pushURLParams from '../../../utils/pushURLParams';
 
 function refreshList({
   page,
+  rowsPerPage = 10,
   formRepresentation,
   router,
   call,
@@ -32,23 +33,17 @@ function refreshList({
 
   call({
     params: {
-      take: 10,
-      skip: (page - 1) * 10,
+      take: rowsPerPage,
+      skip: (page - 1) * rowsPerPage,
       ...paramsToSend,
     },
-  }).finally(() => {
-    const paramsString = params.toString();
-    const newPath = paramsString ? `${BULK_EMAIL}?${params.toString()}` : BULK_EMAIL;
-
-    if (newPath != router.asPath) {
-      router.replace(newPath);
-    }
-  });
+  }).finally(pushURLParams({ params, router }));
 }
 
 export default function ListContainer() {
   const router = useRouter();
   const [page, setPage] = useState<number>(parseInt(router.query?.page?.toString() || '1', 10));
+  const [rowsPerPage, setRowsPerPage] = useState<number>(parseInt(router.query?.rowsPerPage?.toString() || '10', 10));
   const status = router.query?.status?.toString();
 
   const { formRepresentation, setValue } = useForm({
@@ -74,12 +69,14 @@ export default function ListContainer() {
   useEffect(() => {
     /* refreshList({
       page,
+      rowsPerPage,
       formRepresentation,
       router,
       call,
     }); */
   }, [
     page,
+    rowsPerPage,
     formRepresentation.search.value,
     formRepresentation.status.value,
     formRepresentation.createdAt.value,
@@ -100,6 +97,11 @@ export default function ListContainer() {
         page={page}
         onCheck={() => {}}
         onPageChange={(newPage) => setPage(newPage)}
+        onRowsPerPageChange={(newRowsPerPage) => {
+          setRowsPerPage(newRowsPerPage);
+          setPage(1);
+        }}
+        rowsPerPage={rowsPerPage}
       />
     </Card>
   );

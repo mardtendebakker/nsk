@@ -4,7 +4,6 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  Pagination,
   Checkbox,
   Collapse,
 } from '@mui/material';
@@ -16,6 +15,7 @@ import { ProductListItem } from '../../../utils/axios/models/product';
 import TasksProgress from './tasksProgress';
 import TaskStatusTableCell from './taskStatusTableCell';
 import { STOCKS_PRODUCTS } from '../../../utils/routes';
+import PaginatedTable from '../../paginatedTable';
 
 type OnCheck = (object: { id: number, checked: boolean }) => void;
 type OnClick = (object: { id: number }) => void;
@@ -100,7 +100,7 @@ function Row(
       >
         <TableCell colSpan={9} sx={{ padding: 0 }}>
           <Collapse in={product.id == shownProductTasks} unmountOnExit mountOnEnter>
-            <Table sx={{ borderRadius: 0 }}>
+            <Table sx={{ borderRadius: 0 }} size="small">
               <TableHead>
                 <TableRow>
                   <TableCell>{trans('taskName')}</TableCell>
@@ -135,6 +135,8 @@ export default function List({
   count,
   page,
   onPageChange,
+  onRowsPerPageChange,
+  rowsPerPage,
   onCheck,
   checkedProductIds,
 }: {
@@ -142,6 +144,8 @@ export default function List({
   count: number,
   page: number,
   onPageChange: (newPage: number)=>void,
+  onRowsPerPageChange: (rowsPerPage: number)=>void,
+  rowsPerPage: number,
   onCheck: OnCheck,
   checkedProductIds: number[]
 }) {
@@ -155,77 +159,74 @@ export default function List({
   };
 
   return (
-    <>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>
-              {trans('serialNumber')}
-            </TableCell>
-            <TableCell>
-              {trans('productName/type')}
-            </TableCell>
-            <TableCell>
-              {trans('location')}
-            </TableCell>
-            {stockProductsPage && (
+    <PaginatedTable
+      count={count}
+      page={page}
+      onPageChange={onPageChange}
+      onRowsPerPageChange={onRowsPerPageChange}
+      rowsPerPage={rowsPerPage}
+    >
+      <TableHead>
+        <TableRow>
+          <TableCell>
+            {trans('serialNumber')}
+          </TableCell>
+          <TableCell>
+            {trans('productName/type')}
+          </TableCell>
+          <TableCell>
+            {trans('location')}
+          </TableCell>
+          {stockProductsPage && (
             <TableCell>
               {trans('price')}
             </TableCell>
-            )}
-            {!stockProductsPage && (
+          )}
+          {!stockProductsPage && (
             <TableCell>
               {trans('orderDate')}
             </TableCell>
-            )}
-            {stockProductsPage && (
+          )}
+          {stockProductsPage && (
             <TableCell>
               {trans('purchased')}
             </TableCell>
-            )}
-            <TableCell>
-              {trans('inStock')}
-            </TableCell>
-            <TableCell>
-              {trans('ready')}
-            </TableCell>
-            {stockProductsPage && (
+          )}
+          <TableCell>
+            {trans('inStock')}
+          </TableCell>
+          <TableCell>
+            {trans('ready')}
+          </TableCell>
+          {stockProductsPage && (
             <TableCell>
               {trans('sold')}
             </TableCell>
-            )}
-            {!stockProductsPage && (
+          )}
+          {!stockProductsPage && (
             <TableCell>
               {trans('delivered')}
             </TableCell>
-            )}
-            <TableCell>
-              {trans('taskStatus')}
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {products.map(
-            (product: ProductListItem) => (
-              <Row
-                shownProductTasks={shownProductTasks}
-                onClick={handleClick}
-                key={product.id}
-                checkedProductIds={checkedProductIds}
-                product={product}
-                onCheck={onCheck}
-              />
-            ),
           )}
-        </TableBody>
-      </Table>
-      <Pagination
-        sx={{ display: 'flex', justifyContent: 'end', mt: '2rem' }}
-        shape="rounded"
-        count={count}
-        onChange={(_, newPage) => onPageChange(newPage)}
-        page={page}
-      />
-    </>
+          <TableCell>
+            {trans('taskStatus')}
+          </TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {products.map(
+          (product: ProductListItem) => (
+            <Row
+              shownProductTasks={shownProductTasks}
+              onClick={handleClick}
+              key={product.id}
+              checkedProductIds={checkedProductIds}
+              product={product}
+              onCheck={onCheck}
+            />
+          ),
+        )}
+      </TableBody>
+    </PaginatedTable>
   );
 }
