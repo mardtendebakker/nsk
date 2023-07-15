@@ -3,5 +3,9 @@ export interface User {
 }
 
 export interface UserListItem {
-  id?: string,
+  Username?: string,
+  Enabled?: string,
+  UserCreateDate?: string,
+  UserLastModifiedDate?: string,
+  UserStatus?: string,
 }

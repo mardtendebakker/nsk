@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import List from './list';
 import Filter from './filter';
 import useAxios from '../../../../hooks/useAxios';
-import { USERS_PATH } from '../../../../utils/axios';
+import { ADMIN_USERS_PATH } from '../../../../utils/axios';
 import { ADMIN_USERS } from '../../../../utils/routes';
 import useForm, { FieldPayload } from '../../../../hooks/useForm';
 
@@ -57,8 +57,7 @@ function refreshList({
 
   call({
     params: {
-      take: 10,
-      skip: (page - 1) * 10,
+      limit: 10,
       ...paramsToSend,
     },
   }).finally(() => {
@@ -83,9 +82,9 @@ export default function ListContainer() {
     role: router.query?.role?.toString(),
   }));
 
-  const { data: { data = [], count = 0 } = {}, call, performing } = useAxios(
+  const { data: { Users = [], count = 0 } = {}, call, performing } = useAxios(
     'get',
-    USERS_PATH.replace(':id', ''),
+    ADMIN_USERS_PATH.replace(':id', ''),
     {
       withProgressBar: true,
     },
@@ -126,7 +125,7 @@ export default function ListContainer() {
       <Box sx={{ m: '1rem' }} />
       <List
         disabled={performing}
-        users={data}
+        users={Users}
         count={Math.ceil(count / 10)}
         page={page}
         onCheck={() => {}}

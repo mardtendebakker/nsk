@@ -7,6 +7,7 @@ import {
   Pagination,
   Checkbox,
 } from '@mui/material';
+import moment from 'moment';
 import useTranslation from '../../../../hooks/useTranslation';
 import { UserListItem } from '../../../../utils/axios/models/user';
 
@@ -33,29 +34,43 @@ export default function List({
         <TableHead>
           <TableRow>
             <TableCell>
-              {trans('id')}
-            </TableCell>
-            <TableCell>
-              {trans('name')}
-            </TableCell>
-            <TableCell>
-              {trans('role')}
+              {trans('username')}
             </TableCell>
             <TableCell>
               {trans('status')}
             </TableCell>
             <TableCell>
+              {trans('enabled')}
+            </TableCell>
+            <TableCell>
               {trans('createdAt')}
             </TableCell>
             <TableCell>
-              {trans('lastActive')}
-            </TableCell>
-            <TableCell>
-              {trans('actions')}
+              {trans('lastModifiedAt')}
             </TableCell>
           </TableRow>
         </TableHead>
-        <TableBody />
+        <TableBody>
+          {users.map((user: UserListItem) => (
+            <TableRow key={user.Username}>
+              <TableCell>
+                {user.Username}
+              </TableCell>
+              <TableCell>
+                {user.UserStatus}
+              </TableCell>
+              <TableCell>
+                {user.Enabled ? 'True' : 'False'}
+              </TableCell>
+              <TableCell>
+                {moment(user.UserCreateDate).format('Y/MM/DD')}
+              </TableCell>
+              <TableCell>
+                {moment(user.UserLastModifiedDate).format('Y/MM/DD')}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
       </Table>
       <Pagination
         disabled={disabled}
