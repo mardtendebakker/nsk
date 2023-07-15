@@ -123,7 +123,6 @@ export class StockService {
     const productwhere: Prisma.productWhereInput = {
       ...query.where,
       ...(query.orderId && { product_order: { some: { order_id: query.orderId } } }),
-      ...(query.search && { name: { contains: query.search } }),
       ...(query.productType && { type_id: query.productType }),
       ...(query.location && { location_id: query.location }),
       OR: [{
@@ -137,7 +136,10 @@ export class StockService {
             is_stock: true
           }]
         }
-      }]
+      }],
+      AND: {
+        OR: query.search ? [ { name: { contains: query.search } }, { sku: { contains: query.search } }] : undefined
+      }
     }
 
     const productOrderBy: Prisma.productOrderByWithRelationInput[] = query.orderBy || [
