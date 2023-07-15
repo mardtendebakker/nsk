@@ -7,6 +7,7 @@ import {
   Pagination,
   Checkbox,
 } from '@mui/material';
+import moment from 'moment';
 import useTranslation from '../../../../hooks/useTranslation';
 import { UserListItem } from '../../../../utils/axios/models/user';
 
@@ -62,10 +63,10 @@ export default function List({
                 {user.Enabled ? 'True' : 'False'}
               </TableCell>
               <TableCell>
-                {user.UserCreateDate}
+                {moment(user.UserCreateDate).format('Y/MM/DD')}
               </TableCell>
               <TableCell>
-                {user.UserLastModifiedDate}
+                {moment(user.UserLastModifiedDate).format('Y/MM/DD')}
               </TableCell>
             </TableRow>
           ))}
