@@ -2,11 +2,13 @@ import {
   Box, Card, CardContent, IconButton, MenuItem, MenuList, Table, TableBody, TableCell, TableHead, TableRow, Typography,
 } from '@mui/material';
 import Head from 'next/head';
-import moment, { Moment } from 'moment';
 import { useEffect, useState } from 'react';
 import ChevronRight from '@mui/icons-material/ChevronRight';
 import ChevronLeft from '@mui/icons-material/ChevronLeft';
 import Search from '@mui/icons-material/Search';
+import {
+  addDays, differenceInMinutes, format, setHours, setMinutes,
+} from 'date-fns';
 import DashboardLayout from '../../layouts/dashboard';
 import useTranslation from '../../hooks/useTranslation';
 import Event from '../../components/logistics/event';
@@ -25,30 +27,30 @@ for (let i = 0; i < 12; i++) {
 
 export default function Logistics() {
   const { trans, locale } = useTranslation();
-  const [firstDate, setFirstDate] = useState<Moment>(moment().set('hour', 7).set('minute', 0));
+  const [firstDate, setFirstDate] = useState<Date>(setHours(setMinutes(new Date(), 0), 7));
   const [selectedLogisticIds, setSelectedLogisticIds] = useState<number[]>([0]);
   const [search, setSearch] = useState('');
   const [clickedPickup, setClickedPickup] = useState<{ pickup: PickupListItem, allPickups: PickupListItem[] } | undefined>();
 
-  const dates: Moment[] = [
-    firstDate.clone(),
-    firstDate.clone().add(1, 'days'),
-    firstDate.clone().add(2, 'days'),
-    firstDate.clone().add(3, 'days'),
-    firstDate.clone().add(4, 'days'),
-    firstDate.clone().add(5, 'days'),
-    firstDate.clone().add(6, 'days'),
+  const dates: Date[] = [
+    new Date(firstDate),
+    addDays(firstDate, 1),
+    addDays(firstDate, 2),
+    addDays(firstDate, 3),
+    addDays(firstDate, 4),
+    addDays(firstDate, 5),
+    addDays(firstDate, 6),
   ];
 
   const { data: { data = [] } = {}, call } = useAxios('get', PICKUPS_PATH.replace(':id', ''), { withProgressBar: true });
 
   useEffect(() => {
     setSelectedLogisticIds([0]);
-    call({ params: { startsAt: firstDate.format('Y-MM-DD'), endsAt: dates[6].format('Y-MM-DD') } });
+    call({ params: { startsAt: format(firstDate, 'yyyy-MM-dd'), endsAt: format(dates[6], 'yyyy-MM-dd') } });
   }, [firstDate]);
 
   useEffect(() => {
-    setFirstDate(firstDate.clone());
+    setFirstDate(new Date(firstDate));
   }, [locale]);
 
   const logistics: Logistic[] = [];
@@ -148,19 +150,19 @@ export default function Logistics() {
                   size="small"
                   sx={{ borderRadius: 0, border: '1px solid', mr: '1rem' }}
                   onClick={() => {
-                    setFirstDate(firstDate.clone().add(-5, 'days'));
+                    setFirstDate(addDays(firstDate, -5));
                   }}
                 >
                   <ChevronLeft />
                 </IconButton>
                 <Typography variant="h4">
-                  {firstDate.format('DD MMMM Y')}
+                  {format(firstDate, 'dd MMMM Y')}
                 </Typography>
                 <IconButton
                   size="small"
                   sx={{ borderRadius: 0, border: '1px solid', ml: '1rem' }}
                   onClick={() => {
-                    setFirstDate(firstDate.clone().add(5, 'days'));
+                    setFirstDate(addDays(firstDate, 5));
                   }}
                 >
                   <ChevronRight />
@@ -184,8 +186,8 @@ export default function Logistics() {
                 <TableHead>
                   <TableRow sx={{ height: '2.5rem' }}>
                     <TableCell sx={{ borderBottom: 'unset', width: '10rem' }} />
-                    {dates.map((date: Moment) => {
-                      const formatted = date.format('dddd D');
+                    {dates.map((date: Date) => {
+                      const formatted = format(date, 'EEEE d');
                       return <TableCell sx={{ borderLeft: (theme) => `1px solid ${theme.palette.divider}`, width: '13.2%' }} key={formatted}>{formatted}</TableCell>;
                     })}
                   </TableRow>
@@ -195,10 +197,10 @@ export default function Logistics() {
                     <TableCell sx={{ verticalAlign: 'baseline', borderBottom: 'unset' }}>
                       <Box sx={{ marginTop: '-1.67em' }}>{hours[0]}</Box>
                     </TableCell>
-                    {dates.map((date: Moment) => {
+                    {dates.map((date: Date) => {
                       const thisDayPickups = pickups.filter(({ real_pickup_date }) => {
-                        const realPickupDate = moment(real_pickup_date);
-                        return realPickupDate.format('Y-MM-DD') == date.format('Y-MM-DD');
+                        const realPickupDate = new Date(real_pickup_date);
+                        return format(realPickupDate, 'Y-MM-dd') == format(date, 'Y-MM-dd');
                       });
 
                       return (
@@ -208,7 +210,7 @@ export default function Logistics() {
                         >
                           {
                         thisDayPickups.map((pickup) => {
-                          const realPickupDate = moment(pickup.real_pickup_date);
+                          const realPickupDate = new Date(pickup.real_pickup_date);
 
                           return (
                             <Event
@@ -222,7 +224,7 @@ export default function Logistics() {
                               }}
                               pickup={pickup}
                               key={pickup.id}
-                              top={`${realPickupDate.diff(date, 'minutes') * 0.1}rem`}
+                              top={`${differenceInMinutes(realPickupDate, date) * 0.1}rem`}
                               height="6rem"
                             />
                           );
@@ -242,7 +244,7 @@ export default function Logistics() {
                         <TableCell sx={{ verticalAlign: 'baseline', borderBottom: 'unset' }}>
                           <Box sx={{ marginTop: '-1.67em' }}>{hour.includes(':00') && hour}</Box>
                         </TableCell>
-                        {dates.map((date: Moment) => (
+                        {dates.map((date: Date) => (
                           <TableCell
                             key={date.toString()}
                             sx={{ position: 'relative', borderLeft: (theme) => `1px solid ${theme.palette.divider}` }}

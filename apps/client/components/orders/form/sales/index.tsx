@@ -50,7 +50,7 @@ function SalesForm({
             <DesktopDatePicker
               onChange={(value) => setValue({ field: 'deliveryDate', value })}
               value={formRepresentation.deliveryDate.value || null}
-              inputFormat="YYYY/MM/DD"
+              inputFormat="yyyy/MM/dd"
               label={trans('deliveryDate')}
               renderInput={(params) => (
                 <BaseTextField

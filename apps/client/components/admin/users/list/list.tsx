@@ -4,7 +4,7 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import moment from 'moment';
+import { format } from 'date-fns';
 import useTranslation from '../../../../hooks/useTranslation';
 import { UserListItem } from '../../../../utils/axios/models/user';
 import PaginatedTable from '../../../paginatedTable';
@@ -69,10 +69,10 @@ export default function List({
               {user.Enabled ? 'True' : 'False'}
             </TableCell>
             <TableCell>
-              {moment(user.UserCreateDate).format('Y/MM/DD')}
+              {format(new Date(user.UserCreateDate), 'yyyy/MM/dd')}
             </TableCell>
             <TableCell>
-              {moment(user.UserLastModifiedDate).format('Y/MM/DD')}
+              {format(new Date(user.UserLastModifiedDate), 'yyyy/MM/dd')}
             </TableCell>
           </TableRow>
         ))}

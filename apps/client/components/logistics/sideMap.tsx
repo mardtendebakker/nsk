@@ -10,13 +10,13 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import ReactMapGL, {
   Marker, NavigationControl, Source, Layer,
 } from 'react-map-gl';
-import moment from 'moment';
 import { useRouter } from 'next/router';
+import { format } from 'date-fns';
 import { PickupListItem } from '../../utils/axios/models/pickup';
 import useTranslation from '../../hooks/useTranslation';
 import { ORDERS_PURCHASES_EDIT } from '../../utils/routes';
 import Select from '../memoizedInput/select';
-import { fetchWayForPickups, Way, fetchPolylineCoordinates } from '../../utils/map';
+import { fetchWayForPickups, Way, fetchPolylineInfo } from '../../utils/map';
 
 const MAP_STYLE_URL = 'https://vectormaps-resources.myptv.com/styles/latest/standard.json';
 const API_KEY = process.env.MY_PTV_API_KEY;
@@ -104,10 +104,12 @@ export default function SideMap({ onClose, pickup, pickups }: {
 
     setWays(validWays);
 
-    setTravelTime(moment.utc(4448 * 1000).format('HH:mm:ss'));
+    const { coordinates, travelTime: fetchedTravelTime } = await fetchPolylineInfo(validWays);
+
+    setTravelTime(format(new Date(fetchedTravelTime * 1000), 'HH:mm:ss'));
     setGeometry({
       ...geometry,
-      coordinates: await fetchPolylineCoordinates(validWays),
+      coordinates,
     });
 
     const wayToSelect = validWays.find((validWay: Way) => validWay?.pickup?.id == pickup.id);

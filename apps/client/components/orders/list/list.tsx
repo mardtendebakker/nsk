@@ -6,8 +6,8 @@ import {
   Checkbox,
   Box,
 } from '@mui/material';
-import moment from 'moment';
 import { useRouter } from 'next/router';
+import { format } from 'date-fns';
 import { ORDERS_PURCHASES } from '../../../utils/routes';
 import useTranslation from '../../../hooks/useTranslation';
 import { OrderListItem } from '../../../utils/axios/models/order';
@@ -86,7 +86,7 @@ export default function List({
               {order.order_nr}
             </TableCell>
             <TableCell>
-              {moment(order.order_date).format('Y/MM/DD')}
+              {format(new Date(order.order_date), 'yyyy/MM/dd')}
             </TableCell>
             <TableCell>
               {(router.pathname == ORDERS_PURCHASES

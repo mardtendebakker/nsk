@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import moment from 'moment';
+import { format } from 'date-fns';
 import useTranslation from '../../../hooks/useTranslation';
 import { ProductListItem } from '../../../utils/axios/models/product';
 import TasksProgress from './tasksProgress';
@@ -64,7 +64,7 @@ function Row(
         )}
         {!stockProductsPage && (
         <TableCell>
-          {product.order_date ? moment(product.order_date.toString()).format('YYYY/MM/DD') : '--'}
+          {product.order_date ? format(new Date(product.order_date), 'yyyy/MM/dd') : '--'}
         </TableCell>
         )}
         {stockProductsPage && (

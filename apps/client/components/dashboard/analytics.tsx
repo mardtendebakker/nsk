@@ -63,7 +63,7 @@ export default function Analytics({ path, label }: { path: string, label: string
             </Select>
             <IconButton sx={(theme) => ({
               p: '.65rem',
-              ml: '1rem',
+              ml: '.5rem',
               borderRadius: '.5rem',
               border: `1px solid ${theme.palette.divider}`,
             })}
@@ -74,7 +74,7 @@ export default function Analytics({ path, label }: { path: string, label: string
         </Box>
         <Box sx={{ display: 'flex', mt: '2rem' }}>
           {keys.map((key) => (
-            <Button size="small" variant="outlined" color="inherit" sx={{ mr: '1rem', cursor: 'unset' }} key={key} disableRipple>
+            <Button size="small" variant="outlined" color="inherit" sx={{ mr: '.5rem', cursor: 'unset' }} key={key} disableRipple>
               <Box sx={{
                 mr: '.5rem',
                 bgcolor: COLORS[key],
@@ -87,7 +87,7 @@ export default function Analytics({ path, label }: { path: string, label: string
             </Button>
           ))}
         </Box>
-        <Box sx={{ width: '100%', height: '30rem', p: '1rem' }}>
+        <Box sx={{ width: '100%', height: '20rem', p: '.5rem' }}>
           <ResponsiveContainer width="100%">
             <LineChart
               data={chartData}
