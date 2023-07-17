@@ -7,6 +7,7 @@ import Filter from './filter';
 import useAxios from '../../../hooks/useAxios';
 import { CUSTOMERS_PATH, SUPPLIERS_PATH } from '../../../utils/axios';
 import useForm, { FieldPayload } from '../../../hooks/useForm';
+import pushURLParams from '../../../utils/pushURLParams';
 
 function initFormState(
   {
@@ -32,6 +33,7 @@ function initFormState(
 
 function refreshList({
   page,
+  rowsPerPage = 10,
   formRepresentation,
   router,
   call,
@@ -41,6 +43,8 @@ function refreshList({
   if (page > 1) {
     params.append('page', page.toString());
   }
+
+  params.append('rowsPerPage', rowsPerPage.toString());
 
   const paramsToSend = {};
 
@@ -54,23 +58,17 @@ function refreshList({
 
   call({
     params: {
-      take: 10,
-      skip: (page - 1) * 10,
+      take: rowsPerPage,
+      skip: (page - 1) * rowsPerPage,
       ...paramsToSend,
     },
-  }).finally(() => {
-    const paramsString = params.toString();
-    const newPath = paramsString ? `${router.pathname}?${params.toString()}` : router.pathname;
-
-    if (newPath != router.asPath) {
-      router.replace(newPath);
-    }
-  });
+  }).finally(() => pushURLParams({ params, router }));
 }
 
 export default function ListContainer() {
   const router = useRouter();
   const [page, setPage] = useState<number>(parseInt(router.query?.page?.toString() || '1', 10));
+  const [rowsPerPage, setRowsPerPage] = useState<number>(parseInt(router.query?.rowsPerPage?.toString() || '10', 10));
 
   const { formRepresentation, setValue, setData } = useForm(initFormState({
     search: router.query?.search?.toString(),
@@ -101,12 +99,14 @@ export default function ListContainer() {
   useEffect(() => {
     refreshList({
       page,
+      rowsPerPage,
       formRepresentation,
       router,
       call,
     });
   }, [
     page,
+    rowsPerPage,
     formRepresentation.search.value,
     formRepresentation.createdAt.value,
     formRepresentation.representative.value,
@@ -123,6 +123,7 @@ export default function ListContainer() {
       .then(() => {
         refreshList({
           page,
+          rowsPerPage,
           formRepresentation,
           router,
           call,
@@ -147,13 +148,20 @@ export default function ListContainer() {
       <List
         disabled={disabled()}
         companies={data}
-        count={Math.ceil(count / 10)}
+        count={count}
         page={page}
         onDelete={handleDelete}
         onEdit={(id) => router.push(
           (router.pathname == CONTACTS_CUSTOMERS ? CONTACTS_CUSTOMERS_EDIT : CONTACTS_SUPPLIERS_EDIT).replace(':id', id.toString()),
         )}
-        onPageChange={(newPage) => setPage(newPage)}
+        onPageChange={(newPage) => {
+          setPage(newPage);
+        }}
+        onRowsPerPageChange={(newRowsPerPage) => {
+          setRowsPerPage(newRowsPerPage);
+          setPage(1);
+        }}
+        rowsPerPage={rowsPerPage}
       />
     </Card>
   );

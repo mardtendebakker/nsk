@@ -4,7 +4,7 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  Pagination,
+  TablePagination,
 } from '@mui/material';
 import { useRouter } from 'next/router';
 import Edit from '../../button/edit';
@@ -20,6 +20,8 @@ export default function List({
   count,
   page,
   onPageChange,
+  onRowsPerPageChange,
+  rowsPerPage,
   disabled,
 }: {
   companies: CompanyListItem[],
@@ -28,6 +30,8 @@ export default function List({
   count: number,
   page: number,
   onPageChange: (newPage: number)=>void,
+  onRowsPerPageChange: (rowsPerPage: number)=>void,
+  rowsPerPage: number,
   disabled: boolean
 }) {
   const { trans } = useTranslation();
@@ -35,12 +39,9 @@ export default function List({
 
   return (
     <>
-      <Table>
+      <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell>
-              {trans('id')}
-            </TableCell>
             <TableCell>
               {trans('name')}
             </TableCell>
@@ -68,9 +69,6 @@ export default function List({
               key={company.id}
             >
               <TableCell>
-                <b>{company.id}</b>
-              </TableCell>
-              <TableCell>
                 <b>{company.name}</b>
               </TableCell>
               <TableCell>
@@ -93,13 +91,24 @@ export default function List({
           ))}
         </TableBody>
       </Table>
-      <Pagination
+      <TablePagination
+        size="small"
+        component="div"
         sx={{ display: 'flex', justifyContent: 'end', mt: '2rem' }}
-        shape="rounded"
         count={count}
-        onChange={(_, newPage) => onPageChange(newPage)}
-        page={page}
-        disabled={disabled}
+        onPageChange={(_, newPage) => {
+          if (!disabled) {
+            onPageChange(newPage + 1);
+          }
+        }}
+        page={page - 1}
+        rowsPerPage={rowsPerPage}
+        rowsPerPageOptions={[10, 25, 50]}
+        onRowsPerPageChange={(e) => {
+          if (!disabled) {
+            onRowsPerPageChange(parseInt(e.target.value, 10));
+          }
+        }}
       />
     </>
   );

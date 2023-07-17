@@ -1,7 +1,6 @@
 import { Box } from '@mui/material';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import moment from 'moment';
-import UserRolePicker from '../../../memoizedInput/userRolePicker';
 import Autocomplete from '../../../memoizedInput/autocomplete';
 import useTranslation from '../../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../../hooks/useForm';
@@ -33,17 +32,6 @@ export default function Filter({
           onReset={onReset}
         >
           <Box sx={{ flex: 1, display: 'flex', alignItems: 'center' }}>
-            <UserRolePicker
-              label=" "
-              disabled={disabled}
-              fullWidth
-              sx={{
-                fieldset: {
-                  display: 'none',
-                },
-              }}
-            />
-            <Box sx={(theme) => ({ width: '1px', height: '2.5rem', background: theme.palette.divider })} />
             <Autocomplete
               disabled={disabled}
               fullWidth

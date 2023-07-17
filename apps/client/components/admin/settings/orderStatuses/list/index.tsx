@@ -16,6 +16,7 @@ export default function ListContainer() {
   const { trans } = useTranslation();
   const router = useRouter();
   const [page, setPage] = useState<number>(parseInt(router.query?.page?.toString() || '1', 10));
+  const [rowsPerPage, setRowsPerPage] = useState<number>(parseInt(router.query?.rowsPerPage?.toString() || '10', 10));
   const [showForm, setShowForm] = useState<boolean>(false);
   const [editOrderStatusId, setEditOrderStatusId] = useState<number | undefined>();
   const [search, setSearch] = useState(router.query?.search?.toString() || '');
@@ -30,18 +31,18 @@ export default function ListContainer() {
 
   useEffect(() => {
     refreshList({
-      page, router, call, search,
+      page, rowsPerPage, router, call, search,
     });
-  }, []);
+  }, [page, rowsPerPage]);
 
   const disabled = () => performing;
 
   const handleSearchChange = useCallback(debounce((value: string) => {
     setPage(1);
     refreshList({
-      page: 1, router, call, search: value,
+      page: 1, rowsPerPage, router, call, search: value,
     });
-  }), []);
+  }), [rowsPerPage]);
 
   return (
     <Box>
@@ -74,15 +75,15 @@ export default function ListContainer() {
       <List
         orderStatuses={data}
         disabled={disabled()}
-        count={Math.ceil(count / 10)}
+        count={count}
         page={page}
         onEdit={(id) => setEditOrderStatusId(id)}
-        onPageChange={(newPage: number) => {
-          setPage(newPage);
-          refreshList({
-            page: newPage, router, call, search,
-          });
+        onPageChange={(newPage: number) => setPage(newPage)}
+        onRowsPerPageChange={(newRowsPerPage) => {
+          setRowsPerPage(newRowsPerPage);
+          setPage(1);
         }}
+        rowsPerPage={rowsPerPage}
       />
       {showForm && (
       <CreateModal
@@ -90,7 +91,7 @@ export default function ListContainer() {
         onSubmit={() => {
           setShowForm(false);
           refreshList({
-            page, router, call, search,
+            page, rowsPerPage, router, call, search,
           });
         }}
       />
@@ -101,7 +102,7 @@ export default function ListContainer() {
         onSubmit={() => {
           setEditOrderStatusId(undefined);
           refreshList({
-            page, router, call, search,
+            page, rowsPerPage, router, call, search,
           });
         }}
         id={editOrderStatusId.toString()}

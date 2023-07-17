@@ -13,7 +13,8 @@ export interface Supplier {
   street?: string,
   phone?: string,
   name?: string,
-  email?: string
+  email?: string,
+  representative?: string
 }
 
 export type Customer = Supplier;

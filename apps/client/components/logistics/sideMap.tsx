@@ -203,7 +203,10 @@ export default function SideMap({ onClose, pickup, pickups }: {
             );
           })}
         </ReactMapGL>
-        <Box sx={{ p: '1rem', maxWidth: '25rem', lineBreak: 'anywhere' }}>
+        <Box sx={{
+          p: '1rem', maxWidth: '22rem', minWidth: '22rem', lineBreak: 'anywhere',
+        }}
+        >
           <Typography variant="h5" sx={{ mb: '.5rem', display: 'flex', alignItems: 'center' }}>
             <LocalShippingOutlined sx={{ mr: '.5rem', fontSize: '1.2rem' }} />
             {trans('pickupBy')}
@@ -217,7 +220,7 @@ export default function SideMap({ onClose, pickup, pickups }: {
             {': '}
             {travelTime}
           </Typography>
-          <Divider sx={{ mt: '.5rem' }} />
+          <Divider sx={{ my: '.5rem' }} />
           <Select
             sx={{ width: '100%' }}
             label={trans('supplier')}
@@ -247,13 +250,13 @@ export default function SideMap({ onClose, pickup, pickups }: {
                   <Typography variant="h5">
                     {selectedWay.pickup.order.supplier.name}
                   </Typography>
-                  <Typography variant="body1">{selectedWay.pickup.order.supplier.email}</Typography>
-                </Box>
-                <Box sx={{ flex: 1, textAlign: 'end' }}>
-                  <Typography variant="h5" sx={{ justifySelf: 'flex-end' }}>
+                  <Typography variant="body1">{selectedWay.pickup.order.supplier.representative}</Typography>
+
+                  <Typography variant="body1" sx={{ justifySelf: 'flex-end' }}>
                     {selectedWay.pickup.order.supplier.phone}
                   </Typography>
                 </Box>
+                <Box sx={{ flex: 1, textAlign: 'end' }} />
               </Box>
               <Divider sx={{ mt: '.5rem' }} />
             </Box>
@@ -275,7 +278,7 @@ export default function SideMap({ onClose, pickup, pickups }: {
                   {' '}
                   {pickup.logistic.lastname}
                 </Typography>
-                <Typography variant="body1">{pickup.logistic.email}</Typography>
+                <Typography variant="body1">{pickup.logistic.username}</Typography>
               </Box>
             </Box>
             <Divider sx={{ mt: '.5rem' }} />

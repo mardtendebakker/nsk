@@ -1,6 +1,7 @@
 import {
-  Table, TableBody, TableCell, TableHead, TableRow, Pagination,
+  TableBody, TableCell, TableHead, TableRow,
 } from '@mui/material';
+import PaginatedTable from '../../../../paginatedTable';
 import Edit from '../../../../button/edit';
 import { Task } from '../../../../../utils/axios/models/product';
 import useTranslation from '../../../../../hooks/useTranslation';
@@ -10,69 +11,65 @@ export default function List({
   onEdit,
   disabled,
   count,
-  onPageChange,
   page,
+  onPageChange,
+  onRowsPerPageChange,
+  rowsPerPage,
 }: {
   onEdit: (id: number) => void,
   tasks: Task[],
   count: number,
   page: number,
   onPageChange: (newPage: number)=>void,
+  onRowsPerPageChange: (rowsPerPage: number)=>void,
+  rowsPerPage: number,
   disabled: boolean
 }) {
   const { trans } = useTranslation();
 
   return (
-    <>
-      <Table>
-        <TableHead>
-          <TableRow>
+    <PaginatedTable
+      count={count}
+      page={page}
+      onPageChange={onPageChange}
+      onRowsPerPageChange={onRowsPerPageChange}
+      rowsPerPage={rowsPerPage}
+      disabled={disabled}
+    >
+      <TableHead>
+        <TableRow>
+          <TableCell>
+            {trans('name')}
+          </TableCell>
+          <TableCell>
+            {trans('description')}
+          </TableCell>
+          <TableCell>
+            {trans('numberOfProductTypes')}
+          </TableCell>
+          <TableCell>
+            {trans('actions')}
+          </TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {tasks.map((task: Task) => (
+          <TableRow key={task.id}>
             <TableCell>
-              {trans('id')}
+              {task.name}
             </TableCell>
             <TableCell>
-              {trans('name')}
+              {task.description || '--'}
             </TableCell>
             <TableCell>
-              {trans('description')}
+              {task.productTypes?.length || 0}
             </TableCell>
             <TableCell>
-              {trans('numberOfProductTypes')}
-            </TableCell>
-            <TableCell>
-              {trans('actions')}
+              <Edit onClick={() => onEdit(task.id)} disabled={disabled} />
             </TableCell>
           </TableRow>
-        </TableHead>
-        <TableBody>
-          {tasks.map((task: Task) => (
-            <TableRow key={task.id}>
-              <TableCell>
-                {task.id}
-              </TableCell>
-              <TableCell>
-                {task.name}
-              </TableCell>
-              <TableCell>
-                {task.description || '--'}
-              </TableCell>
-              <TableCell>
-                {task.productTypes?.length || 0}
-              </TableCell>
-              <TableCell>
-                <Edit onClick={() => onEdit(task.id)} disabled={disabled} />
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      <Pagination
-        sx={{ display: 'flex', justifyContent: 'end', mt: '2rem' }}
-        shape="rounded"
-        count={count}
-        onChange={(_, newPage) => onPageChange(newPage)}
-        page={page}
-      />
-    </>
+        ))}
+      </TableBody>
+    </PaginatedTable>
   );
 }

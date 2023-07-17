@@ -1,19 +1,19 @@
 import {
-  Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
-  Pagination,
-  Checkbox,
 } from '@mui/material';
 import useTranslation from '../../../hooks/useTranslation';
+import PaginatedTable from '../../paginatedTable';
 
 export default function List({
   emails = [],
   count,
   page,
   onPageChange,
+  onRowsPerPageChange,
+  rowsPerPage,
   onCheck,
   disabled,
 }: {
@@ -21,46 +21,45 @@ export default function List({
   count: number,
   page: number,
   onPageChange: (newPage: number)=>void,
+  onRowsPerPageChange: (rowsPerPage: number)=>void,
+  rowsPerPage: number,
   onCheck: (object: { id: number, checked: boolean })=>void,
   disabled: boolean
 }) {
   const { trans } = useTranslation();
 
   return (
-    <>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>
-              {trans('name')}
-            </TableCell>
-            <TableCell>
-              {trans('recipients')}
-            </TableCell>
-            <TableCell>
-              {trans('openRate')}
-            </TableCell>
-            <TableCell>
-              {trans('clickRate')}
-            </TableCell>
-            <TableCell>
-              {trans('unsubscribes')}
-            </TableCell>
-            <TableCell>
-              {trans('status')}
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody />
-      </Table>
-      <Pagination
-        sx={{ display: 'flex', justifyContent: 'end', mt: '2rem' }}
-        shape="rounded"
-        count={count}
-        onChange={(_, newPage) => onPageChange(newPage)}
-        page={page}
-        disabled={disabled}
-      />
-    </>
+    <PaginatedTable
+      count={count}
+      page={page}
+      onPageChange={onPageChange}
+      onRowsPerPageChange={onRowsPerPageChange}
+      rowsPerPage={rowsPerPage}
+      disabled={disabled}
+    >
+      <TableHead>
+        <TableRow>
+          <TableCell>
+            {trans('name')}
+          </TableCell>
+          <TableCell>
+            {trans('recipients')}
+          </TableCell>
+          <TableCell>
+            {trans('openRate')}
+          </TableCell>
+          <TableCell>
+            {trans('clickRate')}
+          </TableCell>
+          <TableCell>
+            {trans('unsubscribes')}
+          </TableCell>
+          <TableCell>
+            {trans('status')}
+          </TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody />
+    </PaginatedTable>
   );
 }
