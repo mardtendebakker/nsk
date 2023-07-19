@@ -33,7 +33,7 @@ export async function fetchWayForPickups(pickups: PickupListItem[]): Promise<Way
   return fulfilled.map(({ value }) => value) as Way[];
 }
 
-export async function fetchPolylineCoordinates(ways: Way[]): Promise<[]> {
+export async function fetchPolylineInfo(ways: Way[]): Promise<{ coordinates: [], travelTime: number }> {
   const url = new URL(WAY_POINTS_URL);
 
   ways.forEach((way: Way) => {
@@ -42,5 +42,8 @@ export async function fetchPolylineCoordinates(ways: Way[]): Promise<[]> {
 
   const result = await axios.get(url.toString(), { headers: { apiKey: API_KEY } });
 
-  return JSON.parse(result.data.polyline).coordinates;
+  return {
+    coordinates: JSON.parse(result.data.polyline).coordinates,
+    travelTime: result.data.travelTime,
+  };
 }

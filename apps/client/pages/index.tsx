@@ -42,16 +42,16 @@ function Dashboard() {
           {trans('newPurchase')}
         </Button>
       </Box>
-      <Box sx={{ m: '1rem' }} />
+      <Box sx={{ m: '.5rem' }} />
       <IndicatorRow />
-      <Box sx={{ mt: '1rem', display: 'flex' }}>
-        <Box sx={{ flex: '.8', mr: '1rem' }}>
+      <Box sx={{ mt: '.5rem', display: 'flex' }}>
+        <Box sx={{ flex: '.8', mr: '.5rem' }}>
           <Analytics label={trans('productAnalytics')} path={ORDERS_ANALYTICS_PATH} />
-          <Box sx={{ m: '1rem' }} />
+          <Box sx={{ m: '.5rem' }} />
           <LocationCapacity />
-          <Box sx={{ m: '1rem' }} />
+          <Box sx={{ m: '.5rem' }} />
           <ResourceManagement />
-          <Box sx={{ m: '1rem' }} />
+          <Box sx={{ m: '.5rem' }} />
           <DueToday />
         </Box>
         <Box sx={{ flex: '.2' }}>

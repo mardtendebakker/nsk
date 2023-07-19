@@ -86,7 +86,7 @@ export default function Edit({ open, onClose }: { open: boolean, onClose: () => 
             onChange={() => {}}
             value={null}
             label={trans('dueBy')}
-            inputFormat="YYYY/MM/DD"
+            inputFormat="yyyy/MM/dd"
             renderInput={(params) => (
               <TextField
                 sx={{ mt: '3rem' }}

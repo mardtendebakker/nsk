@@ -52,7 +52,7 @@ export default function BasicDetails({
           <DesktopDatePicker
             onChange={(value) => setValue({ field: 'orderDate', value })}
             value={formRepresentation.orderDate.value || null}
-            inputFormat="YYYY/MM/DD"
+            inputFormat="yyyy/MM/dd"
             label={trans('orderDate')}
             renderInput={(params) => (
               <BaseTextField

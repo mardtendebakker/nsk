@@ -1,5 +1,5 @@
 import { Box, Tooltip, Typography } from '@mui/material';
-import moment from 'moment';
+import { addHours, format } from 'date-fns';
 import { Order, PickupListItem } from '../../utils/axios/models/pickup';
 import useTranslation from '../../hooks/useTranslation';
 
@@ -17,8 +17,8 @@ export default function Event({
   let title = '';
 
   if (pickup.real_pickup_date) {
-    const realPickupDate = moment(pickup.real_pickup_date);
-    title = `${realPickupDate.format('hh:mm')} - ${realPickupDate.add(1, 'hours').format('hh:mm')}`;
+    const realPickupDate = new Date(pickup.real_pickup_date);
+    title = `${format(realPickupDate, 'HH:mm')} - ${format(addHours(realPickupDate, 1), 'HH:mm')}`;
   }
 
   const color = pickup?.order?.order_status?.color;

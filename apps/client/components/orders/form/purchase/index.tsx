@@ -70,7 +70,7 @@ function PurchaseForm({
               <DesktopDateTimePicker
                 onChange={(value) => setValue({ field: 'pickupDate', value })}
                 value={formRepresentation.pickupDate.value || null}
-                inputFormat="YYYY/MM/DD H:ss"
+                inputFormat="yyyy/MM/dd H:ss"
                 label={trans('pickupDate')}
                 renderInput={(params) => (
                   <BaseTextField

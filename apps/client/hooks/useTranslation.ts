@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { trans, setConfig } from 'itranslator';
-import moment from 'moment';
+import { setDefaultOptions } from 'date-fns';
+import { nl, enUS, de } from 'date-fns/locale';
 import { getDefaultLocale, setDefaultLocale } from '../utils/storage';
 import EventEmitter from '../utils/eventEmitter';
 import nlSource from '../public/translations/nl';
@@ -15,13 +16,10 @@ export const localeMapping = {
   de: deSource,
 };
 
-const momentLocaleMapping = {
-  // eslint-disable-next-line global-require
-  nl: require('moment/locale/nl'),
-  // eslint-disable-next-line global-require
-  en: require('moment/locale/en-gb'),
-  // eslint-disable-next-line global-require
-  de: require('moment/locale/de'),
+export const dateFnsMapping = {
+  nl,
+  en: enUS,
+  de,
 };
 
 class LocaleEmitter extends EventEmitter {
@@ -29,7 +27,7 @@ class LocaleEmitter extends EventEmitter {
 
   constructor() {
     super();
-    moment.locale(this.#locale, momentLocaleMapping[this.#locale]);
+    setDefaultOptions({ locale: dateFnsMapping[this.#locale] });
   }
 
   get locale() { return this.#locale; }
@@ -39,7 +37,7 @@ class LocaleEmitter extends EventEmitter {
       this.#locale = payload;
 
       setConfig({ source: localeMapping[payload] });
-      moment.locale(payload, momentLocaleMapping[payload]);
+      setDefaultOptions({ locale: dateFnsMapping[payload] });
       setDefaultLocale(payload);
     }
 

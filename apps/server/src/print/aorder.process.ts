@@ -1,9 +1,8 @@
 import * as bwipjs from 'bwip-js';
-import * as moment from 'moment';
 import { AOrderTotalPrice } from "../aorder/aorder.process";
 import { DeliveryType } from "../aorder/types/delivery-type.enum";
 import { DataDestruction } from "../aorder/types/data-destruction.enum";
-
+import { format } from 'date-fns';
 export class AOrderProcess {
   private currencyFormat: Intl.NumberFormat;
 
@@ -64,13 +63,13 @@ export class AOrderProcess {
     return {
       order_barcode: await this.getBarcode(this.aorder.order_nr),
       order_nr: this.aorder.order_nr,
-      order_date: this.aorder.order_date ? moment(this.aorder.order_date).format('DD-MM-YYYY') : 'Unknown',
+      order_date: this.aorder.order_date ? format(this.aorder.order_date, 'dd-MM-yyyy') : 'Unknown',
       remarks: this.aorder.remarks ?? 'None',
       totalPrice: this.aorder.totalPrice ? this.currencyFormat.format(this.aorder.totalPrice) : '€ 0.00',
       transport: this.aorder.transport ? this.currencyFormat.format(this.aorder.transport) : '€ 0.00',
       discount: this.aorder.discount ? this.currencyFormat.format(this.aorder.discount) : '€ 0.00',
       isGift: this.aorder.is_gift ? 'YES' : 'NO',
-      delivery_date: this.aorder.delivery_date ? moment(this.aorder.delivery_date).format('DD-MM-YYYY') : 'Unknown',
+      delivery_date: this.aorder.delivery_date ? format(this.aorder.delivery_date, 'dd-MM-yyyy') : 'Unknown',
       delivery_type:
         this.aorder.delivery_type ? this.aorder.delivery_type == DeliveryType.DELIVERYTYPE_PICKUP ? 
         'Pickup' : this.aorder.delivery_type == DeliveryType.DELIVERYTYPE_DELIVERY ?
@@ -79,7 +78,7 @@ export class AOrderProcess {
       delivery_instructions: this.aorder.delivery_instructions ?? 'None',
       ...(this.aorder.pickup && {
         pickup: {
-          real_pickup_date: this.aorder.pickup.real_pickup_date ? moment(this.aorder.pickup.real_pickup_date).format('DD-MM-YYYY') : 'Unknown',
+          real_pickup_date: this.aorder.pickup.real_pickup_date ? format(this.aorder.pickup.real_pickup_date, 'dd-MM-yyyy') : 'Unknown',
           description: this.aorder.pickup.description ?? 'None',
           data_destruction: this.aorder.pickup.data_destruction ? this.aorder.pickup.data_destruction == DataDestruction.DATADESTRUCTION_NONE ? 
           'None' : this.aorder.pickup.data_destruction == DataDestruction.DATADESTRUCTION_FORMAT ?
