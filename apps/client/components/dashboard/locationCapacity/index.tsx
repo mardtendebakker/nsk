@@ -19,7 +19,7 @@ export default function LocationCapacity() {
         <Typography variant="h5" sx={{ mb: '2rem' }}>
           {trans('locationCapacity')}
         </Typography>
-        <Table>
+        <Table size="small">
           <TableHead>
             <TableRow>
               <TableCell>

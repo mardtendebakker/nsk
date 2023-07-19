@@ -19,7 +19,7 @@ export {
   PURCHASE_ORDERS_PATH,
   STOCK_PRODUCTS_PATH,
   ADMIN_USERS_PATH,
-  STOCK_REPAIR_SERVICES_PATH,
+  STOCK_REPAIRS_PATH,
   ORDER_STATUSES_PATH,
   COMPANIES_PATH,
   PRODUCT_STATUSES_PATH,
@@ -32,6 +32,7 @@ export {
   TASKS_PATH,
   ATTRIBUTES_PATH,
   LOGISTICS_PATH,
+  SERVICES_PATH,
 } from './paths';
 export { AxiosError } from 'axios';
 export type { AxiosPromise, AxiosResponse } from 'axios';

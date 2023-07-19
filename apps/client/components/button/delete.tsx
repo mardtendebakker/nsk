@@ -10,12 +10,10 @@ export default function Delete({
   tooltip,
   onDelete,
   disabled,
-  borderless,
 }: {
   tooltip?: boolean,
   onDelete: () => void,
-  disabled: boolean,
-  borderless?: boolean
+  disabled?: boolean,
 }) {
   const { trans } = useTranslation();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -26,7 +24,7 @@ export default function Delete({
         <span>
           {tooltip
             ? (
-              <IconButton size="small" sx={{ borderRadius: 0, border: borderless ? '0px' : '1px solid' }} onClick={() => setShowDeleteModal(true)} color="error" disabled={disabled}>
+              <IconButton size="small" sx={{ borderRadius: 0, border: 0 }} onClick={() => setShowDeleteModal(true)} color="error" disabled={disabled}>
                 <DeleteIcon sx={{ fontSize: '1rem' }} />
               </IconButton>
             )
@@ -70,4 +68,4 @@ export default function Delete({
   );
 }
 
-Delete.defaultProps = { tooltip: false, borderless: false };
+Delete.defaultProps = { tooltip: false, disabled: false };

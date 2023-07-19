@@ -19,7 +19,7 @@ export default function ResourceManagement() {
         <Typography variant="h5" sx={{ mb: '2rem' }}>
           {trans('ResourceManagement')}
         </Typography>
-        <Table>
+        <Table size="small">
           <TableHead>
             <TableRow>
               <TableCell>

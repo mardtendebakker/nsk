@@ -8,7 +8,7 @@ import { useEffect, useMemo } from 'react';
 import useTranslation from '../../../hooks/useTranslation';
 import useForm from '../../../hooks/useForm';
 import Form from '../form';
-import { STOCK_PRODUCTS_PATH, STOCK_REPAIR_SERVICES_PATH } from '../../../utils/axios';
+import { STOCK_PRODUCTS_PATH } from '../../../utils/axios';
 import useAxios from '../../../hooks/useAxios';
 import { formRepresentationToBody, initFormState } from '../createModal';
 
@@ -17,21 +17,17 @@ export default function EditModal(
     onClose,
     onSubmit,
     id,
-    type,
   }: {
     onClose: () => void,
     onSubmit: () => void,
     id: string,
-    type: 'product' | 'repair'
   },
 ) {
   const { trans } = useTranslation();
 
-  const ajaxPath = type == 'product' ? STOCK_PRODUCTS_PATH : STOCK_REPAIR_SERVICES_PATH;
+  const { data: product, call, performing } = useAxios('get', STOCK_PRODUCTS_PATH.replace(':id', id));
 
-  const { data: product, call, performing } = useAxios('get', ajaxPath.replace(':id', id));
-
-  const { call: callPut, performing: performingPut } = useAxios('put', ajaxPath.replace(':id', id));
+  const { call: callPut, performing: performingPut } = useAxios('put', STOCK_PRODUCTS_PATH.replace(':id', id));
 
   const { formRepresentation, setValue, validate } = useForm(useMemo(() => initFormState(product), [product]));
 

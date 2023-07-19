@@ -8,7 +8,7 @@ import useAxios from '../../../hooks/useAxios';
 import useTranslation from '../../../hooks/useTranslation';
 import useForm, { FormRepresentation } from '../../../hooks/useForm';
 import Form, { buildAttributeKey } from '../form';
-import { STOCK_PRODUCTS_PATH, STOCK_REPAIR_SERVICES_PATH } from '../../../utils/axios';
+import { STOCK_PRODUCTS_PATH } from '../../../utils/axios';
 import { Product } from '../../../utils/axios/models/product';
 
 export function initFormState(product?: Product) {
@@ -81,17 +81,14 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
 
 const formState = initFormState();
 
-export default function CreateModal({ onClose, onSubmit, type }: {
+export default function CreateModal({ onClose, onSubmit }: {
   onClose: () => void,
   onSubmit: () => void,
-  type: 'product' | 'repair'
 }) {
   const { trans } = useTranslation();
   const { formRepresentation, setValue, validate } = useForm(formState);
 
-  const ajaxPath = type == 'product' ? STOCK_PRODUCTS_PATH : STOCK_REPAIR_SERVICES_PATH;
-
-  const { call, performing } = useAxios('post', ajaxPath.replace(':id', ''));
+  const { call, performing } = useAxios('post', STOCK_PRODUCTS_PATH.replace(':id', ''));
 
   const handleSave = (e) => {
     e.preventDefault();

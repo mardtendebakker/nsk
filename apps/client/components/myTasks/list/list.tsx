@@ -28,7 +28,7 @@ export default function List({ title }: { title: string }) {
         </Typography>
       </AccordionSummary>
       <AccordionDetails>
-        <Table>
+        <Table size="small">
           <TableHead>
             <TableRow>
               <TableCell>

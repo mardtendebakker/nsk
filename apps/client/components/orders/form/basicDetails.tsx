@@ -25,7 +25,7 @@ export default function BasicDetails({
   return (
     <CardContent>
       <Typography
-        sx={{ mb: '2rem' }}
+        sx={{ mb: '1rem' }}
         variant="h4"
       >
         {trans('basicDetails')}

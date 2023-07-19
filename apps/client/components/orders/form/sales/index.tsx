@@ -36,7 +36,7 @@ function SalesForm({
       <Divider sx={{ mx: '1.5rem' }} />
       <CardContent>
         <Typography
-          sx={{ mb: '2rem' }}
+          sx={{ mb: '1rem' }}
           variant="h4"
         >
           {trans('delivery')}
@@ -54,7 +54,7 @@ function SalesForm({
               label={trans('deliveryDate')}
               renderInput={(params) => (
                 <BaseTextField
-                  sx={{ mb: '2rem' }}
+                  sx={{ mb: '.5rem' }}
                   fullWidth
                   error={!!formRepresentation.deliveryDate.error}
                   helperText={formRepresentation.deliveryDate.error}
@@ -67,7 +67,7 @@ function SalesForm({
               )}
             />
             <Select
-              sx={{ mb: '2rem' }}
+              sx={{ mb: '.5rem' }}
               value={formRepresentation.deliveryType.value}
               onChange={(e) => setValue({ field: 'deliveryType', value: e.target.value })}
               options={[
@@ -75,6 +75,7 @@ function SalesForm({
                 { title: trans('delivery'), value: 1 },
                 { title: trans('shipping'), value: 2 },
               ]}
+              label={trans('deliveryType')}
               placeholder={trans('selectDeliveryType')}
             />
             <TextField

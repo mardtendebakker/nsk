@@ -6,6 +6,7 @@ import {
   Table,
   TableRow,
   TableCell,
+  TableBody,
 } from '@mui/material';
 import { DesktopDateTimePicker } from '@mui/x-date-pickers/DesktopDateTimePicker';
 import useTranslation from '../../../../hooks/useTranslation';
@@ -53,7 +54,7 @@ function PurchaseForm({
         <Divider sx={{ mx: '1.5rem' }} />
         <CardContent>
           <Typography
-            sx={{ mb: '2rem' }}
+            sx={{ mb: '1rem' }}
             variant="h4"
           >
             {trans('pickupDetails')}
@@ -105,25 +106,26 @@ function PurchaseForm({
               sx={{ display: 'flex', width: '50%' }}
               item
             >
-              <Table>
-                <TableRow>
-                  <TableCell>{trans('proposedPickupDate')}</TableCell>
-                  <TableCell>{order?.pickup?.pickup_date || '--'}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>{trans('description')}</TableCell>
-                  <TableCell>{order?.pickup?.description || '--'}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>{trans('origin')}</TableCell>
-                  <TableCell>{order?.pickup?.origin || '--'}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>{trans('dataDestruction')}</TableCell>
-                  <TableCell>{DATA_DESTRUCTION[order?.pickup?.dataDestruction] || '--'}</TableCell>
-                </TableRow>
-                {/* Implement when data is available */}
-                {/* <TableRow>
+              <Table size="small">
+                <TableBody>
+                  <TableRow>
+                    <TableCell>{trans('proposedPickupDate')}</TableCell>
+                    <TableCell>{order?.pickup?.pickup_date || '--'}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>{trans('description')}</TableCell>
+                    <TableCell>{order?.pickup?.description || '--'}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>{trans('origin')}</TableCell>
+                    <TableCell>{order?.pickup?.origin || '--'}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>{trans('dataDestruction')}</TableCell>
+                    <TableCell>{DATA_DESTRUCTION[order?.pickup?.dataDestruction] || '--'}</TableCell>
+                  </TableRow>
+                  {/* Implement when data is available */}
+                  {/* <TableRow>
                   <TableCell>{trans('processingAgreement')}</TableCell>
                   <TableCell>{order?.pickup?.agreement}</TableCell>
                 </TableRow>
@@ -131,6 +133,7 @@ function PurchaseForm({
                   <TableCell>{trans('images')}</TableCell>
                   <TableCell>{order?.pickup?.images}</TableCell>
             </TableRow> */}
+                </TableBody>
               </Table>
             </Grid>
           </Grid>

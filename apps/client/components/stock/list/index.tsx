@@ -1,7 +1,7 @@
 import { Box, Card } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { STOCK_PRODUCTS_PATH, STOCK_REPAIR_SERVICES_PATH, LOCATIONS_PATH } from '../../../utils/axios';
+import { STOCK_PRODUCTS_PATH, STOCK_REPAIRS_PATH, LOCATIONS_PATH } from '../../../utils/axios';
 import List from './list';
 import useAxios from '../../../hooks/useAxios';
 import { STOCKS_PRODUCTS } from '../../../utils/routes';
@@ -92,7 +92,7 @@ export default function ListContainer() {
 
   const ajaxPath = router.pathname == STOCKS_PRODUCTS
     ? STOCK_PRODUCTS_PATH
-    : STOCK_REPAIR_SERVICES_PATH;
+    : STOCK_REPAIRS_PATH;
 
   const { formRepresentation, setValue, setData } = useForm(initFormState({
     search: router.query?.search?.toString(),
@@ -236,7 +236,6 @@ export default function ListContainer() {
           onClose={() => setEditProductId(undefined)}
           onSubmit={() => setEditProductId(undefined)}
           id={editProductId.toString()}
-          type={router.pathname == STOCKS_PRODUCTS ? 'product' : 'repair'}
         />
       )}
       {showChangeLocationModal && (
