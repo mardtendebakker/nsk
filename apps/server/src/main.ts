@@ -6,11 +6,27 @@
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-
 import { AppModule } from './app/app.module';
+import { join } from 'path';
+import { concat, times, lookup, increment } from './common/handlebars/handlebars.helpers';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import * as hbs from 'hbs';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(
+    AppModule,
+  );
+
+  const handlebars = hbs.create();
+  app.useStaticAssets(join(process.cwd(), 'apps/server/src/assets/public'));
+  app.setBaseViewsDir(join(process.cwd(), 'apps/server/src/assets/views'));
+  handlebars.registerHelper('lookup', lookup);
+  handlebars.registerHelper('concat', concat);
+  handlebars.registerHelper('times', times);
+  handlebars.registerHelper('increment', increment);
+  app.engine('hbs', handlebars.__express)
+  app.setViewEngine('hbs');
+  
   app.enableCors();
   app.useGlobalPipes(new ValidationPipe({transform: true}));
   const globalPrefix = 'api';
