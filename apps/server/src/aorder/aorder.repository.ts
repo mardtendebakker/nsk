@@ -25,6 +25,7 @@ export class AOrderRepository {
   }
 
   create(params: Prisma.aorderCreateArgs) {
+    
     return this.prisma.aorder.create(params);
   }
 

@@ -19,3 +19,13 @@ export function formDataStringTransform(params: TransformFnParams) {
 
   return value;
 }
+
+export function formDataDateTransform(params: TransformFnParams) {
+  const { value } = params;
+
+  if (isNaN(new Date(value).getTime())) {
+    return null;
+  }
+
+  return new Date(value);
+}

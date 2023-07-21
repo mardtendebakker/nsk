@@ -19,4 +19,9 @@ export class PickupRepository {
       data: submission[1],
     };
   }
+
+  create(params: Prisma.pickupCreateArgs) {
+    
+    return this.prisma.pickup.create(params);
+  }
 }

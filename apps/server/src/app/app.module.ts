@@ -24,6 +24,7 @@ import { LogisticModule } from '../logistic/logistic.module';
 import { AttributeModule } from '../attribute/attribute.module';
 import { TaskModule } from '../task/task.module';
 import { AdminUserModule } from '../admin/user/user.module';
+import { PublicModule } from '../public/public.module';
 
 @Module({
   imports: [
@@ -63,6 +64,7 @@ import { AdminUserModule } from '../admin/user/user.module';
     AttributeModule,
     TaskModule,
     AdminUserModule,
+    PublicModule,
   ],
   controllers: [AppController],
   providers: [AppService],
