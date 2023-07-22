@@ -76,7 +76,7 @@ export default function ListContainer() {
     lastActive: router.query?.createdBy?.toString(),
   }));
 
-  const { data: { Users = [], count = 0 } = {}, call, performing } = useAxios(
+  const { data: { data = [], count = 0 } = {}, call, performing } = useAxios(
     'get',
     ADMIN_USERS_PATH.replace(':id', ''),
     {
@@ -120,7 +120,7 @@ export default function ListContainer() {
       <Box sx={{ m: '1rem' }} />
       <List
         disabled={performing}
-        users={Users}
+        users={data}
         count={count}
         page={page}
         onPageChange={(newPage) => setPage(newPage)}

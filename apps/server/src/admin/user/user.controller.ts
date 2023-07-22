@@ -15,6 +15,6 @@ export class AdminUserController {
   @Get('')
   @ApiResponse({ type: ListUserResponseDto })
   listUsers(@Query() query: ListUserDto) {
-    return this.adminUserService.listUsers(query);
+    return this.adminUserService.getUsers(query);
   }
 }

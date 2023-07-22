@@ -4,6 +4,7 @@ import {
   AdminSetUserPasswordCommandInput,
   AdminUpdateUserAttributesCommandInput,
   CognitoIdentityProvider,
+  DescribeUserPoolCommandInput,
   ListUsersCommandInput
 } from '@aws-sdk/client-cognito-identity-provider';
 import { Injectable } from '@nestjs/common';
@@ -26,6 +27,17 @@ export class AdminUserService {
     this.cognitoClient = new CognitoIdentityProvider({
       region: this.congigService.get<string>('MAIN_REGION'),
     });
+  }
+
+  async getUsers(listUserDto: ListUserDto) {
+    const userList = await this.listUsers(listUserDto);
+    const userPoolDetail = await this.describeUserPool();
+    
+    return {
+      data: userList.Users,
+      count: userPoolDetail.UserPool.EstimatedNumberOfUsers,
+      pageToken: userList.PaginationToken,
+    }
   }
 
   getUser(adminGetUserDto: AdminUsernameDto) {
@@ -92,5 +104,13 @@ export class AdminUserService {
     });
     
     return results?.Users?.[0]?.Username;
+  }
+
+  describeUserPool() {
+    const describeUserPoolCommandInput: DescribeUserPoolCommandInput = {
+      UserPoolId: this.userPoolId,
+    }
+    
+    return this.cognitoClient.describeUserPool(describeUserPoolCommandInput);
   }
 }
