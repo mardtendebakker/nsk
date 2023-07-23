@@ -4,6 +4,7 @@ export class UserInfoDto {
   constructor() {
     this.username = '';
     this.email = '';
+    this.groups = [''];
     this.email_verified = false;
     this.auth_time = 0;
     this.exp = 0;
@@ -15,6 +16,9 @@ export class UserInfoDto {
 
   @ApiProperty()
   email: string;
+
+  @ApiProperty()
+  groups: string[];
 
   @ApiProperty()
   email_verified: boolean;
