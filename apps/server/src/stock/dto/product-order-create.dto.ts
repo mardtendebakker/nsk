@@ -1,17 +1,10 @@
-import { ApiProperty, ApiPropertyOptional, OmitType } from "@nestjs/swagger";
+import { ApiProperty, ApiPropertyOptional, OmitType, PartialType } from "@nestjs/swagger";
 import { IsNumber, IsOptional } from "class-validator";
 import { Transform, Type } from "class-transformer";
 import { formDataNumberTransform } from "../../common/transforms/form-date.transform";
 import { ProductOrderEntity } from "../entities/product-order.entity";
 
-export class ProductOrderCreateDto extends OmitType(ProductOrderEntity, ['id']) {
-  @ApiPropertyOptional()
-  @Transform(formDataNumberTransform)
-  @IsOptional()
-  @IsNumber()
-  @Type(() => Number)
-  product_id: number | null;
-  
+export class ProductOrderCreateDto extends PartialType(OmitType(ProductOrderEntity, ['id', 'product_id'])) {  
   @ApiProperty()
   @Transform(formDataNumberTransform)
   @IsNumber()
@@ -23,19 +16,19 @@ export class ProductOrderCreateDto extends OmitType(ProductOrderEntity, ['id']) 
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
-  quantity: number | null;
+  quantity?: number | null;
   
   @ApiPropertyOptional()
   @Transform(formDataNumberTransform)
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
-  price: number | null;
+  price?: number | null;
   
   @ApiPropertyOptional()
   @Transform(formDataNumberTransform)
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
-  external_id: number | null;
+  external_id?: number | null;
 }

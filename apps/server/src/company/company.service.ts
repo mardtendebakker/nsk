@@ -1,9 +1,10 @@
 import { CompanyRepository } from './company.repository';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 import { Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Prisma, acompany } from '@prisma/client';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { FindManyDto } from './dto/find-many.dto';
+import { CompanyEntity } from './entities/company.entity';
 
 @Injectable()
 export class CompanyService {
@@ -22,13 +23,13 @@ export class CompanyService {
       }
     }
 
-    if(query.partnerOnly == 1) {
+    if (query.partnerOnly == 1) {
       where.is_partner = {
-          gt: 0
+        gt: 0
       }
     }
 
-    const {count, data} = await this.repository.findAll({
+    const { count, data } = await this.repository.findAll({
       ...query,
       select: {
         ...query.select,
@@ -46,7 +47,7 @@ export class CompanyService {
     //TODO refacto response DTO
     return {
       count,
-      data: data.map(({customerOrders, supplierOrders, ...rest}) => ({
+      data: data.map(({ customerOrders, supplierOrders, ...rest }) => ({
         ...rest,
         orders: customerOrders.length > 0 ? customerOrders : supplierOrders
       }))
@@ -62,7 +63,7 @@ export class CompanyService {
   }
 
   async delete(id: number) {
-    return this.repository.delete({ where: {id} });
+    return this.repository.delete({ where: { id } });
   }
 
   async update(id: number, comapny: UpdateCompanyDto) {
@@ -70,5 +71,33 @@ export class CompanyService {
       data: comapny,
       where: { id }
     });
+  }
+
+  async checkExists(comapnyData: Partial<CompanyEntity>) {
+    const zip = (comapnyData.zip ?? comapnyData.zip2);
+    let company: CompanyEntity;
+
+    if (zip) {
+      company = await this.repository.findFirst({
+        where: {
+          AND: [
+            { zip: zip },
+            {
+              OR: [
+                { ...(comapnyData.name.length > 2 && { name: comapnyData.name }) },
+                { ...(comapnyData.email.length > 5 && { email: comapnyData.email }) },
+                { ...(comapnyData.phone.length > 5 && { phone: { contains: comapnyData.phone.replace("-", "") } }) },
+              ]
+            },
+          ],
+        }
+      });
+    }
+
+    if (!company) {
+      company = await this.repository.create(comapnyData as Prisma.acompanyCreateInput);
+    }
+
+    return company;
   }
 }

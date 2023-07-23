@@ -7,6 +7,7 @@ import { OrderStatusController } from './order-status.controller';
 @Module({
   providers: [OrderStatusService, OrderStatusRepository],
   controllers: [OrderStatusController],
-  imports: [PrismaModule]
+  imports: [PrismaModule],
+  exports: [OrderStatusService]
 })
 export class OrderStatusModule {}

@@ -23,9 +23,18 @@ export class OrderStatusRepository {
   findOne(params: Prisma.order_statusFindUniqueArgs) {
     return this.prisma.order_status.findUnique(params);
   }
+  
+  findFirst(params: Prisma.order_statusFindFirstArgs) {
+    return this.prisma.order_status.findFirst(params);
+  }
 
   update(params: Prisma.order_statusUpdateArgs) {
 
     return this.prisma.order_status.update(params);
+  }
+
+  create(params: Prisma.order_statusCreateArgs) {
+
+    return this.prisma.order_status.create(params);
   }
 }

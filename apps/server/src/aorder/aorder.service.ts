@@ -132,7 +132,7 @@ export class AOrderService {
       }
     };
 
-    let aorder = await this.repository.create(this.processSelectPart(params));
+    const aorder = await this.repository.create(this.processSelectPart(params));
 
     if (orderDto.order_nr === undefined) {
       const {
@@ -143,10 +143,11 @@ export class AOrderService {
       const order_nr = order_date.getFullYear() + id.toString().padStart(6, "0");
 
       try {
-        aorder = await this.repository.update({
+        await this.repository.update({
           where: { id },
           data: { order_nr },
         });
+        aorder.order_nr = order_nr;
       } catch (e) {
         this.repository.deleteMany([id]);
         throw e;

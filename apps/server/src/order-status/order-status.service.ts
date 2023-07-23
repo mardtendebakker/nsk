@@ -3,6 +3,8 @@ import { FindManyDto } from './dto/find-many.dto';
 import { OrderStatusRepository } from './order-status.repository';
 import { Injectable } from '@nestjs/common';
 import { UpdateOrderStatusDto } from './dto/update-order-status.dto';
+import { OrderStatusEntity } from './entities/order-status.entity';
+import { CreateOrderStatusDto } from './dto/create-order-status.dto';
 
 @Injectable()
 export class OrderStatusService {
@@ -12,12 +14,9 @@ export class OrderStatusService {
     return this.repository.findAll({
       ...query,
       where: {
-        id: {
-          in: query.ids
-        },
-        name: {
-          contains: query.search
-        }
+        ...query.where,
+        ...(query.ids && { id: { in: query.ids } }),
+        ...(query.search && { name: { contains: query.search } }),
       }
     });
   }
@@ -36,5 +35,22 @@ export class OrderStatusService {
       where: { id },
       data: { ...updateOrderStatusDto }
     });
+  }
+
+  create(params: Prisma.order_statusCreateArgs) {
+
+    return this.repository.create(params);
+  }
+
+  async findByNameOrCreate(createOrderStatusDto: CreateOrderStatusDto) {
+    let orderStatus = await this.repository.findFirst({
+      where: { name: createOrderStatusDto.name }
+    });
+
+    if (!orderStatus) {
+      orderStatus = await this.create({ data: createOrderStatusDto });
+    }
+
+    return orderStatus;
   }
 }

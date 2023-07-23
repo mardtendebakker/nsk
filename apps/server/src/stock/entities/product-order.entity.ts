@@ -6,7 +6,7 @@ export class ProductOrderEntity implements product_order {
   id: number;
 
   @ApiProperty()
-  product_id: number | null;
+  product_id: number;
   
   @ApiProperty()
   order_id: number;

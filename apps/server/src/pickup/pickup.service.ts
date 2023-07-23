@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PickupRepository } from './pickup.repository';
 import { FindManyDto } from './dto/find-many.dto';
+import { CreatePickupUncheckedWithoutAorderInputDto } from './dto/create-pickup-unchecked-without-aorder-input.dto';
 
 @Injectable()
 export class PickupService {
@@ -69,5 +70,12 @@ export class PickupService {
           logistic: fos_user,
       }))
     }
+  }
+
+  async create(pickup: CreatePickupUncheckedWithoutAorderInputDto) {
+
+    return this.repository.create({
+      data: pickup
+    });
   }
 }

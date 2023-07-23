@@ -262,7 +262,7 @@ export class StockService {
     }
   }
 
-  async create(body: CreateBodyStockDto, files: Express.Multer.File[]) {
+  async create(body: CreateBodyStockDto, files?: Express.Multer.File[]) {
     const {
       product_attributes,
       product_orders,
@@ -345,22 +345,9 @@ export class StockService {
     });
   }
 
-  async deleteAllAttributes(productId: number) {
-    const productAttributes = await this.repository.findProductAttributesIncludeAttribute(productId);
+  async getAllTypes() {
 
-    const result = await this.repository.deleteProductAttributes(productId);
-
-    for (let i = 0; i < productAttributes.length; i++) {
-      const productAttribute = productAttributes[i];
-
-      if (productAttribute.attribute.type === AttributeType.TYPE_FILE
-        && productAttribute.value !== '') {
-        const fileIds = productAttribute.value.split(FILE_VALUE_DELIMITER).filter(Boolean).map(Number);
-        this.fileService.deleteMany(fileIds);
-      }
-    }
-
-    return result;
+    return this.repository.getAllTypes();
   }
 
   private async generateAllAttributes(productId: number, typeId: number) {
@@ -380,6 +367,24 @@ export class StockService {
     }
 
     return this.repository.addProductAttributes(productAttributes);
+  }
+
+  private async deleteAllAttributes(productId: number) {
+    const productAttributes = await this.repository.findProductAttributesIncludeAttribute(productId);
+
+    const result = await this.repository.deleteProductAttributes(productId);
+
+    for (let i = 0; i < productAttributes.length; i++) {
+      const productAttribute = productAttributes[i];
+
+      if (productAttribute.attribute.type === AttributeType.TYPE_FILE
+        && productAttribute.value !== '') {
+        const fileIds = productAttribute.value.split(FILE_VALUE_DELIMITER).filter(Boolean).map(Number);
+        this.fileService.deleteMany(fileIds);
+      }
+    }
+
+    return result;
   }
 
   private async uploadFiles(productId: number, files: Express.Multer.File[] = []) {

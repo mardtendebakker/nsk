@@ -81,8 +81,11 @@ export class StockRepository {
     return this.prisma.product_type.findMany({
       select: {
         id: true,
-        name: true
-      }
+        name: true,
+      },
+      orderBy: {
+        id: 'asc',
+      },
     });
   }
 

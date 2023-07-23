@@ -8,6 +8,7 @@ import { PrintService } from '../print/print.service';
 @Module({
   providers: [PurchaseService, PurchaseRepository, PrintService],
   controllers: [PurchaseController],
-  imports: [PrismaModule]
+  imports: [PrismaModule],
+  exports: [PurchaseService]
 })
 export class PurchaseModule {}
