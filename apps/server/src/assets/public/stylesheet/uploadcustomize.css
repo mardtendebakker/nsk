@@ -1,0 +1,5 @@
+.image-preview img {
+  max-width: 100px; /* Adjust this value as needed */
+  max-height: 100px; /* Adjust this value as needed */
+  margin: 5px;
+}

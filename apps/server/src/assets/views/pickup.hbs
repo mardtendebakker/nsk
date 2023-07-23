@@ -1,0 +1,209 @@
+<div id="pickupform"><form name="pickup_form" method="post" class="form-horizontal">
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+        <span class="glyphicon glyphicon-play" aria-hidden="true"></span> Uw gegevens
+    </div>
+    <div class="panel-body">
+      {{#each form}}
+        {{#each supplier}}
+          <div class="form-group">
+            <label class="col-sm-3 control-label required" for="pickup_form_supplier_{{@key}}">{{this.label}}{{#if this.required}} *{{/if}}</label>
+            <div class="col-sm-9">
+              <input 
+                type="text"
+                id="pickup_form_supplier_{{@key}}"
+                name="pickup_form[supplier][{{@key}}]"
+                {{#if this.required}}required="required"{{/if}}
+                class="form-control"
+                value="{{this.value}}"
+              >
+            </div>
+          </div>
+        {{/each}}
+      {{/each}}
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+        <span class="glyphicon glyphicon-play" aria-hidden="true"></span> Ophaaladres(sen)
+    </div>
+    <div class="panel-body">
+      <div class="form-group">
+        {{#each form}}
+          {{#with countAddresses}}
+            <label 
+              class="col-sm-3 control-label
+              {{#if this.required}}required{{/if}}"
+              for="pickup_form_countAddresses"
+            >{{this.label}}{{#if this.required}} *{{/if}}</label>
+            <div class="col-sm-2">
+              <input 
+                type="number"
+                id="pickup_form_countAddresses"
+                name="pickup_form[countAddresses]"
+                {{#if this.required}}required="required"{{/if}}
+                class="form-control"
+                value="{{this.value}}"
+              >
+            </div>
+            <div class="col-sm-7" style="margin-top: 7px">
+              Zet op 0 indien ophaaladres gelijk is aan adres hierboven.
+            </div>
+          {{/with}}
+        {{/each}}
+      </div>
+      {{#times maxAddresses}}
+        <div class="form-group" style="display: none;">
+          <label class="col-sm-3 control-label" for="pickup_form_address{{@index}}">Ophaaladres {{increment @index}}</label>
+          <div class="col-sm-4">
+            <input
+              type="text"
+              id="pickup_form_address{{increment @index}}"
+              name="pickup_form[addresses][{{@index}}][address]"
+              class="pickup_form_address form-control"
+              placeholder="Straat + nr *"
+            >
+          </div>
+          <div class="col-sm-2">
+            <input 
+              type="text"
+              id="pickup_form_address_zip_{{@index}}"
+              name="pickup_form[addresses][{{@index}}][address_zip]"
+              placeholder="Postcode"
+              class="form-control"
+            >
+          </div>
+          <div class="col-sm-3">
+            <input
+              type="text"
+              id="pickup_form_address_city_{{@index}}"
+              name="pickup_form[addresses][{{@index}}][address_city]"
+              placeholder="Woonplaats"
+              class="form-control"
+            >
+          </div>
+        </div>
+      {{/times}}
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+        <span class="glyphicon glyphicon-play" aria-hidden="true"></span> Op te halen materialen
+    </div>
+    <div class="panel-body">
+      {{#each allProductTypes}}
+        <label class="col-sm-3 control-label" for="pickup_form_quantity_1_{{increment @index}}">{{this.name}}</label>
+        <div class="col-sm-9">
+          <table>
+            <tbody>
+              <tr>
+                {{#times ../maxAddresses}}
+                  <td style="display:none; padding: 0px;">
+                    <input
+                      type="number"
+                      id="pickup_form_quantity_{{increment @index}}_{{this.id}}"
+                      name="pickup_form[quantityAddresses][{{@index}}][{{concat 'type_id_' this.id}}]"
+                      style="max-width: 100px;"
+                      class="pickup_form_quantity pickup_form_quantity_{{increment @index}} form-control"
+                      placeholder="0"
+                      data-toggle="tooltip"
+                      title=""
+                      data-original-title="Aantal voor adres {{increment @index}}"
+                    >
+                  </td>
+                {{/times}}
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      {{/each}}
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <span class="glyphicon glyphicon-play" aria-hidden="true"></span> Extra informatie
+    </div>
+    <div class="panel-body">
+      <div class="form-group">
+        <label class="col-sm-3 control-label" for="pickup_form_pickupDate">Gewenste ophaaldatum</label>
+        <div class="col-sm-9"><input type="date" id="pickup_form_pickupDate" name="pickup_form[pickupDate]" class="form-control"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-sm-3 control-label" for="pickup_form_description">Toelichting</label>
+        <div class="col-sm-9"><textarea id="pickup_form_description" name="pickup_form[description]" class="form-control"></textarea></div>
+      </div> 
+      
+      <div class="form-group">
+        <label class="col-sm-3 control-label required" for="pickup_form_dataDestruction">Vernietiging data</label>
+        <div class="col-sm-9">
+          <select id="pickup_form_dataDestruction" name="pickup_form[dataDestruction]" class="form-control">
+            {{#each dataDestructionChoices}}
+              <option value="{{this.[0]}}"> {{this.[1]}} </option>
+            {{/each}}
+          </select>
+        </div>
+      </div>
+      <hr>
+      {{#each form}}
+        {{#each fileInput}}
+          <div class="form-group">
+            <label class="col-sm-3 control-label" for="pickup_form_{{@key}}">{{this.label}}</label>
+            <div class="col-sm-9">
+              <input 
+                type="file"
+                id="pickup_form_{{@key}}"
+                name="{{@key}}"
+                class="filepond"
+                style="display: none;"
+                {{#if this.multiple}}multiple="multiple" accept="image/*"
+                {{else}}accept="application/pdf"
+                {{/if}}
+              >
+              <div
+                id="uploadifive-pickup_form_{{@key}}"
+                class="uploadifive-button"
+                style="height: 30px; line-height: 30px; overflow: hidden; position: relative; text-align: center; width: 100px; user-select: none;"
+              >Select Files
+              </div>
+              <div id="pickup_form_{{@key}}Preview" class="uploadifive-queue image-preview"></div>
+            </div>
+          </div>
+        {{/each}}
+      {{/each}}
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-body">
+        
+        <div class="row">
+            <div class="col-sm-9 col-sm-offset-3">
+                <div class="g-recaptcha" data-sitekey="{{recaptchaKey}}"></div>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 10px">
+            <div class="col-sm-9 col-sm-offset-3">
+                <button type="submit" id="pickup_form_save" name="pickup_form[save]" class="btn-success btn" style="width: 150px;">Send</button>
+            </div>
+        </div>        
+    </div>
+  </div>
+
+  <input type="hidden" id="pickup_form_orderStatusName" name="pickup_form[orderStatusName]" required="required" value="{{orderStatusName}}">
+  <input type="hidden" id="pickup_form_locationId" name="pickup_form[locationId]" required="required" value={{locationId}}>
+  <input type="hidden" id="pickup_form_confirmPage" name="pickup_form[confirmPage]" value="{{confirmPage}}">
+  <input type="hidden" id="pickup_form_origin" name="pickup_form[origin]" value="{{origin}}">
+  <input type="hidden" id="pickup_form_maxAddresses" name="pickup_form[maxAddresses]" required="required" value={{maxAddresses}}> 
+  </form>
+
+  <div id="errorContainer" style="color: red"></div>
+
+  <script src="https://www.google.com/recaptcha/api.js" async="" defer=""></script>
+
+</div>
