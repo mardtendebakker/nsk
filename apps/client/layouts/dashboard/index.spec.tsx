@@ -3,6 +3,8 @@ import useSecurity from '../../hooks/useSecurity';
 import { SIGN_IN, ACCOUNT_VERIFICATION } from '../../utils/routes';
 import DashboardLayout from './index';
 
+jest.mock('./header', () => () => {});
+
 const mockRouter = {
   push: jest.fn(),
 };

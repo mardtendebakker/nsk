@@ -11,29 +11,29 @@ exports[`Dashboard component matches snapshot 1`] = `
       hello, !
     </h3>
     <button
-      class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium css-sghohy-MuiButtonBase-root-MuiButton-root"
+      class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeSmall MuiButton-containedSizeSmall MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeSmall MuiButton-containedSizeSmall css-11qr2p8-MuiButtonBase-root-MuiButton-root"
       tabindex="0"
       type="button"
     >
-      createOrder
       <svg
         aria-hidden="true"
-        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-uym7v6-MuiSvgIcon-root"
-        data-testid="ChevronRightIcon"
+        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+        data-testid="AddIcon"
         focusable="false"
         viewBox="0 0 24 24"
       >
         <path
-          d="M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"
+          d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"
         />
       </svg>
+      newPurchase
       <span
         class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
       />
     </button>
   </div>
   <div
-    class="MuiBox-root css-175t7kh"
+    class="MuiBox-root css-6s73tp"
   />
   <div
     class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-bhp9pd-MuiPaper-root-MuiCard-root"
@@ -114,132 +114,13 @@ exports[`Dashboard component matches snapshot 1`] = `
     </div>
   </div>
   <div
-    class="MuiBox-root css-1v4xrfe"
+    class="MuiBox-root css-19ysx2c"
   >
     <div
-      class="MuiBox-root css-12z8m2j"
+      class="MuiBox-root css-odlrzr"
     >
       <div
-        class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-bhp9pd-MuiPaper-root-MuiCard-root"
-      >
-        <div
-          class="MuiCardContent-root css-46bh2p-MuiCardContent-root"
-        >
-          <div
-            class="MuiBox-root css-gg4vpm"
-          >
-            <h6
-              class="MuiTypography-root MuiTypography-h6 css-2ulfj5-MuiTypography-root"
-            >
-              taskAnalytics
-            </h6>
-            <div
-              class="MuiBox-root css-0"
-            >
-              <div
-                class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-sizeSmall  css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
-              >
-                <div
-                  aria-expanded="false"
-                  aria-haspopup="listbox"
-                  class="MuiSelect-select MuiSelect-outlined MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall css-jedpe8-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
-                  role="button"
-                  tabindex="0"
-                >
-                  thisMonth
-                </div>
-                <input
-                  aria-hidden="true"
-                  class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
-                  tabindex="-1"
-                  value="0"
-                />
-                <svg
-                  aria-hidden="true"
-                  class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-hfutr2-MuiSvgIcon-root-MuiSelect-icon"
-                  data-testid="ArrowDropDownIcon"
-                  focusable="false"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    d="M7 10l5 5 5-5z"
-                  />
-                </svg>
-                <fieldset
-                  aria-hidden="true"
-                  class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
-                >
-                  <legend
-                    class="css-ihdtdm"
-                  >
-                    <span
-                      class="notranslate"
-                    >
-                      ​
-                    </span>
-                  </legend>
-                </fieldset>
-              </div>
-              <button
-                class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-jwg6ec-MuiButtonBase-root-MuiIconButton-root"
-                tabindex="0"
-                type="button"
-              >
-                <svg
-                  aria-hidden="true"
-                  class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
-                  data-testid="FileDownloadIcon"
-                  focusable="false"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"
-                  />
-                </svg>
-                <span
-                  class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-                />
-              </button>
-            </div>
-          </div>
-          <div
-            class="MuiBox-root css-yfuilf"
-          >
-            <button
-              class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedInherit MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorInherit MuiButton-root MuiButton-outlined MuiButton-outlinedInherit MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorInherit css-1sxhbq7-MuiButtonBase-root-MuiButton-root"
-              tabindex="0"
-              type="button"
-            >
-              sales
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-              />
-            </button>
-            <button
-              class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedInherit MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorInherit MuiButton-root MuiButton-outlined MuiButton-outlinedInherit MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorInherit css-1sxhbq7-MuiButtonBase-root-MuiButton-root"
-              tabindex="0"
-              type="button"
-            >
-              purchases
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-              />
-            </button>
-            <button
-              class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedInherit MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorInherit MuiButton-root MuiButton-outlined MuiButton-outlinedInherit MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorInherit css-1sxhbq7-MuiButtonBase-root-MuiButton-root"
-              tabindex="0"
-              type="button"
-            >
-              repairs
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-              />
-            </button>
-          </div>
-        </div>
-      </div>
-      <div
-        class="MuiBox-root css-175t7kh"
+        class="MuiBox-root css-6s73tp"
       />
       <div
         class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-bhp9pd-MuiPaper-root-MuiCard-root"
@@ -247,11 +128,11 @@ exports[`Dashboard component matches snapshot 1`] = `
         <div
           class="MuiCardContent-root css-46bh2p-MuiCardContent-root"
         >
-          <h6
-            class="MuiTypography-root MuiTypography-h6 css-q1xl87-MuiTypography-root"
+          <h5
+            class="MuiTypography-root MuiTypography-h5 css-fjo7g7-MuiTypography-root"
           >
             locationCapacity
-          </h6>
+          </h5>
           <table
             class="MuiTable-root css-rqglhn-MuiTable-root"
           >
@@ -262,25 +143,25 @@ exports[`Dashboard component matches snapshot 1`] = `
                 class="MuiTableRow-root MuiTableRow-head css-1q1u3t4-MuiTableRow-root"
               >
                 <th
-                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1ygcj2i-MuiTableCell-root"
+                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-1howxi1-MuiTableCell-root"
                   scope="col"
                 >
                   locationName
                 </th>
                 <th
-                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1ygcj2i-MuiTableCell-root"
+                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-1howxi1-MuiTableCell-root"
                   scope="col"
                 >
                   status
                 </th>
                 <th
-                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1ygcj2i-MuiTableCell-root"
+                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-1howxi1-MuiTableCell-root"
                   scope="col"
                 >
                   quantity
                 </th>
                 <th
-                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1ygcj2i-MuiTableCell-root"
+                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-1howxi1-MuiTableCell-root"
                   scope="col"
                 >
                   lastOrder
@@ -294,7 +175,7 @@ exports[`Dashboard component matches snapshot 1`] = `
         </div>
       </div>
       <div
-        class="MuiBox-root css-175t7kh"
+        class="MuiBox-root css-6s73tp"
       />
       <div
         class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-bhp9pd-MuiPaper-root-MuiCard-root"
@@ -302,11 +183,11 @@ exports[`Dashboard component matches snapshot 1`] = `
         <div
           class="MuiCardContent-root css-46bh2p-MuiCardContent-root"
         >
-          <h6
-            class="MuiTypography-root MuiTypography-h6 css-q1xl87-MuiTypography-root"
+          <h5
+            class="MuiTypography-root MuiTypography-h5 css-fjo7g7-MuiTypography-root"
           >
             ResourceManagement
-          </h6>
+          </h5>
           <table
             class="MuiTable-root css-rqglhn-MuiTable-root"
           >
@@ -317,31 +198,31 @@ exports[`Dashboard component matches snapshot 1`] = `
                 class="MuiTableRow-root MuiTableRow-head css-1q1u3t4-MuiTableRow-root"
               >
                 <th
-                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1ygcj2i-MuiTableCell-root"
+                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-1howxi1-MuiTableCell-root"
                   scope="col"
                 >
                   name
                 </th>
                 <th
-                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1ygcj2i-MuiTableCell-root"
+                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-1howxi1-MuiTableCell-root"
                   scope="col"
                 >
                   email
                 </th>
                 <th
-                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1ygcj2i-MuiTableCell-root"
+                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-1howxi1-MuiTableCell-root"
                   scope="col"
                 >
                   numberOfTasks
                 </th>
                 <th
-                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1ygcj2i-MuiTableCell-root"
+                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-1howxi1-MuiTableCell-root"
                   scope="col"
                 >
                   status
                 </th>
                 <th
-                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1ygcj2i-MuiTableCell-root"
+                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-1howxi1-MuiTableCell-root"
                   scope="col"
                 >
                   role
@@ -355,7 +236,7 @@ exports[`Dashboard component matches snapshot 1`] = `
         </div>
       </div>
       <div
-        class="MuiBox-root css-175t7kh"
+        class="MuiBox-root css-6s73tp"
       />
       <div
         class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-bhp9pd-MuiPaper-root-MuiCard-root"
@@ -363,11 +244,11 @@ exports[`Dashboard component matches snapshot 1`] = `
         <div
           class="MuiCardContent-root css-46bh2p-MuiCardContent-root"
         >
-          <h6
-            class="MuiTypography-root MuiTypography-h6 css-q1xl87-MuiTypography-root"
+          <h5
+            class="MuiTypography-root MuiTypography-h5 css-fjo7g7-MuiTypography-root"
           >
             dueToday
-          </h6>
+          </h5>
           <table
             class="MuiTable-root css-rqglhn-MuiTable-root"
           >
@@ -378,19 +259,19 @@ exports[`Dashboard component matches snapshot 1`] = `
                 class="MuiTableRow-root MuiTableRow-head css-1q1u3t4-MuiTableRow-root"
               >
                 <th
-                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1ygcj2i-MuiTableCell-root"
+                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-1howxi1-MuiTableCell-root"
                   scope="col"
                 >
                   taskName
                 </th>
                 <th
-                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1ygcj2i-MuiTableCell-root"
+                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-1howxi1-MuiTableCell-root"
                   scope="col"
                 >
                   productName/type
                 </th>
                 <th
-                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1ygcj2i-MuiTableCell-root"
+                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-1howxi1-MuiTableCell-root"
                   scope="col"
                 >
                   dueBy
@@ -413,11 +294,11 @@ exports[`Dashboard component matches snapshot 1`] = `
         <div
           class="MuiCardContent-root css-46bh2p-MuiCardContent-root"
         >
-          <h6
-            class="MuiTypography-root MuiTypography-h6 css-2ulfj5-MuiTypography-root"
+          <h5
+            class="MuiTypography-root MuiTypography-h5 css-ag7rrr-MuiTypography-root"
           >
             upcomingDeliveries 1
-          </h6>
+          </h5>
           <div
             class="MuiBox-root css-10awhm1"
           />
@@ -427,11 +308,11 @@ exports[`Dashboard component matches snapshot 1`] = `
             <div
               class="MuiBox-root css-gg4vpm"
             >
-              <h6
-                class="MuiTypography-root MuiTypography-h6 css-2ulfj5-MuiTypography-root"
+              <h5
+                class="MuiTypography-root MuiTypography-h5 css-ag7rrr-MuiTypography-root"
               >
                 test test 12345 1
-              </h6>
+              </h5>
               <div
                 class="MuiBox-root css-1qadj9d"
               >

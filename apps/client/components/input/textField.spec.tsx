@@ -23,7 +23,7 @@ describe('TextField', () => {
     size: 'medium',
     sx: {
       bgcolor: 'red',
-      legend: { display: 'none' },
+      legend: { width: 0 },
     },
     value: 'value',
     about: 'about',

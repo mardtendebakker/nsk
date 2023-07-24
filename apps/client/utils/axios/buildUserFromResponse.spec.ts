@@ -30,6 +30,7 @@ describe('getUserFromResponse', () => {
       refreshToken: 'REFRESH_TOKEN',
       accessToken: 'ACCESS_TOKEN',
       emailVerified: false,
+      groups: [],
     };
 
     expect(getUserFromResponse(response)).toEqual(expectedUser);

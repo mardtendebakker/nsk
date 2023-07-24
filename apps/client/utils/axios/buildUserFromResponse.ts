@@ -7,4 +7,5 @@ export default (response: AxiosResponse): User => ({
   accessToken: response.data.idToken.jwtToken,
   refreshToken: response.data.refreshToken.token,
   emailVerified: response.data.idToken.payload.email_verified,
+  groups: response.data.idToken.payload.groups || [],
 });
