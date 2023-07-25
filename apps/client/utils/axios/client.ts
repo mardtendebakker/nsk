@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { getUser } from '../storage';
 
-const baseURL = process.env.NODE_ENV === 'development' ? 'http://localhost:3333/api' : process.env.NX_AXIOS_BASE_URL;
+const baseURL = process.env.NX_AXIOS_BASE_URL;
 
 export const client = axios.create({
   baseURL,
