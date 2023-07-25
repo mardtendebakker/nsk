@@ -29,11 +29,11 @@ import axiosClient, {
   CONFIRM_ACCOUNT_PATH,
   SEND_VERIFICATION_CODE_PATH,
   FORGOT_PASSWORD_PATH,
+  CONFIRM_PASSWORD_PATH,
 } from '../utils/axios';
 import useAxios from './useAxios';
 import useTranslation from './useTranslation';
 import buildUserFromResponse from '../utils/axios/buildUserFromResponse';
-import { CONFIRM_PASSWORD_PATH } from '../utils/axios';
 
 const useSecurity = (): {
   state: State,
@@ -134,7 +134,9 @@ const useSecurity = (): {
       securityStore.emit(SIGN_UP_REQUEST);
       try {
         await signUpCall({ body: { username, email, password } });
-        securityStore.emit(SIGN_UP_REQUEST_SUCCEEDED, { username, email, emailVerified: false });
+        securityStore.emit(SIGN_UP_REQUEST_SUCCEEDED, {
+          username, email, emailVerified: false, groups: [],
+        });
       } catch (e) {
         securityStore.emit(SIGN_UP_REQUEST_FAILED);
         throw e;
@@ -158,6 +160,7 @@ const useSecurity = (): {
           ...securityStore.state.user,
           username: response.data.username,
           email: response.data.email,
+          groups: response.data.groups,
         },
       );
     },

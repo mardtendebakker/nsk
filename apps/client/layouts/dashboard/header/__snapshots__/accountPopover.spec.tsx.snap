@@ -17,8 +17,8 @@ exports[`AccountPopover matches snapshot 1`] = `
       />
     </svg>
   </div>
-  <h6
-    class="MuiTypography-root MuiTypography-h6 css-1qj4wb3-MuiTypography-root"
+  <h5
+    class="MuiTypography-root MuiTypography-h5 css-18ezm2a-MuiTypography-root"
   />
   <button
     class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"

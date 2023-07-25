@@ -11,6 +11,7 @@ jest.mock('next/router', () => ({
 }));
 
 jest.mock('../layouts/dashboard', () => ({ children }:{ children:JSX.Element }) => children);
+jest.mock('../components/dashboard/analytics', () => ({ children }:{ children:JSX.Element }) => children);
 
 const mockUseSecurity = {
   signOut: jest.fn(() => Promise.resolve()),

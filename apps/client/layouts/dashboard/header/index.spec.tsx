@@ -1,9 +1,9 @@
 import { render } from '@testing-library/react';
-import { CUSTOMERS_CONTACTS, MY_TASKS } from '../../../utils/routes';
+import { CONTACTS_CUSTOMERS, MY_TASKS } from '../../../utils/routes';
 import Header from './index';
 
 const mockRouter = {
-  get pathname() { return CUSTOMERS_CONTACTS; },
+  get pathname() { return CONTACTS_CUSTOMERS; },
 };
 
 jest.mock('next/router', () => ({
@@ -19,12 +19,13 @@ describe('Header', () => {
   it('should highlight the active menu item', () => {
     const { getByText } = render(<Header />);
 
-    expect(getByText('customers')).toHaveStyle({ fontWeight: 700 });
+    expect(getByText('contacts')).toHaveStyle({ fontWeight: 700 });
 
     expect(getByText('dashboard')).toHaveStyle({ fontWeight: 400 });
     expect(getByText('stock')).toHaveStyle({ fontWeight: 400 });
     expect(getByText('orders')).toHaveStyle({ fontWeight: 400 });
-    expect(getByText('suppliers')).toHaveStyle({ fontWeight: 400 });
+    expect(getByText('bulkEmail')).toHaveStyle({ fontWeight: 400 });
+    expect(getByText('logistics')).toHaveStyle({ fontWeight: 400 });
   });
 
   it('should highlight myTasks menu item', () => {
@@ -33,10 +34,11 @@ describe('Header', () => {
 
     expect(getByText('myTasks')).toHaveStyle({ fontWeight: 700 });
 
+    expect(getByText('contacts')).toHaveStyle({ fontWeight: 400 });
     expect(getByText('dashboard')).toHaveStyle({ fontWeight: 400 });
     expect(getByText('stock')).toHaveStyle({ fontWeight: 400 });
     expect(getByText('orders')).toHaveStyle({ fontWeight: 400 });
-    expect(getByText('customers')).toHaveStyle({ fontWeight: 400 });
-    expect(getByText('suppliers')).toHaveStyle({ fontWeight: 400 });
+    expect(getByText('bulkEmail')).toHaveStyle({ fontWeight: 400 });
+    expect(getByText('logistics')).toHaveStyle({ fontWeight: 400 });
   });
 });
