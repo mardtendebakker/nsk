@@ -10,30 +10,25 @@ import {
   useState, useEffect, useCallback,
 } from 'react';
 import Add from '@mui/icons-material/Add';
-import { useRouter } from 'next/router';
-import { ProductListItem } from '../../../utils/axios/models/product';
-import debounce from '../../../utils/debounce';
-import TextField from '../../memoizedInput/textField';
-import CreateModal from '../../stock/createModal';
-import useTranslation from '../../../hooks/useTranslation';
-import useAxios from '../../../hooks/useAxios';
-import { ORDERS_PURCHASES } from '../../../utils/routes';
-import { STOCK_PRODUCTS_PATH, STOCK_REPAIR_SERVICES_PATH } from '../../../utils/axios';
-import EditModal from '../../stock/editModal';
+import { ProductListItem } from '../../../../utils/axios/models/product';
+import debounce from '../../../../utils/debounce';
+import TextField from '../../../memoizedInput/textField';
+import CreateModal from '../../../stock/createModal';
+import useTranslation from '../../../../hooks/useTranslation';
+import useAxios from '../../../../hooks/useAxios';
+import { STOCK_PRODUCTS_PATH } from '../../../../utils/axios';
+import EditModal from '../../../stock/editModal';
+import Edit from '../../../button/edit';
 
 export default function ProductsTable({ orderId }:{ orderId: string }) {
   const [showForm, setShowForm] = useState<boolean>(false);
   const [editProductId, setEditProductId] = useState<number | undefined>();
-  const router = useRouter();
 
   const { trans } = useTranslation();
 
-  const ajaxPath = router.pathname.includes(ORDERS_PURCHASES) ? STOCK_PRODUCTS_PATH : STOCK_REPAIR_SERVICES_PATH;
-  const type = router.pathname.includes(ORDERS_PURCHASES) ? 'product' : 'repair';
-
   const { data: { data = [] } = {}, call } = useAxios(
     'get',
-    ajaxPath.replace(':id', ''),
+    STOCK_PRODUCTS_PATH.replace(':id', ''),
     {
       withProgressBar: true,
     },
@@ -43,7 +38,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
 
   const handleProductPropertyChange = useCallback(debounce((product, property: string, value) => {
     callPut({
-      path: ajaxPath.replace(':id', product.id.toString()),
+      path: STOCK_PRODUCTS_PATH.replace(':id', product.id.toString()),
       body: { [property]: value },
     });
   }), []);
@@ -119,9 +114,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
                   />
                 </TableCell>
                 <TableCell>
-                  <Button size="small" onClick={() => setEditProductId(product.id)}>
-                    {trans('edit')}
-                  </Button>
+                  <Edit onClick={() => setEditProductId(product.id)} />
                 </TableCell>
               </TableRow>
             ),
@@ -136,8 +129,8 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
           </TableRow>
         </TableBody>
       </Table>
-      {showForm && <CreateModal type={type} onClose={() => setShowForm(false)} onSubmit={() => { call({ params: { orderId } }); setShowForm(false); }} />}
-      {editProductId && <EditModal type={type} id={editProductId.toString()} onClose={() => setEditProductId(undefined)} onSubmit={() => setEditProductId(undefined)} />}
+      {showForm && <CreateModal onClose={() => setShowForm(false)} onSubmit={() => { call({ params: { orderId } }); setShowForm(false); }} />}
+      {editProductId && <EditModal id={editProductId.toString()} onClose={() => setEditProductId(undefined)} onSubmit={() => setEditProductId(undefined)} />}
     </>
   );
 }

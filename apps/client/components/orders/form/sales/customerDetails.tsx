@@ -28,7 +28,7 @@ export default function CustomerDetails({
   return (
     <Box sx={{ flex: 1 }}>
       <Typography
-        sx={{ mb: '2rem' }}
+        sx={{ mb: '1rem' }}
         variant="h4"
       >
         {trans('customerDetails')}

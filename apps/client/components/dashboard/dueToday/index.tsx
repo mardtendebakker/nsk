@@ -19,7 +19,7 @@ export default function DueToday() {
         <Typography variant="h5" sx={{ mb: '2rem' }}>
           {trans('dueToday')}
         </Typography>
-        <Table>
+        <Table size="small">
           <TableHead>
             <TableRow>
               <TableCell>

@@ -16,7 +16,7 @@ import useForm from '../../../hooks/useForm';
 import useTranslation from '../../../hooks/useTranslation';
 import { initFormState, formRepresentationToBody } from './new';
 import { ORDERS_PURCHASES } from '../../../utils/routes';
-import ProductsTable from '../../../components/orders/form/productsTable';
+import ProductsTable from '../../../components/orders/form/purchase/productsTable';
 
 function UpdatePurchaseOrder() {
   const { trans } = useTranslation();

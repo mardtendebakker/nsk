@@ -85,6 +85,11 @@ export default function DataSourcePicker(
       size="small"
       sx={sx}
       options={options}
+      renderOption={(props, option) => (
+        <li {...props} key={option.id}>
+          {option.name}
+        </li>
+      )}
       value={currentValue || (multiple ? [] : null)}
       onChange={(_, selected: { id: number } | { id: number }[]) => {
         setCurrentValue(selected);

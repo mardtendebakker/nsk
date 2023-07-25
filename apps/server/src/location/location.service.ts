@@ -17,10 +17,10 @@ export class LocationService {
         id: {
           in: query.ids
         },
-        OR: [
+        OR: query.search ? [
           {name: { contains: query.search }},
           {zipcodes: { contains: query.search }},
-        ]
+        ] : undefined
       }
     });
   }

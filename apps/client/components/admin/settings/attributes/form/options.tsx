@@ -55,7 +55,6 @@ export default function Options({
               }}
             />
             <Delete
-              borderless
               onDelete={() => {
                 setData(Object.keys(formRepresentation)
                   .filter((key) => key !== field)
@@ -69,12 +68,14 @@ export default function Options({
             />
           </Grid>
         ))}
-      <Button size="small" onClick={() => {
-        setData({
-          ...formRepresentation,
-          [`option:new_${Math.random()}`]: { value: { name: '', price: 0 } },
-        });
-      }}
+      <Button
+        size="small"
+        onClick={() => {
+          setData({
+            ...formRepresentation,
+            [`option:new_${Math.random()}`]: { value: { name: '', price: 0 } },
+          });
+        }}
       >
         <Add />
         {trans('addAnother')}

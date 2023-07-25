@@ -21,6 +21,7 @@ export default function ConfirmationDialog(
     confirmButtonVariant,
     cancelButtonVariant,
     disabled,
+    open,
   }:
   {
     onConfirm: ()=>void,
@@ -34,13 +35,14 @@ export default function ConfirmationDialog(
     confirmButtonVariant?: Variant,
     cancelButtonVariant?: Variant
     disabled?: boolean,
+    open?: boolean
   },
 ) {
   const { trans } = useTranslation();
 
   return (
     <Dialog
-      open
+      open={open}
       onClose={onClose}
       fullWidth
     >
@@ -54,7 +56,8 @@ export default function ConfirmationDialog(
         <Button size="small" onClick={onClose} variant={cancelButtonVariant} color={cancelButtonColor}>
           {cancelButtonText || trans('cancel')}
         </Button>
-        <Button size="small"
+        <Button
+          size="small"
           onClick={onConfirm}
           variant={confirmButtonVariant}
           color={confirmButtonColor}
@@ -75,4 +78,5 @@ ConfirmationDialog.defaultProps = {
   cancelButtonVariant: 'outlined',
   confirmButtonVariant: 'contained',
   disabled: false,
+  open: true,
 };

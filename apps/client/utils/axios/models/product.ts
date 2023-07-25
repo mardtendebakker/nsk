@@ -22,8 +22,15 @@ export interface ProductStatus {
   color?: string,
 }
 
+export interface Service {
+  id?: number,
+  name?: number,
+  price?: number,
+  status?: number,
+}
+
 export interface ProductListItem {
-  id: number,
+  id?: number,
   name?: string,
   price?: number,
   retailPrice?: number,
@@ -38,6 +45,7 @@ export interface ProductListItem {
   location?: string,
   type?: string,
   tasks?: Task[],
+  services?: Service[],
   updated_at?: string,
   created_at?: string
 }
