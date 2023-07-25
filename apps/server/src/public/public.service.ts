@@ -117,15 +117,16 @@ export class PublicService {
       pickup_date: pickup_form.pickupDate,
     };
 
+    const orderStatus = await this.findOrderStatusByNameOrCreate(pickup_form.orderStatusName);
+
     const purchaseData: CreateAOrderDto = {
       supplier_id: supplier.id,
       pickup: pickupData,
       is_gift: true,
+      status_id: orderStatus.id
     };
 
     const purchase = <AOrderPayload>await this.purchaseService.create(purchaseData);
-
-    this.findOrderStatusByNameOrCreate(pickup_form.orderStatusName);
     
     if (files?.length) {
       await this.uploadFiles(purchase.pickup.id, files);
