@@ -18,9 +18,10 @@ import { ORDERS_PURCHASES_EDIT } from '../../utils/routes';
 import Select from '../memoizedInput/select';
 import { fetchWayForPickups, Way, fetchPolylineInfo } from '../../utils/map';
 
-const MAP_STYLE_URL = 'https://vectormaps-resources.myptv.com/styles/latest/standard.json';
-const API_KEY = process.env.MY_PTV_API_KEY;
-const MAP_TILE_URL = 'https://api.myptv.com/maps/v1/vector-tiles/{z}/{x}/{y}';
+const API_KEY = process.env.MYPTV_API_KEY;
+const MAP_STYLE_URL = process.env.MYPTV_MAP_STYLE_URL;
+const MAP_TILE_URL = process.env.MYPTV_MAP_TILE_URL;
+
 
 function buildHomeWay() {
   return {

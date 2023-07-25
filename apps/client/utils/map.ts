@@ -1,8 +1,9 @@
 import axios, { AxiosResponse } from 'axios';
 import { PickupListItem } from './axios/models/pickup';
 
-const WAY_POINTS_URL = 'https://api.myptv.com/routing/v1/routes?results=POLYLINE&options[trafficMode]=AVERAGE';
-const API_KEY = process.env.MY_PTV_API_KEY;
+const API_KEY = process.env.MYPTV_API_KEY;
+const SEARCH_TEXT_URL = process.env.MYPTV_SEARCH_TEXT_URL;
+const WAY_POINTS_URL = process.env.MYPTV_WAY_POINTS_URL;
 
 export interface Way {
   pickup?: PickupListItem,
@@ -14,7 +15,7 @@ export async function fetchWayForPickup(pickupItem: PickupListItem): Promise<Way
   const { supplier } = pickupItem.order;
 
   const address = `${supplier.street}, ${supplier.zip}, ${supplier.city}, ${supplier.state}, ${supplier.country}`;
-  const result = await axios.get(`https://api.myptv.com/geocoding/v1/locations/by-text?searchText=${address}`, { headers: { apiKey: API_KEY } });
+  const result = await axios.get(`${SEARCH_TEXT_URL}${address}`, { headers: { apiKey: API_KEY } });
 
   return {
     pickup: pickupItem,
