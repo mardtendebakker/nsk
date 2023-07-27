@@ -1,11 +1,14 @@
-import { 
+import {
   AdminCreateUserCommandInput,
   AdminGetUserCommandInput,
   AdminSetUserPasswordCommandInput,
   AdminUpdateUserAttributesCommandInput,
   CognitoIdentityProvider,
   DescribeUserPoolCommandInput,
-  ListUsersCommandInput
+  ListUsersCommandInput,
+  AdminAddUserToGroupCommandInput,
+  AdminRemoveUserFromGroupCommandInput,
+  AdminListGroupsForUserCommandInput
 } from '@aws-sdk/client-cognito-identity-provider';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -14,6 +17,8 @@ import { AdminCreateUserDto } from './dto/admin-create-user.dto';
 import { AdminSetUserPasswordDto } from './dto/admin-set-user-pasword.dto';
 import { ListUserDto } from './dto/list-user.dto';
 import { AdminEmailDto } from './dto/admin-email.dto';
+import { CognitoGroups } from '../../common/types/cognito-groups.enum';
+import { UpdateUserGroupDto } from './dto/update-user-group.dto';
 
 @Injectable()
 export class AdminUserService {
@@ -32,7 +37,7 @@ export class AdminUserService {
   async getUsers(listUserDto: ListUserDto) {
     const userList = await this.listUsers(listUserDto);
     const userPoolDetail = await this.describeUserPool();
-    
+
     return {
       data: userList.Users,
       count: userPoolDetail.UserPool.EstimatedNumberOfUsers,
@@ -102,7 +107,7 @@ export class AdminUserService {
     const results = await this.listUsers({
       filter: `email="${adminEmailDto.email}"`,
     });
-    
+
     return results?.Users?.[0]?.Username;
   }
 
@@ -110,7 +115,72 @@ export class AdminUserService {
     const describeUserPoolCommandInput: DescribeUserPoolCommandInput = {
       UserPoolId: this.userPoolId,
     }
-    
+
     return this.cognitoClient.describeUserPool(describeUserPoolCommandInput);
+  }
+
+  async manageUserGroup(username: string, updateUserGroupDto: UpdateUserGroupDto[]): Promise<UpdateUserGroupDto[]> {
+
+    for (let i = 0; i < updateUserGroupDto?.length; i++) {
+      if (updateUserGroupDto[i].assign === true) {
+        await this.addUserToGroup(username, updateUserGroupDto[i].group);
+      } else if (updateUserGroupDto[i].assign === false) {
+        await this.removeUserFromGroup(username, updateUserGroupDto[i].group);
+      }
+    }
+
+    return this.listGroupsForUser(username);
+  }
+
+  async listGroupsForUser(username: string): Promise<UpdateUserGroupDto[]> {
+    const adminRemoveUserFromGroupCommandInput: AdminListGroupsForUserCommandInput = {
+      UserPoolId: this.userPoolId,
+      Username: username,
+      Limit: 60
+    };
+
+    const listGroupsOutput = await this.cognitoClient.adminListGroupsForUser(adminRemoveUserFromGroupCommandInput);
+
+    const allGroups = Object.values(CognitoGroups);
+    const userGroups = listGroupsOutput.Groups.map(group => group.GroupName);
+    const result: UpdateUserGroupDto[] = [];
+
+    for (let i = 0; i < allGroups.length; i++) {
+      let found = false;
+
+      for (let j = 0; j < userGroups.length; j++) {
+        if (allGroups[i] === userGroups[j]) {
+          found = true;
+          break;
+        }
+      }
+
+      result.push({
+        group: allGroups[i],
+        assign: found
+      });
+    }
+
+    return result;
+  }
+
+  private addUserToGroup(username: string, groupname: CognitoGroups) {
+    const adminAddUserToGroupCommandInput: AdminAddUserToGroupCommandInput = {
+      UserPoolId: this.userPoolId,
+      Username: username,
+      GroupName: groupname,
+    };
+
+    return this.cognitoClient.adminAddUserToGroup(adminAddUserToGroupCommandInput);
+  }
+
+  private removeUserFromGroup(username: string, groupname: CognitoGroups) {
+    const adminRemoveUserFromGroupCommandInput: AdminRemoveUserFromGroupCommandInput = {
+      UserPoolId: this.userPoolId,
+      Username: username,
+      GroupName: groupname,
+    };
+
+    return this.cognitoClient.adminRemoveUserFromGroup(adminRemoveUserFromGroupCommandInput);
   }
 }
