@@ -331,15 +331,29 @@ export class AOrderService {
   private processSelectPart<T extends Prisma.aorderArgs>(params: T): T {
     if (this.type === AOrderDiscrimination.PURCHASE) {
       params.include = {
-        pickup: true,
+        pickup: {
+          include: {
+            afile: {
+              select: {
+                id: true,
+                unique_server_filename: true,
+                original_client_filename: true,
+                discr: true,
+              },
+            },
+          },
+        },
+      };
+    } else if (this.type === AOrderDiscrimination.SALE) {
+      params.include = {
         afile: {
           select: {
             id: true,
             unique_server_filename: true,
             original_client_filename: true,
             discr: true,
-          }
-        }
+          },
+        },
       };
     }
 
