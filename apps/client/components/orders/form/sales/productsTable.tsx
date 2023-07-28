@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Table,
   TableBody,
@@ -13,12 +14,12 @@ import debounce from '../../../../utils/debounce';
 import TextField from '../../../memoizedInput/textField';
 import useTranslation from '../../../../hooks/useTranslation';
 import useAxios from '../../../../hooks/useAxios';
-import { STOCK_REPAIRS_PATH, SERVICES_PATH, STOCK_PRODUCTS_PATH } from '../../../../utils/axios';
+import { STOCK_REPAIRS_PATH, SERVICES_PATH } from '../../../../utils/axios';
 import AddButton from '../../../button/add';
 import Select from '../../../memoizedInput/select';
 import Delete from '../../../button/delete';
-import DataSourcePicker from '../../../memoizedInput/dataSourcePicker';
-import ConfirmationDialog from '../../../confirmationDialog';
+import PaginatedTable from '../../../paginatedTable';
+import AddProductsModal from './addProductsModal';
 
 function Row({
   product,
@@ -139,54 +140,16 @@ function Row({
   );
 }
 
-function AddProductModal({
-  onClose,
-  onProductAdded,
-  open,
-}:{
-  onClose: ()=>void,
-  onProductAdded: () => void,
-  open: boolean
-}) {
-  const { trans } = useTranslation();
-  const [productId, setProductId] = useState<number | undefined>();
-
-  const handleConfirm = () => {
-    // TODO call api to add product
-    onProductAdded();
-  };
-
-  // TODO update when api call is done
-  const disabled = () => !productId;
-
-  return (
-    <ConfirmationDialog
-      open={open}
-      disabled={disabled()}
-      title={<>{trans('addProduct')}</>}
-      onClose={onClose}
-      onConfirm={handleConfirm}
-      content={(
-        <DataSourcePicker
-          url={STOCK_PRODUCTS_PATH.replace(':id', '')}
-          label={trans('product')}
-          placeholder={trans('selectProduct')}
-          onChange={(value: { id: number }) => setProductId(value?.id)}
-          value={productId?.toString() || ''}
-        />
-      )}
-    />
-  );
-}
-
 export default function ProductsTable({ orderId }:{ orderId: string }) {
   const { trans } = useTranslation();
   const [showServicePicker, setShowServicePicker] = useState(false);
+  const [page, setPage] = useState<number>(1);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(5);
 
   const { call: callPut } = useAxios('patch', undefined, { withProgressBar: true });
   const { call: postService } = useAxios('post', SERVICES_PATH.replace(':id', ''), { withProgressBar: true });
   const { call: deleteService } = useAxios('delete', undefined, { withProgressBar: true });
-  const { data: { data = [] } = {}, call } = useAxios(
+  const { data: { data = [], count = 0 } = {}, call } = useAxios(
     'get',
     STOCK_REPAIRS_PATH.replace(':id', ''),
     {
@@ -210,23 +173,65 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
 
   const handleAddService = () => {
     postService().then(() => {
-      call({ params: { orderId } });
+      call({
+        params: {
+          take: rowsPerPage,
+          skip: (page - 1) * rowsPerPage,
+          orderId,
+        },
+      });
     });
   };
 
   const handleDeleteService = (id: number) => {
     deleteService({ path: SERVICES_PATH.replace(':id', id.toString()) }).then(() => {
-      call({ params: { orderId } });
+      call({
+        params: {
+          take: rowsPerPage,
+          skip: (page - 1) * rowsPerPage,
+          orderId,
+        },
+      });
     });
   };
 
   useEffect(() => {
-    call({ params: { orderId } });
+    call({
+      params: {
+        take: rowsPerPage,
+        skip: (page - 1) * rowsPerPage,
+        orderId,
+      },
+    });
   }, [orderId]);
+
+  const handleProductsAdded = (productIds: number[]) => {
+    // TODO add products to the order
+    setShowServicePicker(false);
+    call({
+      params: {
+        take: rowsPerPage,
+        skip: (page - 1) * rowsPerPage,
+        orderId,
+      },
+    });
+  };
 
   return (
     <>
-      <Table size="small">
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <Button size="small" onClick={() => setShowServicePicker(true)} sx={{ mr: 0, mb: '.5rem' }}>
+          <Add />
+          {trans('addProducts')}
+        </Button>
+      </Box>
+      <PaginatedTable
+        count={count}
+        page={page}
+        onPageChange={setPage}
+        onRowsPerPageChange={setRowsPerPage}
+        rowsPerPage={rowsPerPage}
+      >
         <TableHead>
           <TableRow>
             <TableCell>
@@ -263,22 +268,11 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
               product={product}
             />
           ))}
-          <TableRow>
-            <TableCell>
-              <Button size="small" onClick={() => setShowServicePicker(true)}>
-                <Add />
-                {trans('addAnotherProduct')}
-              </Button>
-            </TableCell>
-          </TableRow>
         </TableBody>
-      </Table>
-      <AddProductModal
+      </PaginatedTable>
+      <AddProductsModal
         open={showServicePicker}
-        onProductAdded={() => {
-          setShowServicePicker(false);
-          call({ params: { orderId } });
-        }}
+        onProductsAdded={handleProductsAdded}
         onClose={() => setShowServicePicker(false)}
       />
     </>

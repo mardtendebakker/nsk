@@ -1,6 +1,6 @@
 import {
+  Box,
   Button,
-  Table,
   TableBody,
   TableCell,
   TableHead,
@@ -19,14 +19,17 @@ import useAxios from '../../../../hooks/useAxios';
 import { STOCK_PRODUCTS_PATH } from '../../../../utils/axios';
 import EditModal from '../../../stock/editModal';
 import Edit from '../../../button/edit';
+import PaginatedTable from '../../../paginatedTable';
 
 export default function ProductsTable({ orderId }:{ orderId: string }) {
   const [showForm, setShowForm] = useState<boolean>(false);
   const [editProductId, setEditProductId] = useState<number | undefined>();
+  const [page, setPage] = useState<number>(1);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(5);
 
   const { trans } = useTranslation();
 
-  const { data: { data = [] } = {}, call } = useAxios(
+  const { data: { data = [], count = 0 } = {}, call } = useAxios(
     'get',
     STOCK_PRODUCTS_PATH.replace(':id', ''),
     {
@@ -44,12 +47,30 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
   }), []);
 
   useEffect(() => {
-    call({ params: { orderId } });
+    call({
+      params: {
+        take: rowsPerPage,
+        skip: (page - 1) * rowsPerPage,
+        orderId,
+      },
+    });
   }, [orderId]);
 
   return (
     <>
-      <Table>
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <Button size="small" onClick={() => setShowForm(true)}>
+          <Add />
+          {trans('addAnotherProduct')}
+        </Button>
+      </Box>
+      <PaginatedTable
+        count={count}
+        page={page}
+        onPageChange={setPage}
+        onRowsPerPageChange={setRowsPerPage}
+        rowsPerPage={rowsPerPage}
+      >
         <TableHead>
           <TableRow>
             <TableCell>
@@ -119,17 +140,23 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
               </TableRow>
             ),
           )}
-          <TableRow>
-            <TableCell>
-              <Button size="small" onClick={() => setShowForm(true)}>
-                <Add />
-                {trans('addAnotherProduct')}
-              </Button>
-            </TableCell>
-          </TableRow>
         </TableBody>
-      </Table>
-      {showForm && <CreateModal onClose={() => setShowForm(false)} onSubmit={() => { call({ params: { orderId } }); setShowForm(false); }} />}
+      </PaginatedTable>
+      {showForm && (
+      <CreateModal
+        onClose={() => setShowForm(false)}
+        onSubmit={() => {
+          call({
+            params: {
+              take: rowsPerPage,
+              skip: (page - 1) * rowsPerPage,
+              orderId,
+            },
+          });
+          setShowForm(false);
+        }}
+      />
+      )}
       {editProductId && <EditModal id={editProductId.toString()} onClose={() => setEditProductId(undefined)} onSubmit={() => setEditProductId(undefined)} />}
     </>
   );

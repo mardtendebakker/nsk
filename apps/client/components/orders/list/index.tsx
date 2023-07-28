@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Box, Card } from '@mui/material';
+import _ from 'lodash';
 import saveBlob from '../../../utils/saveBlob';
 import useForm, { FieldPayload } from '../../../hooks/useForm';
 import List from './list';
@@ -22,6 +23,7 @@ import ConfirmationDialog from '../../confirmationDialog';
 import useTranslation from '../../../hooks/useTranslation';
 import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
 import pushURLParams from '../../../utils/pushURLParams';
+import { OrderListItem } from '../../../utils/axios/models/order';
 
 function initFormState(
   {
@@ -176,7 +178,11 @@ export default function ListContainer() {
   ]);
 
   const handleAllChecked = (checked: boolean) => {
-    setCheckedOrderIds(checked ? data.map(({ id }) => id) : []);
+    setCheckedOrderIds(
+      checked
+        ? _.union(checkedOrderIds, data.map(({ id }) => id))
+        : checkedOrderIds.filter((orderId) => !data.find((order: OrderListItem) => order.id == orderId)),
+    );
   };
 
   const handleRowChecked = ({ id, checked }: { id: number, checked: boolean }) => {
@@ -190,7 +196,7 @@ export default function ListContainer() {
   const disabled = (): boolean => performing || performingDelete || performingPatch || performingPrint;
 
   const handleDelete = () => {
-    callDelete({ body: ['df'] })
+    callDelete({ body: checkedOrderIds })
       .then(() => {
         setCheckedOrderIds([]);
         refreshList({
@@ -247,7 +253,7 @@ export default function ListContainer() {
       <Box sx={{ m: '.5rem' }} />
       <Action
         disabled={disabled()}
-        allChecked={checkedOrderIds.length === data.length && data.length > 0}
+        allChecked={(_.intersectionWith(checkedOrderIds, data, (orderId: number, order: OrderListItem) => orderId === order.id).length === data.length) && data.length != 0}
         checkedOrdersCount={checkedOrderIds.length}
         onEdit={() => router.push(
           (router.pathname == ORDERS_PURCHASES ? ORDERS_PURCHASES_EDIT : ORDERS_SALES_EDIT).replace(':id', checkedOrderIds[0].toString()),
@@ -265,7 +271,7 @@ export default function ListContainer() {
         page={page}
         onCheck={handleRowChecked}
         checkedOrderIds={checkedOrderIds}
-        onPageChange={(newPage) => setPage(newPage)}
+        onPageChange={setPage}
         onRowsPerPageChange={(newRowsPerPage) => {
           setRowsPerPage(newRowsPerPage);
           setPage(1);
