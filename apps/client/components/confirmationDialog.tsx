@@ -2,7 +2,8 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
-import { Button } from '@mui/material';
+import { Box, Button, IconButton } from '@mui/material';
+import Close from '@mui/icons-material/Close';
 import useTranslation from '../hooks/useTranslation';
 
 type Color = 'inherit' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning';
@@ -35,7 +36,7 @@ export default function ConfirmationDialog(
     confirmButtonVariant?: Variant,
     cancelButtonVariant?: Variant
     disabled?: boolean,
-    open?: boolean
+    open?: boolean,
   },
 ) {
   const { trans } = useTranslation();
@@ -44,16 +45,21 @@ export default function ConfirmationDialog(
     <Dialog
       open={open}
       onClose={onClose}
-      fullWidth
+      maxWidth={false}
     >
       <DialogTitle>
-        {title}
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          {title}
+          <IconButton onClick={onClose} sx={{ ml: 'auto' }}>
+            <Close sx={{ fontSize: '1rem' }} />
+          </IconButton>
+        </Box>
       </DialogTitle>
       <DialogContent>
         {content}
       </DialogContent>
-      <DialogActions sx={{ mt: '1rem', p: '24px' }}>
-        <Button size="small" onClick={onClose} variant={cancelButtonVariant} color={cancelButtonColor}>
+      <DialogActions sx={{ px: '24px', pb: '24px' }}>
+        <Button size="small" onClick={onClose} variant={cancelButtonVariant} color={cancelButtonColor} disabled={disabled}>
           {cancelButtonText || trans('cancel')}
         </Button>
         <Button

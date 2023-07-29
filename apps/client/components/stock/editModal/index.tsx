@@ -1,9 +1,3 @@
-import {
-  Box, Button, Dialog, DialogActions,
-  DialogContent, DialogTitle,
-  IconButton,
-} from '@mui/material';
-import Close from '@mui/icons-material/Close';
 import { useEffect, useMemo } from 'react';
 import useTranslation from '../../../hooks/useTranslation';
 import useForm from '../../../hooks/useForm';
@@ -11,6 +5,7 @@ import Form from '../form';
 import { STOCK_PRODUCTS_PATH } from '../../../utils/axios';
 import useAxios from '../../../hooks/useAxios';
 import { formRepresentationToBody, initFormState } from '../createModal';
+import ConfirmationDialog from '../../confirmationDialog';
 
 export default function EditModal(
   {
@@ -37,9 +32,7 @@ export default function EditModal(
 
   const canSubmit = () => !performing && !performingPut;
 
-  const handleSave = (e) => {
-    e.preventDefault();
-
+  const handleSave = () => {
     if (validate() && !canSubmit()) {
       return;
     }
@@ -52,24 +45,15 @@ export default function EditModal(
   };
 
   return (
-    <Dialog open onClose={onClose} maxWidth={false}>
-      <form onSubmit={handleSave}>
-        <DialogTitle>
-          <Box sx={{ justifyContent: 'space-between', alignItems: 'center', display: 'flex' }}>
-            {trans('editProduct')}
-            <IconButton onClick={onClose} disabled={!canSubmit()}>
-              <Close />
-            </IconButton>
-          </Box>
-        </DialogTitle>
-        <DialogContent>
-          <Form setValue={setValue} formRepresentation={formRepresentation} disabled={!canSubmit()} />
-        </DialogContent>
-        <DialogActions>
-          <Button size="small" disabled={!canSubmit()} onClick={onClose} variant="outlined" color="inherit">{trans('cancel')}</Button>
-          <Button size="small" type="submit" disabled={!canSubmit()} onClick={handleSave} variant="contained" color="primary">{trans('save')}</Button>
-        </DialogActions>
-      </form>
-    </Dialog>
+    <ConfirmationDialog
+      open
+      title={<>{trans('editProduct')}</>}
+      onClose={onClose}
+      onConfirm={handleSave}
+      disabled={performing}
+      content={(
+        <Form setValue={setValue} formRepresentation={formRepresentation} disabled={performing} />
+      )}
+    />
   );
 }

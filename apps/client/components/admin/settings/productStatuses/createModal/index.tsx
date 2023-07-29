@@ -1,15 +1,10 @@
-import {
-  Box, Button, Dialog, DialogActions,
-  DialogContent, DialogTitle,
-  IconButton,
-} from '@mui/material';
-import Close from '@mui/icons-material/Close';
 import useAxios from '../../../../../hooks/useAxios';
 import useTranslation from '../../../../../hooks/useTranslation';
 import useForm, { FormRepresentation } from '../../../../../hooks/useForm';
 import Form from '../form';
 import { PRODUCT_STATUSES_PATH } from '../../../../../utils/axios';
 import { ProductStatus } from '../../../../../utils/axios/models/product';
+import ConfirmationDialog from '../../../../confirmationDialog';
 
 export function initFormState(productStatus?: ProductStatus) {
   return {
@@ -40,9 +35,7 @@ export default function CreateModal({ onClose, onSubmit }: {
 
   const { call, performing } = useAxios('post', PRODUCT_STATUSES_PATH.replace(':id', ''));
 
-  const handleSave = (e) => {
-    e.preventDefault();
-
+  const handleSave = () => {
     if (validate()) {
       return;
     }
@@ -52,24 +45,15 @@ export default function CreateModal({ onClose, onSubmit }: {
   };
 
   return (
-    <Dialog open onClose={onClose} maxWidth={false}>
-      <form onSubmit={handleSave}>
-        <DialogTitle>
-          <Box sx={{ justifyContent: 'space-between', alignItems: 'center', display: 'flex' }}>
-            {trans('createProductStatus')}
-            <IconButton onClick={onClose} disabled={performing}>
-              <Close />
-            </IconButton>
-          </Box>
-        </DialogTitle>
-        <DialogContent>
-          <Form setValue={setValue} formRepresentation={formRepresentation} disabled={performing} />
-        </DialogContent>
-        <DialogActions>
-          <Button size="small" disabled={performing} onClick={onClose} variant="outlined" color="inherit">{trans('cancel')}</Button>
-          <Button size="small" type="submit" disabled={performing} onClick={handleSave} variant="contained" color="primary">{trans('save')}</Button>
-        </DialogActions>
-      </form>
-    </Dialog>
+    <ConfirmationDialog
+      open
+      title={<>{trans('createProductStatus')}</>}
+      onClose={onClose}
+      onConfirm={handleSave}
+      disabled={performing}
+      content={(
+        <Form setValue={setValue} formRepresentation={formRepresentation} disabled={performing} />
+      )}
+    />
   );
 }

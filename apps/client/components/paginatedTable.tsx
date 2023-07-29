@@ -32,7 +32,7 @@ export default function PaginatedTable({
         }}
         page={page - 1}
         rowsPerPage={rowsPerPage}
-        rowsPerPageOptions={[10, 25, 50]}
+        rowsPerPageOptions={[5, 10, 25, 50]}
         onRowsPerPageChange={(e) => {
           if (!disabled) {
             onRowsPerPageChange(parseInt(e.target.value, 10));

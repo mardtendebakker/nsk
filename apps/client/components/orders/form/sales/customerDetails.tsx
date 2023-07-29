@@ -43,7 +43,7 @@ export default function CustomerDetails({
           sx={{ display: 'flex', flex: 1, alignItems: 'center' }}
         >
           <FormControl sx={{ flex: 1 }}>
-            <FormLabel>{trans('customerType')}</FormLabel>
+            <FormLabel sx={{ mb: '.5rem' }}>{trans('customerType')}</FormLabel>
             <RadioGroup
               row
               defaultValue={formRepresentation.newCustomer.value ? 'new' : 'existing'}
@@ -64,9 +64,8 @@ export default function CustomerDetails({
           <FormControlLabel
             key={element.value}
             sx={(theme) => ({
-              border: `2px solid ${theme.palette.text.disabled}`,
+              border: `1px solid ${theme.palette.text.disabled}`,
               borderRadius: '.5rem',
-              p: '.25rem .5rem',
               mr: 0,
               ml: i === 0 ? 'unset' : '1rem',
               flex: 1,

@@ -1,6 +1,7 @@
 import { Box, Card } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import _ from 'lodash';
 import { STOCK_PRODUCTS_PATH, STOCK_REPAIRS_PATH, LOCATIONS_PATH } from '../../../utils/axios';
 import List from './list';
 import useAxios from '../../../hooks/useAxios';
@@ -13,6 +14,7 @@ import useTranslation from '../../../hooks/useTranslation';
 import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
 import EditModal from '../editModal';
 import pushURLParams from '../../../utils/pushURLParams';
+import { ProductListItem } from '../../../utils/axios/models/product';
 
 function initFormState(
   {
@@ -145,7 +147,11 @@ export default function ListContainer() {
   ]);
 
   const handleAllChecked = (checked: boolean) => {
-    setCheckedProductIds(checked ? data.map(({ id }) => id) : []);
+    setCheckedProductIds(
+      checked
+        ? _.union(checkedProductIds, data.map(({ id }) => id))
+        : checkedProductIds.filter((productId) => !data.find((product: ProductListItem) => product.id == productId)),
+    );
   };
 
   const handleRowChecked = ({ id, checked }: { id: number, checked: boolean }) => {
@@ -209,7 +215,7 @@ export default function ListContainer() {
       <Box sx={{ m: '.5rem' }} />
       <Action
         disabled={disabled()}
-        allChecked={checkedProductIds.length === data.length && data.length > 0}
+        allChecked={(_.intersectionWith(checkedProductIds, data, (productId: number, product: ProductListItem) => productId === product.id).length === data.length) && data.length != 0}
         checkedProductsCount={checkedProductIds.length}
         onAllCheck={handleAllChecked}
         onEdit={() => setEditProductId(checkedProductIds[0])}
@@ -224,7 +230,7 @@ export default function ListContainer() {
         page={page}
         onCheck={handleRowChecked}
         checkedProductIds={checkedProductIds}
-        onPageChange={(newPage) => { setPage(newPage); setCheckedProductIds([]); }}
+        onPageChange={setPage}
         onRowsPerPageChange={(newRowsPerPage) => {
           setRowsPerPage(newRowsPerPage);
           setPage(1);
