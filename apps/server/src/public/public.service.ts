@@ -102,7 +102,7 @@ export class PublicService {
     }
   }
 
-  async postPickup(params: PostPickupDto, files?: Express.Multer.File[]) {
+  async postPickup(params: PostPickupDto, files?: Express.Multer.File[]): Promise<void> {
 
     const { pickup_form } = params;
 
@@ -132,12 +132,9 @@ export class PublicService {
       await this.uploadFiles(purchase.pickup.id, files);
     }
 
-    const products = await this.createProductsForPickup(pickup_form, purchase.id);
+    await this.createProductsForPickup(pickup_form, purchase.id);
     
-    // sendStatusMail
-    const message = pickup_form.confirmPage ? pickup_form.confirmPage : "Pickup added successfully";
-    //
-    return message;
+    // TODO: sendStatusMail
   }
 
   private async uploadFiles(pickupId: number, files: Express.Multer.File[]): Promise<afile[]> {

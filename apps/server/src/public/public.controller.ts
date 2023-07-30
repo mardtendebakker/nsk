@@ -1,4 +1,5 @@
-import { Body, Controller, Get, Post, Query, Render, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, Render, Res, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import { Response } from 'express';
 import { PublicService } from './public.service';
 import { ApiTags } from '@nestjs/swagger';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
@@ -33,12 +34,17 @@ export class PublicController {
 
   @Post('pickup')
   @UseInterceptors(AnyFilesInterceptor())
-  create(
+  async create(
     @Body() body: PostPickupDto,
-    @UploadedFiles() files?: Express.Multer.File[],
+    @UploadedFiles() files: Express.Multer.File[],
+    @Res() res: Response,
   ) {
-    console.log(body, files);
+    await this.publicService.postPickup(body, files);
 
-    return this.publicService.postPickup(body, files);
+    if (body.pickup_form.confirmPage) {
+      res.redirect(body.pickup_form.confirmPage);
+    } else {
+      res.send('Pickup added successfully');
+    }
   }
 }
