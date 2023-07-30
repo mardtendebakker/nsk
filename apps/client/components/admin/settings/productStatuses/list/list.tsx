@@ -1,11 +1,12 @@
 import {
-  TableBody, TableCell, TableHead, TableRow, Box,
+  TableBody, TableHead, TableRow, Box,
 } from '@mui/material';
 import Check from '@mui/icons-material/Check';
 import Edit from '../../../../button/edit';
 import { ProductStatus } from '../../../../../utils/axios/models/product';
 import useTranslation from '../../../../../hooks/useTranslation';
 import PaginatedTable from '../../../../paginatedTable';
+import TableCell from '../../../../tableCell';
 
 export default function List({
   productStatuses,

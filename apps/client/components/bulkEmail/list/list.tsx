@@ -1,11 +1,11 @@
 import {
   TableBody,
-  TableCell,
   TableHead,
   TableRow,
 } from '@mui/material';
 import useTranslation from '../../../hooks/useTranslation';
 import PaginatedTable from '../../paginatedTable';
+import TableCell from '../../tableCell';
 
 export default function List({
   emails = [],

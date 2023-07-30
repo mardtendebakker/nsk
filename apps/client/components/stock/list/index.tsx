@@ -15,6 +15,7 @@ import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
 import EditModal from '../editModal';
 import pushURLParams from '../../../utils/pushURLParams';
 import { ProductListItem } from '../../../utils/axios/models/product';
+import SplitModal, { SplitData } from './splitModal';
 
 function initFormState(
   {
@@ -91,6 +92,7 @@ export default function ListContainer() {
   const [rowsPerPage, setRowsPerPage] = useState<number>(parseInt(router.query?.rowsPerPage?.toString() || '10', 10));
   const [editProductId, setEditProductId] = useState<number | undefined>();
   const [checkedProductIds, setCheckedProductIds] = useState<number[]>([]);
+  const [showSplitModal, setShowSplitModal] = useState(false);
 
   const ajaxPath = router.pathname == STOCKS_PRODUCTS
     ? STOCK_PRODUCTS_PATH
@@ -196,6 +198,10 @@ export default function ListContainer() {
       });
   };
 
+  const handleSplit = (data: SplitData) => {
+    // TODO call endpoint to perform a split
+  };
+
   const handleReset = () => {
     setData(initFormState({}));
     setPage(1);
@@ -215,6 +221,7 @@ export default function ListContainer() {
       <Box sx={{ m: '.5rem' }} />
       <Action
         disabled={disabled()}
+        onSplit={() => setShowSplitModal(true)}
         allChecked={(_.intersectionWith(checkedProductIds, data, (productId: number, product: ProductListItem) => productId === product.id).length === data.length) && data.length != 0}
         checkedProductsCount={checkedProductIds.length}
         onAllCheck={handleAllChecked}
@@ -265,6 +272,12 @@ export default function ListContainer() {
         onConfirm={handlePatchLocation}
         onClose={() => setShowChangeLocationModal(false)}
         confirmButtonText={trans('save')}
+      />
+      )}
+      {showSplitModal && (
+      <SplitModal
+        onClose={() => setShowSplitModal(false)}
+        onConfirm={handleSplit}
       />
       )}
     </Card>

@@ -2,7 +2,6 @@ import {
   Box,
   Button,
   TableBody,
-  TableCell,
   TableHead,
   TableRow,
 } from '@mui/material';
@@ -20,6 +19,7 @@ import { STOCK_PRODUCTS_PATH } from '../../../../utils/axios';
 import EditModal from '../../../stock/editModal';
 import Edit from '../../../button/edit';
 import PaginatedTable from '../../../paginatedTable';
+import TableCell from '../../../tableCell';
 
 export default function ProductsTable({ orderId }:{ orderId: string }) {
   const [showForm, setShowForm] = useState<boolean>(false);
@@ -59,7 +59,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
   return (
     <>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <Button size="small" onClick={() => setShowForm(true)}>
+        <Button size="small" onClick={() => setShowForm(true)} sx={{ mb: '.5rem' }}>
           <Add />
           {trans('addAnotherProduct')}
         </Button>

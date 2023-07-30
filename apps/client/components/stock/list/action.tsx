@@ -2,6 +2,7 @@ import {
   Box, Button, Checkbox, Typography,
 } from '@mui/material';
 import ChevronRight from '@mui/icons-material/ChevronRight';
+import Bolt from '@mui/icons-material/Bolt';
 import Edit from '@mui/icons-material/Edit';
 import EditLocation from '@mui/icons-material/EditLocation';
 import useTranslation from '../../../hooks/useTranslation';
@@ -13,6 +14,7 @@ export default function Action({
   checkedProductsCount,
   onAllCheck,
   onChangeLocation,
+  onSplit,
   onEdit,
   onPrint,
   onDelete,
@@ -22,6 +24,7 @@ export default function Action({
   checkedProductsCount: number,
   onAllCheck: (checked: boolean) => void,
   onChangeLocation: () => void,
+  onSplit: () => void,
   onEdit: () => void,
   onPrint: () => void,
   onDelete: () => void,
@@ -52,19 +55,27 @@ export default function Action({
         )}
         {checkedProductsCount === 1
         && (
-        <Button size="small" onClick={onEdit} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
-          <Edit sx={{ mr: '.1rem' }} />
-          {trans('editProduct')}
-        </Button>
+        <>
+          <Button size="small" onClick={onEdit} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
+            <Edit sx={{ mr: '.1rem' }} />
+            {trans('editProduct')}
+          </Button>
+          <Button size="small" onClick={onSplit} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
+            {trans('split')}
+            <Bolt />
+          </Button>
+        </>
         )}
         {checkedProductsCount > 0
         && (
-        <Button size="small" onClick={onPrint} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
-          {trans('print')}
-          <ChevronRight sx={{ transform: 'rotate(90deg)' }} />
-        </Button>
+          <>
+            <Button size="small" onClick={onPrint} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
+              {trans('print')}
+              <ChevronRight sx={{ transform: 'rotate(90deg)' }} />
+            </Button>
+            <Delete onDelete={onDelete} disabled={disabled} />
+          </>
         )}
-        {checkedProductsCount > 0 && (<Delete onDelete={onDelete} disabled={disabled} />)}
       </Box>
     </Box>
   );

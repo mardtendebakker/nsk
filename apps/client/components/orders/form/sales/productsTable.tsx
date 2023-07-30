@@ -3,7 +3,6 @@ import {
   Button,
   Table,
   TableBody,
-  TableCell,
   TableHead,
   TableRow,
 } from '@mui/material';
@@ -19,6 +18,7 @@ import AddButton from '../../../button/add';
 import Select from '../../../memoizedInput/select';
 import Delete from '../../../button/delete';
 import PaginatedTable from '../../../paginatedTable';
+import TableCell from '../../../tableCell';
 import AddProductsModal from './addProductsModal';
 
 function Row({
@@ -220,7 +220,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
   return (
     <>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <Button size="small" onClick={() => setShowServicePicker(true)} sx={{ mr: 0, mb: '.5rem' }}>
+        <Button size="small" onClick={() => setShowServicePicker(true)} sx={{ mb: '.5rem' }}>
           <Add />
           {trans('addProducts')}
         </Button>
