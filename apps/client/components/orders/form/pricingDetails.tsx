@@ -60,7 +60,7 @@ export default function PricingDetails({
             onChange={(_, checked) => setValue({ field: 'isGift', value: checked })}
             checked={formRepresentation.isGift.value as boolean}
           />
-          <Typography variant="inherit" sx={{ mt: '1.9rem' }}>
+          <Typography variant="inherit">
             {trans('gift')}
           </Typography>
         </Grid>

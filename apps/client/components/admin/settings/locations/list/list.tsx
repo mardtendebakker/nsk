@@ -1,7 +1,8 @@
 import {
-  TableBody, TableCell, TableHead, TableRow,
+  TableBody, TableHead, TableRow,
 } from '@mui/material';
 import PaginatedTable from '../../../../paginatedTable';
+import TableCell from '../../../../tableCell';
 import Edit from '../../../../button/edit';
 import { Location } from '../../../../../utils/axios/models/location';
 import useTranslation from '../../../../../hooks/useTranslation';

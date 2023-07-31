@@ -45,6 +45,7 @@ export interface ProductListItem {
   location?: string,
   type?: string,
   tasks?: Task[],
+  splitable?: boolean,
   services?: Service[],
   updated_at?: string,
   created_at?: string

@@ -1,6 +1,5 @@
 import {
   TableBody,
-  TableCell,
   TableHead,
   TableRow,
 } from '@mui/material';
@@ -8,6 +7,7 @@ import { format } from 'date-fns';
 import useTranslation from '../../../../hooks/useTranslation';
 import { UserListItem } from '../../../../utils/axios/models/user';
 import PaginatedTable from '../../../paginatedTable';
+import TableCell from '../../../tableCell';
 
 export default function List({
   users = [],

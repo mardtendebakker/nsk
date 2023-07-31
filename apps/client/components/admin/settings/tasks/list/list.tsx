@@ -1,7 +1,8 @@
 import {
-  TableBody, TableCell, TableHead, TableRow,
+  TableBody, TableHead, TableRow,
 } from '@mui/material';
 import PaginatedTable from '../../../../paginatedTable';
+import TableCell from '../../../../tableCell';
 import Edit from '../../../../button/edit';
 import { Task } from '../../../../../utils/axios/models/product';
 import useTranslation from '../../../../../hooks/useTranslation';
@@ -59,7 +60,7 @@ export default function List({
               {task.name}
             </TableCell>
             <TableCell>
-              {task.description || '--'}
+              {task.description}
             </TableCell>
             <TableCell>
               {task.productTypes?.length || 0}

@@ -1,6 +1,5 @@
 import {
   TableBody,
-  TableCell,
   TableHead,
   TableRow,
   Checkbox,
@@ -12,6 +11,7 @@ import { ORDERS_PURCHASES } from '../../../utils/routes';
 import useTranslation from '../../../hooks/useTranslation';
 import { OrderListItem } from '../../../utils/axios/models/order';
 import PaginatedTable from '../../paginatedTable';
+import TableCell from '../../tableCell';
 
 export default function List({
   orders = [],

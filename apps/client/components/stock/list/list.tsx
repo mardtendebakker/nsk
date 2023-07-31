@@ -1,7 +1,6 @@
 import {
   Table,
   TableBody,
-  TableCell,
   TableHead,
   TableRow,
   Checkbox,
@@ -10,12 +9,14 @@ import {
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { format } from 'date-fns';
+import Check from '@mui/icons-material/Check';
 import useTranslation from '../../../hooks/useTranslation';
 import { ProductListItem } from '../../../utils/axios/models/product';
 import TasksProgress from './tasksProgress';
 import TaskStatusTableCell from './taskStatusTableCell';
 import { STOCKS_PRODUCTS } from '../../../utils/routes';
 import PaginatedTable from '../../paginatedTable';
+import TableCell from '../../tableCell';
 
 type OnCheck = (object: { id: number, checked: boolean }) => void;
 type OnClick = (object: { id: number }) => void;
@@ -80,6 +81,9 @@ function Row(
         </TableCell>
         <TableCell>
           {product.sold || '--'}
+        </TableCell>
+        <TableCell>
+          {product.splitable && <Check />}
         </TableCell>
         <TableCell
           sx={{ cursor: 'pointer' }}
@@ -208,6 +212,9 @@ export default function List({
               {trans('delivered')}
             </TableCell>
           )}
+          <TableCell>
+            {trans('splitable')}
+          </TableCell>
           <TableCell>
             {trans('taskStatus')}
           </TableCell>
