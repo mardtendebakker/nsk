@@ -107,7 +107,7 @@ export default function AddProductsModal({
       onClose={onClose}
       onConfirm={() => onProductsAdded(checkedProductIds)}
       content={(
-        <>
+        <form onSubmit={(e) => { e.preventDefault(); onProductsAdded(checkedProductIds); }}>
           <Filter
             disabled={performing}
             onReset={() => {}}
@@ -142,7 +142,8 @@ export default function AddProductsModal({
             }}
             rowsPerPage={rowsPerPage}
           />
-        </>
+          <input type="submit" style={{ display: 'none' }} />
+        </form>
       )}
     />
   );

@@ -23,7 +23,10 @@ export default function Create({ open, onClose }: { open: boolean, onClose: () =
       onClose={onClose}
       onConfirm={onClose}
       content={(
-        <Form setValue={setValue} formRepresentation={formRepresentation} />
+        <form onSubmit={(e) => { e.preventDefault(); onClose(); }}>
+          <Form setValue={setValue} formRepresentation={formRepresentation} />
+          <input type="submit" style={{ display: 'none' }} />
+        </form>
       )}
     />
   );

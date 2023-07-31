@@ -56,7 +56,10 @@ export default function CreateModal({ onClose, onSubmit }: {
       onConfirm={handleSave}
       disabled={performing}
       content={(
-        <Form setValue={setValue} formRepresentation={formRepresentation} disabled={performing} />
+        <form onSubmit={(e) => { e.preventDefault(); handleSave(); }}>
+          <Form setValue={setValue} formRepresentation={formRepresentation} disabled={performing} />
+          <input type="submit" style={{ display: 'none' }} />
+        </form>
       )}
     />
   );

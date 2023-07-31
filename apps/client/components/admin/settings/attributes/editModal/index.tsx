@@ -43,7 +43,10 @@ export default function EditModal({ onClose, onSubmit, id }: {
       onConfirm={handleSave}
       disabled={performing}
       content={(
-        <Form setData={setData} setValue={setValue} formRepresentation={formRepresentation} disabled={performing} />
+        <form onSubmit={(e) => { e.preventDefault(); handleSave(); }}>
+          <Form setData={setData} setValue={setValue} formRepresentation={formRepresentation} disabled={performing} />
+          <input type="submit" style={{ display: 'none' }} />
+        </form>
       )}
     />
   );
