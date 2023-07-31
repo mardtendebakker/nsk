@@ -19,7 +19,7 @@ export default function Form({
   return (
     <BorderedBox sx={{ width: '80rem', p: '1rem' }}>
       <TextField
-        sx={{ mb: '2rem' }}
+        sx={{ mb: '1rem' }}
         fullWidth
         label={trans('taskForm.name.label')}
         placeholder={trans('taskForm.name.placeholder')}
@@ -31,7 +31,7 @@ export default function Form({
       />
       <TextField
         multiline
-        sx={{ mb: '2rem' }}
+        sx={{ mb: '1rem' }}
         minRows={3}
         fullWidth
         label={trans('taskForm.description.label')}
@@ -44,7 +44,6 @@ export default function Form({
       />
       <DataSourcePicker
         multiple
-        sx={{ mb: '2rem' }}
         disabled={disabled}
         url={PRODUCT_TYPES_PATH.replace(':id', '')}
         fullWidth

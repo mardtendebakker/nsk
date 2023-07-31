@@ -1,6 +1,4 @@
-import {
-  Checkbox, Grid, Typography, Box,
-} from '@mui/material';
+import { Grid } from '@mui/material';
 import { SetValue, FormRepresentation } from '../../../../../hooks/useForm';
 import useTranslation from '../../../../../hooks/useTranslation';
 import BorderedBox from '../../../../borderedBox';
@@ -9,6 +7,7 @@ import Select from '../../../../memoizedInput/select';
 import { PRODUCT_TYPES_PATH } from '../../../../../utils/axios';
 import DataSourcePicker from '../../../../memoizedInput/dataSourcePicker';
 import Options from './options';
+import Checkbox from '../../../../checkbox';
 
 export default function Form({
   setValue,
@@ -30,12 +29,7 @@ export default function Form({
         spacing={3}
         sx={{ flexDirection: 'column' }}
       >
-        <Grid
-          sx={{
-            flex: 1, display: 'flex', alignItems: 'baseline', mb: '1rem',
-          }}
-          item
-        >
+        <Grid sx={{ flex: 1, display: 'flex' }} item>
           <TextField
             sx={{ mr: '1rem', flex: 0.25 }}
             label={trans('attributeForm.code.label')}
@@ -70,18 +64,14 @@ export default function Form({
             label={trans('attributeForm.type.label')}
           />
           )}
-          <Box sx={{ display: 'flex', alignSelf: 'center' }}>
-            <Checkbox
-              disabled={disabled}
-              onChange={(_, checked) => setValue({ field: 'isPublic', value: checked })}
-              checked={formRepresentation.isPublic.value as boolean}
-            />
-            <Typography variant="inherit" sx={{ mt: '.3rem' }}>
-              {trans('isPublic')}
-            </Typography>
-          </Box>
+          <Checkbox
+            disabled={disabled}
+            onCheck={(checked) => setValue({ field: 'isPublic', value: checked })}
+            checked={formRepresentation.isPublic.value as boolean}
+            label={trans('isPublic')}
+          />
         </Grid>
-        <Grid sx={{ mb: '1rem', display: 'flex' }} item>
+        <Grid sx={{ display: 'flex' }} item>
           <DataSourcePicker
             sx={{ flex: 0.5, flexGrow: 1 }}
             multiple

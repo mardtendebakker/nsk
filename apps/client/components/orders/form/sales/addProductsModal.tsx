@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Box, Checkbox, Typography } from '@mui/material';
 import _ from 'lodash';
+import { Box } from '@mui/material';
 import ConfirmationDialog from '../../../confirmationDialog';
 import { STOCK_PRODUCTS_PATH } from '../../../../utils/axios';
 import useTranslation from '../../../../hooks/useTranslation';
@@ -9,6 +9,7 @@ import useAxios from '../../../../hooks/useAxios';
 import Filter from '../../../stock/list/filter';
 import useForm, { FieldPayload } from '../../../../hooks/useForm';
 import { ProductListItem } from '../../../../utils/axios/models/product';
+import Checkbox from '../../../checkbox';
 
 const initFormState = {
   search: {},
@@ -117,18 +118,14 @@ export default function AddProductsModal({
               setPage(1);
             }}
           />
-          <Box sx={{ display: 'flex', alignItems: 'center', my: '.5rem' }}>
-            <Checkbox
-              disabled={performing}
-              checked={(_.intersectionWith(checkedProductIds, data, (productId: number, product: ProductListItem) => productId === product.id).length === data.length) && data.length != 0}
-              onChange={(e, checked) => handleAllChecked(checked)}
-            />
-            <Typography>
-              {`${trans('selectAll')}`}
-              {' '}
-              {checkedProductIds.length > 0 ? `(${checkedProductIds.length} ${trans('selected')})` : ''}
-            </Typography>
-          </Box>
+          <Box sx={{ m: '.5rem' }} />
+          <Checkbox
+            disabled={performing}
+            checked={(_.intersectionWith(checkedProductIds, data, (productId: number, product: ProductListItem) => productId === product.id).length === data.length) && data.length != 0}
+            onCheck={handleAllChecked}
+            label={`${trans('selectAll')} ${checkedProductIds.length > 0 ? `(${checkedProductIds.length} ${trans('selected')})` : ''}`}
+          />
+          <Box sx={{ m: '.5rem' }} />
           <List
             products={data}
             count={Math.ceil(count / rowsPerPage)}

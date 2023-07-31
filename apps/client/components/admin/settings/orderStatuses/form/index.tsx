@@ -1,8 +1,9 @@
-import { Box, Checkbox, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import { SetValue, FormRepresentation } from '../../../../../hooks/useForm';
 import useTranslation from '../../../../../hooks/useTranslation';
 import BorderedBox from '../../../../borderedBox';
 import TextField from '../../../../memoizedInput/textField';
+import Checkbox from '../../../../checkbox';
 
 export default function Form({
   setValue,
@@ -18,7 +19,7 @@ export default function Form({
   return (
     <BorderedBox sx={{ width: '80rem', p: '1rem' }}>
       <TextField
-        sx={{ mb: '2rem' }}
+        sx={{ mb: '1rem' }}
         fullWidth
         label={trans('orderStatusForm.name.label')}
         placeholder={trans('orderStatusForm.name.placeholder')}
@@ -37,23 +38,18 @@ export default function Form({
         />
         <Checkbox
           disabled={disabled}
-          onChange={(_, checked) => setValue({ field: 'isSale', value: checked })}
+          onCheck={(checked) => setValue({ field: 'isSale', value: checked })}
           checked={formRepresentation.isSale.value as boolean}
+          label={trans('sale')}
         />
-        <Typography variant="inherit" sx={{ mt: '.3rem' }}>
-          {trans('sale')}
-        </Typography>
         <Checkbox
           disabled={disabled}
-          onChange={(_, checked) => setValue({ field: 'isPurchase', value: checked })}
+          onCheck={(checked) => setValue({ field: 'isPurchase', value: checked })}
           checked={formRepresentation.isPurchase.value as boolean}
+          label={trans('isPurchase')}
         />
-        <Typography variant="inherit" sx={{ mt: '.3rem' }}>
-          {trans('purchase')}
-        </Typography>
       </Box>
       <TextField
-        sx={{ mb: '2rem' }}
         minRows={3}
         multiline
         fullWidth

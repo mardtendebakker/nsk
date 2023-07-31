@@ -1,12 +1,11 @@
-import {
-  Box, Button, Checkbox, Typography,
-} from '@mui/material';
+import { Box, Button } from '@mui/material';
 import ChevronRight from '@mui/icons-material/ChevronRight';
 import Bolt from '@mui/icons-material/Bolt';
 import Edit from '@mui/icons-material/Edit';
 import EditLocation from '@mui/icons-material/EditLocation';
 import useTranslation from '../../../hooks/useTranslation';
 import Delete from '../../button/delete';
+import Checkbox from '../../checkbox';
 
 export default function Action({
   disabled,
@@ -33,18 +32,12 @@ export default function Action({
 
   return (
     <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <Checkbox
-          disabled={disabled}
-          checked={allChecked}
-          onChange={(_, checked) => onAllCheck(checked)}
-        />
-        <Typography>
-          {`${trans('selectAll')}`}
-          {' '}
-          {checkedProductsCount > 0 ? `(${checkedProductsCount} ${trans('selected')})` : ''}
-        </Typography>
-      </Box>
+      <Checkbox
+        disabled={disabled}
+        checked={allChecked}
+        onCheck={onAllCheck}
+        label={`${trans('selectAll')} ${checkedProductsCount > 0 ? `(${checkedProductsCount} ${trans('selected')})` : ''}`}
+      />
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         {checkedProductsCount > 0
         && (

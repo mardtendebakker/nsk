@@ -1,5 +1,4 @@
 import {
-  Checkbox,
   Grid,
   Typography,
   Box,
@@ -7,6 +6,7 @@ import {
 import useTranslation from '../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../hooks/useForm';
 import TextField from '../../memoizedInput/textField';
+import Checkbox from '../../checkbox';
 
 export default function PricingDetails({
   formRepresentation,
@@ -56,13 +56,10 @@ export default function PricingDetails({
           />
           <Checkbox
             disabled={disabled}
-            sx={{ m: 'revert', mb: '.4rem', alignSelf: 'end' }}
-            onChange={(_, checked) => setValue({ field: 'isGift', value: checked })}
+            onCheck={(checked) => setValue({ field: 'isGift', value: checked })}
             checked={formRepresentation.isGift.value as boolean}
+            label={trans('gift')}
           />
-          <Typography variant="inherit">
-            {trans('gift')}
-          </Typography>
         </Grid>
         <Grid item>
           <Typography variant="h3">
