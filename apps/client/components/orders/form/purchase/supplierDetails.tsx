@@ -95,7 +95,7 @@ export default function SupplierDetails({
               fullWidth
               placeholder={trans('selectSupplier')}
               onChange={(selected: { id: number }) => setValue({ field: 'supplierId', value: selected?.id })}
-              value={formRepresentation.supplierId.value?.toString() || ''}
+              value={formRepresentation.supplierId.value}
               error={!!formRepresentation.supplierId.error}
               helperText={formRepresentation.supplierId.error}
             />

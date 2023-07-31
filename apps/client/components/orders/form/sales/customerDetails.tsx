@@ -95,7 +95,7 @@ export default function CustomerDetails({
               fullWidth
               placeholder={trans('selectCustomer')}
               onChange={(selected: { id: number }) => setValue({ field: 'customerId', value: selected?.id })}
-              value={formRepresentation.customerId.value?.toString() || ''}
+              value={formRepresentation.customerId.value}
               error={!!formRepresentation.customerId.error}
               helperText={formRepresentation.customerId.error}
             />

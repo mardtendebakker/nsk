@@ -87,7 +87,7 @@ export default function DataSourcePicker(
       options={options}
       renderOption={(props, option) => (
         <li {...props} key={option.id}>
-          {option.name}
+          {option.label}
         </li>
       )}
       value={currentValue || (multiple ? [] : null)}
