@@ -12,6 +12,8 @@ import useTranslation from '../../../hooks/useTranslation';
 import { OrderListItem } from '../../../utils/axios/models/order';
 import PaginatedTable from '../../paginatedTable';
 import TableCell from '../../tableCell';
+import Delete from '../../button/delete';
+import Edit from '../../button/edit';
 
 export default function List({
   orders = [],
@@ -23,6 +25,8 @@ export default function List({
   rowsPerPage,
   onCheck,
   disabled,
+  onEdit,
+  onDelete,
 }: {
   orders: OrderListItem[],
   checkedOrderIds: number[],
@@ -32,7 +36,9 @@ export default function List({
   onRowsPerPageChange: (rowsPerPage: number)=>void,
   rowsPerPage: number,
   onCheck: (object: { id: number, checked: boolean })=>void,
-  disabled: boolean
+  disabled: boolean,
+  onEdit: (id: number) => void,
+  onDelete: (id: number) => void,
 }) {
   const { trans } = useTranslation();
   const router = useRouter();
@@ -64,6 +70,9 @@ export default function List({
           </TableCell>
           <TableCell>
             {trans('status')}
+          </TableCell>
+          <TableCell>
+            {trans('actions')}
           </TableCell>
         </TableRow>
       </TableHead>
@@ -113,6 +122,10 @@ export default function List({
                   {order.order_status.name}
                 </Box>
               </Box>
+            </TableCell>
+            <TableCell>
+              <Edit onClick={() => onEdit(order.id)} disabled={disabled} />
+              <Delete onDelete={() => onDelete(order.id)} disabled={disabled} tooltip />
             </TableCell>
           </TableRow>
         ))}

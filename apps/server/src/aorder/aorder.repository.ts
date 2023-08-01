@@ -52,4 +52,8 @@ export class AOrderRepository {
   deleteMany(ids: number[]) {
     return this.prisma.aorder.deleteMany({ where: { id: { in: ids } } })
   }
+
+  deleteOne(id: number) {
+    return this.prisma.aorder.delete({ where: { id } })
+  }
 }

@@ -57,8 +57,8 @@ export class StockController {
     return this.stockService.updateMany(updateManyProductDto)
   }
 
-  @Delete('')
-  deleteMany(@Body() ids: number[]) {
-    return this.stockService.deleteMany(ids);
+  @Delete(':id')
+  deleteOne(@Param('id') id: number) {
+    return this.stockService.deleteOne(id);
   }
 }

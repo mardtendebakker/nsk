@@ -76,7 +76,7 @@ export default function SplitModal({ onClose, onConfirm }:{
             fullWidth
             sx={{ mt: '.5rem' }}
             url={PRODUCT_STATUSES_PATH.replace(':id', '')}
-            label={trans('status')}
+            label={trans('newStatus')}
             placeholder={trans('selectStatus')}
             onChange={(selected: { id: number }) => setValue({ field: 'statusId', value: selected?.id })}
             value={formRepresentation.statusId.value?.toString()}
