@@ -283,7 +283,7 @@ export default function ListContainer() {
         disabled={!changeStatusValue}
         title={<>{trans('changeStatus')}</>}
         content={(
-          <Box>
+          <form onSubmit={(e) => { e.preventDefault(); handlePatchStatus(); }}>
             {trans('changeStatusContent')}
             <Box sx={{ pb: '2rem' }} />
             <DataSourcePicker
@@ -294,7 +294,7 @@ export default function ListContainer() {
               onChange={(value: { id: number }) => setChangeStatusValue(value?.id)}
               value={changeStatusValue?.toString()}
             />
-          </Box>
+          </form>
         )}
         onConfirm={handlePatchStatus}
         onClose={() => setShowChangeStatusModal(false)}

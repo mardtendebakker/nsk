@@ -256,7 +256,7 @@ export default function ListContainer() {
         disabled={!changeLocationValue}
         title={<>{trans('changeLocation')}</>}
         content={(
-          <Box>
+          <form onSubmit={(e) => { e.preventDefault(); handlePatchLocation(); }}>
             {trans('changeLocationContent')}
             <Box sx={{ pb: '2rem' }} />
             <DataSourcePicker
@@ -267,7 +267,8 @@ export default function ListContainer() {
               onChange={(value: { id: number }) => setChangeLocationValue(value?.id)}
               value={changeLocationValue?.toString()}
             />
-          </Box>
+            <input type="submit" style={{ display: 'none' }} />
+          </form>
         )}
         onConfirm={handlePatchLocation}
         onClose={() => setShowChangeLocationModal(false)}
