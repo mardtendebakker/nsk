@@ -115,7 +115,7 @@ export default function ListContainer() {
 
   const { call: callDelete, performing: performingDelete } = useAxios(
     'delete',
-    ajaxPath.replace(':id', ''),
+    ajaxPath,
     {
       withProgressBar: true,
       showSuccessMessage: true,
@@ -164,10 +164,9 @@ export default function ListContainer() {
     }
   };
 
-  const handleDelete = () => {
-    callDelete({ body: checkedProductIds })
+  const handleDelete = (id: number) => {
+    callDelete({ path: ajaxPath.replace(':id', id.toString()) })
       .then(() => {
-        setCheckedProductIds([]);
         refreshList({
           page,
           rowsPerPage,
@@ -221,28 +220,29 @@ export default function ListContainer() {
       <Box sx={{ m: '.5rem' }} />
       <Action
         disabled={disabled()}
-        onSplit={() => setShowSplitModal(true)}
         allChecked={(_.intersectionWith(checkedProductIds, data, (productId: number, product: ProductListItem) => productId === product.id).length === data.length) && data.length != 0}
         checkedProductsCount={checkedProductIds.length}
         onAllCheck={handleAllChecked}
-        onEdit={() => setEditProductId(checkedProductIds[0])}
         onChangeLocation={() => setShowChangeLocationModal(true)}
         onPrint={() => {}}
-        onDelete={handleDelete}
       />
       <Box sx={{ m: '.5rem' }} />
       <List
+        disabled={disabled()}
         products={data}
         count={Math.ceil(count / rowsPerPage)}
         page={page}
         onCheck={handleRowChecked}
         checkedProductIds={checkedProductIds}
         onPageChange={setPage}
+        onSplit={() => setShowSplitModal(true)}
         onRowsPerPageChange={(newRowsPerPage) => {
           setRowsPerPage(newRowsPerPage);
           setPage(1);
         }}
         rowsPerPage={rowsPerPage}
+        onEdit={(id) => setEditProductId(id)}
+        onDelete={handleDelete}
       />
       {editProductId && (
         <EditModal

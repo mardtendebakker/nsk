@@ -195,10 +195,9 @@ export default function ListContainer() {
 
   const disabled = (): boolean => performing || performingDelete || performingPatch || performingPrint;
 
-  const handleDelete = () => {
-    callDelete({ body: checkedOrderIds })
+  const handleDelete = (id: number) => {
+    callDelete({ path: ajaxPath.replace(':id', id.toString()) })
       .then(() => {
-        setCheckedOrderIds([]);
         refreshList({
           page,
           rowsPerPage,
@@ -255,13 +254,9 @@ export default function ListContainer() {
         disabled={disabled()}
         allChecked={(_.intersectionWith(checkedOrderIds, data, (orderId: number, order: OrderListItem) => orderId === order.id).length === data.length) && data.length != 0}
         checkedOrdersCount={checkedOrderIds.length}
-        onEdit={() => router.push(
-          (router.pathname == ORDERS_PURCHASES ? ORDERS_PURCHASES_EDIT : ORDERS_SALES_EDIT).replace(':id', checkedOrderIds[0].toString()),
-        )}
         onAllCheck={handleAllChecked}
         onChangeStatus={() => setShowChangeStatusModal(true)}
         onPrint={handlePrint}
-        onDelete={handleDelete}
       />
       <Box sx={{ m: '.5rem' }} />
       <List
@@ -277,6 +272,10 @@ export default function ListContainer() {
           setPage(1);
         }}
         rowsPerPage={rowsPerPage}
+        onEdit={(id) => router.push(
+          (router.pathname == ORDERS_PURCHASES ? ORDERS_PURCHASES_EDIT : ORDERS_SALES_EDIT).replace(':id', id.toString()),
+        )}
+        onDelete={handleDelete}
       />
       {showChangeStatusModal && (
       <ConfirmationDialog
