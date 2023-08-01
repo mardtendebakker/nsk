@@ -1,4 +1,4 @@
-import { Box, Checkbox, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import useForm from '../../../hooks/useForm';
 import useTranslation from '../../../hooks/useTranslation';
 import { PRODUCT_STATUSES_PATH } from '../../../utils/axios';
@@ -6,6 +6,7 @@ import ConfirmationDialog from '../../confirmationDialog';
 import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
 import Select from '../../memoizedInput/select';
 import TextField from '../../memoizedInput/textField';
+import Checkbox from '../../checkbox';
 
 export interface SplitData {
   mode: 'individualize' | 'newBundle',
@@ -80,15 +81,12 @@ export default function SplitModal({ onClose, onConfirm }:{
             onChange={(selected: { id: number }) => setValue({ field: 'statusId', value: selected?.id })}
             value={formRepresentation.statusId.value?.toString()}
           />
-          <Box sx={{ display: 'flex', mt: '.5rem' }}>
-            <Checkbox
-              onChange={(_, checked) => setValue({ field: 'newSKU', value: checked })}
-              checked={formRepresentation.newSKU.value as boolean}
-            />
-            <Typography variant="inherit" sx={{ mt: '.6rem' }}>
-              {trans('newSKU')}
-            </Typography>
-          </Box>
+          <Box sx={{ mt: '.5rem' }} />
+          <Checkbox
+            onCheck={(checked) => setValue({ field: 'newSKU', value: checked })}
+            checked={formRepresentation.newSKU.value}
+            label={trans('newSKU')}
+          />
           <input type="submit" style={{ display: 'none' }} />
         </form>
         )}

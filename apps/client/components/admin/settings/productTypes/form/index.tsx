@@ -1,10 +1,10 @@
-import { Box, Checkbox, Typography } from '@mui/material';
 import { SetValue, FormRepresentation } from '../../../../../hooks/useForm';
 import useTranslation from '../../../../../hooks/useTranslation';
 import BorderedBox from '../../../../borderedBox';
 import TextField from '../../../../memoizedInput/textField';
 import DataSourcePicker from '../../../../memoizedInput/dataSourcePicker';
 import { TASKS_PATH, ATTRIBUTES_PATH } from '../../../../../utils/axios';
+import Checkbox from '../../../../checkbox';
 
 export default function Form({
   setValue,
@@ -20,7 +20,7 @@ export default function Form({
   return (
     <BorderedBox sx={{ width: '80rem', p: '1rem' }}>
       <TextField
-        sx={{ mb: '2rem' }}
+        sx={{ mb: '1rem' }}
         fullWidth
         label={trans('productTypeForm.name.label')}
         placeholder={trans('productTypeForm.name.placeholder')}
@@ -32,7 +32,7 @@ export default function Form({
       />
       <TextField
         multiline
-        sx={{ mb: '2rem' }}
+        sx={{ mb: '1rem' }}
         minRows={3}
         fullWidth
         label={trans('productTypeForm.comment.label')}
@@ -45,7 +45,7 @@ export default function Form({
       />
       <DataSourcePicker
         multiple
-        sx={{ mb: '2rem' }}
+        sx={{ mb: '1rem' }}
         disabled={disabled}
         url={TASKS_PATH.replace(':id', '')}
         fullWidth
@@ -58,7 +58,7 @@ export default function Form({
       />
       <DataSourcePicker
         multiple
-        sx={{ mb: '2rem' }}
+        sx={{ mb: '.5rem' }}
         disabled={disabled}
         url={ATTRIBUTES_PATH.replace(':id', '')}
         fullWidth
@@ -69,16 +69,12 @@ export default function Form({
         }}
         value={formRepresentation.attributes.value}
       />
-      <Box sx={{ flex: 0.33, display: 'flex', alignItems: 'center' }}>
-        <Checkbox
-          sx={{ alignSelf: 'end' }}
-          onChange={(_, checked) => setValue({ field: 'is_attribute', value: checked })}
-          checked={formRepresentation.is_attribute.value as boolean}
-        />
-        <Typography variant="inherit">
-          {trans('productTypeForm.isAttribute.label')}
-        </Typography>
-      </Box>
+      <Checkbox
+        onCheck={(checked) => setValue({ field: 'is_attribute', value: checked })}
+        label={trans('productTypeForm.isAttribute.label')}
+        checked={formRepresentation.is_attribute.value as boolean}
+
+      />
     </BorderedBox>
   );
 }

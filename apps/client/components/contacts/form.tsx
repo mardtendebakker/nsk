@@ -2,7 +2,6 @@ import {
   Box,
   Card,
   CardContent,
-  Checkbox,
   Divider,
   Grid,
   Typography,
@@ -14,6 +13,7 @@ import TextField from '../memoizedInput/textField';
 import Autocomplete from '../memoizedInput/autocomplete';
 import BaseTextField from '../input/textField';
 import DataSourcePicker from '../memoizedInput/dataSourcePicker';
+import Checkbox from '../checkbox';
 
 function Form({
   formRepresentation,
@@ -163,15 +163,12 @@ function Form({
                 value={formRepresentation.partner.value}
               />
             ) : (
-              <Box sx={{ flex: 0.33, display: 'flex', alignItems: 'center' }}>
+              <Box sx={{ flex: 0.33 }}>
                 <Checkbox
-                  sx={{ alignSelf: 'end' }}
-                  onChange={(_, checked) => setValue({ field: 'is_partner', value: checked })}
-                  checked={formRepresentation.is_partner.value as boolean}
+                  checked={formRepresentation.is_partner.value}
+                  onCheck={(checked) => setValue({ field: 'is_partner', value: checked })}
+                  label={trans('partner')}
                 />
-                <Typography variant="inherit">
-                  {trans('partner')}
-                </Typography>
               </Box>
             )}
           </Grid>

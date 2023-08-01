@@ -18,7 +18,7 @@ export default function Form({
   return (
     <BorderedBox sx={{ width: '80rem', p: '1rem' }}>
       <TextField
-        sx={{ mb: '2rem' }}
+        sx={{ mb: '1rem' }}
         fullWidth
         label={trans('locationForm.name.label')}
         placeholder={trans('locationForm.name.placeholder')}
