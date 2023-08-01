@@ -50,9 +50,9 @@ export class AOrderController {
     return this.aorderService.updateMany(updateManyAOrderDto)
   }
 
-  @Delete('')
-  deleteMany(@Body() ids: number[]) {
-    return this.aorderService.deleteMany(ids);
+  @Delete(':id')
+  deleteOne(@Param('id') id: number) {
+    return this.aorderService.deleteOne(id);
   }
 
   @Get('bulk/print')

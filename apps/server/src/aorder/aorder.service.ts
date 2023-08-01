@@ -184,8 +184,8 @@ export class AOrderService {
     });
   }
 
-  async deleteMany(ids: number[]) {
-    return this.repository.deleteMany(ids);
+  async deleteOne(id: number) {
+    return this.repository.deleteOne(id);
   }
 
   async findByIds(ids: number[]) {

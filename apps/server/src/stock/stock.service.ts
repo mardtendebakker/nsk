@@ -332,8 +332,8 @@ export class StockService {
     });
   }
 
-  async deleteMany(ids: number[]) {
-    return this.repository.deleteMany(ids);
+  async deleteOne(id) {
+    return this.repository.deleteOne(id);
   }
 
   async updateMany(updateManyProductDto: UpdateManyProductDto) {

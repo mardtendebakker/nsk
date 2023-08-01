@@ -89,8 +89,8 @@ export class StockRepository {
     });
   }
 
-  deleteMany(ids: number[]) {
-    return this.prisma.product.deleteMany({where: {id : {in: ids}}})
+  deleteOne(id: number) {
+    return this.prisma.product.deleteMany({where: {id}})
   }
   
   updateMany(params: {

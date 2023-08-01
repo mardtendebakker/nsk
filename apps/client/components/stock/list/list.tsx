@@ -9,7 +9,6 @@ import {
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { format } from 'date-fns';
-import Check from '@mui/icons-material/Check';
 import useTranslation from '../../../hooks/useTranslation';
 import { ProductListItem } from '../../../utils/axios/models/product';
 import TasksProgress from './tasksProgress';
@@ -17,20 +16,35 @@ import TaskStatusTableCell from './taskStatusTableCell';
 import { STOCKS_PRODUCTS } from '../../../utils/routes';
 import PaginatedTable from '../../paginatedTable';
 import TableCell from '../../tableCell';
+import Edit from '../../button/edit';
+import Delete from '../../button/delete';
+import Split from '../../button/split';
 
 type OnCheck = (object: { id: number, checked: boolean }) => void;
 type OnClick = (object: { id: number }) => void;
 
 function Row(
   {
-    product, onCheck, onClick, checkedProductIds, shownProductTasks,
+    product,
+    onCheck,
+    onClick,
+    checkedProductIds,
+    shownProductTasks,
+    onEdit,
+    onDelete,
+    onSplit,
+    disabled,
   }
   : {
     product: ProductListItem,
     onCheck: OnCheck,
     onClick: OnClick,
     checkedProductIds: number[],
-    shownProductTasks: number | undefined
+    shownProductTasks: number | undefined,
+    onEdit: (id: number) => void,
+    onDelete: (id: number) => void,
+    onSplit: () => void,
+    disabled: boolean,
   },
 ) {
   const { trans } = useTranslation();
@@ -82,9 +96,6 @@ function Row(
         <TableCell>
           {product.sold || '--'}
         </TableCell>
-        <TableCell>
-          {product.splitable && <Check />}
-        </TableCell>
         <TableCell
           sx={{ cursor: 'pointer' }}
           onClick={() => onClick({ id: product.id })}
@@ -96,6 +107,11 @@ function Row(
                 tasks={product.tasks.filter((task) => task.status != 4).length}
               />
             ) : '--'}
+        </TableCell>
+        <TableCell>
+          <Edit onClick={() => onEdit(product.id)} disabled={disabled} />
+          {product.splittable && <Split onClick={onSplit} disabled={disabled} />}
+          <Delete onDelete={() => onDelete(product.id)} disabled={disabled} tooltip />
         </TableCell>
       </TableRow>
       {product.tasks.length > 0 && (
@@ -142,6 +158,10 @@ export default function List({
   onRowsPerPageChange,
   rowsPerPage,
   onCheck,
+  onEdit,
+  onDelete,
+  onSplit,
+  disabled,
   checkedProductIds,
 }: {
   products: ProductListItem[],
@@ -151,6 +171,10 @@ export default function List({
   onRowsPerPageChange: (rowsPerPage: number)=>void,
   rowsPerPage: number,
   onCheck: OnCheck,
+  onEdit: (id: number) => void,
+  onDelete: (id: number) => void,
+  onSplit: () => void,
+  disabled: boolean,
   checkedProductIds: number[]
 }) {
   const { trans } = useTranslation();
@@ -213,10 +237,10 @@ export default function List({
             </TableCell>
           )}
           <TableCell>
-            {trans('splitable')}
+            {trans('taskStatus')}
           </TableCell>
           <TableCell>
-            {trans('taskStatus')}
+            {trans('actions')}
           </TableCell>
         </TableRow>
       </TableHead>
@@ -230,6 +254,10 @@ export default function List({
               checkedProductIds={checkedProductIds}
               product={product}
               onCheck={onCheck}
+              disabled={disabled}
+              onDelete={onDelete}
+              onEdit={onEdit}
+              onSplit={onSplit}
             />
           ),
         )}
