@@ -111,7 +111,7 @@ function UpdateSalesOrder() {
           <Divider sx={{ mx: '1.5rem' }} />
           <CardContent>
             <Typography
-              sx={{ mb: '2rem' }}
+              sx={{ mb: '1rem' }}
               variant="h4"
             >
               {trans('addProducts')}

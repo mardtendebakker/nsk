@@ -13,7 +13,7 @@ import debounce from '../../../../utils/debounce';
 import TextField from '../../../memoizedInput/textField';
 import useTranslation from '../../../../hooks/useTranslation';
 import useAxios from '../../../../hooks/useAxios';
-import { STOCK_REPAIRS_PATH, SERVICES_PATH } from '../../../../utils/axios';
+import { STOCK_PRODUCTS_PATH, SERVICES_PATH } from '../../../../utils/axios';
 import AddButton from '../../../button/add';
 import Select from '../../../memoizedInput/select';
 import Delete from '../../../button/delete';
@@ -151,7 +151,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
   const { call: deleteService } = useAxios('delete', undefined, { withProgressBar: true });
   const { data: { data = [], count = 0 } = {}, call } = useAxios(
     'get',
-    STOCK_REPAIRS_PATH.replace(':id', ''),
+    STOCK_PRODUCTS_PATH.replace(':id', ''),
     {
       withProgressBar: true,
     },
@@ -159,7 +159,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
 
   const handleProductPropertyChange = useCallback(debounce((product, property: string, value) => {
     callPut({
-      path: STOCK_REPAIRS_PATH.replace(':id', product.id.toString()),
+      path: STOCK_PRODUCTS_PATH.replace(':id', product.id.toString()),
       body: { [property]: value },
     });
   }), []);
