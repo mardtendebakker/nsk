@@ -24,7 +24,7 @@ export interface ProductStatus {
 
 export interface Service {
   id?: number,
-  name?: number,
+  description?: number,
   price?: number,
   status?: number,
 }

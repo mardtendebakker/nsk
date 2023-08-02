@@ -80,7 +80,7 @@ function Row({
             <Table sx={{ borderRadius: 0 }} size="small">
               <TableHead>
                 <TableRow>
-                  <TableCell colSpan={3}>{trans('serviceName')}</TableCell>
+                  <TableCell colSpan={3}>{trans('serviceDescription')}</TableCell>
                   <TableCell colSpan={2}>{trans('status')}</TableCell>
                   <TableCell>{trans('price')}</TableCell>
                   <TableCell>{trans('actions')}</TableCell>
@@ -91,12 +91,12 @@ function Row({
                   <TableRow sx={(theme) => ({ backgroundColor: theme.palette.grey[10] })} key={service.id}>
                     <TableCell colSpan={3}>
                       <TextField
-                        defaultValue={service.name}
+                        defaultValue={service.description}
                         fullWidth
-                        placeholder={trans('serviceName')}
+                        placeholder={trans('serviceDescription')}
                         onChange={(e) => onServicePropertyChange(
                           product,
-                          'name',
+                          'description',
                           e.target.value,
                         )}
                       />
@@ -118,7 +118,7 @@ function Row({
                       <TextField
                         type="number"
                         placeholder="0.00"
-                        defaultValue={service.price.toString()}
+                        defaultValue={service.price?.toString()}
                         onChange={(e) => onServicePropertyChange(
                           product,
                           'price',

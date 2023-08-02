@@ -356,7 +356,7 @@ const translation = {
   newCustomerTag: 'Nieuwe klantenkaart',
   toDo: 'Te doen',
   inProgress: 'Bezig',
-  serviceName: 'Dienst naam',
+  serviceDescription: 'Dienst naam',
   todo: 'Te doen',
   hold: 'Uitstel',
   done: 'Klaar',
