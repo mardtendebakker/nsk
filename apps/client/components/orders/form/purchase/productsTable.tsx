@@ -37,7 +37,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
     },
   );
 
-  const { call: callPut } = useAxios('patch', undefined, { withProgressBar: true });
+  const { call: callPut } = useAxios('put', undefined, { withProgressBar: true });
 
   const handleProductPropertyChange = useCallback(debounce((product, property: string, value) => {
     callPut({
