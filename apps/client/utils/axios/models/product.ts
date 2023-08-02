@@ -1,3 +1,5 @@
+import { AFile } from './aFile';
+
 export interface Product {
   id: number,
   name?: string,
@@ -82,11 +84,4 @@ export interface ProductType {
   comment?: string,
   attributes?: Attribute[]
   tasks?: Task[]
-}
-
-export interface AFile {
-  id?: number,
-  unique_server_filename?: string,
-  original_client_filename?: string,
-  discr?: string
 }
