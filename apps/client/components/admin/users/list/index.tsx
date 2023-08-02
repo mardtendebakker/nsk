@@ -43,7 +43,7 @@ function refreshList({
     params.append('page', page.toString());
   }
 
-  params.append('rowsPerPage', page.toString());
+  params.append('rowsPerPage', rowsPerPage.toString());
 
   const paramsToSend = {};
 

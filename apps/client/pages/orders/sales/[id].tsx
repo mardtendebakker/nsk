@@ -19,7 +19,7 @@ import ProductsTable from '../../../components/orders/form/sales/productsTable';
 function UpdateSalesOrder() {
   const { trans } = useTranslation();
   const router = useRouter();
-  const { id } = router.query;
+  const { id = '0' } = router.query;
 
   const { call, performing } = useAxios(
     'put',

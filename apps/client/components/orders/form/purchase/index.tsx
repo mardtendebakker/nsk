@@ -69,6 +69,7 @@ function PurchaseForm({
               item
             >
               <DesktopDateTimePicker
+                disableMaskedInput
                 onChange={(value) => setValue({ field: 'pickupDate', value })}
                 value={formRepresentation.pickupDate.value || null}
                 inputFormat="yyyy/MM/dd H:ss"
