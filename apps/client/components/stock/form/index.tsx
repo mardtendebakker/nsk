@@ -94,6 +94,7 @@ export default function Form({
             <DataSourcePicker
               sx={{ flex: 0.33, mr: '1rem' }}
               url={LOCATIONS_PATH.replace(':id', '')}
+              searchKey="name"
               label={trans('location')}
               placeholder={trans('selectLocation')}
               onChange={(selected: { id: number }) => setValue({ field: 'location_id', value: selected?.id })}

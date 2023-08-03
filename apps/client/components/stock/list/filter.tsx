@@ -42,6 +42,7 @@ export default function Filter({
             <Box sx={(theme) => ({ width: '1px', height: '2.5rem', background: theme.palette.divider })} />
             <DataSourcePicker
               url={LOCATIONS_PATH.replace(':id', '')}
+              searchKey="name"
               disabled={disabled}
               fullWidth
               displayFieldset={false}

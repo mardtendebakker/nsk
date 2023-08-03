@@ -261,6 +261,7 @@ export default function ListContainer() {
             <Box sx={{ pb: '2rem' }} />
             <DataSourcePicker
               url={LOCATIONS_PATH.replace(':id', '')}
+              searchKey="name"
               disabled={disabled()}
               fullWidth
               placeholder={trans('selectLocation')}
