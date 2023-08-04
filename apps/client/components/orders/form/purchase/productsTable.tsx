@@ -155,6 +155,10 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
           });
           setShowForm(false);
         }}
+        additionalPayloadData={{
+          'product_orders[0][order_id]': orderId,
+          'product_orders[0][quantity]': '1',
+        }}
       />
       )}
       {editProductId && <EditModal id={editProductId.toString()} onClose={() => setEditProductId(undefined)} onSubmit={() => setEditProductId(undefined)} />}
