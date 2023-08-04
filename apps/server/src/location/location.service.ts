@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { LocationRepository } from './location.repository';
 import { FindManyDto } from './dto/find-many.dto';
+import { UpdateLocationDto } from './dto/update-location.dto';
+import { CreateLocationDto } from './dto/create-location.dto';
 
 @Injectable()
 export class LocationService {
@@ -23,5 +25,17 @@ export class LocationService {
         ] : undefined
       }
     });
+  }
+
+  findOne(id: number) {
+    return this.repository.findOne({where: {id}});
+  }
+
+  update(id: number, body: UpdateLocationDto) {
+    return this.repository.update({ where: {id}, data: body });
+  }
+
+  create(body: CreateLocationDto) {
+    return this.repository.create(body);
   }
 }
