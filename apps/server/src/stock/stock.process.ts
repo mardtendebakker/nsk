@@ -18,6 +18,7 @@ export class StockProcess {
   private locationName: string;
   private typeName: string;
   private firstProductOrder: product_order;
+  private theProductOrder: product_order;
   private aservices: aservice[];
   private orderDate: Date;
   private orderNumber: string;
@@ -36,7 +37,8 @@ export class StockProcess {
   constructor(
     private readonly repository: StockRepository,
     private readonly product: ProductRelationGetPayload,
-    private readonly productSelect: Prisma.productSelect
+    private readonly productSelect: Prisma.productSelect,
+    private readonly orderId?: number,
   ) {
     this.init();
   }
@@ -59,7 +61,9 @@ export class StockProcess {
     this.typeName = product_type?.name;
     
     this.firstProductOrder = product_order?.[0];
-    this.aservices = this.firstProductOrder?.['aservice'] || [];
+    this.theProductOrder = product_order.find(po => po.order_id === this.orderId);
+    
+    this.aservices = this.theProductOrder?.['aservice'] || [];
     this.orderDate = this.firstProductOrder?.['aorder']?.order_date;
     this.orderNumber = this.firstProductOrder?.['aorder']?.order_nr;
     this.productTypeTasks = product_type?.['product_type_task'] || [];
@@ -93,6 +97,7 @@ export class StockProcess {
       order_date: this.orderDate,
       order_nr: this.orderNumber,
       tasks: this.processedTasks,
+      ...(this.orderId && {services: this.aservices}),
       splittable: this.splittable,
     };
   }

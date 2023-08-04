@@ -52,6 +52,8 @@ export class StockService {
 
     const serviceSelect: Prisma.aserviceSelect = {
       id: true,
+      description: true,
+      price: true,
       task_id: true,
       status: true,
     };
@@ -59,6 +61,7 @@ export class StockService {
     const productOrderSelect: Prisma.product_orderSelect = {
       quantity: true,
       price: true,
+      order_id: true,
       aorder: {
         select: aorderSelect,
       },
@@ -156,7 +159,8 @@ export class StockService {
     });
 
     const data = await Promise.all(result.data.map(async product => {
-      const productProcess = new StockProcess(this.repository, product, productSelect);
+      console.log("product", product);
+      const productProcess = new StockProcess(this.repository, product, productSelect, query.orderId);
       return productProcess.run();
     }));
 
