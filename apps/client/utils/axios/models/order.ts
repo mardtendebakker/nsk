@@ -1,3 +1,5 @@
+import { AFile } from './aFile';
+
 export interface Company {
   id?: string,
   name?: string,
@@ -43,6 +45,7 @@ export interface Order {
 
 interface Pickup {
   id?: number,
+  afile?: AFile[],
   logistics_id?: number,
   pickup_date?: string,
   real_pickup_date?: string,

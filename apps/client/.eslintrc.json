@@ -47,6 +47,7 @@
   ],
   "rules": {
     "@next/next/no-html-link-for-pages": "off",
+    "import/prefer-default-export": "off",
     "require-jsdoc": "off",
     "react/react-in-jsx-scope": "off",
     "import/extensions": "off",
