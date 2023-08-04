@@ -2,12 +2,14 @@ import {
   Box, Typography,
 } from '@mui/material';
 import { memo } from 'react';
-import { AFile, Attribute } from '../../../utils/axios/models/product';
+import { Attribute } from '../../../utils/axios/models/product';
 import ImageInput from '../../input/imageInput';
+import { AFile } from '../../../utils/axios/models/aFile';
+import { buildAFileLink } from '../../../utils/afile';
 
 function buildImageLink(id: string, afile: AFile[]): string {
   const file = afile.find(({ id: afileId }) => afileId.toString() == id);
-  return `https://${file.unique_server_filename}.s3.amazonaws.com/${file.discr}/${file.original_client_filename}`;
+  return buildAFileLink(file);
 }
 
 function FileAttribute({

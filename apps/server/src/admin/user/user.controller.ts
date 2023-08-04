@@ -7,7 +7,7 @@ import { ListUserResponseDto } from './dto/list-user-response.dto';
 import { CognitoGroups } from '../../common/types/cognito-groups.enum';
 import { UpdateUserGroupDto } from './dto/update-user-group.dto';
 
-@ApiTags('admin/users')
+@ApiTags('adminusers')
 @Controller('admin/users')
 @ApiBearerAuth()
 @Authorization([

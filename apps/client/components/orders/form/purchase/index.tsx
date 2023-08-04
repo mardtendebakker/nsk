@@ -7,6 +7,7 @@ import {
   TableRow,
   TableCell,
   TableBody,
+  Box,
 } from '@mui/material';
 import { DesktopDateTimePicker } from '@mui/x-date-pickers/DesktopDateTimePicker';
 import useTranslation from '../../../../hooks/useTranslation';
@@ -18,6 +19,8 @@ import BasicDetails from '../basicDetails';
 import PricingDetails from '../pricingDetails';
 import { Order } from '../../../../utils/axios/models/order';
 import SupplierDetails from './supplierDetails';
+import { buildAFileLink } from '../../../../utils/afile';
+import { AFile } from '../../../../utils/axios/models/aFile';
 
 function PurchaseForm({
   formRepresentation,
@@ -39,6 +42,38 @@ function PurchaseForm({
     3: trans('shred'),
     4: trans('killDisk'),
   };
+
+  let agreementAFile: AFile | undefined;
+  const picturesAFiles: AFile[] = [];
+
+  order?.pickup?.afile?.forEach((aFile: AFile) => {
+    if (aFile.discr == 'pa') {
+      agreementAFile = aFile;
+    } else if (aFile.discr == 'pi') {
+      picturesAFiles.push(aFile);
+    }
+  });
+
+  const pictures = picturesAFiles.map((afile: AFile) => {
+    const file = buildAFileLink(afile);
+    return (
+      <Box
+        onClick={() => window.open(file, '_blank')}
+        sx={{
+          mr: '.5rem',
+          mb: '.5rem',
+          borderRadius: '.5rem',
+          width: '5rem',
+          height: '5rem',
+          cursor: 'pointer',
+          backgroundImage: `url("${file}")`,
+          backgroundPosition: 'center',
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
+        }}
+      />
+    );
+  });
 
   return (
     <>
@@ -69,6 +104,7 @@ function PurchaseForm({
               item
             >
               <DesktopDateTimePicker
+                disableMaskedInput
                 onChange={(value) => setValue({ field: 'pickupDate', value })}
                 value={formRepresentation.pickupDate.value || null}
                 inputFormat="yyyy/MM/dd H:ss"
@@ -124,15 +160,22 @@ function PurchaseForm({
                     <TableCell>{trans('dataDestruction')}</TableCell>
                     <TableCell>{DATA_DESTRUCTION[order?.pickup?.dataDestruction] || '--'}</TableCell>
                   </TableRow>
-                  {/* Implement when data is available */}
-                  {/* <TableRow>
-                  <TableCell>{trans('processingAgreement')}</TableCell>
-                  <TableCell>{order?.pickup?.agreement}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>{trans('images')}</TableCell>
-                  <TableCell>{order?.pickup?.images}</TableCell>
-            </TableRow> */}
+                  <TableRow>
+                    <TableCell>{trans('processingAgreement')}</TableCell>
+                    <TableCell>
+                      {
+                      agreementAFile
+                        ? (<a href={buildAFileLink(agreementAFile)} target="_blank" rel="noreferrer">{agreementAFile.original_client_filename}</a>)
+                        : '--'
+                      }
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>{trans('pictures')}</TableCell>
+                    <TableCell sx={{ display: 'flex', flexWrap: 'wrap' }}>
+                      {pictures.length > 0 ? pictures : '--'}
+                    </TableCell>
+                  </TableRow>
                 </TableBody>
               </Table>
             </Grid>
@@ -140,7 +183,7 @@ function PurchaseForm({
         </CardContent>
       </>
       )
-      }
+}
     </>
   );
 }
