@@ -47,6 +47,7 @@ export default function Form({
         multiple
         sx={{ mb: '1rem' }}
         disabled={disabled}
+        searchKey="name"
         url={TASKS_PATH.replace(':id', '')}
         fullWidth
         label={trans('productTypeForm.tasks.label')}
@@ -61,6 +62,7 @@ export default function Form({
         sx={{ mb: '.5rem' }}
         disabled={disabled}
         url={ATTRIBUTES_PATH.replace(':id', '')}
+        searchKey="name"
         fullWidth
         label={trans('productTypeForm.attributes.label')}
         placeholder={trans('productTypeForm.attributes.placeholder')}

@@ -10,6 +10,11 @@ export class FindManyDto extends BaseFindManyDto {
   search?: string;
 
   @ApiPropertyOptional()
+  @IsString()
+  @ValidateIf((_, value) => value !== undefined)
+  name?: string;
+
+  @ApiPropertyOptional()
   @Transform(({value}) => Array.isArray(value) ? value.map((id: string) => parseInt(id)) : parseInt(value))
   ids?: number[];
 }
