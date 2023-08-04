@@ -76,9 +76,10 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
 
 const formState = initFormState();
 
-export default function CreateModal({ onClose, onSubmit }: {
+export default function CreateModal({ onClose, onSubmit, additionalPayloadData }: {
   onClose: () => void,
   onSubmit: () => void,
+  additionalPayloadData: { [key: string]: string }
 }) {
   const { trans } = useTranslation();
   const { formRepresentation, setValue, validate } = useForm(formState);
@@ -90,10 +91,13 @@ export default function CreateModal({ onClose, onSubmit }: {
       return;
     }
 
-    call({
-      body: formRepresentationToBody(formRepresentation),
-      headers: { 'Content-Type': 'multipart/form-data' },
-    })
+    const body = formRepresentationToBody(formRepresentation);
+
+    Object.keys(additionalPayloadData).forEach((key) => {
+      body.append(key, additionalPayloadData[key]);
+    });
+
+    call({ body, headers: { 'Content-Type': 'multipart/form-data' } })
       .then(onSubmit);
   };
 
