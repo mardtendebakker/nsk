@@ -21,7 +21,7 @@ import ProductsTable from '../../../components/orders/form/purchase/productsTabl
 function UpdatePurchaseOrder() {
   const { trans } = useTranslation();
   const router = useRouter();
-  const { id } = router.query;
+  const { id = '0' } = router.query;
 
   const { call, performing } = useAxios(
     'put',
