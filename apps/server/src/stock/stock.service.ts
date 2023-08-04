@@ -298,16 +298,16 @@ export class StockService {
   }
 
   async updateOne(id: number, body: UpdateBodyStockDto, files?: Express.Multer.File[]) {
-    if (id === undefined) {
+    if (!Number.isFinite(id)) {
       throw new Error("product id is required");
     }
 
     const stock = await this.findOne({ where: { id } });
-    if (stock?.id === undefined) {
+    if (!Number.isFinite(stock?.id)) {
       throw new Error("stock not found");
     }
 
-    const typeHasChanged = body.type_id !== undefined && body.type_id !== stock.product_type.id;
+    const typeHasChanged = Number.isFinite(body.type_id) && body.type_id !== stock.product_type?.id;
 
     // check if the product type has changed
     if (typeHasChanged) {
@@ -319,9 +319,9 @@ export class StockService {
 
     const productAttributeUpdate = await this.processProductAttributeUpdate(
       id,
+      stock.product_type?.id,
       product_attributes,
       typeHasChanged,
-      stock.product_type.id,
       files,
     );
 
@@ -355,6 +355,13 @@ export class StockService {
   }
 
   private async generateAllAttributes(productId: number, typeId: number) {
+    if (!Number.isFinite(productId)) {
+      throw new Error("productId must be provided");
+    }
+    if (!Number.isFinite(typeId)) {
+      return null;
+    }
+
     await this.deleteAllAttributes(productId);
     const allAttributes = await this.repository.getAttributesByTypeId(typeId);
     const productAttributes: Prisma.product_attributeCreateManyInput[] = [];
@@ -392,7 +399,7 @@ export class StockService {
   }
 
   private async uploadFiles(productId: number, files: Express.Multer.File[] = []) {
-    if (productId === undefined) {
+    if (!Number.isFinite(productId)) {
       throw new Error('productId must be provided');
     }
     const fileIdsUploaded: number[] = [];
@@ -461,16 +468,19 @@ export class StockService {
 
   private async processProductAttributeUpdate(
     productId: number,
+    productTypeId: number,
     product_attributes: ProductAttributeUpdateDto[] = [],
     typeHasChanged: boolean,
-    productTypeId: number,
-    files?: Express.Multer.File[],
+    files: Express.Multer.File[] = [],
   ): Promise<Prisma.product_attributeUpdateManyWithoutProduct_product_attribute_product_idToproductNestedInput> {
 
-    if (productId === undefined) {
+    if (!Number.isFinite(productId)) {
       throw new Error("productId must be provided");
     }
-    if (product_attributes.length === 0 && files?.length === 0) {
+    if (!Number.isFinite(productTypeId)) {
+      return null;
+    }
+    if (product_attributes.length === 0 && files.length === 0) {
       return null;
     }
 
@@ -542,7 +552,7 @@ export class StockService {
     }
 
     // group files by attribute id
-    const filesGroupByAttributeId: Record<string, Express.Multer.File[]> = files?.reduce((acc, obj) => {
+    const filesGroupByAttributeId: Record<string, Express.Multer.File[]> = files.reduce((acc, obj) => {
       const { fieldname } = obj;
 
       if (!acc[fieldname]) {
