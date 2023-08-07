@@ -26,61 +26,85 @@ exports[`Header matches snapshot 1`] = `
           href="/"
           style="text-decoration: none;"
         >
-          <p
-            class="MuiTypography-root MuiTypography-body1 css-1kghwzj-MuiTypography-root"
+          <div
+            class="MuiBox-root css-1fojr6f"
           >
-            dashboard
-          </p>
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-vkc4v8-MuiTypography-root"
+            >
+              dashboard
+            </p>
+          </div>
         </a>
         <a
           href="/stock/products"
           style="text-decoration: none;"
         >
-          <p
-            class="MuiTypography-root MuiTypography-body1 css-1kghwzj-MuiTypography-root"
+          <div
+            class="MuiBox-root css-1fojr6f"
           >
-            stock
-          </p>
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-vkc4v8-MuiTypography-root"
+            >
+              stock
+            </p>
+          </div>
         </a>
         <a
           href="/orders/purchases"
           style="text-decoration: none;"
         >
-          <p
-            class="MuiTypography-root MuiTypography-body1 css-1kghwzj-MuiTypography-root"
+          <div
+            class="MuiBox-root css-1fojr6f"
           >
-            orders
-          </p>
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-vkc4v8-MuiTypography-root"
+            >
+              orders
+            </p>
+          </div>
         </a>
         <a
           href="/contacts/customers"
           style="text-decoration: none;"
         >
-          <p
-            class="MuiTypography-root MuiTypography-body1 css-1leebsn-MuiTypography-root"
+          <div
+            class="MuiBox-root css-1fojr6f"
           >
-            contacts
-          </p>
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-1we0tu4-MuiTypography-root"
+            >
+              contacts
+            </p>
+          </div>
         </a>
         <a
           href="/bulk-email"
           style="text-decoration: none;"
         >
-          <p
-            class="MuiTypography-root MuiTypography-body1 css-1kghwzj-MuiTypography-root"
+          <div
+            class="MuiBox-root css-1fojr6f"
           >
-            bulkEmail
-          </p>
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-vkc4v8-MuiTypography-root"
+            >
+              bulkEmail
+            </p>
+          </div>
         </a>
         <a
           href="/logistics"
           style="text-decoration: none;"
         >
-          <p
-            class="MuiTypography-root MuiTypography-body1 css-1kghwzj-MuiTypography-root"
+          <div
+            class="MuiBox-root css-1fojr6f"
           >
-            logistics
-          </p>
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-vkc4v8-MuiTypography-root"
+            >
+              logistics
+            </p>
+          </div>
         </a>
       </ul>
       <div
@@ -93,11 +117,15 @@ exports[`Header matches snapshot 1`] = `
           href="/my-tasks"
           style="text-decoration: none;"
         >
-          <p
-            class="MuiTypography-root MuiTypography-body1 css-1kghwzj-MuiTypography-root"
+          <div
+            class="MuiBox-root css-1fojr6f"
           >
-            myTasks
-          </p>
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-vkc4v8-MuiTypography-root"
+            >
+              myTasks
+            </p>
+          </div>
         </a>
         <div
           class="MuiBox-root css-1dwbrks"
