@@ -1,5 +1,6 @@
 import { Box } from '@mui/material';
-import useForm from '../../../hooks/useForm';
+import { useCallback } from 'react';
+import useForm, { FormRepresentation } from '../../../hooks/useForm';
 import useTranslation from '../../../hooks/useTranslation';
 import { PRODUCT_STATUSES_PATH } from '../../../utils/axios';
 import ConfirmationDialog from '../../confirmationDialog';
@@ -7,6 +8,7 @@ import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
 import Select from '../../memoizedInput/select';
 import TextField from '../../memoizedInput/textField';
 import Checkbox from '../../checkbox';
+import { ProductListItem } from '../../../utils/axios/models/product';
 
 export interface SplitData {
   mode: 'individualize' | 'newBundle',
@@ -15,19 +17,34 @@ export interface SplitData {
   newSKU: boolean,
 }
 
-const initFormState = {
-  mode: { required: true, value: 'newBundle' },
-  value: { required: true, value: 0 },
-  statusId: {},
-  newSKU: { value: false },
-};
-
-export default function SplitModal({ onClose, onConfirm }:{
+export default function SplitModal({ onClose, onConfirm, product }:{
   onClose: () => void,
-  onConfirm: (data: SplitData)=>void
+  onConfirm: (data: SplitData)=>void,
+  product: ProductListItem
 }) {
-  const { setValue, formRepresentation, validate } = useForm(initFormState);
   const { trans } = useTranslation();
+
+  const initFormState = (): FormRepresentation => ({
+    mode: { required: true, value: 'newBundle' },
+    value: {
+      required: true,
+      value: '',
+      validator: (({ value }): string | undefined => {
+        if (value.value >= product.stock) {
+          const vars = new Map();
+          vars.set('value', product.stock - 1);
+          return trans('splitModal.maxStockExceeded', { vars });
+        }
+        if (value.value < 1) {
+          return trans('required');
+        }
+      }),
+    },
+    statusId: {},
+    newSKU: { value: false },
+  });
+
+  const { setValue, formRepresentation, validate } = useForm(useCallback(() => initFormState(), [])());
 
   const handleConfirm = () => {
     if (validate()) {

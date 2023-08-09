@@ -17,6 +17,8 @@ export default function PaginatedTable({
   count: number,
   disabled?: boolean,
 }) {
+  const currentPage = count > 0 ? page - 1 : 0;
+
   return (
     <>
       <Table size="small">{children}</Table>
@@ -30,7 +32,7 @@ export default function PaginatedTable({
             onPageChange(newPage + 1);
           }
         }}
-        page={page - 1}
+        page={currentPage}
         rowsPerPage={rowsPerPage}
         rowsPerPageOptions={[5, 10, 25, 50]}
         onRowsPerPageChange={(e) => {

@@ -92,7 +92,7 @@ export default function ListContainer() {
   const [rowsPerPage, setRowsPerPage] = useState<number>(parseInt(router.query?.rowsPerPage?.toString() || '10', 10));
   const [editProductId, setEditProductId] = useState<number | undefined>();
   const [checkedProductIds, setCheckedProductIds] = useState<number[]>([]);
-  const [showSplitModal, setShowSplitModal] = useState(false);
+  const [splitProduct, setSplitProduct] = useState<ProductListItem | undefined>();
 
   const ajaxPath = router.pathname == STOCKS_PRODUCTS
     ? STOCK_PRODUCTS_PATH
@@ -235,7 +235,7 @@ export default function ListContainer() {
         onCheck={handleRowChecked}
         checkedProductIds={checkedProductIds}
         onPageChange={setPage}
-        onSplit={() => setShowSplitModal(true)}
+        onSplit={(product: ProductListItem) => setSplitProduct(product)}
         onRowsPerPageChange={(newRowsPerPage) => {
           setRowsPerPage(newRowsPerPage);
           setPage(1);
@@ -276,9 +276,10 @@ export default function ListContainer() {
         confirmButtonText={trans('save')}
       />
       )}
-      {showSplitModal && (
+      {splitProduct && (
       <SplitModal
-        onClose={() => setShowSplitModal(false)}
+        product={splitProduct}
+        onClose={() => setSplitProduct(undefined)}
         onConfirm={handleSplit}
       />
       )}
