@@ -1,4 +1,4 @@
-export default function saveBlob(blob: Blob, fileName: string): void {
+export function openBlob(blob: Blob): void {
   const a = document.createElement('a');
   document.body.appendChild(a);
   a.style.cssText = 'display: none';
@@ -6,7 +6,7 @@ export default function saveBlob(blob: Blob, fileName: string): void {
   const url = window.URL.createObjectURL(blob);
 
   a.href = url;
-  a.download = fileName;
+  a.target = '_blank';
   a.click();
   window.URL.revokeObjectURL(url);
 }
