@@ -159,7 +159,6 @@ export class StockService {
     });
 
     const data = await Promise.all(result.data.map(async product => {
-      console.log("product", product);
       const productProcess = new StockProcess(this.repository, product, productSelect, query.orderId);
       return productProcess.run();
     }));

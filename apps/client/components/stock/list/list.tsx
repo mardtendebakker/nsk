@@ -43,7 +43,7 @@ function Row(
     shownProductTasks: number | undefined,
     onEdit?: (id: number) => void,
     onDelete?: (id: number) => void,
-    onSplit?: () => void,
+    onSplit?: (product: ProductListItem) => void,
     disabled: boolean,
   },
 ) {
@@ -110,7 +110,7 @@ function Row(
         </TableCell>
         <TableCell>
           {onEdit && <Edit onClick={() => onEdit(product.id)} disabled={disabled} />}
-          {onSplit && product.splittable && <Split onClick={onSplit} disabled={disabled} />}
+          {onSplit && product.splittable && <Split onClick={() => onSplit(product)} disabled={disabled} />}
           {onDelete && <Delete onDelete={() => onDelete(product.id)} disabled={disabled} tooltip />}
         </TableCell>
       </TableRow>
@@ -173,7 +173,7 @@ export default function List({
   onCheck: OnCheck,
   onEdit?: (id: number) => void,
   onDelete?: (id: number) => void,
-  onSplit?: () => void,
+  onSplit?: (product: ProductListItem) => void,
   disabled?: boolean,
   checkedProductIds: number[]
 }) {

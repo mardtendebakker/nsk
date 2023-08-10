@@ -470,6 +470,7 @@ const translation = {
   splitModal: {
     newBundle: 'Nieuwe bundel',
     individualize: 'Individualiseren',
+    maxStockExceeded: 'De waarde mag niet hoger zijn dan %value%',
   },
   newSKU: 'nieuwe SKU',
   isPublic: 'Openbaar',
