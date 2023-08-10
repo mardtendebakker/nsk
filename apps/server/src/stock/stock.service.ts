@@ -2,17 +2,23 @@ import { Prisma, attribute } from "@prisma/client";
 import { FindOneDto } from "../common/dto/find-one.dto";
 import { LocationService } from "../location/location.service";
 import { StockRepository } from "./stock.repository";
-import { ProductAttributeIncludeAttributeGetPayload, ProductRelationGetPayload, StockProcess } from "./stock.process";
+import { StockProcess } from "./stock.process";
 import { UpdateManyProductDto } from "./dto/update-many-product.dto";
 import { FindManyDto } from "./dto/find-many.dto";
-import { ProductAttributeUpdateDto, UpdateBodyStockDto } from "./dto/update-body-stock.dto";
+import { UpdateBodyStockDto } from "./dto/update-body-stock.dto";
 import { FileService } from "../file/file.service";
 import { FileDiscrimination } from "../file/types/file-discrimination.enum";
 import { CreateFileDto } from "../file/dto/upload-meta.dto";
 import { AttributeType } from "../attribute/enum/attribute-type.enum";
 import { CreateBodyStockDto } from "./dto/create-body-stock.dto";
-
-const FILE_VALUE_DELIMITER = ',';
+import { NotFoundException } from "@nestjs/common";
+import { FindOneCustomResponse } from "./types/find-one-custom-respone";
+import { ProductAttributeIncludeAttribute } from "./types/product-attribute-include-attribute";
+import { ProductRelation } from "./types/product-relation";
+import { ProcessedStock } from "./dto/processed-stock.dto";
+import { ProductAttributeDto } from "./dto/product-attribute.dto";
+import { FILE_VALUE_DELIMITER } from "./types/file-value-delimiter.const";
+import { ProductAttributeFile } from "./types/product-attribute-file";
 
 export class StockService {
   constructor(
@@ -21,12 +27,13 @@ export class StockService {
     protected readonly fileService: FileService
   ) {}
 
-  async findAll(query: FindManyDto) {
+  processSelect(select: Prisma.productSelect = {}): Prisma.productSelect {
     const productTypeTaskSelect: Prisma.product_type_taskSelect = {
       task: true,
     };
 
     const productTypeSelect: Prisma.product_typeSelect = {
+      id: true,
       name: true,
       product_type_task: {
         select: productTypeTaskSelect
@@ -34,6 +41,7 @@ export class StockService {
     };
 
     const locationSelect: Prisma.locationSelect = {
+      id: true,
       name: true,
     };
 
@@ -59,6 +67,7 @@ export class StockService {
     };
 
     const productOrderSelect: Prisma.product_orderSelect = {
+      id: true,
       quantity: true,
       price: true,
       order_id: true,
@@ -96,8 +105,17 @@ export class StockService {
       },
     };
 
-    const productSelect: Prisma.productSelect = {
-      ...query.select,
+    const productAttributeSelect: Prisma.product_attributeSelect = {
+      attribute_id: true,
+      value_product_id: true,
+      value: true,
+      attribute: {
+        select: attributeSelect,
+      },
+    };
+
+    return {
+      ...select,
       id: true,
       sku: true,
       name: true,
@@ -117,10 +135,21 @@ export class StockService {
       product_attribute_product_attribute_value_product_idToproduct: {
         select: productAttributedSelect,
       },
+      product_attribute_product_attribute_product_idToproduct: {
+        select: productAttributeSelect,
+      },
       created_at: true,
       updated_at: true
     };
+  }
 
+  processStock(product: ProductRelation, orderId?: number): Promise<ProcessedStock> {
+    const productSelect = this.processSelect();
+    const processProdcut = new StockProcess(this.repository, product, productSelect, orderId);
+    return processProdcut.run();
+  }
+
+  async findAll(query: FindManyDto) {
     // const isStock = product_status ? product_status?.is_stock ?? true : true;
     // this where is the top line logic transformation
     const productwhere: Prisma.productWhereInput = {
@@ -128,21 +157,22 @@ export class StockService {
       ...(query.orderId && { product_order: { some: { order_id: query.orderId } } }),
       ...(query.productType && { type_id: query.productType }),
       ...(query.location && { location_id: query.location }),
-      OR: [{
-        status_id: null,
-      }, {
-        product_status: {
-          ...(query.productStatus && { id: query.productStatus }),
-          OR: [{
-            is_stock: null
-          }, {
-            is_stock: true
-          }]
-        }
-      }],
-      AND: {
-        OR: query.search ? [ { name: { contains: query.search } }, { sku: { contains: query.search } }] : undefined
-      }
+      ...(query.productStatus && {product_status: { id: query.productStatus }} || {
+        OR: [{
+          status_id: null,
+        }, {
+          product_status: {
+            OR: [{
+              is_stock: null
+            }, {
+              is_stock: true
+            }]
+          }
+        }],
+      }),
+      ...(query.search && {
+        OR: [{name: {contains: query.search}}, {sku: { contains: query.search}}]
+      }),
     }
 
     const productOrderBy: Prisma.productOrderByWithRelationInput[] = query.orderBy || [
@@ -153,14 +183,13 @@ export class StockService {
 
     const result = await this.repository.findAll({
       ...query,
-      select: productSelect,
+      select: this.processSelect(query.select),
       where: productwhere,
       orderBy: productOrderBy,
     });
 
     const data = await Promise.all(result.data.map(async product => {
-      const productProcess = new StockProcess(this.repository, product, productSelect, query.orderId);
-      return productProcess.run();
+      return this.processStock(product, query.orderId);
     }));
 
     return {
@@ -169,7 +198,14 @@ export class StockService {
     };
   }
 
-  async findOne(query: FindOneDto) {
+  findOneRelation(query: FindOneDto) {
+    return this.repository.findOneSelect({
+      ...query,
+      select: this.processSelect(query.select),
+    });
+  }
+
+  async findOneCustomSelect(query: FindOneDto): Promise<FindOneCustomResponse> {
     const locationSelect: Prisma.locationSelect = {
       id: true,
       name: true,
@@ -254,24 +290,29 @@ export class StockService {
       },
     };
 
+    const stock = await this.repository.findOneSelect({ ...query, select: productSelect });
+    if (!stock) {
+      throw new NotFoundException('Stock not found');
+    }
+
     const {
       product_attribute_product_attribute_product_idToproduct,
       ...rest
-    } = await <Promise<ProductRelationGetPayload>>this.repository.findOne({ ...query, select: productSelect });
+    } = stock;
 
     return {
       ...rest,
       product_attributes: product_attribute_product_attribute_product_idToproduct,
-    }
+    };
   }
 
-  async create(body: CreateBodyStockDto, files?: Express.Multer.File[]) {
+  async create(body: CreateBodyStockDto, files?: ProductAttributeFile[]) {
     const {
       product_attributes,
       product_orders,
       ...rest
     } = body;
-
+    
     const createInput: Prisma.productUncheckedCreateInput = {
       ...rest,
       ...(!rest.sku && { sku: Math.floor(Date.now() / 1000).toString() }),
@@ -289,36 +330,40 @@ export class StockService {
 
     const stock = await this.repository.create(createInput);
 
-    if (product_attributes?.length > 0) {
-      return this.updateOne(stock.id, { product_attributes }, files);
+    if (product_attributes?.length) {
+      return this.updateOne(
+        stock.id,
+        { type_id: body.type_id, product_attributes },
+        files
+      );
     }
 
     return stock;
   }
 
-  async updateOne(id: number, body: UpdateBodyStockDto, files?: Express.Multer.File[]) {
+  async updateOne(id: number, body: UpdateBodyStockDto, files?: ProductAttributeFile[]) {
     if (!Number.isFinite(id)) {
       throw new Error("product id is required");
     }
 
-    const stock = await this.findOne({ where: { id } });
+    const stock = await this.findOneCustomSelect({ where: { id } });
     if (!Number.isFinite(stock?.id)) {
       throw new Error("stock not found");
     }
-
     const typeHasChanged = Number.isFinite(body.type_id) && body.type_id !== stock.product_type?.id;
 
     // check if the product type has changed
     if (typeHasChanged) {
       // generate a new set of product attributes
+
       await this.generateAllAttributes(id, body.type_id);
     }
 
-    const { product_attributes, ...restBody } = body;
+    const { product_attributes, product_orders, ...restBody } = body;
 
     const productAttributeUpdate = await this.processProductAttributeUpdate(
       id,
-      stock.product_type?.id,
+      body.type_id,
       product_attributes,
       typeHasChanged,
       files,
@@ -328,6 +373,16 @@ export class StockService {
       where: { id },
       data: {
         ...restBody,
+        ...(product_orders?.length && {
+          product_order: {
+            update: product_orders.map(product_order => ({
+              where: {
+                id: product_order.id
+              },
+              data: { ...product_order },
+            })),
+          },
+        }),
         ...(productAttributeUpdate && {
           product_attribute_product_attribute_product_idToproduct: productAttributeUpdate
         }),
@@ -388,7 +443,8 @@ export class StockService {
       const productAttribute = productAttributes[i];
 
       if (productAttribute.attribute.type === AttributeType.TYPE_FILE
-        && productAttribute.value !== '') {
+        && productAttribute.value) {
+        productAttribute.value = productAttribute.value || '';
         const fileIds = productAttribute.value.split(FILE_VALUE_DELIMITER).filter(Boolean).map(Number);
         this.fileService.deleteMany(fileIds);
       }
@@ -397,7 +453,7 @@ export class StockService {
     return result;
   }
 
-  private async uploadFiles(productId: number, files: Express.Multer.File[] = []) {
+  private async uploadFiles(productId: number, files: Array<string | Uint8Array | Buffer> = []) {
     if (!Number.isFinite(productId)) {
       throw new Error('productId must be provided');
     }
@@ -421,12 +477,12 @@ export class StockService {
   private addAttributeRelationToProductAttributes(
     productId: number,
     attributes: attribute[],
-    productAttributes: ProductAttributeUpdateDto[],
+    productAttributes: ProductAttributeDto[],
     inclusive = false,
-  ): ProductAttributeIncludeAttributeGetPayload[] {
+  ): ProductAttributeIncludeAttribute[] {
 
     const newProductAttributesIncludeAttribute:
-      ProductAttributeIncludeAttributeGetPayload[] = [];
+      ProductAttributeIncludeAttribute[] = [];
 
     for (let i = 0; i < attributes.length; i++) {
       const attribute = attributes[i];
@@ -468,10 +524,15 @@ export class StockService {
   private async processProductAttributeUpdate(
     productId: number,
     productTypeId: number,
-    product_attributes: ProductAttributeUpdateDto[] = [],
+    product_attributes: ProductAttributeDto[] = [],
     typeHasChanged: boolean,
-    files: Express.Multer.File[] = [],
+    files: ProductAttributeFile[] = [],
   ): Promise<Prisma.product_attributeUpdateManyWithoutProduct_product_attribute_product_idToproductNestedInput> {
+    console.log("productId", productId);
+    console.log("productTypeId", productTypeId);
+    console.log("product_attributes", product_attributes);
+    console.log("typeHasChanged", typeHasChanged);
+    console.log("files", files);
 
     if (!Number.isFinite(productId)) {
       throw new Error("productId must be provided");
@@ -494,7 +555,7 @@ export class StockService {
         attributes,
         product_attributes,
       );
-
+      
     const oldProductAttributesIncludeAttribute =
       await this.repository.findProductAttributesIncludeAttribute(productId);
 
@@ -512,6 +573,7 @@ export class StockService {
 
     for (let i = 0; i < oldFileProductAttributes.length; i++) {
       const oldFileProductAttribute = oldFileProductAttributes[i];
+      oldFileProductAttribute.value = oldFileProductAttribute.value || '';
       let productAttributeFound = false;
 
       for (let j = 0; j < newFileProductAttributes.length; j++) {
@@ -520,7 +582,7 @@ export class StockService {
         if (oldFileProductAttribute.attribute_id === newFileProductAttribute.attribute_id) {
           // the file ids that must be deleted
           fileIdsDeleteds[oldFileProductAttribute.attribute_id] =
-            oldFileProductAttribute?.value.split(FILE_VALUE_DELIMITER).filter(Boolean).map(Number).filter(
+            oldFileProductAttribute.value.split(FILE_VALUE_DELIMITER).filter(Boolean).map(Number).filter(
               (fileId) => !newFileProductAttribute?.value?.split(FILE_VALUE_DELIMITER).filter(Boolean).map(Number).includes(fileId)
             );
           // the file ids that must be kept
@@ -551,7 +613,7 @@ export class StockService {
     }
 
     // group files by attribute id
-    const filesGroupByAttributeId: Record<string, Express.Multer.File[]> = files.reduce((acc, obj) => {
+    const filesGroupByAttributeId: Record<string, ProductAttributeFile[]> = files.reduce((acc, obj) => {
       const { fieldname } = obj;
 
       if (!acc[fieldname]) {
@@ -565,7 +627,7 @@ export class StockService {
     const uploadedIdsGroupByAttributeId: Record<string, number[]> = {};
     for (const [fileAttributeId, files] of Object.entries(filesGroupByAttributeId)) {
       // upload all new files
-      const fileIdsUploaded = await this.uploadFiles(productId, files);
+      const fileIdsUploaded = await this.uploadFiles(productId, files.map(file => file.buffer));
       // keep all file ids
       uploadedIdsGroupByAttributeId[fileAttributeId] = fileIdsUploaded;
     }
@@ -578,7 +640,7 @@ export class StockService {
         product_attributes,
         true
       );
-
+    
     // store the all file ids to the product_attribute.value in comma-separated format
     for (let i = 0; i < productAttributesIncludeAttributeInclusive.length; i++) {
 
@@ -624,7 +686,7 @@ export class StockService {
           },
         })),
     };
-
+    
     return productAttributeUpdate;
   }
 }

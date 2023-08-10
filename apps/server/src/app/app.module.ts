@@ -25,6 +25,7 @@ import { AttributeModule } from '../attribute/attribute.module';
 import { TaskModule } from '../task/task.module';
 import { AdminUserModule } from '../admin/user/user.module';
 import { PublicModule } from '../public/public.module';
+import { SplitProductModule } from '../split-product/split-product.module';
 
 @Module({
   imports: [
@@ -65,6 +66,7 @@ import { PublicModule } from '../public/public.module';
     TaskModule,
     AdminUserModule,
     PublicModule,
+    SplitProductModule,
   ],
   controllers: [AppController],
   providers: [AppService],

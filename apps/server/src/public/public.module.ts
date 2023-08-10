@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { PublicService } from './public.service';
 import { PublicController } from './public.controller';
 import { PrintService } from '../print/print.service';
-import { PrismaModule } from '../prisma/prisma.module';
 import { PurchaseModule } from '../purchase/purchase.module';
 import { SupplierModule } from '../supplier/supplier.module';
 import { FileModule } from '../file/file.module';
@@ -15,7 +14,6 @@ import { HttpModule } from '@nestjs/axios';
   controllers: [PublicController],
   imports: [
     HttpModule,
-    PrismaModule,
     PurchaseModule,
     SupplierModule,
     FileModule,

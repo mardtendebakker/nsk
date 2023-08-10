@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Transform, Type } from "class-transformer";
-import { ProductAttributeFormDto } from "./product-attribute-form.dto";
+import { ProductAttributeDto } from "./product-attribute.dto";
 import { formDataNumberTransform, formDataStringTransform } from "../../common/transforms/form-date.transform";
 import { IsOptional, IsString, IsNumber } from "class-validator";
 import { ProductOrderCreateDto } from "./product-order-create.dto";
@@ -60,8 +60,8 @@ export class CreateBodyStockDto {
   location_id: number;
   
   @ApiPropertyOptional()
-  @Type(() => ProductAttributeFormDto)
-  product_attributes?: ProductAttributeFormDto[];
+  @Type(() => ProductAttributeDto)
+  product_attributes?: ProductAttributeDto[];
   
   @ApiPropertyOptional()
   @Type(() => ProductOrderCreateDto)

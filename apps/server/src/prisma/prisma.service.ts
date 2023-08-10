@@ -26,7 +26,7 @@ export class PrismaService extends PrismaClient {
         (params.args.select?.price || params.args.include?.price)
       ) {
         const product = await next(params);
-        return {
+        return product && {
           ...product,
           ...{ price: (product.price || 0) / 100 },
         };
@@ -240,7 +240,7 @@ export class PrismaService extends PrismaClient {
       ) {
         const aorder = await next(params);
 
-        return {
+        return aorder && {
           ...aorder,
           ...(aorder.product_order && {
             product_order: aorder.product_order.map((pOrder) => {

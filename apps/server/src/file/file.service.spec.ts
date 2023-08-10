@@ -92,6 +92,6 @@ describe('FileService', () => {
   });
 
   it('should create a file', async () => {
-    expect(await service.create(createFileDto, file)).toBe(createResult);
+    expect(await service.create(createFileDto, file.buffer)).toBe(createResult);
   });
 });
