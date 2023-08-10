@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Box, Card } from '@mui/material';
 import _ from 'lodash';
-import saveBlob from '../../../utils/saveBlob';
+import { openBlob } from '../../../utils/blob';
 import useForm, { FieldPayload } from '../../../hooks/useForm';
 import List from './list';
 import useAxios from '../../../hooks/useAxios';
@@ -234,7 +234,7 @@ export default function ListContainer() {
   const handlePrint = () => {
     callPrint({ params: { ids: checkedOrderIds }, responseType: 'blob' })
       .then((response: AxiosResponse) => {
-        saveBlob(response.data, 'orders.pdf');
+        openBlob(response.data);
       });
   };
 
