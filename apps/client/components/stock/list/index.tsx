@@ -2,7 +2,9 @@ import { Box, Card } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import _ from 'lodash';
-import { STOCK_PRODUCTS_PATH, STOCK_REPAIRS_PATH, LOCATIONS_PATH } from '../../../utils/axios';
+import {
+  STOCK_PRODUCTS_PATH, STOCK_REPAIRS_PATH, LOCATIONS_PATH, SPLIT_PRODUCT_INDIVIDUALIZE_PATH, SPLIT_PRODUCT_STOCK_PART_PATH,
+} from '../../../utils/axios';
 import List from './list';
 import useAxios from '../../../hooks/useAxios';
 import { STOCKS_PRODUCTS } from '../../../utils/routes';
@@ -131,14 +133,25 @@ export default function ListContainer() {
     },
   );
 
+  const { call: splitCall, performing: performingSplit } = useAxios(
+    'put',
+    '',
+    {
+      withProgressBar: true,
+      showSuccessMessage: true,
+    },
+  );
+
+  const defaultRefreshList = () => refreshList({
+    page,
+    rowsPerPage,
+    formRepresentation,
+    router,
+    call,
+  });
+
   useEffect(() => {
-    refreshList({
-      page,
-      rowsPerPage,
-      formRepresentation,
-      router,
-      call,
-    });
+    defaultRefreshList();
   }, [
     page,
     rowsPerPage,
@@ -166,30 +179,16 @@ export default function ListContainer() {
 
   const handleDelete = (id: number) => {
     callDelete({ path: ajaxPath.replace(':id', id.toString()) })
-      .then(() => {
-        refreshList({
-          page,
-          rowsPerPage,
-          formRepresentation,
-          router,
-          call,
-        });
-      });
+      .then(() => defaultRefreshList());
   };
 
-  const disabled = (): boolean => performing || performingDelete || performingPatch;
+  const disabled = (): boolean => performing || performingDelete || performingPatch || performingSplit;
 
   const handlePatchLocation = () => {
     callPatch({ body: { ids: checkedProductIds, product: { location_id: changeLocationValue } } })
       .then(() => {
         setCheckedProductIds([]);
-        refreshList({
-          page,
-          rowsPerPage,
-          formRepresentation,
-          router,
-          call,
-        });
+        defaultRefreshList();
       })
       .finally(() => {
         setShowChangeLocationModal(false);
@@ -197,8 +196,22 @@ export default function ListContainer() {
       });
   };
 
-  const handleSplit = (data: SplitData) => {
-    // TODO call endpoint to perform a split
+  const handleSplit = (splitData: SplitData) => {
+    const path = (splitData.mode == 'individualize'
+      ? SPLIT_PRODUCT_INDIVIDUALIZE_PATH
+      : SPLIT_PRODUCT_STOCK_PART_PATH).replace(':id', splitProduct.id.toString());
+
+    setSplitProduct(undefined);
+
+    splitCall({
+      path,
+      body: {
+        quantity: splitData.value,
+        newSku: !!splitData.newSKU,
+        status: splitData.statusId,
+      },
+    })
+      .then(() => defaultRefreshList());
   };
 
   const handleReset = () => {

@@ -158,15 +158,16 @@ export default function ListContainer() {
       showSuccessMessage: true,
     },
   );
+  const defaultRefreshList = () => refreshList({
+    page,
+    rowsPerPage,
+    formRepresentation,
+    router,
+    call,
+  });
 
   useEffect(() => {
-    refreshList({
-      page,
-      rowsPerPage,
-      formRepresentation,
-      router,
-      call,
-    });
+    defaultRefreshList();
   }, [
     page,
     rowsPerPage,
@@ -197,28 +198,14 @@ export default function ListContainer() {
 
   const handleDelete = (id: number) => {
     callDelete({ path: ajaxPath.replace(':id', id.toString()) })
-      .then(() => {
-        refreshList({
-          page,
-          rowsPerPage,
-          formRepresentation,
-          router,
-          call,
-        });
-      });
+      .then(() => defaultRefreshList());
   };
 
   const handlePatchStatus = () => {
     callPatch({ body: { ids: checkedOrderIds, order: { status_id: changeStatusValue } } })
       .then(() => {
         setCheckedOrderIds([]);
-        refreshList({
-          page,
-          rowsPerPage,
-          formRepresentation,
-          router,
-          call,
-        });
+        defaultRefreshList();
       })
       .finally(() => {
         setShowChangeStatusModal(false);

@@ -528,12 +528,6 @@ export class StockService {
     typeHasChanged: boolean,
     files: ProductAttributeFile[] = [],
   ): Promise<Prisma.product_attributeUpdateManyWithoutProduct_product_attribute_product_idToproductNestedInput> {
-    console.log("productId", productId);
-    console.log("productTypeId", productTypeId);
-    console.log("product_attributes", product_attributes);
-    console.log("typeHasChanged", typeHasChanged);
-    console.log("files", files);
-
     if (!Number.isFinite(productId)) {
       throw new Error("productId must be provided");
     }
