@@ -8,6 +8,7 @@ const mockUseSecurity = {
   state: { user: null },
 };
 
+jest.mock('../../../utils/can', () => jest.fn(() => true));
 jest.mock('../../../hooks/useSecurity', () => jest.fn(() => mockUseSecurity));
 
 const mockRouter = {
@@ -50,8 +51,8 @@ describe('AccountPopover', () => {
     const { getByRole, getByText } = render(<AccountPopover />);
     const button = getByRole('button');
     fireEvent.click(button);
-    const logoutButton = getByText('admin');
-    fireEvent.click(logoutButton);
+    const adminButton = getByText('admin');
+    fireEvent.click(adminButton);
     expect(mockRouter.push).toBeCalledWith(ADMIN_USERS);
   });
 
@@ -59,8 +60,8 @@ describe('AccountPopover', () => {
     const { getByRole, getByText } = render(<AccountPopover />);
     const button = getByRole('button');
     fireEvent.click(button);
-    const logoutButton = getByText('settings');
-    fireEvent.click(logoutButton);
+    const settingsButton = getByText('settings');
+    fireEvent.click(settingsButton);
     expect(mockRouter.push).toBeCalledWith(SETTINGS);
   });
 });

@@ -1,3 +1,5 @@
+import { Group } from '../stores/security/types';
+
 export const DASHBOARD = '/';
 export const SIGN_IN = '/sign-in';
 export const BULK_EMAIL = '/bulk-email';
@@ -34,3 +36,17 @@ export const ADMIN_SETTINGS_CUSTOMER_TAGS = '/admin/settings/customer-tags';
 export const ADMIN_SETTINGS_PRODUCT_STATUSES = '/admin/settings/product-statuses';
 export const ADMIN_SETTINGS_ORDER_STATUSES = '/admin/settings/order-statuses';
 export const LOGISTICS = '/logistics';
+
+export const ROUTES_GROUPS: { [key: string]: Group[] } = {
+  [ADMIN_USERS]: ['admin', 'super_admin'],
+  [ADMIN_SETTINGS]: ['admin', 'super_admin'],
+  [ADMIN_SETTINGS_LOCATIONS]: ['admin', 'super_admin'],
+  [ADMIN_SETTINGS_PRODUCT_TYPES]: ['admin', 'super_admin'],
+  [ADMIN_SETTINGS_ATTRIBUTES]: ['admin', 'super_admin'],
+  [ADMIN_SETTINGS_TASKS]: ['admin', 'super_admin'],
+  [ADMIN_SETTINGS_STATUS]: ['admin', 'super_admin'],
+  [ADMIN_SETTINGS_MAILING_LISTS]: ['admin', 'super_admin'],
+  [ADMIN_SETTINGS_CUSTOMER_TAGS]: ['admin', 'super_admin'],
+  [ADMIN_SETTINGS_PRODUCT_STATUSES]: ['admin', 'super_admin'],
+  [ADMIN_SETTINGS_ORDER_STATUSES]: ['admin', 'super_admin'],
+};

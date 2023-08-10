@@ -1,12 +1,19 @@
 import { render } from '@testing-library/react';
 import useSecurity from '../../hooks/useSecurity';
-import { SIGN_IN, ACCOUNT_VERIFICATION } from '../../utils/routes';
+import {
+  SIGN_IN, ACCOUNT_VERIFICATION, DASHBOARD, ADMIN_SETTINGS,
+} from '../../utils/routes';
 import DashboardLayout from './index';
+import can from '../../utils/can';
 
 jest.mock('./header', () => () => {});
+jest.mock('../../utils/can', () => jest.fn(() => true));
 
 const mockRouter = {
   push: jest.fn(),
+  get pathname() {
+    return ADMIN_SETTINGS;
+  },
 };
 
 jest.mock('next/router', () => ({
@@ -54,5 +61,19 @@ describe('DashboardLayout', () => {
 
     expect(element).toBeNull();
     expect(mockRouter.push).toBeCalledWith(SIGN_IN);
+  });
+  it('should redirects to dashboard', () => {
+    useSecurity.mockImplementation(() => ({
+      state: { user: { get emailVerified() { return true; } } },
+      refreshUserInfo: jest.fn(() => Promise.resolve()),
+    }));
+    can.mockImplementation(() => false);
+    jest.spyOn(mockRouter, 'pathname', 'get').mockReturnValue(ADMIN_SETTINGS);
+
+    const { container } = render(<DashboardLayout><b id="children">Text</b></DashboardLayout>);
+    const element = container.querySelector('#children');
+
+    expect(element).toBeNull();
+    expect(mockRouter.push).toBeCalledWith(DASHBOARD);
   });
 });

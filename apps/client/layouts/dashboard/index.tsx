@@ -1,12 +1,17 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Box, Container } from '@mui/material';
 import { useRouter } from 'next/router';
 import useSecurity from '../../hooks/useSecurity';
 import Header from './header';
-import { SIGN_IN, ACCOUNT_VERIFICATION } from '../../utils/routes';
+import {
+  SIGN_IN, ACCOUNT_VERIFICATION, ROUTES_GROUPS, DASHBOARD,
+} from '../../utils/routes';
+import { Group } from '../../stores/security/types';
+import can from '../../utils/can';
 
 export default function DashboardLayout({ children }: { children: JSX.Element | JSX.Element[] }) {
   const { state: { user }, refreshUserInfo } = useSecurity();
+  const [canShowPage, setCanShowPage] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -14,6 +19,14 @@ export default function DashboardLayout({ children }: { children: JSX.Element | 
       router.push(SIGN_IN);
     } else if (!user.emailVerified) {
       router.push(ACCOUNT_VERIFICATION);
+    } else {
+      const requiredGroups: undefined | Group[] = ROUTES_GROUPS[router.pathname];
+
+      if (requiredGroups && !can(user.groups, requiredGroups)) {
+        router.push(DASHBOARD);
+      } else {
+        setCanShowPage(true);
+      }
     }
   }, [user, router]);
 
@@ -22,8 +35,8 @@ export default function DashboardLayout({ children }: { children: JSX.Element | 
       refreshUserInfo();
     }
   }, []);
-
-  return user?.emailVerified && (
+  console.log(canShowPage);
+  return user?.emailVerified && canShowPage && (
     <>
       <Header />
       <Box

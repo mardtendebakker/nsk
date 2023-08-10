@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 import { ADMIN_USERS, SETTINGS } from '../../../utils/routes';
 import useSecurity from '../../../hooks/useSecurity';
 import useTranslation from '../../../hooks/useTranslation';
+import Can from '../../../components/can';
 
 export default function AccountPopover() {
   const router = useRouter();
@@ -53,9 +54,11 @@ export default function AccountPopover() {
           <MenuItem onClick={() => router.push(SETTINGS)}>
             {trans('settings')}
           </MenuItem>
-          <MenuItem onClick={() => router.push(ADMIN_USERS)}>
-            {trans('admin')}
-          </MenuItem>
+          <Can requiredGroups={['admin', 'super_admin']}>
+            <MenuItem onClick={() => router.push(ADMIN_USERS)}>
+              {trans('admin')}
+            </MenuItem>
+          </Can>
         </Stack>
         <Divider sx={{ borderStyle: 'dashed' }} />
         <Stack sx={{ p: 1 }}>
