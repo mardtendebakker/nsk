@@ -229,7 +229,7 @@ model product_attribute {
   product_id                                          Int
   attribute_id                                        Int
   value_product_id                                    Int?
-  value                                               String    @db.VarChar(255)
+  value                                               String?    @db.VarChar(255)
   quantity                                            Int?
   external_id                                         Int?
   product_product_attribute_product_idToproduct       product   @relation("product_attribute_product_idToproduct", fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_94DA59764584665A")

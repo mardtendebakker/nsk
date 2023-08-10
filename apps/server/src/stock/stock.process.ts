@@ -4,10 +4,9 @@ import { AttributeType } from "../attribute/enum/attribute-type.enum";
 import { AOrderDiscrimination } from "../aorder/types/aorder-discrimination.enum";
 import { StockRepository } from "./stock.repository";
 import { ServiceStatus } from "../service/enum/service-status.enum";
-import { ProcessedTask } from "./dto/find-product-respone.dto";
-
-export type ProductRelationGetPayload = Prisma.productGetPayload<Record<'select', Prisma.productSelect>>;
-export type ProductAttributeIncludeAttributeGetPayload = Prisma.product_attributeGetPayload<Record<'include', Prisma.product_attributeInclude>>;
+import { ProductRelation } from "./types/product-relation";
+import { ProcessedTask } from "./dto/processed-task.dto";
+import { ProcessedStock } from "./dto/processed-stock.dto";
 
 export class StockProcess {
   private isSaleable: boolean;
@@ -36,7 +35,7 @@ export class StockProcess {
 
   constructor(
     private readonly repository: StockRepository,
-    private readonly product: ProductRelationGetPayload,
+    private readonly product: ProductRelation,
     private readonly productSelect: Prisma.productSelect,
     private readonly orderId?: number,
   ) {
@@ -75,7 +74,7 @@ export class StockProcess {
     this.isSaleAndRepair = this.productSaleOrders.length == 1 && this.productSaleOrders?.[0]['aorder']?.repair?.id;
   }
   
-  public async run() {
+  public async run(): Promise<ProcessedStock> {
     this.processedTasks = this.processTasks();
     this.quantitySold = await this.getQuantitySold();
     this.quantityPurchased = this.getQuantityPurchased();
@@ -83,23 +82,31 @@ export class StockProcess {
     this.quantityInStock = await this.getQuantityInStock();
     this.quantityOnHold = await this.getQuantityOnHold();
     this.splittable = this.quantityPurchased > 1;
-    
-    return {
-      ...this.rest,
+
+    const result: ProcessedStock = {
+      id: this.rest.id,
+      sku: this.rest.sku,
+      name: this.rest.name,
+      price: this.rest.price,
+      created_at: this.rest.created_at,
+      updated_at: this.rest.updated_at,
       retailPrice: this.firstProductOrder?.price ?? 0,
       location: this.locationName,
       type: this.typeName,
-      purch: this.quantityPurchased,
       stock: this.quantityInStock,
+      purch: this.quantityPurchased,
       hold: this.quantityOnHold,
       sale: this.quantitySaleable,
       sold: this.quantitySold,
       order_date: this.orderDate,
       order_nr: this.orderNumber,
       tasks: this.processedTasks,
-      ...(this.orderId && {services: this.aservices}),
       splittable: this.splittable,
+      ...(this.orderId && {product_order_id: this.theProductOrder.id}),
+      ...(this.orderId && {services: this.aservices}),
     };
+    
+    return result;
   }
 
   private processTasks(): ProcessedTask[] {
@@ -151,7 +158,7 @@ export class StockProcess {
 
         if (product_attributed['product_product_attribute_product_idToproduct'].id) {
           
-          const newProduct = await this.repository.findOne({
+          const newProduct = await this.repository.findOneSelect({
             where: {
               id: product_attributed['product_product_attribute_product_idToproduct'].id,
             },

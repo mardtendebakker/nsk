@@ -1,4 +1,4 @@
-import { ApiProperty, PickType } from "@nestjs/swagger";
+import { ApiProperty, ApiPropertyOptional, PickType } from "@nestjs/swagger";
 import { FileEntity } from "../../file/entities/file.entity";
 import { LocationEntity } from "../../location/entities/location.entity";
 import { ProductOrderEntity } from "../entities/product-order.entity";
@@ -41,13 +41,15 @@ class ProductOrderDto extends PickType(ProductOrderEntity, [
   'quantity',
   'price'
 ]) {
-  @ApiProperty()
-  aorder: AOrderDto[]
+  @ApiPropertyOptional()
+  aorder?: AOrderDto[]
 }
 
 class FileDto extends PickType(FileEntity, [
+  'id',
   'unique_server_filename',
   'original_client_filename',
+  'discr',
 ]) {}
 
 class LocationDto extends PickType(LocationEntity, [
@@ -69,6 +71,7 @@ export class FindOneProductResponeDto extends PickType(ProductEntity, [
   "id",
   "sku",
   "name",
+  "description",
   "price",
   "created_at",
   "updated_at",
@@ -76,8 +79,8 @@ export class FindOneProductResponeDto extends PickType(ProductEntity, [
   @ApiProperty()
   product_attributes: ProductAttributeDto[];
   
-  @ApiProperty()
-  product_order: ProductOrderDto[];
+  @ApiPropertyOptional()
+  product_order?: ProductOrderDto[];
   
   @ApiProperty()
   afile: FileDto[];

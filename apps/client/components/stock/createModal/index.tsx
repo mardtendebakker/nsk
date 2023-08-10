@@ -11,7 +11,7 @@ export function initFormState(product?: Product) {
 
   product?.product_attributes?.forEach((productAttribute) => {
     const value = productAttribute.attribute.type == 2
-      ? productAttribute.value.split(',').filter(Boolean)
+      ? productAttribute.value?.split(',').filter(Boolean)
       : productAttribute.value;
 
     attributes[buildAttributeKey({ id: productAttribute.attribute_id }, { id: product.product_type.id })] = {

@@ -11,7 +11,6 @@ import { CreateAOrderDto } from '../aorder/dto/create-aorder.dto';
 import { CreatePickupUncheckedWithoutAorderInputDto } from '../pickup/dto/create-pickup-unchecked-without-aorder-input.dto';
 import { AOrderPayload } from '../aorder/aorder.process';
 import { ProductService } from '../product/product.service';
-import { ProductRelationGetPayload } from '../stock/stock.process';
 import { HttpService } from '@nestjs/axios';
 import { catchError, lastValueFrom } from 'rxjs';
 import { ConfigService } from '@nestjs/config';
@@ -20,6 +19,7 @@ import { DataDestruction } from '../pickup/types/destruction.enum';
 import { DataDestructionChoice } from './types/data-destruction-choise';
 import { afile } from '@prisma/client';
 import { CreateBodyStockDto } from '../stock/dto/create-body-stock.dto';
+import { ProductRelation } from '../stock/types/product-relation';
 @Injectable()
 export class PublicService {
   constructor(
@@ -159,7 +159,7 @@ export class PublicService {
 
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        const afile = await this.fileService.create(createFileDto, file);
+        const afile = await this.fileService.create(createFileDto, file.buffer);
         afiles.push(afile);
       }
     }
@@ -177,12 +177,12 @@ export class PublicService {
     return this.orderStatusService.findByNameOrCreate(createOrderStatusDto);
   }
 
-  private async createProductsForPickup(params: PickupFormDto, order_id: number): Promise<ProductRelationGetPayload[]> {
+  private async createProductsForPickup(params: PickupFormDto, order_id: number): Promise<ProductRelation[]> {
     let count = 0;
     let countAddresses = params.countAddresses;
     const { locationId, quantityAddresses } = params;
     if (!countAddresses) countAddresses = 1;
-    const products: ProductRelationGetPayload[] = [];
+    const products: ProductRelation[] = [];
 
     for (let i = 0; i < quantityAddresses.length; i++) {
       const quantityProductTypes = quantityAddresses[i];
@@ -205,7 +205,7 @@ export class PublicService {
 
           const productDto: CreateBodyStockDto = {
             name: address,
-            sku: String(Date.now() + count),
+            sku: String(Math.floor(Date.now() / 1000) + count),
             location_id: locationId,
             description: 'Created by application',
             type_id: Number(key.split('type_id_')[1]),

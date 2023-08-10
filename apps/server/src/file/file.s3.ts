@@ -1,4 +1,4 @@
-import { DeleteObjectCommand, DeleteObjectsCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { DeleteObjectCommand, DeleteObjectsCommand, GetObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 
@@ -9,6 +9,19 @@ export class FileS3 {
     this.client = new S3Client({
       region: this.configService.get<string>('MAIN_REGION')
     });
+  }
+
+  async get(Key: string) {
+    if (Key === undefined) {
+      throw new Error("The Key must be provided");
+    }
+
+    const delCommand = new GetObjectCommand({
+      Bucket: this.configService.get<string>('S3_FILE_BUCKET'),
+      Key
+    });
+
+    return this.client.send(delCommand);
   }
 
   async put(Key: string, Body: string | Uint8Array | Buffer) {
