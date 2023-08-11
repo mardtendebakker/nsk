@@ -22,7 +22,6 @@ const API_KEY = process.env.MYPTV_API_KEY;
 const MAP_STYLE_URL = process.env.MYPTV_MAP_STYLE_URL;
 const MAP_TILE_URL = process.env.MYPTV_MAP_TILE_URL;
 
-
 function buildHomeWay() {
   return {
     address: 'Televisiestraat 2E, 2525 KD Den Haag',
@@ -298,7 +297,7 @@ export default function SideMap({ onClose, pickup, pickups }: {
               </Typography>
             </Box>
           </Box>
-          <Button size="small" variant="contained" sx={{ width: '100%', mt: '1rem' }} onClick={() => router.push(ORDERS_PURCHASES_EDIT.replace(':id', pickup.order.id.toString()))}>
+          <Button size="small" variant="contained" sx={{ width: '100%', mt: '1rem' }} onClick={() => router.push(ORDERS_PURCHASES_EDIT.replace('[id]', pickup.order.id.toString()))}>
             <VisibilityOutlined />
             {' '}
             {trans('viewOrder')}

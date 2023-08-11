@@ -39,7 +39,7 @@ function NewSupplierContact() {
     call({
       body: formRepresentationToBody(formRepresentation),
     }).then((response: AxiosResponse) => {
-      router.push(CONTACTS_SUPPLIERS_EDIT.replace(':id', response.data.id));
+      router.push(CONTACTS_SUPPLIERS_EDIT.replace('[id]', response.data.id));
     });
   };
 

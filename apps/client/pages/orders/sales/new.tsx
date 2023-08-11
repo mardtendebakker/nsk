@@ -114,7 +114,7 @@ function NewSalesOrder() {
     call({
       body: formRepresentationToBody(formRepresentation),
     }).then((response: AxiosResponse) => {
-      router.push(ORDERS_SALES_EDIT.replace(':id', response.data.id));
+      router.push(ORDERS_SALES_EDIT.replace('[id]', response.data.id));
     });
   };
 

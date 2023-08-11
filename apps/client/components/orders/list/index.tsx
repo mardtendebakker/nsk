@@ -273,7 +273,7 @@ export default function ListContainer() {
         }}
         rowsPerPage={rowsPerPage}
         onEdit={(id) => router.push(
-          (router.pathname == ORDERS_PURCHASES ? ORDERS_PURCHASES_EDIT : ORDERS_SALES_EDIT).replace(':id', id.toString()),
+          (router.pathname == ORDERS_PURCHASES ? ORDERS_PURCHASES_EDIT : ORDERS_SALES_EDIT).replace('[id]', id.toString()),
         )}
         onDelete={handleDelete}
       />

@@ -58,6 +58,7 @@ function PurchaseForm({
     const file = buildAFileLink(afile);
     return (
       <Box
+        key={file}
         onClick={() => window.open(file, '_blank')}
         sx={{
           mr: '.5rem',

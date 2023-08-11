@@ -35,7 +35,7 @@ export default function DashboardLayout({ children }: { children: JSX.Element | 
       refreshUserInfo();
     }
   }, []);
-  console.log(canShowPage);
+
   return user?.emailVerified && canShowPage && (
     <>
       <Header />

@@ -130,7 +130,7 @@ function NewCustomerContact() {
     call({
       body: formRepresentationToBody(formRepresentation),
     }).then((response: AxiosResponse) => {
-      router.push(CONTACTS_CUSTOMERS_EDIT.replace(':id', response.data.id));
+      router.push(CONTACTS_CUSTOMERS_EDIT.replace('[id]', response.data.id));
     });
   };
 

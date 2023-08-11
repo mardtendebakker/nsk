@@ -152,7 +152,7 @@ export default function ListContainer() {
         page={page}
         onDelete={handleDelete}
         onEdit={(id) => router.push(
-          (router.pathname == CONTACTS_CUSTOMERS ? CONTACTS_CUSTOMERS_EDIT : CONTACTS_SUPPLIERS_EDIT).replace(':id', id.toString()),
+          (router.pathname == CONTACTS_CUSTOMERS ? CONTACTS_CUSTOMERS_EDIT : CONTACTS_SUPPLIERS_EDIT).replace('[id]', id.toString()),
         )}
         onPageChange={(newPage) => {
           setPage(newPage);
