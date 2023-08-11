@@ -11,12 +11,13 @@ import {
 import Form from '../../../components/orders/form/purchase';
 import DashboardLayout from '../../../layouts/dashboard';
 import useAxios from '../../../hooks/useAxios';
-import { PURCHASE_ORDERS_PATH } from '../../../utils/axios';
+import { PURCHASE_ORDERS_FILES_PATH, PURCHASE_ORDERS_PATH } from '../../../utils/axios';
 import useForm from '../../../hooks/useForm';
 import useTranslation from '../../../hooks/useTranslation';
 import { initFormState, formRepresentationToBody } from './new';
 import { ORDERS_PURCHASES } from '../../../utils/routes';
 import ProductsTable from '../../../components/orders/form/purchase/productsTable';
+import { AFile } from '../../../utils/axios/models/aFile';
 
 function UpdatePurchaseOrder() {
   const { trans } = useTranslation();
@@ -35,6 +36,14 @@ function UpdatePurchaseOrder() {
     { withProgressBar: true },
   );
 
+  const { call: deleteFile, performing: performingDeleteFilte } = useAxios(
+    'delete',
+    PURCHASE_ORDERS_FILES_PATH
+      .replace(':orderId', id.toString())
+      .replace(':id', ''),
+    { withProgressBar: true },
+  );
+
   const { formRepresentation, setValue, validate } = useForm(useMemo(() => initFormState(trans, purchaseOrder), [purchaseOrder]));
 
   useEffect(() => {
@@ -48,7 +57,7 @@ function UpdatePurchaseOrder() {
     }
   }, [id]);
 
-  const canSubmit = () => !performing && !performingFetchPurchaseOrder;
+  const canSubmit = () => !performing && !performingFetchPurchaseOrder && !performingDeleteFilte;
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
@@ -58,6 +67,13 @@ function UpdatePurchaseOrder() {
     }
 
     call({ body: formRepresentationToBody(formRepresentation) });
+  };
+
+  const handleDeleteFile = (file: AFile) => {
+    deleteFile({ body: [file.id] })
+      .then(() => {
+        fetchPurchaseOrder();
+      });
   };
 
   return (
@@ -106,6 +122,7 @@ function UpdatePurchaseOrder() {
         </Box>
         <Card>
           <Form
+            onFileDelete={handleDeleteFile}
             order={purchaseOrder}
             formRepresentation={formRepresentation}
             disabled={!canSubmit()}

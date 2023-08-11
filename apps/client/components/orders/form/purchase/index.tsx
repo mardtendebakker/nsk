@@ -21,16 +21,19 @@ import { Order } from '../../../../utils/axios/models/order';
 import SupplierDetails from './supplierDetails';
 import { buildAFileLink } from '../../../../utils/afile';
 import { AFile } from '../../../../utils/axios/models/aFile';
+import Delete from '../../../button/delete';
 
 function PurchaseForm({
   formRepresentation,
   disabled,
   setValue,
+  onFileDelete,
   order,
 }: {
   formRepresentation : FormRepresentation,
   disabled:boolean,
   setValue: SetValue,
+  onFileDelete?: (file: AFile) => void,
   order?: Order
 }) {
   const { trans } = useTranslation();
@@ -54,25 +57,30 @@ function PurchaseForm({
     }
   });
 
-  const pictures = picturesAFiles.map((afile: AFile) => {
-    const file = buildAFileLink(afile);
+  const pictures = picturesAFiles.map((aFile: AFile) => {
+    const file = buildAFileLink(aFile);
     return (
-      <Box
-        key={file}
-        onClick={() => window.open(file, '_blank')}
-        sx={{
-          mr: '.5rem',
-          mb: '.5rem',
-          borderRadius: '.5rem',
-          width: '5rem',
-          height: '5rem',
-          cursor: 'pointer',
-          backgroundImage: `url("${file}")`,
-          backgroundPosition: 'center',
-          backgroundSize: 'cover',
-          backgroundRepeat: 'no-repeat',
-        }}
-      />
+      <Box sx={{ position: 'relative' }} key={file}>
+        <Box sx={{ right: '.5rem', top: 0, position: 'absolute' }}>
+          { onFileDelete && <Delete tooltip onDelete={() => onFileDelete(aFile)} disabled={disabled} />}
+        </Box>
+        <Box
+          onClick={() => window.open(file, '_blank')}
+          sx={{
+            border: (theme) => `1px solid ${theme.palette.divider}`,
+            mr: '.5rem',
+            mb: '.5rem',
+            borderRadius: '.5rem',
+            width: '5rem',
+            height: '5rem',
+            cursor: 'pointer',
+            backgroundImage: `url("${file}")`,
+            backgroundPosition: 'center',
+            backgroundSize: 'cover',
+            backgroundRepeat: 'no-repeat',
+          }}
+        />
+      </Box>
     );
   });
 
@@ -166,7 +174,14 @@ function PurchaseForm({
                     <TableCell>
                       {
                       agreementAFile
-                        ? (<a href={buildAFileLink(agreementAFile)} target="_blank" rel="noreferrer">{agreementAFile.original_client_filename}</a>)
+                        ? (
+                          <>
+                            <a href={buildAFileLink(agreementAFile)} target="_blank" rel="noreferrer" style={{ margin: '.5rem' }}>
+                              {agreementAFile.original_client_filename}
+                            </a>
+                            {onFileDelete && <Delete tooltip onDelete={() => onFileDelete(agreementAFile)} disabled={disabled} />}
+                          </>
+                        )
                         : '--'
                       }
                     </TableCell>
@@ -189,6 +204,6 @@ function PurchaseForm({
   );
 }
 
-PurchaseForm.defaultProps = { order: undefined };
+PurchaseForm.defaultProps = { order: undefined, onFileDelete: undefined };
 
 export default PurchaseForm;
