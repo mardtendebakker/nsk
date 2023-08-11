@@ -1,10 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { PurchaseService } from '../purchase/purchase.service';
-import { SaleService } from '../sale/sale.service';
 import { ProductService } from '../product/product.service';
 import { SplitDto } from './dto/split.dto';
 import { CreateBodyStockDto } from '../stock/dto/create-body-stock.dto';
-import { ProductOrderRelation } from '../stock/types/product-order-relation';
 import { AOrderDiscrimination } from '../aorder/types/aorder-discrimination.enum';
 import { ProductOrderCreateDto } from '../stock/dto/product-order-create.dto';
 import { ProductAttributeDto } from '../stock/dto/product-attribute.dto';
@@ -18,27 +15,55 @@ import { ProductOrderUpdateDto } from '../stock/dto/product-order-update.dto';
 export class SplitProductService {
   constructor(
     private readonly productService: ProductService,
-    private readonly purchaseService: PurchaseService,
-    private readonly saleService: SaleService,
     private readonly fileService: FileService
   ) {}
 
-  async splitStockPart(id: number, splitDto: SplitDto) {
+  async splitPartOfBundle(id: number, splitDto: SplitDto) {
     const { quantity, status, newSku } = splitDto;
     const individualize = false;
-    const sales = false;
 
     return this.splitStock({
       id,
-      status,
-      quantity,
       individualize,
-      sales,
+      quantity,
+      status,
       newSku,
     });
   }
 
-  async individualizeBundle(id: number, splitDto: SplitDto) {
+  async individualizePartOfBundle(id: number, splitDto: SplitDto) {
+    const { quantity, status, newSku } = splitDto;
+    const individualize = true;
+
+    return this.splitStock({
+      id,
+      individualize,
+      quantity,
+      status,
+      newSku,
+    });
+  }
+
+  async individualizeTheWholeStock(id: number, splitDto: SplitDto) {
+    const { status, newSku } = splitDto;
+    const product = await this.productService.findOneRelation({
+      where: { id },
+    });
+    const processedProduct = await this.productService.processStock(product);
+
+    const quantity = processedProduct.stock - 1;
+    const individualize = true;
+
+    return this.splitStock({
+      id,
+      individualize,
+      quantity,
+      status,
+      newSku,
+    });
+  }
+
+  async individualizeTheWholeBundle(id: number, splitDto: SplitDto) {
     const { status, newSku } = splitDto;
     const product = await this.productService.findOneRelation({
       where: { id },
@@ -51,23 +76,23 @@ export class SplitProductService {
 
     return this.splitStock({
       id,
-      status,
-      quantity,
       individualize,
-      sales,
+      quantity,
+      status,
       newSku,
+      sales,
     });
   }
 
-  async splitStock(params: {
+  private async splitStock(params: {
     id: number;
-    status: number;
-    quantity: number;
     individualize: boolean;
-    sales: boolean;
-    newSku: boolean;
+    quantity?: number;
+    status?: number;
+    newSku?: boolean;
+    sales?: boolean;
   }) {
-    const { id, status, quantity, individualize, sales, newSku } = params;
+    const { id, status, individualize, quantity, sales, newSku } = params;
     const product = await this.productService.findOneRelation({
       where: { id },
     });
@@ -83,11 +108,11 @@ export class SplitProductService {
             }
             await this.splitToProduct({
               id,
-              status,
-              quantity: 1,
               nameSupplement: `(split ${i})`,
+              quantity: 1,
               newSkuIndex,
-              salesRelation: productOrder,
+              status,
+              sales: true,
             });
             i++;
           }
@@ -101,10 +126,10 @@ export class SplitProductService {
         }
         await this.splitToProduct({
           id,
-          status,
-          quantity: 1,
           nameSupplement: `(split ${k})`,
+          quantity: 1,
           newSkuIndex,
+          status,
         });
       }
     } else if (individualize && quantity > 1) {
@@ -115,10 +140,10 @@ export class SplitProductService {
         }
         await this.splitToProduct({
           id,
-          status,
-          quantity: 1,
           nameSupplement: `(split ${i})`,
+          quantity: 1,
           newSkuIndex,
+          status,
         });
       }
     } else {
@@ -128,40 +153,43 @@ export class SplitProductService {
       }
       await this.splitToProduct({
         id,
-        status,
-        quantity,
         nameSupplement: `(split)`,
+        quantity: Number.isFinite(quantity) ? quantity : 1,
         newSkuIndex,
+        status,
       });
     }
 
     return true;
   }
 
-  async splitToProduct(params: {
+  private async splitToProduct(params: {
     id: number;
-    status: number;
-    quantity: number;
     nameSupplement: string;
+    quantity: number;
     newSkuIndex: number;
-    salesRelation?: ProductOrderRelation;
+    status?: number;
+    sales?: boolean;
   }) {
-    const { id, status, quantity, nameSupplement, newSkuIndex, salesRelation } =
-      params;
+    const { id, nameSupplement, quantity, newSkuIndex, status, sales } = params;
     const product = await this.productService.findOneRelation({
       where: { id },
     });
-    const productAttributes =
-      product.product_attribute_product_attribute_product_idToproduct;
     const purchaseRelation = product.product_order.find(
       (productOrder) =>
         productOrder['aorder'].discr === AOrderDiscrimination.PURCHASE
     );
+    const salesRelation = product.product_order.find(
+      (productOrder) =>
+        productOrder['aorder'].discr === AOrderDiscrimination.SALE
+    );
+    const productAttributes =
+      product.product_attribute_product_attribute_product_idToproduct;
 
     const product_orders: ProductOrderCreateDto[] = [];
-    if (quantity > 1 && salesRelation) {
+    if (quantity > 1 && sales) {
       throw new Error('Bundle split with sales order involved is not allowed');
-    } else if (salesRelation) {
+    } else if (sales) {
       product_orders.push({
         order_id: salesRelation.order_id,
         quantity: 1,
@@ -179,16 +207,14 @@ export class SplitProductService {
     for (const productAttribute of productAttributes) {
       const isFile =
         productAttribute?.['attribute']?.type === AttributeType.TYPE_FILE;
-        
+
       if (isFile) {
         const fileIds =
           productAttribute?.value?.split(FILE_VALUE_DELIMITER).map(Number) ||
           [];
-        
+
         for (const fileId of fileIds) {
           const uint8Array = await this.fileService.get(fileId);
-          console.log("uint8Array", uint8Array.byteLength);
-          
           uint8Array &&
             files.push({
               buffer: Buffer.from(uint8Array),
@@ -215,7 +241,7 @@ export class SplitProductService {
       name: product.name + ' ' + nameSupplement,
       ...(product.product_type?.id && { type_id: product.product_type.id }),
       ...(product.location?.id && { location_id: product.location.id }),
-      status_id: status,
+      status_id: Number.isFinite(status) ? status : product.product_status.id,
       ...(Number.isFinite(product.price) && { price: product.price }),
       ...(product.description && { description: product.description }),
       ...(product.acompany?.id && { owner_id: product.acompany.id }),
@@ -229,7 +255,7 @@ export class SplitProductService {
         quantity: purchaseRelation.quantity - quantity,
       },
     ];
-    salesRelation &&
+    sales &&
       productOrderUpdate.push({
         id: salesRelation.id,
         quantity: salesRelation.quantity - quantity,
