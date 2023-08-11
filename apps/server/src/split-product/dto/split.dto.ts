@@ -1,22 +1,23 @@
 import { IsBoolean, IsInt, IsOptional } from 'class-validator';
 import { Type } from 'class-transformer';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 
 export class SplitDto {
-  @ApiProperty()
+  @ApiPropertyOptional()
+  @IsOptional()
   @IsInt()
   @Type(() => Number)
-  status: number;
+  quantity?: number;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsInt()
+  @Type(() => Number)
+  status?: number;
   
   @ApiPropertyOptional()
   @IsOptional()
   @IsBoolean()
   @Type(() => Boolean)
   newSku?: boolean;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsInt()
-  @Type(() => Number)
-  quantity?: number;
 }

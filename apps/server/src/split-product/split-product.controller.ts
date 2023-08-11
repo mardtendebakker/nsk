@@ -11,19 +11,35 @@ import { Authentication } from '@nestjs-cognito/auth';
 export class SplitProductController {
   constructor(protected readonly splitProductService: SplitProductService) {}
 
-  @Put(':id/split-stockpart')
-  splitStockPart(
+  @Put(':id/split-part-of-bundle')
+  splitPartOfBundle(
     @Param('id') id: number,
     @Body() body: SplitDto,
   ) {
-    return this.splitProductService.splitStockPart(id, body);
+    return this.splitProductService.splitPartOfBundle(id, body);
   }
 
-  @Put(':id/individualize-bundle')
-  individualizeBundle(
+  @Put(':id/individualize-part-of-bundle')
+  individualizePartOfBundle(
     @Param('id') id: number,
     @Body() body: SplitDto,
   ) {
-    return this.splitProductService.individualizeBundle(id, body);
+    return this.splitProductService.individualizePartOfBundle(id, body);
+  }
+
+  @Put(':id/individualize-the-whole-stock')
+  individualizeTheWholeStock(
+    @Param('id') id: number,
+    @Body() body: SplitDto,
+  ) {
+    return this.splitProductService.individualizeTheWholeStock(id, body);
+  }
+
+  @Put(':id/individualize-the-whole-bundle')
+  individualizeTheWholeBundle(
+    @Param('id') id: number,
+    @Body() body: SplitDto,
+  ) {
+    return this.splitProductService.individualizeTheWholeBundle(id, body);
   }
 }
