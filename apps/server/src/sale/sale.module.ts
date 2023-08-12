@@ -4,11 +4,12 @@ import { SaleController } from './sale.controller';
 import { SaleRepository } from './sale.repository';
 import { PrismaModule } from '../prisma/prisma.module';
 import { PrintService } from '../print/print.service';
+import { FileModule } from '../file/file.module';
 
 @Module({
   providers: [SaleService, SaleRepository, PrintService],
   controllers: [SaleController],
-  imports: [PrismaModule],
+  imports: [PrismaModule, FileModule],
   exports: [SaleService],
 })
 export class SaleModule {}

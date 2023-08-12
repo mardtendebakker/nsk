@@ -8,6 +8,8 @@ import { UpdateManyAOrderDto } from './dto/update-many-aorder.dto';
 import { AOrderProcess } from './aorder.process';
 import { PrintService } from '../print/print.service';
 import { CompanyDiscrimination } from '../company/types/company-discrimination.enum';
+import { FileService } from '../file/file.service';
+import { NotFoundException } from '@nestjs/common';
 type CommonAOrderDto = Partial<Omit<CreateAOrderDto, 'pickup'>>;
 type CommonAOrderInput = Partial<Omit<Prisma.aorderCreateInput, 'pickup'>>;
 
@@ -15,6 +17,7 @@ export class AOrderService {
   constructor(
     protected readonly repository: AOrderRepository,
     protected readonly printService: PrintService,
+    protected readonly fileService: FileService,
     protected readonly type?: AOrderDiscrimination
   ) {}
 
@@ -63,7 +66,7 @@ export class AOrderService {
       ...query.where,
       ...(this.type && { discr: this.type }),
       ...(query.search && { order_nr: { contains: query.search } }),
-      ...(query.status && { status_id: { equals: query.status } })
+      ...(query.status && { status_id: { equals: query.status } }),
     };
 
     if (query.partner !== undefined) {
@@ -110,7 +113,13 @@ export class AOrderService {
       where: { id }
     };
 
-    return this.repository.findOne(this.processSelectPart(params));
+    const order = await this.repository.findOne(this.processSelectPart(params));
+
+    if (order?.discr !== this.type) {
+      throw new NotFoundException(`Order with ID ${id} not found`);
+    }
+    
+    return order;
   }
 
   async create(orderDto: CreateAOrderDto) {
@@ -118,9 +127,7 @@ export class AOrderService {
       throw new Error('discr is mandatory!');
     }
 
-    const {
-      pickup
-    } = orderDto;
+    const { pickup } = orderDto;
 
     const params: Prisma.aorderCreateArgs = {
       data: {
@@ -135,10 +142,7 @@ export class AOrderService {
     const aorder = await this.repository.create(this.processSelectPart(params));
 
     if (orderDto.order_nr === undefined) {
-      const {
-        id,
-        order_date,
-      } = aorder;
+      const { id, order_date } = aorder;
 
       const order_nr = order_date.getFullYear() + id.toString().padStart(6, "0");
 
@@ -158,9 +162,7 @@ export class AOrderService {
   }
 
   async update(id: number, orderDto: UpdateAOrderDto) {
-    const {
-      pickup
-    } = orderDto;
+    const { pickup } = orderDto;
 
     const data: Prisma.aorderUpdateInput = {
       ...this.processCreateOrUpdateOrderInput(orderDto),
@@ -185,7 +187,24 @@ export class AOrderService {
   }
 
   async deleteOne(id: number) {
+    const order = await this.findOne(id);
+    if (order.discr === AOrderDiscrimination.PURCHASE) {
+      order['pickup']?.afile?.length &&
+        this.fileService.deleteMany(
+          order['pickup'].afile.map((file) => file.id)
+        );
+    } else if (order.discr === AOrderDiscrimination.SALE) {
+      order['afile']?.length &&
+        this.fileService.deleteMany(order['afile'].map((file) => file.id));
+    }
+
     return this.repository.deleteOne(id);
+  }
+  
+  async deleteFiles(id: number, fileIds: number[]) {
+    await this.findOne(id);
+    
+    return this.fileService.deleteMany(fileIds);
   }
 
   async findByIds(ids: number[]) {

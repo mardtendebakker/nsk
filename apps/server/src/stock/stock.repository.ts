@@ -118,7 +118,7 @@ export class StockRepository {
   }
 
   deleteOne(id: number) {
-    return this.prisma.product.deleteMany({ where: { id } });
+    return this.prisma.product.delete({ where: { id } });
   }
 
   updateMany(params: { where: Prisma.aorderWhereInput; data: Product }) {
