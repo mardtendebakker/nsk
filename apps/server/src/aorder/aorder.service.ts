@@ -95,7 +95,7 @@ export class AOrderService {
     }
 
     const orderBy: Prisma.Enumerable<Prisma.aorderOrderByWithRelationInput> =
-      !Object.keys(query?.orderBy).length ? { id: 'desc' } : query.orderBy;
+      Object.keys(query?.orderBy || {})?.length ? query.orderBy : { id: 'desc' };
 
     return this.repository.findAll({
       ...query,

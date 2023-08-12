@@ -1,27 +1,27 @@
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
-import { IsRepairService } from './types/is-repair-service.enum';
-import { RepairProductName } from './types/repair-product-name.enum';
+import { IS_SERVICE } from '../service/types/is-service.enum';
+import { REPAIR_PRODUCT_NAME } from './types/repair-product-name.enum';
 import { Product } from './dto/update-many-product.dto';
 
 export class StockRepository {
-  private isRepairWhere: { name?: RepairProductName } = {};
+  private isServiceWhere: { name?: string } = {};
 
   constructor(
     protected readonly prisma: PrismaService,
-    protected readonly isRepairService: IsRepairService
+    protected readonly isService?: boolean
   ) {
-    this.isRepairWhere = this.isRepairService == IsRepairService.YES && {
-      name: RepairProductName.REPAIR_PRODUCT_NAME,
+    this.isServiceWhere = this.isService == IS_SERVICE && {
+      name: REPAIR_PRODUCT_NAME,
     };
   }
 
   async findAll(params: Prisma.productFindManyArgs) {
     const { skip, cursor, select, orderBy } = params;
     const take = params.take ? params.take : 20;
-    const where = {
+    const where: Prisma.productWhereInput = {
       ...params.where,
-      ...this.isRepairWhere,
+      ...this.isServiceWhere,
     };
     const submission = await this.prisma.$transaction([
       this.prisma.product.count({ where }),
@@ -44,7 +44,7 @@ export class StockRepository {
   create(createData: Prisma.productUncheckedCreateInput) {
     const data = {
       ...createData,
-      ...this.isRepairWhere,
+      ...this.isServiceWhere,
     };
 
     return this.prisma.product.create({
@@ -53,7 +53,7 @@ export class StockRepository {
   }
 
   findOne(params: { where: Prisma.productWhereUniqueInput }) {
-    const where = { ...params.where, ...this.isRepairWhere };
+    const where = { ...params.where, ...this.isServiceWhere };
     return this.prisma.product.findUnique({ where });
   }
 
@@ -61,7 +61,7 @@ export class StockRepository {
     where: Prisma.productWhereUniqueInput;
     select: Prisma.productSelect;
   }) {
-    const where = { ...params.where, ...this.isRepairWhere };
+    const where = { ...params.where, ...this.isServiceWhere };
     const { select } = params;
     
     return this.prisma.product.findUnique({
@@ -74,7 +74,7 @@ export class StockRepository {
     where: Prisma.productWhereUniqueInput;
     include: Prisma.productInclude;
   }) {
-    const where = { ...params.where, ...this.isRepairWhere };
+    const where = { ...params.where, ...this.isServiceWhere };
     const { include } = params;
     return this.prisma.product.findUnique({
       where,
