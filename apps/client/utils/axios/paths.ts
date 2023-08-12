@@ -28,3 +28,5 @@ export const PICKUPS_PATH = '/pickups/:id';
 export const TASKS_PATH = '/tasks/:id';
 export const ATTRIBUTES_PATH = '/attributes/:id';
 export const LOGISTICS_PATH = '/logistics/:id';
+export const SPLIT_PRODUCT_INDIVIDUALIZE_PATH = '/split-product/:id/individualize-part-of-bundle';
+export const SPLIT_PRODUCT_STOCK_PART_PATH = '/split-product/:id/split-part-of-bundle';
