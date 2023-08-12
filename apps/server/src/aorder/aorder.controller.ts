@@ -1,8 +1,8 @@
-import { Authentication } from "@nestjs-cognito/auth";
+import { Authentication, AuthorizationGuard } from "@nestjs-cognito/auth";
 import { 
   Get, Post, Put, Patch, Delete,
   Body, Param, Query,
-  HttpStatus, Res, StreamableFile
+  HttpStatus, Res, StreamableFile, UseGuards
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiResponse } from "@nestjs/swagger";
 import { AOrderService } from "./aorder.service";
@@ -15,6 +15,7 @@ import { UpdateManyAOrderDto } from "./dto/update-many-aorder.dto";
 import { UpdateManyResponseAOrderDto } from "./dto/update-many-aorder-response.dts";
 import type { Response } from 'express';
 import { BulkPrintDTO } from "./dto/bulk-print.dto";
+import { CognitoGroups } from "../common/types/cognito-groups.enum";
 
 @ApiBearerAuth()
 @Authentication()
@@ -51,8 +52,18 @@ export class AOrderController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthorizationGuard([CognitoGroups.SUPER_ADMIN, CognitoGroups.ADMIN]))
   deleteOne(@Param('id') id: number) {
     return this.aorderService.deleteOne(id);
+  }
+
+  @Delete(':id/files')
+  @UseGuards(AuthorizationGuard([CognitoGroups.SUPER_ADMIN, CognitoGroups.ADMIN]))
+  deleteFiles(
+    @Param('id') id: number,
+    @Body() fileIds: number[],
+  ) {
+    return this.aorderService.deleteFiles(id, fileIds);
   }
 
   @Get('bulk/print')
