@@ -26,6 +26,7 @@ import { TaskModule } from '../task/task.module';
 import { AdminUserModule } from '../admin/user/user.module';
 import { PublicModule } from '../public/public.module';
 import { SplitProductModule } from '../split-product/split-product.module';
+import { ServiceModule } from '../service/service.module';
 
 @Module({
   imports: [
@@ -49,10 +50,12 @@ import { SplitProductModule } from '../split-product/split-product.module';
     DashboardModule,
     CustomerModule,
     SupplierModule,
-    SaleModule,
     PurchaseModule,
+    SaleModule,
+    ServiceModule,
     ProductModule,
     RepairModule,
+    SplitProductModule,
     FileModule,
     CompanyModule,
     OrderStatusModule,
@@ -66,7 +69,6 @@ import { SplitProductModule } from '../split-product/split-product.module';
     TaskModule,
     AdminUserModule,
     PublicModule,
-    SplitProductModule,
   ],
   controllers: [AppController],
   providers: [AppService],
