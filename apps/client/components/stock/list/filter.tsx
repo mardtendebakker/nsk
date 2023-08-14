@@ -5,6 +5,8 @@ import { FormRepresentation, SetValue } from '../../../hooks/useForm';
 import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
 import { PRODUCT_TYPES_PATH, LOCATIONS_PATH, PRODUCT_STATUSES_PATH } from '../../../utils/axios';
 import SearchAccordion from '../../searchAccordion';
+import useResponsive from '../../../hooks/useResponsive';
+import ListFilterDivider from '../../listFilterDivider';
 
 export default function Filter({
   disabled,
@@ -18,6 +20,7 @@ export default function Filter({
   onReset: () => void
 }) {
   const { trans } = useTranslation();
+  const isDesktop = useResponsive('up', 'sm');
 
   return (
     <form>
@@ -29,7 +32,13 @@ export default function Filter({
           onReset={onReset}
           searchLabel={trans('searchBySerialNumberOrName')}
         >
-          <Box sx={{ flex: 1, display: 'flex', alignItems: 'center' }}>
+          <Box sx={{
+            flex: 1,
+            display: 'flex',
+            alignItems: 'center',
+            flexDirection: isDesktop ? 'unset' : 'column',
+          }}
+          >
             <DataSourcePicker
               url={PRODUCT_TYPES_PATH.replace(':id', '')}
               disabled={disabled}
@@ -39,7 +48,7 @@ export default function Filter({
               onChange={(selected: { id: number }) => setValue({ field: 'productType', value: selected?.id })}
               value={formRepresentation.productType.value?.toString()}
             />
-            <Box sx={(theme) => ({ width: '1px', height: '2.5rem', background: theme.palette.divider })} />
+            <ListFilterDivider horizontal={!isDesktop} />
             <DataSourcePicker
               url={LOCATIONS_PATH.replace(':id', '')}
               searchKey="name"
@@ -50,7 +59,7 @@ export default function Filter({
               onChange={(selected: { id: number }) => setValue({ field: 'location', value: selected?.id })}
               value={formRepresentation.location.value?.toString()}
             />
-            <Box sx={(theme) => ({ width: '1px', height: '2.5rem', background: theme.palette.divider })} />
+            <ListFilterDivider horizontal={!isDesktop} />
             <DataSourcePicker
               url={PRODUCT_STATUSES_PATH.replace(':id', '')}
               disabled={disabled}

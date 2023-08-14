@@ -10,6 +10,8 @@ import TextField from '../../input/textField';
 import BorderedBox from '../../borderedBox';
 import SearchAccordion from '../../searchAccordion';
 import debounce from '../../../utils/debounce';
+import useResponsive from '../../../hooks/useResponsive';
+import ListFilterDivider from '../../listFilterDivider';
 
 export default function Filter({
   disabled,
@@ -24,6 +26,7 @@ export default function Filter({
 }) {
   const representativeInputRef = useRef<HTMLInputElement>(null);
   const { trans } = useTranslation();
+  const isDesktop = useResponsive('up', 'sm');
   const debouncedSetValue = debounce(setValue.bind(null));
 
   const handleReset = () => {
@@ -41,7 +44,13 @@ export default function Filter({
           searchValue={formRepresentation.search.value?.toString() || ''}
           onReset={handleReset}
         >
-          <Box sx={{ flex: 1, display: 'flex', alignItems: 'center' }}>
+          <Box sx={{
+            flex: 1,
+            display: 'flex',
+            alignItems: 'center',
+            flexDirection: isDesktop ? 'unset' : 'column',
+          }}
+          >
             <Autocomplete
               disabled={disabled}
               fullWidth
@@ -62,7 +71,7 @@ export default function Filter({
                 )
             }
             />
-            <Box sx={(theme) => ({ width: '1px', height: '2.5rem', background: theme.palette.divider })} />
+            <ListFilterDivider horizontal={!isDesktop} />
             <Autocomplete
               disabled={disabled}
               fullWidth
@@ -91,7 +100,7 @@ export default function Filter({
                 )
             }
             />
-            <Box sx={(theme) => ({ width: '1px', height: '2.5rem', background: theme.palette.divider })} />
+            <ListFilterDivider horizontal={!isDesktop} />
             <MemoizedTextField
               inputRef={representativeInputRef}
               disabled={disabled}
@@ -107,7 +116,7 @@ export default function Filter({
                 },
               }}
             />
-            <Box sx={(theme) => ({ width: '1px', height: '2.5rem', background: theme.palette.divider })} />
+            <ListFilterDivider horizontal={!isDesktop} />
             <DesktopDatePicker
               disabled={disabled}
               inputFormat="yyyy/MM/dd"

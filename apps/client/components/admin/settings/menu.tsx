@@ -1,4 +1,4 @@
-import { MenuItem, MenuList } from '@mui/material';
+import { MenuList } from '@mui/material';
 import { useRouter } from 'next/router';
 import {
   ADMIN_SETTINGS_LOCATIONS,
@@ -9,6 +9,7 @@ import {
   ADMIN_SETTINGS_ORDER_STATUSES,
 } from '../../../utils/routes';
 import useTranslation from '../../../hooks/useTranslation';
+import NavItem from '../../navItem';
 
 export default function Menu() {
   const router = useRouter();
@@ -16,53 +17,40 @@ export default function Menu() {
   const ITEMS = [
     {
       active: router.pathname === ADMIN_SETTINGS_LOCATIONS,
-      text: trans('locations'),
-      onClick: () => router.push(ADMIN_SETTINGS_LOCATIONS),
+      title: trans('locations'),
+      path: ADMIN_SETTINGS_LOCATIONS,
     },
     {
       active: router.pathname === ADMIN_SETTINGS_PRODUCT_TYPES,
-      text: trans('productTypes'),
-      onClick: () => router.push(ADMIN_SETTINGS_PRODUCT_TYPES),
+      title: trans('productTypes'),
+      path: ADMIN_SETTINGS_PRODUCT_TYPES,
     },
     {
       active: router.pathname === ADMIN_SETTINGS_ATTRIBUTES,
-      text: trans('attributes'),
-      onClick: () => router.push(ADMIN_SETTINGS_ATTRIBUTES),
+      title: trans('attributes'),
+      path: ADMIN_SETTINGS_ATTRIBUTES,
     },
     {
       active: router.pathname === ADMIN_SETTINGS_TASKS,
-      text: trans('tasks'),
-      onClick: () => router.push(ADMIN_SETTINGS_TASKS),
+      title: trans('tasks'),
+      path: ADMIN_SETTINGS_TASKS,
     },
     {
       active: router.pathname === ADMIN_SETTINGS_PRODUCT_STATUSES,
-      text: trans('productStatuses'),
-      onClick: () => router.push(ADMIN_SETTINGS_PRODUCT_STATUSES),
+      title: trans('productStatuses'),
+      path: ADMIN_SETTINGS_PRODUCT_STATUSES,
     },
     {
       active: router.pathname === ADMIN_SETTINGS_ORDER_STATUSES,
-      text: trans('orderStatuses'),
-      onClick: () => router.push(ADMIN_SETTINGS_ORDER_STATUSES),
+      title: trans('orderStatuses'),
+      path: ADMIN_SETTINGS_ORDER_STATUSES,
     },
   ];
 
   return (
     <MenuList>
-      {ITEMS.map(({ text, active, onClick }) => (
-        <MenuItem
-          onClick={onClick}
-          sx={(theme) => ({
-            borderRadius: '.25rem',
-            fontWeight: theme.typography.fontWeightMedium,
-            background: active ? '#D6E0FA' : undefined,
-            color: active ? theme.palette.primary.main : undefined,
-            mb: '.2rem',
-            p: '.5rem .75rem',
-          })}
-          key={text}
-        >
-          {text}
-        </MenuItem>
+      {ITEMS.map((menuItemDescription) => (
+        <NavItem menuItemDescription={menuItemDescription} />
       ))}
     </MenuList>
   );

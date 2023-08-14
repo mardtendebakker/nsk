@@ -23,7 +23,7 @@ import {
 import useTranslation from '../../../hooks/useTranslation';
 import useResponsive from '../../../hooks/useResponsive';
 import NavSection from './navSection';
-import MenuItemText from './menuItemText';
+import MenuItemText from '../../../components/menuTextItem';
 
 function MenuItem(
   {
@@ -52,7 +52,7 @@ export default function Header() {
   const router = useRouter();
   const { trans } = useTranslation();
   const [open, setOpen] = useState(false);
-  const showHorizontalItems = useResponsive('up', 'md');
+  const isDesktop = useResponsive('up', 'md');
 
   const MENU_LIST = [
     {
@@ -65,17 +65,53 @@ export default function Header() {
       path: STOCKS_PRODUCTS,
       active: router.pathname.includes(STOCKS_PRODUCTS)
               || router.pathname.includes(STOCKS_REPAIR_SERVICES),
+      subItems: [
+        {
+          title: trans('products'),
+          path: STOCKS_PRODUCTS,
+          active: router.pathname.includes(STOCKS_PRODUCTS),
+        },
+        {
+          title: trans('repairServices'),
+          path: STOCKS_REPAIR_SERVICES,
+          active: router.pathname.includes(STOCKS_REPAIR_SERVICES),
+        },
+      ],
     },
     {
       title: trans('orders'),
       path: ORDERS_PURCHASES,
       active: router.pathname.includes(ORDERS_PURCHASES) || router.pathname.includes(ORDERS_SALES),
+      subItems: [
+        {
+          title: trans('purchaseOrders'),
+          path: ORDERS_PURCHASES,
+          active: router.pathname.includes(ORDERS_PURCHASES),
+        },
+        {
+          title: trans('salesOrders'),
+          path: ORDERS_SALES,
+          active: router.pathname.includes(ORDERS_SALES),
+        },
+      ],
     },
     {
       title: trans('contacts'),
       path: CONTACTS_CUSTOMERS,
       active: router.pathname.includes(CONTACTS_CUSTOMERS)
                || router.pathname.includes(CONTACTS_SUPPLIERS),
+      subItems: [
+        {
+          title: trans('customers'),
+          path: CONTACTS_CUSTOMERS,
+          active: router.pathname.includes(CONTACTS_CUSTOMERS),
+        },
+        {
+          title: trans('suppliers'),
+          path: CONTACTS_SUPPLIERS,
+          active: router.pathname.includes(CONTACTS_SUPPLIERS),
+        },
+      ],
     },
     {
       title: trans('bulkEmail'),
@@ -95,7 +131,7 @@ export default function Header() {
       sx={{ display: 'flex' }}
     >
       <Toolbar sx={{ height: 50 }}>
-        {!showHorizontalItems && (
+        {!isDesktop && (
           <>
             <IconButton onClick={() => setOpen(true)} data-testid="openMenuButton">
               <Menu />
@@ -109,11 +145,11 @@ export default function Header() {
                 },
               }}
             >
-              <NavSection data={MENU_LIST} />
+              <NavSection menuDescription={MENU_LIST} />
             </Drawer>
           </>
         )}
-        {showHorizontalItems && (
+        {isDesktop && (
           <>
             <Image src="/assets/logo.jpg" alt="logo" width={50} height={9} />
             <List sx={{ p: 1, display: 'flex' }}>
