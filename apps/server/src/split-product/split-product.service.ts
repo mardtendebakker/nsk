@@ -214,11 +214,12 @@ export class SplitProductService {
           [];
 
         for (const fileId of fileIds) {
-          const uint8Array = await this.fileService.get(fileId);
-          uint8Array &&
+          const result = await this.fileService.get(fileId);
+          result &&
             files.push({
-              buffer: Buffer.from(uint8Array),
+              buffer: Buffer.from(await result.Body.transformToByteArray()),
               fieldname: String(productAttribute.attribute_id),
+              mimetype: result.ContentType,
             });
         }
       }

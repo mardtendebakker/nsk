@@ -5,7 +5,7 @@ import { SupplierService } from '../supplier/supplier.service';
 import { OrderStatusService } from '../order-status/order-status.service';
 import { CreateOrderStatusDto } from '../order-status/dto/create-order-status.dto';
 import { FileService } from '../file/file.service';
-import { CreateFileDto } from '../file/dto/upload-meta.dto';
+import { CreateFileDto } from '../file/dto/create-file.dto';
 import { FileDiscrimination } from '../file/types/file-discrimination.enum';
 import { CreateAOrderDto } from '../aorder/dto/create-aorder.dto';
 import { CreatePickupUncheckedWithoutAorderInputDto } from '../pickup/dto/create-pickup-unchecked-without-aorder-input.dto';
@@ -159,7 +159,10 @@ export class PublicService {
 
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        const afile = await this.fileService.create(createFileDto, file.buffer);
+        const afile = await this.fileService.create(createFileDto, {
+          Body: file.buffer,
+          ContentType: file.mimetype
+        });
         afiles.push(afile);
       }
     }

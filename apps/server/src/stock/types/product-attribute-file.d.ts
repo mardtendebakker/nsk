@@ -1,1 +1,4 @@
-export type ProductAttributeFile = Pick<Express.Multer.File, 'buffer' | 'fieldname'>;
+export type ProductAttributeFile = Pick<
+  Express.Multer.File,
+  'buffer' | 'fieldname' | 'mimetype'
+>;

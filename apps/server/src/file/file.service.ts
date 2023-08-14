@@ -4,8 +4,9 @@ import { FileRepository } from './file.repository';
 import { v4 as uuidv4 } from 'uuid';
 import { ConfigService } from '@nestjs/config';
 import { Prisma, afile } from '@prisma/client';
-import { CreateFileDto } from './dto/upload-meta.dto';
+import { CreateFileDto } from './dto/create-file.dto';
 import { FileS3 } from './file.s3';
+import { PutObjectWithoutKeyInput } from './dto/put-object-without-key-input.dto';
 
 @Injectable()
 export class FileService {
@@ -20,19 +21,20 @@ export class FileService {
     const file = await this.repository.findOne({ where });
 
     const fileKey = `${file.discr}/${file.original_client_filename}`;
-    const response = await this.fileS3.get(fileKey);
-
-    return response.Body.transformToByteArray();
+    return this.fileS3.get(fileKey);
   }
 
   async create(
     createFileDto: CreateFileDto,
-    file: string | Uint8Array | Buffer
+    putObjectWithoutKeyInput: PutObjectWithoutKeyInput,
   ): Promise<afile> {
     const fileName = uuidv4();
     const fileKey = `${createFileDto.discr}/${fileName}`;
 
-    await this.fileS3.put(fileKey, file);
+    await this.fileS3.put({
+      Key: fileKey,
+      ...putObjectWithoutKeyInput
+    });
 
     try {
       return this.repository.create({
