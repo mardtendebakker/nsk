@@ -1,6 +1,7 @@
-import { DeleteObjectCommand, DeleteObjectsCommand, GetObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { DeleteObjectCommand, DeleteObjectsCommand, GetObjectCommand, PutObjectCommand, PutObjectCommandInput, S3Client } from "@aws-sdk/client-s3";
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
+import { PutObjectInput } from "./dto/put-object-input.dto";
 
 @Injectable()
 export class FileS3 {
@@ -24,11 +25,10 @@ export class FileS3 {
     return this.client.send(delCommand);
   }
 
-  async put(Key: string, Body: string | Uint8Array | Buffer) {
+  async put(putObjectInput: PutObjectInput) {
     const putCommand = new PutObjectCommand({
       Bucket: this.configService.get<string>('S3_FILE_BUCKET'),
-      Key,
-      Body,
+      ...putObjectInput,
     });
 
     return this.client.send(putCommand);

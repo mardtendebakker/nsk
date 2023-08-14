@@ -8,7 +8,7 @@ import { FindManyDto } from "./dto/find-many.dto";
 import { UpdateBodyStockDto } from "./dto/update-body-stock.dto";
 import { FileService } from "../file/file.service";
 import { FileDiscrimination } from "../file/types/file-discrimination.enum";
-import { CreateFileDto } from "../file/dto/upload-meta.dto";
+import { CreateFileDto } from "../file/dto/create-file.dto";
 import { AttributeType } from "../attribute/enum/attribute-type.enum";
 import { CreateBodyStockDto } from "./dto/create-body-stock.dto";
 import { NotFoundException } from "@nestjs/common";
@@ -19,6 +19,7 @@ import { ProcessedStock } from "./dto/processed-stock.dto";
 import { ProductAttributeDto } from "./dto/product-attribute.dto";
 import { FILE_VALUE_DELIMITER } from "./types/file-value-delimiter.const";
 import { ProductAttributeFile } from "./types/product-attribute-file";
+import { PutObjectWithoutKeyInput } from "../file/dto/put-object-without-key-input.dto";
 
 export class StockService {
   constructor(
@@ -453,7 +454,7 @@ export class StockService {
     return result;
   }
 
-  private async uploadFiles(productId: number, files: Array<string | Uint8Array | Buffer> = []) {
+  private async uploadFiles(productId: number, files: Array<PutObjectWithoutKeyInput> = []) {
     if (!Number.isFinite(productId)) {
       throw new Error('productId must be provided');
     }
@@ -467,7 +468,9 @@ export class StockService {
         product_id: productId,
       };
 
-      const afile = await this.fileService.create(createFileDto, file);
+      const afile = await this.fileService.create(createFileDto, {
+        ...file,
+      });
       fileIdsUploaded.push(afile.id);
     }
 
@@ -621,7 +624,13 @@ export class StockService {
     const uploadedIdsGroupByAttributeId: Record<string, number[]> = {};
     for (const [fileAttributeId, files] of Object.entries(filesGroupByAttributeId)) {
       // upload all new files
-      const fileIdsUploaded = await this.uploadFiles(productId, files.map(file => file.buffer));
+      const fileIdsUploaded = await this.uploadFiles(
+        productId,
+        files.map((file) => ({
+          Body: file.buffer,
+          ContentType: file.mimetype,
+        }))
+      );
       // keep all file ids
       uploadedIdsGroupByAttributeId[fileAttributeId] = fileIdsUploaded;
     }

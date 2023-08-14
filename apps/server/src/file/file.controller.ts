@@ -9,7 +9,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileService } from './file.service';
-import { CreateFileDto } from './dto/upload-meta.dto';
+import { CreateFileDto } from './dto/create-file.dto';
 
 @Controller('files')
 export class FileController {
@@ -21,7 +21,10 @@ export class FileController {
     @Body() body: CreateFileDto,
     @UploadedFile() file: Express.Multer.File
   ) {
-    return this.fileService.create(body, file.buffer);
+    return this.fileService.create(body, {
+      Body: file.stream,
+      ContentType: file.mimetype,
+    });
   }
 
   @Delete('')
