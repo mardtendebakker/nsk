@@ -1,5 +1,5 @@
 export interface PickupListItem {
-  id?: number,
+  id: number,
   real_pickup_date?: string,
   order?: Order,
   logistic?: Logistic,

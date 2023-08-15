@@ -32,7 +32,7 @@ export interface Service {
 }
 
 export interface ProductListItem {
-  id?: number,
+  id: number,
   name?: string,
   price?: number,
   retailPrice?: number,

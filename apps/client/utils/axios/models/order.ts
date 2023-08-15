@@ -16,7 +16,7 @@ export interface OrderStatus {
 }
 
 export interface OrderListItem {
-  id?: number,
+  id: number,
   order_nr?: string
   order_date?: string,
   order_status?: { id: number, name?: string, color?: string }
