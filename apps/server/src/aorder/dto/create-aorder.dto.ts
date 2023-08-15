@@ -6,6 +6,4 @@ export class CreateAOrderDto extends OmitType(PrismaAOrderCreateInputDto, [
   'afile',
   'aorder',
   'other_aorder',
-  'product_order',
-  'repair'
 ] as const) {}

@@ -46,9 +46,7 @@ export class SplitProductService {
 
   async individualizeTheWholeStock(id: number, splitDto: SplitDto) {
     const { status, newSku } = splitDto;
-    const product = await this.productService.findOneRelation({
-      where: { id },
-    });
+    const product = await this.productService.findOneRelation(id);
     const processedProduct = await this.productService.processStock(product);
 
     const quantity = processedProduct.stock - 1;
@@ -65,9 +63,7 @@ export class SplitProductService {
 
   async individualizeTheWholeBundle(id: number, splitDto: SplitDto) {
     const { status, newSku } = splitDto;
-    const product = await this.productService.findOneRelation({
-      where: { id },
-    });
+    const product = await this.productService.findOneRelation(id);
     const processedProduct = await this.productService.processStock(product);
 
     const quantity = processedProduct.purch - 1;
@@ -93,9 +89,7 @@ export class SplitProductService {
     sales?: boolean;
   }) {
     const { id, status, individualize, quantity, sales, newSku } = params;
-    const product = await this.productService.findOneRelation({
-      where: { id },
-    });
+    const product = await this.productService.findOneRelation(id);
     if (sales) {
       let i = 1;
       for (const productOrder of product.product_order) {
@@ -172,9 +166,7 @@ export class SplitProductService {
     sales?: boolean;
   }) {
     const { id, nameSupplement, quantity, newSkuIndex, status, sales } = params;
-    const product = await this.productService.findOneRelation({
-      where: { id },
-    });
+    const product = await this.productService.findOneRelation(id);
     const purchaseRelation = product.product_order.find(
       (productOrder) =>
         productOrder['aorder'].discr === AOrderDiscrimination.PURCHASE

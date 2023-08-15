@@ -1,5 +1,4 @@
 import { Prisma, attribute } from "@prisma/client";
-import { FindOneDto } from "../common/dto/find-one.dto";
 import { LocationService } from "../location/location.service";
 import { StockRepository } from "./stock.repository";
 import { StockProcess } from "./stock.process";
@@ -199,14 +198,14 @@ export class StockService {
     };
   }
 
-  findOneRelation(query: FindOneDto) {
+  findOneRelation(id: number) {
     return this.repository.findOneSelect({
-      ...query,
-      select: this.processSelect(query.select),
+      id,
+      select: this.processSelect(),
     });
   }
 
-  async findOneCustomSelect(query: FindOneDto): Promise<FindOneCustomResponse> {
+  async findOneCustomSelect(id: number): Promise<FindOneCustomResponse> {
     const locationSelect: Prisma.locationSelect = {
       id: true,
       name: true,
@@ -291,7 +290,7 @@ export class StockService {
       },
     };
 
-    const stock = await this.repository.findOneSelect({ ...query, select: productSelect });
+    const stock = await this.repository.findOneSelect({ id, select: productSelect });
     if (!stock) {
       throw new NotFoundException('Stock not found');
     }
@@ -347,7 +346,7 @@ export class StockService {
       throw new Error("product id is required");
     }
 
-    const stock = await this.findOneCustomSelect({ where: { id } });
+    const stock = await this.findOneCustomSelect(id);
     if (!Number.isFinite(stock?.id)) {
       throw new Error("stock not found");
     }
@@ -371,7 +370,7 @@ export class StockService {
     );
 
     return this.repository.updateOne({
-      where: { id },
+      id,
       data: {
         ...restBody,
         ...(product_orders?.length && {
@@ -391,7 +390,7 @@ export class StockService {
     });
   }
 
-  async deleteOne(id) {
+  async deleteOne(id: number) {
     return this.repository.deleteOne(id);
   }
 

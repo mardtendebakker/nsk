@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { AOrderDiscrimination } from "./types/aorder-discrimination.enum";
-import { ServiceStatus } from "../service/enum/service-status.enum";
+import { AServiceStatus } from "../aservice/enum/aservice-status.enum";
 export type AOrderPayload = Prisma.aorderGetPayload<Record<'select', Prisma.aorderSelect>>;
 export type AOrderTotalPrice = AOrderPayload & {totalPrice: number};
 
@@ -32,7 +32,7 @@ export class AOrderProcess {
       for (let j = 0; j < pOrder?.['aservice']?.length; j++) {
         const service = pOrder?.['aservice']?.[j];
 
-        if (this.aorder.discr === AOrderDiscrimination.SALE && service.status !== ServiceStatus.STATUS_CANCEL) {
+        if (this.aorder.discr === AOrderDiscrimination.SALE && service.status !== AServiceStatus.STATUS_CANCEL) {
           price += service.price;
         }
       }

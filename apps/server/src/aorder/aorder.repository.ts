@@ -1,33 +1,28 @@
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { AOrder } from './dto/update-many-aorder.dto';
-import { REPAIR_PRODUCT_NAME } from '../stock/types/repair-product-name.enum';
 
 export class AOrderRepository {
   private serviceWhere: Prisma.aorderWhereInput = {};
 
   constructor(
     protected readonly prisma: PrismaService,
-    protected readonly isService?: boolean
+    protected readonly isRepair?: boolean
   ) {
     this.serviceWhere = {
-      product_order: {
-        ...(isService && {
-          some: { product: { name: REPAIR_PRODUCT_NAME } },
-        }),
-        ...(!isService && {
-          none: { product: { name: REPAIR_PRODUCT_NAME } },
-        }),
-      }
-    }
+      repair: { ...(isRepair ? { isNot: null } : { is: null }) },
+    };
   }
 
   async findAll(params: Prisma.aorderFindManyArgs) {
     const { skip, cursor, select, orderBy } = params;
     const take = params.take ? params.take : 20;
+    const { 
+      repair,
+    ...restWhere } = params.where;
     const where: Prisma.aorderWhereInput = {
-      ...params.where,
-      ...this.serviceWhere,
+      ...(repair ? { repair } : this.serviceWhere),
+      ...restWhere,
     };
     const submission = await this.prisma.$transaction([
       this.prisma.aorder.count({ where }),

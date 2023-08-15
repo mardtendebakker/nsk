@@ -11,7 +11,7 @@ import { UserModule } from '../user/user.module';
 import { SaleModule } from '../sale/sale.module';
 import { PurchaseModule } from '../purchase/purchase.module';
 import { ProductModule } from '../product/product.module';
-import { RepairModule } from '../repair/repair.module';
+import { ToRepairModule } from '../to-repair/to-repair.module';
 import { FileModule } from '../file/file.module';
 import { OrderStatusModule } from '../order-status/order-status.module';
 import { CompanyModule } from '../company/company.module';
@@ -26,7 +26,7 @@ import { TaskModule } from '../task/task.module';
 import { AdminUserModule } from '../admin/user/user.module';
 import { PublicModule } from '../public/public.module';
 import { SplitProductModule } from '../split-product/split-product.module';
-import { ServiceModule } from '../service/service.module';
+import { RepairModule } from '../repair/repair.module';
 
 @Module({
   imports: [
@@ -52,9 +52,9 @@ import { ServiceModule } from '../service/service.module';
     SupplierModule,
     PurchaseModule,
     SaleModule,
-    ServiceModule,
-    ProductModule,
     RepairModule,
+    ProductModule,
+    ToRepairModule,
     SplitProductModule,
     FileModule,
     CompanyModule,

@@ -25,9 +25,7 @@ export class StockController {
   @Get(':id')
   @ApiResponse({type: FindOneProductResponeDto})
   findOne(@Param('id') id: number) {
-    return this.stockService.findOneCustomSelect({
-      where: { id }
-    });
+    return this.stockService.findOneCustomSelect(id);
   }
 
   @Post('')

@@ -1,4 +1,4 @@
-export enum ServiceStatus {
+export enum AServiceStatus {
   STATUS_TODO,
   STATUS_HOLD,
   STATUS_BUSY,
