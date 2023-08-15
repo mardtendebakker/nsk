@@ -12,6 +12,7 @@ export const FORGOT_PASSWORD_PATH = '/auth/forgot';
 export const CONFIRM_PASSWORD_PATH = '/auth/confirmpassword';
 export const SALES_ORDERS_PATH = '/sales/:id';
 export const PURCHASE_ORDERS_PATH = '/purchases/:id';
+export const PURCHASE_ORDERS_FILES_PATH = '/purchases/:orderId/files/:id';
 export const STOCK_PRODUCTS_PATH = '/products/:id';
 export const ADMIN_USERS_PATH = '/admin/users';
 export const STOCK_REPAIRS_PATH = '/repairs/:id';

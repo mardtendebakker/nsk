@@ -48,7 +48,7 @@ export default function ConfirmationDialog(
       maxWidth={false}
     >
       <DialogTitle>
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <Box sx={{ display: 'flex', alignItems: 'start' }}>
           {title}
           <IconButton onClick={onClose} sx={{ ml: 'auto' }}>
             <Close sx={{ fontSize: '1rem' }} />
