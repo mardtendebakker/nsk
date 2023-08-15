@@ -4,6 +4,7 @@ import {
   TableRow,
 } from '@mui/material';
 import { format } from 'date-fns';
+import Check from '@mui/icons-material/Check';
 import useTranslation from '../../../../hooks/useTranslation';
 import { UserListItem } from '../../../../utils/axios/models/user';
 import PaginatedTable from '../../../paginatedTable';
@@ -66,13 +67,13 @@ export default function List({
               {user.UserStatus}
             </TableCell>
             <TableCell>
-              {user.Enabled ? 'True' : 'False'}
+              {user.Enabled && <Check />}
             </TableCell>
             <TableCell>
-              {format(new Date(user.UserCreateDate), 'yyyy/MM/dd')}
+              {user.UserCreateDate && format(new Date(user.UserCreateDate), 'yyyy/MM/dd')}
             </TableCell>
             <TableCell>
-              {format(new Date(user.UserLastModifiedDate), 'yyyy/MM/dd')}
+              {user.UserLastModifiedDate && format(new Date(user.UserLastModifiedDate), 'yyyy/MM/dd')}
             </TableCell>
           </TableRow>
         ))}

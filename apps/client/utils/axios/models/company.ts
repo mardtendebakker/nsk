@@ -1,5 +1,5 @@
 export interface CompanyListItem {
-  id?: number,
+  id: number,
   name?: string,
   email?: string,
   representative?: string,

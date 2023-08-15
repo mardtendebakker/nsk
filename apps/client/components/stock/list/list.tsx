@@ -100,7 +100,7 @@ function Row(
           sx={{ cursor: 'pointer' }}
           onClick={() => onClick({ id: product.id })}
         >
-          {product.tasks.length > 0
+          {product.tasks?.length > 0
             ? (
               <TasksProgress
                 done={product.tasks.filter((task) => task.status == 3).length}
@@ -114,7 +114,7 @@ function Row(
           {onDelete && <Delete onDelete={() => onDelete(product.id)} disabled={disabled} tooltip />}
         </TableCell>
       </TableRow>
-      {product.tasks.length > 0 && (
+      {product.tasks?.length > 0 && (
       <TableRow
         sx={(theme) => ({ backgroundColor: theme.palette.grey[10] })}
       >
@@ -129,7 +129,7 @@ function Row(
                 </TableRow>
               </TableHead>
               <TableBody>
-                {product.tasks.map(({ name, status, description }) => (
+                {product.tasks?.map(({ name, status, description }) => (
                   <TableRow key={name} sx={{ height: 60 }}>
                     <TableCell sx={{ padding: '0 16px' }}>
                       {name}

@@ -108,6 +108,7 @@ export default function List({
                 : order.acompany_aorder_customer_idToacompany?.acompany?.name) || '--'}
             </TableCell>
             <TableCell>
+              {order.order_status && (
               <Box>
                 <Box sx={{
                   px: '1rem',
@@ -122,6 +123,7 @@ export default function List({
                   {order.order_status.name}
                 </Box>
               </Box>
+              )}
             </TableCell>
             <TableCell>
               <Edit onClick={() => onEdit(order.id)} disabled={disabled} />
