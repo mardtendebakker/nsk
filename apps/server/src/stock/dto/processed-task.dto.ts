@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { ServiceStatus } from "../../service/enum/service-status.enum";
+import { AServiceStatus } from "../../aservice/enum/aservice-status.enum";
 
 export class ProcessedTask {
     @ApiProperty()
@@ -9,5 +9,5 @@ export class ProcessedTask {
     description: string;
   
     @ApiProperty()
-    status: ServiceStatus;
+    status: AServiceStatus;
   }

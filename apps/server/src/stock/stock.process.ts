@@ -3,7 +3,7 @@ import { Prisma, aservice, product, product_order, product_type_task } from "@pr
 import { AttributeType } from "../attribute/enum/attribute-type.enum";
 import { AOrderDiscrimination } from "../aorder/types/aorder-discrimination.enum";
 import { StockRepository } from "./stock.repository";
-import { ServiceStatus } from "../service/enum/service-status.enum";
+import { AServiceStatus } from "../aservice/enum/aservice-status.enum";
 import { ProductRelation } from "./types/product-relation";
 import { ProcessedTask } from "./dto/processed-task.dto";
 import { ProcessedStock } from "./dto/processed-stock.dto";
@@ -114,7 +114,7 @@ export class StockProcess {
       const processedTask: ProcessedTask = {
         name: productTypeTask['task'].name,
         description: productTypeTask['task'].description,
-        status: ServiceStatus.STATUS_TODO,
+        status: AServiceStatus.STATUS_TODO,
       };
       for (let i = 0; i < this.aservices.length; i++) {
         const service = this.aservices[i];
@@ -159,16 +159,15 @@ export class StockProcess {
         if (product_attributed['product_product_attribute_product_idToproduct'].id) {
           
           const newProduct = await this.repository.findOneSelect({
-            where: {
-              id: product_attributed['product_product_attribute_product_idToproduct'].id,
-            },
+            id: product_attributed['product_product_attribute_product_idToproduct'].id,
             select: this.productSelect,
           });
 
           const newProductProcess = new StockProcess(
             this.repository,
             newProduct,
-            this.productSelect
+            this.productSelect,
+            this.orderId
           );
 
           parentProductQuantitySold = await newProductProcess.getQuantitySold() || 0;

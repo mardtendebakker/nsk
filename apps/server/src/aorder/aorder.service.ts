@@ -9,7 +9,7 @@ import { AOrderProcess } from './aorder.process';
 import { PrintService } from '../print/print.service';
 import { CompanyDiscrimination } from '../company/types/company-discrimination.enum';
 import { FileService } from '../file/file.service';
-import { NotFoundException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 type CommonAOrderDto = Partial<Omit<CreateAOrderDto, 'pickup'>>;
 type CommonAOrderInput = Partial<Omit<Prisma.aorderCreateInput, 'pickup'>>;
 
@@ -124,7 +124,7 @@ export class AOrderService {
 
   async create(orderDto: CreateAOrderDto) {
     if (this.type === undefined) {
-      throw new Error('discr is mandatory!');
+      throw new BadRequestException('The operation requires a specific order type');
     }
 
     const { pickup } = orderDto;

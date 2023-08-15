@@ -1,27 +1,41 @@
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
-import { IS_SERVICE } from '../service/types/is-service.enum';
-import { REPAIR_PRODUCT_NAME } from './types/repair-product-name.enum';
 import { Product } from './dto/update-many-product.dto';
 
 export class StockRepository {
-  private isServiceWhere: { name?: string } = {};
+  private serviceWhere: Prisma.productWhereInput = {};
 
   constructor(
     protected readonly prisma: PrismaService,
-    protected readonly isService?: boolean
+    protected readonly isRepair?: boolean
   ) {
-    this.isServiceWhere = this.isService == IS_SERVICE && {
-      name: REPAIR_PRODUCT_NAME,
+    this.serviceWhere = {
+      product_order: {
+        ...(isRepair
+          ? {
+              some: { aorder: { isNot: null } },
+              every: {
+                aorder: { repair: { isNot: null } },
+              },
+            }
+          : {
+              every: {
+                aorder: { repair: { is: null } },
+              },
+            }),
+      },
     };
   }
 
   async findAll(params: Prisma.productFindManyArgs) {
     const { skip, cursor, select, orderBy } = params;
     const take = params.take ? params.take : 20;
+    const { 
+      product_order,
+    ...restWhere } = params.where;
     const where: Prisma.productWhereInput = {
-      ...params.where,
-      ...this.isServiceWhere,
+      ...(product_order ? { product_order } : this.serviceWhere),
+      ...restWhere,
     };
     const submission = await this.prisma.$transaction([
       this.prisma.product.count({ where }),
@@ -42,53 +56,46 @@ export class StockRepository {
   }
 
   create(createData: Prisma.productUncheckedCreateInput) {
-    const data = {
-      ...createData,
-      ...this.isServiceWhere,
-    };
-
     return this.prisma.product.create({
-      data,
+      data: createData,
     });
   }
 
   findOne(params: { where: Prisma.productWhereUniqueInput }) {
-    const where = { ...params.where, ...this.isServiceWhere };
+    const where = { ...params.where };
     return this.prisma.product.findUnique({ where });
   }
 
   findOneSelect(params: {
-    where: Prisma.productWhereUniqueInput;
+    id: number;
     select: Prisma.productSelect;
   }) {
-    const where = { ...params.where, ...this.isServiceWhere };
-    const { select } = params;
+    const { id, select } = params;
     
     return this.prisma.product.findUnique({
-      where,
+      where: { id },
       select,
     });
   }
 
   findOneInclude(params: {
-    where: Prisma.productWhereUniqueInput;
+    id: number;
     include: Prisma.productInclude;
   }) {
-    const where = { ...params.where, ...this.isServiceWhere };
-    const { include } = params;
+    const { id, include } = params;
     return this.prisma.product.findUnique({
-      where,
+      where: { id },
       include,
     });
   }
 
   updateOne(params: {
-    where: Prisma.productWhereUniqueInput;
+    id: number;
     data: Prisma.productUpdateInput;
   }) {
-    const { where, data } = params;
+    const { id, data } = params;
     return this.prisma.product.update({
-      where,
+      where: { id },
       data,
       include: {
         product_attribute_product_attribute_product_idToproduct: true,
