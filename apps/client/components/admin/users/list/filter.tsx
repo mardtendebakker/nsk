@@ -7,6 +7,8 @@ import { FormRepresentation, SetValue } from '../../../../hooks/useForm';
 import TextField from '../../../input/textField';
 import BorderedBox from '../../../borderedBox';
 import SearchAccordion from '../../../searchAccordion';
+import useResponsive from '../../../../hooks/useResponsive';
+import ListFilterDivider from '../../../listFilterDivider';
 
 export default function Filter({
   disabled,
@@ -20,6 +22,7 @@ export default function Filter({
   onReset: () => void
 }) {
   const { trans } = useTranslation();
+  const isDesktop = useResponsive('up', 'sm');
 
   return (
     <form>
@@ -31,7 +34,13 @@ export default function Filter({
           searchValue={formRepresentation.search.value?.toString()}
           onReset={onReset}
         >
-          <Box sx={{ flex: 1, display: 'flex', alignItems: 'center' }}>
+          <Box sx={{
+            flex: 1,
+            display: 'flex',
+            alignItems: 'center',
+            flexDirection: isDesktop ? 'unset' : 'column',
+          }}
+          >
             <Autocomplete
               disabled={disabled}
               fullWidth
@@ -52,7 +61,7 @@ export default function Filter({
                 )
             }
             />
-            <Box sx={(theme) => ({ width: '1px', height: '2.5rem', background: theme.palette.divider })} />
+            <ListFilterDivider horizontal={!isDesktop} />
             <Autocomplete
               disabled={disabled}
               fullWidth
@@ -73,7 +82,7 @@ export default function Filter({
                 )
             }
             />
-            <Box sx={(theme) => ({ width: '1px', height: '2.5rem', background: theme.palette.divider })} />
+            <ListFilterDivider horizontal={!isDesktop} />
             <DesktopDatePicker
               disabled={disabled}
               inputFormat="yyyy/MM/dd"

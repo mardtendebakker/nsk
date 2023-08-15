@@ -29,27 +29,26 @@ export default function Navigation() {
       <Create open={showUserForm} onClose={() => setShowUserForm(false)} />
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Typography variant="h4" sx={{ mr: '.5rem' }}>{trans('adminCenter')}</Typography>
-        <Box sx={{ display: 'flex' }}>
-          {ITEMS.map(({ text, active, onClick }) => (
-            <Typography
-              key={text}
-              onClick={() => !active && onClick()}
-              variant="h5"
-              sx={(theme) => ({
-                cursor: 'pointer',
-                background: active ? '#D6E0FA' : undefined,
-                color: active ? theme.palette.primary.main : undefined,
-                p: '.5rem .75rem',
-                mr: '.5rem',
-              })}
-            >
-              {text}
-            </Typography>
-          ))}
-        </Box>
+        {ITEMS.map(({ text, active, onClick }) => (
+          <Typography
+            key={text}
+            onClick={() => !active && onClick()}
+            variant="h5"
+            sx={(theme) => ({
+              cursor: 'pointer',
+              background: active ? '#D6E0FA' : undefined,
+              color: active ? theme.palette.primary.main : undefined,
+              p: '.5rem .75rem',
+              mr: '.5rem',
+            })}
+          >
+            {text}
+          </Typography>
+        ))}
       </Box>
       {router.pathname === ADMIN_USERS && (
-      <Button size="small"
+      <Button
+        size="small"
         variant="contained"
         onClick={() => setShowUserForm(true)}
       >

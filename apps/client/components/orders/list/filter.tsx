@@ -9,6 +9,8 @@ import TextField from '../../input/textField';
 import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
 import { ORDER_STATUSES_PATH, COMPANIES_PATH } from '../../../utils/axios';
 import SearchAccordion from '../../searchAccordion';
+import useResponsive from '../../../hooks/useResponsive';
+import ListFilterDivider from '../../listFilterDivider';
 
 export default function Filter({
   disabled,
@@ -22,6 +24,7 @@ export default function Filter({
   onReset: () => void
 }) {
   const { trans } = useTranslation();
+  const isDesktop = useResponsive('up', 'md');
 
   const ORDER_BY_OPTIONS = [
     {
@@ -43,7 +46,13 @@ export default function Filter({
           searchValue={formRepresentation.search.value?.toString() || ''}
           onReset={onReset}
         >
-          <Box sx={{ flex: 1, display: 'flex', alignItems: 'center' }}>
+          <Box sx={{
+            flex: 1,
+            display: 'flex',
+            alignItems: 'center',
+            flexDirection: isDesktop ? 'unset' : 'column',
+          }}
+          >
             <DesktopDatePicker
               disabled={disabled}
               inputFormat="yyyy/MM/dd"
@@ -67,7 +76,7 @@ export default function Filter({
                 />
               )}
             />
-            <Box sx={(theme) => ({ width: '1px', height: '2.5rem', background: theme.palette.divider })} />
+            <ListFilterDivider horizontal={!isDesktop} />
             <DataSourcePicker
               url={COMPANIES_PATH.replace(':id', '')}
               disabled={disabled}
@@ -77,7 +86,7 @@ export default function Filter({
               onChange={(selected: { id: number }) => setValue({ field: 'createdBy', value: selected?.id })}
               value={formRepresentation.createdBy.value?.toString()}
             />
-            <Box sx={(theme) => ({ width: '1px', height: '2.5rem', background: theme.palette.divider })} />
+            <ListFilterDivider horizontal={!isDesktop} />
             <Autocomplete
               disabled={disabled}
               fullWidth
@@ -104,7 +113,7 @@ export default function Filter({
                 )
             }
             />
-            <Box sx={(theme) => ({ width: '1px', height: '2.5rem', background: theme.palette.divider })} />
+            <ListFilterDivider horizontal={!isDesktop} />
             <DataSourcePicker
               url={ORDER_STATUSES_PATH.replace(':id', '')}
               disabled={disabled}
@@ -114,7 +123,7 @@ export default function Filter({
               onChange={(selected: { id: number }) => setValue({ field: 'status', value: selected?.id })}
               value={formRepresentation.status.value?.toString()}
             />
-            <Box sx={(theme) => ({ width: '1px', height: '2.5rem', background: theme.palette.divider })} />
+            <ListFilterDivider horizontal={!isDesktop} />
             <DataSourcePicker
               url={COMPANIES_PATH.replace(':id', '')}
               params={{ partnerOnly: '1' }}
