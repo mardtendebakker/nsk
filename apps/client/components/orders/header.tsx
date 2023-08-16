@@ -3,9 +3,21 @@ import { Box, Button, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import useTranslation from '../../hooks/useTranslation';
 import {
-  ORDERS_PURCHASES, ORDERS_PURCHASES_NEW, ORDERS_SALES, ORDERS_SALES_NEW,
+  ORDERS_PURCHASES, ORDERS_PURCHASES_NEW, ORDERS_REPAIRS, ORDERS_REPAIRS_NEW, ORDERS_SALES, ORDERS_SALES_NEW,
 } from '../../utils/routes';
 import useResponsive from '../../hooks/useResponsive';
+
+const NEW_ORDER_PATH = {
+  [ORDERS_PURCHASES]: ORDERS_PURCHASES_NEW,
+  [ORDERS_SALES]: ORDERS_SALES_NEW,
+  [ORDERS_REPAIRS]: ORDERS_REPAIRS_NEW,
+};
+
+const NEW_ORDER_LABEL = {
+  [ORDERS_PURCHASES]: 'newPurchase',
+  [ORDERS_SALES]: 'newSale',
+  [ORDERS_REPAIRS]: 'newRepair',
+};
 
 export default function Navigation() {
   const router = useRouter();
@@ -22,6 +34,11 @@ export default function Navigation() {
       active: router.pathname === ORDERS_SALES,
       text: trans('salesOrders'),
       onClick: () => router.push(ORDERS_SALES),
+    },
+    {
+      active: router.pathname === ORDERS_REPAIRS,
+      text: trans('repairOrders'),
+      onClick: () => router.push(ORDERS_REPAIRS),
     },
   ];
 
@@ -54,10 +71,10 @@ export default function Navigation() {
         sx={{ mb: '.5rem' }}
         size="small"
         variant="contained"
-        onClick={() => router.push(router.pathname == ORDERS_PURCHASES ? ORDERS_PURCHASES_NEW : ORDERS_SALES_NEW)}
+        onClick={() => router.push(NEW_ORDER_PATH[router.pathname] || ORDERS_PURCHASES_NEW)}
       >
         <Add />
-        {trans(router.pathname == ORDERS_PURCHASES ? 'newPurchase' : 'newSale')}
+        {trans(NEW_ORDER_LABEL[router.pathname] || ORDERS_PURCHASES)}
       </Button>
     </Box>
 

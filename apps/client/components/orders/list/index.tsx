@@ -12,10 +12,12 @@ import {
   ORDER_STATUSES_PATH,
   BULK_PRINT_PURCHASES_PATH,
   BULK_PRINT_SALES_PATH,
+  BULK_PRINT_REPAIRS_PATH,
   AxiosResponse,
+  REPAIR_ORDERS_PATH,
 } from '../../../utils/axios';
 import {
-  ORDERS_PURCHASES, ORDERS_PURCHASES_EDIT, ORDERS_SALES_EDIT,
+  ORDERS_PURCHASES, ORDERS_PURCHASES_EDIT, ORDERS_REPAIRS, ORDERS_REPAIRS_EDIT, ORDERS_SALES, ORDERS_SALES_EDIT,
 } from '../../../utils/routes';
 import Filter from './filter';
 import Action from './action';
@@ -105,6 +107,23 @@ function refreshList({
     },
   }).finally(() => pushURLParams({ params, router }));
 }
+const AJAX_PATHS = {
+  [ORDERS_PURCHASES]: PURCHASE_ORDERS_PATH,
+  [ORDERS_SALES]: SALES_ORDERS_PATH,
+  [ORDERS_REPAIRS]: REPAIR_ORDERS_PATH,
+};
+
+const AJAX_BULK_PRINT_PATHS = {
+  [ORDERS_PURCHASES]: BULK_PRINT_PURCHASES_PATH,
+  [ORDERS_SALES]: BULK_PRINT_SALES_PATH,
+  [ORDERS_REPAIRS]: BULK_PRINT_REPAIRS_PATH,
+};
+
+const EDIT_PATHS = {
+  [ORDERS_PURCHASES]: ORDERS_PURCHASES_EDIT,
+  [ORDERS_SALES]: ORDERS_SALES_EDIT,
+  [ORDERS_REPAIRS]: ORDERS_REPAIRS_EDIT,
+};
 
 export default function ListContainer() {
   const { trans } = useTranslation();
@@ -115,8 +134,11 @@ export default function ListContainer() {
   const [rowsPerPage, setRowsPerPage] = useState<number>(parseInt(router.query?.rowsPerPage?.toString() || '10', 10));
   const [checkedOrderIds, setCheckedOrderIds] = useState<number[]>([]);
 
-  const ajaxPath = router.pathname == ORDERS_PURCHASES ? PURCHASE_ORDERS_PATH : SALES_ORDERS_PATH;
-  const ajaxBulkPrintPath = router.pathname == ORDERS_PURCHASES ? BULK_PRINT_PURCHASES_PATH : BULK_PRINT_SALES_PATH;
+  const ajaxPath = AJAX_PATHS[router.pathname] || PURCHASE_ORDERS_PATH;
+
+  const ajaxBulkPrintPath = AJAX_BULK_PRINT_PATHS[router.pathname] || BULK_PRINT_PURCHASES_PATH;
+
+  const editPath = EDIT_PATHS[router.pathname] || ORDERS_PURCHASES_EDIT;
 
   const { formRepresentation, setValue, setData } = useForm(initFormState({
     search: router.query?.search?.toString(),
@@ -259,9 +281,7 @@ export default function ListContainer() {
           setPage(1);
         }}
         rowsPerPage={rowsPerPage}
-        onEdit={(id) => router.push(
-          (router.pathname == ORDERS_PURCHASES ? ORDERS_PURCHASES_EDIT : ORDERS_SALES_EDIT).replace('[id]', id.toString()),
-        )}
+        onEdit={(id) => router.push(editPath.replace('[id]', id.toString()))}
         onDelete={handleDelete}
       />
       {showChangeStatusModal && (

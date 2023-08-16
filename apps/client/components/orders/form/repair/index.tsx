@@ -14,7 +14,7 @@ import CustomerDetails from '../customerDetails';
 import Select from '../../../memoizedInput/select';
 import TextField from '../../../memoizedInput/textField';
 
-function SalesForm({
+function RepairForm({
   formRepresentation,
   disabled,
   setValue,
@@ -96,4 +96,4 @@ function SalesForm({
   );
 }
 
-export default SalesForm;
+export default RepairForm;
