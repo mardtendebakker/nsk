@@ -10,8 +10,8 @@ import { PrintService } from '../print/print.service';
 import { CompanyDiscrimination } from '../company/types/company-discrimination.enum';
 import { FileService } from '../file/file.service';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-type CommonAOrderDto = Partial<Omit<CreateAOrderDto, 'pickup'>>;
-type CommonAOrderInput = Partial<Omit<Prisma.aorderCreateInput, 'pickup'>>;
+type CommonAOrderDto = Partial<Omit<CreateAOrderDto, 'pickup' | 'repair'>>;
+type CommonAOrderInput = Partial<Omit<Prisma.aorderCreateInput, 'pickup' | 'repair'>>;
 
 export class AOrderService {
   constructor(
@@ -127,7 +127,7 @@ export class AOrderService {
       throw new BadRequestException('The operation requires a specific order type');
     }
 
-    const { pickup } = orderDto;
+    const { pickup, repair } = orderDto;
 
     const params: Prisma.aorderCreateArgs = {
       data: {
@@ -136,6 +136,7 @@ export class AOrderService {
         discr: this.type,
         order_date: new Date(),
         ...(pickup && { pickup: { create: { ...pickup } } }),
+        ...(repair && { repair: { create: { ...repair } } })
       }
     };
 
@@ -162,11 +163,12 @@ export class AOrderService {
   }
 
   async update(id: number, orderDto: UpdateAOrderDto) {
-    const { pickup } = orderDto;
+    const { pickup, repair } = orderDto;
 
     const data: Prisma.aorderUpdateInput = {
       ...this.processCreateOrUpdateOrderInput(orderDto),
       ...(pickup && { pickup: { upsert: { update: { ...pickup }, create: { ...pickup } } } }),
+      ...(repair && { repair: { upsert: { update: { ...repair }, create: { ...repair } } } }),
     };
 
     const params: Prisma.aorderUpdateArgs = {
@@ -373,6 +375,7 @@ export class AOrderService {
             discr: true,
           },
         },
+        repair: true
       };
     }
 

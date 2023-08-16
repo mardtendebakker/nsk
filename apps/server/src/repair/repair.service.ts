@@ -53,10 +53,8 @@ export class RepairService extends AOrderService {
         },
       },
       repair: {
-        create: {
-          damage: null,
-          description: null,
-        },
+        damage: null,
+        description: null,
       },
     };
   }
