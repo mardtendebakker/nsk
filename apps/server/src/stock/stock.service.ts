@@ -350,6 +350,12 @@ export class StockService {
     if (!Number.isFinite(stock?.id)) {
       throw new Error("stock not found");
     }
+
+    const { product_attributes, product_orders, ...restBody } = body;
+    if (product_attributes && !Number.isFinite(body.type_id)) {
+      throw new Error("missing type_id in body for updating product_attributes");
+    }
+    
     const typeHasChanged = Number.isFinite(body.type_id) && body.type_id !== stock.product_type?.id;
 
     // check if the product type has changed
@@ -359,8 +365,6 @@ export class StockService {
       await this.generateAllAttributes(id, body.type_id);
     }
 
-    const { product_attributes, product_orders, ...restBody } = body;
-
     const productAttributeUpdate = await this.processProductAttributeUpdate(
       id,
       body.type_id,
@@ -368,7 +372,7 @@ export class StockService {
       typeHasChanged,
       files,
     );
-
+    
     return this.repository.updateOne({
       id,
       data: {

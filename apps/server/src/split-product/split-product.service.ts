@@ -256,7 +256,6 @@ export class SplitProductService {
 
     const newProduct = await this.productService.create(createStockDto, files);
     await this.productService.updateOne(product.id, {
-      type_id: product.product_type.id,
       product_orders: productOrderUpdate,
     });
 
