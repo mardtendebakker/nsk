@@ -1,0 +1,15 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Nx Nest App",
+      "type": "node",
+      "request": "attach",
+      "processId": "${command:PickProcess}",
+      "sourceMaps": true,
+      "sourceMapPathOverrides": {
+        "webpack:///./*": "${workspaceFolder}/apps/server/*"
+      }
+    },
+  ]
+}
