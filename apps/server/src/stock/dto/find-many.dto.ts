@@ -32,4 +32,10 @@ export class FindManyDto extends BaseFindManyDto {
   @Type(() => Number)
   @ValidateIf((_, value) => value !== undefined)
   orderId?: number;
+
+  @ApiPropertyOptional()
+  @IsInt()
+  @Type(() => Number)
+  @ValidateIf((_, value) => value !== undefined)
+  orderIdExclude?: number;
 }
