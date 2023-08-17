@@ -7,6 +7,7 @@ import { AServiceStatus } from "../aservice/enum/aservice-status.enum";
 import { ProductRelation } from "./types/product-relation";
 import { ProcessedTask } from "./dto/processed-task.dto";
 import { ProcessedStock } from "./dto/processed-stock.dto";
+import { ProductOrderPayload } from "./types/product-order-payload";
 
 export class StockProcess {
   private isSaleable: boolean;
@@ -18,6 +19,7 @@ export class StockProcess {
   private typeName: string;
   private firstProductOrder: product_order;
   private theProductOrder: product_order;
+  private product_order: ProductOrderPayload;
   private aservices: aservice[];
   private orderDate: Date;
   private orderNumber: string;
@@ -61,6 +63,11 @@ export class StockProcess {
     
     this.firstProductOrder = product_order?.[0];
     this.theProductOrder = product_order.find(po => po.order_id === this.orderId);
+    this.product_order = {
+      id: this.theProductOrder?.id,
+      price: this.theProductOrder?.price,
+      quantity: this.theProductOrder?.quantity,
+    };
     
     this.aservices = this.theProductOrder?.['aservice'] || [];
     this.orderDate = this.firstProductOrder?.['aorder']?.order_date;
@@ -102,7 +109,7 @@ export class StockProcess {
       order_nr: this.orderNumber,
       tasks: this.processedTasks,
       splittable: this.splittable,
-      ...(this.orderId && {product_order_id: this.theProductOrder.id}),
+      ...(this.orderId && {product_order: this.product_order}),
       ...(this.orderId && {services: this.aservices}),
     };
     

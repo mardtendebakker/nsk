@@ -2,6 +2,7 @@ import { ApiProperty, ApiPropertyOptional, PickType } from "@nestjs/swagger";
 import { aservice } from "@prisma/client";
 import { ProcessedTask } from "./processed-task.dto";
 import { ProductEntity } from "../entities/product.entity";
+import { ProductOrderPayload } from "../types/product-order-payload";
 
 export class ProcessedStock extends PickType(ProductEntity, [
     "id",
@@ -48,7 +49,7 @@ export class ProcessedStock extends PickType(ProductEntity, [
     splittable: boolean;
   
     @ApiPropertyOptional()
-    product_order_id?: number;
+    product_order?: ProductOrderPayload;
   
     @ApiPropertyOptional()
     services?: aservice[];
