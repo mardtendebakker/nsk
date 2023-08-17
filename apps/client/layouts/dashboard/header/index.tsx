@@ -19,6 +19,7 @@ import {
   CONTACTS_CUSTOMERS,
   CONTACTS_SUPPLIERS,
   BULK_EMAIL,
+  ORDERS_REPAIRS,
 } from '../../../utils/routes';
 import useTranslation from '../../../hooks/useTranslation';
 import useResponsive from '../../../hooks/useResponsive';
@@ -81,7 +82,9 @@ export default function Header() {
     {
       title: trans('orders'),
       path: ORDERS_PURCHASES,
-      active: router.pathname.includes(ORDERS_PURCHASES) || router.pathname.includes(ORDERS_SALES),
+      active: router.pathname.includes(ORDERS_PURCHASES)
+      || router.pathname.includes(ORDERS_SALES)
+      || router.pathname.includes(ORDERS_REPAIRS),
       subItems: [
         {
           title: trans('purchaseOrders'),
@@ -92,6 +95,11 @@ export default function Header() {
           title: trans('salesOrders'),
           path: ORDERS_SALES,
           active: router.pathname.includes(ORDERS_SALES),
+        },
+        {
+          title: trans('repairOrders'),
+          path: ORDERS_REPAIRS,
+          active: router.pathname.includes(ORDERS_REPAIRS),
         },
       ],
     },

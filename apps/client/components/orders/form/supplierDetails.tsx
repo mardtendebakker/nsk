@@ -8,11 +8,11 @@ import {
   Radio,
   RadioGroup,
 } from '@mui/material';
-import useTranslation from '../../../../hooks/useTranslation';
-import { FormRepresentation, SetValue } from '../../../../hooks/useForm';
-import DataSourcePicker from '../../../memoizedInput/dataSourcePicker';
-import { SUPPLIERS_PATH } from '../../../../utils/axios';
-import Company from '../company';
+import useTranslation from '../../../hooks/useTranslation';
+import { FormRepresentation, SetValue } from '../../../hooks/useForm';
+import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
+import { SUPPLIERS_PATH } from '../../../utils/axios';
+import Company from './company';
 
 export default function SupplierDetails({
   formRepresentation,

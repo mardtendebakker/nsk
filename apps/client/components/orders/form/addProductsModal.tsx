@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
 import _ from 'lodash';
 import { Box } from '@mui/material';
-import ConfirmationDialog from '../../../confirmationDialog';
-import { STOCK_PRODUCTS_PATH } from '../../../../utils/axios';
-import useTranslation from '../../../../hooks/useTranslation';
-import List from '../../../stock/list/list';
-import useAxios from '../../../../hooks/useAxios';
-import Filter from '../../../stock/list/filter';
-import useForm, { FieldPayload } from '../../../../hooks/useForm';
-import { ProductListItem } from '../../../../utils/axios/models/product';
-import Checkbox from '../../../checkbox';
+import ConfirmationDialog from '../../confirmationDialog';
+import { STOCK_PRODUCTS_PATH } from '../../../utils/axios';
+import useTranslation from '../../../hooks/useTranslation';
+import List from '../../stock/list/list';
+import useAxios from '../../../hooks/useAxios';
+import Filter from '../../stock/list/filter';
+import useForm, { FieldPayload } from '../../../hooks/useForm';
+import { ProductListItem } from '../../../utils/axios/models/product';
+import Checkbox from '../../checkbox';
 
 const initFormState = {
   search: {},
@@ -23,6 +23,7 @@ function refreshList({
   rowsPerPage = 10,
   formRepresentation,
   call,
+  orderId,
 }) {
   const paramsToSend = {};
 
@@ -39,6 +40,7 @@ function refreshList({
 
   call({
     params: {
+      orderIdExclude: orderId,
       take: rowsPerPage,
       skip: (page - 1) * rowsPerPage,
       ...paramsToSend,
@@ -47,13 +49,13 @@ function refreshList({
 }
 
 export default function AddProductsModal({
+  orderId,
   onClose,
   onProductsAdded,
-  open,
 }:{
+  orderId: string,
   onClose: ()=>void,
   onProductsAdded: (productIds: number[]) => void,
-  open: boolean
 }) {
   const { trans } = useTranslation();
   const [page, setPage] = useState<number>(1);
@@ -91,6 +93,7 @@ export default function AddProductsModal({
       rowsPerPage,
       formRepresentation,
       call,
+      orderId,
     });
   }, [
     page,
@@ -103,7 +106,7 @@ export default function AddProductsModal({
 
   return (
     <ConfirmationDialog
-      open={open}
+      open
       title={<>{trans('addProduct')}</>}
       onClose={onClose}
       onConfirm={() => onProductsAdded(checkedProductIds)}

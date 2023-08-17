@@ -39,10 +39,17 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
 
   const { call: callPut } = useAxios('put', undefined, { withProgressBar: true });
 
-  const handleProductPropertyChange = useCallback(debounce((product, property: string, value) => {
+  const handleProductPropertyChange = useCallback(debounce((product: ProductListItem, property: string, value) => {
     callPut({
       path: STOCK_PRODUCTS_PATH.replace(':id', product.id.toString()),
-      body: { [property]: value },
+      body: {
+        product_orders: [
+          {
+            [property]: value,
+            id: product.product_order.id,
+          },
+        ],
+      },
     });
   }), []);
 
@@ -54,7 +61,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
         orderId,
       },
     });
-  }, [orderId]);
+  }, [page, rowsPerPage, orderId]);
 
   return (
     <>
@@ -113,8 +120,8 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
                 <TableCell>
                   <TextField
                     type="number"
-                    placeholder="0.00"
-                    defaultValue={product.price.toString()}
+                    placeholder="1"
+                    defaultValue={product.product_order.price.toString()}
                     onChange={(e) => handleProductPropertyChange(
                       product,
                       'price',
@@ -129,7 +136,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
                     defaultValue={product.stock.toString()}
                     onChange={(e) => handleProductPropertyChange(
                       product,
-                      'stock',
+                      'quantity',
                       e.target.value,
                     )}
                   />

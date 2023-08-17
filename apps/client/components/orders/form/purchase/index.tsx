@@ -18,7 +18,7 @@ import { LOGISTICS_PATH } from '../../../../utils/axios';
 import BasicDetails from '../basicDetails';
 import PricingDetails from '../pricingDetails';
 import { Order } from '../../../../utils/axios/models/order';
-import SupplierDetails from './supplierDetails';
+import SupplierDetails from '../supplierDetails';
 import { buildAFileLink } from '../../../../utils/afile';
 import { AFile } from '../../../../utils/axios/models/aFile';
 import Delete from '../../../button/delete';

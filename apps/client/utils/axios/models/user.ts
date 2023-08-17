@@ -1,11 +1,11 @@
 export interface User {
-  id?: string,
+  id:string,
 }
 
 export interface UserListItem {
-  Username?: string,
-  Enabled?: string,
-  UserCreateDate?: string,
-  UserLastModifiedDate?: string,
-  UserStatus?: string,
+  Username:string,
+  Enabled:string,
+  UserCreateDate:string,
+  UserLastModifiedDate:string,
+  UserStatus:string,
 }
