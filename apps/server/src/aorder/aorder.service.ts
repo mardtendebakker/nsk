@@ -119,7 +119,7 @@ export class AOrderService {
       throw new NotFoundException(`Order with ID ${id} not found`);
     }
     
-    return order;
+    return new AOrderProcess(order).run();;
   }
 
   async create(orderDto: CreateAOrderDto) {
@@ -191,13 +191,13 @@ export class AOrderService {
   async deleteOne(id: number) {
     const order = await this.findOne(id);
     if (order.discr === AOrderDiscrimination.PURCHASE) {
-      order['pickup']?.afile?.length &&
+      order?.pickup?.['afile']?.length &&
         this.fileService.deleteMany(
-          order['pickup'].afile.map((file) => file.id)
+          order?.pickup?.['afile']?.map((file) => file.id)
         );
     } else if (order.discr === AOrderDiscrimination.SALE) {
       order['afile']?.length &&
-        this.fileService.deleteMany(order['afile'].map((file) => file.id));
+        this.fileService.deleteMany(order['afile']?.map((file) => file.id));
     }
 
     return this.repository.deleteOne(id);
@@ -316,10 +316,7 @@ export class AOrderService {
       orderBy: { id: 'asc', },
     });
 
-    return result.map(aorder => {
-      const aorderProcess = new AOrderProcess(aorder);
-      return aorderProcess.run();
-    });;
+    return result.map(aorder => new AOrderProcess(aorder).run());
   }
 
   async printAOrders(ids: number[]) {
@@ -350,8 +347,20 @@ export class AOrderService {
   }
 
   private processSelectPart<T extends Prisma.aorderArgs>(params: T): T {
+    params.include = {
+      ...params.include,
+      product_order: {
+        select: {
+          product_id: true,
+          price: true,
+          quantity: true,
+        }
+      }
+    };
+
     if (this.type === AOrderDiscrimination.PURCHASE) {
       params.include = {
+        ...params.include,
         pickup: {
           include: {
             afile: {
@@ -367,6 +376,7 @@ export class AOrderService {
       };
     } else if (this.type === AOrderDiscrimination.SALE) {
       params.include = {
+        ...params.include,
         afile: {
           select: {
             id: true,

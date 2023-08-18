@@ -7,9 +7,16 @@ import { LocationModule } from '../location/location.module';
 import { FileModule } from '../file/file.module';
 
 @Module({
-  providers: [ProductService, ProductRepository],
+  providers: [
+    ProductService,
+    ProductRepository,
+    {
+      provide: 'IS_REPAIR',
+      useValue: false,
+    },
+  ],
   controllers: [ProductController],
   imports: [PrismaModule, LocationModule, FileModule],
-  exports: [ProductService]
+  exports: [ProductService],
 })
 export class ProductModule {}

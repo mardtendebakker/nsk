@@ -7,9 +7,16 @@ import { ToRepairController } from './to-repair.controller';
 import { FileModule } from '../file/file.module';
 
 @Module({
-  providers: [ToRepairService, ToRepairRepository],
+  providers: [
+    ToRepairService,
+    ToRepairRepository,
+    {
+      provide: 'IS_REPAIR',
+      useValue: true,
+    },
+  ],
   controllers: [ToRepairController],
   imports: [PrismaModule, LocationModule, FileModule],
-  exports: [ToRepairService]
+  exports: [ToRepairService],
 })
 export class ToRepairModule {}

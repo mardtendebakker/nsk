@@ -5,11 +5,20 @@ import { SaleRepository } from './sale.repository';
 import { PrismaModule } from '../prisma/prisma.module';
 import { PrintService } from '../print/print.service';
 import { FileModule } from '../file/file.module';
+import { AProductModule } from '../aproduct/aproduct.module';
 
 @Module({
-  providers: [SaleService, SaleRepository, PrintService],
+  providers: [
+    SaleService,
+    SaleRepository,
+    {
+      provide: 'IS_REPAIR',
+      useValue: false,
+    },
+    PrintService,
+  ],
   controllers: [SaleController],
-  imports: [PrismaModule, FileModule],
+  imports: [PrismaModule, FileModule, AProductModule],
   exports: [SaleService],
 })
 export class SaleModule {}

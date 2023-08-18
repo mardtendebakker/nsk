@@ -8,11 +8,29 @@ import { FileModule } from '../file/file.module';
 import { OrderStatusModule } from '../order-status/order-status.module';
 import { ToRepairModule } from '../to-repair/to-repair.module';
 import { SalesServiceModule } from '../sales-service/sales-service.module';
+import { SaleModule } from '../sale/sale.module';
+import { AProductModule } from '../aproduct/aproduct.module';
 
 @Module({
-  providers: [RepairService, RepairRepository, PrintService],
+  providers: [
+    RepairService,
+    RepairRepository,
+    {
+      provide: 'IS_REPAIR',
+      useValue: true,
+    },
+    PrintService,
+  ],
   controllers: [RepairController],
-  imports: [PrismaModule, FileModule, OrderStatusModule, ToRepairModule, SalesServiceModule],
-  exports: [RepairService]
+  imports: [
+    PrismaModule,
+    SaleModule,
+    FileModule,
+    AProductModule,
+    OrderStatusModule,
+    ToRepairModule,
+    SalesServiceModule,
+  ],
+  exports: [RepairService],
 })
 export class RepairModule {}

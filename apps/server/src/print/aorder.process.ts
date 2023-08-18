@@ -1,12 +1,12 @@
 import * as bwipjs from 'bwip-js';
-import { AOrderTotalPrice } from "../aorder/aorder.process";
+import { AOrderProcessed } from "../aorder/aorder.process";
 import { DeliveryType } from "../aorder/types/delivery-type.enum";
 import { DataDestruction } from "../aorder/types/data-destruction.enum";
 import { format } from 'date-fns';
 export class AOrderProcess {
   private currencyFormat: Intl.NumberFormat;
 
-  constructor (private readonly aorder: AOrderTotalPrice) {
+  constructor (private readonly aorder: AOrderProcessed) {
     this.currencyFormat = new Intl.NumberFormat('nl-NL', { style: 'currency', currency: 'EUR' })
   }
 

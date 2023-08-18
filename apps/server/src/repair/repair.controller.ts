@@ -1,11 +1,11 @@
 import { Controller, Post } from '@nestjs/common';
 import { RepairService } from './repair.service';
-import { AOrderController } from '../aorder/aorder.controller';
 import { ApiExcludeEndpoint, ApiTags } from '@nestjs/swagger';
+import { SaleController } from '../sale/sale.controller';
 
 @ApiTags('repairs')
 @Controller('repairs')
-export class RepairController extends AOrderController {
+export class RepairController extends SaleController {
   constructor(protected readonly repairService: RepairService) {
     super(repairService);
   }

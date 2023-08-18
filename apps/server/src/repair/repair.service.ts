@@ -1,6 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { AOrderDiscrimination } from '../aorder/types/aorder-discrimination.enum';
-import { AOrderService } from '../aorder/aorder.service';
 import { RepairRepository } from './repair.repository';
 import { PrintService } from '../print/print.service';
 import { FileService } from '../file/file.service';
@@ -10,18 +8,21 @@ import { CreateAOrderDto } from '../aorder/dto/create-aorder.dto';
 import { ToRepairService } from '../to-repair/to-repair.service';
 import { aorder } from '@prisma/client';
 import { SalesServiceService } from '../sales-service/sales-service.service';
+import { SaleService } from '../sale/sale.service';
+import { AProductService } from '../aproduct/aproduct.service';
 
 @Injectable()
-export class RepairService extends AOrderService {
+export class RepairService extends SaleService {
   constructor(
     protected readonly repository: RepairRepository,
     protected readonly printService: PrintService,
     protected readonly fileService: FileService,
+    protected readonly aProductService: AProductService,
     private readonly orderStatusService: OrderStatusService,
     private readonly toRepairService: ToRepairService,
     private readonly salesServiceService: SalesServiceService,
   ) {
-    super(repository, printService, fileService, AOrderDiscrimination.SALE);
+    super(repository, printService, fileService, aProductService);
   }
 
   async create(): Promise<aorder> {

@@ -11,18 +11,16 @@ export class StockRepository {
   ) {
     this.serviceWhere = {
       product_order: {
-        ...(isRepair
-          ? {
-              some: { aorder: { isNot: null } },
-              every: {
-                aorder: { repair: { isNot: null } },
-              },
-            }
-          : {
-              every: {
-                aorder: { repair: { is: null } },
-              },
-            }),
+        ...(isRepair !== undefined
+          ? isRepair
+            ? {
+                some: { aorder: { isNot: null } },
+                every: { aorder: { repair: { isNot: null } } },
+              }
+            : {
+                every: { aorder: { repair: { is: null } } },
+              }
+          : {}),
       },
     };
   }
@@ -30,9 +28,7 @@ export class StockRepository {
   async findAll(params: Prisma.productFindManyArgs) {
     const { skip, cursor, select, orderBy } = params;
     const take = params.take ? params.take : 20;
-    const { 
-      product_order,
-    ...restWhere } = params.where;
+    const { product_order, ...restWhere } = params.where;
     const where: Prisma.productWhereInput = {
       ...(product_order ? { product_order } : this.serviceWhere),
       ...restWhere,
@@ -66,22 +62,16 @@ export class StockRepository {
     return this.prisma.product.findUnique({ where });
   }
 
-  findOneSelect(params: {
-    id: number;
-    select: Prisma.productSelect;
-  }) {
+  findOneSelect(params: { id: number; select: Prisma.productSelect }) {
     const { id, select } = params;
-    
+
     return this.prisma.product.findUnique({
       where: { id },
       select,
     });
   }
 
-  findOneInclude(params: {
-    id: number;
-    include: Prisma.productInclude;
-  }) {
+  findOneInclude(params: { id: number; include: Prisma.productInclude }) {
     const { id, include } = params;
     return this.prisma.product.findUnique({
       where: { id },
@@ -89,10 +79,7 @@ export class StockRepository {
     });
   }
 
-  updateOne(params: {
-    id: number;
-    data: Prisma.productUpdateInput;
-  }) {
+  updateOne(params: { id: number; data: Prisma.productUpdateInput }) {
     const { id, data } = params;
     return this.prisma.product.update({
       where: { id },
