@@ -12,8 +12,8 @@ import useAxios from '../../../hooks/useAxios';
 import { REPAIR_ORDERS_PATH } from '../../../utils/axios';
 import useForm from '../../../hooks/useForm';
 import useTranslation from '../../../hooks/useTranslation';
-import { initFormState, formRepresentationToBody } from '../sales/new';
-import { ORDERS_REPAIRS } from '../../../utils/routes';
+import { initFormState, formRepresentationToBody } from './new';
+import { ORDERS_REPAIRS, ORDERS_REPAIRS_NEW } from '../../../utils/routes';
 import ProductsTable from '../../../components/orders/form/repair/productsTable';
 
 function UpdateRepairOrder() {
@@ -40,7 +40,7 @@ function UpdateRepairOrder() {
       fetchRepairOrder()
         .catch((error) => {
           if (error && error?.status !== 200) {
-            router.push(REPAIR_ORDERS_PATH.replace(':id', 'new'));
+            router.push(ORDERS_REPAIRS_NEW);
           }
         });
     }
@@ -65,7 +65,7 @@ function UpdateRepairOrder() {
           {trans('editRepair')}
         </title>
       </Head>
-      <form>
+      <form onSubmit={handleSubmit}>
         <Box
           sx={{
             alignItems: 'center',
@@ -92,6 +92,7 @@ function UpdateRepairOrder() {
               {trans('cancel')}
             </Button>
             <Button
+              type="submit"
               size="small"
               sx={{ ml: '1.5rem' }}
               variant="contained"

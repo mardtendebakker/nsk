@@ -10,10 +10,32 @@ import Form from '../../../components/orders/form/repair';
 import DashboardLayout from '../../../layouts/dashboard';
 import useAxios from '../../../hooks/useAxios';
 import { AxiosResponse, REPAIR_ORDERS_PATH } from '../../../utils/axios';
-import useForm from '../../../hooks/useForm';
+import useForm, { FormRepresentation } from '../../../hooks/useForm';
 import useTranslation from '../../../hooks/useTranslation';
 import { ORDERS_REPAIRS, ORDERS_REPAIRS_EDIT } from '../../../utils/routes';
-import { formRepresentationToBody, initFormState } from '../sales/new';
+import {
+  formRepresentationToBody as salesFormRepresentationToBody,
+  initFormState as salesInitFormState,
+} from '../sales/new';
+import { Order } from '../../../utils/axios/models/order';
+
+export function initFormState(trans, order?: Order) {
+  return {
+    ...salesInitFormState(trans, order),
+    repairDamage: { value: order?.repair?.damage },
+    repairDescription: { value: order?.repair?.description },
+  };
+}
+
+export function formRepresentationToBody(formRepresentation: FormRepresentation): object {
+  return {
+    ...salesFormRepresentationToBody(formRepresentation),
+    repair: {
+      damage: formRepresentation.repairDamage.value,
+      description: formRepresentation.repairDescription.value,
+    },
+  };
+}
 
 function NewRepairOrder() {
   const { trans } = useTranslation();

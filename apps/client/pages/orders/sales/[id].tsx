@@ -13,7 +13,7 @@ import { SALES_ORDERS_PATH } from '../../../utils/axios';
 import useForm from '../../../hooks/useForm';
 import useTranslation from '../../../hooks/useTranslation';
 import { initFormState, formRepresentationToBody } from './new';
-import { ORDERS_SALES } from '../../../utils/routes';
+import { ORDERS_SALES, ORDERS_SALES_NEW } from '../../../utils/routes';
 import ProductsTable from '../../../components/orders/form/sales/productsTable';
 
 function UpdateSalesOrder() {
@@ -40,7 +40,7 @@ function UpdateSalesOrder() {
       fetchSalesOrder()
         .catch((error) => {
           if (error && error?.status !== 200) {
-            router.push(SALES_ORDERS_PATH.replace(':id', 'new'));
+            router.push(ORDERS_SALES_NEW);
           }
         });
     }
@@ -65,7 +65,7 @@ function UpdateSalesOrder() {
           {trans('editSales')}
         </title>
       </Head>
-      <form>
+      <form onSubmit={handleSubmit}>
         <Box
           sx={{
             alignItems: 'center',

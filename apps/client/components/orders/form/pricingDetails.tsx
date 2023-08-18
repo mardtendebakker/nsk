@@ -1,7 +1,6 @@
 import {
   Grid,
   Typography,
-  Box,
 } from '@mui/material';
 import useTranslation from '../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../hooks/useForm';
@@ -20,7 +19,7 @@ export default function PricingDetails({
   const { trans } = useTranslation();
 
   return (
-    <Box sx={{ flex: 1 }}>
+    <>
       <Typography
         sx={{ mb: '1rem' }}
         variant="h4"
@@ -73,6 +72,6 @@ export default function PricingDetails({
           </Typography>
         </Grid>
       </Grid>
-    </Box>
+    </>
   );
 }
