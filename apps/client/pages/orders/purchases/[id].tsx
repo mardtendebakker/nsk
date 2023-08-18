@@ -15,7 +15,7 @@ import { PURCHASE_ORDERS_FILES_PATH, PURCHASE_ORDERS_PATH } from '../../../utils
 import useForm from '../../../hooks/useForm';
 import useTranslation from '../../../hooks/useTranslation';
 import { initFormState, formRepresentationToBody } from './new';
-import { ORDERS_PURCHASES } from '../../../utils/routes';
+import { ORDERS_PURCHASES, ORDERS_PURCHASES_NEW } from '../../../utils/routes';
 import ProductsTable from '../../../components/orders/form/purchase/productsTable';
 import { AFile } from '../../../utils/axios/models/aFile';
 
@@ -51,7 +51,7 @@ function UpdatePurchaseOrder() {
       fetchPurchaseOrder()
         .catch((error) => {
           if (error && error?.status !== 200) {
-            router.push(PURCHASE_ORDERS_PATH.replace(':id', 'new'));
+            router.push(ORDERS_PURCHASES_NEW.replace(':id', 'new'));
           }
         });
     }
@@ -83,7 +83,7 @@ function UpdatePurchaseOrder() {
           {trans('newPurchase')}
         </title>
       </Head>
-      <form>
+      <form onSubmit={handleSubmit}>
         <Box
           sx={{
             alignItems: 'center',

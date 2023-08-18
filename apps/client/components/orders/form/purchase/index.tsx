@@ -89,8 +89,13 @@ function PurchaseForm({
       <BasicDetails formRepresentation={formRepresentation} disabled={disabled} setValue={setValue} />
       <Divider sx={{ mx: '1.5rem' }} />
       <CardContent sx={{ display: 'flex' }}>
-        <PricingDetails formRepresentation={formRepresentation} disabled={disabled} setValue={setValue} />
-        <SupplierDetails formRepresentation={formRepresentation} disabled={disabled} setValue={setValue} />
+        <Box sx={{ flex: 1 }}>
+          <PricingDetails formRepresentation={formRepresentation} disabled={disabled} setValue={setValue} />
+        </Box>
+        <Box sx={{ m: '.5rem' }} />
+        <Box sx={{ flex: 1 }}>
+          <SupplierDetails formRepresentation={formRepresentation} disabled={disabled} setValue={setValue} />
+        </Box>
       </CardContent>
       {
       order && (

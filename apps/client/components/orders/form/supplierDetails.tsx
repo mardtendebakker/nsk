@@ -1,5 +1,4 @@
 import {
-  Box,
   Grid,
   Typography,
   FormControl,
@@ -26,7 +25,7 @@ export default function SupplierDetails({
   const { trans } = useTranslation();
 
   return (
-    <Box sx={{ flex: 1 }}>
+    <>
       <Typography
         sx={{ mb: '1rem' }}
         variant="h4"
@@ -102,6 +101,6 @@ export default function SupplierDetails({
           )}
         </Grid>
       </Grid>
-    </Box>
+    </>
   );
 }
