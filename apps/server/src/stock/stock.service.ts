@@ -155,7 +155,7 @@ export class StockService {
     const productwhere: Prisma.productWhereInput = {
       ...query.where,
       ...(query.orderId && { product_order: { some: { order_id: query.orderId } } }),
-      ...(query.orderIdExclude && { product_order: { none: { order_id: query.orderIdExclude } } }),
+      ...(query.excludeByOrderDiscr && { product_order: { none: { aorder: { discr: query.excludeByOrderDiscr} } } }),
       ...(query.productType && { type_id: query.productType }),
       ...(query.location && { location_id: query.location }),
       ...(query.productStatus && {product_status: { id: query.productStatus }} || {

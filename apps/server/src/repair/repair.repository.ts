@@ -1,11 +1,13 @@
-import { Injectable } from '@nestjs/common';
-import { AOrderRepository } from '../aorder/aorder.repository';
+import { Inject, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { IS_REPAIR } from './types/is-repair.const';
+import { SaleRepository } from '../sale/sale.repository';
 
 @Injectable()
-export class RepairRepository extends AOrderRepository {
-  constructor(protected readonly prisma: PrismaService) {
-    super(prisma, IS_REPAIR);
+export class RepairRepository extends SaleRepository {
+  constructor(
+    protected readonly prisma: PrismaService,
+    @Inject('IS_REPAIR') protected readonly isRepair: boolean
+  ) {
+    super(prisma, isRepair);
   }
 }

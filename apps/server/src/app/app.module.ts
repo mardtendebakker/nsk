@@ -27,6 +27,7 @@ import { AdminUserModule } from '../admin/user/user.module';
 import { PublicModule } from '../public/public.module';
 import { SplitProductModule } from '../split-product/split-product.module';
 import { RepairModule } from '../repair/repair.module';
+import { AProductModule } from '../aproduct/aproduct.module';
 
 @Module({
   imports: [
@@ -69,6 +70,7 @@ import { RepairModule } from '../repair/repair.module';
     TaskModule,
     AdminUserModule,
     PublicModule,
+    AProductModule,
   ],
   controllers: [AppController],
   providers: [AppService],

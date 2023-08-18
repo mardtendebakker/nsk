@@ -1,7 +1,8 @@
 import { ApiPropertyOptional } from "@nestjs/swagger";
 import { FindManyDto as BaseFindManyDto } from "../../common/dto/find-many.dto";
-import { IsInt, IsString, ValidateIf } from "class-validator";
+import { IsEnum, IsInt, IsOptional, IsString, ValidateIf } from "class-validator";
 import { Type } from "class-transformer";
+import { AOrderDiscrimination } from "../../aorder/types/aorder-discrimination.enum";
 
 export class FindManyDto extends BaseFindManyDto {
   @ApiPropertyOptional()
@@ -33,9 +34,13 @@ export class FindManyDto extends BaseFindManyDto {
   @ValidateIf((_, value) => value !== undefined)
   orderId?: number;
 
-  @ApiPropertyOptional()
-  @IsInt()
-  @Type(() => Number)
+  @ApiPropertyOptional({
+    enum: AOrderDiscrimination,
+    enumName: 'AOrderDiscrimination'
+  })
+  @IsOptional()
+  @IsEnum(AOrderDiscrimination)
+  @Type(() => String)
   @ValidateIf((_, value) => value !== undefined)
-  orderIdExclude?: number;
+  excludeByOrderDiscr?: AOrderDiscrimination;
 }
