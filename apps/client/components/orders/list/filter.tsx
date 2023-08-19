@@ -38,68 +38,67 @@ export default function Filter({
   ];
 
   return (
-    <form>
-      <BorderedBox>
-        <SearchAccordion
-          disabled={disabled}
-          onSearchChange={(value: string) => setValue({ field: 'search', value })}
-          searchValue={formRepresentation.search.value?.toString() || ''}
-          onReset={onReset}
+    <BorderedBox>
+      <SearchAccordion
+        disabled={disabled}
+        onSearchChange={(value: string) => setValue({ field: 'search', value })}
+        searchValue={formRepresentation.search.value?.toString() || ''}
+        onReset={onReset}
+      >
+        <Box sx={{
+          flex: 1,
+          display: 'flex',
+          alignItems: 'center',
+          flexDirection: isDesktop ? 'unset' : 'column',
+        }}
         >
-          <Box sx={{
-            flex: 1,
-            display: 'flex',
-            alignItems: 'center',
-            flexDirection: isDesktop ? 'unset' : 'column',
-          }}
-          >
-            <DesktopDatePicker
-              disabled={disabled}
-              inputFormat="yyyy/MM/dd"
-              value={formRepresentation.createdAt.value}
-              onChange={(value) => setValue({ field: 'createdAt', value: format(new Date(value.toString()), 'yyyy/MM/dd') })}
-              renderInput={(params) => (
-                <TextField
-                  placeholder={trans('createdAt')}
-                  fullWidth
-                  size="small"
-                  {...params}
-                  inputProps={{
-                    ...params.inputProps,
-                    placeholder: trans('createdAt'),
-                  }}
-                  sx={{
-                    fieldset: {
-                      display: 'none',
-                    },
-                  }}
-                />
-              )}
-            />
-            <ListFilterDivider horizontal={!isDesktop} />
-            <DataSourcePicker
-              url={COMPANIES_PATH.replace(':id', '')}
-              disabled={disabled}
-              fullWidth
-              displayFieldset={false}
-              placeholder={trans('createdBy')}
-              onChange={(selected: { id: number }) => setValue({ field: 'createdBy', value: selected?.id })}
-              value={formRepresentation.createdBy.value?.toString()}
-            />
-            <ListFilterDivider horizontal={!isDesktop} />
-            <Autocomplete
-              disabled={disabled}
-              fullWidth
-              size="small"
-              getOptionLabel={({ name }: { name:string }) => name}
-              value={
+          <DesktopDatePicker
+            disabled={disabled}
+            inputFormat="yyyy/MM/dd"
+            value={formRepresentation.createdAt.value}
+            onChange={(value) => setValue({ field: 'createdAt', value: format(new Date(value.toString()), 'yyyy/MM/dd') })}
+            renderInput={(params) => (
+              <TextField
+                placeholder={trans('createdAt')}
+                fullWidth
+                size="small"
+                {...params}
+                inputProps={{
+                  ...params.inputProps,
+                  placeholder: trans('createdAt'),
+                }}
+                sx={{
+                  fieldset: {
+                    display: 'none',
+                  },
+                }}
+              />
+            )}
+          />
+          <ListFilterDivider horizontal={!isDesktop} />
+          <DataSourcePicker
+            url={COMPANIES_PATH.replace(':id', '')}
+            disabled={disabled}
+            fullWidth
+            displayFieldset={false}
+            placeholder={trans('createdBy')}
+            onChange={(selected: { id: number }) => setValue({ field: 'createdBy', value: selected?.id })}
+            value={formRepresentation.createdBy.value?.toString()}
+          />
+          <ListFilterDivider horizontal={!isDesktop} />
+          <Autocomplete
+            disabled={disabled}
+            fullWidth
+            size="small"
+            getOptionLabel={({ name }: { name:string }) => name}
+            value={
                   ORDER_BY_OPTIONS.find(({ id }) => id == formRepresentation.orderBy.value)
                   || null
                 }
-              onChange={(_, selected: { id: number }) => setValue({ field: 'orderBy', value: selected?.id })}
-              options={ORDER_BY_OPTIONS}
-              filterSelectedOptions
-              renderInput={
+            onChange={(_, selected: { id: number }) => setValue({ field: 'orderBy', value: selected?.id })}
+            options={ORDER_BY_OPTIONS}
+            filterSelectedOptions
+            renderInput={
                 (params) => (
                   <TextField
                     {...params}
@@ -112,31 +111,30 @@ export default function Filter({
                   />
                 )
             }
-            />
-            <ListFilterDivider horizontal={!isDesktop} />
-            <DataSourcePicker
-              url={ORDER_STATUSES_PATH.replace(':id', '')}
-              disabled={disabled}
-              fullWidth
-              displayFieldset={false}
-              placeholder={trans('status')}
-              onChange={(selected: { id: number }) => setValue({ field: 'status', value: selected?.id })}
-              value={formRepresentation.status.value?.toString()}
-            />
-            <ListFilterDivider horizontal={!isDesktop} />
-            <DataSourcePicker
-              url={COMPANIES_PATH.replace(':id', '')}
-              params={{ partnerOnly: '1' }}
-              disabled={disabled}
-              fullWidth
-              displayFieldset={false}
-              placeholder={trans('partner')}
-              onChange={(selected: { id: number }) => setValue({ field: 'partner', value: selected?.id })}
-              value={formRepresentation.partner.value?.toString()}
-            />
-          </Box>
-        </SearchAccordion>
-      </BorderedBox>
-    </form>
+          />
+          <ListFilterDivider horizontal={!isDesktop} />
+          <DataSourcePicker
+            url={ORDER_STATUSES_PATH.replace(':id', '')}
+            disabled={disabled}
+            fullWidth
+            displayFieldset={false}
+            placeholder={trans('status')}
+            onChange={(selected: { id: number }) => setValue({ field: 'status', value: selected?.id })}
+            value={formRepresentation.status.value?.toString()}
+          />
+          <ListFilterDivider horizontal={!isDesktop} />
+          <DataSourcePicker
+            url={COMPANIES_PATH.replace(':id', '')}
+            params={{ partnerOnly: '1' }}
+            disabled={disabled}
+            fullWidth
+            displayFieldset={false}
+            placeholder={trans('partner')}
+            onChange={(selected: { id: number }) => setValue({ field: 'partner', value: selected?.id })}
+            value={formRepresentation.partner.value?.toString()}
+          />
+        </Box>
+      </SearchAccordion>
+    </BorderedBox>
   );
 }

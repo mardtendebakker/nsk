@@ -23,7 +23,6 @@ function refreshList({
   rowsPerPage = 10,
   formRepresentation,
   call,
-  orderId,
 }) {
   const paramsToSend = {};
 
@@ -40,7 +39,7 @@ function refreshList({
 
   call({
     params: {
-      orderIdExclude: orderId,
+      excludeByOrderDiscr: 's',
       take: rowsPerPage,
       skip: (page - 1) * rowsPerPage,
       ...paramsToSend,
@@ -49,11 +48,9 @@ function refreshList({
 }
 
 export default function AddProductsModal({
-  orderId,
   onClose,
   onProductsAdded,
 }:{
-  orderId: string,
   onClose: ()=>void,
   onProductsAdded: (productIds: number[]) => void,
 }) {
@@ -93,7 +90,6 @@ export default function AddProductsModal({
       rowsPerPage,
       formRepresentation,
       call,
-      orderId,
     });
   }, [
     page,

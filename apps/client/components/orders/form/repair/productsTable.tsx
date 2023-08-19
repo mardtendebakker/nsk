@@ -13,7 +13,7 @@ import debounce from '../../../../utils/debounce';
 import TextField from '../../../memoizedInput/textField';
 import useTranslation from '../../../../hooks/useTranslation';
 import useAxios from '../../../../hooks/useAxios';
-import { STOCK_REPAIRS_PATH, SERVICES_PATH } from '../../../../utils/axios';
+import { STOCK_REPAIRS_PATH, SERVICES_PATH, REPAIR_ORDERS_PRODUCTS_PATH } from '../../../../utils/axios';
 import AddButton from '../../../button/add';
 import Select from '../../../memoizedInput/select';
 import Delete from '../../../button/delete';
@@ -213,14 +213,18 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
   }, [page, rowsPerPage, orderId]);
 
   const handleProductsAdded = (productIds: number[]) => {
-    // TODO add products to the order
-    setShowProductsModal(false);
-    call({
-      params: {
-        take: rowsPerPage,
-        skip: (page - 1) * rowsPerPage,
-        orderId,
-      },
+    callPut({
+      path: REPAIR_ORDERS_PRODUCTS_PATH.replace(':id', orderId),
+      body: productIds,
+    }).then(() => {
+      setShowProductsModal(false);
+      call({
+        params: {
+          take: rowsPerPage,
+          skip: (page - 1) * rowsPerPage,
+          orderId,
+        },
+      });
     });
   };
 
@@ -277,7 +281,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
           ))}
         </TableBody>
       </PaginatedTable>
-      {showProductsModal && (<AddProductsModal orderId={orderId} onProductsAdded={handleProductsAdded} onClose={() => setShowProductsModal(false)} />)}
+      {showProductsModal && (<AddProductsModal onProductsAdded={handleProductsAdded} onClose={() => setShowProductsModal(false)} />)}
     </>
   );
 }

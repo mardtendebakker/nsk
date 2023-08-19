@@ -4,7 +4,7 @@ import {
 
 function Indicator({ title, value }: { title: string, value: string }) {
   return (
-    <Box>
+    <Box sx={{ mx: '.5rem' }}>
       <Typography variant="inherit" color="text.secondary">{title}</Typography>
       <Typography variant="h3">{value}</Typography>
     </Box>
@@ -14,7 +14,7 @@ function Indicator({ title, value }: { title: string, value: string }) {
 export default function IndicatorRow() {
   return (
     <Card>
-      <CardContent sx={{ display: 'flex', justifyContent: 'space-between' }}>
+      <CardContent sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
         {
         [
           { title: 'Test Test 1', value: '€100.00' },

@@ -12,7 +12,7 @@ import debounce from '../../../../utils/debounce';
 import TextField from '../../../memoizedInput/textField';
 import useTranslation from '../../../../hooks/useTranslation';
 import useAxios from '../../../../hooks/useAxios';
-import { STOCK_PRODUCTS_PATH } from '../../../../utils/axios';
+import { SALES_ORDERS_PRODUCTS_PATH, STOCK_PRODUCTS_PATH } from '../../../../utils/axios';
 import Delete from '../../../button/delete';
 import PaginatedTable from '../../../paginatedTable';
 import TableCell from '../../../tableCell';
@@ -101,14 +101,18 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
   }, [page, rowsPerPage, orderId]);
 
   const handleProductsAdded = (productIds: number[]) => {
-    // TODO add products to the order
-    setShowProductsModal(false);
-    call({
-      params: {
-        take: rowsPerPage,
-        skip: (page - 1) * rowsPerPage,
-        orderId,
-      },
+    callPut({
+      path: SALES_ORDERS_PRODUCTS_PATH.replace(':id', orderId),
+      body: productIds,
+    }).then(() => {
+      setShowProductsModal(false);
+      call({
+        params: {
+          take: rowsPerPage,
+          skip: (page - 1) * rowsPerPage,
+          orderId,
+        },
+      });
     });
   };
 
@@ -162,7 +166,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
           ))}
         </TableBody>
       </PaginatedTable>
-      {showProductsModal && (<AddProductsModal orderId={orderId} onProductsAdded={handleProductsAdded} onClose={() => setShowProductsModal(false)} />)}
+      {showProductsModal && (<AddProductsModal onProductsAdded={handleProductsAdded} onClose={() => setShowProductsModal(false)} />)}
     </>
   );
 }
