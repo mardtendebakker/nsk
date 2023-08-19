@@ -3,37 +3,37 @@ import { PrismaService } from '../prisma/prisma.service';
 import { Product } from './dto/update-many-product.dto';
 
 export class StockRepository {
-  private serviceWhere: Prisma.productWhereInput = {};
-
   constructor(
     protected readonly prisma: PrismaService,
     protected readonly isRepair?: boolean
-  ) {
-    this.serviceWhere = {
-      product_order: {
-        ...(isRepair !== undefined
-          ? isRepair
-            ? {
-                some: { aorder: { isNot: null } },
-                every: { aorder: { repair: { isNot: null } } },
-              }
-            : {
-                every: { aorder: { repair: { is: null } } },
-              }
-          : {}),
-      },
-    };
-  }
+  ) {}
 
   async findAll(params: Prisma.productFindManyArgs) {
     const { skip, cursor, select, orderBy } = params;
-    const take = params.take ? params.take : 20;
+    const take = params.take ?? 20;
     const { product_order, ...restWhere } = params.where;
+    
     const where: Prisma.productWhereInput = {
-      ...(product_order ? { product_order } : this.serviceWhere),
       ...restWhere,
     };
-    const submission = await this.prisma.$transaction([
+  
+    if (this.isRepair === true) {
+      where.product_order = {
+        some: { aorder: { isNot: null }, ...product_order?.some },
+        every: { aorder: { repair: { isNot: null }, ...product_order?.every } },
+        ...(product_order?.none && { none: { ...product_order?.none } }),
+      };
+    } else if (this.isRepair === false) {
+      where.product_order = {
+        every: { aorder: { repair: { is: null } }, ...product_order?.every },
+        ...(product_order?.some && { some: { ...product_order?.some } }),
+        ...(product_order?.none && { none: { ...product_order?.none } }),
+      };
+    } else if (product_order) {
+      where.product_order = { ...product_order };
+    }
+  
+    const [count, data] = await this.prisma.$transaction([
       this.prisma.product.count({ where }),
       this.prisma.product.findMany({
         skip,
@@ -44,12 +44,12 @@ export class StockRepository {
         orderBy,
       }),
     ]);
-
+  
     return {
-      count: submission[0] ?? 0,
-      data: submission[1],
+      count: count ?? 0,
+      data,
     };
-  }
+  }  
 
   create(createData: Prisma.productUncheckedCreateInput) {
     return this.prisma.product.create({
