@@ -1,6 +1,5 @@
 import {
   Injectable,
-  NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { AOrderDiscrimination } from '../aorder/types/aorder-discrimination.enum';
@@ -9,6 +8,7 @@ import { SaleRepository } from './sale.repository';
 import { PrintService } from '../print/print.service';
 import { FileService } from '../file/file.service';
 import { AProductService } from '../aproduct/aproduct.service';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class SaleService extends AOrderService {
@@ -22,12 +22,6 @@ export class SaleService extends AOrderService {
   }
 
   async addProducts(id: number, productIds: number[]) {
-    const order = await this.findOne(id);
-
-    if (!order) {
-      throw new NotFoundException('Order not found');
-    }
-
     const products = await this.aProductService.findAll({
       where: { id: { in: productIds } },
       excludeByOrderDiscr: this.type,
@@ -45,7 +39,7 @@ export class SaleService extends AOrderService {
       quantity: product.stock,
     }));
 
-    return this.repository.update({
+    const addProductsToOrderParams: Prisma.aorderUpdateArgs = {
       where: { id },
       data: {
         product_order: {
@@ -54,7 +48,26 @@ export class SaleService extends AOrderService {
           },
         },
       },
-    });
+    };
+
+    return this.repository.update(this.processSelectPart(addProductsToOrderParams));
+  }
+
+  async removeProducts(id: number, productIds: number[]) {
+    const deleteProductsFromOrderParams: Prisma.aorderUpdateArgs = {
+      where: { id },
+      data: {
+        product_order: {
+          deleteMany: {
+            product_id: {
+              in: productIds,
+            },
+          },
+        },
+      },
+    };
+
+    return this.repository.update(this.processSelectPart(deleteProductsFromOrderParams));
   }
 
   private areProductIdsEqual(poductIds1: number[], poductIds2: number[]): boolean {

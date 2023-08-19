@@ -115,7 +115,7 @@ export class AOrderService {
 
     const order = await this.repository.findOne(this.processSelectPart(params));
 
-    if (order?.discr !== this.type) {
+    if (!order || order?.discr !== this.type) {
       throw new NotFoundException(`Order with ID ${id} not found`);
     }
     
@@ -324,7 +324,7 @@ export class AOrderService {
     return this.printService.printAOrders(aorders);
   }
 
-  private processCreateOrUpdateOrderInput(orderDto: CommonAOrderDto): CommonAOrderInput {
+  protected processCreateOrUpdateOrderInput(orderDto: CommonAOrderDto): CommonAOrderInput {
     const {
       status_id,
       supplier_id,
@@ -346,7 +346,7 @@ export class AOrderService {
     return data;
   }
 
-  private processSelectPart<T extends Prisma.aorderArgs>(params: T): T {
+  protected processSelectPart<T extends Prisma.aorderArgs>(params: T): T {
     params.include = {
       ...params.include,
       product_order: {

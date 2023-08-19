@@ -24,12 +24,14 @@ import AddProductsModal from '../addProductsModal';
 function Row({
   product,
   onAddService,
+  onDeleteProduct,
   onDeleteService,
   onProductPropertyChange,
   onServicePropertyChange,
 }: {
   product: ProductListItem,
   onAddService: () => void,
+  onDeleteProduct: (id: number) => void,
   onDeleteService: (id: number) => void,
   onProductPropertyChange: (payload: object, property: string, value) => void,
   onServicePropertyChange: (payload: object, property: string, value) => void,
@@ -71,7 +73,7 @@ function Row({
         </TableCell>
         <TableCell>
           <AddButton title={trans('addService')} onClick={onAddService} />
-          <Delete onDelete={() => {}} tooltip />
+          <Delete onDelete={() => onDeleteProduct(product.id)} tooltip />
         </TableCell>
       </TableRow>
       {product.services && (
@@ -148,7 +150,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
 
   const { call: callPut } = useAxios('put', undefined, { withProgressBar: true });
   const { call: postService } = useAxios('post', SERVICES_PATH.replace(':id', ''), { withProgressBar: true });
-  const { call: deleteService } = useAxios('delete', undefined, { withProgressBar: true });
+  const { call: callDelete } = useAxios('delete', undefined, { withProgressBar: true });
   const { data: { data = [], count = 0 } = {}, call } = useAxios(
     'get',
     STOCK_REPAIRS_PATH.replace(':id', ''),
@@ -191,7 +193,19 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
   };
 
   const handleDeleteService = (id: number) => {
-    deleteService({ path: SERVICES_PATH.replace(':id', id.toString()) }).then(() => {
+    callDelete({ path: SERVICES_PATH.replace(':id', id.toString()) }).then(() => {
+      call({
+        params: {
+          take: rowsPerPage,
+          skip: (page - 1) * rowsPerPage,
+          orderId,
+        },
+      });
+    });
+  };
+
+  const handleDeleteProduct = (id: number) => {
+    callDelete({ path: REPAIR_ORDERS_PRODUCTS_PATH.replace(':id', orderId), body: [id] }).then(() => {
       call({
         params: {
           take: rowsPerPage,
@@ -273,6 +287,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
             <Row
               onAddService={handleAddService}
               onDeleteService={handleDeleteService}
+              onDeleteProduct={handleDeleteProduct}
               onProductPropertyChange={handleProductPropertyChange}
               onServicePropertyChange={handleServicePropertyChange}
               key={product.id}
