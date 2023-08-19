@@ -18,9 +18,10 @@ import PaginatedTable from '../../../paginatedTable';
 import TableCell from '../../../tableCell';
 import AddProductsModal from '../addProductsModal';
 
-function Row({ product, onProductPropertyChange }: {
+function Row({ product, onProductPropertyChange, onDeleteProduct }: {
   product: ProductListItem,
   onProductPropertyChange: (payload: object, property: string, value) => void,
+  onDeleteProduct: (id: number) => void
 }) {
   return (
     <TableRow>
@@ -55,7 +56,7 @@ function Row({ product, onProductPropertyChange }: {
         />
       </TableCell>
       <TableCell>
-        <Delete onDelete={() => {}} tooltip />
+        <Delete onDelete={() => onDeleteProduct(product.id)} tooltip />
       </TableCell>
     </TableRow>
   );
@@ -68,6 +69,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
   const [rowsPerPage, setRowsPerPage] = useState<number>(5);
 
   const { call: callPut } = useAxios('put', undefined, { withProgressBar: true });
+  const { call: callDelete } = useAxios('delete', undefined, { withProgressBar: true });
   const { data: { data = [], count = 0 } = {}, call } = useAxios(
     'get',
     STOCK_PRODUCTS_PATH.replace(':id', ''),
@@ -106,6 +108,18 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
       body: productIds,
     }).then(() => {
       setShowProductsModal(false);
+      call({
+        params: {
+          take: rowsPerPage,
+          skip: (page - 1) * rowsPerPage,
+          orderId,
+        },
+      });
+    });
+  };
+
+  const handleDeleteProduct = (id: number) => {
+    callDelete({ path: SALES_ORDERS_PRODUCTS_PATH.replace(':id', orderId), body: [id] }).then(() => {
       call({
         params: {
           take: rowsPerPage,
@@ -159,6 +173,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
         <TableBody>
           {data.map((product: ProductListItem) => (
             <Row
+              onDeleteProduct={handleDeleteProduct}
               onProductPropertyChange={handleProductPropertyChange}
               key={product.id}
               product={product}
