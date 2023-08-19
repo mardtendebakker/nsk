@@ -23,55 +23,53 @@ export default function Filter({
   const isDesktop = useResponsive('up', 'sm');
 
   return (
-    <form>
-      <BorderedBox>
-        <SearchAccordion
-          disabled={disabled}
-          onSearchChange={(value: string) => setValue({ field: 'search', value })}
-          searchValue={formRepresentation.search.value?.toString() || ''}
-          onReset={onReset}
-          searchLabel={trans('searchBySerialNumberOrName')}
+    <BorderedBox>
+      <SearchAccordion
+        disabled={disabled}
+        onSearchChange={(value: string) => setValue({ field: 'search', value })}
+        searchValue={formRepresentation.search.value?.toString() || ''}
+        onReset={onReset}
+        searchLabel={trans('searchBySerialNumberOrName')}
+      >
+        <Box sx={{
+          flex: 1,
+          display: 'flex',
+          alignItems: 'center',
+          flexDirection: isDesktop ? 'unset' : 'column',
+        }}
         >
-          <Box sx={{
-            flex: 1,
-            display: 'flex',
-            alignItems: 'center',
-            flexDirection: isDesktop ? 'unset' : 'column',
-          }}
-          >
-            <DataSourcePicker
-              url={PRODUCT_TYPES_PATH.replace(':id', '')}
-              disabled={disabled}
-              fullWidth
-              displayFieldset={false}
-              placeholder={trans('productType')}
-              onChange={(selected: { id: number }) => setValue({ field: 'productType', value: selected?.id })}
-              value={formRepresentation.productType.value?.toString()}
-            />
-            <ListFilterDivider horizontal={!isDesktop} />
-            <DataSourcePicker
-              url={LOCATIONS_PATH.replace(':id', '')}
-              searchKey="name"
-              disabled={disabled}
-              fullWidth
-              displayFieldset={false}
-              placeholder={trans('location')}
-              onChange={(selected: { id: number }) => setValue({ field: 'location', value: selected?.id })}
-              value={formRepresentation.location.value?.toString()}
-            />
-            <ListFilterDivider horizontal={!isDesktop} />
-            <DataSourcePicker
-              url={PRODUCT_STATUSES_PATH.replace(':id', '')}
-              disabled={disabled}
-              fullWidth
-              displayFieldset={false}
-              placeholder={trans('productStatus')}
-              onChange={(selected: { id: number }) => setValue({ field: 'productStatus', value: selected?.id })}
-              value={formRepresentation.productStatus.value?.toString()}
-            />
-          </Box>
-        </SearchAccordion>
-      </BorderedBox>
-    </form>
+          <DataSourcePicker
+            url={PRODUCT_TYPES_PATH.replace(':id', '')}
+            disabled={disabled}
+            fullWidth
+            displayFieldset={false}
+            placeholder={trans('productType')}
+            onChange={(selected: { id: number }) => setValue({ field: 'productType', value: selected?.id })}
+            value={formRepresentation.productType.value?.toString()}
+          />
+          <ListFilterDivider horizontal={!isDesktop} />
+          <DataSourcePicker
+            url={LOCATIONS_PATH.replace(':id', '')}
+            searchKey="name"
+            disabled={disabled}
+            fullWidth
+            displayFieldset={false}
+            placeholder={trans('location')}
+            onChange={(selected: { id: number }) => setValue({ field: 'location', value: selected?.id })}
+            value={formRepresentation.location.value?.toString()}
+          />
+          <ListFilterDivider horizontal={!isDesktop} />
+          <DataSourcePicker
+            url={PRODUCT_STATUSES_PATH.replace(':id', '')}
+            disabled={disabled}
+            fullWidth
+            displayFieldset={false}
+            placeholder={trans('productStatus')}
+            onChange={(selected: { id: number }) => setValue({ field: 'productStatus', value: selected?.id })}
+            value={formRepresentation.productStatus.value?.toString()}
+          />
+        </Box>
+      </SearchAccordion>
+    </BorderedBox>
   );
 }
