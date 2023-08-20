@@ -3,8 +3,6 @@ import { LocationService } from '../location/location.service';
 import { StockService } from '../stock/stock.service';
 import { ToRepairRepository } from './to-repair.repository';
 import { FileService } from '../file/file.service';
-import { Prisma } from '@prisma/client';
-import { REPAIR_PRODUCT_LOCATION_ID, REPAIR_PRODUCT_NAME } from './enum/repair-product.const';
 
 @Injectable()
 export class ToRepairService extends StockService {
@@ -14,15 +12,5 @@ export class ToRepairService extends StockService {
     protected readonly fileService: FileService,
   ) {
     super(repository, locationService, fileService);
-  }
-
-  getCreateInput(): Prisma.productUncheckedCreateInput {
-    const productToRepair: Prisma.productUncheckedCreateInput = {
-      name: REPAIR_PRODUCT_NAME,
-      location_id: REPAIR_PRODUCT_LOCATION_ID,
-      sku: String(Math.floor(Date.now() / 1000)),
-    };
-
-    return productToRepair;
   }
 }

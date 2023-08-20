@@ -2,28 +2,20 @@ import { Prisma } from "@prisma/client";
 import { AOrderDiscrimination } from "./types/aorder-discrimination.enum";
 import { AServiceStatus } from "../aservice/enum/aservice-status.enum";
 export type AOrderPayload = Prisma.aorderGetPayload<Record<'select', Prisma.aorderSelect>>;
-export type AOrderProcessed = AOrderPayload & {totalPrice: number, productIds: number[]};
+export type AOrderProcessed = AOrderPayload & {totalPrice: number};
 
 export class AOrderProcess {
   private totalPrice: number;
-  private productIds: number[];
 
   constructor( private readonly aorder: AOrderPayload ) {}
 
   public run() {
-    const {product_order, ...restOrder} = this.aorder;
     this.totalPrice = this.calculateTotalPrice();
-    this.productIds = this.ProductIdsMapper(product_order);
 
     return {
-      ...restOrder,
+      ...this.aorder,
       totalPrice: this.totalPrice,
-      productIds: this.productIds,
     };
-  }
-
-  private ProductIdsMapper(product_order: typeof this.aorder.product_order): number[] {
-    return product_order?.map(pOrder => pOrder.product_id) || [];
   }
 
   private calculateTotalPrice(): number {

@@ -119,7 +119,7 @@ export class AOrderService {
       throw new NotFoundException(`Order with ID ${id} not found`);
     }
     
-    return new AOrderProcess(order).run();;
+    return new AOrderProcess(order).run();
   }
 
   async create(orderDto: CreateAOrderDto) {
@@ -351,6 +351,7 @@ export class AOrderService {
       ...params.include,
       product_order: {
         select: {
+          id: true,
           product_id: true,
           price: true,
           quantity: true,

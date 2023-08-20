@@ -5,11 +5,10 @@ import { FileService } from '../file/file.service';
 import { CreateOrderStatusDto } from '../order-status/dto/create-order-status.dto';
 import { OrderStatusService } from '../order-status/order-status.service';
 import { CreateAOrderDto } from '../aorder/dto/create-aorder.dto';
-import { ToRepairService } from '../to-repair/to-repair.service';
-import { aorder } from '@prisma/client';
-import { SalesServiceService } from '../sales-service/sales-service.service';
+import { Prisma, aorder } from '@prisma/client';
 import { SaleService } from '../sale/sale.service';
 import { AProductService } from '../aproduct/aproduct.service';
+import { REPAIR_PRODUCT_LOCATION_ID, REPAIR_PRODUCT_NAME } from '../to-repair/enum/repair-product.const';
 
 @Injectable()
 export class RepairService extends SaleService {
@@ -19,8 +18,6 @@ export class RepairService extends SaleService {
     protected readonly fileService: FileService,
     protected readonly aProductService: AProductService,
     private readonly orderStatusService: OrderStatusService,
-    private readonly toRepairService: ToRepairService,
-    private readonly salesServiceService: SalesServiceService,
   ) {
     super(repository, printService, fileService, aProductService);
   }
@@ -31,10 +28,10 @@ export class RepairService extends SaleService {
   }
 
   private async generateRepairBaseInput(): Promise<CreateAOrderDto> {
-    const service1 = this.salesServiceService.getCreateInput('1. Replacement: ...');
-    const service2 = this.salesServiceService.getCreateInput('2a. Research: ...');
-    const service3 = this.salesServiceService.getCreateInput('2b. Repair ...till €50,-- ...');
-    const service4 = this.salesServiceService.getCreateInput('3. Backup by ...us/customer...');
+    const service1 = this.getCreateSalesServiceInput('1. Replacement: ...');
+    const service2 = this.getCreateSalesServiceInput('2a. Research: ...');
+    const service3 = this.getCreateSalesServiceInput('2b. Repair ...till €50,-- ...');
+    const service4 = this.getCreateSalesServiceInput('3. Backup by ...us/customer...');
 
     const orderStatus = await this.findRepairOrderStatusOrCreate();
 
@@ -43,7 +40,7 @@ export class RepairService extends SaleService {
       product_order: {
         create: {
           product: {
-            create: this.toRepairService.getCreateInput()
+            create: this.getToRepairCreateInput()
           },
           quantity: 1,
           aservice: {
@@ -68,5 +65,15 @@ export class RepairService extends SaleService {
     };
 
     return this.orderStatusService.findByNameOrCreate(createOrderStatusDto);
+  }
+
+  private getToRepairCreateInput() {
+    const productToRepair: Prisma.productUncheckedCreateInput = {
+      name: REPAIR_PRODUCT_NAME,
+      location_id: REPAIR_PRODUCT_LOCATION_ID,
+      sku: String(Math.floor(Date.now() / 1000)),
+    };
+
+    return productToRepair;
   }
 }
