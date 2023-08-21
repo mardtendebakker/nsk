@@ -73,8 +73,8 @@ export default function DataSourcePicker(
           setCurrentValue(formatter(found));
           onChange(found);
         } else if (value === undefined) {
-          setCurrentValue(value);
-          onChange(value);
+          setCurrentValue(undefined);
+          onChange(undefined);
         }
       }
     });
