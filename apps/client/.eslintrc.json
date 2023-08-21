@@ -1,6 +1,6 @@
 {
   "extends": [
-    "plugin:@nrwl/nx/react-typescript",
+    "plugin:@nx/react-typescript",
     "next",
     "next/core-web-vitals",
     "../../.eslintrc.json",
@@ -8,40 +8,23 @@
     "airbnb/hooks",
     "airbnb-typescript"
   ],
-  "ignorePatterns": [
-    "!**/*",
-    ".next/**/*"
-  ],
+  "ignorePatterns": ["!**/*", ".next/**/*"],
   "parserOptions": {
     "project": "./apps/client/tsconfig.json"
   },
   "overrides": [
     {
-      "files": [
-        "*.ts",
-        "*.tsx",
-        "*.js",
-        "*.jsx"
-      ],
+      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
       "rules": {
-        "@next/next/no-html-link-for-pages": [
-          "error",
-          "apps/client/pages"
-        ]
+        "@next/next/no-html-link-for-pages": ["error", "apps/client/pages"]
       }
     },
     {
-      "files": [
-        "*.ts",
-        "*.tsx"
-      ],
+      "files": ["*.ts", "*.tsx"],
       "rules": {}
     },
     {
-      "files": [
-        "*.js",
-        "*.jsx"
-      ],
+      "files": ["*.js", "*.jsx"],
       "rules": {}
     }
   ],
@@ -62,10 +45,7 @@
     "react/jsx-filename-extension": [
       1,
       {
-        "extensions": [
-          ".tsx",
-          ".jsx"
-        ]
+        "extensions": [".tsx", ".jsx"]
       }
     ]
   },
