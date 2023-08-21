@@ -19,17 +19,17 @@ import ProductsTable from '../../../components/orders/form/sales/productsTable';
 function UpdateSalesOrder() {
   const { trans } = useTranslation();
   const router = useRouter();
-  const { id = '0' } = router.query;
+  const { id } = router.query;
 
   const { call, performing } = useAxios(
     'put',
-    SALES_ORDERS_PATH.replace(':id', id.toString()),
+    SALES_ORDERS_PATH.replace(':id', id?.toString()),
     { withProgressBar: true, showSuccessMessage: true },
   );
 
   const { call: fetchSalesOrder, performing: performingFetchSalesOrder, data: salesOrder } = useAxios(
     'get',
-    SALES_ORDERS_PATH.replace(':id', id.toString()),
+    SALES_ORDERS_PATH.replace(':id', id?.toString()),
     { withProgressBar: true },
   );
 
@@ -124,7 +124,7 @@ function UpdateSalesOrder() {
                 item
                 xs={12}
               >
-                <ProductsTable orderId={id.toString()} />
+                { id && <ProductsTable orderId={id.toString()} /> }
               </Grid>
             </Grid>
           </CardContent>

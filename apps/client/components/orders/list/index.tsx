@@ -79,7 +79,7 @@ function refreshList({
 
   const paramsToSend = {};
 
-  ['status', 'search', 'partner', 'createdBy'].forEach((filter) => {
+  ['status', 'search', 'partner', 'createdBy', 'createdAt'].forEach((filter) => {
     if (formRepresentation[filter].value) {
       const value = formRepresentation[filter].value.toString();
       params.append(filter, value);
@@ -197,6 +197,7 @@ export default function ListContainer() {
     formRepresentation.status.value?.toString(),
     formRepresentation.partner.value?.toString(),
     formRepresentation.createdBy.value?.toString(),
+    formRepresentation.createdAt.value?.toString(),
     formRepresentation.orderBy.value,
   ]);
 

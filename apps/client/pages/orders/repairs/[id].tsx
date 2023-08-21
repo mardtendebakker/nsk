@@ -19,17 +19,17 @@ import ProductsTable from '../../../components/orders/form/repair/productsTable'
 function UpdateRepairOrder() {
   const { trans } = useTranslation();
   const router = useRouter();
-  const { id = '0' } = router.query;
+  const { id } = router.query;
 
   const { call, performing } = useAxios(
     'put',
-    REPAIR_ORDERS_PATH.replace(':id', id.toString()),
+    REPAIR_ORDERS_PATH.replace(':id', id?.toString()),
     { withProgressBar: true, showSuccessMessage: true },
   );
 
   const { call: fetchRepairOrder, performing: performingFetchRepairOrder, data: repairOrder } = useAxios(
     'get',
-    REPAIR_ORDERS_PATH.replace(':id', id.toString()),
+    REPAIR_ORDERS_PATH.replace(':id', id?.toString()),
     { withProgressBar: true },
   );
 
@@ -125,7 +125,7 @@ function UpdateRepairOrder() {
                 item
                 xs={12}
               >
-                <ProductsTable orderId={id.toString()} />
+                {id && <ProductsTable orderId={id.toString()} />}
               </Grid>
             </Grid>
           </CardContent>
