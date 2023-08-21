@@ -28,6 +28,7 @@ import { PublicModule } from '../public/public.module';
 import { SplitProductModule } from '../split-product/split-product.module';
 import { RepairModule } from '../repair/repair.module';
 import { AProductModule } from '../aproduct/aproduct.module';
+import { SalesServiceModule } from '../sales-service/sales-service.module';
 
 @Module({
   imports: [
@@ -71,6 +72,7 @@ import { AProductModule } from '../aproduct/aproduct.module';
     AdminUserModule,
     PublicModule,
     AProductModule,
+    SalesServiceModule,
   ],
   controllers: [AppController],
   providers: [AppService],

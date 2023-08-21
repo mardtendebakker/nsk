@@ -9,6 +9,9 @@ import { PrintService } from '../print/print.service';
 import { FileService } from '../file/file.service';
 import { AProductService } from '../aproduct/aproduct.service';
 import { Prisma } from '@prisma/client';
+import { CreateAServiceDto } from '../aservice/dto/create-aservice.dto';
+import { AServiceDiscrimination } from '../aservice/enum/aservice-discrimination.enum';
+import { AServiceStatus } from '../aservice/enum/aservice-status.enum';
 
 @Injectable()
 export class SaleService extends AOrderService {
@@ -16,7 +19,7 @@ export class SaleService extends AOrderService {
     protected readonly repository: SaleRepository,
     protected readonly printService: PrintService,
     protected readonly fileService: FileService,
-    protected readonly aProductService: AProductService
+    protected readonly aProductService: AProductService,
   ) {
     super(repository, printService, fileService, AOrderDiscrimination.SALE);
   }
@@ -68,6 +71,16 @@ export class SaleService extends AOrderService {
     };
 
     return this.repository.update(this.processSelectPart(deleteProductsFromOrderParams));
+  }
+
+  protected getCreateSalesServiceInput(description: string): CreateAServiceDto {
+    const toDoServie: CreateAServiceDto = {
+      discr: AServiceDiscrimination.SalesService,
+      status: AServiceStatus.STATUS_TODO,
+      description: description,
+    };
+
+    return toDoServie;
   }
 
   private areProductIdsEqual(poductIds1: number[], poductIds2: number[]): boolean {

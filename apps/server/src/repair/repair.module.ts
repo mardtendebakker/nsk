@@ -6,8 +6,6 @@ import { PrismaModule } from '../prisma/prisma.module';
 import { PrintService } from '../print/print.service';
 import { FileModule } from '../file/file.module';
 import { OrderStatusModule } from '../order-status/order-status.module';
-import { ToRepairModule } from '../to-repair/to-repair.module';
-import { SalesServiceModule } from '../sales-service/sales-service.module';
 import { SaleModule } from '../sale/sale.module';
 import { AProductModule } from '../aproduct/aproduct.module';
 
@@ -28,8 +26,6 @@ import { AProductModule } from '../aproduct/aproduct.module';
     FileModule,
     AProductModule,
     OrderStatusModule,
-    ToRepairModule,
-    SalesServiceModule,
   ],
   exports: [RepairService],
 })

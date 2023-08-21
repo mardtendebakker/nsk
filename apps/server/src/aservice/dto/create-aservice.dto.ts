@@ -1,4 +1,4 @@
-import { OmitType } from "@nestjs/swagger";
-import { PrismaUncheckedCreateAServiceInputDto } from "./prisma-create-aservice-input.sto";
+import { OmitType } from '@nestjs/swagger';
+import { PrismaUncheckedCreateAServiceInputDto } from './prisma-create-aservice-input.sto';
 
-export class CreateAServiceDto extends OmitType(PrismaUncheckedCreateAServiceInputDto, ['id', 'relation_id', 'task_id']) {}
+export class CreateAServiceDto extends OmitType(PrismaUncheckedCreateAServiceInputDto, ['id']) {}

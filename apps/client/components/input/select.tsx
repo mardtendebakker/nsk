@@ -6,7 +6,7 @@ type Options = { options: Option[] };
 export type Props = TextFieldProps & Options;
 
 export default function Select({
-  label, sx, fullWidth, options = [], placeholder, onChange, value,
+  label, sx, fullWidth, options = [], placeholder, onChange, value, defaultValue,
 } : Props) {
   return (
     <TextField
@@ -14,9 +14,9 @@ export default function Select({
       select
       label={label}
       sx={{ ...sx }}
-      value={(value === undefined || value === null) ? 'none' : value}
+      value={placeholder && (value === undefined || value === null) ? 'none' : value}
       onChange={onChange}
-      defaultValue="none"
+      defaultValue={placeholder ? 'none' : defaultValue}
     >
       {placeholder && (
       <option value="none" disabled style={{ color: '#B7C2D1', padding: '1rem .5rem' }}>
