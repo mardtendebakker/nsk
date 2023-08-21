@@ -22,24 +22,24 @@ import { AFile } from '../../../utils/axios/models/aFile';
 function UpdatePurchaseOrder() {
   const { trans } = useTranslation();
   const router = useRouter();
-  const { id = '0' } = router.query;
+  const { id } = router.query;
 
   const { call, performing } = useAxios(
     'put',
-    PURCHASE_ORDERS_PATH.replace(':id', id.toString()),
+    PURCHASE_ORDERS_PATH.replace(':id', id?.toString()),
     { withProgressBar: true, showSuccessMessage: true },
   );
 
   const { call: fetchPurchaseOrder, performing: performingFetchPurchaseOrder, data: purchaseOrder } = useAxios(
     'get',
-    PURCHASE_ORDERS_PATH.replace(':id', id.toString()),
+    PURCHASE_ORDERS_PATH.replace(':id', id?.toString()),
     { withProgressBar: true },
   );
 
   const { call: deleteFile, performing: performingDeleteFilte } = useAxios(
     'delete',
     PURCHASE_ORDERS_FILES_PATH
-      .replace(':orderId', id.toString())
+      .replace(':orderId', id?.toString())
       .replace(':id', ''),
     { withProgressBar: true },
   );
@@ -144,7 +144,7 @@ function UpdatePurchaseOrder() {
                 item
                 xs={12}
               >
-                <ProductsTable orderId={id.toString()} />
+                { id && <ProductsTable orderId={id.toString()} /> }
               </Grid>
             </Grid>
           </CardContent>

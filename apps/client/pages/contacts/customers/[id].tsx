@@ -18,17 +18,17 @@ import { initFormState, formRepresentationToBody } from './new';
 function EditCustomerContact() {
   const { trans } = useTranslation();
   const router = useRouter();
-  const { id = '0' } = router.query;
+  const { id } = router.query;
 
   const { call, performing } = useAxios(
     'put',
-    CUSTOMERS_PATH.replace(':id', id.toString()),
+    CUSTOMERS_PATH.replace(':id', id?.toString()),
     { withProgressBar: true, showSuccessMessage: true },
   );
 
   const { call: callGet, performing: performingGet, data: customer } = useAxios(
     'get',
-    CUSTOMERS_PATH.replace(':id', id.toString()),
+    CUSTOMERS_PATH.replace(':id', id?.toString()),
     { withProgressBar: true },
   );
 
@@ -45,7 +45,7 @@ function EditCustomerContact() {
 
     call({
       body: formRepresentationToBody(formRepresentation),
-      path: CUSTOMERS_PATH.replace(':id', id.toString()),
+      path: CUSTOMERS_PATH.replace(':id', id?.toString()),
     });
   };
 

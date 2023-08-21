@@ -18,17 +18,17 @@ import { initFormState, formRepresentationToBody } from '../customers/new';
 function EditSupplierContact() {
   const { trans } = useTranslation();
   const router = useRouter();
-  const { id = '0' } = router.query;
+  const { id } = router.query;
 
   const { call, performing } = useAxios(
     'put',
-    SUPPLIERS_PATH.replace(':id', id.toString()),
+    SUPPLIERS_PATH.replace(':id', id?.toString()),
     { withProgressBar: true, showSuccessMessage: true },
   );
 
   const { call: callGet, performing: performingGet, data: supplier } = useAxios(
     'get',
-    SUPPLIERS_PATH.replace(':id', id.toString()),
+    SUPPLIERS_PATH.replace(':id', id?.toString()),
     { withProgressBar: true },
   );
 
@@ -45,7 +45,7 @@ function EditSupplierContact() {
 
     call({
       body: formRepresentationToBody(formRepresentation),
-      path: SUPPLIERS_PATH.replace(':id', id.toString()),
+      path: SUPPLIERS_PATH.replace(':id', id?.toString()),
     });
   };
 

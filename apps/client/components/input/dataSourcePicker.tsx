@@ -74,7 +74,6 @@ export default function DataSourcePicker(
           onChange(found);
         } else if (value === undefined) {
           setCurrentValue(undefined);
-          onChange(undefined);
         }
       }
     });
