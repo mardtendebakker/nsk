@@ -34,7 +34,7 @@ export default function DataSourcePicker(
     placeholder?: string,
     displayFieldset?: boolean,
     formatter?: (arg0: object) => object,
-    onChange: (arg0: object | object[])=>void,
+    onChange: (arg0: undefined | object | object[])=>void,
     url: string,
     searchKey?: string,
     helperText?: string,
@@ -72,6 +72,9 @@ export default function DataSourcePicker(
         } else if (!multiple && found) {
           setCurrentValue(formatter(found));
           onChange(found);
+        } else if (value === undefined) {
+          setCurrentValue(value);
+          onChange(value);
         }
       }
     });

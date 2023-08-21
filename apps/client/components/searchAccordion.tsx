@@ -30,7 +30,7 @@ export default function SearchAccordion({
 
   return (
     <Accordion expanded={showFilter}>
-      <AccordionSummary sx={{ background: 'transparent !important' }}>
+      <AccordionSummary sx={{ background: 'transparent !important', padding: '0 .1rem' }}>
         <Box sx={{ flex: 1, display: 'flex', alignItems: 'center' }}>
           <Search sx={{ color: (theme) => theme.palette.grey[40] }} />
           <MemoizedTextField

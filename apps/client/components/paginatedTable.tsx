@@ -1,4 +1,4 @@
-import { Table, TablePagination } from '@mui/material';
+import { Box, Table, TablePagination } from '@mui/material';
 
 export default function PaginatedTable({
   children,
@@ -20,12 +20,14 @@ export default function PaginatedTable({
   const currentPage = count > 0 ? page - 1 : 0;
 
   return (
-    <>
+    <Box sx={{ width: '100%', overflowX: 'scroll' }}>
       <Table size="small">{children}</Table>
       <TablePagination
         size="small"
         component="div"
-        sx={{ display: 'flex', justifyContent: 'end', mt: '2rem' }}
+        sx={{
+          display: 'flex', justifyContent: 'end', mt: '2rem', overflow: 'hidden',
+        }}
         count={count}
         onPageChange={(_, newPage) => {
           if (!disabled) {
@@ -41,7 +43,7 @@ export default function PaginatedTable({
           }
         }}
       />
-    </>
+    </Box>
   );
 }
 
