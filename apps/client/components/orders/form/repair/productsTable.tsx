@@ -8,12 +8,12 @@ import {
 } from '@mui/material';
 import { useEffect, useCallback, useState } from 'react';
 import Add from '@mui/icons-material/Add';
-import { ProductListItem } from '../../../../utils/axios/models/product';
+import { ProductListItem, Service } from '../../../../utils/axios/models/product';
 import debounce from '../../../../utils/debounce';
 import TextField from '../../../memoizedInput/textField';
 import useTranslation from '../../../../hooks/useTranslation';
 import useAxios from '../../../../hooks/useAxios';
-import { STOCK_REPAIRS_PATH, SERVICES_PATH, REPAIR_ORDERS_PRODUCTS_PATH } from '../../../../utils/axios';
+import { STOCK_REPAIRS_PATH, REPAIR_ORDERS_PRODUCTS_PATH, SALES_SERVICES_PATH } from '../../../../utils/axios';
 import AddButton from '../../../button/add';
 import Select from '../../../memoizedInput/select';
 import Delete from '../../../button/delete';
@@ -33,8 +33,8 @@ function Row({
   onAddService: () => void,
   onDeleteProduct: (id: number) => void,
   onDeleteService: (id: number) => void,
-  onProductPropertyChange: (payload: object, property: string, value) => void,
-  onServicePropertyChange: (payload: object, property: string, value) => void,
+  onProductPropertyChange: (payload: ProductListItem, property: string, value) => void,
+  onServicePropertyChange: (payload: Service, property: string, value) => void,
 }) {
   const { trans } = useTranslation();
 
@@ -97,7 +97,7 @@ function Row({
                         fullWidth
                         placeholder={trans('serviceDescription')}
                         onChange={(e) => onServicePropertyChange(
-                          product,
+                          service,
                           'description',
                           e.target.value,
                         )}
@@ -112,8 +112,8 @@ function Row({
                           { title: trans('done'), value: '3' },
                           { title: trans('cancel'), value: '4' },
                         ]}
-                        onChange={(e) => onServicePropertyChange(product, 'status', e.target.value)}
-                        value="1"
+                        onChange={(e) => onServicePropertyChange(service, 'status', e.target.value)}
+                        defaultValue={service.status.toString()}
                       />
                     </TableCell>
                     <TableCell>
@@ -122,7 +122,7 @@ function Row({
                         placeholder="0.00"
                         defaultValue={service.price?.toString()}
                         onChange={(e) => onServicePropertyChange(
-                          product,
+                          service,
                           'price',
                           e.target.value,
                         )}
@@ -149,7 +149,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
   const [rowsPerPage, setRowsPerPage] = useState<number>(5);
 
   const { call: callPut } = useAxios('put', undefined, { withProgressBar: true });
-  const { call: postService } = useAxios('post', SERVICES_PATH.replace(':id', ''), { withProgressBar: true });
+  const { call: postService } = useAxios('post', SALES_SERVICES_PATH.replace(':id', ''), { withProgressBar: true });
   const { call: callDelete } = useAxios('delete', undefined, { withProgressBar: true });
   const { data: { data = [], count = 0 } = {}, call } = useAxios(
     'get',
@@ -159,7 +159,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
     },
   );
 
-  const handleProductPropertyChange = useCallback(debounce((product, property: string, value) => {
+  const handleProductPropertyChange = useCallback(debounce((product: ProductListItem, property: string, value) => {
     callPut({
       path: STOCK_REPAIRS_PATH.replace(':id', product.id.toString()),
       body: {
@@ -173,15 +173,15 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
     });
   }), []);
 
-  const handleServicePropertyChange = useCallback(debounce((service, property: string, value) => {
+  const handleServicePropertyChange = useCallback(debounce((service: Service, property: string, value) => {
     callPut({
-      path: SERVICES_PATH.replace(':id', service.id.toString()),
+      path: SALES_SERVICES_PATH.replace(':id', service.id.toString()),
       body: { [property]: value },
     });
   }), []);
 
-  const handleAddService = () => {
-    postService().then(() => {
+  const handleAddService = (id: number) => {
+    postService({ body: { product_order_id: id } }).then(() => {
       call({
         params: {
           take: rowsPerPage,
@@ -193,7 +193,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
   };
 
   const handleDeleteService = (id: number) => {
-    callDelete({ path: SERVICES_PATH.replace(':id', id.toString()) }).then(() => {
+    callDelete({ path: SALES_SERVICES_PATH.replace(':id', id.toString()) }).then(() => {
       call({
         params: {
           take: rowsPerPage,
@@ -285,7 +285,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
         <TableBody>
           {data.map((product: ProductListItem) => (
             <Row
-              onAddService={handleAddService}
+              onAddService={() => handleAddService(product.product_order.id)}
               onDeleteService={handleDeleteService}
               onDeleteProduct={handleDeleteProduct}
               onProductPropertyChange={handleProductPropertyChange}
