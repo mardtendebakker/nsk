@@ -5,13 +5,12 @@
   "projectType": "application",
   "targets": {
     "build": {
-      "executor": "@nrwl/next:build",
+      "executor": "@nx/next:build",
       "outputs": [
         "{options.outputPath}"
       ],
       "defaultConfiguration": "production",
       "options": {
-        "root": "apps/client",
         "outputPath": "dist/apps/client"
       },
       "configurations": {
@@ -22,7 +21,7 @@
       }
     },
     "serve": {
-      "executor": "@nrwl/next:server",
+      "executor": "@nx/next:server",
       "defaultConfiguration": "development",
       "options": {
         "buildTarget": "client:build",
@@ -40,13 +39,13 @@
       }
     },
     "export": {
-      "executor": "@nrwl/next:export",
+      "executor": "@nx/next:export",
       "options": {
         "buildTarget": "client:build:production"
       }
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
+      "executor": "@nx/jest:jest",
       "outputs": [
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
@@ -62,7 +61,7 @@
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "outputs": [
         "{options.outputFile}"
       ],
