@@ -22,12 +22,12 @@ export class RepairService extends SaleService {
     super(repository, printService, fileService, aProductService);
   }
 
-  async create(): Promise<aorder> {
-    const orderDto = await this.generateRepairBaseInput();
-    return super.create(orderDto);
+  async create(orderDto: CreateAOrderDto) {
+    const newOrderDto = await this.generateRepairBaseInput(orderDto);
+    return super.create(newOrderDto);
   }
 
-  private async generateRepairBaseInput(): Promise<CreateAOrderDto> {
+  private async generateRepairBaseInput(orderDto: CreateAOrderDto): Promise<CreateAOrderDto> {
     const service1 = this.getCreateSalesServiceInput('1. Replacement: ...');
     const service2 = this.getCreateSalesServiceInput('2a. Research: ...');
     const service3 = this.getCreateSalesServiceInput('2b. Repair ...till €50,-- ...');
@@ -36,6 +36,7 @@ export class RepairService extends SaleService {
     const orderStatus = await this.findRepairOrderStatusOrCreate();
 
     return {
+      ...orderDto,
       status_id: orderStatus.id,
       product_order: {
         create: {
@@ -51,8 +52,8 @@ export class RepairService extends SaleService {
         },
       },
       repair: {
-        damage: null,
-        description: null,
+        damage: orderDto?.repair?.damage ?? null,
+        description: orderDto?.repair?.description ?? null,
       },
     };
   }
