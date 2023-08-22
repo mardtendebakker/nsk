@@ -127,7 +127,7 @@ export default function AddProductsModal({
           <Box sx={{ m: '.5rem' }} />
           <List
             products={data}
-            count={Math.ceil(count / rowsPerPage)}
+            count={count}
             page={page}
             onCheck={handleRowChecked}
             checkedProductIds={checkedProductIds}

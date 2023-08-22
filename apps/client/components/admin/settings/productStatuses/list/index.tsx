@@ -11,15 +11,16 @@ import EditModal from '../editModal';
 import refreshList from '../../refreshList';
 import debounce from '../../../../../utils/debounce';
 import TextField from '../../../../memoizedInput/textField';
+import { getQueryParam } from '../../../../../utils/location';
 
 export default function ListContainer() {
   const { trans } = useTranslation();
   const router = useRouter();
-  const [page, setPage] = useState<number>(parseInt(router.query?.page?.toString() || '1', 10));
-  const [rowsPerPage, setRowsPerPage] = useState<number>(parseInt(router.query?.rowsPerPage?.toString() || '10', 10));
+  const [page, setPage] = useState<number>(parseInt(getQueryParam('page', '1'), 10));
+  const [rowsPerPage, setRowsPerPage] = useState<number>(parseInt(getQueryParam('rowsPerPage', '10'), 10));
   const [showForm, setShowForm] = useState<boolean>(false);
   const [editProductStatusId, setEditProductStatusId] = useState<number | undefined>();
-  const [search, setSearch] = useState(router.query?.search?.toString() || '');
+  const [search, setSearch] = useState(getQueryParam('search', ''));
 
   const { data: { data = [], count = 0 } = {}, call, performing } = useAxios(
     'get',
