@@ -7,6 +7,7 @@ import useAxios from '../../../hooks/useAxios';
 import { CUSTOMERS_PATH } from '../../../utils/axios';
 import useForm from '../../../hooks/useForm';
 import pushURLParams from '../../../utils/pushURLParams';
+import { getQueryParam } from '../../../utils/location';
 
 function refreshList({
   page,
@@ -42,16 +43,16 @@ function refreshList({
 
 export default function ListContainer() {
   const router = useRouter();
-  const [page, setPage] = useState<number>(parseInt(router.query?.page?.toString() || '1', 10));
-  const [rowsPerPage, setRowsPerPage] = useState<number>(parseInt(router.query?.rowsPerPage?.toString() || '10', 10));
+  const [page, setPage] = useState<number>(parseInt(getQueryParam('page', '1'), 10));
+  const [rowsPerPage, setRowsPerPage] = useState<number>(parseInt(getQueryParam('rowsPerPage', '10'), 10));
   const status = router.query?.status?.toString();
 
   const { formRepresentation, setValue } = useForm({
     search: {
-      value: router.query?.search?.toString() || '',
+      value: getQueryParam('search', ''),
     },
     createdAt: {
-      value: router.query?.createdAt?.toString() || null,
+      value: getQueryParam('createdAt', null),
     },
     status: {
       value: status || undefined,
@@ -93,7 +94,7 @@ export default function ListContainer() {
       <List
         disabled={performing}
         emails={[]}
-        count={Math.ceil(count / 10)}
+        count={count}
         page={page}
         onCheck={() => {}}
         onPageChange={(newPage) => setPage(newPage)}

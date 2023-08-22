@@ -8,6 +8,7 @@ import useAxios from '../../../hooks/useAxios';
 import { CUSTOMERS_PATH, SUPPLIERS_PATH } from '../../../utils/axios';
 import useForm, { FieldPayload } from '../../../hooks/useForm';
 import pushURLParams from '../../../utils/pushURLParams';
+import { getQueryParam } from '../../../utils/location';
 
 function initFormState(
   {
@@ -67,14 +68,14 @@ function refreshList({
 
 export default function ListContainer() {
   const router = useRouter();
-  const [page, setPage] = useState<number>(parseInt(router.query?.page?.toString() || '1', 10));
-  const [rowsPerPage, setRowsPerPage] = useState<number>(parseInt(router.query?.rowsPerPage?.toString() || '10', 10));
+  const [page, setPage] = useState<number>(parseInt(getQueryParam('page', '1'), 10));
+  const [rowsPerPage, setRowsPerPage] = useState<number>(parseInt(getQueryParam('rowsPerPage', '10'), 10));
 
   const { formRepresentation, setValue, setData } = useForm(initFormState({
-    search: router.query?.search?.toString(),
-    createdAt: router.query?.createdAt?.toString(),
-    representative: router.query?.representative?.toString(),
-    list: router.query?.list?.toString(),
+    search: getQueryParam('search'),
+    createdAt: getQueryParam('createdAt'),
+    representative: getQueryParam('representative'),
+    list: getQueryParam('list'),
   }));
 
   const ajaxPath = router.pathname == CONTACTS_CUSTOMERS ? CUSTOMERS_PATH : SUPPLIERS_PATH;

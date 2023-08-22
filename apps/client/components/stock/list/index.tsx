@@ -18,6 +18,7 @@ import EditModal from '../editModal';
 import pushURLParams from '../../../utils/pushURLParams';
 import { ProductListItem } from '../../../utils/axios/models/product';
 import SplitModal, { SplitData } from './splitModal';
+import { getQueryParam } from '../../../utils/location';
 
 function initFormState(
   {
@@ -90,8 +91,8 @@ export default function ListContainer() {
   const router = useRouter();
   const [showChangeLocationModal, setShowChangeLocationModal] = useState(false);
   const [changeLocationValue, setChangeLocationValue] = useState<number | undefined>();
-  const [page, setPage] = useState<number>(parseInt(router.query?.page?.toString() || '1', 10));
-  const [rowsPerPage, setRowsPerPage] = useState<number>(parseInt(router.query?.rowsPerPage?.toString() || '10', 10));
+  const [page, setPage] = useState<number>(parseInt(getQueryParam('page', '1'), 10));
+  const [rowsPerPage, setRowsPerPage] = useState<number>(parseInt(getQueryParam('rowsPerPage', '10'), 10));
   const [editProductId, setEditProductId] = useState<number | undefined>();
   const [checkedProductIds, setCheckedProductIds] = useState<number[]>([]);
   const [splitProduct, setSplitProduct] = useState<ProductListItem | undefined>();
@@ -101,10 +102,10 @@ export default function ListContainer() {
     : STOCK_REPAIRS_PATH;
 
   const { formRepresentation, setValue, setData } = useForm(initFormState({
-    search: router.query?.search?.toString(),
-    productType: router.query?.productType?.toString(),
-    location: router.query?.location?.toString(),
-    productStatus: router.query?.productStatus?.toString(),
+    search: getQueryParam('search'),
+    productType: getQueryParam('productType'),
+    location: getQueryParam('location'),
+    productStatus: getQueryParam('productStatus'),
   }));
 
   const { data: { data = [], count = 0 } = {}, call, performing } = useAxios(
@@ -243,7 +244,7 @@ export default function ListContainer() {
       <List
         disabled={disabled()}
         products={data}
-        count={Math.ceil(count / rowsPerPage)}
+        count={count}
         page={page}
         onCheck={handleRowChecked}
         checkedProductIds={checkedProductIds}
