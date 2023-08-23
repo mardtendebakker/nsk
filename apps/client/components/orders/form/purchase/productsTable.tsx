@@ -15,7 +15,7 @@ import TextField from '../../../memoizedInput/textField';
 import CreateModal from '../../../stock/createModal';
 import useTranslation from '../../../../hooks/useTranslation';
 import useAxios from '../../../../hooks/useAxios';
-import { STOCK_PRODUCTS_PATH } from '../../../../utils/axios';
+import { APRODUCT_PATH, STOCK_PRODUCTS_PATH } from '../../../../utils/axios';
 import EditModal from '../../../stock/editModal';
 import Edit from '../../../button/edit';
 import PaginatedTable from '../../../paginatedTable';
@@ -31,7 +31,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
 
   const { data: { data = [], count = 0 } = {}, call } = useAxios(
     'get',
-    STOCK_PRODUCTS_PATH.replace(':id', ''),
+    APRODUCT_PATH.replace(':id', ''),
     {
       withProgressBar: true,
     },

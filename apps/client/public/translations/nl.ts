@@ -279,6 +279,7 @@ const translation = {
       placeholder: 'Zoek op naam',
     },
   },
+  saleableQuantity: 'Verkoopbare hoeveelheid',
   newRepair: 'Nieuwe reparatie',
   editRepair: 'Reparatie bewerken',
   addService: 'Dienst toevoegen',
