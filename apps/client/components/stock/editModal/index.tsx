@@ -2,10 +2,11 @@ import { useEffect, useMemo } from 'react';
 import useTranslation from '../../../hooks/useTranslation';
 import useForm from '../../../hooks/useForm';
 import Form from '../form';
-import { STOCK_PRODUCTS_PATH } from '../../../utils/axios';
+import { AxiosResponse, APRODUCT_BULK_PRINT_BARCODES, STOCK_PRODUCTS_PATH } from '../../../utils/axios';
 import useAxios from '../../../hooks/useAxios';
 import { formRepresentationToBody, initFormState } from '../createModal';
 import ConfirmationDialog from '../../confirmationDialog';
+import { openBlob } from '../../../utils/blob';
 
 export default function EditModal(
   {
@@ -21,7 +22,7 @@ export default function EditModal(
   const { trans } = useTranslation();
 
   const { data: product, call, performing } = useAxios('get', STOCK_PRODUCTS_PATH.replace(':id', id));
-
+  const { call: bulkPrint, performing: performingBulkPrintBarcodes } = useAxios('get', APRODUCT_BULK_PRINT_BARCODES);
   const { call: callPut, performing: performingPut } = useAxios('put', STOCK_PRODUCTS_PATH.replace(':id', id));
 
   const { formRepresentation, setValue, validate } = useForm(useMemo(() => initFormState(product), [product]));
@@ -30,7 +31,7 @@ export default function EditModal(
     call().catch(onClose);
   }, []);
 
-  const canSubmit = () => !performing && !performingPut;
+  const canSubmit = () => !performing && !performingPut && !performingBulkPrintBarcodes;
 
   const handleSave = () => {
     if (validate() && !canSubmit()) {
@@ -44,6 +45,13 @@ export default function EditModal(
       .then(onSubmit);
   };
 
+  const handlePrintBarcode = () => {
+    bulkPrint({ params: { ids: [id] }, responseType: 'blob' })
+      .then((response: AxiosResponse) => {
+        openBlob(response.data);
+      });
+  };
+
   return (
     <ConfirmationDialog
       open
@@ -53,7 +61,12 @@ export default function EditModal(
       disabled={!canSubmit()}
       content={(
         <form onSubmit={(e) => { e.preventDefault(); handleSave(); }}>
-          <Form setValue={setValue} formRepresentation={formRepresentation} disabled={!canSubmit()} />
+          <Form
+            setValue={setValue}
+            formRepresentation={formRepresentation}
+            disabled={!canSubmit()}
+            onPrintBarcode={handlePrintBarcode}
+          />
           <input type="submit" style={{ display: 'none' }} />
         </form>
       )}

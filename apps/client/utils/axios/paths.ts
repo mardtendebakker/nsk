@@ -37,3 +37,4 @@ export const ATTRIBUTES_PATH = '/attributes/:id';
 export const LOGISTICS_PATH = '/logistics/:id';
 export const SPLIT_PRODUCT_INDIVIDUALIZE_PATH = '/split-product/:id/individualize-part-of-bundle';
 export const SPLIT_PRODUCT_STOCK_PART_PATH = '/split-product/:id/split-part-of-bundle';
+export const APRODUCT_BULK_PRINT_BARCODES = '/aproduct/bulk/print/barcodes';
