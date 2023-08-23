@@ -85,6 +85,7 @@ export interface Field {
   required?: boolean;
   requiredMessage?: string;
   error?: string;
+  disabled?: boolean;
 }
 
 export interface FormRepresentation {

@@ -15,10 +15,12 @@ export default function BasicDetails({
   formRepresentation,
   disabled,
   setValue,
+  disableOrderStatus,
 }: {
   formRepresentation : FormRepresentation,
   disabled:boolean,
-  setValue: SetValue
+  setValue: SetValue,
+  disableOrderStatus?: boolean
 }) {
   const { trans } = useTranslation();
 
@@ -67,6 +69,7 @@ export default function BasicDetails({
               />
             )}
           />
+          {!disableOrderStatus && (
           <DataSourcePicker
             sx={{ flex: 1 }}
             url={ORDER_STATUSES_PATH.replace(':id', '')}
@@ -79,6 +82,7 @@ export default function BasicDetails({
             error={!!formRepresentation.orderStatus.error}
             helperText={formRepresentation.orderStatus.error}
           />
+          )}
         </Grid>
         <Grid
           item
@@ -102,3 +106,5 @@ export default function BasicDetails({
     </CardContent>
   );
 }
+
+BasicDetails.defaultProps = { disableOrderStatus: false };
