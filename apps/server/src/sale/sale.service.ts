@@ -39,7 +39,7 @@ export class SaleService extends AOrderService {
     const productOrderData = products.data.map((product) => ({
       product_id: product.id,
       price: product.price,
-      quantity: product.stock,
+      quantity: 1,
     }));
 
     const addProductsToOrderParams: Prisma.aorderUpdateArgs = {

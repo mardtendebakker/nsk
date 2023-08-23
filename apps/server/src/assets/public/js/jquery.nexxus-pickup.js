@@ -45,7 +45,7 @@ function cancelAgreementItem(self) {
   
       // Default options.
       var settings = $.extend({
-        recaptchaKey: '6LfPrUwnAAAAAKkkkZa6j_1HZ1lSsIqzxj7yDjRS',
+        recaptchaKey: '6LdzW4QUAAAAANRAfkgl8Cz4-QNUcNEJomOj5wgX',
         orderStatusName: "To plan and pickup",
         locationId: 1,
         maxAddresses: 10,
