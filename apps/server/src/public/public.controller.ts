@@ -6,8 +6,8 @@ import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { GetPickupDto } from './dto/get-pickup.dto';
 import { PostPickupDto } from './dto/post-pickup.dto';
 
-@ApiTags('public')
-@Controller('public')
+@ApiTags('nsk-public')
+@Controller('nsk/public')
 export class PublicController {
   constructor(protected readonly publicService: PublicService) {}
 

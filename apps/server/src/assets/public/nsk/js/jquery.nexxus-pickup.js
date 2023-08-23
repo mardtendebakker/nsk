@@ -56,7 +56,7 @@ function cancelAgreementItem(self) {
       thisElement = $(this);
   
       $.ajax({
-        url: getMyUrl() + '/api/public/pickup',
+        url: getMyUrl() + '/public/pickup',
         data: settings,
         type: 'GET',
         success: function(data) {
@@ -163,7 +163,7 @@ function cancelAgreementItem(self) {
   
         $.ajax({
             type: "POST",
-            url: getMyUrl() + '/api/public/pickup',
+            url: getMyUrl() + '/public/pickup',
             data: formData,
 			contentType: false,
 			processData: false,

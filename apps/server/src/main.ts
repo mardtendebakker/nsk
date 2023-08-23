@@ -30,7 +30,9 @@ async function bootstrap() {
   app.enableCors();
   app.useGlobalPipes(new ValidationPipe({transform: true}));
   const globalPrefix = 'api';
-  app.setGlobalPrefix(globalPrefix);
+  app.setGlobalPrefix(globalPrefix, {
+    exclude: ['/nsk/public/pickup', '/nsk/public/pickuptest'],
+  });
   const port = process.env.PORT || 3333;
   const swaggerConfig = new DocumentBuilder()
     .addBearerAuth({
