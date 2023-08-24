@@ -1,4 +1,7 @@
-import { Box, Grid, Typography } from '@mui/material';
+import {
+  Box, Grid, IconButton, InputAdornment, Tooltip, Typography,
+} from '@mui/material';
+import QrCode from '@mui/icons-material/QrCode';
 import { useState } from 'react';
 import { SetValue, FormRepresentation } from '../../../hooks/useForm';
 import useTranslation from '../../../hooks/useTranslation';
@@ -19,10 +22,12 @@ export default function Form({
   setValue,
   formRepresentation,
   disabled,
+  onPrintBarcode,
 }: {
   setValue: SetValue,
   formRepresentation: FormRepresentation
-  disabled?: boolean
+  disabled?: boolean,
+  onPrintBarcode?: () => void
 }) {
   const { trans } = useTranslation();
   const [productType, setProductType] = useState<ProductType | undefined>();
@@ -63,6 +68,17 @@ export default function Form({
               value={formRepresentation.sku.value || ''}
               onChange={(e) => setValue({ field: 'sku', value: e.target.value })}
               disabled={disabled}
+              InputProps={{
+                endAdornment: onPrintBarcode && (
+                  <InputAdornment position="end">
+                    <Tooltip title={trans('printBarcode')}>
+                      <IconButton onClick={onPrintBarcode} disableRipple>
+                        <QrCode sx={{ fontSize: '1rem' }} />
+                      </IconButton>
+                    </Tooltip>
+                  </InputAdornment>
+                ),
+              }}
             />
             <TextField
               sx={{ flex: 0.33, mr: '1rem' }}
@@ -199,4 +215,4 @@ export default function Form({
   );
 }
 
-Form.defaultProps = { disabled: false };
+Form.defaultProps = { disabled: false, onPrintBarcode: undefined };
