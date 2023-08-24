@@ -30,6 +30,7 @@ export function initFormState(trans, order?: Order) {
 export function formRepresentationToBody(formRepresentation: FormRepresentation): object {
   return {
     ...salesFormRepresentationToBody(formRepresentation),
+    orderStatus: undefined,
     repair: {
       damage: formRepresentation.repairDamage.value,
       description: formRepresentation.repairDescription.value,
