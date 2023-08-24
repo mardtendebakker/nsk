@@ -19,12 +19,15 @@ import { ProductAttributeDto } from "./dto/product-attribute.dto";
 import { FILE_VALUE_DELIMITER } from "./types/file-value-delimiter.const";
 import { ProductAttributeFile } from "./types/product-attribute-file";
 import { PutObjectWithoutKeyInput } from "../file/dto/put-object-without-key-input.dto";
+import { PrintService } from "../print/print.service";
+import { id } from "date-fns/locale";
 
 export class StockService {
   constructor(
     protected readonly repository: StockRepository,
     protected readonly locationService: LocationService,
-    protected readonly fileService: FileService
+    protected readonly fileService: FileService,
+    protected readonly printService: PrintService,
   ) {}
 
   processSelect(select: Prisma.productSelect = {}): Prisma.productSelect {
@@ -411,6 +414,18 @@ export class StockService {
   async getAllTypes() {
 
     return this.repository.getAllTypes();
+  }
+
+  async printBarcodes(ids: number[]) {
+    const products = await this.repository.findBy({
+      where: { id: { in: ids } },
+      select: {
+        sku: true,
+      },
+    });
+  
+    const skusToPrint = products.map(product => product.sku);
+    return this.printService.printBarcodes(skusToPrint);
   }
 
   private async generateAllAttributes(productId: number, typeId: number) {

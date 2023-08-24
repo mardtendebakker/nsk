@@ -5,6 +5,7 @@ import { ToRepairRepository } from './to-repair.repository';
 import { ToRepairService } from './to-repair.service';
 import { ToRepairController } from './to-repair.controller';
 import { FileModule } from '../file/file.module';
+import { PrintService } from '../print/print.service';
 
 @Module({
   providers: [
@@ -14,6 +15,7 @@ import { FileModule } from '../file/file.module';
       provide: 'IS_REPAIR',
       useValue: true,
     },
+    PrintService,
   ],
   controllers: [ToRepairController],
   imports: [PrismaModule, LocationModule, FileModule],

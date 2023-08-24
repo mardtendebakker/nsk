@@ -1,5 +1,5 @@
 import { Authentication } from "@nestjs-cognito/auth";
-import { Body, Delete, Get, Param, Patch, Post, Put, Query, UploadedFiles, UseInterceptors } from "@nestjs/common";
+import { Body, Delete, Get, HttpStatus, Param, Patch, Post, Put, Query, Res, StreamableFile, UploadedFiles, UseInterceptors } from "@nestjs/common";
 import { ApiBearerAuth, ApiResponse } from "@nestjs/swagger";
 import { FindOneProductResponeDto } from "./dto/find-one-product-response.dto";
 import { FindProductsResponseDto } from "./dto/find-product-respone.dto";
@@ -10,6 +10,8 @@ import { UpdateManyProductDto } from "./dto/update-many-product.dto";
 import { FindManyDto } from "./dto/find-many.dto";
 import { AnyFilesInterceptor } from "@nestjs/platform-express";
 import { CreateBodyStockDto } from "./dto/create-body-stock.dto";
+import { BulkPrintDTO } from "../print/dto/bulk-print.dto";
+import type { Response } from 'express';
 
 @ApiBearerAuth()
 @Authentication()
@@ -58,5 +60,28 @@ export class StockController {
   @Delete(':id')
   deleteOne(@Param('id') id: number) {
     return this.stockService.deleteOne(id);
+  }
+
+  @Get('bulk/print/barcodes')
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Orders pdf',
+    content: {
+      'application/octet-stream': {
+        schema: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  async printBarcodes(@Query() bulkPrintDTO: BulkPrintDTO, @Res({ passthrough: true }) res: Response) {
+    const { ids } = bulkPrintDTO;
+    const pdfStream = await this.stockService.printBarcodes(ids);
+    res.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': 'inline; filename="orders.pdf"',
+    });
+    return new StreamableFile(pdfStream);
   }
 }

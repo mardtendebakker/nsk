@@ -14,7 +14,7 @@ import { FindManyDto } from "./dto/find-many.dto";
 import { UpdateManyAOrderDto } from "./dto/update-many-aorder.dto";
 import { UpdateManyResponseAOrderDto } from "./dto/update-many-aorder-response.dts";
 import type { Response } from 'express';
-import { BulkPrintDTO } from "./dto/bulk-print.dto";
+import { BulkPrintDTO } from "../print/dto/bulk-print.dto";
 import { CognitoGroups } from "../common/types/cognito-groups.enum";
 
 @ApiBearerAuth()

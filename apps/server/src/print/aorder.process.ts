@@ -1,67 +1,20 @@
-import * as bwipjs from 'bwip-js';
+
 import { AOrderProcessed } from "../aorder/aorder.process";
 import { DeliveryType } from "../aorder/types/delivery-type.enum";
 import { DataDestruction } from "../aorder/types/data-destruction.enum";
 import { format } from 'date-fns';
-export class AOrderProcess {
+import { PrintProcess } from "./print.process";
+export class AOrderProcess extends PrintProcess {
   private currencyFormat: Intl.NumberFormat;
 
   constructor (private readonly aorder: AOrderProcessed) {
-    this.currencyFormat = new Intl.NumberFormat('nl-NL', { style: 'currency', currency: 'EUR' })
-  }
-
-  private cleanString(text) {
-    const utf8 = {
-      '/[áàâãªä]/u': 'a',
-      '/[ÁÀÂÃÄ]/u': 'A',
-      '/[ÍÌÎÏ]/u': 'I',
-      '/[íìîï]/u': 'i',
-      '/[éèêë]/u': 'e',
-      '/[ÉÈÊË]/u': 'E',
-      '/[óòôõºö]/u': 'o',
-      '/[ÓÒÔÕÖ]/u': 'O',
-      '/[úùûü]/u': 'u',
-      '/[ÚÙÛÜ]/u': 'U',
-      '/ç/': 'c',
-      '/Ç/': 'C',
-      '/ñ/': 'n',
-      '/Ñ/': 'N',
-      '/–/': '-', // UTF-8 hyphen to "normal" hyphen
-      '/[’‘‹›‚]/u': ' ', // Literally a single quote
-      '/[“”«»„]/u': ' ', // Double quote
-      '/ /': ' ', // nonbreaking space (equiv. to 0x160)
-      '/&/': 'en',
-    };
-    
-    let replacedText: string;
-    for (const key in utf8) {
-      replacedText = text.replace(new RegExp(key), utf8[key]);
-    }
-
-    return replacedText;
-  }
-
-  async getBarcode(text: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-      bwipjs.toBuffer({
-        bcid:        'code39',
-        text:        this.cleanString(text).toUpperCase(),
-        scale:       2,
-        height:      10,
-      }, function (err, png) {
-        if (err) {
-          reject(err);
-        } else {
-          const base64String = png.toString('base64');
-          resolve(`data:image/png;base64,${base64String}`);
-        }
-      });
-    })
+    super();
+    this.currencyFormat = new Intl.NumberFormat('nl-NL', { style: 'currency', currency: 'EUR' });
   }
 
   async run() {
     return {
-      order_barcode: await this.getBarcode(this.aorder.order_nr),
+      order_barcode: await this.getBarcode({text: this.aorder.order_nr}),
       order_nr: this.aorder.order_nr,
       order_date: this.aorder.order_date ? format(this.aorder.order_date, 'dd-MM-yyyy') : 'Unknown',
       remarks: this.aorder.remarks ?? 'None',
@@ -102,8 +55,15 @@ export class AOrderProcess {
       }),
       ...(this.aorder.acompany_aorder_supplier_idToacompany && {
         supplier: {
-          ...this.aorder.acompany_aorder_supplier_idToacompany,
-          barcode: await this.getBarcode(this.aorder.acompany_aorder_supplier_idToacompany.name.substring(0,20)),
+          supplier: {
+            ...this.aorder.acompany_aorder_supplier_idToacompany,
+            barcode: await this.getBarcode({
+              text: this.aorder.acompany_aorder_supplier_idToacompany.name.substring(
+                0,
+                20
+              ),
+            }),
+          },
         },
       }),
       product_order: {
