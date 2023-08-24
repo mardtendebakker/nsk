@@ -5,6 +5,7 @@ import { PrismaModule } from '../prisma/prisma.module';
 import { ProductRepository } from './product.repository';
 import { LocationModule } from '../location/location.module';
 import { FileModule } from '../file/file.module';
+import { PrintService } from '../print/print.service';
 
 @Module({
   providers: [
@@ -14,6 +15,7 @@ import { FileModule } from '../file/file.module';
       provide: 'IS_REPAIR',
       useValue: false,
     },
+    PrintService,
   ],
   controllers: [ProductController],
   imports: [PrismaModule, LocationModule, FileModule],

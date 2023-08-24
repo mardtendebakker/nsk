@@ -49,7 +49,12 @@ export class StockRepository {
       count: count ?? 0,
       data,
     };
-  }  
+  }
+
+  findBy(params: Prisma.productFindManyArgs) {
+    const { where, select, orderBy } = params;
+    return this.prisma.product.findMany({ where, select, orderBy })
+  }
 
   create(createData: Prisma.productUncheckedCreateInput) {
     return this.prisma.product.create({
