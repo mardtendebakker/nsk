@@ -12,7 +12,7 @@ import debounce from '../../../../utils/debounce';
 import TextField from '../../../memoizedInput/textField';
 import useTranslation from '../../../../hooks/useTranslation';
 import useAxios from '../../../../hooks/useAxios';
-import { SALES_ORDERS_PRODUCTS_PATH, STOCK_PRODUCTS_PATH } from '../../../../utils/axios';
+import { APRODUCT_PATH, SALES_ORDERS_PRODUCTS_PATH, STOCK_PRODUCTS_PATH } from '../../../../utils/axios';
 import Delete from '../../../button/delete';
 import PaginatedTable from '../../../paginatedTable';
 import TableCell from '../../../tableCell';
@@ -30,6 +30,9 @@ function Row({ product, onProductPropertyChange, onDeleteProduct }: {
       <TableCell>{product.type}</TableCell>
       <TableCell>
         {product.retailPrice}
+      </TableCell>
+      <TableCell>
+        {product.sale}
       </TableCell>
       <TableCell>
         <TextField
@@ -72,7 +75,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
   const { call: callDelete } = useAxios('delete', undefined, { withProgressBar: true });
   const { data: { data = [], count = 0 } = {}, call } = useAxios(
     'get',
-    STOCK_PRODUCTS_PATH.replace(':id', ''),
+    APRODUCT_PATH.replace(':id', ''),
     {
       withProgressBar: true,
     },
@@ -158,6 +161,9 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
             </TableCell>
             <TableCell>
               {trans('retailUnitPrice')}
+            </TableCell>
+            <TableCell>
+              {trans('sealableQuantity')}
             </TableCell>
             <TableCell>
               {trans('unitPrice')}

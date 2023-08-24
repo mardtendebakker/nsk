@@ -13,7 +13,9 @@ import debounce from '../../../../utils/debounce';
 import TextField from '../../../memoizedInput/textField';
 import useTranslation from '../../../../hooks/useTranslation';
 import useAxios from '../../../../hooks/useAxios';
-import { STOCK_REPAIRS_PATH, REPAIR_ORDERS_PRODUCTS_PATH, SALES_SERVICES_PATH } from '../../../../utils/axios';
+import {
+  STOCK_REPAIRS_PATH, REPAIR_ORDERS_PRODUCTS_PATH, SALES_SERVICES_PATH, APRODUCT_PATH,
+} from '../../../../utils/axios';
 import AddButton from '../../../button/add';
 import Select from '../../../memoizedInput/select';
 import Delete from '../../../button/delete';
@@ -153,7 +155,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
   const { call: callDelete } = useAxios('delete', undefined, { withProgressBar: true });
   const { data: { data = [], count = 0 } = {}, call } = useAxios(
     'get',
-    STOCK_REPAIRS_PATH.replace(':id', ''),
+    APRODUCT_PATH.replace(':id', ''),
     {
       withProgressBar: true,
     },
