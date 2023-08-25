@@ -20,7 +20,6 @@ import { FILE_VALUE_DELIMITER } from "./types/file-value-delimiter.const";
 import { ProductAttributeFile } from "./types/product-attribute-file";
 import { PutObjectWithoutKeyInput } from "../file/dto/put-object-without-key-input.dto";
 import { PrintService } from "../print/print.service";
-import { id } from "date-fns/locale";
 
 export class StockService {
   constructor(
