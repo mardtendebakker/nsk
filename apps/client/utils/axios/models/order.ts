@@ -52,7 +52,7 @@ interface Pickup {
   real_pickup_date:string,
   description:string,
   origin:string,
-  dataDestruction:number,
+  data_destruction:number,
   agreement:{ id:number, originalClientFilename:string },
   images:{ originalClientFilename:string }[]
 }
