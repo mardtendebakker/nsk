@@ -206,13 +206,15 @@ export class SplitProductService {
           [];
 
         for (const fileId of fileIds) {
-          const result = await this.fileService.get(fileId);
-          result &&
-            files.push({
-              buffer: Buffer.from(await result.Body.transformToByteArray()),
-              fieldname: String(productAttribute.attribute_id),
-              mimetype: result.ContentType,
-            });
+          try {
+            const result = await this.fileService.get(fileId);
+            result &&
+              files.push({
+                buffer: Buffer.from(await result.Body.transformToByteArray()),
+                fieldname: String(productAttribute.attribute_id),
+                mimetype: result.ContentType,
+              });
+          } catch (e) { /* empty */ }
         }
       }
       product_attributes.push({
