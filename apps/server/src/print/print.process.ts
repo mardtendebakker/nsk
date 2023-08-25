@@ -37,7 +37,12 @@ export class PrintProcess {
     scale?: number,
     height?: number,
   } = { text: undefined, scale: 2, height: 10 }): Promise<string> {
-    const { text, scale, height } = params;
+    const {
+      text,
+      scale = 2,
+      height = 10
+    } = params;
+    
     return new Promise((resolve, reject) => {
       bwipjs.toBuffer({
         bcid:        'code39',
