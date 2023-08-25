@@ -172,7 +172,7 @@ function PurchaseForm({
                   </TableRow>
                   <TableRow>
                     <TableCell>{trans('dataDestruction')}</TableCell>
-                    <TableCell>{DATA_DESTRUCTION[order?.pickup?.dataDestruction] || '--'}</TableCell>
+                    <TableCell>{DATA_DESTRUCTION[order?.pickup?.data_destruction] || '--'}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>{trans('processingAgreement')}</TableCell>
