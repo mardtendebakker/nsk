@@ -42,7 +42,7 @@ export class PublicController {
     await this.publicService.postPickup(body, files);
 
     if (body.pickup_form.confirmPage) {
-      res.redirect(body.pickup_form.confirmPage);
+      res.send(body.pickup_form.confirmPage);
     } else {
       res.send('Pickup added successfully');
     }
