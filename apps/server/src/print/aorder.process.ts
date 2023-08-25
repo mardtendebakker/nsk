@@ -46,7 +46,7 @@ export class AOrderProcess extends PrintProcess {
         },
       }),
       order_status: {
-        name: this.aorder.order_status.name ?? 'Unknown',
+        name: this.aorder.order_status?.name ?? 'Unknown',
       },
       ...(this.aorder.acompany_aorder_customer_idToacompany && {
         customer: {
@@ -55,15 +55,13 @@ export class AOrderProcess extends PrintProcess {
       }),
       ...(this.aorder.acompany_aorder_supplier_idToacompany && {
         supplier: {
-          supplier: {
-            ...this.aorder.acompany_aorder_supplier_idToacompany,
-            barcode: await this.getBarcode({
-              text: this.aorder.acompany_aorder_supplier_idToacompany.name.substring(
-                0,
-                20
-              ),
-            }),
-          },
+          ...this.aorder.acompany_aorder_supplier_idToacompany,
+          barcode: await this.getBarcode({
+            text: this.aorder.acompany_aorder_supplier_idToacompany.name.substring(
+              0,
+              20
+            ),
+          }),
         },
       }),
       product_order: {

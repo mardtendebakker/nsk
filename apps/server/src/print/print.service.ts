@@ -39,7 +39,7 @@ export class PrintService {
   }
 
   async printAOrders(orders: AOrderProcessed[]): Promise<Buffer> {
-    const templatePath = join(process.cwd(), 'apps/server/src/assets/templates/sale.hbs');
+    const templatePath = join(process.cwd(), 'apps/server/src/assets/templates/order.hbs');
     const source = readFileSync(templatePath, 'utf8');
     const template = Handlebars.compile(source);
 
