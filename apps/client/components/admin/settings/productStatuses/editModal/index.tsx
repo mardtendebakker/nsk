@@ -15,7 +15,7 @@ export default function EditModal({ onClose, onSubmit, id }: {
   const { trans } = useTranslation();
 
   const { data: productStatus, call, performing } = useAxios('get', PRODUCT_STATUSES_PATH.replace(':id', id));
-  const { call: callPut, performing: performingPut } = useAxios('put', PRODUCT_STATUSES_PATH.replace(':id', id));
+  const { call: callPut, performing: performingPut } = useAxios('put', PRODUCT_STATUSES_PATH.replace(':id', id), { showSuccessMessage: true });
   const { formRepresentation, setValue, validate } = useForm(useMemo(() => initFormState(productStatus), [productStatus]));
 
   useEffect(() => {

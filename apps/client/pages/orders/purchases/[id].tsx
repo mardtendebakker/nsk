@@ -41,7 +41,7 @@ function UpdatePurchaseOrder() {
     PURCHASE_ORDERS_FILES_PATH
       .replace(':orderId', id?.toString())
       .replace(':id', ''),
-    { withProgressBar: true },
+    { withProgressBar: true, showSuccessMessage: true },
   );
 
   const { formRepresentation, setValue, validate } = useForm(useMemo(() => initFormState(trans, purchaseOrder), [purchaseOrder]));

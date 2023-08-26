@@ -72,7 +72,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
   const [rowsPerPage, setRowsPerPage] = useState<number>(5);
 
   const { call: callPut } = useAxios('put', undefined, { withProgressBar: true });
-  const { call: callDelete } = useAxios('delete', undefined, { withProgressBar: true });
+  const { call: callDelete } = useAxios('delete', undefined, { withProgressBar: true, showSuccessMessage: true });
   const { data: { data = [], count = 0 } = {}, call } = useAxios(
     'get',
     APRODUCT_PATH.replace(':id', ''),

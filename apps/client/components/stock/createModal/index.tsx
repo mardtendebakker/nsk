@@ -84,7 +84,7 @@ export default function CreateModal({ onClose, onSubmit, additionalPayloadData }
   const { trans } = useTranslation();
   const { formRepresentation, setValue, validate } = useForm(formState);
 
-  const { call, performing } = useAxios('post', STOCK_PRODUCTS_PATH.replace(':id', ''));
+  const { call, performing } = useAxios('post', STOCK_PRODUCTS_PATH.replace(':id', ''), { showSuccessMessage: true, withProgressBar: true });
 
   const handleSave = () => {
     if (validate()) {
