@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import _ from 'lodash';
 import {
-  STOCK_PRODUCTS_PATH, STOCK_REPAIRS_PATH, LOCATIONS_PATH, SPLIT_PRODUCT_INDIVIDUALIZE_PATH, SPLIT_PRODUCT_STOCK_PART_PATH,
+  STOCK_PRODUCTS_PATH, STOCK_REPAIRS_PATH, LOCATIONS_PATH, SPLIT_PRODUCT_INDIVIDUALIZE_PATH, SPLIT_PRODUCT_STOCK_PART_PATH, APRODUCT_BULK_PRINT_BARCODES, AxiosResponse,
 } from '../../../utils/axios';
 import List from './list';
 import useAxios from '../../../hooks/useAxios';
@@ -19,6 +19,7 @@ import pushURLParams from '../../../utils/pushURLParams';
 import { ProductListItem } from '../../../utils/axios/models/product';
 import SplitModal, { SplitData } from './splitModal';
 import { getQueryParam } from '../../../utils/location';
+import { openBlob } from '../../../utils/blob';
 
 function initFormState(
   {
@@ -115,6 +116,7 @@ export default function ListContainer() {
       withProgressBar: true,
     },
   );
+  const { call: bulkPrint, performing: performingBulkPrintBarcodes } = useAxios('get', APRODUCT_BULK_PRINT_BARCODES);
 
   const { call: callDelete, performing: performingDelete } = useAxios(
     'delete',
@@ -183,7 +185,7 @@ export default function ListContainer() {
       .then(() => defaultRefreshList());
   };
 
-  const disabled = (): boolean => performing || performingDelete || performingPatch || performingSplit;
+  const disabled = (): boolean => performing || performingDelete || performingPatch || performingSplit || performingBulkPrintBarcodes;
 
   const handlePatchLocation = () => {
     callPatch({ body: { ids: checkedProductIds, product: { location_id: changeLocationValue } } })
@@ -194,6 +196,13 @@ export default function ListContainer() {
       .finally(() => {
         setShowChangeLocationModal(false);
         setChangeLocationValue(undefined);
+      });
+  };
+
+  const handlePrintBarcodes = () => {
+    bulkPrint({ params: { ids: checkedProductIds }, responseType: 'blob' })
+      .then((response: AxiosResponse) => {
+        openBlob(response.data);
       });
   };
 
@@ -238,7 +247,7 @@ export default function ListContainer() {
         checkedProductsCount={checkedProductIds.length}
         onAllCheck={handleAllChecked}
         onChangeLocation={() => setShowChangeLocationModal(true)}
-        onPrint={() => {}}
+        onPrint={handlePrintBarcodes}
       />
       <Box sx={{ m: '.5rem' }} />
       <List

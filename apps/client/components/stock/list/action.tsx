@@ -40,7 +40,7 @@ export default function Action({
         {checkedProductsCount > 0
         && (
           <Button size="small" onClick={onPrint} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
-              {trans('print')}
+              {trans('printBarcode')}
             <ChevronRight sx={{ transform: 'rotate(90deg)' }} />
           </Button>
         )}

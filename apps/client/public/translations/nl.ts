@@ -279,6 +279,7 @@ const translation = {
       placeholder: 'Zoek op naam',
     },
   },
+  printBarcodes: 'Streepjescodes afdrukken',
   saleableQuantity: 'Verkoopbare hoeveelheid',
   printBarcode: 'Streepjescode afdrukken',
   newRepair: 'Nieuwe reparatie',
