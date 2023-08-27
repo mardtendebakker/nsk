@@ -2,7 +2,7 @@ import useAxios from '../../../../../hooks/useAxios';
 import useTranslation from '../../../../../hooks/useTranslation';
 import useForm, { FormRepresentation } from '../../../../../hooks/useForm';
 import Form from '../form';
-import { LOCATIONS_PATH } from '../../../../../utils/axios';
+import { ATTRIBUTES_PATH } from '../../../../../utils/axios';
 import { Attribute } from '../../../../../utils/axios/models/product';
 import ConfirmationDialog from '../../../../confirmationDialog';
 
@@ -70,7 +70,7 @@ export default function CreateModal({ onClose, onSubmit }: {
     formRepresentation, setValue, validate, setData,
   } = useForm(formState);
 
-  const { call, performing } = useAxios('post', LOCATIONS_PATH.replace(':id', ''));
+  const { call, performing } = useAxios('post', ATTRIBUTES_PATH.replace(':id', ''), { showSuccessMessage: true, withProgressBar: true });
 
   const handleSave = () => {
     if (validate()) {

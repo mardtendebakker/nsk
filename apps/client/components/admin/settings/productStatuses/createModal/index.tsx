@@ -33,7 +33,7 @@ export default function CreateModal({ onClose, onSubmit }: {
   const { trans } = useTranslation();
   const { formRepresentation, setValue, validate } = useForm(formState);
 
-  const { call, performing } = useAxios('post', PRODUCT_STATUSES_PATH.replace(':id', ''));
+  const { call, performing } = useAxios('post', PRODUCT_STATUSES_PATH.replace(':id', ''), { showSuccessMessage: true, withProgressBar: true });
 
   const handleSave = () => {
     if (validate()) {
