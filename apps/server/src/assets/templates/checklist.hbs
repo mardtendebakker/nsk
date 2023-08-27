@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Checklists</title>
+    
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+      body {
+        font-size: 12px;
+        font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        color: #212529;
+      }
+
+      .container {
+        width: 100%;
+        padding-top: 30px;
+        padding-bottom: 30px;
+        padding-right: 45px;
+        padding-left: 45px;
+        margin-right: auto;
+        margin-left: auto;
+      }
+
+      .panel-default {
+        border-color: #ecf0f1;
+      }
+      .panel {
+        margin-bottom: 21px;
+        border-radius: 4px;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+      }
+      .panel-heading {
+        font-weight: bold;
+        padding: 10px 15px;
+        color: #2c3e50;
+        background-color: #ecf0f1;
+        border-bottom: 2px solid #000405;
+      }
+      .panel-body {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+      }
+
+      .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        line-height: 1.2;
+      }
+
+      h1 {
+        font-size: 2.5rem;
+      }
+      h2 {
+        font-size: 2rem;
+      }
+      h3 {
+        font-size: 1.75rem;
+      }
+      h4 {
+        font-size: 1.5rem;
+      }
+      h5 {
+        font-size: 1.25rem;
+      }
+      h6 {
+        font-size: 1rem;
+      }
+
+      .table {
+        margin: 5px 15px;
+        width: 100%;
+        padding-bottom: .2rem;
+      }
+      .table th,
+      .table td {
+        padding: 0;
+      }
+      .table thead tr th {
+        text-align: left;
+      }
+
+      .table-bordered {
+        border: 1px solid #ddd; /* Define border style */
+        border-collapse: collapse; /* Collapse border spacing */
+      }
+      .table-bordered th,
+      .table-bordered td {
+        border: 1px solid #ddd; /* Define cell border style */
+        padding: 8px; /* Add padding to cells for spacing */
+      }
+
+      .table-checklist {
+        width: auto;
+      }
+      .table-checklist td, .table-checklist th {
+        padding: 5px;
+      }
+
+      thead { display: table-header-group; }
+      tfoot { display: table-row-group; }
+      tr { page-break-inside: avoid; }
+
+      .pagebreak {
+        page-break-before: always;
+      }
+    </style>
+  </head>
+  <body>
+    {{#each this}}
+    <div class="container pagebreak">
+      {{#if product_tasks.length }}
+      <h2>Checklist {{ product_sku }}</h2>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <span class="glyphicon glyphicon-play" aria-hidden="true">Order details</span>
+        </div>
+        <div class="panel-body row">
+          <table class="table">
+            <tr>
+              <td width="20%">Order nr</td>
+              <td width="40%">{{ order_nr }}</td>
+              <td width="40%" rowspan="99" align="right"><img width="80%" src="{{order_barcode}}"></td>
+            </tr>
+            <tr>
+              <td>Order date</td>
+              <td>{{ order_date }}</td>
+            </tr>
+            <tr>
+              <td>Status</td>
+              <td>{{ order_status.name }}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <span class="glyphicon glyphicon-play" aria-hidden="true">Product details</span>
+        </div>
+        <div class="panel-body row">
+          <table class="table">
+            <tr>
+              <td width="20%">SKU</td>
+              <td width="40%">{{ product_sku }}</td>
+              <td width="40%" rowspan="99" align="right"><img width="80%" src="{{ product_barcode }}"></td>
+            </tr>
+            <tr>
+              <td>Name</td>
+              <td>{{ product_name }}</td>
+            </tr>
+            <tr>
+              <td>Status</td>
+              <td>{{ product_status }}</td>
+            </tr>
+            <tr>
+              <td>Location</td>
+              <td>{{ product_location }}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      
+      <table class="table table-bordered table-checklist">
+        <tr>
+          <th width="5%"></th>
+          <th width="30%">Task</th>
+          <th width="70%">Description</th>
+        </tr>
+        {{#each product_tasks }}
+        <tr>
+          <td style="padding: 5px 0px 5px 5px;">
+            {{#ifCond status '==' 3 }}
+            <div style="width: 18px;border: 2px solid black; text-align: center">&nbsp;X&nbsp;</div>
+            {{else}}
+            <div style="width: 18px;border: 2px solid black">&nbsp;</div>
+            {{/ifCond}}
+          </td>
+          <td>{{ name }}</td>
+          <td>{{ description }}</td>
+        </tr>
+        {{/each}}
+      </table>
+      {{else}}
+      <h2>No checklist for printing these types of products</h2>
+      {{/if}}
+    </div>
+    {{/each}}
+  </body>
+</html>

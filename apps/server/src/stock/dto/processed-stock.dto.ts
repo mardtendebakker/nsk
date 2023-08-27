@@ -3,6 +3,7 @@ import { aservice } from "@prisma/client";
 import { ProcessedTask } from "./processed-task.dto";
 import { ProductEntity } from "../entities/product.entity";
 import { ProductOrderPayload } from "../types/product-order-payload";
+import { ProductOrderRelationOrder } from "./product-order-relation-order.dto";
 
 export class ProcessedStock extends PickType(ProductEntity, [
     "id",
@@ -12,6 +13,9 @@ export class ProcessedStock extends PickType(ProductEntity, [
     "created_at",
     "updated_at"
   ] as const) {
+    @ApiProperty()
+    status: string;
+
     @ApiProperty()
     type: string;
     
@@ -50,6 +54,9 @@ export class ProcessedStock extends PickType(ProductEntity, [
   
     @ApiPropertyOptional()
     product_order?: ProductOrderPayload;
+    
+    @ApiProperty()
+    product_orders?: ProductOrderRelationOrder[];
   
     @ApiPropertyOptional()
     services?: aservice[];
