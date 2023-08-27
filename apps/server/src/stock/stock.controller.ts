@@ -65,7 +65,7 @@ export class StockController {
   @Get('bulk/print/barcodes')
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Orders pdf',
+    description: 'Barcodes pdf',
     content: {
       'application/octet-stream': {
         schema: {
@@ -80,7 +80,30 @@ export class StockController {
     const pdfStream = await this.stockService.printBarcodes(ids);
     res.set({
       'Content-Type': 'application/pdf',
-      'Content-Disposition': 'inline; filename="orders.pdf"',
+      'Content-Disposition': 'inline; filename="barcodes.pdf"',
+    });
+    return new StreamableFile(pdfStream);
+  }
+
+  @Get('bulk/print/checklists')
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Checklist pdf',
+    content: {
+      'application/octet-stream': {
+        schema: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  async printChecklists(@Query() bulkPrintDTO: BulkPrintDTO, @Res({ passthrough: true }) res: Response) {
+    const { ids } = bulkPrintDTO;
+    const pdfStream = await this.stockService.printChecklists(ids);
+    res.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': 'inline; filename="checklists.pdf"',
     });
     return new StreamableFile(pdfStream);
   }

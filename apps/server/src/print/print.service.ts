@@ -6,6 +6,8 @@ import { join } from 'path';
 import { AOrderProcessed } from '../aorder/aorder.process';
 import { AOrderProcess } from './aorder.process';
 import { PrintProcess } from './print.process';
+import { ProductProcess } from './product.process';
+import { ProcessedStock } from '../stock/dto/processed-stock.dto';
 
 @Injectable()
 export class PrintService {
@@ -44,8 +46,8 @@ export class PrintService {
     const template = Handlebars.compile(source);
 
     const data = await Promise.all(orders.map(async order => {
-      const orderPRocess = new AOrderProcess(order);
-      return orderPRocess.run();
+      const orderProcess = new AOrderProcess(order);
+      return orderProcess.run();
     }));
 
     const browser = await puppeteer.launch({
@@ -98,8 +100,8 @@ export class PrintService {
       const page = await browser.newPage();
       await page.setContent(htmls.join('<br>'));
 
-      const customWidth = '54mm';   // Adjust as needed
-      const customHeight = '25mm';  // Adjust as needed
+      const customWidth = '54mm';
+      const customHeight = '25mm';
       const pdfStream: Buffer = await page.pdf({
         width: customWidth,
         height: customHeight,
@@ -108,6 +110,44 @@ export class PrintService {
           bottom: 0,
           left: 3,
           right: 3,
+        },
+      });
+
+      return pdfStream;
+    } finally {
+      if (browser) {
+        browser.close();
+      }
+    }
+  }
+
+  async printChecklists(products: ProcessedStock[]): Promise<Buffer> {
+    const templatePath = join(process.cwd(), 'apps/server/src/assets/templates/checklist.hbs');
+    const source = readFileSync(templatePath, 'utf8');
+    const template = Handlebars.compile(source);
+
+    const data = await Promise.all(products.map(async product => {
+      const productProcess = new ProductProcess(product);
+      return productProcess.run();
+    }));
+
+    const browser = await puppeteer.launch({
+      headless: true,
+      args: ['--no-sandbox'],
+    });
+    
+    try {
+      const page = await browser.newPage();
+      const result = template(data);
+      await page.setContent(result);
+
+      const pdfStream: Buffer = await page.pdf({
+        format: 'A4',
+        margin: {
+          top: 10,
+          bottom: 10,
+          left: 10,
+          right: 10,
         },
       });
 

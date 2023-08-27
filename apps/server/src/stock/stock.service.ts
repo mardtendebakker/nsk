@@ -52,12 +52,18 @@ export class StockService {
     };
 
     const aorderSelect: Prisma.aorderSelect = {
+      id: true,
       discr: true,
       order_date: true,
       order_nr: true,
+      order_status: {
+        select: {
+          name: true,
+        },
+      },
       repair: {
         select: repairSelect,
-      }
+      },
     };
 
     const serviceSelect: Prisma.aserviceSelect = {
@@ -425,6 +431,11 @@ export class StockService {
   
     const skusToPrint = products.map(product => product.sku);
     return this.printService.printBarcodes(skusToPrint);
+  }
+
+  async printChecklists(ids: number[]) {
+    const { data } = await this.findAll({ where: { id: { in: ids } } });
+    return this.printService.printChecklists(data);
   }
 
   private async generateAllAttributes(productId: number, typeId: number) {
