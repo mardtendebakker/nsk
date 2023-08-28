@@ -10,10 +10,10 @@ export class ProductProcess extends PrintProcess {
   async run() {
     const purchaseOrder = this.product?.product_orders?.find(
       (pOrder) => pOrder?.order?.discr === AOrderDiscrimination.PURCHASE
-    ).order;
+    )?.order;
 
     return {
-      order_barcode: await this.getBarcode({ text: purchaseOrder?.order_nr, height: 20 }),
+      order_barcode: purchaseOrder?.order_nr && await this.getBarcode({ text: purchaseOrder.order_nr, height: 20 }),
       order_nr: purchaseOrder?.order_nr,
       order_date: purchaseOrder?.order_date
         ? format(purchaseOrder?.order_date, 'dd-MM-yyyy')

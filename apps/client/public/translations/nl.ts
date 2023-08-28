@@ -280,6 +280,7 @@ const translation = {
     },
   },
   printBarcodes: 'Streepjescodes afdrukken',
+  printChecklist: 'Controlelijst afdrukken',
   saleableQuantity: 'Verkoopbare hoeveelheid',
   printBarcode: 'Streepjescode afdrukken',
   newRepair: 'Nieuwe reparatie',
