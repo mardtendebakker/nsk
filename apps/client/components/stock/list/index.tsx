@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import _ from 'lodash';
 import {
-  STOCK_PRODUCTS_PATH, STOCK_REPAIRS_PATH, LOCATIONS_PATH, SPLIT_PRODUCT_INDIVIDUALIZE_PATH, SPLIT_PRODUCT_STOCK_PART_PATH, APRODUCT_BULK_PRINT_BARCODES, AxiosResponse,
+  STOCK_PRODUCTS_PATH, STOCK_REPAIRS_PATH, LOCATIONS_PATH, SPLIT_PRODUCT_INDIVIDUALIZE_PATH, SPLIT_PRODUCT_STOCK_PART_PATH, APRODUCT_BULK_PRINT_BARCODES, AxiosResponse, APRODUCT_BULK_PRINT_CHECKLISTS,
 } from '../../../utils/axios';
 import List from './list';
 import useAxios from '../../../hooks/useAxios';
@@ -117,7 +117,7 @@ export default function ListContainer() {
     },
   );
   const { call: bulkPrint, performing: performingBulkPrintBarcodes } = useAxios('get', APRODUCT_BULK_PRINT_BARCODES);
-
+  const { call: bulkPrintChecklist, performing: performingBulkPrintChecklists } = useAxios('get', APRODUCT_BULK_PRINT_CHECKLISTS);
   const { call: callDelete, performing: performingDelete } = useAxios(
     'delete',
     ajaxPath,
@@ -126,7 +126,6 @@ export default function ListContainer() {
       showSuccessMessage: true,
     },
   );
-
   const { call: callPatch, performing: performingPatch } = useAxios(
     'patch',
     ajaxPath.replace(':id', ''),
@@ -135,7 +134,6 @@ export default function ListContainer() {
       showSuccessMessage: true,
     },
   );
-
   const { call: splitCall, performing: performingSplit } = useAxios(
     'put',
     '',
@@ -185,7 +183,7 @@ export default function ListContainer() {
       .then(() => defaultRefreshList());
   };
 
-  const disabled = (): boolean => performing || performingDelete || performingPatch || performingSplit || performingBulkPrintBarcodes;
+  const disabled = (): boolean => performing || performingDelete || performingPatch || performingSplit || performingBulkPrintBarcodes || performingBulkPrintChecklists;
 
   const handlePatchLocation = () => {
     callPatch({ body: { ids: checkedProductIds, product: { location_id: changeLocationValue } } })
@@ -201,6 +199,13 @@ export default function ListContainer() {
 
   const handlePrintBarcodes = () => {
     bulkPrint({ params: { ids: checkedProductIds }, responseType: 'blob' })
+      .then((response: AxiosResponse) => {
+        openBlob(response.data);
+      });
+  };
+
+  const handlePrintChecklists = () => {
+    bulkPrintChecklist({ params: { ids: checkedProductIds }, responseType: 'blob' })
       .then((response: AxiosResponse) => {
         openBlob(response.data);
       });
@@ -248,6 +253,7 @@ export default function ListContainer() {
         onAllCheck={handleAllChecked}
         onChangeLocation={() => setShowChangeLocationModal(true)}
         onPrint={handlePrintBarcodes}
+        onPrintChecklist={handlePrintChecklists}
       />
       <Box sx={{ m: '.5rem' }} />
       <List

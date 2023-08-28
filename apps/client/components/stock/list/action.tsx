@@ -11,6 +11,7 @@ export default function Action({
   onAllCheck,
   onChangeLocation,
   onPrint,
+  onPrintChecklist,
 }:{
   disabled: boolean,
   allChecked: boolean,
@@ -18,6 +19,7 @@ export default function Action({
   onAllCheck: (checked: boolean) => void,
   onChangeLocation: () => void,
   onPrint: () => void,
+  onPrintChecklist: () => void,
 }) {
   const { trans } = useTranslation();
 
@@ -41,6 +43,13 @@ export default function Action({
         && (
           <Button size="small" onClick={onPrint} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
               {trans('printBarcode')}
+            <ChevronRight sx={{ transform: 'rotate(90deg)' }} />
+          </Button>
+        )}
+        {checkedProductsCount > 0
+        && (
+          <Button size="small" onClick={onPrintChecklist} variant="outlined" color="primary" disabled={disabled}>
+              {trans('printChecklist')}
             <ChevronRight sx={{ transform: 'rotate(90deg)' }} />
           </Button>
         )}
