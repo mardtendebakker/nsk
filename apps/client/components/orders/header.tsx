@@ -19,7 +19,7 @@ const NEW_ORDER_LABEL = {
   [ORDERS_REPAIRS]: 'newRepair',
 };
 
-export default function Navigation() {
+export default function Header() {
   const router = useRouter();
   const { trans } = useTranslation();
   const isDesktop = useResponsive('up', 'md');

@@ -1,14 +1,14 @@
-import Add from '@mui/icons-material/Add';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 import useTranslation from '../../hooks/useTranslation';
-import {
-  STOCKS_PRODUCTS, STOCKS_REPAIR_SERVICES, ORDERS_PURCHASES_NEW,
-} from '../../utils/routes';
 import useResponsive from '../../hooks/useResponsive';
+import { STOCKS_PRODUCTS, STOCKS_REPAIR_SERVICES } from '../../utils/routes';
+import CreateModal from './createModal';
 
-export default function Navigation() {
+export default function Header({ onProductCreated }: { onProductCreated: () => void }) {
   const router = useRouter();
+  const [showForm, setShowForm] = useState(false);
   const { trans } = useTranslation();
   const isDesktop = useResponsive('up', 'md');
 
@@ -50,15 +50,15 @@ export default function Navigation() {
           </Typography>
         ))}
       </Box>
-      <Button
-        sx={{ mb: '.5rem' }}
-        size="small"
-        variant="contained"
-        onClick={() => router.push(ORDERS_PURCHASES_NEW)}
-      >
-        <Add />
-        {trans('newPurchase')}
-      </Button>
+      {showForm && (
+      <CreateModal
+        onSubmit={() => {
+          onProductCreated();
+          setShowForm(false);
+        }}
+        onClose={() => setShowForm(false)}
+      />
+      )}
     </Box>
   );
 }
