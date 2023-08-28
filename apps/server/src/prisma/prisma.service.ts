@@ -3,264 +3,6 @@ import { PrismaClient } from '@prisma/client';
 
 @Injectable()
 export class PrismaService extends PrismaClient {
-  private initProductMiddlewares() {
-    /*
-      product.price
-    */
-    this.$use(async (params, next) => {
-      if (
-        params.model == 'product' &&
-        ['create', 'update'].includes(params.action) &&
-        params.args.data?.price
-      ) {
-        params.args.data.price *= 100;
-        return await next(params);
-      }
-      return next(params);
-    });
-
-    this.$use(async (params, next) => {
-      if (
-        params.model == 'product' &&
-        ['findFirst', 'findUnique'].includes(params.action) &&
-        (params.args.select?.price || params.args.include?.price)
-      ) {
-        const product = await next(params);
-        return product && {
-          ...product,
-          ...{ price: (product.price || 0) / 100 },
-        };
-      }
-      return next(params);
-    });
-
-    this.$use(async (params, next) => {
-      if (
-        params.model == 'product' &&
-        params.action == 'findMany' &&
-        (params.args.select?.price || params.args.include?.price)
-      ) {
-        const products = await next(params);
-        return products.map((product) => ({
-          ...product,
-          ...{ price: (product.price || 0) / 100 },
-        }));
-      }
-      return next(params);
-    });
-  }
-
-  private initProductProductOrderMiddlewares() {
-    /*
-      product.product_order.price
-    */
-    this.$use(async (params, next) => {
-      if (
-        params.model == 'product' &&
-        ['create', 'update'].includes(params.action) &&
-        params.args.data.product_order
-      ) {
-        for (let i = 0; i < params.args.data.product_order.length; i++) {
-          const pOrder = params.args.data.product_order[i];
-          if (pOrder.price) {
-            params.args.data.product_order[i].price *= 100;
-          }
-        }
-        return await next(params);
-      }
-      return next(params);
-    });
-
-    this.$use(async (params, next) => {
-      if (
-        params.model == 'product' &&
-        params.action == 'findMany' &&
-        (params.args.select?.product_order?.select?.price ||
-          params.args.select?.product_order?.include?.price ||
-          params.args.include?.product_order?.select?.price ||
-          params.args.include?.product_order?.include?.price)
-      ) {
-        const products = await next(params);
-        return products.map((product) => ({
-          ...product,
-          ...(product.product_order && {
-            product_order: product.product_order.map((pOrder) => {
-              return {
-                ...pOrder,
-                ...{ price: (pOrder.price ?? 0) / 100 },
-              };
-            }),
-          }),
-        }));
-      }
-      return next(params);
-    });
-  }
-
-  private initProductProductOrderAServiceMiddlewares() {
-    /*
-      product.product_order.aservice.price
-    */
-    this.$use(async (params, next) => {
-      if (
-        params.model == 'product' &&
-        ['create', 'update'].includes(params.action) &&
-        params.args.data.product_order
-      ) {
-        for (let i = 0; i < params.args.data.product_order.length; i++) {
-          const pOrder = params.args.data.product_order[i];
-          for (let j = 0; j < pOrder?.aservice.length; j++) {
-            const service = pOrder.aservice[j];
-            if (service.price) {
-              params.args.data.product_order[i].aservice[j].price *= 100;
-            }
-          }
-        }
-        return await next(params);
-      }
-      return next(params);
-    });
-
-    this.$use(async (params, next) => {
-      if (
-        params.model == 'product' &&
-        params.action == 'findMany' &&
-        (params.args.select?.product_order?.select?.aservice?.select?.price ||
-          params.args.select?.product_order?.select?.aservice?.include?.price ||
-          params.args.select?.product_order?.include?.aservice?.select?.price ||
-          params.args.select?.product_order?.include?.aservice?.include
-            ?.price ||
-          params.args.include?.product_order?.select?.aservice?.select?.price ||
-          params.args.include?.product_order?.select?.aservice?.include
-            ?.price ||
-          params.args.include?.product_order?.include?.aservice?.select
-            ?.price ||
-          params.args.include?.product_order?.include?.aservice?.include?.price)
-      ) {
-        const products = await next(params);
-        return products.map((product) => ({
-          ...product,
-          ...(product.product_order && {
-            product_order: product.product_order.map((pOrder) => ({
-              ...pOrder,
-              ...(pOrder.aservice && {
-                aservice: pOrder.aservice.map((service) => ({
-                  ...service,
-                  ...{ price: (service.price ?? 0) / 100 },
-                })),
-              }),
-            })),
-          }),
-        }));
-      }
-      return next(params);
-    });
-  }
-
-  private initAOrderProductOrderMiddlewares() {
-    /**
-     * aorder.product_order.price
-     */
-    this.$use(async (params, next) => {
-      if (
-        params.model == 'aorder' &&
-        params.action == 'findMany' &&
-        (params.args.select?.product_order?.select?.price ||
-          params.args.select?.product_order?.include?.price ||
-          params.args.include?.product_order?.select?.price ||
-          params.args.include?.product_order?.include?.price)
-      ) {
-        const aorders = await next(params);
-        return aorders.map((aorder) => ({
-          ...aorder,
-          ...(aorder.product_order && {
-            product_order: aorder.product_order.map((pOrder) => {
-              return {
-                ...pOrder,
-                ...{ price: (pOrder.price ?? 0) / 100 },
-              };
-            }),
-          }),
-        }));
-      }
-      return next(params);
-    });
-  }
-
-  private initAOrderProductOrderProductMiddlewares() {
-    /*
-      aorder.product_order.product.price
-    */
-    this.$use(async (params, next) => {
-      if (
-        params.model == 'aorder' &&
-        params.action == 'findMany' &&
-        (params.args.select?.product_order?.select?.product?.select?.price ||
-          params.args.select?.product_order?.select?.product?.include?.price ||
-          params.args.select?.product_order?.include?.product?.select?.price ||
-          params.args.select?.product_order?.include?.product?.include?.price ||
-          params.args.include?.product_order?.select?.product?.select?.price ||
-          params.args.include?.product_order?.select?.product?.include?.price ||
-          params.args.include?.product_order?.include?.product?.select?.price ||
-          params.args.include?.product_order?.include?.product?.include?.price)
-      ) {
-        const aorders = await next(params);
-        return aorders.map((aorder) => ({
-          ...aorder,
-          ...(aorder.product_order && {
-            product_order: aorder.product_order.map((pOrder) => {
-              return {
-                ...pOrder,
-                ...(pOrder.product && {
-                  product: {
-                    ...pOrder.product,
-                    ...{ price: (pOrder.product.price ?? 0) / 100 },
-                  },
-                }),
-              };
-            }),
-          }),
-        }));
-      }
-      return next(params);
-    });
-
-    this.$use(async (params, next) => {
-      if (
-        params.model == 'aorder' &&
-        ['findFirst', 'findUnique'].includes(params.action) &&
-        (params.args.select?.product_order?.select?.product?.select?.price ||
-          params.args.select?.product_order?.select?.product?.include?.price ||
-          params.args.select?.product_order?.include?.product?.select?.price ||
-          params.args.select?.product_order?.include?.product?.include?.price ||
-          params.args.include?.product_order?.select?.product?.select?.price ||
-          params.args.include?.product_order?.select?.product?.include?.price ||
-          params.args.include?.product_order?.include?.product?.select?.price ||
-          params.args.include?.product_order?.include?.product?.include?.price)
-      ) {
-        const aorder = await next(params);
-
-        return aorder && {
-          ...aorder,
-          ...(aorder.product_order && {
-            product_order: aorder.product_order.map((pOrder) => {
-              return {
-                ...pOrder,
-                ...(pOrder.product && {
-                  product: {
-                    ...pOrder.product,
-                    ...{ price: (pOrder.product.price ?? 0) / 100 },
-                  },
-                }),
-              };
-            }),
-          }),
-        };
-      }
-      return next(params);
-    });
-  }
-
   constructor() {
     super();
     // TODO: prisma middleware for updateAt
@@ -271,11 +13,72 @@ export class PrismaService extends PrismaClient {
       return Number(this);
     };
 
-    this.initProductMiddlewares();
-    this.initProductProductOrderMiddlewares();
-    this.initProductProductOrderAServiceMiddlewares();
-    this.initAOrderProductOrderMiddlewares();
-    this.initAOrderProductOrderProductMiddlewares();
+    this.initPriceMiddleware();
+  }
+
+  private initPriceMiddleware() {
+    this.$use(async (params, next) => {
+      if (
+        [
+          'create',
+          'createMany',
+          'update',
+          'updateMany',
+          'upsert'
+        ].includes(params.action)
+      ) {
+        params.args.data = this.multiplyPriceBy100(params.args.data);
+        return next(params);
+      }
+
+      if (
+        [
+          'find',
+          'findMany',
+          'findFirst',
+          'findFirstOrThrow',
+          'findUnique',
+          'findUniqueOrThrow',
+        ].includes(params.action)
+      ) {
+        const result = await next(params);
+        return this.dividePriceBy100(result);
+      }
+
+      return next(params);
+    });
+  }
+
+  private multiplyPriceBy100<T extends { [key: string]: any }>(obj: T): T {
+    for (const key in obj) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        const value = obj[key];
+        if (key === 'price' && Number.isFinite(value)) {
+          obj[key] = (value * 100) as T[Extract<keyof T, string>];
+        } else if (typeof value === 'object') {
+          obj[key] = this.multiplyPriceBy100(value);
+        }
+      }
+    }
+    return obj;
+  }
+
+  private dividePriceBy100<T extends { [key: string]: any }>(obj: T): T {
+    for (const key in obj) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        const value = obj[key];
+        if (key === 'price') {
+          if (Number.isFinite(value)) {
+            obj[key] = (value / 100) as T[Extract<keyof T, string>];
+          } else {
+            obj[key] = 0 as T[Extract<keyof T, string>];
+          }
+        } else if (typeof value === 'object') {
+          obj[key] = this.dividePriceBy100(value);
+        }
+      }
+    }
+    return obj;
   }
 
   async enableShutdownHooks(app: INestApplication) {
