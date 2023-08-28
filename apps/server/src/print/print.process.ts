@@ -1,7 +1,7 @@
 import * as bwipjs from 'bwip-js';
 
 export class PrintProcess {
-  protected cleanString(text) {
+  protected cleanString(text = '') {
     const utf8 = {
       '/[áàâãªä]/u': 'a',
       '/[ÁÀÂÃÄ]/u': 'A',
