@@ -133,7 +133,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
                   <TextField
                     type="number"
                     placeholder="1"
-                    defaultValue={product.stock.toString()}
+                    defaultValue={product.product_order.quantity.toString()}
                     onChange={(e) => handleProductPropertyChange(
                       product,
                       'quantity',
