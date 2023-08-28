@@ -65,7 +65,7 @@ function Row({
           <TextField
             type="number"
             placeholder="1"
-            defaultValue={product.stock.toString()}
+            defaultValue={product.product_order.quantity.toString()}
             onChange={(e) => onProductPropertyChange(
               product,
               'quantity',

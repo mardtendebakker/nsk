@@ -34,6 +34,7 @@ export interface Service {
 export interface ProductOrder {
   id:number,
   price:number,
+  quantity: number
 }
 
 export interface ProductListItem {
