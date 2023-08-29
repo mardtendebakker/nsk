@@ -1,8 +1,11 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsString } from "class-validator";
-import { EmailOrUsernameDto } from "./email-or-username.dto";
 
-export class ConfirmRegistrationRequestDto extends EmailOrUsernameDto {
+export class ConfirmRegistrationRequestDto {
+  @ApiProperty()
+  @IsString()
+  email: string;
+
   @ApiProperty()
   @IsString()
   code: string;

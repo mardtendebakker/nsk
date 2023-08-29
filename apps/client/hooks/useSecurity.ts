@@ -145,7 +145,7 @@ const useSecurity = (): {
     confirmAccount: async ({ code }) => {
       securityStore.emit(CONFIRM_ACCOUNT_REQUEST);
       try {
-        await confirmAccountCall({ body: { code, emailOrUsername: state.user.username } });
+        await confirmAccountCall({ body: { code, email: state.user.email } });
         securityStore.emit(CONFIRM_ACCOUNT_REQUEST_SUCCEEDED);
       } catch (e) {
         securityStore.emit(CONFIRM_ACCOUNT_REQUEST_FAILED);

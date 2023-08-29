@@ -103,13 +103,13 @@ export class AuthService {
   }
 
   confirmRegistration(confirmationRegistrationRequest: ConfirmRegistrationRequestDto) {
-    const { emailOrUsername, code } = confirmationRegistrationRequest;
-    if (!emailOrUsername.toLowerCase().endsWith("@copiatek.nl")) {
+    const { email, code } = confirmationRegistrationRequest;
+    if (!email.toLowerCase().endsWith("@copiatek.nl")) {
       throw new UnprocessableEntityException('to activate your user, please contact copiatek.nl');
     }
     
     const userData = {
-      Username: emailOrUsername,
+      Username: email,
       Pool: this.userPool,
     };
     
