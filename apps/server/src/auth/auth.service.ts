@@ -102,14 +102,15 @@ export class AuthService {
     });
   }
 
-  confirmRegistration(confirmationRegistrationRequest: ConfirmRegistrationRequestDto) {
+  async confirmRegistration(confirmationRegistrationRequest: ConfirmRegistrationRequestDto) {
     const { email, code } = confirmationRegistrationRequest;
     if (!email.toLowerCase().endsWith("@copiatek.nl")) {
       throw new UnprocessableEntityException('to activate your user, please contact copiatek.nl');
     }
-    
+
+    const username = await this.adminUserService.findUsernameByEmail({ email });
     const userData = {
-      Username: email,
+      Username: username,
       Pool: this.userPool,
     };
     
