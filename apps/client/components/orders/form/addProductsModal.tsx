@@ -141,7 +141,7 @@ export default function AddProductsModal({
               setPage(1);
             }}
             rowsPerPage={rowsPerPage}
-            disabled
+            disableSelection={(product: ProductListItem) => product.sale <= 0}
           />
           <input type="submit" style={{ display: 'none' }} />
         </form>
