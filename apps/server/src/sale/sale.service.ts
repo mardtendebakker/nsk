@@ -27,12 +27,18 @@ export class SaleService extends AOrderService {
   async addProducts(id: number, productIds: number[]) {
     const products = await this.aProductService.findAll({
       where: { id: { in: productIds } },
-      excludeByOrderDiscr: this.type,
+      excludeByOrderId: id,
     });
 
     if (!this.areProductIdsEqual(productIds, products.data.map(p => p.id))) {
       throw new UnprocessableEntityException(
-        'One or more product IDs already exist in one or more sales order'
+        'One or more products already exist in this order'
+      );
+    }
+
+    if (products.data.some(p => p.sale <= 0)) {
+      throw new UnprocessableEntityException(
+        'One or more products are not saleable'
       );
     }
 

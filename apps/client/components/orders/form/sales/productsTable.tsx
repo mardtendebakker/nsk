@@ -32,7 +32,7 @@ function Row({ product, onProductPropertyChange, onDeleteProduct }: {
         {product.retailPrice}
       </TableCell>
       <TableCell>
-        {product.sale}
+        {product.stock}
       </TableCell>
       <TableCell>
         <TextField
@@ -163,7 +163,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
               {trans('retailUnitPrice')}
             </TableCell>
             <TableCell>
-              {trans('sealableQuantity')}
+              {trans('stockQuantity')}
             </TableCell>
             <TableCell>
               {trans('unitPrice')}
@@ -187,7 +187,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
           ))}
         </TableBody>
       </PaginatedTable>
-      {showProductsModal && (<AddProductsModal onProductsAdded={handleProductsAdded} onClose={() => setShowProductsModal(false)} />)}
+      {showProductsModal && (<AddProductsModal orderId={orderId} onProductsAdded={handleProductsAdded} onClose={() => setShowProductsModal(false)} />)}
     </>
   );
 }

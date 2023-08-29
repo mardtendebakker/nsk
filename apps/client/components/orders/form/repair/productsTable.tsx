@@ -50,6 +50,9 @@ function Row({
           {product.retailPrice}
         </TableCell>
         <TableCell>
+          {product.stock}
+        </TableCell>
+        <TableCell>
           <TextField
             type="number"
             placeholder="1"
@@ -274,6 +277,9 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
               {trans('retailUnitPrice')}
             </TableCell>
             <TableCell>
+              {trans('stockQuantity')}
+            </TableCell>
+            <TableCell>
               {trans('unitPrice')}
             </TableCell>
             <TableCell>
@@ -298,7 +304,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
           ))}
         </TableBody>
       </PaginatedTable>
-      {showProductsModal && (<AddProductsModal onProductsAdded={handleProductsAdded} onClose={() => setShowProductsModal(false)} />)}
+      {showProductsModal && (<AddProductsModal orderId={orderId} onProductsAdded={handleProductsAdded} onClose={() => setShowProductsModal(false)} />)}
     </>
   );
 }

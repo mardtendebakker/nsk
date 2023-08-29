@@ -34,6 +34,7 @@ function Row(
     onDelete,
     onSplit,
     disabled,
+    disableSelection,
   }
   : {
     product: ProductListItem,
@@ -45,6 +46,7 @@ function Row(
     onDelete?: (id: number) => void,
     onSplit?: (product: ProductListItem) => void,
     disabled: boolean,
+    disableSelection: (product: ProductListItem) => boolean
   },
 ) {
   const { trans } = useTranslation();
@@ -62,6 +64,7 @@ function Row(
             checked={Boolean(checkedProductIds.find((id) => id === product.id))}
             sx={{ mr: '1.5rem' }}
             onChange={(_, checked) => onCheck({ id: product.id, checked })}
+            disabled={disabled || disableSelection(product)}
           />
           {product.sku}
         </TableCell>
@@ -163,6 +166,7 @@ export default function List({
   onSplit,
   disabled,
   checkedProductIds,
+  disableSelection,
 }: {
   products: ProductListItem[],
   count: number,
@@ -175,7 +179,8 @@ export default function List({
   onDelete?: (id: number) => void,
   onSplit?: (product: ProductListItem) => void,
   disabled?: boolean,
-  checkedProductIds: number[]
+  checkedProductIds: number[],
+  disableSelection?: (product: ProductListItem) => boolean
 }) {
   const { trans } = useTranslation();
   const [shownProductTasks, setShownProductTasks] = useState<number | undefined>();
@@ -258,6 +263,7 @@ export default function List({
               onDelete={onDelete}
               onEdit={onEdit}
               onSplit={onSplit}
+              disableSelection={disableSelection}
             />
           ),
         )}
@@ -267,6 +273,6 @@ export default function List({
 }
 
 List.defaultProps = {
-  onDelete: undefined, onSplit: undefined, onEdit: undefined, disabled: false,
+  onDelete: undefined, onSplit: undefined, onEdit: undefined, disabled: false, disableSelection: () => false,
 };
 Row.defaultProps = { onDelete: undefined, onSplit: undefined, onEdit: undefined };
