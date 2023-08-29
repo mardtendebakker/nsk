@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import _ from 'lodash';
 import { Box } from '@mui/material';
 import ConfirmationDialog from '../../confirmationDialog';
-import { STOCK_PRODUCTS_PATH } from '../../../utils/axios';
+import { APRODUCT_PATH } from '../../../utils/axios';
 import useTranslation from '../../../hooks/useTranslation';
 import List from '../../stock/list/list';
 import useAxios from '../../../hooks/useAxios';
@@ -23,6 +23,7 @@ function refreshList({
   rowsPerPage = 10,
   formRepresentation,
   call,
+  orderId,
 }) {
   const paramsToSend = {};
 
@@ -39,7 +40,7 @@ function refreshList({
 
   call({
     params: {
-      excludeByOrderDiscr: 's',
+      excludeByOrderId: orderId,
       take: rowsPerPage,
       skip: (page - 1) * rowsPerPage,
       ...paramsToSend,
@@ -48,9 +49,11 @@ function refreshList({
 }
 
 export default function AddProductsModal({
+  orderId,
   onClose,
   onProductsAdded,
 }:{
+  orderId: string,
   onClose: ()=>void,
   onProductsAdded: (productIds: number[]) => void,
 }) {
@@ -62,7 +65,7 @@ export default function AddProductsModal({
 
   const { data: { data = [], count = 0 } = {}, call, performing } = useAxios(
     'get',
-    STOCK_PRODUCTS_PATH.replace(':id', ''),
+    APRODUCT_PATH.replace(':id', ''),
     {
       withProgressBar: true,
     },
@@ -90,6 +93,7 @@ export default function AddProductsModal({
       rowsPerPage,
       formRepresentation,
       call,
+      orderId,
     });
   }, [
     page,
@@ -137,6 +141,7 @@ export default function AddProductsModal({
               setPage(1);
             }}
             rowsPerPage={rowsPerPage}
+            disabled
           />
           <input type="submit" style={{ display: 'none' }} />
         </form>

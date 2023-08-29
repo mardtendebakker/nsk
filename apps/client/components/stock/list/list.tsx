@@ -62,6 +62,7 @@ function Row(
             checked={Boolean(checkedProductIds.find((id) => id === product.id))}
             sx={{ mr: '1.5rem' }}
             onChange={(_, checked) => onCheck({ id: product.id, checked })}
+            disabled={disabled && !product.sale}
           />
           {product.sku}
         </TableCell>

@@ -15,7 +15,7 @@ import TextField from '../../../memoizedInput/textField';
 import CreateModal from '../../../stock/createModal';
 import useTranslation from '../../../../hooks/useTranslation';
 import useAxios from '../../../../hooks/useAxios';
-import { APRODUCT_PATH, STOCK_PRODUCTS_PATH } from '../../../../utils/axios';
+import { APRODUCT_PATH } from '../../../../utils/axios';
 import EditModal from '../../../stock/editModal';
 import Edit from '../../../button/edit';
 import PaginatedTable from '../../../paginatedTable';
@@ -41,7 +41,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
 
   const handleProductPropertyChange = useCallback(debounce((product: ProductListItem, property: string, value) => {
     callPut({
-      path: STOCK_PRODUCTS_PATH.replace(':id', product.id.toString()),
+      path: APRODUCT_PATH.replace(':id', product.id.toString()),
       body: {
         product_orders: [
           {

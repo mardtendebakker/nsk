@@ -162,8 +162,13 @@ export class StockService {
     // this where is the top line logic transformation
     const productwhere: Prisma.productWhereInput = {
       ...query.where,
-      ...(query.orderId && { product_order: { some: { order_id: query.orderId } } }),
-      ...(query.excludeByOrderDiscr && { product_order: { none: { aorder: { discr: query.excludeByOrderDiscr} } } }),
+      ...(query.orderId || query.excludeByOrderId || query.excludeByOrderDiscr) && {
+        product_order: {
+          ...(query.orderId && { some: { order_id: query.orderId } }),
+          ...(query.excludeByOrderId && { none: { order_id: query.excludeByOrderId } }),
+          ...(query.excludeByOrderDiscr && { none: { aorder: { discr: query.excludeByOrderDiscr } } }),
+        },
+      },
       ...(query.productType && { type_id: query.productType }),
       ...(query.location && { location_id: query.location }),
       ...(query.productStatus && {product_status: { id: query.productStatus }} || {

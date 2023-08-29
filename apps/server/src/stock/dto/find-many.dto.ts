@@ -34,6 +34,12 @@ export class FindManyDto extends BaseFindManyDto {
   @ValidateIf((_, value) => value !== undefined)
   orderId?: number;
 
+  @ApiPropertyOptional()
+  @IsInt()
+  @Type(() => Number)
+  @ValidateIf((_, value) => value !== undefined)
+  excludeByOrderId?: number;
+
   @ApiPropertyOptional({
     enum: AOrderDiscrimination,
     enumName: 'AOrderDiscrimination'
