@@ -15,7 +15,7 @@ function RepairOrders() {
       </Head>
       <Header />
       <Box sx={{ mt: '1.5rem' }} />
-      <List />
+      <List type="repair" />
     </DashboardLayout>
   );
 }

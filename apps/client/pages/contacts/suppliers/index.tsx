@@ -15,7 +15,7 @@ function ContactsSuppliers() {
       </Head>
       <Header />
       <Box sx={{ mt: '1.5rem' }} />
-      <List />
+      <List type="supplier" />
     </DashboardLayout>
   );
 }

@@ -11,7 +11,7 @@ function Products() {
       <Head>
         <title>{trans('stock')}</title>
       </Head>
-      <List />
+      <List type="product" />
     </DashboardLayout>
   );
 }

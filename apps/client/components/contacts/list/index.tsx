@@ -1,7 +1,7 @@
 import { Box, Card } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { CONTACTS_CUSTOMERS, CONTACTS_CUSTOMERS_EDIT, CONTACTS_SUPPLIERS_EDIT } from '../../../utils/routes';
+import { CONTACTS_CUSTOMERS_EDIT, CONTACTS_SUPPLIERS_EDIT } from '../../../utils/routes';
 import List from './list';
 import Filter from './filter';
 import useAxios from '../../../hooks/useAxios';
@@ -66,7 +66,7 @@ function refreshList({
   }).finally(() => pushURLParams({ params, router }));
 }
 
-export default function ListContainer() {
+export default function ListContainer({ type }: { type: 'customer' | 'supplier' }) {
   const router = useRouter();
   const [page, setPage] = useState<number>(parseInt(getQueryParam('page', '1'), 10));
   const [rowsPerPage, setRowsPerPage] = useState<number>(parseInt(getQueryParam('rowsPerPage', '10'), 10));
@@ -78,7 +78,7 @@ export default function ListContainer() {
     list: getQueryParam('list'),
   }));
 
-  const ajaxPath = router.pathname == CONTACTS_CUSTOMERS ? CUSTOMERS_PATH : SUPPLIERS_PATH;
+  const ajaxPath = type == 'customer' ? CUSTOMERS_PATH : SUPPLIERS_PATH;
 
   const { data: { data = [], count = 0 } = {}, call, performing } = useAxios(
     'get',
@@ -147,13 +147,14 @@ export default function ListContainer() {
       />
       <Box sx={{ m: '1rem' }} />
       <List
+        type={type}
         disabled={disabled()}
         companies={data}
         count={count}
         page={page}
         onDelete={handleDelete}
         onEdit={(id) => router.push(
-          (router.pathname == CONTACTS_CUSTOMERS ? CONTACTS_CUSTOMERS_EDIT : CONTACTS_SUPPLIERS_EDIT).replace('[id]', id.toString()),
+          (type === 'customer' ? CONTACTS_CUSTOMERS_EDIT : CONTACTS_SUPPLIERS_EDIT).replace('[id]', id.toString()),
         )}
         onPageChange={(newPage) => {
           setPage(newPage);

@@ -16,9 +16,7 @@ import {
   AxiosResponse,
   REPAIR_ORDERS_PATH,
 } from '../../../utils/axios';
-import {
-  ORDERS_PURCHASES, ORDERS_PURCHASES_EDIT, ORDERS_REPAIRS, ORDERS_REPAIRS_EDIT, ORDERS_SALES, ORDERS_SALES_EDIT,
-} from '../../../utils/routes';
+import { ORDERS_PURCHASES_EDIT, ORDERS_REPAIRS_EDIT, ORDERS_SALES_EDIT } from '../../../utils/routes';
 import Filter from './filter';
 import Action from './action';
 import ConfirmationDialog from '../../confirmationDialog';
@@ -109,24 +107,24 @@ function refreshList({
   }).finally(() => pushURLParams({ params, router }));
 }
 const AJAX_PATHS = {
-  [ORDERS_PURCHASES]: PURCHASE_ORDERS_PATH,
-  [ORDERS_SALES]: SALES_ORDERS_PATH,
-  [ORDERS_REPAIRS]: REPAIR_ORDERS_PATH,
+  purchase: PURCHASE_ORDERS_PATH,
+  sales: SALES_ORDERS_PATH,
+  repair: REPAIR_ORDERS_PATH,
 };
 
 const AJAX_BULK_PRINT_PATHS = {
-  [ORDERS_PURCHASES]: BULK_PRINT_PURCHASES_PATH,
-  [ORDERS_SALES]: BULK_PRINT_SALES_PATH,
-  [ORDERS_REPAIRS]: BULK_PRINT_REPAIRS_PATH,
+  purchase: BULK_PRINT_PURCHASES_PATH,
+  sales: BULK_PRINT_SALES_PATH,
+  repair: BULK_PRINT_REPAIRS_PATH,
 };
 
 const EDIT_PATHS = {
-  [ORDERS_PURCHASES]: ORDERS_PURCHASES_EDIT,
-  [ORDERS_SALES]: ORDERS_SALES_EDIT,
-  [ORDERS_REPAIRS]: ORDERS_REPAIRS_EDIT,
+  purchase: ORDERS_PURCHASES_EDIT,
+  sales: ORDERS_SALES_EDIT,
+  repair: ORDERS_REPAIRS_EDIT,
 };
 
-export default function ListContainer() {
+export default function ListContainer({ type }: { type: 'purchase' | 'sales' | 'repair' }) {
   const { trans } = useTranslation();
   const [showChangeStatusModal, setShowChangeStatusModal] = useState(false);
   const [changeStatusValue, setChangeStatusValue] = useState<number | undefined>();
@@ -135,11 +133,11 @@ export default function ListContainer() {
   const [rowsPerPage, setRowsPerPage] = useState<number>(parseInt(getQueryParam('rowsPerPage', '10'), 10));
   const [checkedOrderIds, setCheckedOrderIds] = useState<number[]>([]);
 
-  const ajaxPath = AJAX_PATHS[router.pathname] || PURCHASE_ORDERS_PATH;
+  const ajaxPath = AJAX_PATHS[type] || PURCHASE_ORDERS_PATH;
 
-  const ajaxBulkPrintPath = AJAX_BULK_PRINT_PATHS[router.pathname] || BULK_PRINT_PURCHASES_PATH;
+  const ajaxBulkPrintPath = AJAX_BULK_PRINT_PATHS[type] || BULK_PRINT_PURCHASES_PATH;
 
-  const editPath = EDIT_PATHS[router.pathname] || ORDERS_PURCHASES_EDIT;
+  const editPath = EDIT_PATHS[type] || ORDERS_PURCHASES_EDIT;
 
   const { formRepresentation, setValue, setData } = useForm(initFormState({
     search: getQueryParam('search'),
@@ -271,6 +269,7 @@ export default function ListContainer() {
       />
       <Box sx={{ m: '.5rem' }} />
       <List
+        type={type}
         disabled={disabled()}
         orders={data}
         count={count}

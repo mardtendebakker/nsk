@@ -130,6 +130,7 @@ export default function AddProductsModal({
           />
           <Box sx={{ m: '.5rem' }} />
           <List
+            type="product"
             products={data}
             count={count}
             page={page}

@@ -18,53 +18,6 @@ import PaginatedTable from '../../../paginatedTable';
 import TableCell from '../../../tableCell';
 import AddProductsModal from '../addProductsModal';
 
-function Row({ product, onProductPropertyChange, onDeleteProduct }: {
-  product: ProductListItem,
-  onProductPropertyChange: (payload: object, property: string, value) => void,
-  onDeleteProduct: (id: number) => void
-}) {
-  return (
-    <TableRow>
-      <TableCell>{product.sku}</TableCell>
-      <TableCell>{product.name}</TableCell>
-      <TableCell>{product.type}</TableCell>
-      <TableCell>
-        {product.retailPrice}
-      </TableCell>
-      <TableCell>
-        {product.stock}
-      </TableCell>
-      <TableCell>
-        <TextField
-          type="number"
-          placeholder="1"
-          defaultValue={product.product_order.price.toString()}
-          onChange={(e) => onProductPropertyChange(
-            product,
-            'price',
-            e.target.value,
-          )}
-        />
-      </TableCell>
-      <TableCell>
-        <TextField
-          type="number"
-          placeholder="1"
-          defaultValue={product.product_order.quantity.toString()}
-          onChange={(e) => onProductPropertyChange(
-            product,
-            'quantity',
-            e.target.value,
-          )}
-        />
-      </TableCell>
-      <TableCell>
-        <Delete onDelete={() => onDeleteProduct(product.id)} tooltip />
-      </TableCell>
-    </TableRow>
-  );
-}
-
 export default function ProductsTable({ orderId }:{ orderId: string }) {
   const { trans } = useTranslation();
   const [showProductsModal, setShowProductsModal] = useState(false);
@@ -178,12 +131,44 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
         </TableHead>
         <TableBody>
           {data.map((product: ProductListItem) => (
-            <Row
-              onDeleteProduct={handleDeleteProduct}
-              onProductPropertyChange={handleProductPropertyChange}
-              key={product.id}
-              product={product}
-            />
+            <TableRow>
+              <TableCell>{product.sku}</TableCell>
+              <TableCell>{product.name}</TableCell>
+              <TableCell>{product.type}</TableCell>
+              <TableCell>
+                {product.retailPrice}
+              </TableCell>
+              <TableCell>
+                {product.stock}
+              </TableCell>
+              <TableCell>
+                <TextField
+                  type="number"
+                  placeholder="1"
+                  defaultValue={product.product_order.price.toString()}
+                  onChange={(e) => handleProductPropertyChange(
+                    product,
+                    'price',
+                    e.target.value,
+                  )}
+                />
+              </TableCell>
+              <TableCell>
+                <TextField
+                  type="number"
+                  placeholder="1"
+                  defaultValue={product.product_order.quantity.toString()}
+                  onChange={(e) => handleProductPropertyChange(
+                    product,
+                    'quantity',
+                    e.target.value,
+                  )}
+                />
+              </TableCell>
+              <TableCell>
+                <Delete onDelete={() => handleDeleteProduct(product.id)} tooltip />
+              </TableCell>
+            </TableRow>
           ))}
         </TableBody>
       </PaginatedTable>

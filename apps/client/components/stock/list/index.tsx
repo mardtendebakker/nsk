@@ -7,7 +7,6 @@ import {
 } from '../../../utils/axios';
 import List from './list';
 import useAxios from '../../../hooks/useAxios';
-import { STOCKS_PRODUCTS } from '../../../utils/routes';
 import useForm, { FieldPayload } from '../../../hooks/useForm';
 import Filter from './filter';
 import Action from './action';
@@ -88,7 +87,7 @@ function refreshList({
   }).finally(() => pushURLParams({ params, router }));
 }
 
-export default function ListContainer() {
+export default function ListContainer({ type } : { type: 'product' | 'repair' }) {
   const { trans } = useTranslation();
   const router = useRouter();
   const [showChangeLocationModal, setShowChangeLocationModal] = useState(false);
@@ -99,9 +98,7 @@ export default function ListContainer() {
   const [checkedProductIds, setCheckedProductIds] = useState<number[]>([]);
   const [splitProduct, setSplitProduct] = useState<ProductListItem | undefined>();
 
-  const ajaxPath = router.pathname == STOCKS_PRODUCTS
-    ? STOCK_PRODUCTS_PATH
-    : STOCK_REPAIRS_PATH;
+  const ajaxPath = type === 'product' ? STOCK_PRODUCTS_PATH : STOCK_REPAIRS_PATH;
 
   const { formRepresentation, setValue, setData } = useForm(initFormState({
     search: getQueryParam('search'),
@@ -260,6 +257,7 @@ export default function ListContainer() {
         />
         <Box sx={{ m: '.5rem' }} />
         <List
+          type={type}
           disabled={disabled()}
           products={data}
           count={count}
