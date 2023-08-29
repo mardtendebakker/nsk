@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
   AuthenticationDetails,
@@ -102,10 +102,15 @@ export class AuthService {
     });
   }
 
-  confirmRegistration(confirmationRegistrationRequest: ConfirmRegistrationRequestDto) {
-    const { emailOrUsername, code } = confirmationRegistrationRequest;
+  async confirmRegistration(confirmationRegistrationRequest: ConfirmRegistrationRequestDto) {
+    const { email, code } = confirmationRegistrationRequest;
+    if (!email.toLowerCase().endsWith("@copiatek.nl")) {
+      throw new UnprocessableEntityException('to activate your user, please contact copiatek.nl');
+    }
+
+    const username = await this.adminUserService.findUsernameByEmail({ email });
     const userData = {
-      Username: emailOrUsername,
+      Username: username,
       Pool: this.userPool,
     };
     
