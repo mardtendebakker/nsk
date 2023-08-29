@@ -1,35 +1,41 @@
 import * as bwipjs from 'bwip-js';
 
 export class PrintProcess {
-  protected cleanString(text = '') {
-    const utf8 = {
-      '/[áàâãªä]/u': 'a',
-      '/[ÁÀÂÃÄ]/u': 'A',
-      '/[ÍÌÎÏ]/u': 'I',
-      '/[íìîï]/u': 'i',
-      '/[éèêë]/u': 'e',
-      '/[ÉÈÊË]/u': 'E',
-      '/[óòôõºö]/u': 'o',
-      '/[ÓÒÔÕÖ]/u': 'O',
-      '/[úùûü]/u': 'u',
-      '/[ÚÙÛÜ]/u': 'U',
-      '/ç/': 'c',
-      '/Ç/': 'C',
-      '/ñ/': 'n',
-      '/Ñ/': 'N',
-      '/–/': '-', // UTF-8 hyphen to "normal" hyphen
-      '/[’‘‹›‚]/u': ' ', // Literally a single quote
-      '/[“”«»„]/u': ' ', // Double quote
-      '/ /': ' ', // nonbreaking space (equiv. to 0x160)
-      '/&/': 'en',
+  protected cleanString(text = ''): string {
+    const utf8: Record<string, string> = {
+      '[áàâãªä]': 'a',
+      '[ÁÀÂÃÄ]': 'A',
+      '[ÍÌÎÏ]': 'I',
+      '[íìîï]': 'i',
+      '[éèêë]': 'e',
+      '[ÉÈÊË]': 'E',
+      '[óòôõºö]': 'o',
+      '[ÓÒÔÕÖ]': 'O',
+      '[úùûü]': 'u',
+      '[ÚÙÛÜ]': 'U',
+      'ç': 'c',
+      'Ç': 'C',
+      'ñ': 'n',
+      'Ñ': 'N',
+      '–': '-', // UTF-8 hyphen to "normal" hyphen
+      '[’‘‹›‚]': ' ', // Literally a single quote
+      '[“”«»„]': ' ', // Double quote
+      ' ': ' ', // nonbreaking space (equiv. to 0x160)
+      '&': 'en',
+      '\'': ' ',
+      '"': ' ',
     };
-    
-    let replacedText: string;
-    for (const key in utf8) {
-      replacedText = text.replace(new RegExp(key), utf8[key]);
+  
+    const patternArray = Object.keys(utf8);
+    const replacementArray = Object.values(utf8);
+  
+    let cleanedText = text;
+    for (let i = 0; i < patternArray.length; i++) {
+      const pattern = new RegExp(patternArray[i], 'gu');
+      cleanedText = cleanedText.replace(pattern, replacementArray[i]);
     }
-
-    return replacedText;
+  
+    return cleanedText;
   }
 
   async getBarcode(params: {
