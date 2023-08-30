@@ -6,7 +6,7 @@ import useTranslation from '../../hooks/useTranslation';
 import { ADMIN_USERS, ADMIN_SETTINGS, ADMIN_SETTINGS_LOCATIONS } from '../../utils/routes';
 import Create from './users/create';
 
-export default function Navigation() {
+export default function Header() {
   const router = useRouter();
   const { trans } = useTranslation();
   const [showUserForm, setShowUserForm] = useState(false);

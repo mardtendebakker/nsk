@@ -10,7 +10,7 @@ import {
 } from '../../utils/routes';
 import useResponsive from '../../hooks/useResponsive';
 
-export default function Navigation() {
+export default function Header() {
   const router = useRouter();
   const { trans } = useTranslation();
   const isDesktop = useResponsive('up', 'md');

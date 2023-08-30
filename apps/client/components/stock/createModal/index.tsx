@@ -79,7 +79,7 @@ const formState = initFormState();
 export default function CreateModal({ onClose, onSubmit, additionalPayloadData }: {
   onClose: () => void,
   onSubmit: () => void,
-  additionalPayloadData: { [key: string]: string }
+  additionalPayloadData?: { [key: string]: string }
 }) {
   const { trans } = useTranslation();
   const { formRepresentation, setValue, validate } = useForm(formState);
@@ -117,3 +117,5 @@ export default function CreateModal({ onClose, onSubmit, additionalPayloadData }
     />
   );
 }
+
+CreateModal.defaultProps = { additionalPayloadData: {} };

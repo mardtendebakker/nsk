@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import useTranslation from '../../hooks/useTranslation';
 import { BULK_EMAIL_NEW } from '../../utils/routes';
 
-export default function Navigation() {
+export default function Header() {
   const router = useRouter();
   const { trans } = useTranslation();
 

@@ -20,6 +20,7 @@ import { ProductListItem } from '../../../utils/axios/models/product';
 import SplitModal, { SplitData } from './splitModal';
 import { getQueryParam } from '../../../utils/location';
 import { openBlob } from '../../../utils/blob';
+import Header from '../header';
 
 function initFormState(
   {
@@ -235,83 +236,86 @@ export default function ListContainer() {
   };
 
   return (
-    <Card sx={{ overflowX: 'auto', p: '1.5rem' }}>
-      <Filter
-        onReset={handleReset}
-        disabled={disabled()}
-        formRepresentation={formRepresentation}
-        setValue={(payload: FieldPayload) => {
-          setValue(payload);
-          setPage(1);
-        }}
-      />
-      <Box sx={{ m: '.5rem' }} />
-      <Action
-        disabled={disabled()}
-        allChecked={(_.intersectionWith(checkedProductIds, data, (productId: number, product: ProductListItem) => productId === product.id).length === data.length) && data.length != 0}
-        checkedProductsCount={checkedProductIds.length}
-        onAllCheck={handleAllChecked}
-        onChangeLocation={() => setShowChangeLocationModal(true)}
-        onPrint={handlePrintBarcodes}
-        onPrintChecklist={handlePrintChecklists}
-      />
-      <Box sx={{ m: '.5rem' }} />
-      <List
-        disabled={disabled()}
-        products={data}
-        count={count}
-        page={page}
-        onCheck={handleRowChecked}
-        checkedProductIds={checkedProductIds}
-        onPageChange={setPage}
-        onSplit={(product: ProductListItem) => setSplitProduct(product)}
-        onRowsPerPageChange={(newRowsPerPage) => {
-          setRowsPerPage(newRowsPerPage);
-          setPage(1);
-        }}
-        rowsPerPage={rowsPerPage}
-        onEdit={(id) => setEditProductId(id)}
-        onDelete={handleDelete}
-      />
-      {editProductId && (
+    <>
+      <Header onProductCreated={defaultRefreshList} />
+      <Card sx={{ overflowX: 'auto', p: '1.5rem', mt: '1.5rem' }}>
+        <Filter
+          onReset={handleReset}
+          disabled={disabled()}
+          formRepresentation={formRepresentation}
+          setValue={(payload: FieldPayload) => {
+            setValue(payload);
+            setPage(1);
+          }}
+        />
+        <Box sx={{ m: '.5rem' }} />
+        <Action
+          disabled={disabled()}
+          allChecked={(_.intersectionWith(checkedProductIds, data, (productId: number, product: ProductListItem) => productId === product.id).length === data.length) && data.length != 0}
+          checkedProductsCount={checkedProductIds.length}
+          onAllCheck={handleAllChecked}
+          onChangeLocation={() => setShowChangeLocationModal(true)}
+          onPrint={handlePrintBarcodes}
+          onPrintChecklist={handlePrintChecklists}
+        />
+        <Box sx={{ m: '.5rem' }} />
+        <List
+          disabled={disabled()}
+          products={data}
+          count={count}
+          page={page}
+          onCheck={handleRowChecked}
+          checkedProductIds={checkedProductIds}
+          onPageChange={setPage}
+          onSplit={(product: ProductListItem) => setSplitProduct(product)}
+          onRowsPerPageChange={(newRowsPerPage) => {
+            setRowsPerPage(newRowsPerPage);
+            setPage(1);
+          }}
+          rowsPerPage={rowsPerPage}
+          onEdit={(id) => setEditProductId(id)}
+          onDelete={handleDelete}
+        />
+        {editProductId && (
         <EditModal
           onClose={() => setEditProductId(undefined)}
           onSubmit={() => setEditProductId(undefined)}
           id={editProductId.toString()}
         />
-      )}
-      {showChangeLocationModal && (
-      <ConfirmationDialog
-        disabled={!changeLocationValue}
-        title={<>{trans('changeLocation')}</>}
-        content={(
-          <form onSubmit={(e) => { e.preventDefault(); handlePatchLocation(); }}>
-            {trans('changeLocationContent')}
-            <Box sx={{ pb: '2rem' }} />
-            <DataSourcePicker
-              url={LOCATIONS_PATH.replace(':id', '')}
-              searchKey="name"
-              disabled={disabled()}
-              fullWidth
-              placeholder={trans('selectLocation')}
-              onChange={(value: { id: number }) => setChangeLocationValue(value?.id)}
-              value={changeLocationValue?.toString()}
-            />
-            <input type="submit" style={{ display: 'none' }} />
-          </form>
         )}
-        onConfirm={handlePatchLocation}
-        onClose={() => setShowChangeLocationModal(false)}
-        confirmButtonText={trans('save')}
-      />
-      )}
-      {splitProduct && (
-      <SplitModal
-        product={splitProduct}
-        onClose={() => setSplitProduct(undefined)}
-        onConfirm={handleSplit}
-      />
-      )}
-    </Card>
+        {showChangeLocationModal && (
+        <ConfirmationDialog
+          disabled={!changeLocationValue}
+          title={<>{trans('changeLocation')}</>}
+          content={(
+            <form onSubmit={(e) => { e.preventDefault(); handlePatchLocation(); }}>
+              {trans('changeLocationContent')}
+              <Box sx={{ pb: '2rem' }} />
+              <DataSourcePicker
+                url={LOCATIONS_PATH.replace(':id', '')}
+                searchKey="name"
+                disabled={disabled()}
+                fullWidth
+                placeholder={trans('selectLocation')}
+                onChange={(value: { id: number }) => setChangeLocationValue(value?.id)}
+                value={changeLocationValue?.toString()}
+              />
+              <input type="submit" style={{ display: 'none' }} />
+            </form>
+        )}
+          onConfirm={handlePatchLocation}
+          onClose={() => setShowChangeLocationModal(false)}
+          confirmButtonText={trans('save')}
+        />
+        )}
+        {splitProduct && (
+        <SplitModal
+          product={splitProduct}
+          onClose={() => setSplitProduct(undefined)}
+          onConfirm={handleSplit}
+        />
+        )}
+      </Card>
+    </>
   );
 }
