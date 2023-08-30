@@ -20,6 +20,9 @@ import { FILE_VALUE_DELIMITER } from "./types/file-value-delimiter.const";
 import { ProductAttributeFile } from "./types/product-attribute-file";
 import { PutObjectWithoutKeyInput } from "../file/dto/put-object-without-key-input.dto";
 import { PrintService } from "../print/print.service";
+import { ProductOrderRelation } from "./types/product-order-relation";
+import { ProductOrderDto } from "./dto/find-one-product-response.dto";
+import { AOrderPayload } from "../aorder/aorder.process";
 
 export class StockService {
   constructor(
@@ -29,7 +32,316 @@ export class StockService {
     protected readonly printService: PrintService,
   ) {}
 
-  processSelect(select: Prisma.productSelect = {}): Prisma.productSelect {
+  async processStock(product: ProductRelation, orderId?: number): Promise<ProcessedStock> {
+    const productSelect = this.processSelect();
+    const processProdcut = new StockProcess(this.repository, product, productSelect, orderId);
+    return processProdcut.run();
+  }
+
+  async findAll(query: FindManyDto) {
+    // const isStock = product_status ? product_status?.is_stock ?? true : true;
+    // this where is the top line logic transformation
+    const productwhere: Prisma.productWhereInput = {
+      ...query.where,
+      ...(query.orderId || query.excludeByOrderId || query.excludeByOrderDiscr) && {
+        product_order: {
+          ...(query.orderId && { some: { order_id: query.orderId } }),
+          ...(query.excludeByOrderId && { none: { order_id: query.excludeByOrderId } }),
+          ...(query.excludeByOrderDiscr && { none: { aorder: { discr: query.excludeByOrderDiscr } } }),
+        },
+      },
+      ...(query.productType && { type_id: query.productType }),
+      ...(query.location && { location_id: query.location }),
+      ...(query.productStatus && {product_status: { id: query.productStatus }} || {
+        OR: [{
+          status_id: null,
+        }, {
+          product_status: {
+            OR: [{
+              is_stock: null
+            }, {
+              is_stock: true
+            }]
+          }
+        }],
+      }),
+      ...(query.search && {
+        OR: [{name: {contains: query.search}}, {sku: { contains: query.search}}]
+      }),
+    }
+
+    const productOrderBy: Prisma.productOrderByWithRelationInput[] = query.orderBy || [
+      {
+        id: 'desc',
+      },
+    ];
+
+    const result = await this.repository.findAll({
+      ...query,
+      select: this.processSelect(query.select),
+      where: productwhere,
+      orderBy: productOrderBy,
+    });
+
+    const data = await Promise.all(result.data.map(async product => {
+      return this.processStock(product, query.orderId);
+    }));
+
+    return {
+      count: result.count,
+      data: data//.filter(d => d.stock != 0) // TODO: the out of stock products should be removed by cron job not here by filtering
+    };
+  }
+
+  async findOneRelation(id: number) {
+    return this.repository.findOneSelect({
+      id,
+      select: this.processSelect(),
+    });
+  }
+
+  async findOneCustomSelect(id: number): Promise<FindOneCustomResponse> {
+    const locationSelect: Prisma.locationSelect = {
+      id: true,
+      name: true,
+    };
+    const productStatusSelect: Prisma.product_statusSelect = {
+      id: true,
+      name: true,
+    }
+    const productTypeSelect: Prisma.product_typeSelect = {
+      id: true,
+      name: true,
+    };
+    const acompanySelect: Prisma.acompanySelect = {
+      name: true,
+    };
+    const orderStatus: Prisma.order_statusSelect = {
+      name: true,
+    };
+    const aorderSelect: Prisma.aorderSelect = {
+      id: true,
+      order_nr: true,
+      order_date: true,
+      discr: true,
+      acompany_aorder_customer_idToacompany: {
+        select: acompanySelect,
+      },
+      acompany_aorder_supplier_idToacompany: {
+        select: acompanySelect,
+      },
+      order_status: {
+        select: orderStatus,
+      },
+    };
+    const productOrderSelect: Prisma.product_orderSelect = {
+      quantity: true,
+      price: true,
+      aorder: {
+        select: aorderSelect,
+      },
+    };
+    const afileSelect: Prisma.afileSelect = {
+      id: true,
+      unique_server_filename: true,
+      original_client_filename: true,
+      discr: true,
+    };
+    const attributeSelect: Prisma.attributeSelect = {
+      type: true,
+    };
+    const productAttributeSelect: Prisma.product_attributeSelect = {
+      quantity: true,
+      value: true,
+      attribute_id: true,
+      attribute: {
+        select: attributeSelect
+      }
+    };
+    const productSelect: Prisma.productSelect = {
+      id: true,
+      sku: true,
+      name: true,
+      price: true,
+      created_at: true,
+      updated_at: true,
+      description: true,
+      location: {
+        select: locationSelect
+      },
+      product_status: {
+        select: productStatusSelect,
+      },
+      product_type: {
+        select: productTypeSelect,
+      },
+      product_order: {
+        select: productOrderSelect,
+      },
+      afile: {
+        select: afileSelect,
+      },
+      product_attribute_product_attribute_product_idToproduct: {
+        select: productAttributeSelect
+      },
+    };
+
+    const stock = await this.repository.findOneSelect({ id, select: productSelect });
+    if (!stock) {
+      throw new NotFoundException('Stock not found');
+    }
+
+    const {
+      product_order,
+      product_attribute_product_attribute_product_idToproduct,
+      ...rest
+    } = stock;
+
+    return {
+      ...rest,
+      product_orders: product_order.map(this.productOrderProcess),
+      product_attributes: product_attribute_product_attribute_product_idToproduct,
+    };
+  }
+
+  async create(body: CreateBodyStockDto, files?: ProductAttributeFile[]) {
+    const {
+      product_attributes,
+      product_orders,
+      ...rest
+    } = body;
+    
+    const createInput: Prisma.productUncheckedCreateInput = {
+      ...rest,
+      ...(!rest.sku && { sku: Math.floor(Date.now() / 1000).toString() }),
+      ...(product_orders?.length > 0 && {
+        product_order: {
+          connectOrCreate: product_orders.map(product_order => ({
+            where: {
+              id: product_order.order_id
+            },
+            create: { ...product_order }
+          })),
+        },
+      })
+    };
+
+    const stock = await this.repository.create(createInput);
+
+    if (product_attributes?.length) {
+      return this.updateOne(
+        stock.id,
+        { type_id: body.type_id, product_attributes },
+        files
+      );
+    }
+
+    return stock;
+  }
+
+  async updateOne(id: number, body: UpdateBodyStockDto, files?: ProductAttributeFile[]) {
+    if (!Number.isFinite(id)) {
+      throw new Error("product id is required");
+    }
+
+    const stock = await this.findOneCustomSelect(id);
+
+    const { product_attributes, product_orders, ...restBody } = body;
+    if (product_attributes && !Number.isFinite(body.type_id)) {
+      throw new Error("missing type_id in body for updating product_attributes");
+    }
+    
+    const typeHasChanged = Number.isFinite(body.type_id) && body.type_id !== stock.product_type?.id;
+
+    // check if the product type has changed
+    if (typeHasChanged) {
+      // generate a new set of product attributes
+
+      await this.generateAllAttributes(id, body.type_id);
+    }
+
+    const productAttributeUpdate = await this.processProductAttributeUpdate(
+      id,
+      body.type_id,
+      product_attributes,
+      typeHasChanged,
+      files,
+    );
+    
+    return this.repository.updateOne({
+      id,
+      data: {
+        ...restBody,
+        ...(product_orders?.length && {
+          product_order: {
+            update: product_orders.map(product_order => ({
+              where: {
+                id: product_order.id
+              },
+              data: { ...product_order },
+            })),
+          },
+        }),
+        ...(productAttributeUpdate && {
+          product_attribute_product_attribute_product_idToproduct: productAttributeUpdate
+        }),
+      },
+    });
+  }
+
+  async deleteOne(id: number) {
+    return this.repository.deleteOne(id);
+  }
+
+  async updateMany(updateManyProductDto: UpdateManyProductDto) {
+    return this.repository.updateMany({
+      data: updateManyProductDto.product,
+      where: {
+        id: { in: updateManyProductDto.ids }
+      }
+    });
+  }
+
+  async getAllTypes() {
+
+    return this.repository.getAllTypes();
+  }
+
+  async printBarcodes(ids: number[]) {
+    const products = await this.repository.findBy({
+      where: { id: { in: ids } },
+      select: {
+        sku: true,
+      },
+    });
+  
+    const skusToPrint = products.map(product => product.sku);
+    return this.printService.printBarcodes(skusToPrint);
+  }
+
+  async printChecklists(ids: number[]) {
+    const { data } = await this.findAll({ where: { id: { in: ids } } });
+    return this.printService.printChecklists(data);
+  }
+
+  private productOrderProcess(productOrder: ProductOrderRelation): ProductOrderDto {
+    const order = <AOrderPayload>productOrder?.aorder;
+    return {
+      quantity: productOrder?.quantity,
+      order: order && {
+        id: order.id,
+        order_nr: order.order_nr,
+        order_date: order.order_date,
+        discr: order.discr,
+        company:
+          order?.acompany_aorder_customer_idToacompany?.name ||
+          order?.acompany_aorder_supplier_idToacompany?.name,
+        status: order?.order_status?.name,
+      },
+    };
+  }
+
+  private processSelect(select: Prisma.productSelect = {}): Prisma.productSelect {
     const productTypeTaskSelect: Prisma.product_type_taskSelect = {
       task: true,
     };
@@ -151,296 +463,51 @@ export class StockService {
     };
   }
 
-  processStock(product: ProductRelation, orderId?: number): Promise<ProcessedStock> {
-    const productSelect = this.processSelect();
-    const processProdcut = new StockProcess(this.repository, product, productSelect, orderId);
-    return processProdcut.run();
-  }
+  private addAttributeRelationToProductAttributes(
+    productId: number,
+    attributes: attribute[],
+    productAttributes: ProductAttributeDto[],
+    inclusive = false,
+  ): ProductAttributeIncludeAttribute[] {
 
-  async findAll(query: FindManyDto) {
-    // const isStock = product_status ? product_status?.is_stock ?? true : true;
-    // this where is the top line logic transformation
-    const productwhere: Prisma.productWhereInput = {
-      ...query.where,
-      ...(query.orderId || query.excludeByOrderId || query.excludeByOrderDiscr) && {
-        product_order: {
-          ...(query.orderId && { some: { order_id: query.orderId } }),
-          ...(query.excludeByOrderId && { none: { order_id: query.excludeByOrderId } }),
-          ...(query.excludeByOrderDiscr && { none: { aorder: { discr: query.excludeByOrderDiscr } } }),
-        },
-      },
-      ...(query.productType && { type_id: query.productType }),
-      ...(query.location && { location_id: query.location }),
-      ...(query.productStatus && {product_status: { id: query.productStatus }} || {
-        OR: [{
-          status_id: null,
-        }, {
-          product_status: {
-            OR: [{
-              is_stock: null
-            }, {
-              is_stock: true
-            }]
-          }
-        }],
-      }),
-      ...(query.search && {
-        OR: [{name: {contains: query.search}}, {sku: { contains: query.search}}]
-      }),
-    }
+    const newProductAttributesIncludeAttribute:
+      ProductAttributeIncludeAttribute[] = [];
 
-    const productOrderBy: Prisma.productOrderByWithRelationInput[] = query.orderBy || [
-      {
-        id: 'desc',
-      },
-    ];
+    for (let i = 0; i < attributes.length; i++) {
+      const attribute = attributes[i];
+      let attributeFound = false;
 
-    const result = await this.repository.findAll({
-      ...query,
-      select: this.processSelect(query.select),
-      where: productwhere,
-      orderBy: productOrderBy,
-    });
+      for (let j = 0; j < productAttributes.length; j++) {
+        const productAttribute = productAttributes[j];
 
-    const data = await Promise.all(result.data.map(async product => {
-      return this.processStock(product, query.orderId);
-    }));
+        if (attribute.id === productAttribute.attribute_id) {
 
-    return {
-      count: result.count,
-      data: data//.filter(d => d.stock != 0) // TODO: the out of stock products should be removed by cron job not here by filtering
-    };
-  }
+          newProductAttributesIncludeAttribute.push({
+            product_id: productId,
+            ...productAttribute,
+            attribute: attribute,
+          });
 
-  findOneRelation(id: number) {
-    return this.repository.findOneSelect({
-      id,
-      select: this.processSelect(),
-    });
-  }
+          attributeFound = true;
+          break;
 
-  async findOneCustomSelect(id: number): Promise<FindOneCustomResponse> {
-    const locationSelect: Prisma.locationSelect = {
-      id: true,
-      name: true,
-    };
-    const productStatusSelect: Prisma.product_statusSelect = {
-      id: true,
-      name: true,
-    }
-    const productTypeSelect: Prisma.product_typeSelect = {
-      id: true,
-      name: true,
-    };
-    const acompanySelect: Prisma.acompanySelect = {
-      name: true,
-    };
-    const orderStatus: Prisma.order_statusSelect = {
-      name: true,
-    };
-    const aorderSelect: Prisma.aorderSelect = {
-      id: true,
-      order_nr: true,
-      order_date: true,
-      acompany_aorder_customer_idToacompany: {
-        select: acompanySelect,
-      },
-      acompany_aorder_supplier_idToacompany: {
-        select: acompanySelect,
-      },
-      order_status: {
-        select: orderStatus,
-      },
-    };
-    const productOrderSelect: Prisma.product_orderSelect = {
-      quantity: true,
-      price: true,
-      aorder: {
-        select: aorderSelect,
-      },
-    };
-    const afileSelect: Prisma.afileSelect = {
-      id: true,
-      unique_server_filename: true,
-      original_client_filename: true,
-      discr: true,
-    };
-    const attributeSelect: Prisma.attributeSelect = {
-      type: true,
-    };
-    const productAttributeSelect: Prisma.product_attributeSelect = {
-      quantity: true,
-      value: true,
-      attribute_id: true,
-      attribute: {
-        select: attributeSelect
+        }
       }
-    };
-    const productSelect: Prisma.productSelect = {
-      id: true,
-      sku: true,
-      name: true,
-      price: true,
-      created_at: true,
-      updated_at: true,
-      description: true,
-      location: {
-        select: locationSelect
-      },
-      product_status: {
-        select: productStatusSelect,
-      },
-      product_type: {
-        select: productTypeSelect,
-      },
-      product_order: {
-        select: productOrderSelect,
-      },
-      afile: {
-        select: afileSelect,
-      },
-      product_attribute_product_attribute_product_idToproduct: {
-        select: productAttributeSelect
-      },
-    };
 
-    const stock = await this.repository.findOneSelect({ id, select: productSelect });
-    if (!stock) {
-      throw new NotFoundException('Stock not found');
-    }
-
-    const {
-      product_attribute_product_attribute_product_idToproduct,
-      ...rest
-    } = stock;
-
-    return {
-      ...rest,
-      product_attributes: product_attribute_product_attribute_product_idToproduct,
-    };
-  }
-
-  async create(body: CreateBodyStockDto, files?: ProductAttributeFile[]) {
-    const {
-      product_attributes,
-      product_orders,
-      ...rest
-    } = body;
-    
-    const createInput: Prisma.productUncheckedCreateInput = {
-      ...rest,
-      ...(!rest.sku && { sku: Math.floor(Date.now() / 1000).toString() }),
-      ...(product_orders?.length > 0 && {
-        product_order: {
-          connectOrCreate: product_orders.map(product_order => ({
-            where: {
-              id: product_order.order_id
-            },
-            create: { ...product_order }
-          })),
-        },
-      })
-    };
-
-    const stock = await this.repository.create(createInput);
-
-    if (product_attributes?.length) {
-      return this.updateOne(
-        stock.id,
-        { type_id: body.type_id, product_attributes },
-        files
-      );
-    }
-
-    return stock;
-  }
-
-  async updateOne(id: number, body: UpdateBodyStockDto, files?: ProductAttributeFile[]) {
-    if (!Number.isFinite(id)) {
-      throw new Error("product id is required");
-    }
-
-    const stock = await this.findOneCustomSelect(id);
-    if (!Number.isFinite(stock?.id)) {
-      throw new Error("stock not found");
-    }
-
-    const { product_attributes, product_orders, ...restBody } = body;
-    if (product_attributes && !Number.isFinite(body.type_id)) {
-      throw new Error("missing type_id in body for updating product_attributes");
-    }
-    
-    const typeHasChanged = Number.isFinite(body.type_id) && body.type_id !== stock.product_type?.id;
-
-    // check if the product type has changed
-    if (typeHasChanged) {
-      // generate a new set of product attributes
-
-      await this.generateAllAttributes(id, body.type_id);
-    }
-
-    const productAttributeUpdate = await this.processProductAttributeUpdate(
-      id,
-      body.type_id,
-      product_attributes,
-      typeHasChanged,
-      files,
-    );
-    
-    return this.repository.updateOne({
-      id,
-      data: {
-        ...restBody,
-        ...(product_orders?.length && {
-          product_order: {
-            update: product_orders.map(product_order => ({
-              where: {
-                id: product_order.id
-              },
-              data: { ...product_order },
-            })),
-          },
-        }),
-        ...(productAttributeUpdate && {
-          product_attribute_product_attribute_product_idToproduct: productAttributeUpdate
-        }),
-      },
-    });
-  }
-
-  async deleteOne(id: number) {
-    return this.repository.deleteOne(id);
-  }
-
-  async updateMany(updateManyProductDto: UpdateManyProductDto) {
-    return this.repository.updateMany({
-      data: updateManyProductDto.product,
-      where: {
-        id: { in: updateManyProductDto.ids }
+      if (!attributeFound && inclusive) {
+        newProductAttributesIncludeAttribute.push({
+          product_id: productId,
+          attribute_id: attribute.id,
+          quantity: null,
+          value: '',
+          external_id: null,
+          value_product_id: null,
+          attribute: attribute,
+        });
       }
-    });
-  }
+    }
 
-  async getAllTypes() {
-
-    return this.repository.getAllTypes();
-  }
-
-  async printBarcodes(ids: number[]) {
-    const products = await this.repository.findBy({
-      where: { id: { in: ids } },
-      select: {
-        sku: true,
-      },
-    });
-  
-    const skusToPrint = products.map(product => product.sku);
-    return this.printService.printBarcodes(skusToPrint);
-  }
-
-  async printChecklists(ids: number[]) {
-    const { data } = await this.findAll({ where: { id: { in: ids } } });
-    return this.printService.printChecklists(data);
+    return newProductAttributesIncludeAttribute;
   }
 
   private async generateAllAttributes(productId: number, typeId: number) {
@@ -509,53 +576,6 @@ export class StockService {
     }
 
     return fileIdsUploaded;
-  }
-
-  private addAttributeRelationToProductAttributes(
-    productId: number,
-    attributes: attribute[],
-    productAttributes: ProductAttributeDto[],
-    inclusive = false,
-  ): ProductAttributeIncludeAttribute[] {
-
-    const newProductAttributesIncludeAttribute:
-      ProductAttributeIncludeAttribute[] = [];
-
-    for (let i = 0; i < attributes.length; i++) {
-      const attribute = attributes[i];
-      let attributeFound = false;
-
-      for (let j = 0; j < productAttributes.length; j++) {
-        const productAttribute = productAttributes[j];
-
-        if (attribute.id === productAttribute.attribute_id) {
-
-          newProductAttributesIncludeAttribute.push({
-            product_id: productId,
-            ...productAttribute,
-            attribute: attribute,
-          });
-
-          attributeFound = true;
-          break;
-
-        }
-      }
-
-      if (!attributeFound && inclusive) {
-        newProductAttributesIncludeAttribute.push({
-          product_id: productId,
-          attribute_id: attribute.id,
-          quantity: null,
-          value: '',
-          external_id: null,
-          value_product_id: null,
-          attribute: attribute,
-        });
-      }
-    }
-
-    return newProductAttributesIncludeAttribute;
   }
 
   private async processProductAttributeUpdate(
