@@ -1,12 +1,21 @@
 import { AFile } from './aFile';
 
+interface Order {
+  id: number,
+  discr: 'p' | 's',
+  company: string,
+  order_date: string,
+  order_nr: string,
+  status: string
+}
+
 export interface Product {
   id: number,
   name:string,
   price:number,
   sku:string,
   location:{ id: number, name: string },
-  product_order:{ id: number, name: string },
+  product_orders: { order: Order }[],
   product_status:{ id: number, name: string },
   product_type:{ id: number, name: string },
   description:string,
