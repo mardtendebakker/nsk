@@ -11,7 +11,7 @@ function RepairServices() {
       <Head>
         <title>{trans('stock')}</title>
       </Head>
-      <List />
+      <List type="repair" />
     </DashboardLayout>
   );
 }

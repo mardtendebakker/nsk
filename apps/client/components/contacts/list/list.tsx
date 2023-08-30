@@ -6,14 +6,13 @@ import {
   TableRow,
   TablePagination,
 } from '@mui/material';
-import { useRouter } from 'next/router';
 import Edit from '../../button/edit';
-import { CONTACTS_CUSTOMERS } from '../../../utils/routes';
 import Delete from '../../button/delete';
 import useTranslation from '../../../hooks/useTranslation';
 import { CompanyListItem } from '../../../utils/axios/models/company';
 
 export default function List({
+  type,
   companies = [],
   onDelete,
   onEdit,
@@ -24,6 +23,7 @@ export default function List({
   rowsPerPage,
   disabled,
 }: {
+  type: 'customer' | 'supplier',
   companies: CompanyListItem[],
   onDelete: (id: number)=>void,
   onEdit: (id: number)=>void,
@@ -35,7 +35,6 @@ export default function List({
   disabled: boolean
 }) {
   const { trans } = useTranslation();
-  const router = useRouter();
 
   return (
     <>
@@ -52,7 +51,7 @@ export default function List({
               {trans('email')}
             </TableCell>
             <TableCell>
-              {trans(router.pathname == CONTACTS_CUSTOMERS ? 'isPartner' : 'partner')}
+              {trans(type === 'customer' ? 'isPartner' : 'partner')}
             </TableCell>
             <TableCell>
               {trans('actions')}
@@ -78,7 +77,7 @@ export default function List({
                 {company.email || '--'}
               </TableCell>
               <TableCell>
-                {router.pathname == CONTACTS_CUSTOMERS
+                {type === 'customer'
                   ? (Boolean(company.is_partner) || '--')
                   : company.partner?.name || '--'}
               </TableCell>

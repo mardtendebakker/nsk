@@ -297,7 +297,6 @@ const translation = {
   new: 'Nieuw',
   products: 'Producten',
   salesOrderNumber: 'Ordernummer',
-  delivered: 'Afgeleverd',
   repairServices: 'Reparatie diensten',
   serialNumber: 'Serienummer',
   'productName/type': 'Productnaam / Type',

@@ -5,9 +5,7 @@ import {
   Checkbox,
   Box,
 } from '@mui/material';
-import { useRouter } from 'next/router';
 import { format } from 'date-fns';
-import { ORDERS_PURCHASES } from '../../../utils/routes';
 import useTranslation from '../../../hooks/useTranslation';
 import { OrderListItem } from '../../../utils/axios/models/order';
 import PaginatedTable from '../../paginatedTable';
@@ -16,6 +14,7 @@ import Delete from '../../button/delete';
 import Edit from '../../button/edit';
 
 export default function List({
+  type,
   orders = [],
   checkedOrderIds = [],
   count,
@@ -28,6 +27,7 @@ export default function List({
   onEdit,
   onDelete,
 }: {
+  type: 'purchase' | 'sales' | 'repair',
   orders: OrderListItem[],
   checkedOrderIds: number[],
   count: number,
@@ -41,7 +41,6 @@ export default function List({
   onDelete: (id: number) => void,
 }) {
   const { trans } = useTranslation();
-  const router = useRouter();
 
   return (
     <PaginatedTable
@@ -63,7 +62,7 @@ export default function List({
             (yy/mm/dd)
           </TableCell>
           <TableCell>
-            {trans(router.pathname == ORDERS_PURCHASES ? 'supplier' : 'customer')}
+            {trans(type === 'purchase' ? 'supplier' : 'customer')}
           </TableCell>
           <TableCell>
             {trans('partner')}
@@ -98,12 +97,12 @@ export default function List({
               {format(new Date(order.order_date), 'yyyy/MM/dd')}
             </TableCell>
             <TableCell>
-              {(router.pathname == ORDERS_PURCHASES
+              {(type === 'purchase'
                 ? order.acompany_aorder_supplier_idToacompany?.name
                 : order.acompany_aorder_customer_idToacompany?.name) || '--'}
             </TableCell>
             <TableCell>
-              {(router.pathname == ORDERS_PURCHASES
+              {(type === 'purchase'
                 ? order.acompany_aorder_supplier_idToacompany?.acompany?.name
                 : order.acompany_aorder_customer_idToacompany?.acompany?.name) || '--'}
             </TableCell>
