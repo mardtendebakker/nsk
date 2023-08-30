@@ -7,8 +7,6 @@ import { ProductTypeEntity } from "../entities/product-type.entity";
 import { ProductEntity } from "../entities/product.entity";
 import { ProductAttributeEntity } from "../entities/product-attribute.entity";
 import { AOrderEntity } from "../../aorder/entities/aorder.entity";
-import { OrderStatusEntity } from "../../order-status/entities/order-status.entity";
-import { CompanyEntity } from "../../company/entities/company.entity";
 
 class ProductAttributeDto extends PickType(ProductAttributeEntity, [
   'quantity',
@@ -16,33 +14,24 @@ class ProductAttributeDto extends PickType(ProductAttributeEntity, [
   'value'
 ]) {}
 
-class OrderStatusDto extends PickType(OrderStatusEntity, [
-  'name'
-]) {}
-
-class CompanyDto extends PickType(CompanyEntity, ['name']) {}
-
 class AOrderDto extends PickType(AOrderEntity, [
   'id',
   'order_nr',
-  'order_date'
+  'order_date',
+  'discr'
 ]) {
   @ApiProperty()
-  acompany_aorder_customer_idToacompany: CompanyDto;
+  company: string;
 
   @ApiProperty()
-  acompany_aorder_supplier_idToacompany: CompanyDto;
-
-  @ApiProperty()
-  order_status: OrderStatusDto;
+  status: string;
 }
 
-class ProductOrderDto extends PickType(ProductOrderEntity, [
+export class ProductOrderDto extends PickType(ProductOrderEntity, [
   'quantity',
-  'price'
 ]) {
   @ApiPropertyOptional()
-  aorder?: AOrderDto[]
+  order?: AOrderDto;
 }
 
 class FileDto extends PickType(FileEntity, [
@@ -80,7 +69,7 @@ export class FindOneProductResponeDto extends PickType(ProductEntity, [
   product_attributes: ProductAttributeDto[];
   
   @ApiPropertyOptional()
-  product_order?: ProductOrderDto[];
+  product_orders?: ProductOrderDto[];
   
   @ApiProperty()
   afile: FileDto[];
