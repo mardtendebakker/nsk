@@ -1,4 +1,13 @@
 import { useEffect, useMemo } from 'react';
+import {
+  IconButton,
+  Table, TableBody, TableCell, TableHead, TableRow, Tooltip,
+} from '@mui/material';
+import { format } from 'date-fns';
+import Visibility from '@mui/icons-material/VisibilityOutlined';
+import InputOutlinedIcon from '@mui/icons-material/InputOutlined';
+import OutputOutlinedIcon from '@mui/icons-material/OutputOutlined';
+import { useRouter } from 'next/router';
 import useTranslation from '../../../hooks/useTranslation';
 import useForm from '../../../hooks/useForm';
 import Form from '../form';
@@ -7,20 +16,24 @@ import useAxios from '../../../hooks/useAxios';
 import { formRepresentationToBody, initFormState } from '../createModal';
 import ConfirmationDialog from '../../confirmationDialog';
 import { openBlob } from '../../../utils/blob';
+import { Product } from '../../../utils/axios/models/product';
+import { ORDERS_PURCHASES_EDIT, ORDERS_REPAIRS_EDIT, ORDERS_SALES_EDIT } from '../../../utils/routes';
 
 export default function EditModal(
   {
     onClose,
     onSubmit,
     id,
+    type,
   }: {
     onClose: () => void,
     onSubmit: () => void,
     id: string,
+    type?: 'product' | 'repair',
   },
 ) {
   const { trans } = useTranslation();
-
+  const router = useRouter();
   const { data: product, call, performing } = useAxios('get', STOCK_PRODUCTS_PATH.replace(':id', id));
   const { call: bulkPrint, performing: performingBulkPrintBarcodes } = useAxios('get', APRODUCT_BULK_PRINT_BARCODES);
   const { call: callPut, performing: performingPut } = useAxios('put', STOCK_PRODUCTS_PATH.replace(':id', id), { showSuccessMessage: true });
@@ -52,6 +65,16 @@ export default function EditModal(
       });
   };
 
+  const editOrderUrl = (order) => {
+    if (type === 'repair') {
+      return ORDERS_REPAIRS_EDIT.replace('[id]', order.id.toString());
+    }
+    if (order.discr === 'p') {
+      return ORDERS_PURCHASES_EDIT.replace('[id]', order.id.toString());
+    }
+    return ORDERS_SALES_EDIT.replace('[id]', order.id.toString());
+  };
+
   return (
     <ConfirmationDialog
       open
@@ -60,16 +83,91 @@ export default function EditModal(
       onConfirm={handleSave}
       disabled={!canSubmit()}
       content={(
-        <form onSubmit={(e) => { e.preventDefault(); handleSave(); }}>
-          <Form
-            setValue={setValue}
-            formRepresentation={formRepresentation}
-            disabled={!canSubmit()}
-            onPrintBarcode={handlePrintBarcode}
-          />
-          <input type="submit" style={{ display: 'none' }} />
-        </form>
+        <>
+          <form onSubmit={(e) => { e.preventDefault(); handleSave(); }}>
+            <Form
+              setValue={setValue}
+              formRepresentation={formRepresentation}
+              disabled={!canSubmit()}
+              onPrintBarcode={handlePrintBarcode}
+            />
+            <input type="submit" style={{ display: 'none' }} />
+          </form>
+          <Table size="small" sx={{ mt: '.5rem' }}>
+            <TableHead>
+              <TableRow>
+                <TableCell>
+                  {trans('orderNumber')}
+                </TableCell>
+                <TableCell>
+                  {trans('company')}
+                </TableCell>
+                <TableCell>
+                  {trans('orderDate')}
+                </TableCell>
+                <TableCell>
+                  {trans('status')}
+                </TableCell>
+                <TableCell>
+                  {trans('quantity')}
+                </TableCell>
+                <TableCell>
+                  {trans('actions')}
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {(product as Product)?.product_orders?.map(({ quantity, order }) => (
+                <TableRow key={order.id}>
+                  <TableCell>
+                    {order.discr == 'p' && (
+                      <InputOutlinedIcon sx={{
+                        color: (theme) => theme.palette.text.secondary,
+                        mr: '1.5rem',
+                        verticalAlign: 'middle',
+                      }}
+                      />
+                    )}
+                    {order.discr == 's' && (
+                      <OutputOutlinedIcon
+                        sx={{
+                          color: (theme) => theme.palette.text.secondary,
+                          mr: '1.5rem',
+                          verticalAlign: 'middle',
+                        }}
+                      />
+                    )}
+                    {order.order_nr}
+                  </TableCell>
+                  <TableCell>
+                    {order.company}
+                  </TableCell>
+                  <TableCell>
+                    {format(new Date(order.order_date), 'yyyy/MM/dd')}
+                  </TableCell>
+                  <TableCell>
+                    {order.status}
+                  </TableCell>
+                  <TableCell>
+                    {quantity}
+                  </TableCell>
+                  <TableCell>
+                    <Tooltip title={trans('showOrder')}>
+                      <IconButton onClick={() => router.push(editOrderUrl(order))}>
+                        <Visibility />
+                      </IconButton>
+                    </Tooltip>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </>
       )}
     />
   );
 }
+
+EditModal.defaultProps = {
+  type: 'product',
+};

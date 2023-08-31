@@ -279,6 +279,7 @@ export default function ListContainer({ type } : { type: 'product' | 'repair' })
           onClose={() => setEditProductId(undefined)}
           onSubmit={() => setEditProductId(undefined)}
           id={editProductId.toString()}
+          type={type}
         />
         )}
         {showChangeLocationModal && (
