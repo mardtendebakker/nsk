@@ -8,11 +8,67 @@ import {
 } from '@mui/material';
 import { format } from 'date-fns';
 import useTranslation from '../../../hooks/useTranslation';
-import { OrderListItem } from '../../../utils/axios/models/order';
+import { Company as CompanyModel, OrderListItem } from '../../../utils/axios/models/order';
 import PaginatedTable from '../../paginatedTable';
 import TableCell from '../../tableCell';
 import Delete from '../../button/delete';
 import Edit from '../../button/edit';
+
+function OrderNumber({ order }: { order: OrderListItem }) {
+  let productsTooltip = '';
+
+  for (let i = 0; i < 10; i++) {
+    const productOrder = order?.product_orders[i];
+    if (!productOrder) {
+      break;
+    }
+    productsTooltip += `${productOrder.quantity}x `;
+    productsTooltip += productOrder.product.name;
+    productsTooltip += '\n';
+  }
+
+  return (
+    <Tooltip title={productsTooltip ? (
+      <Box sx={{ whiteSpace: 'pre' }}>
+        {productsTooltip}
+      </Box>
+    ) : undefined}
+    >
+      <Box sx={{ textDecoration: productsTooltip ? 'underline' : undefined, display: 'inline' }}>
+        {order.order_nr}
+      </Box>
+    </Tooltip>
+  );
+}
+
+function Company({ company }: { company: CompanyModel }) {
+  let tooltip = '';
+
+  if (company.street) {
+    tooltip += `${company?.street} `;
+  }
+
+  if (company.zip) {
+    tooltip += `${company?.zip} `;
+  }
+
+  if (company.city) {
+    tooltip += company.city;
+  }
+
+  return (
+    <Tooltip title={tooltip ? (
+      <Box sx={{ whiteSpace: 'pre' }}>
+        {tooltip}
+      </Box>
+    ) : undefined}
+    >
+      <Box sx={{ textDecoration: tooltip ? 'underline' : undefined, display: 'inline' }}>
+        {company?.name || '--'}
+      </Box>
+    </Tooltip>
+  );
+}
 
 export default function List({
   type,
@@ -78,16 +134,7 @@ export default function List({
       </TableHead>
       <TableBody>
         {orders.map((order: OrderListItem) => {
-          let productsTooltip = '';
-
-          for (let i = 0; i < 10; i++) {
-            const product = order?.product_orders[i]?.product;
-            if (!product) {
-              break;
-            }
-            productsTooltip += product.name;
-            productsTooltip += '\n';
-          }
+          const company = type === 'purchase' ? order.acompany_aorder_supplier_idToacompany : order.acompany_aorder_customer_idToacompany;
 
           return (
             <TableRow
@@ -104,46 +151,33 @@ export default function List({
                   sx={{ mr: '1.5rem' }}
                   onChange={(_, checked) => { onCheck({ id: order.id, checked }); }}
                 />
-                <Tooltip title={productsTooltip ? (
-                  <Box sx={{ whiteSpace: 'pre' }}>
-                    {productsTooltip}
-                  </Box>
-                ) : undefined}
-                >
-                  <Box sx={{ textDecoration: productsTooltip ? 'underline' : undefined, display: 'inline' }}>
-                    {order.order_nr}
-                  </Box>
-                </Tooltip>
+                <OrderNumber order={order} />
               </TableCell>
               <TableCell>
                 {format(new Date(order.order_date), 'yyyy/MM/dd')}
               </TableCell>
               <TableCell>
-                {(type === 'purchase'
-                  ? order.acompany_aorder_supplier_idToacompany?.name
-                  : order.acompany_aorder_customer_idToacompany?.name) || '--'}
+                <Company company={company} />
               </TableCell>
               <TableCell>
-                {(type === 'purchase'
-                  ? order.acompany_aorder_supplier_idToacompany?.acompany?.name
-                  : order.acompany_aorder_customer_idToacompany?.acompany?.name) || '--'}
+                {company?.acompany?.name || '--'}
               </TableCell>
               <TableCell>
                 {order.order_status && (
-                <Box>
-                  <Box sx={{
-                    px: '1rem',
-                    py: '.5rem',
-                    bgcolor: `${order.order_status.color}25`,
-                    color: order.order_status.color,
-                    borderRadius: '.3rem',
-                    width: 'fit-content',
-                    fontWeight: (theme) => theme.typography.fontWeightMedium,
-                  }}
-                  >
-                    {order.order_status.name}
+                  <Box>
+                    <Box sx={{
+                      px: '1rem',
+                      py: '.5rem',
+                      bgcolor: `${order.order_status.color}25`,
+                      color: order.order_status.color,
+                      borderRadius: '.3rem',
+                      width: 'fit-content',
+                      fontWeight: (theme) => theme.typography.fontWeightMedium,
+                    }}
+                    >
+                      {order.order_status.name}
+                    </Box>
                   </Box>
-                </Box>
                 )}
               </TableCell>
               <TableCell>

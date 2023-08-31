@@ -1,12 +1,16 @@
 import { AFile } from './aFile';
 
 interface ProductOrder {
+  quantity: number,
   product: { name: string }
 }
 
 export interface Company {
   id:string,
   name:string,
+  city?: string,
+  street?: string,
+  zip?: string,
   acompany:{ id:string, name:string }
 }
 
