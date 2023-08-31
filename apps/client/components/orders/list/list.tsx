@@ -4,6 +4,7 @@ import {
   TableRow,
   Checkbox,
   Box,
+  Tooltip,
 } from '@mui/material';
 import { format } from 'date-fns';
 import useTranslation from '../../../hooks/useTranslation';
@@ -76,60 +77,82 @@ export default function List({
         </TableRow>
       </TableHead>
       <TableBody>
-        {orders.map((order: OrderListItem) => (
-          <TableRow
-            sx={{
-              height: 60,
-            }}
-            hover
-            key={order.id}
-          >
-            <TableCell>
-              <Checkbox
-                disabled={disabled}
-                checked={Boolean(checkedOrderIds.find((id) => id === order.id))}
-                sx={{ mr: '1.5rem' }}
-                onChange={(_, checked) => { onCheck({ id: order.id, checked }); }}
-              />
-              {order.order_nr}
-            </TableCell>
-            <TableCell>
-              {format(new Date(order.order_date), 'yyyy/MM/dd')}
-            </TableCell>
-            <TableCell>
-              {(type === 'purchase'
-                ? order.acompany_aorder_supplier_idToacompany?.name
-                : order.acompany_aorder_customer_idToacompany?.name) || '--'}
-            </TableCell>
-            <TableCell>
-              {(type === 'purchase'
-                ? order.acompany_aorder_supplier_idToacompany?.acompany?.name
-                : order.acompany_aorder_customer_idToacompany?.acompany?.name) || '--'}
-            </TableCell>
-            <TableCell>
-              {order.order_status && (
-              <Box>
-                <Box sx={{
-                  px: '1rem',
-                  py: '.5rem',
-                  bgcolor: `${order.order_status.color}25`,
-                  color: order.order_status.color,
-                  borderRadius: '.3rem',
-                  width: 'fit-content',
-                  fontWeight: (theme) => theme.typography.fontWeightMedium,
-                }}
+        {orders.map((order: OrderListItem) => {
+          let productsTooltip = '';
+
+          for (let i = 0; i < 10; i++) {
+            const product = order?.product_orders[i]?.product;
+            if (!product) {
+              break;
+            }
+            productsTooltip += product.name;
+            productsTooltip += '\n';
+          }
+
+          return (
+            <TableRow
+              sx={{
+                height: 60,
+              }}
+              hover
+              key={order.id}
+            >
+              <TableCell>
+                <Checkbox
+                  disabled={disabled}
+                  checked={Boolean(checkedOrderIds.find((id) => id === order.id))}
+                  sx={{ mr: '1.5rem' }}
+                  onChange={(_, checked) => { onCheck({ id: order.id, checked }); }}
+                />
+                <Tooltip title={productsTooltip ? (
+                  <Box sx={{ whiteSpace: 'pre' }}>
+                    {productsTooltip}
+                  </Box>
+                ) : undefined}
                 >
-                  {order.order_status.name}
+                  <Box sx={{ textDecoration: productsTooltip ? 'underline' : undefined, display: 'inline' }}>
+                    {order.order_nr}
+                  </Box>
+                </Tooltip>
+              </TableCell>
+              <TableCell>
+                {format(new Date(order.order_date), 'yyyy/MM/dd')}
+              </TableCell>
+              <TableCell>
+                {(type === 'purchase'
+                  ? order.acompany_aorder_supplier_idToacompany?.name
+                  : order.acompany_aorder_customer_idToacompany?.name) || '--'}
+              </TableCell>
+              <TableCell>
+                {(type === 'purchase'
+                  ? order.acompany_aorder_supplier_idToacompany?.acompany?.name
+                  : order.acompany_aorder_customer_idToacompany?.acompany?.name) || '--'}
+              </TableCell>
+              <TableCell>
+                {order.order_status && (
+                <Box>
+                  <Box sx={{
+                    px: '1rem',
+                    py: '.5rem',
+                    bgcolor: `${order.order_status.color}25`,
+                    color: order.order_status.color,
+                    borderRadius: '.3rem',
+                    width: 'fit-content',
+                    fontWeight: (theme) => theme.typography.fontWeightMedium,
+                  }}
+                  >
+                    {order.order_status.name}
+                  </Box>
                 </Box>
-              </Box>
-              )}
-            </TableCell>
-            <TableCell>
-              <Edit onClick={() => onEdit(order.id)} disabled={disabled} />
-              <Delete onDelete={() => onDelete(order.id)} disabled={disabled} tooltip />
-            </TableCell>
-          </TableRow>
-        ))}
+                )}
+              </TableCell>
+              <TableCell>
+                <Edit onClick={() => onEdit(order.id)} disabled={disabled} />
+                <Delete onDelete={() => onDelete(order.id)} disabled={disabled} tooltip />
+              </TableCell>
+            </TableRow>
+          );
+        })}
       </TableBody>
     </PaginatedTable>
   );

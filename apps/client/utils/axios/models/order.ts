@@ -1,5 +1,9 @@
 import { AFile } from './aFile';
 
+interface ProductOrder {
+  product: { name: string }
+}
+
 export interface Company {
   id:string,
   name:string,
@@ -19,7 +23,8 @@ export interface OrderListItem {
   id: number,
   order_nr:string
   order_date:string,
-  order_status:{ id: number, name:string, color:string }
+  order_status: { id: number, name:string, color:string }
+  product_orders: ProductOrder[];
   acompany_aorder_supplier_idToacompany:Company,
   acompany_aorder_customer_idToacompany:Company
 }
