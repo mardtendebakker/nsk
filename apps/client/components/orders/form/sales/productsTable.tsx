@@ -131,7 +131,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
         </TableHead>
         <TableBody>
           {data.map((product: ProductListItem) => (
-            <TableRow>
+            <TableRow key={product.id}>
               <TableCell>{product.sku}</TableCell>
               <TableCell>{product.name}</TableCell>
               <TableCell>{product.type}</TableCell>

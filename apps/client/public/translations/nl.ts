@@ -439,6 +439,7 @@ const translation = {
   zipcodes: 'Postcodes',
   createProductType: 'Producttype maken',
   editProductType: 'Producttype bewerken',
+  editProduct: 'Product bewerken',
   createLocation: 'Plaats maken',
   editLocation: 'Plaats bewerken',
   pickupDetails: 'Afhaaldetails',
