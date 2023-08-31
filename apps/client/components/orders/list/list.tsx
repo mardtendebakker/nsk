@@ -45,7 +45,7 @@ function Company({ company }: { company: CompanyModel }) {
   let tooltip = '';
 
   if (company.street) {
-    tooltip += `${company?.street} `;
+    tooltip += `${company?.street}\n`;
   }
 
   if (company.zip) {
