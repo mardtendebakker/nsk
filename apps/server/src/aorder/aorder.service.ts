@@ -28,12 +28,14 @@ export class AOrderService {
       name: true,
       street: true,
       city: true,
+      zip: true,
       acompany: {
         select: {
           id: true,
           name: true,
           street: true,
           city: true,
+          zip: true,
         }
       }
     };

@@ -17,6 +17,7 @@ class ACompany extends PickType(CompanyEntity, [
   'name',
   'street',
   'city',
+  'zip',
 ]) {}
 
 class Company extends PickType(CompanyEntity, [
@@ -24,6 +25,7 @@ class Company extends PickType(CompanyEntity, [
   'name',
   'street',
   'city',
+  'zip',
 ]) {
   @ApiPropertyOptional()
   acompany?: ACompany;
