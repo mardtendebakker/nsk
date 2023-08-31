@@ -15,13 +15,13 @@ export interface Product {
   price:number,
   sku:string,
   location:{ id: number, name: string },
-  product_orders: { order: Order }[],
+  product_orders: { quantity: number, order: Order }[],
   product_status:{ id: number, name: string },
   product_type:{ id: number, name: string },
   description:string,
   updated_at:string,
   created_at:string,
-  product_attributes:{ quantity:number, value: string, attribute_id: number, attribute: { type: number } }[],
+  product_attributes:{ quantity: number, value: string, attribute_id: number, attribute: { type: number } }[],
   afile:AFile[]
 }
 

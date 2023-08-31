@@ -5,6 +5,8 @@ import {
 } from '@mui/material';
 import { format } from 'date-fns';
 import Visibility from '@mui/icons-material/VisibilityOutlined';
+import InputOutlinedIcon from '@mui/icons-material/InputOutlined';
+import OutputOutlinedIcon from '@mui/icons-material/OutputOutlined';
 import { useRouter } from 'next/router';
 import useTranslation from '../../../hooks/useTranslation';
 import useForm from '../../../hooks/useForm';
@@ -15,17 +17,19 @@ import { formRepresentationToBody, initFormState } from '../createModal';
 import ConfirmationDialog from '../../confirmationDialog';
 import { openBlob } from '../../../utils/blob';
 import { Product } from '../../../utils/axios/models/product';
-import { ORDERS_PURCHASES_EDIT, ORDERS_SALES_EDIT } from '../../../utils/routes';
+import { ORDERS_PURCHASES_EDIT, ORDERS_REPAIRS_EDIT, ORDERS_SALES_EDIT } from '../../../utils/routes';
 
 export default function EditModal(
   {
     onClose,
     onSubmit,
     id,
+    type,
   }: {
     onClose: () => void,
     onSubmit: () => void,
     id: string,
+    type?: 'product' | 'repair',
   },
 ) {
   const { trans } = useTranslation();
@@ -59,6 +63,16 @@ export default function EditModal(
       .then((response: AxiosResponse) => {
         openBlob(response.data);
       });
+  };
+
+  const editOrderUrl = (order) => {
+    if (type === 'repair') {
+      return ORDERS_REPAIRS_EDIT.replace('[id]', order.id.toString());
+    }
+    if (order.discr === 'p') {
+      return ORDERS_PURCHASES_EDIT.replace('[id]', order.id.toString());
+    }
+    return ORDERS_SALES_EDIT.replace('[id]', order.id.toString());
   };
 
   return (
@@ -95,14 +109,34 @@ export default function EditModal(
                   {trans('status')}
                 </TableCell>
                 <TableCell>
+                  {trans('quantity')}
+                </TableCell>
+                <TableCell>
                   {trans('actions')}
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {(product as Product)?.product_orders?.map(({ order }) => (
+              {(product as Product)?.product_orders?.map(({ quantity, order }) => (
                 <TableRow key={order.id}>
                   <TableCell>
+                    {order.discr == 'p' && (
+                      <InputOutlinedIcon sx={{
+                        color: (theme) => theme.palette.text.secondary,
+                        mr: '1.5rem',
+                        verticalAlign: 'middle',
+                      }}
+                      />
+                    )}
+                    {order.discr == 's' && (
+                      <OutputOutlinedIcon
+                        sx={{
+                          color: (theme) => theme.palette.text.secondary,
+                          mr: '1.5rem',
+                          verticalAlign: 'middle',
+                        }}
+                      />
+                    )}
                     {order.order_nr}
                   </TableCell>
                   <TableCell>
@@ -115,11 +149,11 @@ export default function EditModal(
                     {order.status}
                   </TableCell>
                   <TableCell>
+                    {quantity}
+                  </TableCell>
+                  <TableCell>
                     <Tooltip title={trans('showOrder')}>
-                      <IconButton onClick={() => router.push(
-                        (order.discr == 'p' ? ORDERS_PURCHASES_EDIT : ORDERS_SALES_EDIT).replace('[id]', order.id.toString()),
-                      )}
-                      >
+                      <IconButton onClick={() => router.push(editOrderUrl(order))}>
                         <Visibility />
                       </IconButton>
                     </Tooltip>
@@ -133,3 +167,7 @@ export default function EditModal(
     />
   );
 }
+
+EditModal.defaultProps = {
+  type: 'product',
+};
