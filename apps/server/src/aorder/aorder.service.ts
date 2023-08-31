@@ -10,6 +10,7 @@ import { PrintService } from '../print/print.service';
 import { CompanyDiscrimination } from '../company/types/company-discrimination.enum';
 import { FileService } from '../file/file.service';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { AOrderProductProcess } from './aorder-product.process';
 type CommonAOrderDto = Partial<Omit<CreateAOrderDto, 'pickup' | 'repair'>>;
 type CommonAOrderInput = Partial<Omit<Prisma.aorderCreateInput, 'pickup' | 'repair'>>;
 
@@ -23,11 +24,18 @@ export class AOrderService {
 
   async findAll(query: FindManyDto) {
     const companySelect: Prisma.acompanySelect = {
+      id: true,
       name: true,
+      street: true,
+      city: true,
+      zip: true,
       acompany: {
         select: {
           id: true,
           name: true,
+          street: true,
+          city: true,
+          zip: true,
         }
       }
     };
@@ -36,6 +44,16 @@ export class AOrderService {
       id: true,
       order_nr: true,
       order_date: true,
+      product_order: {
+        select: {
+          quantity: true,
+          product: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
       order_status: {
         select: {
           id: true,
@@ -100,12 +118,17 @@ export class AOrderService {
     const orderBy: Prisma.Enumerable<Prisma.aorderOrderByWithRelationInput> =
       Object.keys(query?.orderBy || {})?.length ? query.orderBy : { id: 'desc' };
 
-    return this.repository.findAll({
+    const result = await this.repository.findAll({
       ...query,
       where,
       select,
       orderBy,
     });
+    
+    return {
+      count: result.count,
+      data: result.data.map(order => new AOrderProductProcess(order).run()),
+    };
   }
 
   async findOne(id: number) {

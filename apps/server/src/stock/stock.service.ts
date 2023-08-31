@@ -22,7 +22,7 @@ import { PutObjectWithoutKeyInput } from "../file/dto/put-object-without-key-inp
 import { PrintService } from "../print/print.service";
 import { ProductOrderRelation } from "./types/product-order-relation";
 import { ProductOrderDto } from "./dto/find-one-product-response.dto";
-import { AOrderPayload } from "../aorder/aorder.process";
+import { AOrderPayload } from "../aorder/types/aorder-payload";
 
 export class StockService {
   constructor(

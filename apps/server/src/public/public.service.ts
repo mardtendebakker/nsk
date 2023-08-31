@@ -9,7 +9,6 @@ import { CreateFileDto } from '../file/dto/create-file.dto';
 import { FileDiscrimination } from '../file/types/file-discrimination.enum';
 import { CreateAOrderDto } from '../aorder/dto/create-aorder.dto';
 import { CreatePickupUncheckedWithoutAorderInputDto } from '../pickup/dto/create-pickup-unchecked-without-aorder-input.dto';
-import { AOrderPayload } from '../aorder/aorder.process';
 import { ProductService } from '../product/product.service';
 import { HttpService } from '@nestjs/axios';
 import { catchError, lastValueFrom } from 'rxjs';
@@ -20,6 +19,7 @@ import { DataDestructionChoice } from './types/data-destruction-choise';
 import { afile } from '@prisma/client';
 import { CreateBodyStockDto } from '../stock/dto/create-body-stock.dto';
 import { ProductRelation } from '../stock/types/product-relation';
+import { AOrderPayload } from '../aorder/types/aorder-payload';
 @Injectable()
 export class PublicService {
   constructor(
