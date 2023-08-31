@@ -9,7 +9,7 @@ import {
   useState, useEffect, useCallback,
 } from 'react';
 import Add from '@mui/icons-material/Add';
-import { ProductListItem } from '../../../../utils/axios/models/product';
+import { Product, ProductListItem } from '../../../../utils/axios/models/product';
 import debounce from '../../../../utils/debounce';
 import TextField from '../../../memoizedInput/textField';
 import CreateModal from '../../../stock/createModal';
@@ -152,7 +152,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
       {showForm && (
       <CreateModal
         onClose={() => setShowForm(false)}
-        onSubmit={() => {
+        onSubmit={(product: Product) => {
           call({
             params: {
               take: rowsPerPage,
@@ -161,6 +161,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
             },
           });
           setShowForm(false);
+          setEditProductId(product.id);
         }}
         additionalPayloadData={{
           'product_orders[0][order_id]': orderId,

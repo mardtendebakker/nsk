@@ -2,7 +2,7 @@ import useAxios from '../../../hooks/useAxios';
 import useTranslation from '../../../hooks/useTranslation';
 import useForm, { FormRepresentation } from '../../../hooks/useForm';
 import Form, { buildAttributeKey } from '../form';
-import { STOCK_PRODUCTS_PATH } from '../../../utils/axios';
+import { AxiosResponse, STOCK_PRODUCTS_PATH } from '../../../utils/axios';
 import { Product } from '../../../utils/axios/models/product';
 import ConfirmationDialog from '../../confirmationDialog';
 
@@ -78,7 +78,7 @@ const formState = initFormState();
 
 export default function CreateModal({ onClose, onSubmit, additionalPayloadData }: {
   onClose: () => void,
-  onSubmit: () => void,
+  onSubmit: (product: Product) => void,
   additionalPayloadData?: { [key: string]: string }
 }) {
   const { trans } = useTranslation();
@@ -98,7 +98,9 @@ export default function CreateModal({ onClose, onSubmit, additionalPayloadData }
     });
 
     call({ body, headers: { 'Content-Type': 'multipart/form-data' } })
-      .then(onSubmit);
+      .then((response: AxiosResponse) => {
+        onSubmit(response.data);
+      });
   };
 
   return (
