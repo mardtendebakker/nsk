@@ -71,10 +71,12 @@ export default function AddProductsModal({
     },
   );
 
+  const selectableProductCb = (product: ProductListItem) => product.sale > 0;
+
   const handleAllChecked = (checked: boolean) => {
     setCheckedProductIds(
       checked
-        ? _.union(checkedProductIds, data.map(({ id }) => id))
+        ? _.union(checkedProductIds, data.filter(selectableProductCb).map(({ id }) => id))
         : checkedProductIds.filter((productId) => !data.find((product: ProductListItem) => product.id == productId)),
     );
   };
@@ -104,6 +106,8 @@ export default function AddProductsModal({
     formRepresentation.location.value?.toString(),
   ]);
 
+  const selectableData = data?.filter(selectableProductCb) || [];
+
   return (
     <ConfirmationDialog
       open
@@ -123,8 +127,8 @@ export default function AddProductsModal({
           />
           <Box sx={{ m: '.5rem' }} />
           <Checkbox
-            disabled={performing}
-            checked={(_.intersectionWith(checkedProductIds, data, (productId: number, product: ProductListItem) => productId === product.id).length === data.length) && data.length != 0}
+            disabled={performing || selectableData.length === 0}
+            checked={(_.intersectionWith(checkedProductIds, selectableData, (productId: number, product: ProductListItem) => productId === product.id).length === selectableData.length) && selectableData.length != 0}
             onCheck={handleAllChecked}
             label={`${trans('selectAll')} ${checkedProductIds.length > 0 ? `(${checkedProductIds.length} ${trans('selected')})` : ''}`}
           />
@@ -142,7 +146,7 @@ export default function AddProductsModal({
               setPage(1);
             }}
             rowsPerPage={rowsPerPage}
-            disableSelection={(product: ProductListItem) => product.sale <= 0}
+            disableSelection={(product: ProductListItem) => !selectableProductCb(product)}
           />
           <input type="submit" style={{ display: 'none' }} />
         </form>
