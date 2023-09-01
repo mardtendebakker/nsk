@@ -39,18 +39,16 @@ export default function AccountPopover() {
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         PaperProps={{
           sx: {
-            p: 0,
             mt: 1.5,
             ml: 0.75,
             width: 180,
             '& .MuiMenuItem-root': {
               typography: 'body2',
-              borderRadius: 0.75,
             },
           },
         }}
       >
-        <Stack sx={{ p: 1 }}>
+        <Stack>
           <MenuItem onClick={() => router.push(SETTINGS)}>
             {trans('settings')}
           </MenuItem>
@@ -61,7 +59,7 @@ export default function AccountPopover() {
           </Can>
         </Stack>
         <Divider sx={{ borderStyle: 'dashed' }} />
-        <Stack sx={{ p: 1 }}>
+        <Stack>
           <Button
             size="small"
             onClick={signOut}
