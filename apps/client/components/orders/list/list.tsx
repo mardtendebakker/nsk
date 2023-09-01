@@ -7,12 +7,16 @@ import {
   Tooltip,
 } from '@mui/material';
 import { format } from 'date-fns';
+import Link from 'next/link';
 import useTranslation from '../../../hooks/useTranslation';
-import { Company as CompanyModel, OrderListItem } from '../../../utils/axios/models/order';
+import { ACompany, Company as CompanyModel, OrderListItem } from '../../../utils/axios/models/order';
 import PaginatedTable from '../../paginatedTable';
 import TableCell from '../../tableCell';
 import Delete from '../../button/delete';
 import Edit from '../../button/edit';
+import { CONTACTS_CUSTOMERS_EDIT, CONTACTS_SUPPLIERS_EDIT } from '../../../utils/routes';
+
+type Type = 'purchase' | 'sales' | 'repair';
 
 function OrderNumber({ order }: { order: OrderListItem }) {
   let productsTooltip = '';
@@ -41,7 +45,7 @@ function OrderNumber({ order }: { order: OrderListItem }) {
   );
 }
 
-function Company({ company }: { company: CompanyModel }) {
+function Company({ company, type }: { company: CompanyModel, type: Type }) {
   let tooltip = '';
 
   if (company.street) {
@@ -56,6 +60,37 @@ function Company({ company }: { company: CompanyModel }) {
     tooltip += company.city;
   }
 
+  const target = type === 'purchase' ? CONTACTS_SUPPLIERS_EDIT : CONTACTS_CUSTOMERS_EDIT;
+
+  return (
+    <Tooltip title={tooltip ? (
+      <Box sx={{ whiteSpace: 'pre' }}>
+        {tooltip}
+      </Box>
+    ) : undefined}
+    >
+      <Link href={target.replace('[id]', company.id)} style={{ color: 'inherit' }}>
+        {company?.name || '--'}
+      </Link>
+    </Tooltip>
+  );
+}
+
+function Supplier({ supplier }: { supplier: ACompany }) {
+  let tooltip = '';
+
+  if (supplier.street) {
+    tooltip += `${supplier?.street}\n`;
+  }
+
+  if (supplier.zip) {
+    tooltip += `${supplier?.zip} `;
+  }
+
+  if (supplier.city) {
+    tooltip += supplier.city;
+  }
+
   return (
     <Tooltip title={tooltip ? (
       <Box sx={{ whiteSpace: 'pre' }}>
@@ -64,7 +99,7 @@ function Company({ company }: { company: CompanyModel }) {
     ) : undefined}
     >
       <Box sx={{ textDecoration: tooltip ? 'underline' : undefined, display: 'inline' }}>
-        {company?.name || '--'}
+        {supplier?.name || '--'}
       </Box>
     </Tooltip>
   );
@@ -84,7 +119,7 @@ export default function List({
   onEdit,
   onDelete,
 }: {
-  type: 'purchase' | 'sales' | 'repair',
+  type: Type,
   orders: OrderListItem[],
   checkedOrderIds: number[],
   count: number,
@@ -157,10 +192,10 @@ export default function List({
                 {format(new Date(order.order_date), 'yyyy/MM/dd')}
               </TableCell>
               <TableCell>
-                <Company company={company} />
+                <Company company={company} type={type} />
               </TableCell>
               <TableCell>
-                {company?.acompany?.name || '--'}
+                { company?.acompany ? <Supplier supplier={company?.acompany} /> : '--'}
               </TableCell>
               <TableCell>
                 {order.order_status && (

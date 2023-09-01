@@ -11,7 +11,14 @@ export interface Company {
   city?: string,
   street?: string,
   zip?: string,
-  acompany:{ id:string, name:string }
+  acompany: ACompany
+}
+export interface ACompany {
+  id:string,
+  name:string,
+  city?: string,
+  street?: string,
+  zip?: string,
 }
 
 export interface OrderStatus {
