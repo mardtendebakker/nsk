@@ -4,8 +4,8 @@ import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { ProductStatusService } from "./product-status.service";
 import { FindProductStatusesResponeDto } from "./dto/find-product-status-response.dto";
 import { FindManyDto } from "./dto/find-many.dto";
-import { ProductStatusEntity } from "../stock/entities/product-status.entity";
 import { UpdateProductStatusDto } from "./dto/update-product-status.dto";
+import { ProductStatusEntity } from "./entities/product-status.entity";
 
 @ApiBearerAuth()
 @Authentication()

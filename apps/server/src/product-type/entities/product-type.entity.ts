@@ -17,6 +17,9 @@ export class ProductTypeEntity implements product_type {
   @ApiProperty()
   is_attribute: boolean;
 
+  @ApiProperty()
+  is_public: boolean;
+
   @ApiPropertyOptional()
   external_id: number | null;
 }

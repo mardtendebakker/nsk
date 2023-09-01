@@ -75,7 +75,12 @@ export default function Form({
         onCheck={(checked) => setValue({ field: 'is_attribute', value: checked })}
         label={trans('productTypeForm.isAttribute.label')}
         checked={formRepresentation.is_attribute.value as boolean}
+      />
 
+      <Checkbox
+        onCheck={(checked) => setValue({ field: 'is_public', value: checked })}
+        label={trans('productTypeForm.isPublic.label')}
+        checked={formRepresentation.is_public.value as boolean}
       />
     </BorderedBox>
   );

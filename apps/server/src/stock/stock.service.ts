@@ -302,9 +302,10 @@ export class StockService {
     });
   }
 
-  async getAllTypes() {
-
-    return this.repository.getAllTypes();
+  async getAllPublicTypes() {
+    return this.repository.getAllTypes({
+      is_public: true
+    });
   }
 
   async printBarcodes(ids: number[]) {

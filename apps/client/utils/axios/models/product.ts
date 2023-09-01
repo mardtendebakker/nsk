@@ -97,7 +97,10 @@ export interface Attribute {
 export interface ProductType {
   id:number,
   name:string,
+  pindex: number,
   comment:string,
+  is_attribute: boolean,
+  is_public: boolean,
   attributes:Attribute[]
   tasks:Task[]
 }

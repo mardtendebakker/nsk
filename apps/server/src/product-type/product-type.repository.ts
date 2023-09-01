@@ -19,4 +19,12 @@ export class ProductTypeRepository {
       data: submission[1],
     };
   }
+  
+  findOne(params: Prisma.product_typeFindUniqueArgs) {
+    return this.prisma.product_type.findUnique(params);
+  }
+
+  update(params: Prisma.product_typeUpdateArgs) {
+    return this.prisma.product_type.update(params);
+  }
 }
