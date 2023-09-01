@@ -104,8 +104,9 @@ export class StockRepository {
     });
   }
 
-  getAllTypes() {
+  getAllTypes(where?: Prisma.product_typeWhereInput) {
     return this.prisma.product_type.findMany({
+      where,
       select: {
         id: true,
         name: true,

@@ -25,7 +25,6 @@ export class ProductStatusRepository {
   }
 
   update(params: Prisma.product_statusUpdateArgs) {
-
     return this.prisma.product_status.update(params);
   }
 }

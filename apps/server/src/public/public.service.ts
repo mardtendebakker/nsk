@@ -34,7 +34,7 @@ export class PublicService {
 
   async getAllProductTypes() {
 
-    return this.productService.getAllTypes();
+    return this.productService.getAllPublicTypes();
   }
 
   getDataDestructionChoices(): DataDestructionChoice {

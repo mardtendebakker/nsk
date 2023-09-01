@@ -9,8 +9,8 @@ export class FindManyDto extends BaseFindManyDto {
   @ValidateIf((_, value) => value !== undefined)
   search?: string
 
-  @Transform(({value}) => Array.isArray(value) ? value.map((id: string) => parseInt(id)) : parseInt(value))
   @ApiPropertyOptional()
+  @Transform(({value}) => Array.isArray(value) ? value.map((id: string) => parseInt(id)) : parseInt(value))
   ids?: number[];
 
   @ApiPropertyOptional()
@@ -18,5 +18,5 @@ export class FindManyDto extends BaseFindManyDto {
   @IsInt()
   @IsIn([0, 1])
   @ValidateIf((_, value) => value !== undefined)
-  attributeOnly?: number
+  attributeOnly?: number;
 }

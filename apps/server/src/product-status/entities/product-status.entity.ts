@@ -1,22 +1,22 @@
-import { product_type } from '@prisma/client';
+import { product_status } from '@prisma/client';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
-export class ProductTypeEntity implements product_type {
+export class ProductStatusEntity implements product_status {
   @ApiProperty()
   id: number;
 
-  @ApiProperty()
-  name: string;
-  
+  @ApiPropertyOptional()
+  is_stock: boolean | null;
+
+  @ApiPropertyOptional()
+  is_saleable: boolean | null;
+
   @ApiPropertyOptional()
   pindex: number | null;
-  
-  @ApiPropertyOptional()
-  comment: string | null;
 
   @ApiProperty()
-  is_attribute: boolean;
+  name: string;
 
   @ApiPropertyOptional()
-  external_id: number | null;
+  color: string | null;
 }

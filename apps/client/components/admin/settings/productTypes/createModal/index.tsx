@@ -12,7 +12,8 @@ export function initFormState(productType?: ProductType) {
     comment: { value: productType?.comment },
     tasks: { value: productType?.tasks?.map(({ id }) => id) || [] },
     attributes: { value: productType?.attributes?.map(({ id }) => id) || [] },
-    is_attribute: { value: false },
+    is_attribute: { value: productType?.is_attribute || false },
+    is_public: { value: productType?.is_public || false },
   };
 }
 

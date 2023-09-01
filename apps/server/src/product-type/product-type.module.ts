@@ -7,6 +7,6 @@ import { ProductTypeController } from './product-type.controller';
 @Module({
   providers: [ProductTypeService, ProductTypeRepository],
   controllers: [ProductTypeController],
-  imports: [PrismaModule]
+  imports: [PrismaModule],
 })
 export class ProductTypeModule {}
