@@ -1,6 +1,9 @@
-import { Box, Button } from '@mui/material';
+import {
+  Box, Button, MenuItem, Popover, Stack,
+} from '@mui/material';
 import ChevronRight from '@mui/icons-material/ChevronRight';
 import EditLocation from '@mui/icons-material/EditLocation';
+import { useState } from 'react';
 import useTranslation from '../../../hooks/useTranslation';
 import Checkbox from '../../checkbox';
 
@@ -22,6 +25,15 @@ export default function Action({
   onPrintChecklist: () => void,
 }) {
   const { trans } = useTranslation();
+  const [showPrintActions, setShowPrintActions] = useState(null);
+
+  const handlePrint = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    setShowPrintActions(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setShowPrintActions(null);
+  };
 
   return (
     <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -41,17 +53,35 @@ export default function Action({
         )}
         {checkedProductsCount > 0
         && (
-          <Button size="small" onClick={onPrint} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
-              {trans('printBarcode')}
-            <ChevronRight sx={{ transform: 'rotate(90deg)' }} />
-          </Button>
-        )}
-        {checkedProductsCount > 0
-        && (
-          <Button size="small" onClick={onPrintChecklist} variant="outlined" color="primary" disabled={disabled}>
-              {trans('printChecklist')}
-            <ChevronRight sx={{ transform: 'rotate(90deg)' }} />
-          </Button>
+          <>
+            <Button size="small" onClick={handlePrint} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
+              {trans('print')}
+              <ChevronRight sx={{ transform: 'rotate(90deg)' }} />
+            </Button>
+            <Popover
+              open={Boolean(showPrintActions)}
+              anchorEl={showPrintActions}
+              onClose={handleClose}
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+              transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+              PaperProps={{
+                sx: {
+                  '& .MuiMenuItem-root': {
+                    typography: 'body2',
+                  },
+                },
+              }}
+            >
+              <Stack>
+                <MenuItem onClick={onPrint} disabled={disabled}>
+                  {trans('printBarcode')}
+                </MenuItem>
+                <MenuItem onClick={onPrintChecklist} disabled={disabled}>
+                  {trans('printChecklist')}
+                </MenuItem>
+              </Stack>
+            </Popover>
+          </>
         )}
       </Box>
     </Box>
