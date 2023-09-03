@@ -102,6 +102,9 @@ export default function DataSourcePicker(
       renderInput={
                 (inputParams) => (
                   <TextField
+                    onFocus={() => {
+                      call({ params });
+                    }}
                     helperText={helperText}
                     error={error}
                     {...inputParams}
@@ -111,9 +114,6 @@ export default function DataSourcePicker(
                       fieldset: {
                         display: !displayFieldset && 'none',
                       },
-                    }}
-                    onBlur={() => {
-                      call({ params });
                     }}
                     onChange={(e) => {
                       debouncedCall({

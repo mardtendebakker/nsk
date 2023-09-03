@@ -50,7 +50,7 @@ export default function Menu() {
   return (
     <MenuList>
       {ITEMS.map((menuItemDescription) => (
-        <NavItem menuItemDescription={menuItemDescription} />
+        <NavItem menuItemDescription={menuItemDescription} key={menuItemDescription.path} />
       ))}
     </MenuList>
   );
