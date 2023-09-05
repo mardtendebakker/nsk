@@ -25,7 +25,7 @@ export class AOrderProductProcess {
   private productOrderProcess(productOrder: ProductOrderRelation): ProductOrderDto {
     const product = productOrder?.product;
     return {
-      quantity: productOrder?.quantity,
+      quantity: productOrder?.quantity ?? 1,
       product: product && {
         name: product.name,
       },
