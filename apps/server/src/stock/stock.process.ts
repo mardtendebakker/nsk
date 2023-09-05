@@ -75,14 +75,14 @@ export class StockProcess {
         status: pOrder?.['aorder']?.order_status?.name,
       },
       price: pOrder.price,
-      quantity: pOrder.quantity,
+      quantity: pOrder.quantity ?? 1,
     }));
     this.firstProductOrder = product_order?.[0];
     this.theProductOrder = product_order.find(po => po.order_id === this.orderId);
     this.product_order = {
       id: this.theProductOrder?.id,
       price: this.theProductOrder?.price,
-      quantity: this.theProductOrder?.quantity,
+      quantity: this.theProductOrder?.quantity ?? 1,
     };
     
     this.aservices =
@@ -230,12 +230,15 @@ export class StockProcess {
   }
 
   private async getQuantityInStock() {
+    const isStock = this.product.product_status.is_stock ?? true;
     let quantityInStock = 0;
 
-    quantityInStock = this.productPurchaseOrder?.quantity || 0;
-
-    if (this.isSaleAndRepair) {
-      quantityInStock = this.productSaleOrders?.[0]?.quantity || 0;
+    if (isStock) {
+      if (this.productPurchaseOrder) {
+        quantityInStock = this.productPurchaseOrder?.quantity ?? 1;
+      } else if (this.isSaleAndRepair) {
+        quantityInStock = this.productSaleOrders?.[0]?.quantity ?? 1;
+      }
     }
 
     this.quantityInStock = quantityInStock - this.quantitySold ?? await this.getQuantitySold();
