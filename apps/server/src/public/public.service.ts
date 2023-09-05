@@ -20,11 +20,16 @@ import { afile } from '@prisma/client';
 import { CreateBodyStockDto } from '../stock/dto/create-body-stock.dto';
 import { ProductRelation } from '../stock/types/product-relation';
 import { AOrderPayload } from '../aorder/types/aorder-payload';
+import { PostOrderDto } from './dto/post-order.dto';
+import { CustomerService } from '../customer/customer.service';
+import { SaleService } from '../sale/sale.service';
 @Injectable()
 export class PublicService {
   constructor(
     private readonly purchaseService: PurchaseService,
+    private readonly saleService: SaleService,
     private readonly supplierService: SupplierService,
+    private readonly customerService: CustomerService,
     private readonly orderStatusService: OrderStatusService,
     private readonly fileService: FileService,
     private readonly productService: ProductService,
@@ -46,39 +51,10 @@ export class PublicService {
     return dataDestructionChoices;
   }
 
-  getForm() {
+  getPickupForm() {
     return {
       form: {
-        supplier: {
-          name: {
-            label: 'Klantnaam',
-            required: true,
-          },
-          representative: {
-            label: 'Contactpersoon',
-            required: false,
-          },
-          email: {
-            label: 'E-mail',
-            required: true,
-          },
-          phone: {
-            label: 'Telefoon',
-            required: true,
-          },
-          street: {
-            label: 'Straat + nr',
-            required: true,
-          },
-          zip: {
-            label: 'Postcode',
-            required: false,
-          },
-          city: {
-            label: 'Woonplaats',
-            required: true,
-          },
-        },
+        supplier: this.getCompanyForm(),
         countAddresses: {
           label: 'Aantal ophaaladressen',
           required: true,
@@ -97,7 +73,7 @@ export class PublicService {
           },
         },
       }
-    }
+    };
   }
 
   async postPickup(params: PostPickupDto, files?: Express.Multer.File[]): Promise<void> {
@@ -115,7 +91,7 @@ export class PublicService {
       pickup_date: pickup_form.pickupDate,
     };
 
-    const orderStatus = await this.findOrderStatusByNameOrCreate(pickup_form.orderStatusName);
+    const orderStatus = await this.findOrderStatusByNameOrCreate(pickup_form.orderStatusName, true, false);
 
     const purchaseData: CreateAOrderDto = {
       supplier_id: supplier.id,
@@ -133,6 +109,78 @@ export class PublicService {
     await this.createProductsForPickup(pickup_form, purchase.id);
     
     // TODO: sendStatusMail
+  }
+
+  getOrderForm() {
+    return {
+      form: {
+        customer: this.getCompanyForm(),
+      },
+    };
+  }
+
+  async postOrder(params: PostOrderDto): Promise<void> {
+    const { public_order_form } = params;
+
+    await this.captchaVerify(params['g-recaptcha-response']);
+
+    const customer = await this.customerService.checkExists(public_order_form.customer);
+
+    const orderStatus = await this.findOrderStatusByNameOrCreate(public_order_form.orderStatusName, false, true);
+
+    let remarks = "";
+
+    for (const product of public_order_form.products) {
+      if (product.quantity > 0) {
+        remarks += `${product.name}: ${product.quantity}x\r\n`;
+      }
+    }
+
+    if (remarks.length < 4) {
+      remarks = "No quantities entered...";
+    }
+
+    const saleData: CreateAOrderDto = {
+      customer_id: customer.id,
+      is_gift: false,
+      status_id: orderStatus.id,
+      remarks: remarks,
+    };
+
+    const sale = <AOrderPayload>await this.saleService.create(saleData);
+  }
+
+  private getCompanyForm() {
+    return {
+      name: {
+        label: 'Klantnaam',
+        required: true,
+      },
+      representative: {
+        label: 'Contactpersoon',
+        required: false,
+      },
+      email: {
+        label: 'E-mail',
+        required: true,
+      },
+      phone: {
+        label: 'Telefoon',
+        required: true,
+      },
+      street: {
+        label: 'Straat + nr',
+        required: true,
+      },
+      zip: {
+        label: 'Postcode',
+        required: false,
+      },
+      city: {
+        label: 'Woonplaats',
+        required: true,
+      },
+    };
   }
 
   private async uploadFiles(pickupId: number, files: Express.Multer.File[]): Promise<afile[]> {
@@ -168,11 +216,11 @@ export class PublicService {
     return afiles;
   }
 
-  private findOrderStatusByNameOrCreate(name: string) {
+  private findOrderStatusByNameOrCreate(name: string, isPurchase: boolean, isSale: boolean) {
     const createOrderStatusDto: CreateOrderStatusDto = {
       name,
-      is_purchase: true,
-      is_sale: false,
+      is_purchase: isPurchase,
+      is_sale: isSale,
     };
 
     return this.orderStatusService.findByNameOrCreate(createOrderStatusDto);

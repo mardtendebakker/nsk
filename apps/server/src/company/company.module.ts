@@ -5,8 +5,15 @@ import { CompanyRepository } from './company.repository';
 import { PrismaModule } from '../prisma/prisma.module';
 
 @Module({
-  providers: [CompanyService, CompanyRepository],
+  providers: [
+    CompanyService,
+    {
+      provide: 'TYPE',
+      useValue: undefined,
+    },
+    CompanyRepository,
+  ],
   controllers: [CompanyController],
-  imports: [PrismaModule]
+  imports: [PrismaModule],
 })
 export class CompanyModule {}

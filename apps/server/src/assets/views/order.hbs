@@ -1,0 +1,79 @@
+<div id="orderform"><form name="public_order_form" method="post" class="form-horizontal">
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <span class="glyphicon glyphicon-play" aria-hidden="true"></span> Your details
+    </div>
+    <div class="panel-body">
+      {{#each form}}
+        {{#each customer}}
+          <div class="form-group">
+            <label class="col-sm-3 control-label required" for="public_order_form_supplier_{{@key}}">{{this.label}}{{#if this.required}} *{{/if}}</label>
+            <div class="col-sm-9">
+              <input 
+                type="text"
+                id="public_order_form_customer_{{@key}}"
+                name="public_order_form[customer][{{@key}}]"
+                {{#if this.required}}required="required"{{/if}}
+                class="form-control"
+                value="{{this.value}}"
+              >
+            </div>
+          </div>
+        {{/each}}
+      {{/each}}
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <span class="glyphicon glyphicon-play" aria-hidden="true"></span> Products
+    </div>
+    <div class="panel-body">
+      {{#each products}}
+        <div class="form-group">
+          <div class="col-sm-3" style="margin-top: 8px"><b>{{this.name}}</b></div>
+          <div class="col-sm-6" style="margin-top: 8px">{{this.remark}}</div>
+          <div class="col-sm-1" style="margin-top: 8px">€ {{this.price}}</div>
+          <div class="col-sm-2">
+            <input
+              type="number"
+              id="public_order_form_products_{{@index}}_quantity"
+              name="public_order_form[products][{{@index}}][quantity]"
+              class="form-control"
+              placeholder="0"
+            >
+          </div>
+        </div>
+        <input type="hidden" id="public_order_form_products_{{@index}}_name" name="public_order_form[products][{{@index}}][name]" value="{{this.name}}">
+      {{/each}}
+
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-body">
+
+      <div class="row">
+        <div class="col-sm-9 col-sm-offset-3">
+          <div class="g-recaptcha" data-sitekey="{{recaptchaKey}}"></div>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top: 10px">
+        <div class="col-sm-9 col-sm-offset-3">
+          <button type="submit" id="public_order_form_save" name="public_order_form[save]" class="btn-success btn" style="width: 150px;">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <input type="hidden" id="public_order_form_orderStatusName" name="public_order_form[orderStatusName]" required="required" value="{{orderStatusName}}">
+  <input type="hidden" id="public_order_form_confirmPage" name="public_order_form[confirmPage]" value="{{confirmPage}}">
+
+</form>
+
+<div id="errorContainer" style="color: red"></div>
+
+<script src="https://www.google.com/recaptcha/api.js" async="" defer=""></script>
+</div>

@@ -5,6 +5,8 @@ import { ApiTags } from '@nestjs/swagger';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { GetPickupDto } from './dto/get-pickup.dto';
 import { PostPickupDto } from './dto/post-pickup.dto';
+import { PostOrderDto } from './dto/post-order.dto';
+import { GetOrderDto } from './dto/get-order.dto';
 
 @ApiTags('nsk-public')
 @Controller('nsk/public')
@@ -22,7 +24,7 @@ export class PublicController {
   async getPickup(@Query() query: GetPickupDto) {
     const allProductTypes = await this.publicService.getAllProductTypes();
     const dataDestructionChoices = this.publicService.getDataDestructionChoices();
-    const form = this.publicService.getForm();
+    const form = this.publicService.getPickupForm();
     
     return {
       ...query,
@@ -34,7 +36,7 @@ export class PublicController {
 
   @Post('pickup')
   @UseInterceptors(AnyFilesInterceptor())
-  async create(
+  async postPickup(
     @Body() body: PostPickupDto,
     @UploadedFiles() files: Express.Multer.File[],
     @Res() res: Response,
@@ -45,6 +47,37 @@ export class PublicController {
       res.send(body.pickup_form.confirmPage);
     } else {
       res.send('Pickup added successfully');
+    }
+  }
+
+  @Get('ordertest')
+  @Render('ordertest')
+  getOrderTest() {
+    return {};
+  }
+
+  @Get('order')
+  @Render('order')
+  async getOrder(@Query() query: GetOrderDto) {
+    const form = this.publicService.getOrderForm();
+    
+    return {
+      ...query,
+      form,
+    };
+  }
+
+  @Post('order')
+  async postOrder(
+    @Body() body: PostOrderDto,
+    @Res() res: Response,
+  ) {
+    await this.publicService.postOrder(body);
+
+    if (body.public_order_form.confirmPage) {
+      res.send(body.public_order_form.confirmPage);
+    } else {
+      res.send('Order added successfully');
     }
   }
 }

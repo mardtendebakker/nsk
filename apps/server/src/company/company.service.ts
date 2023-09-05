@@ -1,20 +1,22 @@
 import { CompanyRepository } from './company.repository';
 import { UpdateCompanyDto } from './dto/update-company.dto';
-import { Injectable } from '@nestjs/common';
-import { Prisma, acompany } from '@prisma/client';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { FindManyDto } from './dto/find-many.dto';
 import { CompanyEntity } from './entities/company.entity';
+import { CompanyDiscrimination } from './types/company-discrimination.enum';
 
 @Injectable()
 export class CompanyService {
   constructor(
     protected readonly repository: CompanyRepository,
+    @Inject('TYPE') protected readonly type?: CompanyDiscrimination,
   ) {}
 
   async findAll(query: FindManyDto) {
     const where = {
       ...query.where,
+      ...(this.type && { discr: this.type }),
       id: {
         in: query.ids
       },
@@ -55,7 +57,14 @@ export class CompanyService {
   }
 
   async create(comapny: CreateCompanyDto) {
-    return this.repository.create(comapny as Prisma.acompanyCreateInput);
+    if (this.type === undefined) {
+      throw new BadRequestException('The operation requires a specific company type');
+    }
+
+    return this.repository.create({
+      discr: this.type,
+      ...comapny,
+    });
   }
 
   async findOne(id: number) {
@@ -80,6 +89,7 @@ export class CompanyService {
     if (zip) {
       company = await this.repository.findFirst({
         where: {
+          ...(this.type && { discr: this.type }),
           AND: [
             { zip: zip },
             {
@@ -95,7 +105,7 @@ export class CompanyService {
     }
 
     if (!company) {
-      company = await this.repository.create(comapnyData as Prisma.acompanyCreateInput);
+      company = await this.create(comapnyData as CreateCompanyDto);
     }
 
     return company;

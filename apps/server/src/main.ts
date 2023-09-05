@@ -31,7 +31,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({transform: true}));
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix, {
-    exclude: ['/nsk/public/pickup', '/nsk/public/pickuptest'],
+    exclude: ['/nsk/public/pickup', '/nsk/public/pickuptest', '/nsk/public/order', '/nsk/public/ordertest'],
   });
   const port = process.env.PORT || 3333;
   const swaggerConfig = new DocumentBuilder()

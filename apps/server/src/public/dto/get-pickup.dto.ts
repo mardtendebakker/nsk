@@ -1,17 +1,11 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { IsOptional, IsString } from "class-validator";
+import { GetCommonDto } from "./get-common.dto";
 
-export class GetPickupDto {
-  @ApiProperty()
-  @IsString()
-  recaptchaKey: string;
-
+export class GetPickupDto extends GetCommonDto {
   @ApiProperty()
   @IsString()
   locationId: string;
-
-  @ApiProperty()
-  orderStatusName?: string;
 
   @ApiProperty()
   @IsString()
