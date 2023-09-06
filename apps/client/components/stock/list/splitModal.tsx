@@ -2,7 +2,7 @@ import { Box } from '@mui/material';
 import { useCallback } from 'react';
 import useForm, { FormRepresentation } from '../../../hooks/useForm';
 import useTranslation from '../../../hooks/useTranslation';
-import { PRODUCT_STATUSES_PATH } from '../../../utils/axios';
+import { AUTOCOMPLETE_PRODUCT_STATUSES_PATH } from '../../../utils/axios';
 import ConfirmationDialog from '../../confirmationDialog';
 import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
 import Select from '../../memoizedInput/select';
@@ -92,7 +92,7 @@ export default function SplitModal({ onClose, onConfirm, product }:{
           <DataSourcePicker
             fullWidth
             sx={{ mt: '.5rem' }}
-            url={PRODUCT_STATUSES_PATH.replace(':id', '')}
+            url={AUTOCOMPLETE_PRODUCT_STATUSES_PATH}
             label={trans('newStatus')}
             placeholder={trans('selectStatus')}
             onChange={(selected: { id: number }) => setValue({ field: 'statusId', value: selected?.id })}

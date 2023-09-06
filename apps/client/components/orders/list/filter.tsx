@@ -7,7 +7,7 @@ import useTranslation from '../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../hooks/useForm';
 import TextField from '../../input/textField';
 import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
-import { ORDER_STATUSES_PATH, COMPANIES_PATH } from '../../../utils/axios';
+import { AUTOCOMPLETE_ORDER_STATUSES_PATH, AUTOCOMPLETE_COMPANIES_PATH } from '../../../utils/axios';
 import SearchAccordion from '../../searchAccordion';
 import useResponsive from '../../../hooks/useResponsive';
 import ListFilterDivider from '../../listFilterDivider';
@@ -77,7 +77,7 @@ export default function Filter({
           />
           <ListFilterDivider horizontal={!isDesktop} />
           <DataSourcePicker
-            url={COMPANIES_PATH.replace(':id', '')}
+            url={AUTOCOMPLETE_COMPANIES_PATH}
             disabled={disabled}
             fullWidth
             displayFieldset={false}
@@ -114,7 +114,7 @@ export default function Filter({
           />
           <ListFilterDivider horizontal={!isDesktop} />
           <DataSourcePicker
-            url={ORDER_STATUSES_PATH.replace(':id', '')}
+            url={AUTOCOMPLETE_ORDER_STATUSES_PATH}
             disabled={disabled}
             fullWidth
             displayFieldset={false}
@@ -124,7 +124,7 @@ export default function Filter({
           />
           <ListFilterDivider horizontal={!isDesktop} />
           <DataSourcePicker
-            url={COMPANIES_PATH.replace(':id', '')}
+            url={AUTOCOMPLETE_COMPANIES_PATH}
             params={{ partnerOnly: '1' }}
             disabled={disabled}
             fullWidth

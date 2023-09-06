@@ -9,7 +9,7 @@ import useAxios from '../../../hooks/useAxios';
 import {
   PURCHASE_ORDERS_PATH,
   SALES_ORDERS_PATH,
-  ORDER_STATUSES_PATH,
+  AUTOCOMPLETE_ORDER_STATUSES_PATH,
   BULK_PRINT_PURCHASES_PATH,
   BULK_PRINT_SALES_PATH,
   BULK_PRINT_REPAIRS_PATH,
@@ -294,7 +294,7 @@ export default function ListContainer({ type }: { type: 'purchase' | 'sales' | '
             {trans('changeStatusContent')}
             <Box sx={{ pb: '2rem' }} />
             <DataSourcePicker
-              url={ORDER_STATUSES_PATH.replace(':id', '')}
+              url={AUTOCOMPLETE_ORDER_STATUSES_PATH}
               disabled={disabled()}
               fullWidth
               placeholder={trans('selectStatus')}

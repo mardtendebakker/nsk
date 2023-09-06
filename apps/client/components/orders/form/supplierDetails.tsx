@@ -10,7 +10,7 @@ import {
 import useTranslation from '../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../hooks/useForm';
 import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
-import { SUPPLIERS_PATH } from '../../../utils/axios';
+import { AUTOCOMPLETE_SUPPLIERS_PATH } from '../../../utils/axios';
 import Company from './company';
 
 export default function SupplierDetails({
@@ -89,7 +89,7 @@ export default function SupplierDetails({
             <Company formRepresentation={formRepresentation} setValue={setValue} />
           ) : (
             <DataSourcePicker
-              url={SUPPLIERS_PATH.replace(':id', '')}
+              url={AUTOCOMPLETE_SUPPLIERS_PATH}
               disabled={disabled}
               fullWidth
               placeholder={trans('selectSupplier')}

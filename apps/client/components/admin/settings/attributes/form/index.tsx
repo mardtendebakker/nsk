@@ -4,7 +4,7 @@ import useTranslation from '../../../../../hooks/useTranslation';
 import BorderedBox from '../../../../borderedBox';
 import TextField from '../../../../memoizedInput/textField';
 import Select from '../../../../memoizedInput/select';
-import { PRODUCT_TYPES_PATH } from '../../../../../utils/axios';
+import { AUTOCOMPLETE_PRODUCT_TYPES_PATH } from '../../../../../utils/axios';
 import DataSourcePicker from '../../../../memoizedInput/dataSourcePicker';
 import Options from './options';
 import Checkbox from '../../../../checkbox';
@@ -76,7 +76,7 @@ export default function Form({
             sx={{ flex: 0.5, flexGrow: 1 }}
             multiple
             disabled={disabled}
-            url={PRODUCT_TYPES_PATH.replace(':id', '')}
+            url={AUTOCOMPLETE_PRODUCT_TYPES_PATH}
             fullWidth
             label={trans('attributeForm.productTypes.label')}
             placeholder={trans('attributeForm.productTypes.placeholder')}
@@ -102,9 +102,8 @@ export default function Form({
           && (
           <DataSourcePicker
             sx={{ flex: 0.5, flexGrow: 1, ml: '1rem' }}
-            params={{ attributeOnly: 1 }}
             disabled={disabled}
-            url={PRODUCT_TYPES_PATH.replace(':id', '')}
+            url={AUTOCOMPLETE_PRODUCT_TYPES_PATH}
             label={trans('attributeForm.productType.label')}
             placeholder={trans('attributeForm.productType.placeholder')}
             onChange={(value: { id: number }) => {

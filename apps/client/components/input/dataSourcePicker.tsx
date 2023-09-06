@@ -33,7 +33,7 @@ export default function DataSourcePicker(
     label?: string,
     placeholder?: string,
     displayFieldset?: boolean,
-    formatter?: (arg0: object) => object,
+    formatter?: (arg0: object) => { id: number, label: string },
     onChange: (arg0: undefined | object | object[])=>void,
     url: string,
     searchKey?: string,
@@ -46,10 +46,7 @@ export default function DataSourcePicker(
   const debouncedCall = useCallback(debounce(call), []);
   const [currentValue, setCurrentValue] = useState(null);
 
-  let options = data?.data || [];
-  if (formatter) {
-    options = options.map(formatter);
-  }
+  const options = (data || []).map(formatter);
 
   let ids;
 
@@ -63,15 +60,18 @@ export default function DataSourcePicker(
     call({ params: { ...params, ids } }).then((response: AxiosResponse) => {
       if (response?.data) {
         const found = multiple
-          ? response.data.data.filter((item) => !!(value as string[]).find((id) => id == item.id))
-          : response.data.data.find((item) => item.id == value);
+          ? response.data.filter((item) => !!(value as string[]).find((id) => id == item.id))
+          : response.data.find((item) => item.id == value);
 
         if (multiple && found.length > 0) {
-          setCurrentValue(found.map(formatter));
-          onChange(found);
+          setCurrentValue(ids
+            .map((id) => {
+              const foundItem = found.find((item) => item.id == id);
+              return foundItem ? formatter(foundItem) : undefined;
+            })
+            .filter((item) => item));
         } else if (!multiple && found) {
           setCurrentValue(formatter(found));
-          onChange(found);
         } else if (value === undefined) {
           setCurrentValue(undefined);
         }
@@ -102,9 +102,6 @@ export default function DataSourcePicker(
       renderInput={
                 (inputParams) => (
                   <TextField
-                    onFocus={() => {
-                      call({ params });
-                    }}
                     helperText={helperText}
                     error={error}
                     {...inputParams}
@@ -137,9 +134,7 @@ DataSourcePicker.defaultProps = {
   label: undefined,
   placeholder: undefined,
   displayFieldset: true,
-  formatter: ({ id, name, ...rest }) => ({
-    id, label: name, name, ...rest,
-  }),
+  formatter: (object): { id: number, label: string } => object,
   helperText: undefined,
   error: false,
   multiple: false,

@@ -29,6 +29,7 @@ import { SplitProductModule } from '../split-product/split-product.module';
 import { RepairModule } from '../repair/repair.module';
 import { AProductModule } from '../aproduct/aproduct.module';
 import { SalesServiceModule } from '../sales-service/sales-service.module';
+import { AutocompleteModule } from '../autocomplete/autocomplete.module';
 
 @Module({
   imports: [
@@ -73,6 +74,7 @@ import { SalesServiceModule } from '../sales-service/sales-service.module';
     PublicModule,
     AProductModule,
     SalesServiceModule,
+    AutocompleteModule
   ],
   controllers: [AppController],
   providers: [AppService],

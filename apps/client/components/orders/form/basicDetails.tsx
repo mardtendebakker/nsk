@@ -9,7 +9,7 @@ import { FormRepresentation, SetValue } from '../../../hooks/useForm';
 import TextField from '../../memoizedInput/textField';
 import BaseTextField from '../../input/textField';
 import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
-import { ORDER_STATUSES_PATH } from '../../../utils/axios';
+import { AUTOCOMPLETE_ORDER_STATUSES_PATH } from '../../../utils/axios';
 
 export default function BasicDetails({
   formRepresentation,
@@ -72,7 +72,7 @@ export default function BasicDetails({
           {!disableOrderStatus && (
           <DataSourcePicker
             sx={{ flex: 1 }}
-            url={ORDER_STATUSES_PATH.replace(':id', '')}
+            url={AUTOCOMPLETE_ORDER_STATUSES_PATH}
             disabled={disabled}
             fullWidth
             placeholder={trans('selectStatus')}

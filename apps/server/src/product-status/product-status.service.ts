@@ -12,9 +12,6 @@ export class ProductStatusService {
     return this.repository.findAll({
       ...query,
       where: {
-        id: {
-          in: query.ids
-        },
         name: {
           contains: query.search
         }

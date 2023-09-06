@@ -10,7 +10,7 @@ import {
 import useTranslation from '../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../hooks/useForm';
 import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
-import { CUSTOMERS_PATH } from '../../../utils/axios';
+import { AUTOCOMPLETE_CUSTOMERS_PATH } from '../../../utils/axios';
 import Company from './company';
 
 export default function CustomerDetails({
@@ -89,7 +89,7 @@ export default function CustomerDetails({
             <Company formRepresentation={formRepresentation} setValue={setValue} />
           ) : (
             <DataSourcePicker
-              url={CUSTOMERS_PATH.replace(':id', '')}
+              url={AUTOCOMPLETE_CUSTOMERS_PATH}
               disabled={disabled}
               fullWidth
               placeholder={trans('selectCustomer')}

@@ -3,7 +3,6 @@ import { FindManyDto } from './dto/find-many.dto';
 import { OrderStatusRepository } from './order-status.repository';
 import { Injectable } from '@nestjs/common';
 import { UpdateOrderStatusDto } from './dto/update-order-status.dto';
-import { OrderStatusEntity } from './entities/order-status.entity';
 import { CreateOrderStatusDto } from './dto/create-order-status.dto';
 
 @Injectable()
@@ -15,7 +14,6 @@ export class OrderStatusService {
       ...query,
       where: {
         ...query.where,
-        ...(query.ids && { id: { in: query.ids } }),
         ...(query.search && { name: { contains: query.search } }),
       }
     });

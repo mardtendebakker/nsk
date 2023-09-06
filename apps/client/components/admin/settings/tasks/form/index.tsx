@@ -3,7 +3,7 @@ import useTranslation from '../../../../../hooks/useTranslation';
 import BorderedBox from '../../../../borderedBox';
 import TextField from '../../../../memoizedInput/textField';
 import DataSourcePicker from '../../../../memoizedInput/dataSourcePicker';
-import { PRODUCT_TYPES_PATH } from '../../../../../utils/axios';
+import { AUTOCOMPLETE_PRODUCT_TYPES_PATH } from '../../../../../utils/axios';
 
 export default function Form({
   setValue,
@@ -45,7 +45,7 @@ export default function Form({
       <DataSourcePicker
         multiple
         disabled={disabled}
-        url={PRODUCT_TYPES_PATH.replace(':id', '')}
+        url={AUTOCOMPLETE_PRODUCT_TYPES_PATH}
         fullWidth
         label={trans('taskForm.productTypes.label')}
         placeholder={trans('taskForm.productTypes.placeholder')}

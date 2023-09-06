@@ -17,17 +17,8 @@ export class CompanyService {
     const where = {
       ...query.where,
       ...(this.type && { discr: this.type }),
-      id: {
-        in: query.ids
-      },
       name: {
         contains: query.search
-      }
-    }
-
-    if (query.partnerOnly == 1) {
-      where.is_partner = {
-        gt: 0
       }
     }
 
