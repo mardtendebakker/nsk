@@ -59,7 +59,7 @@ export class SaleService extends AOrderService {
       },
     };
 
-    return this.repository.update(this.processSelectPart(addProductsToOrderParams));
+    return this.repository.update(this.commonIncludePart(addProductsToOrderParams));
   }
 
   async removeProducts(id: number, productIds: number[]) {
@@ -76,7 +76,7 @@ export class SaleService extends AOrderService {
       },
     };
 
-    return this.repository.update(this.processSelectPart(deleteProductsFromOrderParams));
+    return this.repository.update(this.commonIncludePart(deleteProductsFromOrderParams));
   }
 
   protected getCreateSalesServiceInput(description: string): CreateAServiceDto {

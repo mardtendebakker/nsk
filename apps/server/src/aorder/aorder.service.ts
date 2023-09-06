@@ -23,107 +23,90 @@ export class AOrderService {
   ) {}
 
   async findAll(query: FindManyDto) {
-    const companySelect: Prisma.acompanySelect = {
-      id: true,
-      name: true,
-      street: true,
-      city: true,
-      zip: true,
-      acompany: {
-        select: {
-          id: true,
-          name: true,
-          street: true,
-          city: true,
-          zip: true,
-        }
-      }
-    };
+    const {
+      search,
+      status,
+      partner,
+      createdBy,
+      ...restQuery
+    } = query;
 
-    let select: Prisma.aorderSelect = {
-      id: true,
-      order_nr: true,
-      order_date: true,
-      product_order: {
-        select: {
-          quantity: true,
-          product: {
-            select: {
-              name: true,
+    const params: Prisma.aorderFindManyArgs = {
+      ...restQuery,
+      select: {
+        id: true,
+        order_nr: true,
+        order_date: true,
+        product_order: {
+          select: {
+            quantity: true,
+            product: {
+              select: {
+                name: true,
+              },
             },
           },
         },
-      },
-      order_status: {
-        select: {
-          id: true,
-          name: true,
-          color: true,
-        }
-      },
-    };
-
-    if (this.type !== AOrderDiscrimination.SALE) {
-      select = {
-        ...select,
+        order_status: {
+          select: {
+            id: true,
+            name: true,
+            color: true,
+          }
+        },
         acompany_aorder_supplier_idToacompany: {
-          select: companySelect,
+          select: this.getCompanySelect(),
         },
-      };
-    }
-    if (this.type !== AOrderDiscrimination.PURCHASE) {
-      select = {
-        ...select,
         acompany_aorder_customer_idToacompany: {
-          select: companySelect,
+          select: this.getCompanySelect(),
         },
-      };
-    }
-
-    const where: Prisma.aorderWhereInput = {
-      ...query.where,
-      ...(this.type && { discr: this.type }),
-      ...(query.search && { order_nr: { contains: query.search } }),
-      ...(query.status && { status_id: { equals: query.status } }),
+      },
+      where: {
+        ...query.where,
+        ...(this.type && { discr: this.type }),
+        ...(search && {
+          OR: [
+            { order_nr: { contains: search } },
+            {
+              acompany_aorder_supplier_idToacompany: {
+                OR: [
+                  { name: { contains: search } },
+                  { acompany: { name: { contains: search } } },
+                ],
+              },
+            },
+            {
+              acompany_aorder_customer_idToacompany: {
+                OR: [
+                  { name: { contains: search } },
+                  { acompany: { name: { contains: search } } },
+                ],
+              },
+            },
+          ],
+        }),
+        ...(status && { status_id: { equals: status } }),
+        ...((createdBy || partner) && {
+          OR: [
+            {
+              acompany_aorder_supplier_idToacompany: {
+                ...(createdBy && { id: createdBy }),
+                ...(partner && { partner_id: partner }),
+              },
+            },
+            {
+              acompany_aorder_customer_idToacompany: {
+                ...(createdBy && { id: createdBy }),
+                ...(partner && { partner_id: partner }),
+              },
+            },
+          ],
+        }),
+      },
+      orderBy: Object.keys(query?.orderBy || {})?.length ? query.orderBy : { id: 'desc' },
     };
 
-    if (query.partner !== undefined) {
-      if (this.type !== AOrderDiscrimination.SALE) {
-        where.acompany_aorder_supplier_idToacompany = {
-          partner_id: query.partner,
-        };
-      }
-      if (this.type !== AOrderDiscrimination.PURCHASE) {
-        where.acompany_aorder_customer_idToacompany = {
-          partner_id: query.partner,
-        };
-      }
-    }
-
-    if (query.createdBy !== undefined) {
-      where.OR = [
-        {
-          acompany_aorder_customer_idToacompany: {
-            id: query.createdBy,
-          },
-        },
-        {
-          acompany_aorder_supplier_idToacompany: {
-            id: query.createdBy,
-          },
-        },
-      ];
-    }
-
-    const orderBy: Prisma.Enumerable<Prisma.aorderOrderByWithRelationInput> =
-      Object.keys(query?.orderBy || {})?.length ? query.orderBy : { id: 'desc' };
-
-    const result = await this.repository.findAll({
-      ...query,
-      where,
-      select,
-      orderBy,
-    });
+    const result = await this.repository.findAll(params);
     
     return {
       count: result.count,
@@ -136,7 +119,7 @@ export class AOrderService {
       where: { id }
     };
 
-    const order = await this.repository.findOne(this.processSelectPart(params));
+    const order = await this.repository.findOne(this.commonIncludePart(params));
 
     if (!order || order?.discr !== this.type) {
       throw new NotFoundException(`Order with ID ${id} not found`);
@@ -163,7 +146,7 @@ export class AOrderService {
       }
     };
 
-    const aorder = await this.repository.create(this.processSelectPart(params));
+    const aorder = await this.repository.create(this.commonIncludePart(params));
 
     if (orderDto.order_nr === undefined) {
       const { id, order_date } = aorder;
@@ -199,7 +182,7 @@ export class AOrderService {
       where: { id }
     };
 
-    return this.repository.update(this.processSelectPart(params));
+    return this.repository.update(this.commonIncludePart(params));
   }
 
   async updateMany(updateManyOrderDto: UpdateManyAOrderDto) {
@@ -369,7 +352,7 @@ export class AOrderService {
     return data;
   }
 
-  protected processSelectPart<T extends Prisma.aorderArgs>(params: T): T {
+  protected commonIncludePart<T extends Prisma.aorderArgs>(params: T): T {
     params.include = {
       ...params.include,
       product_order: {
@@ -382,7 +365,7 @@ export class AOrderService {
       }
     };
 
-    if (this.type === AOrderDiscrimination.PURCHASE) {
+    if (this.type !== AOrderDiscrimination.SALE) {
       params.include = {
         ...params.include,
         pickup: {
@@ -398,7 +381,9 @@ export class AOrderService {
           },
         },
       };
-    } else if (this.type === AOrderDiscrimination.SALE) {
+    }
+    
+    if (this.type !== AOrderDiscrimination.PURCHASE) {
       params.include = {
         ...params.include,
         afile: {
@@ -414,5 +399,24 @@ export class AOrderService {
     }
 
     return params;
+  }
+
+  protected getCompanySelect(): Prisma.acompanySelect {
+    return {
+      id: true,
+      name: true,
+      street: true,
+      city: true,
+      zip: true,
+      acompany: {
+        select: {
+          id: true,
+          name: true,
+          street: true,
+          city: true,
+          zip: true,
+        }
+      }
+    };
   }
 }
