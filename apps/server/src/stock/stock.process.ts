@@ -230,7 +230,8 @@ export class StockProcess {
   }
 
   private async getQuantityInStock() {
-    const isStock = this.product?.product_status?.is_stock ?? true;
+    const isStock = this.product?.product_status?.is_stock;
+    const quantitySold = this.quantitySold ?? await this.getQuantitySold();
     let quantityInStock = 0;
 
     if (isStock) {
@@ -241,7 +242,7 @@ export class StockProcess {
       }
     }
 
-    this.quantityInStock = quantityInStock - this.quantitySold ?? await this.getQuantitySold();
+    this.quantityInStock = quantityInStock - quantitySold;
     return this.quantityInStock;
   }
 
