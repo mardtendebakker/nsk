@@ -34,21 +34,12 @@ export class AttributeService {
   async findAll(query: FindManyDto) {
     const where: Prisma.attributeWhereInput = {};
 
-    if(query.ids) {
-      where.id = { in: query.ids };
-    }
-
-    if(query.name) {
-      where.name = { contains: query.name };
-    }
-
     if(query.search) {
       where.OR = [
         { name: { contains: query.search }},
         { attr_code: { contains: query.search }},
       ];
     }
-
 
     const { count, data } = await this.repository.findAll({
       ...query,

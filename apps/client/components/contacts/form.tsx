@@ -6,7 +6,7 @@ import {
   Grid,
   Typography,
 } from '@mui/material';
-import { COMPANIES_PATH } from '../../utils/axios';
+import { AUTOCOMPLETE_COMPANIES_PATH } from '../../utils/axios';
 import useTranslation from '../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../hooks/useForm';
 import TextField from '../memoizedInput/textField';
@@ -153,7 +153,7 @@ function Form({
             {type == 'supplier' ? (
               <DataSourcePicker
                 sx={{ flex: 0.33 }}
-                url={COMPANIES_PATH.replace(':id', '')}
+                url={AUTOCOMPLETE_COMPANIES_PATH}
                 params={{ partnerOnly: '1' }}
                 disabled={disabled}
                 fullWidth

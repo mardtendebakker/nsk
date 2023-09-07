@@ -3,7 +3,7 @@ import BorderedBox from '../../borderedBox';
 import useTranslation from '../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../hooks/useForm';
 import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
-import { PRODUCT_TYPES_PATH, LOCATIONS_PATH, PRODUCT_STATUSES_PATH } from '../../../utils/axios';
+import { AUTOCOMPLETE_PRODUCT_TYPES_PATH, AUTOCOMPLETE_LOCATIONS_PATH, AUTOCOMPLETE_PRODUCT_STATUSES_PATH } from '../../../utils/axios';
 import SearchAccordion from '../../searchAccordion';
 import useResponsive from '../../../hooks/useResponsive';
 import ListFilterDivider from '../../listFilterDivider';
@@ -39,7 +39,7 @@ export default function Filter({
         }}
         >
           <DataSourcePicker
-            url={PRODUCT_TYPES_PATH.replace(':id', '')}
+            url={AUTOCOMPLETE_PRODUCT_TYPES_PATH}
             disabled={disabled}
             fullWidth
             displayFieldset={false}
@@ -49,7 +49,7 @@ export default function Filter({
           />
           <ListFilterDivider horizontal={!isDesktop} />
           <DataSourcePicker
-            url={LOCATIONS_PATH.replace(':id', '')}
+            url={AUTOCOMPLETE_LOCATIONS_PATH}
             searchKey="name"
             disabled={disabled}
             fullWidth
@@ -60,7 +60,7 @@ export default function Filter({
           />
           <ListFilterDivider horizontal={!isDesktop} />
           <DataSourcePicker
-            url={PRODUCT_STATUSES_PATH.replace(':id', '')}
+            url={AUTOCOMPLETE_PRODUCT_STATUSES_PATH}
             disabled={disabled}
             fullWidth
             displayFieldset={false}

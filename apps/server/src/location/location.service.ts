@@ -16,14 +16,6 @@ export class LocationService {
   findAll(query: FindManyDto) {
     const where: Prisma.locationWhereInput = {};
 
-    if(query.ids) {
-      where.id = { in: query.ids };
-    }
-
-    if(query.name) {
-      where.name = { contains: query.name };
-    }
-
     if(query.search) {
       where.OR = [
         { name: { contains: query.search }},

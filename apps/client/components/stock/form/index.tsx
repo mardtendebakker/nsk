@@ -8,7 +8,7 @@ import useTranslation from '../../../hooks/useTranslation';
 import BorderedBox from '../../borderedBox';
 import TextField from '../../memoizedInput/textField';
 import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
-import { LOCATIONS_PATH, PRODUCT_STATUSES_PATH, PRODUCT_TYPES_PATH } from '../../../utils/axios';
+import { AUTOCOMPLETE_PRODUCT_TYPES_PATH, AUTOCOMPLETE_LOCATIONS_PATH, AUTOCOMPLETE_PRODUCT_STATUSES_PATH } from '../../../utils/axios';
 import { AFile } from '../../../utils/axios/models/aFile';
 import { Attribute, ProductType } from '../../../utils/axios/models/product';
 import AutocompleteAttribute from './AutocompleteAttribute';
@@ -92,7 +92,7 @@ export default function Form({
             />
             <DataSourcePicker
               sx={{ flex: 0.33 }}
-              url={PRODUCT_TYPES_PATH.replace(':id', '')}
+              url={AUTOCOMPLETE_PRODUCT_TYPES_PATH}
               label={trans('productType')}
               placeholder={trans('selectProductType')}
               onChange={(selected: ProductType | undefined) => {
@@ -110,7 +110,7 @@ export default function Form({
           >
             <DataSourcePicker
               sx={{ flex: 0.33, mr: '1rem' }}
-              url={LOCATIONS_PATH.replace(':id', '')}
+              url={AUTOCOMPLETE_LOCATIONS_PATH}
               searchKey="name"
               label={trans('location')}
               placeholder={trans('selectLocation')}
@@ -122,7 +122,7 @@ export default function Form({
             />
             <DataSourcePicker
               sx={{ flex: 0.33, mr: '1rem' }}
-              url={PRODUCT_STATUSES_PATH.replace(':id', '')}
+              url={AUTOCOMPLETE_PRODUCT_STATUSES_PATH}
               label={trans('status')}
               placeholder={trans('selectStatus')}
               onChange={(selected: { id: number }) => setValue({ field: 'status_id', value: selected?.id })}

@@ -14,7 +14,7 @@ import useTranslation from '../../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../../hooks/useForm';
 import BaseTextField from '../../../input/textField';
 import DataSourcePicker from '../../../memoizedInput/dataSourcePicker';
-import { LOGISTICS_PATH } from '../../../../utils/axios';
+import { AUTOCOMPLETE_LOGISTICS_PATH } from '../../../../utils/axios';
 import BasicDetails from '../basicDetails';
 import PricingDetails from '../pricingDetails';
 import { Order } from '../../../../utils/axios/models/order';
@@ -140,7 +140,7 @@ function PurchaseForm({
               <DataSourcePicker
                 fullWidth
                 disabled={disabled}
-                url={LOGISTICS_PATH.replace(':id', '')}
+                url={AUTOCOMPLETE_LOGISTICS_PATH}
                 label={trans('logistic')}
                 placeholder={trans('selectLogistic')}
                 onChange={(value: { id: number }) => {

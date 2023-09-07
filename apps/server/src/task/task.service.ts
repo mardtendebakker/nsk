@@ -24,14 +24,6 @@ export class TaskService {
   async findAll(query: FindManyDto) {
     const where: Prisma.taskWhereInput = {};
 
-    if(query.ids) {
-      where.id = { in: query.ids };
-    }
-
-    if(query.name) {
-      where.name = { contains: query.name };
-    }
-
     if(query.search) {
       where.OR = [
         { name: { contains: query.search }},
