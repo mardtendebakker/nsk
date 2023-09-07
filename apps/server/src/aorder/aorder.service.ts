@@ -64,27 +64,7 @@ export class AOrderService {
       where: {
         ...query.where,
         ...(this.type && { discr: this.type }),
-        ...(search && {
-          OR: [
-            { order_nr: { contains: search } },
-            {
-              acompany_aorder_supplier_idToacompany: {
-                OR: [
-                  { name: { contains: search } },
-                  { acompany: { name: { contains: search } } },
-                ],
-              },
-            },
-            {
-              acompany_aorder_customer_idToacompany: {
-                OR: [
-                  { name: { contains: search } },
-                  { acompany: { name: { contains: search } } },
-                ],
-              },
-            },
-          ],
-        }),
+        ...(search && { order_nr: { contains: search } }),
         ...(status && { status_id: { equals: status } }),
         ...((createdBy || partner) && {
           OR: [
@@ -380,6 +360,9 @@ export class AOrderService {
             },
           },
         },
+        acompany_aorder_supplier_idToacompany: {
+          select: this.getCompanySelect()
+        },
       };
     }
     
@@ -393,6 +376,9 @@ export class AOrderService {
             original_client_filename: true,
             discr: true,
           },
+        },
+        acompany_aorder_customer_idToacompany: {
+          select: this.getCompanySelect()
         },
         repair: true
       };
