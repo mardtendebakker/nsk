@@ -59,7 +59,7 @@ export class AOrderProcess extends PrintProcess {
           barcode: await this.getBarcode({
             text: this.aorder.acompany_aorder_supplier_idToacompany.name.substring(
               0,
-              20
+              25
             ),
           }),
         },

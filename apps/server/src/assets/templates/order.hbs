@@ -82,6 +82,10 @@
     }
     .panel-body {
       padding: 15px;
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
     }
 
     .table {
@@ -149,7 +153,7 @@
             <span></span>Order details
           </div>
           <div class="panel-body">
-            <img width="80%" height="80%" src="{{order_barcode}}">
+            <img width="80%" height="80%" style="margin: 0 auto" src="{{order_barcode}}">
           </div>
           <table class="table">
             <tr><td width="50%">Order nr</td><td>{{ order_nr }}</td></tr>
@@ -226,7 +230,7 @@
           </div>
           {{#if supplier}}
           <div class="panel-body">
-            <img width="80%" height="80%" src="{{supplier.barcode}}">
+            <img width="100%" src="{{supplier.barcode}}">
           </div>
           {{/if}}
           <table class="table">
