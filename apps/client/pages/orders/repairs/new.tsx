@@ -22,6 +22,7 @@ import { Order } from '../../../utils/axios/models/order';
 export function initFormState(trans, order?: Order) {
   return {
     ...salesInitFormState(trans, order),
+    orderStatus: { required: false },
     repairDamage: { value: order?.repair?.damage },
     repairDescription: { value: order?.repair?.description },
   };
