@@ -36,6 +36,7 @@ import { AutocompleteModule } from '../autocomplete/autocomplete.module';
     ConfigModule.forRoot({
       envFilePath: ['.env.development.local', '.env.development'],
       isGlobal: true,
+      load: [() => ({ MAX_QUERY_LIMIT: process.env.MAX_QUERY_LIMIT || 100 })],
     }),
     CognitoAuthModule.registerAsync({
       imports: [ConfigModule],

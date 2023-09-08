@@ -1,12 +1,14 @@
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { AOrder } from './dto/update-many-aorder.dto';
+import { ConfigService } from '@nestjs/config';
 
 export class AOrderRepository {
   private serviceWhere: Prisma.aorderWhereInput = {};
 
   constructor(
     protected readonly prisma: PrismaService,
+    protected readonly configService: ConfigService,
     protected readonly isRepair?: boolean
   ) {
     this.serviceWhere = {
@@ -16,7 +18,8 @@ export class AOrderRepository {
 
   async findAll(params: Prisma.aorderFindManyArgs) {
     const { skip, cursor, select, orderBy } = params;
-    const take = params.take ? params.take : 20;
+    const maxQueryLimit = this.configService.get<number>('MAX_QUERY_LIMIT');
+    const take = isFinite(params.take) && params.take <  maxQueryLimit ? params.take : maxQueryLimit;
     const { 
       repair,
     ...restWhere } = params.where;

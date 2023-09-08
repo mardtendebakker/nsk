@@ -7,11 +7,15 @@ import { Prisma } from '@prisma/client';
 import { Sql } from '@prisma/client/runtime';
 import { GroupByDateResult } from './dto/analytics-result.dto';
 import { AOrderDiscrimination } from '../aorder/types/aorder-discrimination.enum';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class OrderRepository extends AOrderRepository {
-  constructor(protected readonly prisma: PrismaService) {
-    super(prisma);
+  constructor(
+    protected readonly prisma: PrismaService,
+    protected readonly configService: ConfigService
+  ) {
+    super(prisma, configService);
   }
 
   async analytics(groupBy: GroupBy): Promise<AnalyticsResultDto> {
