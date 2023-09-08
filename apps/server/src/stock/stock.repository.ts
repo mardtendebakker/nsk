@@ -1,16 +1,19 @@
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { Product } from './dto/update-many-product.dto';
+import { ConfigService } from '@nestjs/config';
 
 export class StockRepository {
   constructor(
     protected readonly prisma: PrismaService,
+    protected readonly configService: ConfigService,
     protected readonly isRepair?: boolean
   ) {}
 
   async findAll(params: Prisma.productFindManyArgs) {
     const { skip, cursor, select, orderBy } = params;
-    const take = params.take ?? 20;
+    const maxQueryLimit = this.configService.get<number>('MAX_QUERY_LIMIT');
+    const take = isFinite(params.take) && params.take <  maxQueryLimit ? params.take : maxQueryLimit;
     const { product_order, ...restWhere } = params.where;
     
     const where: Prisma.productWhereInput = {
