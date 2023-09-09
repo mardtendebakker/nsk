@@ -89,6 +89,7 @@ export default function CustomerDetails({
             <Company formRepresentation={formRepresentation} setValue={setValue} />
           ) : (
             <DataSourcePicker
+              label={trans('customer')}
               url={AUTOCOMPLETE_CUSTOMERS_PATH}
               disabled={disabled}
               fullWidth

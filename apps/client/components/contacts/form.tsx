@@ -10,8 +10,6 @@ import { AUTOCOMPLETE_COMPANIES_PATH } from '../../utils/axios';
 import useTranslation from '../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../hooks/useForm';
 import TextField from '../memoizedInput/textField';
-import Autocomplete from '../memoizedInput/autocomplete';
-import BaseTextField from '../input/textField';
 import DataSourcePicker from '../memoizedInput/dataSourcePicker';
 import Checkbox from '../checkbox';
 
@@ -47,7 +45,7 @@ function Form({
             sx={{ display: 'flex', flex: 1 }}
           >
             <TextField
-              sx={{ flex: 0.33, mr: '1rem' }}
+              sx={{ flex: 0.33, mr: '.5rem' }}
               error={Boolean(formRepresentation.name.error)}
               helperText={formRepresentation.name.error}
               label={trans('contactForm.name.label')}
@@ -57,7 +55,7 @@ function Form({
               value={formRepresentation.name.value || ''}
             />
             <TextField
-              sx={{ flex: 0.33, mr: '1rem' }}
+              sx={{ flex: 0.33, mr: '.5rem' }}
               error={Boolean(formRepresentation.kvk_nr.error)}
               helperText={formRepresentation.kvk_nr.error}
               label={trans('contactForm.kvkNr.label')}
@@ -83,7 +81,7 @@ function Form({
             sx={{ display: 'flex', flex: 1 }}
           >
             <TextField
-              sx={{ flex: 0.33, mr: '1rem' }}
+              sx={{ flex: 0.33, mr: '.5rem' }}
               error={Boolean(formRepresentation.email.error)}
               helperText={formRepresentation.email.error}
               label={trans('contactForm.email.label')}
@@ -94,7 +92,7 @@ function Form({
               value={formRepresentation.email.value || ''}
             />
             <TextField
-              sx={{ flex: 0.33, mr: '1rem' }}
+              sx={{ flex: 0.33, mr: '.5rem' }}
               error={Boolean(formRepresentation.phone.error)}
               helperText={formRepresentation.phone.error}
               label={trans('contactForm.phone.label')}
@@ -119,37 +117,6 @@ function Form({
             xs={12}
             sx={{ display: 'flex', flex: 1, alignItems: 'center' }}
           >
-            <Autocomplete
-              sx={{ flex: 0.33, mr: '1rem' }}
-              multiple
-              disabled={disabled}
-              options={[]}
-              filterSelectedOptions
-              renderInput={
-                (params) => (
-                  <BaseTextField
-                    {...params}
-                    label={trans('contactForm.list.label')}
-                    placeholder={trans('contactForm.list.placeholder')}
-                  />
-                )
-               }
-            />
-            <Autocomplete
-              sx={{ flex: 0.33, mr: '1rem' }}
-              disabled={disabled}
-              options={[]}
-              filterSelectedOptions
-              renderInput={
-                (params) => (
-                  <BaseTextField
-                    {...params}
-                    label={trans('contactForm.tag.label')}
-                    placeholder={trans('contactForm.tag.placeholder')}
-                  />
-                )
-               }
-            />
             {type == 'supplier' ? (
               <DataSourcePicker
                 sx={{ flex: 0.33 }}
@@ -157,9 +124,9 @@ function Form({
                 params={{ partnerOnly: '1' }}
                 disabled={disabled}
                 fullWidth
-                label={trans('contactForm.partner.label')}
-                placeholder={trans('contactForm.partner.placeholder')}
-                onChange={(value: { id: number }) => setValue({ field: 'partner', value: value?.id })}
+                label={trans('partner')}
+                placeholder={trans('selectPartner')}
+                onChange={(value: { id: number }) => setValue({ field: 'partner', value: value?.id || null })}
                 value={formRepresentation.partner.value}
               />
             ) : (
@@ -167,8 +134,20 @@ function Form({
                 <Checkbox
                   checked={formRepresentation.is_partner.value}
                   onCheck={(checked) => setValue({ field: 'is_partner', value: checked })}
-                  label={trans('partner')}
+                  label={trans('isPartner')}
                 />
+                {!formRepresentation.is_partner.value && (
+                <DataSourcePicker
+                  label={trans('partner')}
+                  url={AUTOCOMPLETE_COMPANIES_PATH}
+                  params={{ partnerOnly: '1' }}
+                  disabled={disabled}
+                  fullWidth
+                  placeholder={trans('selectPartner')}
+                  value={formRepresentation.partner.value}
+                  onChange={(value: { id: number }) => setValue({ field: 'partner', value: value?.id || null })}
+                />
+                )}
               </Box>
             )}
           </Grid>
@@ -192,7 +171,7 @@ function Form({
             sx={{ display: 'flex', flex: 1 }}
           >
             <TextField
-              sx={{ flex: 0.5, mr: '1rem' }}
+              sx={{ flex: 0.5, mr: '.5rem' }}
               error={Boolean(formRepresentation.street.error)}
               helperText={formRepresentation.street.error}
               label={trans('contactForm.street.label')}
@@ -218,7 +197,7 @@ function Form({
             sx={{ display: 'flex', flex: 1 }}
           >
             <TextField
-              sx={{ flex: 0.25, mr: '1rem' }}
+              sx={{ flex: 0.25, mr: '.5rem' }}
               error={Boolean(formRepresentation.city.error)}
               helperText={formRepresentation.city.error}
               label={trans('contactForm.city.label')}
@@ -228,7 +207,7 @@ function Form({
               value={formRepresentation.city.value || ''}
             />
             <TextField
-              sx={{ flex: 0.25, mr: '1rem' }}
+              sx={{ flex: 0.25, mr: '.5rem' }}
               error={Boolean(formRepresentation.zip.error)}
               helperText={formRepresentation.zip.error}
               label={trans('contactForm.zipcode.label')}
@@ -238,7 +217,7 @@ function Form({
               value={formRepresentation.zip.value || ''}
             />
             <TextField
-              sx={{ flex: 0.25, mr: '1rem' }}
+              sx={{ flex: 0.25, mr: '.5rem' }}
               error={Boolean(formRepresentation.state.error)}
               helperText={formRepresentation.state.error}
               label={trans('contactForm.state.label')}
@@ -278,7 +257,7 @@ function Form({
             sx={{ display: 'flex', flex: 1 }}
           >
             <TextField
-              sx={{ flex: 0.5, mr: '1rem' }}
+              sx={{ flex: 0.5, mr: '.5rem' }}
               error={Boolean(formRepresentation.street2.error)}
               helperText={formRepresentation.street2.error}
               label={trans('contactForm.street.label')}
@@ -304,7 +283,7 @@ function Form({
             sx={{ display: 'flex', flex: 1 }}
           >
             <TextField
-              sx={{ flex: 0.25, mr: '1rem' }}
+              sx={{ flex: 0.25, mr: '.5rem' }}
               error={Boolean(formRepresentation.city2.error)}
               helperText={formRepresentation.city2.error}
               label={trans('contactForm.city.label')}
@@ -314,7 +293,7 @@ function Form({
               value={formRepresentation.city2.value || ''}
             />
             <TextField
-              sx={{ flex: 0.25, mr: '1rem' }}
+              sx={{ flex: 0.25, mr: '.5rem' }}
               error={Boolean(formRepresentation.zip2.error)}
               helperText={formRepresentation.zip2.error}
               label={trans('contactForm.zipcode.label')}
@@ -324,7 +303,7 @@ function Form({
               value={formRepresentation.zip2.value || ''}
             />
             <TextField
-              sx={{ flex: 0.25, mr: '1rem' }}
+              sx={{ flex: 0.25, mr: '.5rem' }}
               error={Boolean(formRepresentation.state2.error)}
               helperText={formRepresentation.state2.error}
               label={trans('contactForm.state.label')}

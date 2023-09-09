@@ -35,6 +35,7 @@ export function initFormState(trans, order?: Order) {
     deliveryDate: { value: order?.delivery_date },
     deliveryType: { value: order?.delivery_type },
     deliveryInstructions: { value: order?.delivery_instructions },
+    partnerId: { value: order?.acompany_aorder_customer_idToacompany?.acompany?.id },
     customerId: {
       validator: (formRepresentation: FormRepresentation) => {
         if (!formRepresentation.newCustomer.value && formRepresentation.customerId.value == undefined) {

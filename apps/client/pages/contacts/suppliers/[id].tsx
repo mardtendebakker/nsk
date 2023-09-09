@@ -13,7 +13,7 @@ import { SUPPLIERS_PATH } from '../../../utils/axios';
 import { CONTACTS_SUPPLIERS_NEW, CONTACTS_SUPPLIERS } from '../../../utils/routes';
 import useForm from '../../../hooks/useForm';
 import useTranslation from '../../../hooks/useTranslation';
-import { initFormState, formRepresentationToBody } from '../customers/new';
+import { initFormState, formRepresentationToBody } from './new';
 
 function EditSupplierContact() {
   const { trans } = useTranslation();
