@@ -5,7 +5,6 @@ import { CreateCompanyDto } from './dto/create-company.dto';
 import { FindManyDto } from './dto/find-many.dto';
 import { CompanyEntity } from './entities/company.entity';
 import { CompanyDiscrimination } from './types/company-discrimination.enum';
-
 @Injectable()
 export class CompanyService {
   constructor(
@@ -47,14 +46,16 @@ export class CompanyService {
     }
   }
 
-  async create(comapny: CreateCompanyDto) {
+  async create(comapnyDto: CreateCompanyDto) {
     if (this.type === undefined) {
       throw new BadRequestException('The operation requires a specific company type');
     }
 
     return this.repository.create({
-      discr: this.type,
-      ...comapny,
+      data: {
+        ...this.prepareIsPartnerField(comapnyDto),
+        discr: this.type,
+      }
     });
   }
 
@@ -66,9 +67,9 @@ export class CompanyService {
     return this.repository.delete({ where: { id } });
   }
 
-  async update(id: number, comapny: UpdateCompanyDto) {
+  async update(id: number, comapnyDto: UpdateCompanyDto) {
     return this.repository.update({
-      data: comapny,
+      data: this.prepareIsPartnerField(comapnyDto),
       where: { id }
     });
   }
@@ -100,5 +101,15 @@ export class CompanyService {
     }
 
     return company;
+  }
+
+  prepareIsPartnerField<T extends { is_partner?: number; partner_id?: number }>(acompanyDto: T): T {
+    const acompany = { ...acompanyDto };
+  
+    if (acompany.is_partner === 0 && Number.isFinite(acompany.partner_id)) {
+      acompany.is_partner = -1;
+    }
+  
+    return acompany;
   }
 }

@@ -20,11 +20,8 @@ export class CompanyRepository {
     };
   }
   
-  create(companyCreateInput: Prisma.acompanyCreateInput) {
-    const data: Prisma.acompanyCreateInput = companyCreateInput;
-    return this.prisma.acompany.create({
-      data
-    });
+  create(companyCreateArgs: Prisma.acompanyCreateArgs) {
+    return this.prisma.acompany.create(companyCreateArgs);
   }
   
   findOne(where: Prisma.acompanyWhereUniqueInput) {
