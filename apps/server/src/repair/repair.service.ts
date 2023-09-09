@@ -5,7 +5,7 @@ import { FileService } from '../file/file.service';
 import { CreateOrderStatusDto } from '../order-status/dto/create-order-status.dto';
 import { OrderStatusService } from '../order-status/order-status.service';
 import { CreateAOrderDto } from '../aorder/dto/create-aorder.dto';
-import { Prisma, aorder } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { SaleService } from '../sale/sale.service';
 import { AProductService } from '../aproduct/aproduct.service';
 import { REPAIR_PRODUCT_LOCATION_ID, REPAIR_PRODUCT_NAME } from '../to-repair/enum/repair-product.const';

@@ -89,6 +89,7 @@ export default function SupplierDetails({
             <Company formRepresentation={formRepresentation} setValue={setValue} />
           ) : (
             <DataSourcePicker
+              label={trans('supplier')}
               url={AUTOCOMPLETE_SUPPLIERS_PATH}
               disabled={disabled}
               fullWidth

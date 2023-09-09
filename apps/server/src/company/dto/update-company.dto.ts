@@ -1,3 +1,4 @@
-import { PrismaCompanyUpdateInputDto } from "./prisma-company-update-input.dto";
+import { PartialType } from "@nestjs/swagger";
+import { CreateCompanyDto } from "./create-company.dto";
 
-export class UpdateCompanyDto extends PrismaCompanyUpdateInputDto {}
+export class UpdateCompanyDto extends PartialType(CreateCompanyDto) {}

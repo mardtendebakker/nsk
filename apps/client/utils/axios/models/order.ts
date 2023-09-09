@@ -58,6 +58,7 @@ export interface Order {
   delivery_date:string,
   delivery_type:number,
   delivery_instructions:string,
+  acompany_aorder_customer_idToacompany:Company
 }
 
 interface Pickup {

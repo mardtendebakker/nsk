@@ -64,27 +64,7 @@ export class AOrderService {
       where: {
         ...query.where,
         ...(this.type && { discr: this.type }),
-        ...(search && {
-          OR: [
-            { order_nr: { contains: search } },
-            {
-              acompany_aorder_supplier_idToacompany: {
-                OR: [
-                  { name: { contains: search } },
-                  { acompany: { name: { contains: search } } },
-                ],
-              },
-            },
-            {
-              acompany_aorder_customer_idToacompany: {
-                OR: [
-                  { name: { contains: search } },
-                  { acompany: { name: { contains: search } } },
-                ],
-              },
-            },
-          ],
-        }),
+        ...(search && { order_nr: { contains: search } }),
         ...(status && { status_id: { equals: status } }),
         ...((createdBy || partner) && {
           OR: [
@@ -128,17 +108,17 @@ export class AOrderService {
     return new AOrderProcess(order).run();
   }
 
-  async create(orderDto: CreateAOrderDto) {
+  async create(aorderDto: CreateAOrderDto) {
     if (this.type === undefined) {
       throw new BadRequestException('The operation requires a specific order type');
     }
 
-    const { pickup, repair } = orderDto;
+    const { pickup, repair, ...commonDto } = aorderDto;
 
     const params: Prisma.aorderCreateArgs = {
       data: {
-        ...this.processCreateOrUpdateOrderInput(orderDto),
-        order_nr: orderDto.order_nr || 'TEMP' + Math.floor(Date.now() / 1000).toString(),
+        ...this.processCreateOrUpdateOrderInput(commonDto),
+        order_nr: commonDto.order_nr || 'TEMP' + Math.floor(Date.now() / 1000).toString(),
         discr: this.type,
         order_date: new Date(),
         ...(pickup && { pickup: { create: { ...pickup } } }),
@@ -148,7 +128,7 @@ export class AOrderService {
 
     const aorder = await this.repository.create(this.commonIncludePart(params));
 
-    if (orderDto.order_nr === undefined) {
+    if (commonDto.order_nr === undefined) {
       const { id, order_date } = aorder;
 
       const order_nr = order_date.getFullYear() + id.toString().padStart(6, "0");
@@ -168,11 +148,11 @@ export class AOrderService {
     return aorder;
   }
 
-  async update(id: number, orderDto: UpdateAOrderDto) {
-    const { pickup, repair } = orderDto;
+  async update(id: number, aorderDto: UpdateAOrderDto) {
+    const { pickup, repair, ...commonDto } = aorderDto;
 
     const data: Prisma.aorderUpdateInput = {
-      ...this.processCreateOrUpdateOrderInput(orderDto),
+      ...this.processCreateOrUpdateOrderInput(commonDto),
       ...(pickup && { pickup: { upsert: { update: { ...pickup }, create: { ...pickup } } } }),
       ...(repair && { repair: { upsert: { update: { ...repair }, create: { ...repair } } } }),
     };
@@ -380,6 +360,9 @@ export class AOrderService {
             },
           },
         },
+        acompany_aorder_supplier_idToacompany: {
+          select: this.getCompanySelect()
+        },
       };
     }
     
@@ -393,6 +376,9 @@ export class AOrderService {
             original_client_filename: true,
             discr: true,
           },
+        },
+        acompany_aorder_customer_idToacompany: {
+          select: this.getCompanySelect()
         },
         repair: true
       };
