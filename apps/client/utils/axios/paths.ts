@@ -37,6 +37,7 @@ export const SPLIT_PRODUCT_INDIVIDUALIZE_PATH = '/split-product/:id/individualiz
 export const SPLIT_PRODUCT_STOCK_PART_PATH = '/split-product/:id/split-part-of-bundle';
 export const APRODUCT_BULK_PRINT_BARCODES = '/aproduct/bulk/print/barcodes';
 export const APRODUCT_BULK_PRINT_CHECKLISTS = '/aproduct/bulk/print/checklists';
+export const APRODUCT_BULK_PRINT_PRICECARDS = '/aproduct/bulk/print/pricecards';
 export const AUTOCOMPLETE_PRODUCT_TYPES_PATH = '/autocomplete/product-types';
 export const AUTOCOMPLETE_TASKS_PATH = '/autocomplete/tasks';
 export const AUTOCOMPLETE_ATTRIBUTES_PATH = '/autocomplete/attributes';

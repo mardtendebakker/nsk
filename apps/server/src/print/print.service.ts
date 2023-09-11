@@ -8,6 +8,7 @@ import { AOrderProcess } from './aorder.process';
 import { PrintProcess } from './print.process';
 import { ProductProcess } from './product.process';
 import { ProcessedStock } from '../stock/dto/processed-stock.dto';
+import { ProductRelation } from '../stock/types/product-relation';
 
 @Injectable()
 export class PrintService {
@@ -125,10 +126,10 @@ export class PrintService {
     const templatePath = join(process.cwd(), 'apps/server/src/assets/templates/checklist.hbs');
     const source = readFileSync(templatePath, 'utf8');
     const template = Handlebars.compile(source);
+    const productProcess = new ProductProcess();
 
     const data = await Promise.all(products.map(async product => {
-      const productProcess = new ProductProcess(product);
-      return productProcess.run();
+      return productProcess.checklist(product);
     }));
 
     const browser = await puppeteer.launch({
@@ -148,6 +149,44 @@ export class PrintService {
           bottom: 10,
           left: 10,
           right: 10,
+        },
+      });
+
+      return pdfStream;
+    } finally {
+      if (browser) {
+        browser.close();
+      }
+    }
+  }
+
+  async printPriceCards(products: ProductRelation[]): Promise<Buffer> {
+    const templatePath = join(process.cwd(), 'apps/server/src/assets/templates/pricecard.hbs');
+    const source = readFileSync(templatePath, 'utf8');
+    const template = Handlebars.compile(source);
+    const productProcess = new ProductProcess();
+
+    const data = await Promise.all(products.map(async product => {
+      return productProcess.pricecard(product);
+    }));
+
+    const browser = await puppeteer.launch({
+      headless: true,
+      args: ['--no-sandbox'],
+    });
+    
+    try {
+      const page = await browser.newPage();
+      const result = template(data);
+      await page.setContent(result);
+
+      const pdfStream: Buffer = await page.pdf({
+        format: 'A6',
+        margin: {
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right: 0,
         },
       });
 

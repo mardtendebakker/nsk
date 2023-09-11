@@ -99,6 +99,13 @@ export class StockService {
       select: this.processSelect(),
     });
   }
+  
+  async findManyRelation(query: FindManyDto) {
+    return this.repository.findAll({
+      ...query,
+      select: this.processSelect(query.select),
+    });
+  }
 
   async findOneCustomSelect(id: number): Promise<FindOneCustomResponse> {
     const locationSelect: Prisma.locationSelect = {
@@ -156,7 +163,7 @@ export class StockService {
       attribute_id: true,
       attribute: {
         select: attributeSelect
-      }
+      },
     };
     const productSelect: Prisma.productSelect = {
       id: true,
@@ -325,6 +332,11 @@ export class StockService {
     return this.printService.printChecklists(data);
   }
 
+  async printPriceCards(ids: number[]) {
+    const { data } = await this.findManyRelation({ where: { id: { in: ids } } });
+    return this.printService.printPriceCards(data);
+  }
+
   private productOrderProcess(productOrder: ProductOrderRelation): ProductOrderDto {
     const order = <AOrderPayload>productOrder?.aorder;
     return {
@@ -408,8 +420,10 @@ export class StockService {
     };
 
     const attributeSelect: Prisma.attributeSelect = {
+      name: true,
       type: true,
       has_quantity: true,
+      attribute_option: true,
     };
 
     const ParrentProductSelect: Prisma.productSelect = {
@@ -424,6 +438,7 @@ export class StockService {
       attribute: {
         select: attributeSelect,
       },
+      product_product_attribute_value_product_idToproduct: true,
     };
 
     const productAttributeSelect: Prisma.product_attributeSelect = {

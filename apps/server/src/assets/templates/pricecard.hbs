@@ -1,0 +1,106 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="Window-target" content="_blank">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nexxus price tag</title>
+  <style>
+    html {
+      -webkit-print-color-adjust: exact;
+    }
+    body {
+      margin: 0;
+      font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 9pt;
+    }
+
+    div {
+      text-align: center;
+      width: 100%;
+    }
+
+    div.content {
+      padding: 4px;
+    }
+
+    div.attributes {
+      height: 70%;
+      width: 100%;
+    }
+
+    div.title {
+      background-color: #000;
+      color: #fff;
+      text-transform: uppercase;
+      font-size: 14pt;
+    }
+
+    div.price {
+      color: #ff0000;
+      font-weight: bold;
+      font-size: 24pt;
+    }
+
+    table {
+      width: 100%;
+      margin-bottom: 10px;
+      max-height: 100%;
+    }
+
+    td {
+      padding: 4px;
+    }
+
+    td.even {
+      background-color: #eef;
+    }
+    
+    .pagebreak {
+      page-break-before: always;
+    }
+  </style>
+</head>
+<body>
+{{#each this}}
+  <div class="container pagebreak">
+    <div class="content title"><span>{{product.name}}</span></div>
+    <div class="content attributes">
+      <table>
+        {{#each attributeRelations}}
+          {{#ifCond attribute.type '!=' 2}}
+            {{#if value}}
+              <tr>
+                <td class="{{#if even}}even{{/if}}">{{attribute.name}}</td>
+                <td class="{{#if even}}even{{/if}}"><b>
+                  {{#ifCond attribute.type '==' 1}}
+                    {{selectedOption.name}}
+                  {{else}}
+                    {{#ifCond attribute.type '==' 3}}
+                      {{#if valueProduct}}
+                        {{quantity}}x {{valueProduct.name}}
+                      {{/if}}
+                    {{else}}
+                      {{value}}
+                    {{/ifCond}}
+                  {{/ifCond}}
+                </b></td>
+              </tr>
+            {{/if}}
+          {{/ifCond}}
+        {{/each}}
+      </table>
+    </div>
+    <div class="content price">
+      &euro; {{product.price}}
+    </div>
+    <div class="content">
+      <img width="65%" src="{{ product.barcode }}">
+    </div>
+    <div class="content">
+      <b>*&nbsp;{{product.sku}}&nbsp;*</b>
+    </div>
+  </div>
+{{/each}}
+</body>
+</html>
