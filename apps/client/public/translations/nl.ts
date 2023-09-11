@@ -285,6 +285,7 @@ const translation = {
   printChecklist: 'Controlelijst afdrukken',
   saleableQuantity: 'Verkoopbare hoeveelheid',
   printBarcode: 'Streepjescode afdrukken',
+  printPriceCard: 'Prijskaart afdrukken',
   newRepair: 'Nieuwe reparatie',
   editRepair: 'Reparatie bewerken',
   addService: 'Dienst toevoegen',
