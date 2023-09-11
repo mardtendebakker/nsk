@@ -107,4 +107,29 @@ export class StockController {
     });
     return new StreamableFile(pdfStream);
   }
+
+
+
+  @Get('bulk/print/pricecards')
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'PriceCard pdf',
+    content: {
+      'application/octet-stream': {
+        schema: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  async printPriceCards(@Query() bulkPrintDTO: BulkPrintDTO, @Res({ passthrough: true }) res: Response) {
+    const { ids } = bulkPrintDTO;
+    const pdfStream = await this.stockService.printPriceCards(ids);
+    res.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': 'inline; filename="pricecards.pdf"',
+    });
+    return new StreamableFile(pdfStream);
+  }
 }
