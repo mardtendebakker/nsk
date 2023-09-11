@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import _ from 'lodash';
 import {
-  STOCK_PRODUCTS_PATH, STOCK_REPAIRS_PATH, SPLIT_PRODUCT_INDIVIDUALIZE_PATH, SPLIT_PRODUCT_STOCK_PART_PATH, APRODUCT_BULK_PRINT_BARCODES, AxiosResponse, APRODUCT_BULK_PRINT_CHECKLISTS, AUTOCOMPLETE_LOCATIONS_PATH,
+  STOCK_PRODUCTS_PATH, STOCK_REPAIRS_PATH, SPLIT_PRODUCT_INDIVIDUALIZE_PATH, SPLIT_PRODUCT_STOCK_PART_PATH, APRODUCT_BULK_PRINT_BARCODES, AxiosResponse, APRODUCT_BULK_PRINT_CHECKLISTS, AUTOCOMPLETE_LOCATIONS_PATH, APRODUCT_BULK_PRINT_PRICECARDS,
 } from '../../../utils/axios';
 import List from './list';
 import useAxios from '../../../hooks/useAxios';
@@ -116,6 +116,7 @@ export default function ListContainer({ type } : { type: 'product' | 'repair' })
   );
   const { call: bulkPrint, performing: performingBulkPrintBarcodes } = useAxios('get', APRODUCT_BULK_PRINT_BARCODES);
   const { call: bulkPrintChecklist, performing: performingBulkPrintChecklists } = useAxios('get', APRODUCT_BULK_PRINT_CHECKLISTS);
+  const { call: bulkPrintPriceCard, performing: performingBulkPrintPriceCards } = useAxios('get', APRODUCT_BULK_PRINT_PRICECARDS);
   const { call: callDelete, performing: performingDelete } = useAxios(
     'delete',
     ajaxPath,
@@ -181,7 +182,7 @@ export default function ListContainer({ type } : { type: 'product' | 'repair' })
       .then(() => defaultRefreshList());
   };
 
-  const disabled = (): boolean => performing || performingDelete || performingPatch || performingSplit || performingBulkPrintBarcodes || performingBulkPrintChecklists;
+  const disabled = (): boolean => performing || performingDelete || performingPatch || performingSplit || performingBulkPrintBarcodes || performingBulkPrintChecklists || performingBulkPrintPriceCards;
 
   const handlePatchLocation = () => {
     callPatch({ body: { ids: checkedProductIds, product: { location_id: changeLocationValue } } })
@@ -204,6 +205,13 @@ export default function ListContainer({ type } : { type: 'product' | 'repair' })
 
   const handlePrintChecklists = () => {
     bulkPrintChecklist({ params: { ids: checkedProductIds }, responseType: 'blob' })
+      .then((response: AxiosResponse) => {
+        openBlob(response.data);
+      });
+  };
+
+  const handlePrintPriceCards = () => {
+    bulkPrintPriceCard({ params: { ids: checkedProductIds }, responseType: 'blob' })
       .then((response: AxiosResponse) => {
         openBlob(response.data);
       });
@@ -254,6 +262,7 @@ export default function ListContainer({ type } : { type: 'product' | 'repair' })
           onChangeLocation={() => setShowChangeLocationModal(true)}
           onPrint={handlePrintBarcodes}
           onPrintChecklist={handlePrintChecklists}
+          onPrintPriceCard={handlePrintPriceCards}
         />
         <Box sx={{ m: '.5rem' }} />
         <List
