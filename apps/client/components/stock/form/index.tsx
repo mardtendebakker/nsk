@@ -2,21 +2,13 @@ import {
   Box, Grid, IconButton, InputAdornment, Tooltip, Typography,
 } from '@mui/material';
 import QrCode from '@mui/icons-material/QrCode';
-import { useState } from 'react';
 import { SetValue, FormRepresentation } from '../../../hooks/useForm';
 import useTranslation from '../../../hooks/useTranslation';
 import BorderedBox from '../../borderedBox';
 import TextField from '../../memoizedInput/textField';
 import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
 import { AUTOCOMPLETE_PRODUCT_TYPES_PATH, AUTOCOMPLETE_LOCATIONS_PATH, AUTOCOMPLETE_PRODUCT_STATUSES_PATH } from '../../../utils/axios';
-import { AFile } from '../../../utils/axios/models/aFile';
-import { Attribute, ProductType } from '../../../utils/axios/models/product';
-import AutocompleteAttribute from './AutocompleteAttribute';
-import FileAttribute from './FileAttribute';
-
-export const buildAttributeKey = (attribute: { id?: number }, productType: { id?: number }) => (
-  `attribute:${productType.id}:${attribute.id}`
-);
+import AttributeForm from './AttributeForm';
 
 export default function Form({
   setValue,
@@ -30,18 +22,6 @@ export default function Form({
   onPrintBarcode?: () => void
 }) {
   const { trans } = useTranslation();
-  const [productType, setProductType] = useState<ProductType | undefined>();
-
-  const handleAttributeChange = (attribute: Attribute, value: any) => {
-    setValue({
-      field: buildAttributeKey(attribute, productType),
-      value,
-    });
-  };
-
-  const getAttributeValue = (attribute: Attribute) => (
-    formRepresentation[buildAttributeKey(attribute, productType)]?.value
-  );
 
   return (
     <>
@@ -95,10 +75,7 @@ export default function Form({
               url={AUTOCOMPLETE_PRODUCT_TYPES_PATH}
               label={trans('productType')}
               placeholder={trans('selectProductType')}
-              onChange={(selected: ProductType | undefined) => {
-                setProductType(selected);
-                setValue({ field: 'type_id', value: selected?.id });
-              }}
+              onChange={(selected: { id: number }) => setValue({ field: 'type_id', value: selected?.id })}
               value={formRepresentation.type_id.value?.toString()}
               disabled={disabled}
             />
@@ -160,56 +137,13 @@ export default function Form({
           </Grid>
         </Grid>
       </BorderedBox>
-      {productType?.attributes.length > 0 && (
-      <BorderedBox sx={{ width: '80rem', p: '1rem', mt: '1.5rem' }}>
-        <Typography
-          sx={{ mb: '2rem' }}
-          variant="h4"
-        >
-          {trans('attributes')}
-        </Typography>
-        <Grid sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-start' }}>
-          {
-          productType?.attributes?.map((attribute: Attribute) => {
-            if (attribute.type == 1 || attribute.type == 3) {
-              return (
-                <AutocompleteAttribute
-                  key={buildAttributeKey(attribute, productType)}
-                  value={getAttributeValue(attribute)}
-                  onChange={(option) => { handleAttributeChange(attribute, option?.id); }}
-                  attribute={attribute}
-                  disabled={disabled}
-                />
-              );
-            } if (attribute.type == 0) {
-              return (
-                <TextField
-                  key={buildAttributeKey(attribute, productType)}
-                  sx={{ flex: '0 33%', pr: '1rem' }}
-                  label={attribute.name}
-                  value={getAttributeValue(attribute) || ''}
-                  onChange={(e) => { handleAttributeChange(attribute, e.target.value); }}
-                  disabled={disabled}
-                />
-              );
-            } if (attribute.type == 2) {
-              return (
-                <FileAttribute
-                  key={buildAttributeKey(attribute, productType)}
-                  attribute={attribute}
-                  afile={(formRepresentation.afile.value || []) as AFile[]}
-                  value={getAttributeValue(attribute) || []}
-                  onChange={(value) => handleAttributeChange(attribute, value)}
-                  disabled={disabled}
-                />
-              );
-            }
-
-            return undefined;
-          })
-        }
-        </Grid>
-      </BorderedBox>
+      {formRepresentation.type_id.value && (
+        <AttributeForm
+          setValue={setValue}
+          formRepresentation={formRepresentation}
+          disabled={disabled}
+          productTypeId={formRepresentation.type_id.value}
+        />
       )}
     </>
   );
