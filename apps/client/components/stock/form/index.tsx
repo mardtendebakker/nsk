@@ -2,14 +2,12 @@ import {
   Box, Grid, IconButton, InputAdornment, Tooltip, Typography,
 } from '@mui/material';
 import QrCode from '@mui/icons-material/QrCode';
-import { useEffect, useState } from 'react';
 import { SetValue, FormRepresentation } from '../../../hooks/useForm';
 import useTranslation from '../../../hooks/useTranslation';
 import BorderedBox from '../../borderedBox';
 import TextField from '../../memoizedInput/textField';
 import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
 import { AUTOCOMPLETE_PRODUCT_TYPES_PATH, AUTOCOMPLETE_LOCATIONS_PATH, AUTOCOMPLETE_PRODUCT_STATUSES_PATH } from '../../../utils/axios';
-import { ProductType } from '../../../utils/axios/models/product';
 import AttributeForm from './AttributeForm';
 
 export default function Form({
@@ -24,14 +22,7 @@ export default function Form({
   onPrintBarcode?: () => void
 }) {
   const { trans } = useTranslation();
-  const [productTypeId, setProductTypeId] = useState<number | undefined>();
-  const handleProductTypeChange = (newProductTypeId: number) => {
-    setProductTypeId(newProductTypeId);
-    setValue({ field: 'type_id', value: newProductTypeId });
-  };
-  useEffect(() => {
-    setProductTypeId(formRepresentation.type_id.value);
-  }, [formRepresentation.type_id.value]);
+
   return (
     <>
       <BorderedBox sx={{ width: '80rem', p: '1rem' }}>
@@ -84,9 +75,7 @@ export default function Form({
               url={AUTOCOMPLETE_PRODUCT_TYPES_PATH}
               label={trans('productType')}
               placeholder={trans('selectProductType')}
-              onChange={(selected: ProductType | undefined) => {
-                handleProductTypeChange(selected?.id);
-              }}
+              onChange={(selected: { id: number }) => setValue({ field: 'type_id', value: selected?.id })}
               value={formRepresentation.type_id.value?.toString()}
               disabled={disabled}
             />
@@ -148,12 +137,12 @@ export default function Form({
           </Grid>
         </Grid>
       </BorderedBox>
-      {productTypeId && (
+      {formRepresentation.type_id.value && (
         <AttributeForm
           setValue={setValue}
           formRepresentation={formRepresentation}
           disabled={disabled}
-          productTypeId={productTypeId}
+          productTypeId={formRepresentation.type_id.value}
         />
       )}
     </>

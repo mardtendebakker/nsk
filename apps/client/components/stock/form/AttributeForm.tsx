@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Grid, TextField, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import { FormRepresentation, SetValue } from '../../../hooks/useForm';
 import useTranslation from '../../../hooks/useTranslation';
 import { Attribute } from '../../../utils/axios/models/product';
@@ -9,6 +9,7 @@ import FileAttribute from './FileAttribute';
 import { AFile } from '../../../utils/axios/models/aFile';
 import useAxios from '../../../hooks/useAxios';
 import { PRODUCT_TYPES_PATH } from '../../../utils/axios';
+import TextField from '../../memoizedInput/textField';
 
 export const buildAttributeKey = (attribute: { id?: number }, productType: { id?: number }) => (
   `attribute:${productType.id}:${attribute.id}`
