@@ -1,10 +1,11 @@
 import useAxios from '../../../hooks/useAxios';
 import useTranslation from '../../../hooks/useTranslation';
 import useForm, { FormRepresentation } from '../../../hooks/useForm';
-import Form, { buildAttributeKey } from '../form';
+import Form from '../form';
 import { AxiosResponse, STOCK_PRODUCTS_PATH } from '../../../utils/axios';
 import { Product } from '../../../utils/axios/models/product';
 import ConfirmationDialog from '../../confirmationDialog';
+import { buildAttributeKey } from '../form/AttributeForm';
 
 export function initFormState(product?: Product) {
   const attributes = {};
