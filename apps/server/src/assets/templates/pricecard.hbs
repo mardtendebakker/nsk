@@ -67,27 +67,23 @@
     <div class="content title"><span>{{product.name}}</span></div>
     <div class="content attributes">
       <table>
-        {{#each attributeRelations}}
-          {{#ifCond attribute.type '!=' 2}}
-            {{#if value}}
-              <tr>
-                <td class="{{#if even}}even{{/if}}">{{attribute.name}}</td>
-                <td class="{{#if even}}even{{/if}}"><b>
-                  {{#ifCond attribute.type '==' 1}}
-                    {{selectedOption.name}}
-                  {{else}}
-                    {{#ifCond attribute.type '==' 3}}
-                      {{#if valueProduct}}
-                        {{quantity}}x {{valueProduct.name}}
-                      {{/if}}
-                    {{else}}
-                      {{value}}
-                    {{/ifCond}}
-                  {{/ifCond}}
-                </b></td>
-              </tr>
-            {{/if}}
-          {{/ifCond}}
+        {{#each product_attributes}}
+          <tr>
+            <td class="{{#if even}}even{{/if}}">{{attribute.name}}</td>
+            <td class="{{#if even}}even{{/if}}"><b>
+              {{#ifCond attribute.type '==' 1}}
+                {{selectedOption.name}}
+              {{else}}
+                {{#ifCond attribute.type '==' 3}}
+                  {{#if valueProduct}}
+                    {{quantity}}x {{valueProduct.name}}
+                  {{/if}}
+                {{else}}
+                  {{value}}
+                {{/ifCond}}
+              {{/ifCond}}
+            </b></td>
+          </tr>
         {{/each}}
       </table>
     </div>

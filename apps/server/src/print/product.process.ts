@@ -2,7 +2,7 @@ import { format } from 'date-fns';
 import { PrintProcess } from './print.process';
 import { AOrderDiscrimination } from '../aorder/types/aorder-discrimination.enum';
 import { ProcessedStock } from '../stock/dto/processed-stock.dto';
-import { ProductRelation } from '../stock/types/product-relation';
+import { ProductRelationAttributeProcessed } from '../stock/types/product-relation-attribute-processed';
 export class ProductProcess extends PrintProcess {
   async checklist(product: ProcessedStock) {
     const purchaseOrder = product?.product_orders?.find(
@@ -35,7 +35,7 @@ export class ProductProcess extends PrintProcess {
     };
   }
 
-  async pricecard(product: ProductRelation) {
+  async pricecard(product: ProductRelationAttributeProcessed) {
     return {
       product: {
         barcode: await this.getBarcode({ text: product.sku }),
@@ -43,15 +43,13 @@ export class ProductProcess extends PrintProcess {
         name: product.name,
         price: product.price,
       },
-      attributeRelations: {
-        ...product.product_attribute_product_attribute_product_idToproduct.map(
-          (item, i) => ({
+      product_attributes: {
+        ...product.product_attributes
+          .filter((item) => item.attribute.type !== 2 && item.value)
+          .map((item, i) => ({
             ...item,
-            selectedOption: item?.['attribute']?.['attribute_option']?.find(option => option.id === Number(item.value)),
-            valueProduct: item['product_product_attribute_value_product_idToproduct'],
             even: i % 2 !== 0,
-          })
-        ),
+          })),
       },
     };
   }

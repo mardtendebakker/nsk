@@ -23,6 +23,9 @@ import { PrintService } from "../print/print.service";
 import { ProductOrderRelation } from "./types/product-order-relation";
 import { ProductOrderDto } from "./dto/find-one-product-response.dto";
 import { AOrderPayload } from "../aorder/types/aorder-payload";
+import { AttributeGetPayload } from "../attribute/types/attribute-get-payload";
+import { ProductAttributeProcessed } from "./types/product-attribute-processed";
+import { ProductRelationAttributeProcessed } from "./types/product-relation-attribute-processed";
 
 export class StockService {
   constructor(
@@ -100,11 +103,23 @@ export class StockService {
     });
   }
   
-  async findManyRelation(query: FindManyDto) {
-    return this.repository.findAll({
+  async findAllRelationAttributeProcessed(query: FindManyDto): Promise<ProductRelationAttributeProcessed[]> {
+    const { data } = await this.repository.findAll({
       ...query,
       select: this.processSelect(query.select),
     });
+
+    return data.map(
+      ({
+        product_attribute_product_attribute_product_idToproduct,
+        ...rest
+      }) => ({
+        ...rest,
+        product_attributes: (
+          product_attribute_product_attribute_product_idToproduct
+        ).map(this.productAttributeProcess),
+      })
+    );
   }
 
   async findOneCustomSelect(id: number): Promise<FindOneCustomResponse> {
@@ -204,10 +219,12 @@ export class StockService {
       ...rest
     } = stock;
 
+    const product_attributes = product_attribute_product_attribute_product_idToproduct
+
     return {
       ...rest,
       product_orders: product_order.map(this.productOrderProcess),
-      product_attributes: product_attribute_product_attribute_product_idToproduct,
+      product_attributes,
     };
   }
 
@@ -333,8 +350,30 @@ export class StockService {
   }
 
   async printPriceCards(ids: number[]) {
-    const { data } = await this.findManyRelation({ where: { id: { in: ids } } });
-    return this.printService.printPriceCards(data);
+    const products = await this.findAllRelationAttributeProcessed({ where: { id: { in: ids } } });
+    return this.printService.printPriceCards(products);
+  }
+
+  private productAttributeProcess(productAttribute: ProductAttributeIncludeAttribute): ProductAttributeProcessed {
+    const attribute: AttributeGetPayload = productAttribute.attribute;
+    const productAttributeProcessed: ProductAttributeProcessed = { ...productAttribute, attribute };
+    
+    if (attribute.type === AttributeType.TYPE_TEXT) {
+      productAttributeProcessed.totalStandardPrice = productAttribute.value ? attribute.price : 0;
+    }
+    if (attribute.type === AttributeType.TYPE_SELECT) {
+      const selectedOption=  attribute.attribute_option?.find(option => option.id === Number(productAttribute.value));
+      productAttributeProcessed.selectedOption = selectedOption;
+      productAttributeProcessed.totalStandardPrice = selectedOption?.price ?? 0;
+    }
+    if (attribute.type === AttributeType.TYPE_PRODUCT) {
+      const valueProduct = productAttribute.product_product_attribute_value_product_idToproduct;
+      const quantity = productAttribute.quantity ?? 1;
+      productAttributeProcessed.valueProduct = valueProduct;
+      productAttributeProcessed.totalStandardPrice = (valueProduct?.price ?? 0) * quantity;
+    }
+
+    return productAttributeProcessed;
   }
 
   private productOrderProcess(productOrder: ProductOrderRelation): ProductOrderDto {
