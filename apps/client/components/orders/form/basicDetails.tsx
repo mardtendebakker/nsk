@@ -10,6 +10,7 @@ import TextField from '../../memoizedInput/textField';
 import BaseTextField from '../../input/textField';
 import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
 import { AUTOCOMPLETE_ORDER_STATUSES_PATH } from '../../../utils/axios';
+import useResponsive from '../../../hooks/useResponsive';
 
 export default function BasicDetails({
   formRepresentation,
@@ -23,6 +24,7 @@ export default function BasicDetails({
   disableOrderStatus?: boolean
 }) {
   const { trans } = useTranslation();
+  const isDesktop = useResponsive('up', 'md');
 
   return (
     <CardContent>
@@ -34,15 +36,16 @@ export default function BasicDetails({
       </Typography>
       <Grid
         container
-        spacing={3}
+        spacing={1}
+        sx={{ display: 'flex', flexDirection: isDesktop ? 'row' : 'column' }}
       >
         <Grid
           item
           xs={12}
-          sx={{ display: 'flex', flex: 1 }}
+          sx={{ display: 'flex', flex: 1, flexDirection: isDesktop ? 'row' : 'column' }}
         >
           <TextField
-            sx={{ flex: 1, mr: '1rem' }}
+            sx={{ flex: 1, mr: isDesktop && '.5rem' }}
             label={trans('orderForm.orderNr.label')}
             placeholder={trans('orderForm.orderNr.placeholder')}
             name="orderNr"
@@ -60,7 +63,7 @@ export default function BasicDetails({
               <BaseTextField
                 error={!!formRepresentation.orderDate.error}
                 helperText={formRepresentation.orderDate.error}
-                sx={{ flex: 1, mr: '1rem' }}
+                sx={isDesktop ? { flex: 1, mr: '.5rem' } : { flex: 1, mt: '.5rem' }}
                 {...params}
                 inputProps={{
                   ...params.inputProps,
@@ -71,7 +74,7 @@ export default function BasicDetails({
           />
           {!disableOrderStatus && (
           <DataSourcePicker
-            sx={{ flex: 1 }}
+            sx={{ flex: 1, mt: !isDesktop && '.5rem' }}
             url={AUTOCOMPLETE_ORDER_STATUSES_PATH}
             disabled={disabled}
             fullWidth

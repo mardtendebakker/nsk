@@ -119,7 +119,7 @@ function UpdateRepairOrder() {
             </Typography>
             <Grid
               container
-              spacing={3}
+              spacing={1}
             >
               <Grid
                 item

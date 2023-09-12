@@ -27,7 +27,7 @@ export default function DeliveryDetails({
       </Typography>
       <Grid
         container
-        spacing={3}
+        spacing={1}
         sx={{ flexDirection: 'column' }}
       >
         <Grid sx={{ display: 'flex', flexDirection: 'column' }} item>
