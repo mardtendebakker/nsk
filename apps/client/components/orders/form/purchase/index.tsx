@@ -127,7 +127,6 @@ function PurchaseForm({
                 label={trans('pickupDate')}
                 renderInput={(params) => (
                   <BaseTextField
-                    sx={{ mr: '.5rem' }}
                     fullWidth
                     error={!!formRepresentation.pickupDate.error}
                     helperText={formRepresentation.pickupDate.error}
@@ -139,6 +138,7 @@ function PurchaseForm({
                   />
                 )}
               />
+              <Box sx={{ m: '.25rem' }} />
               <DataSourcePicker
                 fullWidth
                 disabled={disabled}

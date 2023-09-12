@@ -1,4 +1,5 @@
 import {
+  Box,
   CardContent,
   Grid,
   Typography,
@@ -45,7 +46,7 @@ export default function BasicDetails({
           sx={{ display: 'flex', flex: 1, flexDirection: isDesktop ? 'row' : 'column' }}
         >
           <TextField
-            sx={{ flex: 1, mr: isDesktop && '.5rem' }}
+            sx={{ flex: 1 }}
             label={trans('orderForm.orderNr.label')}
             placeholder={trans('orderForm.orderNr.placeholder')}
             name="orderNr"
@@ -54,6 +55,7 @@ export default function BasicDetails({
             error={!!formRepresentation.orderNr.error}
             helperText={formRepresentation.orderNr.error}
           />
+          <Box sx={{ m: '.25rem' }} />
           <DesktopDatePicker
             onChange={(value) => setValue({ field: 'orderDate', value })}
             value={formRepresentation.orderDate.value || null}
@@ -63,7 +65,7 @@ export default function BasicDetails({
               <BaseTextField
                 error={!!formRepresentation.orderDate.error}
                 helperText={formRepresentation.orderDate.error}
-                sx={isDesktop ? { flex: 1, mr: '.5rem' } : { flex: 1, mt: '.5rem' }}
+                sx={{ flex: 1 }}
                 {...params}
                 inputProps={{
                   ...params.inputProps,
@@ -73,18 +75,21 @@ export default function BasicDetails({
             )}
           />
           {!disableOrderStatus && (
-          <DataSourcePicker
-            sx={{ flex: 1, mt: !isDesktop && '.5rem' }}
-            url={AUTOCOMPLETE_ORDER_STATUSES_PATH}
-            disabled={disabled}
-            fullWidth
-            placeholder={trans('selectStatus')}
-            label={trans('orderStatus')}
-            onChange={(selected: { id: number }) => setValue({ field: 'orderStatus', value: selected?.id })}
-            value={formRepresentation.orderStatus.value}
-            error={!!formRepresentation.orderStatus.error}
-            helperText={formRepresentation.orderStatus.error}
-          />
+          <>
+            <Box sx={{ m: '.25rem' }} />
+            <DataSourcePicker
+              sx={{ flex: 1 }}
+              url={AUTOCOMPLETE_ORDER_STATUSES_PATH}
+              disabled={disabled}
+              fullWidth
+              placeholder={trans('selectStatus')}
+              label={trans('orderStatus')}
+              onChange={(selected: { id: number }) => setValue({ field: 'orderStatus', value: selected?.id })}
+              value={formRepresentation.orderStatus.value}
+              error={!!formRepresentation.orderStatus.error}
+              helperText={formRepresentation.orderStatus.error}
+            />
+          </>
           )}
         </Grid>
         <Grid

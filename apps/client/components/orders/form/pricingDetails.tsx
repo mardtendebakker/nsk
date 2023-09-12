@@ -1,4 +1,5 @@
 import {
+  Box,
   Grid,
   Typography,
 } from '@mui/material';
@@ -38,22 +39,24 @@ export default function PricingDetails({
         >
           <TextField
             disabled={disabled}
-            sx={{ width: '10rem', mr: '.5rem' }}
+            sx={{ width: '10rem' }}
             label={trans('transportCost')}
             placeholder="0.00"
             type="number"
             onChange={(e) => setValue({ field: 'transport', value: e.target.value })}
             value={formRepresentation.transport.value || ''}
           />
+          <Box sx={{ m: '.25rem' }} />
           <TextField
             disabled={disabled}
-            sx={{ width: '10rem', mr: '.5rem' }}
+            sx={{ width: '10rem' }}
             label={trans('discount')}
             placeholder="0.00"
             type="number"
             onChange={(e) => setValue({ field: 'discount', value: e.target.value })}
             value={formRepresentation.discount.value || ''}
           />
+          <Box sx={{ m: '.25rem' }} />
           <Checkbox
             disabled={disabled}
             onCheck={(checked) => setValue({ field: 'isGift', value: checked })}
