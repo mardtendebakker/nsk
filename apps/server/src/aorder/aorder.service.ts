@@ -341,8 +341,17 @@ export class AOrderService {
           product_id: true,
           price: true,
           quantity: true,
-        }
-      }
+          product: {
+            select: {
+              product_type: {
+                select: {
+                  name: true,
+                },
+              },
+            },
+          },
+        },
+      },
     };
 
     if (this.type !== AOrderDiscrimination.SALE) {

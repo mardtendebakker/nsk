@@ -5,15 +5,18 @@ export type AOrderProcessed = AOrderPayload & {totalPrice: number};
 
 export class AOrderProcess {
   private totalPrice: number;
+  private totalPerProductType: Record<string, number>;
 
   constructor( private readonly aorder: AOrderPayload ) {}
 
   public run() {
     this.totalPrice = this.calculateTotalPrice();
+    this.totalPerProductType = this.calculateTotalPerProductType();
 
     return {
       ...this.aorder,
       totalPrice: this.totalPrice,
+      totalPerProductType: this.totalPerProductType,
     };
   }
 
@@ -46,5 +49,24 @@ export class AOrderProcess {
     }
 
     return price;
+  }
+
+  private calculateTotalPerProductType(): Record<string, number> {
+    const result: Record<string, number> = {};
+
+    const productOrders = this.aorder?.product_order || [];
+
+    for (const pOrder of productOrders) {
+      const productType = pOrder?.['product']?.product_type?.name || '(unknown)';
+      const quantity = pOrder?.quantity || 1;
+  
+      if (!(productType in result)) {
+        result[productType] = 0;
+      }
+  
+      result[productType] += quantity;
+    }
+
+    return result;
   }
 }
