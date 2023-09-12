@@ -281,6 +281,7 @@ const translation = {
       placeholder: 'Zoek op naam',
     },
   },
+  totalPerProductType: 'Totaal per productsoort',
   printBarcodes: 'Streepjescodes afdrukken',
   printChecklist: 'Controlelijst afdrukken',
   saleableQuantity: 'Verkoopbare hoeveelheid',
