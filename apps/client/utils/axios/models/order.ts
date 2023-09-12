@@ -59,6 +59,7 @@ export interface Order {
   delivery_type:number,
   delivery_instructions:string,
   acompany_aorder_customer_idToacompany:Company
+  totalPerProductType: object
 }
 
 interface Pickup {

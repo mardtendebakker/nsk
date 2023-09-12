@@ -10,6 +10,7 @@ import CustomerDetails from '../customerDetails';
 import DeliveryDetails from '../deliveryDetails';
 import RepairDetails from '../repairDetails';
 import useResponsive from '../../../../hooks/useResponsive';
+import TotalPerProductType from '../totalPerProductType';
 
 function RepairForm({
   formRepresentation,
@@ -42,6 +43,12 @@ function RepairForm({
         </Box>
         <Box sx={{ m: '.5rem' }} />
         <Box sx={{ flex: 1 }}>
+          <TotalPerProductType formRepresentation={formRepresentation} />
+        </Box>
+      </CardContent>
+      <Divider sx={{ mx: '1.5rem' }} />
+      <CardContent sx={{ display: 'flex' }}>
+        <Box sx={{ flex: isDesktop ? 0.5 : 1 }}>
           <RepairDetails formRepresentation={formRepresentation} disabled={disabled} setValue={setValue} />
         </Box>
       </CardContent>

@@ -56,6 +56,7 @@ export function initFormState(trans, order?: Order) {
     zipcode: {},
     state: {},
     country: {},
+    totalPerProductType: { value: order?.totalPerProductType },
   };
 }
 
