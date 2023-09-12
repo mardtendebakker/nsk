@@ -34,7 +34,8 @@ export default function SupplierDetails({
       </Typography>
       <Grid
         container
-        spacing={3}
+        spacing={1}
+        sx={{ display: 'flex', flexDirection: 'column' }}
       >
         <Grid
           item
@@ -66,7 +67,7 @@ export default function SupplierDetails({
               border: `1px solid ${theme.palette.text.disabled}`,
               borderRadius: '.5rem',
               mr: 0,
-              ml: i === 0 ? 'unset' : '1rem',
+              ml: i === 0 ? 'unset' : '.5rem',
               flex: 1,
             })}
             labelPlacement="end"

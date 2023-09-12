@@ -138,7 +138,7 @@ function UpdatePurchaseOrder() {
             </Typography>
             <Grid
               container
-              spacing={3}
+              spacing={1}
             >
               <Grid
                 item

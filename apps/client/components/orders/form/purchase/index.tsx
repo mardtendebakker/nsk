@@ -22,6 +22,7 @@ import SupplierDetails from '../supplierDetails';
 import { buildAFileLink } from '../../../../utils/afile';
 import { AFile } from '../../../../utils/axios/models/aFile';
 import Delete from '../../../button/delete';
+import useResponsive from '../../../../hooks/useResponsive';
 
 function PurchaseForm({
   formRepresentation,
@@ -37,6 +38,7 @@ function PurchaseForm({
   order?: Order
 }) {
   const { trans } = useTranslation();
+  const isDesktop = useResponsive('up', 'md');
 
   const DATA_DESTRUCTION = {
     0: trans('none'),
@@ -88,7 +90,7 @@ function PurchaseForm({
     <>
       <BasicDetails formRepresentation={formRepresentation} disabled={disabled} setValue={setValue} />
       <Divider sx={{ mx: '1.5rem' }} />
-      <CardContent sx={{ display: 'flex' }}>
+      <CardContent sx={{ display: 'flex', flexDirection: isDesktop ? 'row' : 'column' }}>
         <Box sx={{ flex: 1 }}>
           <PricingDetails formRepresentation={formRepresentation} disabled={disabled} setValue={setValue} />
         </Box>
@@ -110,11 +112,11 @@ function PurchaseForm({
           </Typography>
           <Grid
             container
-            spacing={3}
+            spacing={1}
             sx={{ flexDirection: 'column' }}
           >
             <Grid
-              sx={{ display: 'flex', width: '50%' }}
+              sx={{ display: 'flex', width: isDesktop ? '50%' : 'unset' }}
               item
             >
               <DesktopDateTimePicker
@@ -125,7 +127,7 @@ function PurchaseForm({
                 label={trans('pickupDate')}
                 renderInput={(params) => (
                   <BaseTextField
-                    sx={{ mr: '1rem' }}
+                    sx={{ mr: '.5rem' }}
                     fullWidth
                     error={!!formRepresentation.pickupDate.error}
                     helperText={formRepresentation.pickupDate.error}
@@ -153,7 +155,7 @@ function PurchaseForm({
               />
             </Grid>
             <Grid
-              sx={{ display: 'flex', width: '50%' }}
+              sx={{ display: 'flex', width: isDesktop ? '50%' : 'unset' }}
               item
             >
               <Table size="small">

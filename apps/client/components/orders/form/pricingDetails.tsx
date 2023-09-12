@@ -28,7 +28,8 @@ export default function PricingDetails({
       </Typography>
       <Grid
         container
-        spacing={3}
+        spacing={1}
+        sx={{ display: 'flex', flexDirection: 'column' }}
       >
         <Grid
           item
@@ -37,7 +38,7 @@ export default function PricingDetails({
         >
           <TextField
             disabled={disabled}
-            sx={{ flex: 0.33, mr: '1rem' }}
+            sx={{ width: '10rem', mr: '.5rem' }}
             label={trans('transportCost')}
             placeholder="0.00"
             type="number"
@@ -46,7 +47,7 @@ export default function PricingDetails({
           />
           <TextField
             disabled={disabled}
-            sx={{ flex: 0.33, mr: '1rem' }}
+            sx={{ width: '10rem', mr: '.5rem' }}
             label={trans('discount')}
             placeholder="0.00"
             type="number"

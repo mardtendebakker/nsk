@@ -26,7 +26,7 @@ export default function Form({
     <BorderedBox sx={{ width: '80rem', p: '1rem' }}>
       <Grid
         container
-        spacing={3}
+        spacing={1}
         sx={{ flexDirection: 'column' }}
       >
         <Grid sx={{ flex: 1, display: 'flex' }} item>

@@ -34,7 +34,7 @@ export default function Form({
         </Typography>
         <Grid
           container
-          spacing={3}
+          spacing={1}
         >
           <Grid
             item

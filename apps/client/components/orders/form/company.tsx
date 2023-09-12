@@ -24,7 +24,7 @@ export default function Company(
         }}
       >
         <TextField
-          sx={{ mr: '1rem' }}
+          sx={{ mr: '.5rem' }}
           fullWidth
           label={trans('name')}
           placeholder={trans('name')}
@@ -34,7 +34,7 @@ export default function Company(
           helperText={formRepresentation.name.error}
         />
         <TextField
-          sx={{ mr: '1rem' }}
+          sx={{ mr: '.5rem' }}
           fullWidth
           label={trans('kvkNr')}
           placeholder={trans('kvkNr')}
@@ -42,7 +42,7 @@ export default function Company(
           value={formRepresentation.kvkNr.value || ''}
         />
         <TextField
-          sx={{ mr: '1rem' }}
+          sx={{ mr: '.5rem' }}
           fullWidth
           label={trans('representative')}
           placeholder={trans('representative')}
@@ -54,18 +54,18 @@ export default function Company(
         item
         xs={12}
         sx={{
-          display: 'flex', mb: '1rem', width: '100%',
+          display: 'flex', mb: '.5rem', width: '100%',
         }}
       />
       <Grid
         item
         xs={12}
         sx={{
-          display: 'flex', mb: '1rem', width: '100%',
+          display: 'flex', mb: '.5rem', width: '100%',
         }}
       >
         <TextField
-          sx={{ mr: '1rem' }}
+          sx={{ mr: '.5rem' }}
           fullWidth
           label={trans('email')}
           placeholder={trans('example@email.com')}
@@ -89,12 +89,12 @@ export default function Company(
         item
         xs={12}
         sx={{
-          display: 'flex', mb: '1rem', width: '100%',
+          display: 'flex', mb: '.5rem', width: '100%',
         }}
       >
         <TextField
           fullWidth
-          sx={{ mr: '1rem' }}
+          sx={{ mr: '.5rem' }}
           label={trans('street')}
           placeholder={trans('street')}
           onChange={(e) => setValue({ field: 'street', value: e.target.value })}
@@ -103,7 +103,7 @@ export default function Company(
           helperText={formRepresentation.street.error}
         />
         <TextField
-          sx={{ mr: '1rem' }}
+          sx={{ mr: '.5rem' }}
           fullWidth
           label={trans('extraStreet')}
           placeholder={trans('extraStreet')}
@@ -126,11 +126,11 @@ export default function Company(
         item
         xs={12}
         sx={{
-          display: 'flex', mb: '1rem', width: '100%',
+          display: 'flex', mb: '.5rem', width: '100%',
         }}
       >
         <TextField
-          sx={{ mr: '1rem' }}
+          sx={{ mr: '.5rem' }}
           fullWidth
           label={trans('zipcode')}
           placeholder={trans('zipcode')}
@@ -138,7 +138,7 @@ export default function Company(
           value={formRepresentation.zipcode.value || ''}
         />
         <TextField
-          sx={{ mr: '1rem' }}
+          sx={{ mr: '.5rem' }}
           fullWidth
           label={trans('state')}
           placeholder={trans('state')}
