@@ -33,6 +33,9 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
     APRODUCT_PATH.replace(':id', ''),
     {
       withProgressBar: true,
+      defaultParams: {
+        orderBy: JSON.stringify({ created_at: 'asc' }),
+      },
     },
   );
 
