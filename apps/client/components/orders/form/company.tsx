@@ -1,4 +1,4 @@
-import { Grid } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import useTranslation from '../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../hooks/useForm';
 import TextField from '../../memoizedInput/textField';
@@ -24,7 +24,6 @@ export default function Company(
         }}
       >
         <TextField
-          sx={{ mr: '.5rem' }}
           fullWidth
           label={trans('name')}
           placeholder={trans('name')}
@@ -33,16 +32,16 @@ export default function Company(
           error={!!formRepresentation.name.error}
           helperText={formRepresentation.name.error}
         />
+        <Box sx={{ m: '.25rem' }} />
         <TextField
-          sx={{ mr: '.5rem' }}
           fullWidth
           label={trans('kvkNr')}
           placeholder={trans('kvkNr')}
           onChange={(e) => setValue({ field: 'kvkNr', value: e.target.value })}
           value={formRepresentation.kvkNr.value || ''}
         />
+        <Box sx={{ m: '.25rem' }} />
         <TextField
-          sx={{ mr: '.5rem' }}
           fullWidth
           label={trans('representative')}
           placeholder={trans('representative')}
@@ -65,7 +64,6 @@ export default function Company(
         }}
       >
         <TextField
-          sx={{ mr: '.5rem' }}
           fullWidth
           label={trans('email')}
           placeholder={trans('example@email.com')}
@@ -75,6 +73,7 @@ export default function Company(
           error={!!formRepresentation.email.error}
           helperText={formRepresentation.email.error}
         />
+        <Box sx={{ m: '.25rem' }} />
         <TextField
           fullWidth
           label={trans('phone')}
@@ -94,7 +93,6 @@ export default function Company(
       >
         <TextField
           fullWidth
-          sx={{ mr: '.5rem' }}
           label={trans('street')}
           placeholder={trans('street')}
           onChange={(e) => setValue({ field: 'street', value: e.target.value })}
@@ -102,8 +100,8 @@ export default function Company(
           error={!!formRepresentation.street.error}
           helperText={formRepresentation.street.error}
         />
+        <Box sx={{ m: '.25rem' }} />
         <TextField
-          sx={{ mr: '.5rem' }}
           fullWidth
           label={trans('extraStreet')}
           placeholder={trans('extraStreet')}
@@ -112,6 +110,7 @@ export default function Company(
           error={!!formRepresentation.extraStreet.error}
           helperText={formRepresentation.extraStreet.error}
         />
+        <Box sx={{ m: '.25rem' }} />
         <TextField
           fullWidth
           label={trans('city')}
@@ -130,21 +129,21 @@ export default function Company(
         }}
       >
         <TextField
-          sx={{ mr: '.5rem' }}
           fullWidth
           label={trans('zipcode')}
           placeholder={trans('zipcode')}
           onChange={(e) => setValue({ field: 'zipcode', value: e.target.value })}
           value={formRepresentation.zipcode.value || ''}
         />
+        <Box sx={{ m: '.25rem' }} />
         <TextField
-          sx={{ mr: '.5rem' }}
           fullWidth
           label={trans('state')}
           placeholder={trans('state')}
           onChange={(e) => setValue({ field: 'state', value: e.target.value })}
           value={formRepresentation.state.value || ''}
         />
+        <Box sx={{ m: '.25rem' }} />
         <TextField
           fullWidth
           label={trans('country')}

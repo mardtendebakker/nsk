@@ -12,6 +12,7 @@ import { FormRepresentation, SetValue } from '../../hooks/useForm';
 import TextField from '../memoizedInput/textField';
 import DataSourcePicker from '../memoizedInput/dataSourcePicker';
 import Checkbox from '../checkbox';
+import useResponsive from '../../hooks/useResponsive';
 
 function Form({
   formRepresentation,
@@ -25,6 +26,7 @@ function Form({
   type: 'customer' | 'supplier'
 }) {
   const { trans } = useTranslation();
+  const isDesktop = useResponsive('up', 'md');
 
   return (
     <Card>
@@ -38,14 +40,15 @@ function Form({
         <Grid
           container
           spacing={1}
+          sx={{ display: 'flex', flexDirection: 'column' }}
         >
           <Grid
             item
             xs={12}
-            sx={{ display: 'flex', flex: 1 }}
+            sx={{ display: 'flex', flex: 1, flexDirection: isDesktop ? 'row' : 'column' }}
           >
             <TextField
-              sx={{ flex: 0.33, mr: '.5rem' }}
+              sx={{ flex: 0.33 }}
               error={Boolean(formRepresentation.name.error)}
               helperText={formRepresentation.name.error}
               label={trans('contactForm.name.label')}
@@ -54,8 +57,9 @@ function Form({
               onChange={(e) => setValue({ field: 'name', value: e.target.value })}
               value={formRepresentation.name.value || ''}
             />
+            <Box sx={{ m: '.25rem' }} />
             <TextField
-              sx={{ flex: 0.33, mr: '.5rem' }}
+              sx={{ flex: 0.33 }}
               error={Boolean(formRepresentation.kvk_nr.error)}
               helperText={formRepresentation.kvk_nr.error}
               label={trans('contactForm.kvkNr.label')}
@@ -64,6 +68,7 @@ function Form({
               onChange={(e) => setValue({ field: 'kvk_nr', value: e.target.value })}
               value={formRepresentation.kvk_nr.value || ''}
             />
+            <Box sx={{ m: '.25rem' }} />
             <TextField
               sx={{ flex: 0.33 }}
               error={Boolean(formRepresentation.representative.error)}
@@ -78,10 +83,10 @@ function Form({
           <Grid
             item
             xs={12}
-            sx={{ display: 'flex', flex: 1 }}
+            sx={{ display: 'flex', flex: 1, flexDirection: isDesktop ? 'row' : 'column' }}
           >
             <TextField
-              sx={{ flex: 0.33, mr: '.5rem' }}
+              sx={{ flex: 0.33 }}
               error={Boolean(formRepresentation.email.error)}
               helperText={formRepresentation.email.error}
               label={trans('contactForm.email.label')}
@@ -91,8 +96,9 @@ function Form({
               onChange={(e) => setValue({ field: 'email', value: e.target.value })}
               value={formRepresentation.email.value || ''}
             />
+            <Box sx={{ m: '.25rem' }} />
             <TextField
-              sx={{ flex: 0.33, mr: '.5rem' }}
+              sx={{ flex: 0.33 }}
               error={Boolean(formRepresentation.phone.error)}
               helperText={formRepresentation.phone.error}
               label={trans('contactForm.phone.label')}
@@ -101,6 +107,7 @@ function Form({
               onChange={(e) => setValue({ field: 'phone', value: e.target.value })}
               value={formRepresentation.phone.value || ''}
             />
+            <Box sx={{ m: '.25rem' }} />
             <TextField
               sx={{ flex: 0.33 }}
               error={Boolean(formRepresentation.phone2.error)}
@@ -119,7 +126,7 @@ function Form({
           >
             {type == 'supplier' ? (
               <DataSourcePicker
-                sx={{ flex: 0.33 }}
+                sx={{ flex: isDesktop ? 0.33 : 1 }}
                 url={AUTOCOMPLETE_COMPANIES_PATH}
                 params={{ partnerOnly: '1' }}
                 disabled={disabled}
@@ -130,7 +137,7 @@ function Form({
                 value={formRepresentation.partner.value}
               />
             ) : (
-              <Box sx={{ flex: 0.33 }}>
+              <Box sx={{ flex: isDesktop ? 0.33 : 1 }}>
                 <Checkbox
                   checked={formRepresentation.is_partner.value}
                   onCheck={(checked) => setValue({ field: 'is_partner', value: checked })}
@@ -164,14 +171,15 @@ function Form({
         <Grid
           container
           spacing={1}
+          sx={{ display: 'flex', flexDirection: 'column' }}
         >
           <Grid
             item
             xs={12}
-            sx={{ display: 'flex', flex: 1 }}
+            sx={{ display: 'flex', flex: 1, flexDirection: isDesktop ? 'row' : 'column' }}
           >
             <TextField
-              sx={{ flex: 0.5, mr: '.5rem' }}
+              sx={{ flex: 0.5 }}
               error={Boolean(formRepresentation.street.error)}
               helperText={formRepresentation.street.error}
               label={trans('contactForm.street.label')}
@@ -180,6 +188,7 @@ function Form({
               onChange={(e) => setValue({ field: 'street', value: e.target.value })}
               value={formRepresentation.street.value || ''}
             />
+            <Box sx={{ m: '.25rem' }} />
             <TextField
               sx={{ flex: 0.5 }}
               error={Boolean(formRepresentation.street_extra.error)}
@@ -194,10 +203,10 @@ function Form({
           <Grid
             item
             xs={12}
-            sx={{ display: 'flex', flex: 1 }}
+            sx={{ display: 'flex', flex: 1, flexDirection: isDesktop ? 'row' : 'column' }}
           >
             <TextField
-              sx={{ flex: 0.25, mr: '.5rem' }}
+              sx={{ flex: 0.25 }}
               error={Boolean(formRepresentation.city.error)}
               helperText={formRepresentation.city.error}
               label={trans('contactForm.city.label')}
@@ -206,8 +215,9 @@ function Form({
               onChange={(e) => setValue({ field: 'city', value: e.target.value })}
               value={formRepresentation.city.value || ''}
             />
+            <Box sx={{ m: '.25rem' }} />
             <TextField
-              sx={{ flex: 0.25, mr: '.5rem' }}
+              sx={{ flex: 0.25 }}
               error={Boolean(formRepresentation.zip.error)}
               helperText={formRepresentation.zip.error}
               label={trans('contactForm.zipcode.label')}
@@ -216,8 +226,9 @@ function Form({
               onChange={(e) => setValue({ field: 'zip', value: e.target.value })}
               value={formRepresentation.zip.value || ''}
             />
+            <Box sx={{ m: '.25rem' }} />
             <TextField
-              sx={{ flex: 0.25, mr: '.5rem' }}
+              sx={{ flex: 0.25 }}
               error={Boolean(formRepresentation.state.error)}
               helperText={formRepresentation.state.error}
               label={trans('contactForm.state.label')}
@@ -226,6 +237,7 @@ function Form({
               onChange={(e) => setValue({ field: 'state', value: e.target.value })}
               value={formRepresentation.state.value || ''}
             />
+            <Box sx={{ m: '.25rem' }} />
             <TextField
               sx={{ flex: 0.25 }}
               error={Boolean(formRepresentation.country.error)}
@@ -250,14 +262,15 @@ function Form({
         <Grid
           container
           spacing={1}
+          sx={{ display: 'flex', flexDirection: 'column' }}
         >
           <Grid
             item
             xs={12}
-            sx={{ display: 'flex', flex: 1 }}
+            sx={{ display: 'flex', flex: 1, flexDirection: isDesktop ? 'row' : 'column' }}
           >
             <TextField
-              sx={{ flex: 0.5, mr: '.5rem' }}
+              sx={{ flex: 0.5 }}
               error={Boolean(formRepresentation.street2.error)}
               helperText={formRepresentation.street2.error}
               label={trans('contactForm.street.label')}
@@ -266,6 +279,7 @@ function Form({
               onChange={(e) => setValue({ field: 'street2', value: e.target.value })}
               value={formRepresentation.street2.value || ''}
             />
+            <Box sx={{ m: '.25rem' }} />
             <TextField
               sx={{ flex: 0.5 }}
               error={Boolean(formRepresentation.street_extra2.error)}
@@ -280,10 +294,10 @@ function Form({
           <Grid
             item
             xs={12}
-            sx={{ display: 'flex', flex: 1 }}
+            sx={{ display: 'flex', flex: 1, flexDirection: isDesktop ? 'row' : 'column' }}
           >
             <TextField
-              sx={{ flex: 0.25, mr: '.5rem' }}
+              sx={{ flex: 0.25 }}
               error={Boolean(formRepresentation.city2.error)}
               helperText={formRepresentation.city2.error}
               label={trans('contactForm.city.label')}
@@ -292,8 +306,9 @@ function Form({
               onChange={(e) => setValue({ field: 'city2', value: e.target.value })}
               value={formRepresentation.city2.value || ''}
             />
+            <Box sx={{ m: '.25rem' }} />
             <TextField
-              sx={{ flex: 0.25, mr: '.5rem' }}
+              sx={{ flex: 0.25 }}
               error={Boolean(formRepresentation.zip2.error)}
               helperText={formRepresentation.zip2.error}
               label={trans('contactForm.zipcode.label')}
@@ -302,8 +317,9 @@ function Form({
               onChange={(e) => setValue({ field: 'zip2', value: e.target.value })}
               value={formRepresentation.zip2.value || ''}
             />
+            <Box sx={{ m: '.25rem' }} />
             <TextField
-              sx={{ flex: 0.25, mr: '.5rem' }}
+              sx={{ flex: 0.25 }}
               error={Boolean(formRepresentation.state2.error)}
               helperText={formRepresentation.state2.error}
               label={trans('contactForm.state.label')}
@@ -312,6 +328,7 @@ function Form({
               onChange={(e) => setValue({ field: 'state2', value: e.target.value })}
               value={formRepresentation.state2.value || ''}
             />
+            <Box sx={{ m: '.25rem' }} />
             <TextField
               sx={{ flex: 0.25 }}
               error={Boolean(formRepresentation.country2.error)}

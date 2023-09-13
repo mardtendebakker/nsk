@@ -1,4 +1,4 @@
-import { Grid, Typography } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import useTranslation from '../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../hooks/useForm';
 import TextField from '../../memoizedInput/textField';
@@ -29,7 +29,6 @@ export default function RepairDetails({
       >
         <Grid sx={{ display: 'flex', flexDirection: 'column' }} item>
           <TextField
-            sx={{ mb: '.5rem' }}
             disabled={disabled}
             fullWidth
             size="medium"
@@ -41,6 +40,7 @@ export default function RepairDetails({
             onChange={(e) => setValue({ field: 'repairDamage', value: e.target.value })}
             value={formRepresentation.repairDamage.value || ''}
           />
+          <Box sx={{ m: '.25rem' }} />
           <TextField
             disabled={disabled}
             fullWidth

@@ -1,4 +1,4 @@
-import { Grid, Typography } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import useTranslation from '../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../hooks/useForm';
@@ -39,7 +39,6 @@ export default function DeliveryDetails({
             label={trans('deliveryDate')}
             renderInput={(params) => (
               <BaseTextField
-                sx={{ mb: '.5rem' }}
                 fullWidth
                 error={!!formRepresentation.deliveryDate.error}
                 helperText={formRepresentation.deliveryDate.error}
@@ -51,9 +50,9 @@ export default function DeliveryDetails({
               />
             )}
           />
+          <Box sx={{ m: '.25rem' }} />
           <Select
             disabled={disabled}
-            sx={{ mb: '.5rem' }}
             value={formRepresentation.deliveryType.value}
             onChange={(e) => setValue({ field: 'deliveryType', value: e.target.value })}
             options={[
@@ -64,6 +63,7 @@ export default function DeliveryDetails({
             label={trans('deliveryType')}
             placeholder={trans('selectDeliveryType')}
           />
+          <Box sx={{ m: '.25rem' }} />
           <TextField
             disabled={disabled}
             fullWidth
