@@ -11,7 +11,6 @@ import { CreateFileDto } from "../file/dto/create-file.dto";
 import { AttributeType } from "../attribute/enum/attribute-type.enum";
 import { CreateBodyStockDto } from "./dto/create-body-stock.dto";
 import { NotFoundException } from "@nestjs/common";
-import { FindOneCustomResponse } from "./types/find-one-custom-respone";
 import { ProductAttributeIncludeAttribute } from "./types/product-attribute-include-attribute";
 import { ProductRelation } from "./types/product-relation";
 import { ProcessedStock } from "./dto/processed-stock.dto";
@@ -26,6 +25,7 @@ import { AOrderPayload } from "../aorder/types/aorder-payload";
 import { AttributeGetPayload } from "../attribute/types/attribute-get-payload";
 import { ProductAttributeProcessed } from "./types/product-attribute-processed";
 import { ProductRelationAttributeProcessed } from "./types/product-relation-attribute-processed";
+import { ProductRelationAttributeOrderProcessed } from "./types/product-relation-attribute-order-processed";
 
 export class StockService {
   constructor(
@@ -122,93 +122,8 @@ export class StockService {
     );
   }
 
-  async findOneCustomSelect(id: number): Promise<FindOneCustomResponse> {
-    const locationSelect: Prisma.locationSelect = {
-      id: true,
-      name: true,
-    };
-    const productStatusSelect: Prisma.product_statusSelect = {
-      id: true,
-      name: true,
-    }
-    const productTypeSelect: Prisma.product_typeSelect = {
-      id: true,
-      name: true,
-    };
-    const acompanySelect: Prisma.acompanySelect = {
-      name: true,
-    };
-    const orderStatus: Prisma.order_statusSelect = {
-      name: true,
-    };
-    const aorderSelect: Prisma.aorderSelect = {
-      id: true,
-      order_nr: true,
-      order_date: true,
-      discr: true,
-      acompany_aorder_customer_idToacompany: {
-        select: acompanySelect,
-      },
-      acompany_aorder_supplier_idToacompany: {
-        select: acompanySelect,
-      },
-      order_status: {
-        select: orderStatus,
-      },
-    };
-    const productOrderSelect: Prisma.product_orderSelect = {
-      quantity: true,
-      price: true,
-      aorder: {
-        select: aorderSelect,
-      },
-    };
-    const afileSelect: Prisma.afileSelect = {
-      id: true,
-      unique_server_filename: true,
-      original_client_filename: true,
-      discr: true,
-    };
-    const attributeSelect: Prisma.attributeSelect = {
-      type: true,
-    };
-    const productAttributeSelect: Prisma.product_attributeSelect = {
-      quantity: true,
-      value: true,
-      attribute_id: true,
-      attribute: {
-        select: attributeSelect
-      },
-    };
-    const productSelect: Prisma.productSelect = {
-      id: true,
-      sku: true,
-      name: true,
-      price: true,
-      created_at: true,
-      updated_at: true,
-      description: true,
-      location: {
-        select: locationSelect
-      },
-      product_status: {
-        select: productStatusSelect,
-      },
-      product_type: {
-        select: productTypeSelect,
-      },
-      product_order: {
-        select: productOrderSelect,
-      },
-      afile: {
-        select: afileSelect,
-      },
-      product_attribute_product_attribute_product_idToproduct: {
-        select: productAttributeSelect
-      },
-    };
-
-    const stock = await this.repository.findOneSelect({ id, select: productSelect });
+  async findOneCustomSelect(id: number): Promise<ProductRelationAttributeOrderProcessed> {
+    const stock = await this.repository.findOneSelect({ id, select: this.processSelect() });
     if (!stock) {
       throw new NotFoundException('Stock not found');
     }
@@ -224,7 +139,7 @@ export class StockService {
     return {
       ...rest,
       product_orders: product_order.map(this.productOrderProcess),
-      product_attributes,
+      product_attributes: product_attributes.map(this.productAttributeProcess),
     };
   }
 
@@ -394,39 +309,52 @@ export class StockService {
   }
 
   private processSelect(select: Prisma.productSelect = {}): Prisma.productSelect {
-    const productTypeTaskSelect: Prisma.product_type_taskSelect = {
-      task: true,
+    const locationSelect: Prisma.locationSelect = {
+      id: true,
+      name: true,
     };
 
     const productTypeSelect: Prisma.product_typeSelect = {
       id: true,
       name: true,
       product_type_task: {
-        select: productTypeTaskSelect
+        select: {
+          task: true,
+        }
       },
     };
 
-    const locationSelect: Prisma.locationSelect = {
+    const productStatusSelect: Prisma.product_statusSelect = {
       id: true,
       name: true,
-    };
-
-    const repairSelect: Prisma.repairSelect = {
-      id: true,
+      is_stock: true,
+      is_saleable: true,
     };
 
     const aorderSelect: Prisma.aorderSelect = {
       id: true,
-      discr: true,
       order_date: true,
       order_nr: true,
+      discr: true,
+      acompany_aorder_customer_idToacompany: {
+        select: {
+          name: true,
+        },
+      },
+      acompany_aorder_supplier_idToacompany: {
+        select: {
+          name: true,
+        },
+      },
       order_status: {
         select: {
           name: true,
         },
       },
       repair: {
-        select: repairSelect,
+        select: {
+          id: true,
+        },
       },
     };
 
@@ -449,13 +377,6 @@ export class StockService {
       aservice: {
         select: serviceSelect,
       }
-    };
-
-    const productStatusSelect: Prisma.product_statusSelect = {
-      id: true,
-      name: true,
-      is_stock: true,
-      is_saleable: true,
     };
 
     const attributeSelect: Prisma.attributeSelect = {
@@ -482,11 +403,19 @@ export class StockService {
 
     const productAttributeSelect: Prisma.product_attributeSelect = {
       attribute_id: true,
-      value_product_id: true,
       value: true,
+      value_product_id: true,
+      quantity: true,
       attribute: {
         select: attributeSelect,
       },
+    };
+
+    const afileSelect: Prisma.afileSelect = {
+      id: true,
+      unique_server_filename: true,
+      original_client_filename: true,
+      discr: true,
     };
 
     return {
@@ -494,24 +423,27 @@ export class StockService {
       id: true,
       sku: true,
       name: true,
-      product_type: {
-        select: productTypeSelect,
-      },
+      price: true,
       location: {
         select: locationSelect,
       },
-      price: true,
-      product_order: {
-        select: productOrderSelect,
-      },
       product_status: {
         select: productStatusSelect,
+      },
+      product_type: {
+        select: productTypeSelect,
+      },
+      product_order: {
+        select: productOrderSelect,
       },
       product_attribute_product_attribute_value_product_idToproduct: {
         select: productAttributedSelect,
       },
       product_attribute_product_attribute_product_idToproduct: {
         select: productAttributeSelect,
+      },
+      afile: {
+        select: afileSelect
       },
       created_at: true,
       updated_at: true
