@@ -36,12 +36,13 @@ const useForm = (formRepresentation: FormRepresentation) : {
   return {
     formRepresentation: data,
     setData,
-    setValue: ({ field, value }: FieldPayload): void => {
+    setValue: ({ field, value, additionalData }: FieldPayload): void => {
       setData((oldData: FormRepresentation) => ({
         ...oldData,
         [field]: {
           ...data[field],
           value,
+          additionalData,
         },
       }));
     },
@@ -85,6 +86,7 @@ export interface Field {
   required?: boolean;
   requiredMessage?: string;
   error?: string;
+  additionalData?: any;
 }
 
 export interface FormRepresentation {
@@ -94,6 +96,7 @@ export interface FormRepresentation {
 export interface FieldPayload {
   field: string;
   value: any;
+  additionalData?: any
 }
 
 interface FieldErrorPayload {

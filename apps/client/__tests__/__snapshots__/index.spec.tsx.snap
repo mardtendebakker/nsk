@@ -2,36 +2,11 @@
 
 exports[`Dashboard component matches snapshot 1`] = `
 <DocumentFragment>
-  <div
-    class="MuiBox-root css-1lekzkb"
+  <h3
+    class="MuiTypography-root MuiTypography-h3 css-gepadz-MuiTypography-root"
   >
-    <h3
-      class="MuiTypography-root MuiTypography-h3 css-gepadz-MuiTypography-root"
-    >
-      hello, !
-    </h3>
-    <button
-      class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeSmall MuiButton-containedSizeSmall MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeSmall MuiButton-containedSizeSmall css-11qr2p8-MuiButtonBase-root-MuiButton-root"
-      tabindex="0"
-      type="button"
-    >
-      <svg
-        aria-hidden="true"
-        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
-        data-testid="AddIcon"
-        focusable="false"
-        viewBox="0 0 24 24"
-      >
-        <path
-          d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"
-        />
-      </svg>
-      newPurchase
-      <span
-        class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-      />
-    </button>
-  </div>
+    hello, !
+  </h3>
   <div
     class="MuiBox-root css-6s73tp"
   />
@@ -39,10 +14,10 @@ exports[`Dashboard component matches snapshot 1`] = `
     class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-bhp9pd-MuiPaper-root-MuiCard-root"
   >
     <div
-      class="MuiCardContent-root css-16q47u3-MuiCardContent-root"
+      class="MuiCardContent-root css-1ufd20l-MuiCardContent-root"
     >
       <div
-        class="MuiBox-root css-0"
+        class="MuiBox-root css-1hac7jn"
       >
         <p
           class="MuiTypography-root MuiTypography-inherit css-adfmws-MuiTypography-root"
@@ -56,7 +31,7 @@ exports[`Dashboard component matches snapshot 1`] = `
         </h3>
       </div>
       <div
-        class="MuiBox-root css-0"
+        class="MuiBox-root css-1hac7jn"
       >
         <p
           class="MuiTypography-root MuiTypography-inherit css-adfmws-MuiTypography-root"
@@ -70,7 +45,7 @@ exports[`Dashboard component matches snapshot 1`] = `
         </h3>
       </div>
       <div
-        class="MuiBox-root css-0"
+        class="MuiBox-root css-1hac7jn"
       >
         <p
           class="MuiTypography-root MuiTypography-inherit css-adfmws-MuiTypography-root"
@@ -84,7 +59,7 @@ exports[`Dashboard component matches snapshot 1`] = `
         </h3>
       </div>
       <div
-        class="MuiBox-root css-0"
+        class="MuiBox-root css-1hac7jn"
       >
         <p
           class="MuiTypography-root MuiTypography-inherit css-adfmws-MuiTypography-root"
@@ -98,7 +73,7 @@ exports[`Dashboard component matches snapshot 1`] = `
         </h3>
       </div>
       <div
-        class="MuiBox-root css-0"
+        class="MuiBox-root css-1hac7jn"
       >
         <p
           class="MuiTypography-root MuiTypography-inherit css-adfmws-MuiTypography-root"

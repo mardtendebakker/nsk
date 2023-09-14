@@ -8,7 +8,7 @@ import { AOrderProcess } from './aorder.process';
 import { PrintProcess } from './print.process';
 import { ProductProcess } from './product.process';
 import { ProcessedStock } from '../stock/dto/processed-stock.dto';
-import { ProductRelation } from '../stock/types/product-relation';
+import { ProductRelationAttributeProcessed } from '../stock/types/product-relation-attribute-processed';
 
 @Injectable()
 export class PrintService {
@@ -160,7 +160,7 @@ export class PrintService {
     }
   }
 
-  async printPriceCards(products: ProductRelation[]): Promise<Buffer> {
+  async printPriceCards(products: ProductRelationAttributeProcessed[]): Promise<Buffer> {
     const templatePath = join(process.cwd(), 'apps/server/src/assets/templates/pricecard.hbs');
     const source = readFileSync(templatePath, 'utf8');
     const template = Handlebars.compile(source);

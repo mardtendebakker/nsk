@@ -17,6 +17,9 @@ export function initFormState(product?: Product) {
 
     attributes[buildAttributeKey({ id: productAttribute.attribute_id }, { id: product.product_type.id })] = {
       value,
+      additionalData: {
+        selectedOption: productAttribute.selectedOption,
+      },
     };
   });
 

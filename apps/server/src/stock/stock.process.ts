@@ -1,4 +1,3 @@
-
 import { Prisma, aservice, product, product_order, product_type_task } from "@prisma/client";
 import { AttributeType } from "../attribute/enum/attribute-type.enum";
 import { AOrderDiscrimination } from "../aorder/types/aorder-discrimination.enum";

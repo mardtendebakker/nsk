@@ -8,7 +8,7 @@ import BorderedBox from '../../borderedBox';
 import TextField from '../../memoizedInput/textField';
 import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
 import { AUTOCOMPLETE_PRODUCT_TYPES_PATH, AUTOCOMPLETE_LOCATIONS_PATH, AUTOCOMPLETE_PRODUCT_STATUSES_PATH } from '../../../utils/axios';
-import AttributeForm from './AttributeForm';
+import AttributeForm, { buildProductTypeKey } from './AttributeForm';
 
 export default function Form({
   setValue,
@@ -22,6 +22,18 @@ export default function Form({
   onPrintBarcode?: () => void
 }) {
   const { trans } = useTranslation();
+
+  const calculateListPrice = (): number => {
+    if (!formRepresentation.type_id.value) {
+      return 0;
+    }
+
+    const keys = Object
+      .keys(formRepresentation)
+      .filter((key) => key.includes(buildProductTypeKey({ id: formRepresentation.type_id.value })));
+
+    return keys.reduce((accumulator, currentValue) => accumulator + (formRepresentation[currentValue].additionalData?.selectedOption?.price || 0), 0);
+  };
 
   return (
     <>
@@ -42,7 +54,7 @@ export default function Form({
             sx={{ display: 'flex', flex: 1 }}
           >
             <TextField
-              sx={{ flex: 0.33, mr: '1rem' }}
+              sx={{ flex: 0.33, mr: '.5rem' }}
               label={trans('productForm.sku.label')}
               placeholder={trans('productForm.sku.placeholder')}
               value={formRepresentation.sku.value || ''}
@@ -61,7 +73,7 @@ export default function Form({
               }}
             />
             <TextField
-              sx={{ flex: 0.33, mr: '1rem' }}
+              sx={{ flex: 0.33, mr: '.5rem' }}
               label={trans('productName')}
               placeholder={trans('productName')}
               value={formRepresentation.name.value || ''}
@@ -86,7 +98,7 @@ export default function Form({
             sx={{ display: 'flex', flex: 1 }}
           >
             <DataSourcePicker
-              sx={{ flex: 0.33, mr: '1rem' }}
+              sx={{ flex: 0.33, mr: '.5rem' }}
               url={AUTOCOMPLETE_LOCATIONS_PATH}
               searchKey="name"
               label={trans('location')}
@@ -98,7 +110,7 @@ export default function Form({
               disabled={disabled}
             />
             <DataSourcePicker
-              sx={{ flex: 0.33, mr: '1rem' }}
+              sx={{ flex: 0.33, mr: '.5rem' }}
               url={AUTOCOMPLETE_PRODUCT_STATUSES_PATH}
               label={trans('status')}
               placeholder={trans('selectStatus')}
@@ -106,18 +118,26 @@ export default function Form({
               value={formRepresentation.status_id.value?.toString()}
               disabled={disabled}
             />
-            <TextField
-              type="number"
-              sx={{ flex: 0.33 }}
-              label={trans('price')}
-              placeholder="0.00"
-              value={formRepresentation.price.value || ''}
-              InputProps={{
-                startAdornment: (<Box sx={{ mr: '.2rem' }}>€</Box>),
-              }}
-              onChange={(e) => setValue({ field: 'price', value: e.target.value })}
-              disabled={disabled}
-            />
+            <Box sx={{ flex: 0.33, display: 'flex', flexDirection: 'column' }}>
+              <TextField
+                type="number"
+                label={trans('price')}
+                placeholder="0.00"
+                value={formRepresentation.price.value || ''}
+                InputProps={{
+                  startAdornment: (<Box sx={{ mr: '.2rem' }}>€</Box>),
+                }}
+                onChange={(e) => setValue({ field: 'price', value: e.target.value })}
+                disabled={disabled}
+              />
+              <Typography variant="subtitle2" color="primary" sx={{ mt: '.5rem' }}>
+                {trans('listPrice')}
+                :
+                €
+                {' '}
+                {calculateListPrice()}
+              </Typography>
+            </Box>
           </Grid>
           <Grid
             item

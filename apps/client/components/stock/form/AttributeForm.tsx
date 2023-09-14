@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { Grid, Typography } from '@mui/material';
 import { FormRepresentation, SetValue } from '../../../hooks/useForm';
 import useTranslation from '../../../hooks/useTranslation';
-import { Attribute } from '../../../utils/axios/models/product';
+import { Attribute, AttributeOption } from '../../../utils/axios/models/product';
 import BorderedBox from '../../borderedBox';
 import AutocompleteAttribute from './AutocompleteAttribute';
 import FileAttribute from './FileAttribute';
@@ -11,8 +11,10 @@ import useAxios from '../../../hooks/useAxios';
 import { PRODUCT_TYPES_PATH } from '../../../utils/axios';
 import TextField from '../../memoizedInput/textField';
 
-export const buildAttributeKey = (attribute: { id?: number }, productType: { id?: number }) => (
-  `attribute:${productType.id}:${attribute.id}`
+export const buildProductTypeKey = (productType: { id?: number }): string => `attribute:${productType.id}`;
+
+export const buildAttributeKey = (attribute: { id?: number }, productType: { id?: number }): string => (
+  `${buildProductTypeKey(productType)}:${attribute.id}`
 );
 
 export default function AttributeForm({
@@ -39,6 +41,16 @@ export default function AttributeForm({
     });
   };
 
+  const handleAttributeOptionChange = (attribute: Attribute, option: AttributeOption) => {
+    setValue({
+      field: buildAttributeKey(attribute, productTypeRelation),
+      value: option.id,
+      additionalData: {
+        selectedOption: option,
+      },
+    });
+  };
+
   const getAttributeValue = (attribute: Attribute) => (
     formRepresentation[buildAttributeKey(attribute, productTypeRelation)]?.value
   );
@@ -59,7 +71,7 @@ export default function AttributeForm({
                 <AutocompleteAttribute
                   key={buildAttributeKey(attribute, productTypeRelation)}
                   value={getAttributeValue(attribute)}
-                  onChange={(option) => { handleAttributeChange(attribute, option?.id); }}
+                  onChange={(option) => { handleAttributeOptionChange(attribute, option); }}
                   attribute={attribute}
                   disabled={disabled}
                 />
@@ -68,7 +80,7 @@ export default function AttributeForm({
               return (
                 <TextField
                   key={buildAttributeKey(attribute, productTypeRelation)}
-                  sx={{ flex: '0 33%', pr: '1rem' }}
+                  sx={{ flex: '0 33%', pr: '.5rem' }}
                   label={attribute.name}
                   value={getAttributeValue(attribute) || ''}
                   onChange={(e) => { handleAttributeChange(attribute, e.target.value); }}

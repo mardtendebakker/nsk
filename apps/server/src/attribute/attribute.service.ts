@@ -3,6 +3,7 @@ import { FindManyDto } from './dto/find-many.dto';
 import { UpdateAttributeDto } from './dto/update-attribute.dto';
 import { AttributeRepository } from './attribute.repository';
 import { Injectable } from '@nestjs/common';
+import { AttributeGetPayload } from './types/attribute-get-payload';
 
 @Injectable()
 export class AttributeService {
@@ -63,7 +64,7 @@ export class AttributeService {
       select: this.select,
     };
 
-    const attribute: Prisma.attributeGetPayload<Record<'select', Prisma.attributeSelect>> = await this.repository.findOne(params);
+    const attribute: AttributeGetPayload = await this.repository.findOne(params);
 
     return {
       ...Object.assign({}, attribute, { product_type_attribute: undefined, attribute_option: undefined }), // removing extra fileds
