@@ -39,12 +39,10 @@ export class AOrderRepository {
   }
 
   findBy(params: Prisma.aorderFindManyArgs) {
-    const { where, select, orderBy } = params;
-    return this.prisma.aorder.findMany({ where, select, orderBy })
+    return this.prisma.aorder.findMany(params)
   }
 
   create(params: Prisma.aorderCreateArgs) {
-    
     return this.prisma.aorder.create(params);
   }
 
@@ -53,7 +51,6 @@ export class AOrderRepository {
   }
 
   update(params: Prisma.aorderUpdateArgs) {
-
     return this.prisma.aorder.update(params);
   }
 
