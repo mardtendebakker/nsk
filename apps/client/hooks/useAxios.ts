@@ -23,12 +23,14 @@ const useAxios = (
     showErrorMessage = true,
     showSuccessMessage = false,
     customSuccessMessage,
+    defaultParams = {},
   }
   : {
     withProgressBar? : boolean,
     showErrorMessage? : boolean,
     showSuccessMessage? : boolean,
     customSuccessMessage?: string
+    defaultParams?: object
   } = {},
 ) => {
   const [response, setResponse] = useState<AxiosResponse>();
@@ -50,14 +52,14 @@ const useAxios = (
     if (method === POST || method === PATCH || method === PUT) {
       return axios[method](explicitPath, body, {
         cancelToken: source.current.token,
-        params,
+        params: { ...defaultParams, ...params },
         responseType,
         headers,
       });
     }
 
     return axios[method](explicitPath, {
-      cancelToken: source.current.token, params, data: body, responseType,
+      cancelToken: source.current.token, params: { ...defaultParams, ...params }, data: body, responseType,
     });
   }
 
