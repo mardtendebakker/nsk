@@ -5,6 +5,7 @@ import {
   TableRow,
   Checkbox,
   Collapse,
+  Box,
 } from '@mui/material';
 import { format } from 'date-fns';
 import useTranslation from '../../../hooks/useTranslation';
@@ -63,7 +64,11 @@ export default function Row(
             onChange={(_, checked) => onCheck({ id: product.id, checked })}
             disabled={disabled || disableSelection(product)}
           />
-          {product.sku}
+          {onEdit ? (
+            <Box sx={{ textDecoration: 'underline', cursor: 'pointer', display: 'inline' }} onClick={() => onEdit(product.id)}>
+              {product.sku}
+            </Box>
+          ) : product.sku}
         </TableCell>
         <TableCell>
           {product.name || '--'}

@@ -14,11 +14,13 @@ import PaginatedTable from '../../paginatedTable';
 import TableCell from '../../tableCell';
 import Delete from '../../button/delete';
 import Edit from '../../button/edit';
-import { CONTACTS_CUSTOMERS_EDIT, CONTACTS_SUPPLIERS_EDIT } from '../../../utils/routes';
+import {
+  CONTACTS_CUSTOMERS_EDIT, CONTACTS_SUPPLIERS_EDIT, ORDERS_PURCHASES_EDIT, ORDERS_REPAIRS_EDIT, ORDERS_SALES_EDIT,
+} from '../../../utils/routes';
 
 type Type = 'purchase' | 'sales' | 'repair';
 
-function OrderNumber({ order }: { order: OrderListItem }) {
+function OrderNumber({ order, type }: { order: OrderListItem, type: Type }) {
   let productsTooltip = '';
 
   for (let i = 0; i < 10; i++) {
@@ -31,6 +33,12 @@ function OrderNumber({ order }: { order: OrderListItem }) {
     productsTooltip += '\n';
   }
 
+  const TARGETS = {
+    purchase: ORDERS_PURCHASES_EDIT,
+    repair: ORDERS_REPAIRS_EDIT,
+    sales: ORDERS_SALES_EDIT,
+  };
+
   return (
     <Tooltip title={productsTooltip ? (
       <Box sx={{ whiteSpace: 'pre' }}>
@@ -39,7 +47,9 @@ function OrderNumber({ order }: { order: OrderListItem }) {
     ) : undefined}
     >
       <Box sx={{ textDecoration: productsTooltip ? 'underline' : undefined, display: 'inline' }}>
-        {order.order_nr}
+        <Link href={TARGETS[type].replace('[id]', order.id.toString())} style={{ color: 'inherit' }}>
+          {order.order_nr}
+        </Link>
       </Box>
     </Tooltip>
   );
@@ -186,7 +196,7 @@ export default function List({
                   sx={{ mr: '1.5rem' }}
                   onChange={(_, checked) => { onCheck({ id: order.id, checked }); }}
                 />
-                <OrderNumber order={order} />
+                <OrderNumber order={order} type={type} />
               </TableCell>
               <TableCell>
                 {format(new Date(order.order_date), 'yyyy/MM/dd')}
