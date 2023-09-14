@@ -31,6 +31,7 @@ export function initFormState(trans, order?: Order) {
     orderStatus: { required: true, value: order?.status_id },
     remarks: { value: order?.remarks },
     transport: { value: order?.transport },
+    totalPrice: { value: order?.totalPrice },
     discount: { value: order?.discount },
     isGift: { value: !!order?.is_gift },
     supplierId: {
