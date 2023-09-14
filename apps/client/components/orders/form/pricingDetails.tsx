@@ -69,10 +69,7 @@ export default function PricingDetails({
             {trans('total')}
             :
             {' '}
-            {
-                  ((formRepresentation.transport.value || 0 as number)
-                   - (formRepresentation.discount.value || 0 as number)).toFixed(2)
-                  }
+            {(formRepresentation.totalPrice.value || 0 as number).toFixed(2)}
           </Typography>
         </Grid>
       </Grid>
