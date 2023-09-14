@@ -53,7 +53,11 @@ export default function PricingDetails({
             label={trans('discount')}
             placeholder="0.00"
             type="number"
-            onChange={(e) => setValue({ field: 'discount', value: e.target.value })}
+            inputProps={{ min: 0 }}
+            onChange={(e) => {
+              const value = parseInt(e.target.value, 10);
+              setValue({ field: 'discount', value: value < 0 || Number.isNaN(value) ? 0 : value });
+            }}
             value={formRepresentation.discount.value || ''}
           />
           <Box sx={{ m: '.25rem' }} />

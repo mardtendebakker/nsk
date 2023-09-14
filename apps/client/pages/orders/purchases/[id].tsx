@@ -66,7 +66,10 @@ function UpdatePurchaseOrder() {
       return;
     }
 
-    call({ body: formRepresentationToBody(formRepresentation) });
+    call({ body: formRepresentationToBody(formRepresentation) })
+      .then(() => {
+        fetchPurchaseOrder();
+      });
   };
 
   const handleDeleteFile = (file: AFile) => {
