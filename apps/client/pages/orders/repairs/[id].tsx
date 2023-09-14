@@ -55,7 +55,10 @@ function UpdateRepairOrder() {
       return;
     }
 
-    call({ body: formRepresentationToBody(formRepresentation) });
+    call({ body: formRepresentationToBody(formRepresentation) })
+      .then(() => {
+        fetchRepairOrder();
+      });
   };
 
   return (
@@ -119,7 +122,7 @@ function UpdateRepairOrder() {
             </Typography>
             <Grid
               container
-              spacing={1}
+              spacing={3}
             >
               <Grid
                 item

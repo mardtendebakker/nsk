@@ -126,10 +126,10 @@ export class AOrderService {
       }
     };
 
-    const aorder = await this.repository.create(this.commonIncludePart(params));
+    const order = await this.repository.create(this.commonIncludePart(params));
 
     if (commonDto.order_nr === undefined) {
-      const { id, order_date } = aorder;
+      const { id, order_date } = order;
 
       const order_nr = order_date.getFullYear() + id.toString().padStart(6, "0");
 
@@ -138,14 +138,14 @@ export class AOrderService {
           where: { id },
           data: { order_nr },
         });
-        aorder.order_nr = order_nr;
+        order.order_nr = order_nr;
       } catch (e) {
         this.repository.deleteMany([id]);
         throw e;
       }
     }
 
-    return aorder;
+    return new AOrderProcess(order).run();
   }
 
   async update(id: number, aorderDto: UpdateAOrderDto) {
@@ -162,7 +162,9 @@ export class AOrderService {
       where: { id }
     };
 
-    return this.repository.update(this.commonIncludePart(params));
+    const order = await this.repository.update(this.commonIncludePart(params));
+
+    return new AOrderProcess(order).run();
   }
 
   async updateMany(updateManyOrderDto: UpdateManyAOrderDto) {
@@ -196,113 +198,16 @@ export class AOrderService {
   }
 
   async findByIds(ids: number[]) {
-    const productSelect: Prisma.productSelect = {
-      sku: true,
-      name: true,
-      product_type: {
-        select: {
-          name: true
-        }
+    const params: Prisma.aorderFindManyArgs = {
+      where: {
+        id: { in: ids },
       },
-    };
-
-    const serviceSelect: Prisma.aserviceSelect = {
-      status: true,
-      price: true
-    };
-
-    const productOrderSelect: Prisma.product_orderSelect = {
-      quantity: true,
-      price: true,
-      product: {
-        select: productSelect,
-      },
-      aservice: {
-        select: serviceSelect,
-      }
-    };
-
-    const companySelect: Prisma.acompanySelect = {
-      name: true,
-      kvk_nr: true,
-      representative: true,
-      email: true,
-      phone: true,
-      street: true,
-      street_extra: true,
-      city: true,
-      zip: true,
-      state: true,
-      country: true,
-    };
-
-    const fileSelect: Prisma.afileSelect = {
-      original_client_filename: true,
-    }
-
-    const pickupSelect: Prisma.pickupSelect = {
-      real_pickup_date: true,
-      description: true,
-      data_destruction: true,
-      afile: {
-        select: fileSelect
-      },
-    };
-
-    let select: Prisma.aorderSelect = {
-      id: true,
-      order_nr: true,
-      order_date: true,
-      remarks: true,
-      delivery_type: true,
-      delivery_date: true,
-      delivery_instructions: true,
-      transport: true,
-      discount: true,
-      is_gift: true,
-      order_status: {
-        select: {
-          id: true,
-          name: true,
-          color: true,
-        }
-      },
-      product_order: {
-        select: productOrderSelect,
-      },
-      pickup: {
-        select: pickupSelect
-      }
-    };
-
-    if (this.type !== AOrderDiscrimination.SALE) {
-      select = {
-        ...select,
-        acompany_aorder_supplier_idToacompany: {
-          select: companySelect,
-        },
-      };
-    }
-    if (this.type !== AOrderDiscrimination.PURCHASE) {
-      select = {
-        ...select,
-        acompany_aorder_customer_idToacompany: {
-          select: companySelect,
-        },
-      };
-    }
-
-    const where: Prisma.aorderWhereInput = {
-      id: { in: ids },
-    };
-
-    const result = await this.repository.findBy({
-      where,
-      select,
       orderBy: { id: 'asc', },
-    });
+    };
 
-    return result.map(aorder => new AOrderProcess(aorder).run());
+    const result = await this.repository.findBy(this.commonIncludePart(params));
+
+    return result.map(order => new AOrderProcess(order).run());
   }
 
   async printAOrders(ids: number[]) {
@@ -335,6 +240,13 @@ export class AOrderService {
   protected commonIncludePart<T extends Prisma.aorderArgs>(params: T): T {
     params.include = {
       ...params.include,
+      order_status: {
+        select: {
+          id: true,
+          name: true,
+          color: true,
+        },
+      },
       product_order: {
         select: {
           id: true,
@@ -343,6 +255,8 @@ export class AOrderService {
           quantity: true,
           product: {
             select: {
+              sku: true,
+              name: true,
               product_type: {
                 select: {
                   name: true,
@@ -350,6 +264,12 @@ export class AOrderService {
               },
             },
           },
+          aservice: {
+            select: {
+              status: true,
+              price: true
+            }
+          }
         },
       },
     };
@@ -400,9 +320,16 @@ export class AOrderService {
     return {
       id: true,
       name: true,
+      kvk_nr: true,
+      representative: true,
+      email: true,
+      phone: true,
       street: true,
+      street_extra: true,
       city: true,
       zip: true,
+      state: true,
+      country: true,
       acompany: {
         select: {
           id: true,

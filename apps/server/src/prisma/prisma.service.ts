@@ -28,7 +28,8 @@ export class PrismaService extends PrismaClient {
         ].includes(params.action)
       ) {
         params.args.data = this.multiplyPriceBy100(params.args.data);
-        return next(params);
+        const result = await next(params);
+        return this.dividePriceBy100(result);
       }
 
       if (
