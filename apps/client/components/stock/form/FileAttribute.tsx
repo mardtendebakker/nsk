@@ -43,7 +43,7 @@ function FileAttribute({
             // eslint-disable-next-line react/no-array-index-key
             key={i}
             sx={{
-              height: '7rem', flex: '0 31%', mr: (i + 1) % 3 !== 0 && '.5rem', mb: '1rem',
+              height: '7rem', flex: '0 31%', mr: (i + 1) % 3 !== 0 && '.5rem', mb: '.5rem',
             }}
             image={image instanceof File ? image : buildImageLink(image, afile)}
             onChange={(file: File) => onChange([...value.filter((element) => element != image), file])}
@@ -54,7 +54,7 @@ function FileAttribute({
         }
         <ImageInput
           sx={{
-            height: '7rem', flex: '0 31%', mr: '.5rem', mb: '1rem',
+            height: '7rem', flex: '0 31%', mr: '.5rem', mb: '.5rem',
           }}
           image={undefined}
           onChange={(file: File) => onChange([...value, file])}

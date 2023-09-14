@@ -281,6 +281,7 @@ const translation = {
       placeholder: 'Zoek op naam',
     },
   },
+  listPrice: 'Catalogusprijs',
   totalPerProductType: 'Totaal per productsoort',
   printBarcodes: 'Streepjescodes afdrukken',
   printChecklist: 'Controlelijst afdrukken',

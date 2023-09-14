@@ -21,7 +21,14 @@ export interface Product {
   description:string,
   updated_at:string,
   created_at:string,
-  product_attributes:{ quantity: number, value: string, attribute_id: number, attribute: { type: number } }[],
+  product_attributes:{
+    quantity: number,
+    value: string,
+    attribute_id: number,
+    totalStandardPrice: number,
+    attribute: { type: number },
+    selectedOption: { price: number }
+  }[],
   afile:AFile[]
 }
 

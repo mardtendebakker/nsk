@@ -1,5 +1,5 @@
 import { fireEvent, render } from '@testing-library/react';
-import { CONTACTS_CUSTOMERS, MY_TASKS } from '../../../utils/routes';
+import { BULK_EMAIL, CONTACTS_CUSTOMERS, MY_TASKS } from '../../../utils/routes';
 import Header from './index';
 import useResponsive from '../../../hooks/useResponsive';
 
@@ -58,16 +58,16 @@ describe('Header', () => {
 
     it('should highlight the active menu item', () => {
       useResponsive.mockReturnValue(false);
-      jest.spyOn(mockRouter, 'pathname', 'get').mockReturnValue(CONTACTS_CUSTOMERS);
+      jest.spyOn(mockRouter, 'pathname', 'get').mockReturnValue(BULK_EMAIL);
       const { getByText, getByTestId } = render(<Header />);
       fireEvent.click(getByTestId('openMenuButton'));
 
-      expect(getByText('contacts')).toHaveStyle({ fontWeight: 700 });
+      expect(getByText('bulkEmail')).toHaveStyle({ fontWeight: 700 });
 
       expect(getByText('dashboard')).toHaveStyle({ fontWeight: 400 });
       expect(getByText('stock')).toHaveStyle({ fontWeight: 400 });
       expect(getByText('orders')).toHaveStyle({ fontWeight: 400 });
-      expect(getByText('bulkEmail')).toHaveStyle({ fontWeight: 400 });
+      expect(getByText('contacts')).toHaveStyle({ fontWeight: 400 });
       expect(getByText('logistics')).toHaveStyle({ fontWeight: 400 });
     });
 

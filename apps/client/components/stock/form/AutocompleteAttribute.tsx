@@ -16,13 +16,13 @@ function AutocompleteAttribute({
   const selectedOption = attribute.options.find((option: AttributeOption) => option.id == value) || null;
 
   return (
-    <Box sx={{ flex: '0 33%', pb: '1rem', pr: '1rem' }}>
+    <Box sx={{ flex: '0 33%', pb: '.5rem', pr: '.5rem' }}>
       <Autocomplete
         disabled={disabled}
         value={selectedOption}
         getOptionLabel={({ name }: { name: string }) => name}
         size="small"
-        sx={{ mb: '1rem' }}
+        sx={{ mb: '.5rem' }}
         options={attribute.options}
         onChange={(_, element: AttributeOption | undefined) => {
           onChange(element);
