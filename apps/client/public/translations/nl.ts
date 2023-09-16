@@ -282,6 +282,7 @@ const translation = {
     },
   },
   listPrice: 'Catalogusprijs',
+  editPurchase: 'Aankoop bewerken',
   totalPerProductType: 'Totaal per productsoort',
   printBarcodes: 'Streepjescodes afdrukken',
   printChecklist: 'Controlelijst afdrukken',

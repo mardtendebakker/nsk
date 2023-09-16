@@ -6,6 +6,7 @@ import {
   ORDERS_PURCHASES, ORDERS_PURCHASES_NEW, ORDERS_REPAIRS, ORDERS_REPAIRS_NEW, ORDERS_SALES, ORDERS_SALES_NEW,
 } from '../../utils/routes';
 import useResponsive from '../../hooks/useResponsive';
+import HeaderItem from '../list/headerItem';
 
 const NEW_ORDER_PATH = {
   [ORDERS_PURCHASES]: ORDERS_PURCHASES_NEW,
@@ -28,17 +29,17 @@ export default function Header() {
     {
       active: router.pathname === ORDERS_PURCHASES,
       text: trans('purchaseOrders'),
-      onClick: () => router.push(ORDERS_PURCHASES),
+      href: ORDERS_PURCHASES,
     },
     {
       active: router.pathname === ORDERS_SALES,
       text: trans('salesOrders'),
-      onClick: () => router.push(ORDERS_SALES),
+      href: ORDERS_SALES,
     },
     {
       active: router.pathname === ORDERS_REPAIRS,
       text: trans('repairOrders'),
-      onClick: () => router.push(ORDERS_REPAIRS),
+      href: ORDERS_REPAIRS,
     },
   ];
 
@@ -49,22 +50,8 @@ export default function Header() {
     >
       <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
         <Typography variant="h4" sx={{ mr: '.5rem', mb: '.5rem' }}>{trans('orders')}</Typography>
-        {isDesktop && ITEMS.map(({ text, active, onClick }) => (
-          <Typography
-            key={text}
-            onClick={() => !active && onClick()}
-            variant="h5"
-            sx={(theme) => ({
-              cursor: 'pointer',
-              background: active ? '#D6E0FA' : undefined,
-              color: active ? theme.palette.primary.main : undefined,
-              p: '.5rem .75rem',
-              mr: '.5rem',
-              mb: '.5rem',
-            })}
-          >
-            {text}
-          </Typography>
+        {isDesktop && ITEMS.map(({ text, active, href }) => (
+          <HeaderItem text={text} active={active} href={href} />
         ))}
       </Box>
       <Button

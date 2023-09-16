@@ -1,6 +1,5 @@
 import { useEffect, useMemo } from 'react';
 import {
-  IconButton,
   Table, TableBody, TableCell, TableHead, TableRow, Tooltip,
 } from '@mui/material';
 import { format } from 'date-fns';
@@ -8,6 +7,7 @@ import Visibility from '@mui/icons-material/VisibilityOutlined';
 import InputOutlinedIcon from '@mui/icons-material/InputOutlined';
 import OutputOutlinedIcon from '@mui/icons-material/OutputOutlined';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 import useTranslation from '../../../hooks/useTranslation';
 import useForm from '../../../hooks/useForm';
 import Form from '../form';
@@ -153,9 +153,9 @@ export default function EditModal(
                   </TableCell>
                   <TableCell>
                     <Tooltip title={trans('showOrder')}>
-                      <IconButton onClick={() => router.push(editOrderUrl(order))}>
-                        <Visibility />
-                      </IconButton>
+                      <Link href={editOrderUrl(order)} style={{ color: 'unset' }}>
+                        <Visibility sx={{ color: (theme) => theme.palette.text.secondary }} />
+                      </Link>
                     </Tooltip>
                   </TableCell>
                 </TableRow>

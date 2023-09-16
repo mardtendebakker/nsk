@@ -4,14 +4,13 @@ import {
 } from '@mui/material';
 import PowerSettingsNew from '@mui/icons-material/PowerSettingsNew';
 import ChevronRight from '@mui/icons-material/ChevronRight';
-import { useRouter } from 'next/router';
+import Link from 'next/link';
 import { ADMIN_USERS, SETTINGS } from '../../../utils/routes';
 import useSecurity from '../../../hooks/useSecurity';
 import useTranslation from '../../../hooks/useTranslation';
 import Can from '../../../components/can';
 
 export default function AccountPopover() {
-  const router = useRouter();
   const [open, setOpen] = useState(null);
   const { trans } = useTranslation();
   const { signOut, state: { user } } = useSecurity();
@@ -49,12 +48,16 @@ export default function AccountPopover() {
         }}
       >
         <Stack>
-          <MenuItem onClick={() => router.push(SETTINGS)}>
-            {trans('settings')}
+          <MenuItem>
+            <Link href={SETTINGS} style={{ textDecoration: 'none', color: 'inherit' }} passHref>
+              {trans('settings')}
+            </Link>
           </MenuItem>
           <Can requiredGroups={['admin', 'super_admin']}>
-            <MenuItem onClick={() => router.push(ADMIN_USERS)}>
-              {trans('admin')}
+            <MenuItem>
+              <Link href={ADMIN_USERS} style={{ textDecoration: 'none', color: 'inherit' }} passHref>
+                {trans('admin')}
+              </Link>
             </MenuItem>
           </Can>
         </Stack>

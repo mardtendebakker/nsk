@@ -16,7 +16,6 @@ import {
   AxiosResponse,
   REPAIR_ORDERS_PATH,
 } from '../../../utils/axios';
-import { ORDERS_PURCHASES_EDIT, ORDERS_REPAIRS_EDIT, ORDERS_SALES_EDIT } from '../../../utils/routes';
 import Filter from './filter';
 import Action from './action';
 import ConfirmationDialog from '../../confirmationDialog';
@@ -118,12 +117,6 @@ const AJAX_BULK_PRINT_PATHS = {
   repair: BULK_PRINT_REPAIRS_PATH,
 };
 
-const EDIT_PATHS = {
-  purchase: ORDERS_PURCHASES_EDIT,
-  sales: ORDERS_SALES_EDIT,
-  repair: ORDERS_REPAIRS_EDIT,
-};
-
 export default function ListContainer({ type }: { type: 'purchase' | 'sales' | 'repair' }) {
   const { trans } = useTranslation();
   const [showChangeStatusModal, setShowChangeStatusModal] = useState(false);
@@ -136,8 +129,6 @@ export default function ListContainer({ type }: { type: 'purchase' | 'sales' | '
   const ajaxPath = AJAX_PATHS[type] || PURCHASE_ORDERS_PATH;
 
   const ajaxBulkPrintPath = AJAX_BULK_PRINT_PATHS[type] || BULK_PRINT_PURCHASES_PATH;
-
-  const editPath = EDIT_PATHS[type] || ORDERS_PURCHASES_EDIT;
 
   const { formRepresentation, setValue, setData } = useForm(initFormState({
     search: getQueryParam('search'),
@@ -282,7 +273,6 @@ export default function ListContainer({ type }: { type: 'purchase' | 'sales' | '
           setPage(1);
         }}
         rowsPerPage={rowsPerPage}
-        onEdit={(id) => router.push(editPath.replace('[id]', id.toString()))}
         onDelete={handleDelete}
       />
       {showChangeStatusModal && (

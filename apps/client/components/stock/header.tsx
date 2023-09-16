@@ -5,6 +5,7 @@ import useTranslation from '../../hooks/useTranslation';
 import useResponsive from '../../hooks/useResponsive';
 import { STOCKS_PRODUCTS, STOCKS_REPAIR_SERVICES } from '../../utils/routes';
 import CreateModal from './createModal';
+import HeaderItem from '../list/headerItem';
 
 export default function Header({ onProductCreated }: { onProductCreated: () => void }) {
   const router = useRouter();
@@ -16,12 +17,12 @@ export default function Header({ onProductCreated }: { onProductCreated: () => v
     {
       active: router.pathname === STOCKS_PRODUCTS,
       text: trans('products'),
-      onClick: () => router.push(STOCKS_PRODUCTS),
+      href: STOCKS_PRODUCTS,
     },
     {
       active: router.pathname === STOCKS_REPAIR_SERVICES,
       text: trans('repairServices'),
-      onClick: () => router.push(STOCKS_REPAIR_SERVICES),
+      href: STOCKS_REPAIR_SERVICES,
     },
   ];
 
@@ -32,22 +33,8 @@ export default function Header({ onProductCreated }: { onProductCreated: () => v
     >
       <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
         <Typography variant="h4" sx={{ mr: '.5rem', mb: '.5rem' }}>{trans('stock')}</Typography>
-        {isDesktop && ITEMS.map(({ text, active, onClick }) => (
-          <Typography
-            key={text}
-            onClick={() => !active && onClick()}
-            variant="h5"
-            sx={(theme) => ({
-              cursor: 'pointer',
-              background: active ? '#D6E0FA' : undefined,
-              color: active ? theme.palette.primary.main : undefined,
-              p: '.5rem .75rem',
-              mr: '.5rem',
-              mb: '.5rem',
-            })}
-          >
-            {text}
-          </Typography>
+        {isDesktop && ITEMS.map(({ text, href, active }) => (
+          <HeaderItem text={text} active={active} href={href} />
         ))}
       </Box>
       {showForm && (
