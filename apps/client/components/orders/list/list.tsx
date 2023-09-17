@@ -20,6 +20,12 @@ import {
 
 type Type = 'purchase' | 'sales' | 'repair';
 
+const EDIT_PATHS = {
+  purchase: ORDERS_PURCHASES_EDIT,
+  sales: ORDERS_SALES_EDIT,
+  repair: ORDERS_REPAIRS_EDIT,
+};
+
 function OrderNumber({ order, type }: { order: OrderListItem, type: Type }) {
   let productsTooltip = '';
 
@@ -79,7 +85,7 @@ function Company({ company, type }: { company: CompanyModel, type: Type }) {
       </Box>
     ) : undefined}
     >
-      <Link href={target.replace('[id]', company.id)} style={{ color: 'inherit' }}>
+      <Link href={target.replace('[id]', company.id)} style={{ color: 'unset' }}>
         {company?.name || '--'}
       </Link>
     </Tooltip>
@@ -126,7 +132,6 @@ export default function List({
   rowsPerPage,
   onCheck,
   disabled,
-  onEdit,
   onDelete,
 }: {
   type: Type,
@@ -139,10 +144,10 @@ export default function List({
   rowsPerPage: number,
   onCheck: (object: { id: number, checked: boolean })=>void,
   disabled: boolean,
-  onEdit: (id: number) => void,
   onDelete: (id: number) => void,
 }) {
   const { trans } = useTranslation();
+  const editPath = EDIT_PATHS[type] || ORDERS_PURCHASES_EDIT;
 
   return (
     <PaginatedTable
@@ -226,7 +231,7 @@ export default function List({
                 )}
               </TableCell>
               <TableCell>
-                <Edit onClick={() => onEdit(order.id)} disabled={disabled} />
+                <Edit href={editPath.replace('[id]', order.id.toString())} disabled={disabled} />
                 <Delete onDelete={() => onDelete(order.id)} disabled={disabled} tooltip />
               </TableCell>
             </TableRow>

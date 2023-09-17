@@ -9,6 +9,7 @@ import {
   CONTACTS_SUPPLIERS_NEW,
 } from '../../utils/routes';
 import useResponsive from '../../hooks/useResponsive';
+import HeaderItem from '../list/headerItem';
 
 export default function Header() {
   const router = useRouter();
@@ -19,12 +20,12 @@ export default function Header() {
     {
       active: router.pathname === CONTACTS_CUSTOMERS,
       text: trans('customers'),
-      onClick: () => router.push(CONTACTS_CUSTOMERS),
+      href: CONTACTS_CUSTOMERS,
     },
     {
       active: router.pathname === CONTACTS_SUPPLIERS,
       text: trans('suppliers'),
-      onClick: () => router.push(CONTACTS_SUPPLIERS),
+      href: CONTACTS_SUPPLIERS,
     },
   ];
 
@@ -35,22 +36,8 @@ export default function Header() {
     >
       <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
         <Typography variant="h4" sx={{ mr: '.5rem', mb: '.5rem' }}>{trans('contacts')}</Typography>
-        {isDesktop && ITEMS.map(({ text, active, onClick }) => (
-          <Typography
-            key={text}
-            onClick={() => !active && onClick()}
-            variant="h5"
-            sx={(theme) => ({
-              cursor: 'pointer',
-              background: active ? '#D6E0FA' : undefined,
-              color: active ? theme.palette.primary.main : undefined,
-              p: '.5rem .75rem',
-              mr: '.5rem',
-              mb: '.5rem',
-            })}
-          >
-            {text}
-          </Typography>
+        {isDesktop && ITEMS.map(({ text, active, href }) => (
+          <HeaderItem text={text} active={active} href={href} />
         ))}
       </Box>
       <Button

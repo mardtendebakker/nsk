@@ -1,7 +1,6 @@
 import { Box, Card } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { CONTACTS_CUSTOMERS_EDIT, CONTACTS_SUPPLIERS_EDIT } from '../../../utils/routes';
 import List from './list';
 import Filter from './filter';
 import useAxios from '../../../hooks/useAxios';
@@ -153,9 +152,6 @@ export default function ListContainer({ type }: { type: 'customer' | 'supplier' 
         count={count}
         page={page}
         onDelete={handleDelete}
-        onEdit={(id) => router.push(
-          (type === 'customer' ? CONTACTS_CUSTOMERS_EDIT : CONTACTS_SUPPLIERS_EDIT).replace('[id]', id.toString()),
-        )}
         onPageChange={(newPage) => {
           setPage(newPage);
         }}

@@ -10,12 +10,12 @@ import Edit from '../../button/edit';
 import Delete from '../../button/delete';
 import useTranslation from '../../../hooks/useTranslation';
 import { CompanyListItem } from '../../../utils/axios/models/company';
+import { CONTACTS_CUSTOMERS_EDIT, CONTACTS_SUPPLIERS_EDIT } from '../../../utils/routes';
 
 export default function List({
   type,
   companies = [],
   onDelete,
-  onEdit,
   count,
   page,
   onPageChange,
@@ -26,7 +26,6 @@ export default function List({
   type: 'customer' | 'supplier',
   companies: CompanyListItem[],
   onDelete: (id: number)=>void,
-  onEdit: (id: number)=>void,
   count: number,
   page: number,
   onPageChange: (newPage: number)=>void,
@@ -82,7 +81,7 @@ export default function List({
                   : company.partner?.name || '--'}
               </TableCell>
               <TableCell>
-                <Edit onClick={() => onEdit(company.id)} disabled={disabled} sx={{ mr: '1rem' }} />
+                <Edit href={(type === 'customer' ? CONTACTS_CUSTOMERS_EDIT : CONTACTS_SUPPLIERS_EDIT).replace('[id]', company.id.toString())} disabled={disabled} />
                 {company.orders?.length === 0
                 && (<Delete onDelete={() => onDelete(company.id)} disabled={disabled} tooltip />)}
               </TableCell>

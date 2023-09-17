@@ -83,7 +83,7 @@ function UpdatePurchaseOrder() {
     <DashboardLayout>
       <Head>
         <title>
-          {trans('newPurchase')}
+          {trans('editPurchase')}
         </title>
       </Head>
       <form onSubmit={handleSubmit}>
@@ -100,7 +100,7 @@ function UpdatePurchaseOrder() {
             <IconButton onClick={() => router.push(ORDERS_PURCHASES)}>
               <ArrowBack />
             </IconButton>
-            {trans('newPurchase')}
+            {trans('editPurchase')}
           </Typography>
           <Box>
             <Button
