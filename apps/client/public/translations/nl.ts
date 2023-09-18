@@ -544,8 +544,11 @@ const translation = {
   200: 'Actie succesvol afgerond',
   201: 'Bron gemaakt',
   400: 'Foutief verzoek',
-  404: 'Bron niet gevonden',
   401: 'Foute gebruikersnaam of wachtwoord',
+  403: 'Het is u verboden deze actie uit te voeren',
+  404: 'Bron niet gevonden',
+  409: 'Unieke eigenschapswaarde die al voor deze resource wordt gebruikt',
+  422: 'Actie kan niet worden uitgevoerd',
   500: 'Intern serverprobleem. Probeer het later alstublieft',
 };
 
