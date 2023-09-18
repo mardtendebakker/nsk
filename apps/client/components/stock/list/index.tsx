@@ -20,6 +20,8 @@ import SplitModal, { SplitData } from './splitModal';
 import { getQueryParam } from '../../../utils/location';
 import { openBlob } from '../../../utils/blob';
 import Header from '../header';
+import can from '../../../utils/can';
+import useSecurity from '../../../hooks/useSecurity';
 
 function initFormState(
   {
@@ -89,6 +91,7 @@ function refreshList({
 
 export default function ListContainer({ type } : { type: 'product' | 'repair' }) {
   const { trans } = useTranslation();
+  const { state: { user } } = useSecurity();
   const router = useRouter();
   const [showChangeLocationModal, setShowChangeLocationModal] = useState(false);
   const [changeLocationValue, setChangeLocationValue] = useState<number | undefined>();
@@ -281,7 +284,7 @@ export default function ListContainer({ type } : { type: 'product' | 'repair' })
           }}
           rowsPerPage={rowsPerPage}
           onEdit={(id) => setEditProductId(id)}
-          onDelete={handleDelete}
+          onDelete={can(user?.groups || [], ['super_admin', 'admin', 'manager']) ? handleDelete : undefined}
         />
         {editProductId && (
         <EditModal
