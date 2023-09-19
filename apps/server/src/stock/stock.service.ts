@@ -229,6 +229,7 @@ export class StockService {
   }
 
   async deleteOne(id: number) {
+    await this.deleteAllAttributes(id);
     return this.repository.deleteOne(id);
   }
 
