@@ -1,10 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class LocationRepository {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    protected readonly configService: ConfigService
+  ) {}
 
   getAll() {
     return this.prisma.location.findMany();
@@ -37,7 +41,9 @@ export class LocationRepository {
   
   async findAll(params: Prisma.locationFindManyArgs) {
     const { skip, cursor, where, select, orderBy } = params;
-    const take = params.take ? params.take : 20;
+    const maxQueryLimit = this.configService.get<number>('MAX_NONE_RELATION_QUERY_LIMIT');
+    const take = isFinite(params.take) && params.take <  maxQueryLimit ? params.take : maxQueryLimit;
+
     const submission = await this.prisma.$transaction([
       this.prisma.location.count({where}),
       this.prisma.location.findMany({ skip, take, cursor, where, select, orderBy })

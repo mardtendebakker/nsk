@@ -12,7 +12,7 @@ export class StockRepository {
 
   async findAll(params: Prisma.productFindManyArgs) {
     const { skip, cursor, select, orderBy } = params;
-    const maxQueryLimit = this.configService.get<number>('MAX_QUERY_LIMIT');
+    const maxQueryLimit = this.configService.get<number>('MAX_RELATION_QUERY_LIMIT');
     const take = isFinite(params.take) && params.take <  maxQueryLimit ? params.take : maxQueryLimit;
     const { product_order, ...restWhere } = params.where;
     
