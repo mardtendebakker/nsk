@@ -13,8 +13,10 @@ export class CompanyService {
   ) {}
 
   async findAll(query: FindManyDto) {
+    const { representative } = query;
     const where = {
       ...query.where,
+      ...(representative && { representative: { contains: representative }}),
       ...(this.type && { discr: this.type }),
       name: {
         contains: query.search

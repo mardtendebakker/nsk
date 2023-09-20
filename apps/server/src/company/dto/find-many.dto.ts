@@ -1,10 +1,15 @@
 import { ApiPropertyOptional } from "@nestjs/swagger";
 import { FindManyDto as BaseFindManyDto } from "../../common/dto/find-many.dto";
-import { IsString, ValidateIf } from "class-validator";
+import { IsOptional, IsString } from "class-validator";
 
 export class FindManyDto extends BaseFindManyDto {
   @ApiPropertyOptional()
+  @IsOptional()
   @IsString()
-  @ValidateIf((_, value) => value !== undefined)
-  search?: string
+  search?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  representative?: string;
 }
