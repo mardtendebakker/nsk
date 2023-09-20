@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { CognitoAuthModule } from "@nestjs-cognito/auth";
+import { CognitoAuthModule } from '@nestjs-cognito/auth';
 import { CustomerModule } from '../customer/customer.module';
 import { DashboardModule } from '../dashboard/dashboard.module';
 import { SupplierModule } from '../supplier/supplier.module';
@@ -36,15 +36,21 @@ import { AutocompleteModule } from '../autocomplete/autocomplete.module';
     ConfigModule.forRoot({
       envFilePath: ['.env.development.local', '.env.development'],
       isGlobal: true,
-      load: [() => ({ MAX_QUERY_LIMIT: process.env.MAX_QUERY_LIMIT || 100 })],
+      load: [
+        () => ({
+          MAX_RELATION_QUERY_LIMIT: process.env.MAX_RELATION_QUERY_LIMIT || 100,
+          MAX_NONE_RELATION_QUERY_LIMIT:
+            process.env.MAX_NONE_RELATION_QUERY_LIMIT || 5000,
+        }),
+      ],
     }),
     CognitoAuthModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         jwtVerifier: {
-          userPoolId: configService.get<string>("COGNITO_USER_POOL_ID"),
-          clientId: configService.get<string>("COGNITO_CLIENT_ID"),
-          tokenUse: "id",
+          userPoolId: configService.get<string>('COGNITO_USER_POOL_ID'),
+          clientId: configService.get<string>('COGNITO_CLIENT_ID'),
+          tokenUse: 'id',
         },
       }),
       inject: [ConfigService],
@@ -75,7 +81,7 @@ import { AutocompleteModule } from '../autocomplete/autocomplete.module';
     PublicModule,
     AProductModule,
     SalesServiceModule,
-    AutocompleteModule
+    AutocompleteModule,
   ],
   controllers: [AppController],
   providers: [AppService],
