@@ -1,21 +1,20 @@
-/**
- * This is not a production server yet!
- * This is only a minimal backend to get started.
- */
-
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app/app.module';
 import { join } from 'path';
-import { concat, times, lookup, increment } from './common/handlebars/handlebars.helpers';
+import {
+  concat,
+  times,
+  lookup,
+  increment,
+} from './common/handlebars/handlebars.helpers';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import * as hbs from 'hbs';
+import { NskNotFoundExceptionFilter } from './common/filters/nsk-not-found-exception.filter';
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(
-    AppModule,
-  );
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   const handlebars = hbs.create();
   app.useStaticAssets(join(process.cwd(), 'apps/server/src/assets/public'));
@@ -24,15 +23,21 @@ async function bootstrap() {
   handlebars.registerHelper('concat', concat);
   handlebars.registerHelper('times', times);
   handlebars.registerHelper('increment', increment);
-  app.engine('hbs', handlebars.__express)
+  app.engine('hbs', handlebars.__express);
   app.setViewEngine('hbs');
-  
+
   app.enableCors();
-  app.useGlobalPipes(new ValidationPipe({transform: true}));
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix, {
-    exclude: ['/nsk/public/pickup', '/nsk/public/pickuptest', '/nsk/public/order', '/nsk/public/ordertest'],
+    exclude: [
+      '/nsk/public/pickup',
+      '/nsk/public/pickuptest',
+      '/nsk/public/order',
+      '/nsk/public/ordertest',
+    ],
   });
+  app.useGlobalFilters(new NskNotFoundExceptionFilter());
   const port = process.env.PORT || 3333;
   const swaggerConfig = new DocumentBuilder()
     .addBearerAuth({
