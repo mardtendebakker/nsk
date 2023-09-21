@@ -55,7 +55,7 @@ export class PrismaService extends PrismaClient {
       if (Object.prototype.hasOwnProperty.call(obj, key)) {
         const value = obj[key];
         if (key === 'price' && Number.isFinite(value)) {
-          obj[key] = (value * 100) as T[Extract<keyof T, string>];
+          obj[key] = Math.floor(value * 100) as T[Extract<keyof T, string>];
         } else if (typeof value === 'object') {
           obj[key] = this.multiplyPriceBy100(value);
         }
@@ -70,7 +70,7 @@ export class PrismaService extends PrismaClient {
         const value = obj[key];
         if (key === 'price') {
           if (Number.isFinite(value)) {
-            obj[key] = (value / 100) as T[Extract<keyof T, string>];
+            obj[key] = Number((value / 100).toFixed(2)) as T[Extract<keyof T, string>];
           } else {
             obj[key] = 0 as T[Extract<keyof T, string>];
           }
