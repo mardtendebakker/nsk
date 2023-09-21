@@ -36,7 +36,7 @@ export default function Row({
         <TableCell>{product.name}</TableCell>
         <TableCell>{product.type}</TableCell>
         <TableCell>
-          {product.retailPrice}
+          {product.price}
         </TableCell>
         <TableCell>
           {product.stock}

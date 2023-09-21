@@ -116,7 +116,6 @@ export class StockProcess {
       status: this.status,
       created_at: this.rest.created_at,
       updated_at: this.rest.updated_at,
-      retailPrice: this.firstProductOrder?.price ?? 0,
       location: this.locationName,
       type: this.typeName,
       stock: this.quantityInStock,

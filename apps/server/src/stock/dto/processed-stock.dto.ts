@@ -18,9 +18,6 @@ export class ProcessedStock extends PickType(ProductEntity, [
 
     @ApiProperty()
     type: string;
-    
-    @ApiProperty()
-    retailPrice: number;
   
     @ApiProperty()
     location: string;
