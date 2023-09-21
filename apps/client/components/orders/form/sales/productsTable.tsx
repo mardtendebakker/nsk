@@ -139,7 +139,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
               <TableCell>{product.name}</TableCell>
               <TableCell>{product.type}</TableCell>
               <TableCell>
-                {product.retailPrice}
+                {product.price}
               </TableCell>
               <TableCell>
                 {product.stock}

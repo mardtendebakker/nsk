@@ -57,7 +57,6 @@ export interface ProductListItem {
   id: number,
   name:string,
   price:number,
-  retailPrice:number,
   sku:string,
   order_date:string,
   order_nr:string,
