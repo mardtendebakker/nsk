@@ -34,6 +34,8 @@ export interface OrderListItem {
   id: number,
   order_nr:string
   order_date:string,
+  pickup: { real_pickup_date: string },
+  delivery_date: string,
   order_status: { id: number, name:string, color:string }
   product_orders: ProductOrder[];
   acompany_aorder_supplier_idToacompany:Company,
