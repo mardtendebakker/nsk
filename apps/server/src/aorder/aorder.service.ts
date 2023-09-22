@@ -54,6 +54,14 @@ export class AOrderService {
             color: true,
           }
         },
+        ...(this.type === AOrderDiscrimination.PURCHASE && {
+          pickup: {
+            select: {
+              real_pickup_date: true,
+            },
+          },
+        }),
+        delivery_date: true,
         acompany_aorder_supplier_idToacompany: {
           select: this.getCompanySelect(),
         },

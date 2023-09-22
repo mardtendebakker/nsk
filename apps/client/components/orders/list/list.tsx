@@ -169,6 +169,11 @@ export default function List({
             (yy/mm/dd)
           </TableCell>
           <TableCell>
+            {trans(type === 'purchase' ? 'pickupDate' : 'deliveryDate')}
+            {' '}
+            (yy/mm/dd)
+          </TableCell>
+          <TableCell>
             {trans(type === 'purchase' ? 'supplier' : 'customer')}
           </TableCell>
           <TableCell>
@@ -205,6 +210,16 @@ export default function List({
               </TableCell>
               <TableCell>
                 {format(new Date(order.order_date), 'yyyy/MM/dd')}
+              </TableCell>
+              <TableCell>
+                {format(
+                  new Date(
+                    type === 'purchase'
+                      ? order.pickup.real_pickup_date
+                      : order.delivery_date,
+                  ),
+                  'yyyy/MM/dd',
+                )}
               </TableCell>
               <TableCell>
                 <Company company={company} type={type} />
