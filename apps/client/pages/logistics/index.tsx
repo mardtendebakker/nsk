@@ -7,7 +7,7 @@ import ChevronRight from '@mui/icons-material/ChevronRight';
 import ChevronLeft from '@mui/icons-material/ChevronLeft';
 import Search from '@mui/icons-material/Search';
 import {
-  addDays, differenceInMinutes, format, setHours, setMinutes,
+  addDays, addMinutes, areIntervalsOverlapping, differenceInMinutes, format, setHours, setMinutes,
 } from 'date-fns';
 import DashboardLayout from '../../layouts/dashboard';
 import useTranslation from '../../hooks/useTranslation';
@@ -17,12 +17,15 @@ import { PICKUPS_PATH } from '../../utils/axios';
 import TextField from '../../components/input/textField';
 import { Logistic, Order, PickupListItem } from '../../utils/axios/models/pickup';
 import SideMap from '../../components/logistics/sideMap';
+import MenuItemText from '../../components/menuTextItem';
 
 const hours = [];
+const HOURS_PER_DAYS = 10;
+const STARTING_HOUR = 8;
 
-for (let i = 0; i < 12; i++) {
-  hours.push(`${7 + i}:00`);
-  hours.push(`${7 + i}:30`);
+for (let i = 0; i < HOURS_PER_DAYS; i++) {
+  hours.push(`${STARTING_HOUR + i}:00`);
+  hours.push(`${STARTING_HOUR + i}:30`);
 }
 
 export default function Logistics() {
@@ -81,15 +84,34 @@ export default function Logistics() {
     const selected = selectedLogisticIds[0] === 0 || selectedLogisticIds.includes(logistic?.id);
 
     return selected && (formatPickupName(order)?.includes(search) || order.order_nr.includes(search));
-  }).sort((a: PickupListItem, b: PickupListItem) => {
-    if (a.real_pickup_date < b.real_pickup_date) {
-      return -1;
-    } if (a.real_pickup_date > b.real_pickup_date) {
-      return 1;
+  });
+
+  const overlappingPickups: PickupListItem[][] = [];
+
+  const pickupsLength = pickups.length;
+
+  for (let i = 0; i < pickupsLength; i++) {
+    const overlappingPickupsLength = overlappingPickups.length;
+    let pushedInGroup = false;
+    for (let j = 0; j < overlappingPickupsLength; j++) {
+      const overlappingPickupsGroup = overlappingPickups[j];
+      const overlappingPickupsGroupLength = overlappingPickupsGroup.length;
+      for (let k = 0; k < overlappingPickupsGroupLength; k++) {
+        if (areIntervalsOverlapping(
+          { start: new Date(overlappingPickupsGroup[k].real_pickup_date), end: addMinutes(new Date(overlappingPickupsGroup[k].real_pickup_date), 30) },
+          { start: new Date(pickups[i].real_pickup_date), end: addMinutes(new Date(pickups[i].real_pickup_date), 30) },
+        )) {
+          overlappingPickupsGroup.push(pickups[i]);
+          pushedInGroup = true;
+          break;
+        }
+      }
     }
 
-    return 0;
-  });
+    if (!pushedInGroup) {
+      overlappingPickups.push([pickups[i]]);
+    }
+  }
 
   return (
     <DashboardLayout>
@@ -108,13 +130,15 @@ export default function Logistics() {
               sx={(theme) => ({
                 borderRadius: '.25rem',
                 fontWeight: theme.typography.fontWeightMedium,
-                background: selectedLogisticIds[0] === 0 ? '#D6E0FA' : undefined,
+                background: selectedLogisticIds[0] === 0 ? theme.palette.primary.light : undefined,
                 color: selectedLogisticIds[0] === 0 ? theme.palette.primary.main : undefined,
                 mb: '.2rem',
                 p: '.5rem .75rem',
               })}
             >
-              {trans('everyone')}
+              <MenuItemText active={selectedLogisticIds[0] === 0}>
+                {trans('everyone')}
+              </MenuItemText>
             </MenuItem>
             {logistics.map((logistic: Logistic) => {
               const active = !!selectedLogisticIds.find((element) => element == logistic.id);
@@ -125,15 +149,17 @@ export default function Logistics() {
                   sx={(theme) => ({
                     borderRadius: '.25rem',
                     fontWeight: theme.typography.fontWeightMedium,
-                    background: active ? '#D6E0FA' : undefined,
+                    background: active ? theme.palette.primary.light : undefined,
                     color: active ? theme.palette.primary.main : undefined,
                     whiteSpace: 'normal',
                     overflowWrap: 'anywhere',
                     mb: '1rem',
-                    py: '1rem',
+                    p: '.5rem .75rem',
                   })}
                 >
-                  {logistic.username}
+                  <MenuItemText active={active}>
+                    {logistic.username}
+                  </MenuItemText>
                 </MenuItem>
               );
             })}
@@ -198,10 +224,14 @@ export default function Logistics() {
                       <Box sx={{ marginTop: '-1.67em' }}>{hours[0]}</Box>
                     </TableCell>
                     {dates.map((date: Date) => {
-                      const thisDayPickups = pickups.filter(({ real_pickup_date }) => {
-                        const realPickupDate = new Date(real_pickup_date);
-                        return format(realPickupDate, 'Y-MM-dd') == format(date, 'Y-MM-dd');
-                      });
+                      const thisDayPickups: PickupListItem[][] = [];
+                      const overlappingPickupsLength = overlappingPickups.length;
+                      for (let i = 0; i < overlappingPickupsLength; i++) {
+                        thisDayPickups.push(overlappingPickups[i].filter(({ real_pickup_date }) => {
+                          const realPickupDate = new Date(real_pickup_date);
+                          return format(realPickupDate, 'Y-MM-dd') == format(date, 'Y-MM-dd');
+                        }));
+                      }
 
                       return (
                         <TableCell
@@ -209,7 +239,7 @@ export default function Logistics() {
                           sx={{ position: 'relative', borderLeft: (theme) => `1px solid ${theme.palette.divider}` }}
                         >
                           {
-                        thisDayPickups.map((pickup) => {
+                        thisDayPickups.map((elements) => elements.map((pickup, i) => {
                           const realPickupDate = new Date(pickup.real_pickup_date);
 
                           return (
@@ -218,17 +248,19 @@ export default function Logistics() {
                                 if (pickup.logistic) {
                                   setClickedPickup({
                                     pickup,
-                                    allPickups: thisDayPickups.filter((element) => element.logistic && (element.logistic.id == pickup.logistic.id)),
+                                    allPickups: thisDayPickups.flat().filter((element) => element.logistic && (element.logistic.id == pickup.logistic.id)),
                                   });
                                 }
                               }}
                               pickup={pickup}
                               key={pickup.id}
-                              top={`${differenceInMinutes(realPickupDate, date) * 0.1}rem`}
-                              height="6rem"
+                              top={`${differenceInMinutes(realPickupDate, date) * 0.01 * (HOURS_PER_DAYS - 1)}rem`}
+                              height="3rem"
+                              left={`${(100 / elements.length) * i}%`}
+                              width={`${(100 / elements.length)}%`}
                             />
                           );
-                        })
+                        }))
 }
                         </TableCell>
                       );

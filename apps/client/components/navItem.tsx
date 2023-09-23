@@ -32,7 +32,7 @@ function CollapsableItem({ menuItemDescription }: { menuItemDescription: MenuIte
               sx={(theme) => ({
                 borderRadius: '.25rem',
                 minHeight: 'unset',
-                background: subItem.active ? '#D6E0FA' : undefined,
+                background: subItem.active ? theme.palette.primary.light : undefined,
                 color: subItem.active ? theme.palette.primary.main : undefined,
                 mb: '.2rem',
                 ml: '.5rem',
@@ -66,7 +66,7 @@ export default function NavItem({ menuItemDescription }: { menuItemDescription: 
         <MenuItem
           sx={(theme) => ({
             borderRadius: '.25rem',
-            background: active && !subItems ? '#D6E0FA' : undefined,
+            background: active && !subItems ? theme.palette.primary.light : undefined,
             color: active && !subItems ? theme.palette.primary.main : undefined,
             mb: '.2rem',
             minHeight: 'unset',

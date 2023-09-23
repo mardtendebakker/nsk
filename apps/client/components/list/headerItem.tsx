@@ -9,7 +9,7 @@ export default function HeaderItem({ text, href, active }: { text: string, href:
         variant="h5"
         sx={(theme) => ({
           cursor: 'pointer',
-          background: active ? '#D6E0FA' : undefined,
+          background: active ? theme.palette.primary.light : undefined,
           color: active ? theme.palette.primary.main : undefined,
           p: '.5rem .75rem',
           mr: '.5rem',
