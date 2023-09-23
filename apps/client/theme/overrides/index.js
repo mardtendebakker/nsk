@@ -10,6 +10,7 @@ import Typography from './Typography';
 import Autocomplete from './Autocomplete';
 import AppBar from './AppBar';
 import Avatar from './Avatar';
+import MenuItem from './MenuItem';
 
 // ----------------------------------------------------------------------
 
@@ -26,5 +27,6 @@ export default function ComponentsOverrides(theme) {
     Autocomplete(theme),
     AppBar(theme),
     Avatar(theme),
+    MenuItem(theme),
   );
 }

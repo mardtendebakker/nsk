@@ -1,14 +1,16 @@
 import { Box, Tooltip, Typography } from '@mui/material';
-import { addHours, format } from 'date-fns';
+import { format } from 'date-fns';
 import { Order, PickupListItem } from '../../utils/axios/models/pickup';
 import useTranslation from '../../hooks/useTranslation';
 
 export default function Event({
-  pickup, top, height, onClick,
+  pickup, top, height, onClick, left, width,
 }: {
   pickup: PickupListItem,
   top: string,
   height: string,
+  left: number | string,
+  width: string,
   onClick: () => void,
 }) {
   const { trans } = useTranslation();
@@ -18,7 +20,7 @@ export default function Event({
 
   if (pickup.real_pickup_date) {
     const realPickupDate = new Date(pickup.real_pickup_date);
-    title = `${format(realPickupDate, 'HH:mm')} - ${format(addHours(realPickupDate, 1), 'HH:mm')}`;
+    title = format(realPickupDate, 'HH:mm');
   }
 
   const color = pickup?.order?.order_status?.color;
@@ -34,42 +36,40 @@ export default function Event({
         height,
         bgcolor: 'white',
         position: 'absolute',
-        left: 0,
+        left,
+        width,
         right: 0,
         overflow: 'hidden',
         zIndex: 1,
+        border: '.1rem solid white',
+        borderRadius: '.2rem',
       }}
     >
-      <Box sx={{
-        borderBottom: `.1rem solid ${color}`,
-        borderTop: `.3rem solid ${color}`,
-        bgcolor: `${color}25`,
-        width: '100%',
-        height: '100%',
-        padding: '1rem',
-        position: 'relative',
-      }}
+      <Tooltip title={(
+        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+          <span>{title}</span>
+          <span>{body}</span>
+          <span>{username}</span>
+        </Box>
+      )}
       >
-        <Typography variant="inherit">{title}</Typography>
-        <Typography variant="body2" fontWeight={700}>{body}</Typography>
-        {username && (
         <Box sx={{
-          width: '1.2rem',
-          height: '1.2rem',
-          borderRadius: '50%',
-          bgcolor: 'white',
-          textAlign: 'center',
-          position: 'absolute',
-          right: '.5rem',
-          bottom: '.5rem',
+          borderBottom: `.1rem solid ${color}`,
+          borderTop: `.3rem solid ${color}`,
+          bgcolor: `${color}25`,
+          width: '100%',
+          height: '100%',
+          padding: '.5rem',
+          position: 'relative',
         }}
         >
-          <Tooltip title={<Typography>{username}</Typography>}>
-            <Typography variant="h5">{username.charAt(0)?.toUpperCase()}</Typography>
-          </Tooltip>
+          <Typography variant="inherit">
+            {body}
+            {', '}
+            {title}
+          </Typography>
         </Box>
-        )}
-      </Box>
+      </Tooltip>
     </Box>
   );
 }

@@ -48,17 +48,17 @@ export default function AccountPopover() {
         }}
       >
         <Stack>
-          <MenuItem>
-            <Link href={SETTINGS} style={{ textDecoration: 'none', color: 'inherit' }} passHref>
-              {trans('settings')}
-            </Link>
-          </MenuItem>
-          <Can requiredGroups={['admin', 'super_admin']}>
+          <Link href={SETTINGS} style={{ textDecoration: 'none', color: 'inherit' }} passHref>
             <MenuItem>
-              <Link href={ADMIN_USERS} style={{ textDecoration: 'none', color: 'inherit' }} passHref>
-                {trans('admin')}
-              </Link>
+              {trans('settings')}
             </MenuItem>
+          </Link>
+          <Can requiredGroups={['admin', 'super_admin']}>
+            <Link href={ADMIN_USERS} style={{ textDecoration: 'none', color: 'inherit' }} passHref>
+              <MenuItem>
+                {trans('admin')}
+              </MenuItem>
+            </Link>
           </Can>
         </Stack>
         <Divider sx={{ borderStyle: 'dashed' }} />
