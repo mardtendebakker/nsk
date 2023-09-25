@@ -34,7 +34,7 @@ export default function Header({ onProductCreated }: { onProductCreated: () => v
       <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
         <Typography variant="h4" sx={{ mr: '.5rem', mb: '.5rem' }}>{trans('stock')}</Typography>
         {isDesktop && ITEMS.map(({ text, href, active }) => (
-          <HeaderItem text={text} active={active} href={href} />
+          <HeaderItem text={text} active={active} href={href} key={text} />
         ))}
       </Box>
       {showForm && (

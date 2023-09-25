@@ -37,7 +37,7 @@ export default function Header() {
       <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
         <Typography variant="h4" sx={{ mr: '.5rem', mb: '.5rem' }}>{trans('contacts')}</Typography>
         {isDesktop && ITEMS.map(({ text, active, href }) => (
-          <HeaderItem text={text} active={active} href={href} />
+          <HeaderItem text={text} active={active} href={href} key={text} />
         ))}
       </Box>
       <Button

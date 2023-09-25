@@ -39,10 +39,10 @@ export default function DeliveryDetails({
             label={trans('deliveryDate')}
             renderInput={(params) => (
               <BaseTextField
-                fullWidth
-                error={!!formRepresentation.deliveryDate.error}
-                helperText={formRepresentation.deliveryDate.error}
                 {...params}
+                fullWidth
+                helperText={formRepresentation.deliveryDate.error}
+                error={!!formRepresentation.deliveryDate.error}
                 inputProps={{
                   ...params.inputProps,
                   placeholder: trans('selectDeliveryDate'),
@@ -54,6 +54,8 @@ export default function DeliveryDetails({
           <Select
             disabled={disabled}
             value={formRepresentation.deliveryType.value}
+            error={!!formRepresentation.deliveryType.error}
+            helperText={formRepresentation.deliveryType.error}
             onChange={(e) => setValue({ field: 'deliveryType', value: e.target.value })}
             options={[
               { title: trans('pickup'), value: 0 },

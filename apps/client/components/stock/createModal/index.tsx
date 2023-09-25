@@ -30,7 +30,7 @@ export function initFormState(product?: Product) {
     type_id: { value: product?.product_type?.id },
     location_id: { value: product?.location?.id, required: true },
     status_id: { value: product?.product_status?.id },
-    price: { value: product?.price },
+    price: { value: product?.price || 0, required: true },
     description: { value: product?.description },
     ...attributes,
   };

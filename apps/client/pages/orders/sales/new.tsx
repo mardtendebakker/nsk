@@ -33,8 +33,8 @@ export function initFormState(trans, order?: Order) {
     totalPrice: { value: order?.totalPrice },
     discount: { value: order?.discount },
     isGift: { value: !!order?.is_gift },
-    deliveryDate: { value: order?.delivery_date },
-    deliveryType: { value: order?.delivery_type },
+    deliveryDate: { value: order?.delivery_date, required: true },
+    deliveryType: { value: order?.delivery_type, required: true },
     deliveryInstructions: { value: order?.delivery_instructions },
     partnerId: { value: order?.acompany_aorder_customer_idToacompany?.acompany?.id },
     customerId: {

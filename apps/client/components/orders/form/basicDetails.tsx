@@ -63,10 +63,10 @@ export default function BasicDetails({
             label={trans('orderDate')}
             renderInput={(params) => (
               <BaseTextField
-                error={!!formRepresentation.orderDate.error}
+                {...params}
                 helperText={formRepresentation.orderDate.error}
                 sx={{ flex: 1 }}
-                {...params}
+                error={!!formRepresentation.orderDate.error}
                 inputProps={{
                   ...params.inputProps,
                   placeholder: trans('selectOrderDate'),

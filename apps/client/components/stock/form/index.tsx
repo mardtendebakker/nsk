@@ -123,7 +123,7 @@ export default function Form({
                 type="number"
                 label={trans('price')}
                 placeholder="0.00"
-                value={formRepresentation.price.value || ''}
+                value={formRepresentation.price.value || '0'}
                 InputProps={{
                   startAdornment: (<Box sx={{ mr: '.2rem' }}>€</Box>),
                 }}
