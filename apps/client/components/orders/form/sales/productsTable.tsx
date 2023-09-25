@@ -18,13 +18,14 @@ import PaginatedTable from '../../../paginatedTable';
 import TableCell from '../../../tableCell';
 import AddProductsModal from '../addProductsModal';
 
-export default function ProductsTable({ orderId }:{ orderId: string }) {
+export default function ProductsTable({ orderId, refreshOrder }:{ orderId: string, refreshOrder: () => void }) {
   const { trans } = useTranslation();
   const [showProductsModal, setShowProductsModal] = useState(false);
   const [page, setPage] = useState<number>(1);
   const [rowsPerPage, setRowsPerPage] = useState<number>(5);
 
   const { call: callPut } = useAxios('put', undefined, { withProgressBar: true });
+  const { call: callPutWithProgressBar } = useAxios('put', undefined, { withProgressBar: true });
   const { call: callDelete } = useAxios('delete', undefined, { withProgressBar: true, showSuccessMessage: true });
   const { data: { data = [], count = 0 } = {}, call } = useAxios(
     'get',
@@ -48,6 +49,8 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
           },
         ],
       },
+    }).then(() => {
+      refreshOrder();
     });
   }), []);
 
@@ -62,7 +65,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
   }, [page, rowsPerPage, orderId]);
 
   const handleProductsAdded = (productIds: number[]) => {
-    callPut({
+    callPutWithProgressBar({
       path: SALES_ORDERS_PRODUCTS_PATH.replace(':id', orderId),
       body: productIds,
     }).then(() => {
