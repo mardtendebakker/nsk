@@ -56,7 +56,7 @@ export interface Order {
   status_id:number,
   supplier_id:number,
   customer_id:number,
-  pickup:Pickup,
+  pickup?: Pickup,
   delivery_date:string,
   delivery_type:number,
   delivery_instructions:string,

@@ -190,6 +190,9 @@ export default function List({
       <TableBody>
         {orders.map((order: OrderListItem) => {
           const company = type === 'purchase' ? order.acompany_aorder_supplier_idToacompany : order.acompany_aorder_customer_idToacompany;
+          const deliveryOrPickupDate = type === 'purchase'
+            ? order?.pickup?.real_pickup_date
+            : order.delivery_date;
 
           return (
             <TableRow
@@ -212,14 +215,10 @@ export default function List({
                 {format(new Date(order.order_date), 'yyyy/MM/dd')}
               </TableCell>
               <TableCell>
-                {format(
-                  new Date(
-                    type === 'purchase'
-                      ? order.pickup.real_pickup_date
-                      : order.delivery_date,
-                  ),
+                {deliveryOrPickupDate ? format(
+                  new Date(deliveryOrPickupDate),
                   'yyyy/MM/dd',
-                )}
+                ) : '--'}
               </TableCell>
               <TableCell>
                 <Company company={company} type={type} />
