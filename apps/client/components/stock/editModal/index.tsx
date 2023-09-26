@@ -6,7 +6,6 @@ import { format } from 'date-fns';
 import Visibility from '@mui/icons-material/VisibilityOutlined';
 import InputOutlinedIcon from '@mui/icons-material/InputOutlined';
 import OutputOutlinedIcon from '@mui/icons-material/OutputOutlined';
-import { useRouter } from 'next/router';
 import Link from 'next/link';
 import useTranslation from '../../../hooks/useTranslation';
 import useForm from '../../../hooks/useForm';
@@ -33,7 +32,6 @@ export default function EditModal(
   },
 ) {
   const { trans } = useTranslation();
-  const router = useRouter();
   const { data: product, call, performing } = useAxios('get', STOCK_PRODUCTS_PATH.replace(':id', id));
   const { call: bulkPrint, performing: performingBulkPrintBarcodes } = useAxios('get', APRODUCT_BULK_PRINT_BARCODES);
   const { call: callPut, performing: performingPut } = useAxios('put', STOCK_PRODUCTS_PATH.replace(':id', id), { showSuccessMessage: true });

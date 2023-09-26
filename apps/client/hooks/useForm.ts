@@ -8,7 +8,7 @@ interface ValidateResponse {
 
 const getError = (field: Field, data: FormRepresentation, trans): string | undefined => {
   switch (true) {
-    case field.required && !field.value:
+    case field.required && (field.value === null || field.value === undefined || field.value === ''):
       return field.requiredMessage || trans('requiredField');
     case typeof field.validator === 'function':
       return field.validator(data);
