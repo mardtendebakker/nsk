@@ -3,41 +3,42 @@ import { FindManyDto as BaseFindManyDto } from "../../common/dto/find-many.dto";
 import { IsEnum, IsInt, IsOptional, IsString, ValidateIf } from "class-validator";
 import { Type } from "class-transformer";
 import { AOrderDiscrimination } from "../../aorder/types/aorder-discrimination.enum";
+import { EntityStatus } from "../../common/types/entity-status.enum";
 
 export class FindManyDto extends BaseFindManyDto {
   @ApiPropertyOptional()
+  @IsOptional()
   @IsString()
-  @ValidateIf((_, value) => value !== undefined)
   search?: string;
   
   @ApiPropertyOptional()
+  @IsOptional()
   @IsInt()
   @Type(() => Number)
-  @ValidateIf((_, value) => value !== undefined)
   productType?: number;
   
   @ApiPropertyOptional()
+  @IsOptional()
   @IsInt()
   @Type(() => Number)
-  @ValidateIf((_, value) => value !== undefined)
   productStatus?: number;
 
   @ApiPropertyOptional()
+  @IsOptional()
   @IsInt()
   @Type(() => Number)
-  @ValidateIf((_, value) => value !== undefined)
   location?: number;
 
   @ApiPropertyOptional()
+  @IsOptional()
   @IsInt()
   @Type(() => Number)
-  @ValidateIf((_, value) => value !== undefined)
   orderId?: number;
 
   @ApiPropertyOptional()
+  @IsOptional()
   @IsInt()
   @Type(() => Number)
-  @ValidateIf((_, value) => value !== undefined)
   excludeByOrderId?: number;
 
   @ApiPropertyOptional({
@@ -47,6 +48,5 @@ export class FindManyDto extends BaseFindManyDto {
   @IsOptional()
   @IsEnum(AOrderDiscrimination)
   @Type(() => String)
-  @ValidateIf((_, value) => value !== undefined)
   excludeByOrderDiscr?: AOrderDiscrimination;
 }

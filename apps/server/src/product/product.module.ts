@@ -6,6 +6,7 @@ import { ProductRepository } from './product.repository';
 import { LocationModule } from '../location/location.module';
 import { FileModule } from '../file/file.module';
 import { PrintService } from '../print/print.service';
+import { EntityStatus } from '../common/types/entity-status.enum';
 
 @Module({
   providers: [
@@ -14,6 +15,10 @@ import { PrintService } from '../print/print.service';
     {
       provide: 'IS_REPAIR',
       useValue: false,
+    },
+    {
+      provide: 'ENTITY_STATUS',
+      useValue: EntityStatus.Active,
     },
     PrintService,
   ],

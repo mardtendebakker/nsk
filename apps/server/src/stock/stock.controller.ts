@@ -55,7 +55,7 @@ export class StockController {
   @Patch('')
   @ApiResponse({type: UpdateManyResponseProductDto})
   updateMany(@Body() updateManyProductDto: UpdateManyProductDto) {
-    return this.stockService.updateMany(updateManyProductDto)
+    return this.stockService.updateManyLocation(updateManyProductDto);
   }
 
   @Delete(':id')

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import _ from 'lodash';
 import {
-  STOCK_PRODUCTS_PATH, STOCK_REPAIRS_PATH, SPLIT_PRODUCT_INDIVIDUALIZE_PATH, SPLIT_PRODUCT_STOCK_PART_PATH, APRODUCT_BULK_PRINT_BARCODES, AxiosResponse, APRODUCT_BULK_PRINT_CHECKLISTS, AUTOCOMPLETE_LOCATIONS_PATH, APRODUCT_BULK_PRINT_PRICECARDS,
+  STOCK_PRODUCTS_PATH, STOCK_REPAIRS_PATH, SPLIT_PRODUCT_INDIVIDUALIZE_PATH, SPLIT_PRODUCT_STOCK_PART_PATH, APRODUCT_BULK_PRINT_BARCODES, AxiosResponse, APRODUCT_BULK_PRINT_CHECKLISTS, AUTOCOMPLETE_LOCATIONS_PATH, APRODUCT_BULK_PRINT_PRICECARDS, STOCK_ARCHIVED_PATH, APRODUCTS_ARCHIVE_SET, APRODUCTS_ARCHIVE_UNSET,
 } from '../../../utils/axios';
 import List from './list';
 import useAxios from '../../../hooks/useAxios';
@@ -89,7 +89,13 @@ function refreshList({
   }).finally(() => pushURLParams({ params, router }));
 }
 
-export default function ListContainer({ type } : { type: 'product' | 'repair' }) {
+const AJAX_PATHS = {
+  product: STOCK_PRODUCTS_PATH,
+  repair: STOCK_REPAIRS_PATH,
+  archived: STOCK_ARCHIVED_PATH,
+};
+
+export default function ListContainer({ type } : { type: 'product' | 'repair' | 'archived' }) {
   const { trans } = useTranslation();
   const { state: { user } } = useSecurity();
   const router = useRouter();
@@ -101,7 +107,7 @@ export default function ListContainer({ type } : { type: 'product' | 'repair' })
   const [checkedProductIds, setCheckedProductIds] = useState<number[]>([]);
   const [splitProduct, setSplitProduct] = useState<ProductListItem | undefined>();
 
-  const ajaxPath = type === 'product' ? STOCK_PRODUCTS_PATH : STOCK_REPAIRS_PATH;
+  const ajaxPath = AJAX_PATHS[type] || STOCK_PRODUCTS_PATH;
 
   const { formRepresentation, setValue, setData } = useForm(initFormState({
     search: getQueryParam('search'),
@@ -120,6 +126,8 @@ export default function ListContainer({ type } : { type: 'product' | 'repair' })
   const { call: bulkPrint, performing: performingBulkPrintBarcodes } = useAxios('get', APRODUCT_BULK_PRINT_BARCODES);
   const { call: bulkPrintChecklist, performing: performingBulkPrintChecklists } = useAxios('get', APRODUCT_BULK_PRINT_CHECKLISTS);
   const { call: bulkPrintPriceCard, performing: performingBulkPrintPriceCards } = useAxios('get', APRODUCT_BULK_PRINT_PRICECARDS);
+  const { call: bulkPatchArchive, performing: performingBulkPatchArchive } = useAxios('patch', APRODUCTS_ARCHIVE_SET);
+  const { call: bulkPatchUnarchive, performing: performingBulkPatchUnarchive } = useAxios('patch', APRODUCTS_ARCHIVE_UNSET);
   const { call: callDelete, performing: performingDelete } = useAxios(
     'delete',
     ajaxPath,
@@ -128,7 +136,7 @@ export default function ListContainer({ type } : { type: 'product' | 'repair' })
       showSuccessMessage: true,
     },
   );
-  const { call: callPatch, performing: performingPatch } = useAxios(
+  const { call: callPatchLocation, performing: performingPatchLocation } = useAxios(
     'patch',
     ajaxPath.replace(':id', ''),
     {
@@ -185,10 +193,26 @@ export default function ListContainer({ type } : { type: 'product' | 'repair' })
       .then(() => defaultRefreshList());
   };
 
-  const disabled = (): boolean => performing || performingDelete || performingPatch || performingSplit || performingBulkPrintBarcodes || performingBulkPrintChecklists || performingBulkPrintPriceCards;
+  const disabled = (): boolean => performing || performingDelete || performingPatchLocation || performingBulkPatchArchive || performingBulkPatchUnarchive || performingSplit || performingBulkPrintBarcodes || performingBulkPrintChecklists || performingBulkPrintPriceCards;
+
+  const handlePatchArchive = () => {
+    bulkPatchArchive({ body: checkedProductIds })
+      .then(() => {
+        setCheckedProductIds([]);
+        defaultRefreshList();
+      });
+  };
+
+  const handlePatchUnarchive = () => {
+    bulkPatchUnarchive({ body: checkedProductIds })
+      .then(() => {
+        setCheckedProductIds([]);
+        defaultRefreshList();
+      });
+  };
 
   const handlePatchLocation = () => {
-    callPatch({ body: { ids: checkedProductIds, product: { location_id: changeLocationValue } } })
+    callPatchLocation({ body: { ids: checkedProductIds, product: { location_id: changeLocationValue } } })
       .then(() => {
         setCheckedProductIds([]);
         defaultRefreshList();
@@ -259,9 +283,12 @@ export default function ListContainer({ type } : { type: 'product' | 'repair' })
         <Box sx={{ m: '.5rem' }} />
         <Action
           disabled={disabled()}
+          type={type}
           allChecked={(_.intersectionWith(checkedProductIds, data, (productId: number, product: ProductListItem) => productId === product.id).length === data.length) && data.length != 0}
           checkedProductsCount={checkedProductIds.length}
           onAllCheck={handleAllChecked}
+          onArchive={handlePatchArchive}
+          onUnarchive={handlePatchUnarchive}
           onChangeLocation={() => setShowChangeLocationModal(true)}
           onPrint={handlePrintBarcodes}
           onPrintChecklist={handlePrintChecklists}

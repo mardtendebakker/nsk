@@ -20,6 +20,7 @@ import {
   CONTACTS_SUPPLIERS,
   BULK_EMAIL,
   ORDERS_REPAIRS,
+  STOCKS_ARCHIVED,
 } from '../../../utils/routes';
 import useTranslation from '../../../hooks/useTranslation';
 import useResponsive from '../../../hooks/useResponsive';
@@ -76,6 +77,11 @@ export default function Header() {
           title: trans('repairServices'),
           path: STOCKS_REPAIR_SERVICES,
           active: router.pathname.includes(STOCKS_REPAIR_SERVICES),
+        },
+        {
+          title: trans('archived'),
+          path: STOCKS_ARCHIVED,
+          active: router.pathname.includes(STOCKS_ARCHIVED),
         },
       ],
     },

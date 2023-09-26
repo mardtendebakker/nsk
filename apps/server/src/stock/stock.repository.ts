@@ -124,12 +124,12 @@ export class StockRepository {
     return this.prisma.product.delete({ where: { id } });
   }
 
-  updateMany(params: { where: Prisma.aorderWhereInput; data: Product }) {
+  updateMany(params: Prisma.productUpdateManyArgs) {
     const { where, data } = params;
 
     return this.prisma.product.updateMany({
-      data,
       where,
+      data,
     });
   }
 

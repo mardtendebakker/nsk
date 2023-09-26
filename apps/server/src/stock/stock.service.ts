@@ -26,6 +26,7 @@ import { AttributeGetPayload } from "../attribute/types/attribute-get-payload";
 import { ProductAttributeProcessed } from "./types/product-attribute-processed";
 import { ProductRelationAttributeProcessed } from "./types/product-relation-attribute-processed";
 import { ProductRelationAttributeOrderProcessed } from "./types/product-relation-attribute-order-processed";
+import { EntityStatus } from "../common/types/entity-status.enum";
 
 export class StockService {
   constructor(
@@ -33,6 +34,7 @@ export class StockService {
     protected readonly locationService: LocationService,
     protected readonly fileService: FileService,
     protected readonly printService: PrintService,
+    protected readonly entityStatus: EntityStatus,
   ) {}
 
   async processStock(product: ProductRelation, orderId?: number): Promise<ProcessedStock> {
@@ -42,10 +44,11 @@ export class StockService {
   }
 
   async findAll(query: FindManyDto) {
-    // const isStock = product_status ? product_status?.is_stock ?? true : true;
-    // this where is the top line logic transformation
+    console.log(this.entityStatus);
+    
     const productwhere: Prisma.productWhereInput = {
       ...query.where,
+      ...(Number.isFinite(this.entityStatus) && { entity_status: this.entityStatus }),
       ...(query.orderId || query.excludeByOrderId || query.excludeByOrderDiscr) && {
         product_order: {
           ...(query.orderId && { some: { order_id: query.orderId } }),
@@ -233,13 +236,18 @@ export class StockService {
     return this.repository.deleteOne(id);
   }
 
-  async updateMany(updateManyProductDto: UpdateManyProductDto) {
+  async updateMany(ids: number[], data: Prisma.productUncheckedUpdateManyInput) {
     return this.repository.updateMany({
-      data: updateManyProductDto.product,
       where: {
-        id: { in: updateManyProductDto.ids }
-      }
+        id: { in: ids },
+      },
+      data,
     });
+  }
+
+  async updateManyLocation(updateManyProductDto: UpdateManyProductDto) {
+    const { ids, product } = updateManyProductDto;
+    return this.updateMany(ids, product);
   }
 
   async getAllPublicTypes() {

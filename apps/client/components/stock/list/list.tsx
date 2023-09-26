@@ -26,7 +26,7 @@ export default function List({
   checkedProductIds,
   disableSelection,
 }: {
-  type: 'product' | 'repair',
+  type: 'product' | 'repair' | 'archived',
   products: ProductListItem[],
   count: number,
   page: number,
