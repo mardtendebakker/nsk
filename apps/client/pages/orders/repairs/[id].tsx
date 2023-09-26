@@ -128,7 +128,7 @@ function UpdateRepairOrder() {
                 item
                 xs={12}
               >
-                {id && <ProductsTable orderId={id.toString()} />}
+                {id && <ProductsTable orderId={id.toString()} refreshOrder={() => fetchRepairOrder()} />}
               </Grid>
             </Grid>
           </CardContent>
