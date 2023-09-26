@@ -6,11 +6,20 @@ import { FileModule } from '../file/file.module';
 import { AProductRepository } from './aproduct.repository';
 import { AproductController } from './aproduct.controller';
 import { PrintService } from '../print/print.service';
+import { ArchivedModule } from './archived/archived.module';
 
 @Module({
-  providers: [AProductService, AProductRepository, PrintService],
+  providers: [
+    AProductService,
+    AProductRepository,
+    {
+      provide: 'ENTITY_STATUS',
+      useValue: null,
+    },
+    PrintService
+  ],
   controllers: [AproductController],
-  imports: [PrismaModule, LocationModule, FileModule],
+  imports: [PrismaModule, LocationModule, FileModule, ArchivedModule],
   exports: [AProductService],
 })
 export class AProductModule {}

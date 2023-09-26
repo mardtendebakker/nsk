@@ -6,6 +6,7 @@ import { ToRepairService } from './to-repair.service';
 import { ToRepairController } from './to-repair.controller';
 import { FileModule } from '../file/file.module';
 import { PrintService } from '../print/print.service';
+import { EntityStatus } from '../common/types/entity-status.enum';
 
 @Module({
   providers: [
@@ -14,6 +15,10 @@ import { PrintService } from '../print/print.service';
     {
       provide: 'IS_REPAIR',
       useValue: true,
+    },
+    {
+      provide: 'ENTITY_STATUS',
+      useValue: EntityStatus.Active,
     },
     PrintService,
   ],

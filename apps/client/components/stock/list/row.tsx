@@ -35,7 +35,7 @@ export default function Row(
     disableSelection,
   }
   : {
-    type: 'product' | 'repair'
+    type: 'product' | 'repair' | 'archived'
     product: ProductListItem,
     onCheck: OnCheck,
     onClick: OnClick,

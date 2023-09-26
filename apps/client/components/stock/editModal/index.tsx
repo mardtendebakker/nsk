@@ -28,7 +28,7 @@ export default function EditModal(
     onClose: () => void,
     onSubmit: () => void,
     id: string,
-    type?: 'product' | 'repair',
+    type?: 'product' | 'repair' | 'archived',
   },
 ) {
   const { trans } = useTranslation();

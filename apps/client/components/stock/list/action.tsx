@@ -3,24 +3,32 @@ import {
 } from '@mui/material';
 import ChevronRight from '@mui/icons-material/ChevronRight';
 import EditLocation from '@mui/icons-material/EditLocation';
+import Archive from '@mui/icons-material/Archive';
+import Unarchive from '@mui/icons-material/Unarchive';
 import { useState } from 'react';
 import useTranslation from '../../../hooks/useTranslation';
 import Checkbox from '../../checkbox';
 
 export default function Action({
   disabled,
+  type,
   allChecked,
   checkedProductsCount,
   onAllCheck,
+  onArchive,
+  onUnarchive,
   onChangeLocation,
   onPrint,
   onPrintChecklist,
   onPrintPriceCard,
 }:{
   disabled: boolean,
+  type: 'product' | 'repair' | 'archived',
   allChecked: boolean,
   checkedProductsCount: number,
   onAllCheck: (checked: boolean) => void,
+  onArchive: () => void,
+  onUnarchive: () => void,
   onChangeLocation: () => void,
   onPrint: () => void,
   onPrintChecklist: () => void,
@@ -46,6 +54,20 @@ export default function Action({
         label={`${trans('selectAll')} ${checkedProductsCount > 0 ? `(${checkedProductsCount} ${trans('selected')})` : ''}`}
       />
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        {checkedProductsCount > 0 && type !== 'archived'
+        && (
+        <Button size="small" onClick={onArchive} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
+          <Archive sx={{ mr: '.1rem' }} />
+          {trans('archive')}
+        </Button>
+        )}
+        {checkedProductsCount > 0 && type === 'archived'
+        && (
+        <Button size="small" onClick={onUnarchive} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
+          <Unarchive sx={{ mr: '.1rem' }} />
+          {trans('unarchive')}
+        </Button>
+        )}
         {checkedProductsCount > 0
         && (
         <Button size="small" onClick={onChangeLocation} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>

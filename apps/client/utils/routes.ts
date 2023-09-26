@@ -25,6 +25,7 @@ export const ORDERS_SALES_NEW = '/orders/sales/new';
 export const ORDERS_REPAIRS_NEW = '/orders/repairs/new';
 export const ORDERS_SALES_EDIT = '/orders/sales/[id]';
 export const STOCKS_REPAIR_SERVICES = '/stock/repair-services';
+export const STOCKS_ARCHIVED = '/stock/archived';
 export const MY_TASKS = '/my-tasks';
 export const ADMIN_USERS = '/admin/users';
 export const ADMIN_SETTINGS = '/admin/settings';
