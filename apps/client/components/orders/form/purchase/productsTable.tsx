@@ -96,10 +96,10 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
               {trans('productType')}
             </TableCell>
             <TableCell>
-              {trans('retailUnitPrice')}
+              {trans('retailPrice')}
             </TableCell>
             <TableCell>
-              {trans('purchaseUnitPrice')}
+              {trans('purchasePrice')}
             </TableCell>
             <TableCell>
               {trans('purchaseQuantity')}

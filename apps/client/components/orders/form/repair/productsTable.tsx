@@ -154,13 +154,13 @@ export default function ProductsTable({ orderId, refreshOrder }:{ orderId: strin
               {trans('productType')}
             </TableCell>
             <TableCell>
-              {trans('retailUnitPrice')}
+              {trans('retailPrice')}
             </TableCell>
             <TableCell>
               {trans('stockQuantity')}
             </TableCell>
             <TableCell>
-              {trans('unitPrice')}
+              {trans('salePrice')}
             </TableCell>
             <TableCell>
               {trans('quantity')}

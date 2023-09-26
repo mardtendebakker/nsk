@@ -121,7 +121,7 @@ export default function Form({
             <Box sx={{ flex: 0.33, display: 'flex', flexDirection: 'column' }}>
               <TextField
                 type="number"
-                label={trans('price')}
+                label={trans('retailPrice')}
                 placeholder="0.00"
                 value={formRepresentation.price.value || '0'}
                 InputProps={{
