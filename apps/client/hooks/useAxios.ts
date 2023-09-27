@@ -71,9 +71,20 @@ const useAxios = (
   }
 
   function handleError(e: Error | AxiosError) {
-    const status = (e instanceof AxiosError && e.response) ? e.response.status : 500;
+    const errorResponse = (e instanceof AxiosError && e.response) ? e.response : { status: 500, data: { message: undefined } };
 
-    enqueueSnackbar(trans(status.toString()), { variant: 'error' });
+    switch (true) {
+      case Array.isArray(errorResponse.data.message):
+        errorResponse.data.message.forEach((message: string) => {
+          enqueueSnackbar(message, { variant: 'error' });
+        });
+        break;
+      case typeof errorResponse.data.message == 'string' && !!errorResponse.data.message:
+        enqueueSnackbar(errorResponse.data.message, { variant: 'error' });
+        break;
+      default:
+        enqueueSnackbar(trans(errorResponse.status.toString()), { variant: 'error' });
+    }
   }
 
   return {
