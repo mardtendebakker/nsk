@@ -44,8 +44,6 @@ export class StockService {
   }
 
   async findAll(query: FindManyDto) {
-    console.log(this.entityStatus);
-    
     const productwhere: Prisma.productWhereInput = {
       ...query.where,
       ...(Number.isFinite(this.entityStatus) && { entity_status: this.entityStatus }),
@@ -433,6 +431,7 @@ export class StockService {
       sku: true,
       name: true,
       price: true,
+      entity_status: true,
       location: {
         select: locationSelect,
       },

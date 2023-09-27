@@ -8,6 +8,7 @@ import { ProcessedTask } from "./dto/processed-task.dto";
 import { ProcessedStock } from "./dto/processed-stock.dto";
 import { ProductOrderPayload } from "./types/product-order-payload";
 import { ProductOrderRelationOrder } from "./dto/product-order-relation-order.dto";
+import { EntityStatus } from "../common/types/entity-status.enum";
 
 export class StockProcess {
   private isSaleable: boolean;
@@ -17,6 +18,7 @@ export class StockProcess {
   
   private locationName: string;
   private status: string;
+  private entity: string;
   private typeName: string;
   private firstProductOrder: product_order;
   private theProductOrder: product_order;
@@ -51,6 +53,7 @@ export class StockProcess {
       product_order,
       product_type,
       product_status,
+      entity_status,
       location,
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       product_attribute_product_attribute_value_product_idToproduct,
@@ -62,6 +65,7 @@ export class StockProcess {
     this.rest = rest;
     this.locationName = location?.name;
     this.status = product_status?.name;
+    this.entity = Object.keys(EntityStatus).find(key => EntityStatus[key] === entity_status);
     this.typeName = product_type?.name;
     
     this.product_orders = product_order.map(pOrder => ({
@@ -114,6 +118,7 @@ export class StockProcess {
       name: this.rest.name,
       price: this.rest.price,
       status: this.status,
+      entity: this.entity,
       created_at: this.rest.created_at,
       updated_at: this.rest.updated_at,
       location: this.locationName,
