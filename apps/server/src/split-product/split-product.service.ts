@@ -229,7 +229,7 @@ export class SplitProductService {
       });
     }
 
-    const createStockDto: CreateBodyStockDto = {
+    const newStockDto: CreateBodyStockDto = {
       sku: Number.isFinite(newSkuIndex)
         ? String(Math.floor(Date.now() / 1000) + newSkuIndex)
         : product.sku,
@@ -239,6 +239,7 @@ export class SplitProductService {
       ...(product.product_status?.id && { status_id: product.product_status?.id }),
       ...(Number.isFinite(status) && { status_id: status }),
       ...(Number.isFinite(product.price) && { price: product.price }),
+      ...(Number.isFinite(product.entity_status) && { entity_status: product.entity_status }),
       ...(product.description && { description: product.description }),
       ...(product.acompany?.id && { owner_id: product.acompany.id }),
       product_orders,
@@ -257,7 +258,7 @@ export class SplitProductService {
         quantity: salesRelation.quantity - quantity,
       });
 
-    const newProduct = await this.productService.create(createStockDto, files);
+    const newProduct = await this.productService.create(newStockDto, files);
     await this.productService.updateOne(product.id, {
       product_orders: productOrderUpdate,
     });

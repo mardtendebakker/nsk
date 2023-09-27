@@ -53,7 +53,6 @@ export class ProductEntity implements product {
   @Type(() => Number)
   external_id: number | null;
 
-  @ApiProperty()
   @ApiProperty({
     enum: EntityStatus,
     enumName: 'EntityStatus',

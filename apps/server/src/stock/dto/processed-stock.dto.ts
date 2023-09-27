@@ -17,6 +17,9 @@ export class ProcessedStock extends PickType(ProductEntity, [
     status: string;
 
     @ApiProperty()
+    entity: string;
+
+    @ApiProperty()
     type: string;
   
     @ApiProperty()
