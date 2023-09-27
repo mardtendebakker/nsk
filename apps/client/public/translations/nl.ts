@@ -118,6 +118,7 @@ const translation = {
   searchBySerialNumberOrName: 'Zoeken op serienummer of naam',
   contact: 'Contact',
   bulkEmail: 'Bulk email',
+  invalidEmail: 'Ongeldig e-mailadres',
   basicDetails: 'Basisgegevens',
   addressDetails: 'Adresgegevens',
   optionalAddressDetails: 'Optionele adresgegevens',

@@ -32,7 +32,7 @@ function EditCustomerContact() {
     { withProgressBar: true },
   );
 
-  const { formRepresentation, setValue, validate } = useForm(useMemo(() => initFormState(customer), [customer]));
+  const { formRepresentation, setValue, validate } = useForm(useMemo(() => initFormState(trans, customer), [customer]));
 
   const canSubmit = () => !performing && !performingGet;
 
