@@ -46,6 +46,7 @@ export class StockService {
   async findAll(query: FindManyDto) {
     const productwhere: Prisma.productWhereInput = {
       ...query.where,
+      ...(Number.isFinite(query.entityStatus) && { entity_status: query.entityStatus }),
       ...(Number.isFinite(this.entityStatus) && { entity_status: this.entityStatus }),
       ...(query.orderId || query.excludeByOrderId || query.excludeByOrderDiscr) && {
         product_order: {

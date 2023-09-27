@@ -41,6 +41,7 @@ function refreshList({
   call({
     params: {
       excludeByOrderId: orderId,
+      entityStatus: 0,
       take: rowsPerPage,
       skip: (page - 1) * rowsPerPage,
       ...paramsToSend,
