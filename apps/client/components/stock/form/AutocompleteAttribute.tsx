@@ -3,6 +3,7 @@ import { memo } from 'react';
 import Autocomplete from '../../memoizedInput/autocomplete';
 import { Attribute, AttributeOption } from '../../../utils/axios/models/product';
 import TextField from '../../input/textField';
+import { price } from '../../../utils/formatter';
 
 function AutocompleteAttribute({
   value, onChange, attribute, disabled,
@@ -39,8 +40,7 @@ function AutocompleteAttribute({
       />
       {selectedOption?.price && (
       <Typography color="primary" fontWeight="medium">
-        €
-          {selectedOption?.price}
+          {selectedOption?.price && price(selectedOption?.price)}
       </Typography>
       )}
     </Box>
