@@ -32,7 +32,7 @@ function EditSupplierContact() {
     { withProgressBar: true },
   );
 
-  const { formRepresentation, setValue, validate } = useForm(useMemo(() => initFormState(supplier), [supplier]));
+  const { formRepresentation, setValue, validate } = useForm(useMemo(() => initFormState(trans, supplier), [supplier]));
 
   const canSubmit = () => !performing && !performingGet;
 

@@ -5,17 +5,18 @@ import {
 import { useRouter } from 'next/router';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import Check from '@mui/icons-material/Check';
-import { SyntheticEvent } from 'react';
+import { SyntheticEvent, useMemo } from 'react';
 import Form from '../../../components/contacts/form';
 import DashboardLayout from '../../../layouts/dashboard';
 import useAxios from '../../../hooks/useAxios';
 import { AxiosResponse, SUPPLIERS_PATH } from '../../../utils/axios';
 import { CONTACTS_SUPPLIERS_EDIT, CONTACTS_SUPPLIERS } from '../../../utils/routes';
 import useForm, { FormRepresentation } from '../../../hooks/useForm';
-import useTranslation from '../../../hooks/useTranslation';
+import useTranslation, { Trans } from '../../../hooks/useTranslation';
 import { Company } from '../../../utils/axios/models/company';
+import { isEmail } from '../../../utils/validator';
 
-export function initFormState(company?: Company) {
+export function initFormState(trans: Trans, company?: Company) {
   return {
     name: {
       value: company?.name,
@@ -29,6 +30,7 @@ export function initFormState(company?: Company) {
     },
     email: {
       value: company?.email,
+      validator: (data: FormRepresentation) => (!isEmail(data.email.value?.toString()) ? trans('invalidEmail') : undefined),
     },
     phone: {
       value: company?.phone,
@@ -103,11 +105,10 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
   };
 }
 
-const formState = initFormState();
-
 function NewSupplierContact() {
   const { trans } = useTranslation();
   const router = useRouter();
+  const formState = useMemo(() => initFormState(trans), []);
 
   const { call, performing } = useAxios(
     'post',

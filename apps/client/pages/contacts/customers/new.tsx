@@ -5,19 +5,19 @@ import {
 import { useRouter } from 'next/router';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import Check from '@mui/icons-material/Check';
-import { SyntheticEvent } from 'react';
+import { SyntheticEvent, useMemo } from 'react';
 import Form from '../../../components/contacts/form';
 import DashboardLayout from '../../../layouts/dashboard';
 import useAxios from '../../../hooks/useAxios';
 import { AxiosResponse, CUSTOMERS_PATH } from '../../../utils/axios';
 import { CONTACTS_CUSTOMERS_EDIT, CONTACTS_CUSTOMERS } from '../../../utils/routes';
 import useForm, { FormRepresentation } from '../../../hooks/useForm';
-import useTranslation from '../../../hooks/useTranslation';
+import useTranslation, { Trans } from '../../../hooks/useTranslation';
 import { Company } from '../../../utils/axios/models/company';
 import { initFormState as baseInitFormState, formRepresentationToBody as baseFormRepresentationToBody } from '../suppliers/new';
 
-export const initFormState = (company?: Company) => ({
-  ...baseInitFormState(company),
+export const initFormState = (trans: Trans, company?: Company) => ({
+  ...baseInitFormState(trans, company),
   is_partner: {
     value: company?.is_partner > 0,
   },
@@ -33,11 +33,10 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
   };
 }
 
-const formState = initFormState();
-
 function NewCustomerContact() {
   const { trans } = useTranslation();
   const router = useRouter();
+  const formState = useMemo(() => initFormState(trans), []);
 
   const { call, performing } = useAxios(
     'post',
