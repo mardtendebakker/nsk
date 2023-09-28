@@ -9,6 +9,7 @@ import TextField from '../../memoizedInput/textField';
 import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
 import { AUTOCOMPLETE_PRODUCT_TYPES_PATH, AUTOCOMPLETE_LOCATIONS_PATH, AUTOCOMPLETE_PRODUCT_STATUSES_PATH } from '../../../utils/axios';
 import AttributeForm, { buildProductTypeKey } from './AttributeForm';
+import { price } from '../../../utils/formatter';
 
 export default function Form({
   setValue,
@@ -133,9 +134,8 @@ export default function Form({
               <Typography variant="subtitle2" color="primary" sx={{ mt: '.5rem' }}>
                 {trans('listPrice')}
                 :
-                €
                 {' '}
-                {calculateListPrice()}
+                {price(calculateListPrice())}
               </Typography>
             </Box>
           </Grid>
