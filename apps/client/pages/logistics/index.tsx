@@ -1,13 +1,11 @@
 import {
-  Box, Card, CardContent, IconButton, MenuItem, MenuList, Table, TableBody, TableCell, TableHead, TableRow, Typography,
+  Box, Card, CardContent, Table, TableBody, TableCell, TableHead, TableRow, Typography,
 } from '@mui/material';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
-import ChevronRight from '@mui/icons-material/ChevronRight';
-import ChevronLeft from '@mui/icons-material/ChevronLeft';
 import Search from '@mui/icons-material/Search';
 import {
-  addDays, addMinutes, areIntervalsOverlapping, differenceInMinutes, format, setHours, setMinutes,
+  addDays, addMinutes, areIntervalsOverlapping, differenceInMinutes, format, setHours, setMinutes, startOfWeek,
 } from 'date-fns';
 import DashboardLayout from '../../layouts/dashboard';
 import useTranslation from '../../hooks/useTranslation';
@@ -17,11 +15,13 @@ import { PICKUPS_PATH } from '../../utils/axios';
 import TextField from '../../components/input/textField';
 import { Logistic, Order, PickupListItem } from '../../utils/axios/models/pickup';
 import SideMap from '../../components/logistics/sideMap';
-import MenuItemText from '../../components/menuTextItem';
+import Pagination from '../../components/logistics/pagination';
+import LogisticsList from '../../components/logistics/logisticsList';
 
 const hours = [];
 const HOURS_PER_DAYS = 10;
 const STARTING_HOUR = 8;
+const TILE_HEIGHT = '3rem';
 
 for (let i = 0; i < HOURS_PER_DAYS; i++) {
   hours.push(`${STARTING_HOUR + i}:00`);
@@ -30,7 +30,7 @@ for (let i = 0; i < HOURS_PER_DAYS; i++) {
 
 export default function Logistics() {
   const { trans, locale } = useTranslation();
-  const [firstDate, setFirstDate] = useState<Date>(setHours(setMinutes(new Date(), 0), 7));
+  const [firstDate, setFirstDate] = useState<Date>(setHours(setMinutes(startOfWeek(new Date(), { weekStartsOn: 1 }), 0), STARTING_HOUR));
   const [selectedLogisticIds, setSelectedLogisticIds] = useState<number[]>([0]);
   const [search, setSearch] = useState('');
   const [clickedPickup, setClickedPickup] = useState<{ pickup: PickupListItem, allPickups: PickupListItem[] } | undefined>();
@@ -41,15 +41,13 @@ export default function Logistics() {
     addDays(firstDate, 2),
     addDays(firstDate, 3),
     addDays(firstDate, 4),
-    addDays(firstDate, 5),
-    addDays(firstDate, 6),
   ];
 
   const { data: { data = [] } = {}, call } = useAxios('get', PICKUPS_PATH.replace(':id', ''), { withProgressBar: true });
 
   useEffect(() => {
     setSelectedLogisticIds([0]);
-    call({ params: { startsAt: format(firstDate, 'yyyy-MM-dd'), endsAt: format(dates[6], 'yyyy-MM-dd') } });
+    call({ params: { startsAt: format(firstDate, 'yyyy-MM-dd'), endsAt: format(dates[4], 'yyyy-MM-dd') } });
   }, [firstDate]);
 
   useEffect(() => {
@@ -68,7 +66,7 @@ export default function Logistics() {
     }
   });
 
-  const handleLogisticMenuClick = (logisticId: number) => {
+  const handleLogisticClick = (logisticId: number) => {
     if (selectedLogisticIds.find((element) => element == logisticId)) {
       setSelectedLogisticIds((currentValue) => currentValue.filter((element) => element != logisticId));
     } else if (logisticId != 0) {
@@ -124,46 +122,7 @@ export default function Logistics() {
             {trans('pickupsBy')}
             :
           </Typography>
-          <MenuList>
-            <MenuItem
-              onClick={() => handleLogisticMenuClick(0)}
-              sx={(theme) => ({
-                borderRadius: '.25rem',
-                fontWeight: theme.typography.fontWeightMedium,
-                background: selectedLogisticIds[0] === 0 ? theme.palette.primary.light : undefined,
-                color: selectedLogisticIds[0] === 0 ? theme.palette.primary.main : undefined,
-                mb: '.2rem',
-                p: '.5rem .75rem',
-              })}
-            >
-              <MenuItemText active={selectedLogisticIds[0] === 0}>
-                {trans('everyone')}
-              </MenuItemText>
-            </MenuItem>
-            {logistics.map((logistic: Logistic) => {
-              const active = !!selectedLogisticIds.find((element) => element == logistic.id);
-              return (
-                <MenuItem
-                  onClick={() => handleLogisticMenuClick(logistic.id)}
-                  key={logistic.id}
-                  sx={(theme) => ({
-                    borderRadius: '.25rem',
-                    fontWeight: theme.typography.fontWeightMedium,
-                    background: active ? theme.palette.primary.light : undefined,
-                    color: active ? theme.palette.primary.main : undefined,
-                    whiteSpace: 'normal',
-                    overflowWrap: 'anywhere',
-                    mb: '1rem',
-                    p: '.5rem .75rem',
-                  })}
-                >
-                  <MenuItemText active={active}>
-                    {logistic.username}
-                  </MenuItemText>
-                </MenuItem>
-              );
-            })}
-          </MenuList>
+          <LogisticsList onClick={handleLogisticClick} logistics={logistics} selectedLogisticIds={selectedLogisticIds} />
         </Box>
         <Card sx={{ flex: 0.85 }}>
           <CardContent sx={{ display: 'flex', flexDirection: 'column', px: 0 }}>
@@ -171,29 +130,11 @@ export default function Logistics() {
               display: 'flex', alignItems: 'center', px: '1rem', py: '2rem', justifyContent: 'space-between',
             }}
             >
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <IconButton
-                  size="small"
-                  sx={{ borderRadius: 0, border: '1px solid', mr: '1rem' }}
-                  onClick={() => {
-                    setFirstDate(addDays(firstDate, -5));
-                  }}
-                >
-                  <ChevronLeft />
-                </IconButton>
-                <Typography variant="h4">
-                  {format(firstDate, 'dd MMMM Y')}
-                </Typography>
-                <IconButton
-                  size="small"
-                  sx={{ borderRadius: 0, border: '1px solid', ml: '1rem' }}
-                  onClick={() => {
-                    setFirstDate(addDays(firstDate, 5));
-                  }}
-                >
-                  <ChevronRight />
-                </IconButton>
-              </Box>
+              <Pagination
+                date={firstDate}
+                onPrevious={() => setFirstDate(addDays(firstDate, -7))}
+                onNext={() => setFirstDate(addDays(firstDate, 7))}
+              />
               <TextField
                 InputProps={{
                   startAdornment: <Search sx={{ color: (theme) => theme.palette.grey[40] }} />,
@@ -214,7 +155,7 @@ export default function Logistics() {
                     <TableCell sx={{ borderBottom: 'unset', width: '10rem' }} />
                     {dates.map((date: Date) => {
                       const formatted = format(date, 'EEEE d');
-                      return <TableCell sx={{ borderLeft: (theme) => `1px solid ${theme.palette.divider}`, width: '13.2%' }} key={formatted}>{formatted}</TableCell>;
+                      return <TableCell sx={{ borderLeft: (theme) => `1px solid ${theme.palette.divider}`, width: '18%' }} key={formatted}>{formatted}</TableCell>;
                     })}
                   </TableRow>
                 </TableHead>
@@ -254,8 +195,8 @@ export default function Logistics() {
                               }}
                               pickup={pickup}
                               key={pickup.id}
-                              top={`${differenceInMinutes(realPickupDate, date) * 0.01 * (HOURS_PER_DAYS - 1)}rem`}
-                              height="3rem"
+                              top={`${differenceInMinutes(realPickupDate, date) / 10}rem`}
+                              height={TILE_HEIGHT}
                               left={`${(100 / elements.length) * i}%`}
                               width={`${(100 / elements.length)}%`}
                             />
@@ -272,7 +213,7 @@ export default function Logistics() {
                     }
 
                     return (
-                      <TableRow sx={{ height: '3rem' }} key={hour}>
+                      <TableRow sx={{ height: TILE_HEIGHT }} key={hour}>
                         <TableCell sx={{ verticalAlign: 'baseline', borderBottom: 'unset' }}>
                           <Box sx={{ marginTop: '-1.67em' }}>{hour.includes(':00') && hour}</Box>
                         </TableCell>
