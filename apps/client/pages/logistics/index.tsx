@@ -11,7 +11,7 @@ import DashboardLayout from '../../layouts/dashboard';
 import useTranslation from '../../hooks/useTranslation';
 import Event from '../../components/logistics/event';
 import useAxios from '../../hooks/useAxios';
-import { PICKUPS_PATH } from '../../utils/axios';
+import { CALENDAR_PICKUPS_PATH } from '../../utils/axios';
 import TextField from '../../components/input/textField';
 import { Logistic, Order, PickupListItem } from '../../utils/axios/models/pickup';
 import SideMap from '../../components/logistics/sideMap';
@@ -43,7 +43,7 @@ export default function Logistics() {
     addDays(firstDate, 4),
   ];
 
-  const { data: { data = [] } = {}, call } = useAxios('get', PICKUPS_PATH.replace(':id', ''), { withProgressBar: true });
+  const { data: { data = [] } = {}, call } = useAxios('get', CALENDAR_PICKUPS_PATH.replace(':id', ''), { withProgressBar: true });
 
   useEffect(() => {
     setSelectedLogisticIds([0]);
@@ -96,8 +96,8 @@ export default function Logistics() {
       const overlappingPickupsGroupLength = overlappingPickupsGroup.length;
       for (let k = 0; k < overlappingPickupsGroupLength; k++) {
         if (areIntervalsOverlapping(
-          { start: new Date(overlappingPickupsGroup[k].real_pickup_date), end: addMinutes(new Date(overlappingPickupsGroup[k].real_pickup_date), 30) },
-          { start: new Date(pickups[i].real_pickup_date), end: addMinutes(new Date(pickups[i].real_pickup_date), 30) },
+          { start: new Date(overlappingPickupsGroup[k].logistic_date), end: addMinutes(new Date(overlappingPickupsGroup[k].logistic_date), 30) },
+          { start: new Date(pickups[i].logistic_date), end: addMinutes(new Date(pickups[i].logistic_date), 30) },
         )) {
           overlappingPickupsGroup.push(pickups[i]);
           pushedInGroup = true;
@@ -168,8 +168,8 @@ export default function Logistics() {
                       const thisDayPickups: PickupListItem[][] = [];
                       const overlappingPickupsLength = overlappingPickups.length;
                       for (let i = 0; i < overlappingPickupsLength; i++) {
-                        thisDayPickups.push(overlappingPickups[i].filter(({ real_pickup_date }) => {
-                          const realPickupDate = new Date(real_pickup_date);
+                        thisDayPickups.push(overlappingPickups[i].filter(({ logistic_date }) => {
+                          const realPickupDate = new Date(logistic_date);
                           return format(realPickupDate, 'Y-MM-dd') == format(date, 'Y-MM-dd');
                         }));
                       }
@@ -181,7 +181,7 @@ export default function Logistics() {
                         >
                           {
                         thisDayPickups.map((elements) => elements.map((pickup, i) => {
-                          const realPickupDate = new Date(pickup.real_pickup_date);
+                          const realPickupDate = new Date(pickup.logistic_date);
 
                           return (
                             <Event

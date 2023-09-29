@@ -1,6 +1,5 @@
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
-import { Product } from './dto/update-many-product.dto';
 import { ConfigService } from '@nestjs/config';
 
 export class StockRepository {
@@ -13,7 +12,7 @@ export class StockRepository {
   async findAll(params: Prisma.productFindManyArgs) {
     const { skip, cursor, select, orderBy } = params;
     const maxQueryLimit = this.configService.get<number>('MAX_RELATION_QUERY_LIMIT');
-    const take = isFinite(params.take) && params.take <  maxQueryLimit ? params.take : maxQueryLimit;
+    const take = Number.isFinite(params.take) && params.take <  maxQueryLimit ? params.take : maxQueryLimit;
     const { product_order, ...restWhere } = params.where;
     
     const where: Prisma.productWhereInput = {

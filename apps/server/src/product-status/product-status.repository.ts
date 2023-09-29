@@ -13,7 +13,7 @@ export class ProductStatusRepository {
   async findAll(params: Prisma.product_statusFindManyArgs) {
     const { skip, cursor, where, select, orderBy } = params;
     const maxQueryLimit = this.configService.get<number>('MAX_NONE_RELATION_QUERY_LIMIT');
-    const take = isFinite(params.take) && params.take <  maxQueryLimit ? params.take : maxQueryLimit;
+    const take = Number.isFinite(params.take) && params.take <  maxQueryLimit ? params.take : maxQueryLimit;
 
     const submission = await this.prisma.$transaction([
       this.prisma.product_status.count({where}),

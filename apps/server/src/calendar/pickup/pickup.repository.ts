@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import { PrismaService } from '../prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
+import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
 export class PickupRepository {
@@ -13,7 +13,7 @@ export class PickupRepository {
   async findAll(params: Prisma.pickupFindManyArgs) {
     const { skip, cursor, where, select, orderBy } = params;
     const maxQueryLimit = this.configService.get<number>('MAX_NONE_RELATION_QUERY_LIMIT');
-    const take = isFinite(params.take) && params.take <  maxQueryLimit ? params.take : maxQueryLimit;
+    const take = Number.isFinite(params.take) && params.take <  maxQueryLimit ? params.take : maxQueryLimit;
 
     const submission = await this.prisma.$transaction([
       this.prisma.pickup.count({where}),

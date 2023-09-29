@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { DataDestruction } from "../../pickup/types/destruction.enum";
+import { DataDestruction } from "../../calendar/pickup/types/destruction.enum";
 import { IsInt, IsOptional, IsString } from "class-validator";
 import { Transform, Type } from "class-transformer";
 import { formDataDateTransform, formDataNumberTransform, formDataStringTransform } from "../../common/transforms/form-date.transform";
