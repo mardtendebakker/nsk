@@ -98,6 +98,9 @@ export default function Logistics() {
         if (areIntervalsOverlapping(
           { start: new Date(overlappingPickupsGroup[k].real_pickup_date), end: addMinutes(new Date(overlappingPickupsGroup[k].real_pickup_date), 30) },
           { start: new Date(pickups[i].real_pickup_date), end: addMinutes(new Date(pickups[i].real_pickup_date), 30) },
+          {
+            inclusive: false,
+          },
         )) {
           overlappingPickupsGroup.push(pickups[i]);
           pushedInGroup = true;
