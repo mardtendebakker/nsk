@@ -88,9 +88,9 @@ export class CompanyService {
             { zip: zip },
             {
               OR: [
-                { ...(comapnyData.name.length > 2 && { name: comapnyData.name }) },
-                { ...(comapnyData.email.length > 5 && { email: comapnyData.email }) },
-                { ...(comapnyData.phone.length > 5 && { phone: { contains: comapnyData.phone.replace("-", "") } }) },
+                { ...(comapnyData.name?.length > 2 && { name: comapnyData.name }) },
+                { ...(comapnyData.email?.length > 5 && { email: comapnyData.email }) },
+                { ...(comapnyData.phone?.length > 5 && { phone: { contains: comapnyData.phone.replace("-", "") } }) },
               ]
             },
           ],

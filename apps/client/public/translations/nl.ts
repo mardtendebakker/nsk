@@ -112,6 +112,7 @@ const translation = {
   editAttribute: 'Attribuut bewerken',
   stock: 'Voorraad',
   search: 'Zoekopdracht',
+  importSales: 'Verkoop importeren',
   createdAt: 'Gemaakt bij',
   createProduct: 'Product maken',
   searchByCustomerNameOrEmail: 'Zoeken op klantnaam of e-mail',
