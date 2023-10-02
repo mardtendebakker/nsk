@@ -64,7 +64,8 @@ export class RepairService extends SaleService {
     const createOrderStatusDto: CreateOrderStatusDto = {
       name: 'To repair',
       is_purchase: false,
-      is_sale: true,
+      is_sale: false,
+      is_repair: true,
     };
 
     return this.orderStatusService.findByNameOrCreate(createOrderStatusDto);

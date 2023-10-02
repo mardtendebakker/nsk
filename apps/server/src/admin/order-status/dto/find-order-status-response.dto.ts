@@ -6,6 +6,7 @@ class FindOrderStatusResponeDto extends PickType(OrderStatusEntity, [
   "id",
   "is_purchase",
   "is_sale",
+  "is_repair",
   "color",
   "name",
 ] as const) {}

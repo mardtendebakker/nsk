@@ -27,8 +27,12 @@ export class AutocompleteService {
     return this.repository.findPurchaseStatuses(autocompleteDto);
   }
 
-  async findSaleStatuses(autocompleteDto: AutocompleteCompanyDto) {
-    return this.repository.findSaleStatuses(autocompleteDto);
+  async findSalesStatuses(autocompleteDto: AutocompleteCompanyDto) {
+    return this.repository.findSalesStatuses(autocompleteDto);
+  }
+
+  async findRepairStatuses(autocompleteDto: AutocompleteCompanyDto) {
+    return this.repository.findRepairStatuses(autocompleteDto);
   }
 
   async findCustomers(autocompleteDto: AutocompleteCompanyDto) {

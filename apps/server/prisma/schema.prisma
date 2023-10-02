@@ -172,8 +172,9 @@ model location {
 
 model order_status {
   id          Int      @id @default(autoincrement())
-  is_sale     Boolean
   is_purchase Boolean
+  is_sale     Boolean
+  is_repair   Boolean
   pindex      Int?
   name        String   @db.VarChar(255)
   color       String?  @db.VarChar(7)

@@ -25,7 +25,7 @@ function RepairForm({
 
   return (
     <>
-      <BasicDetails type="repair" formRepresentation={formRepresentation} disabled={disabled} setValue={setValue} disableOrderStatus />
+      <BasicDetails type="repair" formRepresentation={formRepresentation} disabled={disabled} setValue={setValue} />
       <Divider sx={{ mx: '1.5rem' }} />
       <CardContent sx={{ display: 'flex', flexDirection: isDesktop ? 'row' : 'column' }}>
         <Box sx={{ flex: 1 }}>

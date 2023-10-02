@@ -9,8 +9,6 @@ import useAxios from '../../../hooks/useAxios';
 import {
   PURCHASE_ORDERS_PATH,
   SALES_ORDERS_PATH,
-  AUTOCOMPLETE_PURCHASE_STATUSES_PATH,
-  AUTOCOMPLETE_SALE_STATUSES_PATH,
   BULK_PRINT_PURCHASES_PATH,
   BULK_PRINT_SALES_PATH,
   BULK_PRINT_REPAIRS_PATH,
@@ -26,6 +24,7 @@ import pushURLParams from '../../../utils/pushURLParams';
 import { OrderListItem } from '../../../utils/axios/models/order';
 import { getQueryParam } from '../../../utils/location';
 import { OrderType } from '../../../utils/axios/models/types';
+import { autocompleteOrderStatusesPathMapper } from '../../../utils/axios/helpers/typeMapper';
 
 function initFormState(
   {
@@ -287,7 +286,7 @@ export default function ListContainer({ type }: { type: OrderType }) {
             {trans('changeStatusContent')}
             <Box sx={{ pb: '2rem' }} />
             <DataSourcePicker
-              url={type === 'purchase' ? AUTOCOMPLETE_PURCHASE_STATUSES_PATH : AUTOCOMPLETE_SALE_STATUSES_PATH}
+              url={autocompleteOrderStatusesPathMapper(type)}
               disabled={disabled()}
               fullWidth
               placeholder={trans('selectStatus')}

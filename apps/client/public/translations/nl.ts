@@ -368,6 +368,7 @@ const translation = {
   salable: 'Verkoopbaar',
   purchase: 'Aankoop',
   sale: 'Verkoop',
+  repair: 'Reparatie',
   task: 'Taak',
   tasks: 'Taken',
   newStatus: 'Nieuwe status',

@@ -10,22 +10,20 @@ import { FormRepresentation, SetValue } from '../../../hooks/useForm';
 import TextField from '../../memoizedInput/textField';
 import BaseTextField from '../../input/textField';
 import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
-import { AUTOCOMPLETE_SALE_STATUSES_PATH, AUTOCOMPLETE_PURCHASE_STATUSES_PATH } from '../../../utils/axios';
 import useResponsive from '../../../hooks/useResponsive';
 import { OrderType } from '../../../utils/axios/models/types';
+import { autocompleteOrderStatusesPathMapper } from '../../../utils/axios/helpers/typeMapper';
 
 export default function BasicDetails({
   formRepresentation,
   type,
   disabled,
   setValue,
-  disableOrderStatus,
 }: {
   formRepresentation : FormRepresentation,
   type: OrderType,
   disabled:boolean,
   setValue: SetValue,
-  disableOrderStatus?: boolean
 }) {
   const { trans } = useTranslation();
   const isDesktop = useResponsive('up', 'md');
@@ -77,23 +75,19 @@ export default function BasicDetails({
               />
             )}
           />
-          {!disableOrderStatus && (
-          <>
-            <Box sx={{ m: '.25rem' }} />
-            <DataSourcePicker
-              sx={{ flex: 1 }}
-              url={type === 'purchase' ? AUTOCOMPLETE_PURCHASE_STATUSES_PATH : AUTOCOMPLETE_SALE_STATUSES_PATH}
-              disabled={disabled}
-              fullWidth
-              placeholder={trans('selectStatus')}
-              label={trans('orderStatus')}
-              onChange={(selected: { id: number }) => setValue({ field: 'orderStatus', value: selected?.id })}
-              value={formRepresentation.orderStatus.value}
-              error={!!formRepresentation.orderStatus.error}
-              helperText={formRepresentation.orderStatus.error}
-            />
-          </>
-          )}
+          <Box sx={{ m: '.25rem' }} />
+          <DataSourcePicker
+            sx={{ flex: 1 }}
+            url={autocompleteOrderStatusesPathMapper(type)}
+            disabled={disabled}
+            fullWidth
+            placeholder={trans('selectStatus')}
+            label={trans('orderStatus')}
+            onChange={(selected: { id: number }) => setValue({ field: 'orderStatus', value: selected?.id })}
+            value={formRepresentation.orderStatus.value}
+            error={!!formRepresentation.orderStatus.error}
+            helperText={formRepresentation.orderStatus.error}
+          />
         </Grid>
         <Grid
           item
@@ -117,5 +111,3 @@ export default function BasicDetails({
     </CardContent>
   );
 }
-
-BasicDetails.defaultProps = { disableOrderStatus: false };

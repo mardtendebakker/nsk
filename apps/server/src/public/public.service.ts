@@ -91,7 +91,7 @@ export class PublicService {
       pickup_date: pickup_form.pickupDate,
     };
 
-    const orderStatus = await this.findOrderStatusByNameOrCreate(pickup_form.orderStatusName, true, false);
+    const orderStatus = await this.findOrderStatusByNameOrCreate(pickup_form.orderStatusName, true, false, false);
 
     const purchaseData: CreateAOrderDto = {
       supplier_id: supplier.id,
@@ -126,7 +126,7 @@ export class PublicService {
 
     const customer = await this.customerService.checkExists(public_order_form.customer);
 
-    const orderStatus = await this.findOrderStatusByNameOrCreate(public_order_form.orderStatusName, false, true);
+    const orderStatus = await this.findOrderStatusByNameOrCreate(public_order_form.orderStatusName, false, true, false);
 
     let remarks = "";
 
@@ -216,11 +216,12 @@ export class PublicService {
     return afiles;
   }
 
-  private findOrderStatusByNameOrCreate(name: string, isPurchase: boolean, isSale: boolean) {
+  private findOrderStatusByNameOrCreate(name: string, isPurchase: boolean, isSale: boolean, isRepair: boolean) {
     const createOrderStatusDto: CreateOrderStatusDto = {
       name,
       is_purchase: isPurchase,
       is_sale: isSale,
+      is_repair: isRepair,
     };
 
     return this.orderStatusService.findByNameOrCreate(createOrderStatusDto);

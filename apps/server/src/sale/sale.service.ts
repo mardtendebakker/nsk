@@ -147,7 +147,7 @@ export class SaleService extends AOrderService {
       };
   
       const customer = await this.customerService.checkExists(customerData);
-      const orderStatus = await this.findOrderStatusByNameOrCreate('Products to assign', false, true);
+      const orderStatus = await this.findOrderStatusByNameOrCreate('Products to assign', false, true, false);
       const remarks = `Referentie: ${Referentie || ''}\r\n` +
                       `Gebouw: ${Gebouw || ''}\r\n` +
                       `Verdieping: ${Verdieping || ''}\r\n` +
@@ -178,11 +178,12 @@ export class SaleService extends AOrderService {
     return toDoServie;
   }
 
-  protected findOrderStatusByNameOrCreate(name: string, isPurchase: boolean, isSale: boolean) {
+  protected findOrderStatusByNameOrCreate(name: string, isPurchase: boolean, isSale: boolean, isRepair: boolean) {
     const createOrderStatusDto: CreateOrderStatusDto = {
       name,
       is_purchase: isPurchase,
       is_sale: isSale,
+      is_repair: isRepair,
     };
 
     return this.orderStatusService.findByNameOrCreate(createOrderStatusDto);
