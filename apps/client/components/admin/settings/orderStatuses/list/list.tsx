@@ -44,10 +44,13 @@ export default function List({
             {trans('name')}
           </TableCell>
           <TableCell>
+            {trans('purchase')}
+          </TableCell>
+          <TableCell>
             {trans('sale')}
           </TableCell>
           <TableCell>
-            {trans('purchase')}
+            {trans('repair')}
           </TableCell>
           <TableCell>
             {trans('actions')}
@@ -67,10 +70,13 @@ export default function List({
               </Box>
             </TableCell>
             <TableCell>
+              {orderStatus.is_purchase && <Check />}
+            </TableCell>
+            <TableCell>
               {orderStatus.is_sale && <Check />}
             </TableCell>
             <TableCell>
-              {orderStatus.is_purchase && <Check />}
+              {orderStatus.is_repair && <Check />}
             </TableCell>
             <TableCell>
               <Edit onClick={() => onEdit(orderStatus.id)} disabled={disabled} />

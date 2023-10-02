@@ -38,15 +38,21 @@ export default function Form({
         />
         <Checkbox
           disabled={disabled}
-          onCheck={(checked) => setValue({ field: 'isSale', value: checked })}
-          checked={formRepresentation.isSale.value as boolean}
-          label={trans('sale')}
-        />
-        <Checkbox
-          disabled={disabled}
           onCheck={(checked) => setValue({ field: 'isPurchase', value: checked })}
           checked={formRepresentation.isPurchase.value as boolean}
           label={trans('isPurchase')}
+        />
+        <Checkbox
+          disabled={disabled}
+          onCheck={(checked) => setValue({ field: 'isSale', value: checked })}
+          checked={formRepresentation.isSale.value as boolean}
+          label={trans('isSale')}
+        />
+        <Checkbox
+          disabled={disabled}
+          onCheck={(checked) => setValue({ field: 'isRepair', value: checked })}
+          checked={formRepresentation.isRepair.value as boolean}
+          label={trans('isRepair')}
         />
       </Box>
       <TextField

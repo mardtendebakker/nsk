@@ -10,8 +10,9 @@ export function initFormState(orderStatus?: OrderStatus) {
   return {
     name: { value: orderStatus?.name, required: true },
     color: { value: orderStatus?.color },
-    isSale: { value: orderStatus?.is_sale || false },
     isPurchase: { value: orderStatus?.is_purchase || false },
+    isSale: { value: orderStatus?.is_sale || false },
+    isRepair: { value: orderStatus?.is_repair || false },
     mailBody: { value: orderStatus?.mailbody },
   };
 }
@@ -20,8 +21,9 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
   return {
     name: formRepresentation.name.value,
     color: formRepresentation.color.value,
-    is_sale: formRepresentation.isSale.value,
     is_purchase: formRepresentation.isPurchase.value,
+    is_sale: formRepresentation.isSale.value,
+    is_repair: formRepresentation.isRepair.value,
     mailbody: formRepresentation.mailBody.value,
   };
 }

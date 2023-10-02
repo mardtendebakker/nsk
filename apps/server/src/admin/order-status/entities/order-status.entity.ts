@@ -6,10 +6,13 @@ export class OrderStatusEntity implements order_status {
   id: number;
 
   @ApiProperty()
+  is_purchase: boolean;
+
+  @ApiProperty()
   is_sale: boolean;
 
   @ApiProperty()
-  is_purchase: boolean;
+  is_repair: boolean;
   
   @ApiPropertyOptional()
   pindex: number|null;

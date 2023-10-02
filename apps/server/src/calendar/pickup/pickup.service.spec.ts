@@ -1,7 +1,7 @@
 import { Test } from '@nestjs/testing';
 
 import { PickupService } from './pickup.service';
-import { FindManyDto } from './dto/find-many.dto';
+import { FindManyDto } from '../dto/find-many.dto';
 import { PickupRepository } from './pickup.repository';
 
 describe('PickupService', () => {
@@ -20,8 +20,9 @@ describe('PickupService', () => {
           "order_nr": "2023007802",
           "order_status": {
             "id": 2,
-            "is_sale": false,
             "is_purchase": true,
+            "is_sale": false,
+            "is_repair": false,
             "pindex": 3,
             "name": "Pickup ingepland wijziging",
             "color": "#067cb7",
@@ -89,8 +90,9 @@ describe('PickupService', () => {
           "order_nr": "2023007802",
           "order_status": {
             "id": 2,
-            "is_sale": false,
             "is_purchase": true,
+            "is_sale": false,
+            "is_repair": false,
             "pindex": 3,
             "name": "Pickup ingepland wijziging",
             "color": "#067cb7",

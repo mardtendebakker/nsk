@@ -24,8 +24,9 @@ export interface ACompany {
 export interface OrderStatus {
   id: number,
   name:string,
-  is_sale:boolean,
   is_purchase:boolean,
+  is_sale:boolean,
+  is_repair:boolean,
   color:string,
   mailbody:string
 }

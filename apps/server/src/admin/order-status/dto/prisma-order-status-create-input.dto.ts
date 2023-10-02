@@ -7,12 +7,17 @@ export class PrismaOrderStatusCreateInputDto implements Prisma.order_statusCreat
   @ApiProperty()
   @IsBoolean()
   @ValidateIf((_, value) => value !== undefined)
+  is_purchase: boolean;
+
+  @ApiProperty()
+  @IsBoolean()
+  @ValidateIf((_, value) => value !== undefined)
   is_sale: boolean;
 
   @ApiProperty()
   @IsBoolean()
   @ValidateIf((_, value) => value !== undefined)
-  is_purchase: boolean;
+  is_repair: boolean;
 
   @ApiPropertyOptional()
   @IsNumber()
