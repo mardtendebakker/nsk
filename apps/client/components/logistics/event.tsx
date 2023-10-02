@@ -1,12 +1,13 @@
 import { Box, Tooltip, Typography } from '@mui/material';
 import { format } from 'date-fns';
-import { Order, PickupListItem } from '../../utils/axios/models/pickup';
+import { Order, LogisticServiceListItem } from '../../utils/axios/models/logistic';
 import useTranslation from '../../hooks/useTranslation';
 
 export default function Event({
-  pickup, top, height, onClick, left, width,
+  type, logisticService, top, height, onClick, left, width,
 }: {
-  pickup: PickupListItem,
+  type: 'pickup' | 'delivery',
+  logisticService: LogisticServiceListItem,
   top: string,
   height: string,
   left: number | string,
@@ -14,24 +15,24 @@ export default function Event({
   onClick: () => void,
 }) {
   const { trans } = useTranslation();
-  const formatPickupName = (order: Order) => order?.products[0]?.name || trans('pickup');
+  const formatLogisticServiceName = (order: Order) => order?.products[0]?.name || trans(type);
 
   let title = '';
 
-  if (pickup.logistic_date) {
-    const realPickupDate = new Date(pickup.logistic_date);
-    title = format(realPickupDate, 'HH:mm');
+  if (logisticService.logistic_date) {
+    const realLogisticServiceDate = new Date(logisticService.logistic_date);
+    title = format(realLogisticServiceDate, 'HH:mm');
   }
 
-  const color = pickup?.order?.order_status?.color;
-  const body = formatPickupName(pickup.order);
-  const username = pickup.logistic?.username || '';
+  const color = logisticService?.order?.order_status?.color;
+  const body = formatLogisticServiceName(logisticService.order);
+  const username = logisticService.logistic?.username || '';
 
   return (
     <Box
       onClick={onClick}
       sx={{
-        cursor: pickup.logistic ? 'pointer' : 'not-allowed',
+        cursor: logisticService.logistic ? 'pointer' : 'not-allowed',
         top,
         height,
         bgcolor: 'white',

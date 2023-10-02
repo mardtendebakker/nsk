@@ -407,8 +407,11 @@ const translation = {
   friday: 'Vrijdag',
   saturday: 'Zaterdag',
   sunday: 'Zondag',
-  pickup: 'Ophalen',
-  pickupsBy: 'Ophalen door',
+  pickup: 'Ophaal',
+  pickups: 'Ophaal',
+  deliveries: 'Leveringen',
+  pickupsBy: 'Ophaal door',
+  deliveriesBy: 'Leveringen door',
   everyone: 'Iedereen',
   logisticsPage: {
     search: {
@@ -539,7 +542,7 @@ const translation = {
   newOrderStatus: 'Nieuwe bestelstatus',
   createOrderStatus: 'Bestelstatus aanmaken',
   newProductType: 'Nieuwe productsoort',
-  pickupBy: 'Ophalen door',
+  pickupBy: 'Ophaal door',
   estimatedTravelTime: 'Geschatte reistijd',
   supplierInfo: 'Leverancier informatie',
   driverInfo: 'Bestuurder informatie',

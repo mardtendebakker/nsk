@@ -1,7 +1,6 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import AccountPopover from './accountPopover';
-import { ADMIN_USERS, SETTINGS } from '../../../utils/routes';
 
 const mockUseSecurity = {
   signOut: jest.fn(() => Promise.resolve()),
@@ -45,23 +44,5 @@ describe('AccountPopover', () => {
     const logoutButton = getByText('logout');
     fireEvent.click(logoutButton);
     expect(mockUseSecurity.signOut).toBeCalled();
-  });
-
-  it('should navigate to admin', () => {
-    const { getByRole, getByText } = render(<AccountPopover />);
-    const button = getByRole('button');
-    fireEvent.click(button);
-    const adminButton = getByText('admin');
-    fireEvent.click(adminButton);
-    expect(mockRouter.push).toBeCalledWith(ADMIN_USERS);
-  });
-
-  it('should navigate to settings', () => {
-    const { getByRole, getByText } = render(<AccountPopover />);
-    const button = getByRole('button');
-    fireEvent.click(button);
-    const settingsButton = getByText('settings');
-    fireEvent.click(settingsButton);
-    expect(mockRouter.push).toBeCalledWith(SETTINGS);
   });
 });

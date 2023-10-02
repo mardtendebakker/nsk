@@ -93,7 +93,7 @@ exports[`Header matches snapshot 1`] = `
           </div>
         </a>
         <a
-          href="/logistics"
+          href="/logistics/pickups"
           style="text-decoration: none;"
         >
           <div

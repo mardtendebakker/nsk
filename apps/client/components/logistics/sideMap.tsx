@@ -12,11 +12,11 @@ import ReactMapGL, {
 } from 'react-map-gl';
 import { useRouter } from 'next/router';
 import { format } from 'date-fns';
-import { PickupListItem } from '../../utils/axios/models/pickup';
+import { LogisticServiceListItem } from '../../utils/axios/models/logistic';
 import useTranslation from '../../hooks/useTranslation';
 import { ORDERS_PURCHASES_EDIT } from '../../utils/routes';
 import Select from '../memoizedInput/select';
-import { fetchWayForPickups, Way, fetchPolylineInfo } from '../../utils/map';
+import { fetchWayForLogisticServices, Way, fetchPolylineInfo } from '../../utils/map';
 
 const API_KEY = process.env.MYPTV_API_KEY;
 const MAP_STYLE_URL = process.env.MYPTV_MAP_STYLE_URL;
@@ -59,10 +59,10 @@ const getMapStyle = (url) => fetch(url)
     return mapStyle;
   });
 
-export default function SideMap({ onClose, pickup, pickups }: {
+export default function SideMap({ onClose, logisticService, logisticServices }: {
   onClose: () => void,
-  pickup: PickupListItem,
-  pickups: PickupListItem[]
+  logisticService: LogisticServiceListItem,
+  logisticServices: LogisticServiceListItem[]
 }) {
   const { trans } = useTranslation();
   const router = useRouter();
@@ -84,9 +84,9 @@ export default function SideMap({ onClose, pickup, pickups }: {
   };
 
   async function setUp() {
-    const clonedPickups = structuredClone(pickups);
+    const clonedLogisticServices = structuredClone(logisticServices);
 
-    clonedPickups.sort((a: PickupListItem, b: PickupListItem) => {
+    clonedLogisticServices.sort((a: LogisticServiceListItem, b: LogisticServiceListItem) => {
       if (a.logistic_date < b.logistic_date) {
         return -1;
       } if (a.logistic_date > b.logistic_date) {
@@ -98,7 +98,7 @@ export default function SideMap({ onClose, pickup, pickups }: {
 
     const validWays = [
       buildHomeWay(),
-      ...(await fetchWayForPickups(clonedPickups)),
+      ...(await fetchWayForLogisticServices(clonedLogisticServices)),
       buildHomeWay(),
     ];
 
@@ -112,7 +112,7 @@ export default function SideMap({ onClose, pickup, pickups }: {
       coordinates,
     });
 
-    const wayToSelect = validWays.find((validWay: Way) => validWay?.pickup?.id == pickup.id);
+    const wayToSelect = validWays.find((validWay: Way) => validWay?.logisticService?.id == logisticService.id);
 
     if (wayToSelect) {
       handleSelectedWay(wayToSelect);
@@ -211,9 +211,9 @@ export default function SideMap({ onClose, pickup, pickups }: {
         >
           <Typography variant="h5" sx={{ mb: '.5rem', display: 'flex', alignItems: 'center' }}>
             <LocalShippingOutlined sx={{ mr: '.5rem', fontSize: '1.2rem' }} />
-            {trans('pickupBy')}
+            {trans('logisticServiceBy')}
             {': '}
-            {pickup.logistic.username}
+            {logisticService.logistic.username}
           </Typography>
           <Typography variant="body1" sx={{ mb: '1rem', display: 'flex', alignItems: 'center' }}>
             <TimerOutlined sx={{ mr: '.5rem', fontSize: '1.2rem' }} />
@@ -227,16 +227,16 @@ export default function SideMap({ onClose, pickup, pickups }: {
             sx={{ width: '100%' }}
             label={trans('supplier')}
             placeholder={trans('selectSupplier')}
-            value={selectedWay?.pickup?.id || 'none'}
-            onChange={(e) => handleSelectedWay(ways.find((way: Way) => e.target.value == way?.pickup?.id?.toString()))}
+            value={selectedWay?.logisticService?.id || 'none'}
+            onChange={(e) => handleSelectedWay(ways.find((way: Way) => e.target.value == way?.logisticService?.id?.toString()))}
             options={ways
-              .filter((way: Way) => !!way.pickup)
+              .filter((way: Way) => !!way.logisticService)
               .map((way: Way) => ({
-                title: way.pickup.order.supplier.name,
-                value: way.pickup.id,
+                title: way.logisticService.order.supplier.name,
+                value: way.logisticService.id,
               }))}
           />
-          {selectedWay?.pickup && (
+          {selectedWay?.logisticService && (
             <Box sx={{ mb: '.5rem', mt: '.5rem' }}>
               <Typography color="divider" variant="body1" sx={{ mb: '.5rem' }}>
                 {trans('supplierInfo')}
@@ -245,17 +245,17 @@ export default function SideMap({ onClose, pickup, pickups }: {
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <Avatar sx={{ mr: '1rem' }}>
                   <Typography variant="h5">
-                    {selectedWay.pickup.order.supplier.name.charAt(0)?.toUpperCase()}
+                    {selectedWay.logisticService.order.supplier.name.charAt(0)?.toUpperCase()}
                   </Typography>
                 </Avatar>
                 <Box>
                   <Typography variant="h5">
-                    {selectedWay.pickup.order.supplier.name}
+                    {selectedWay.logisticService.order.supplier.name}
                   </Typography>
-                  <Typography variant="body1">{selectedWay.pickup.order.supplier.representative}</Typography>
+                  <Typography variant="body1">{selectedWay.logisticService.order.supplier.representative}</Typography>
 
                   <Typography variant="body1" sx={{ justifySelf: 'flex-end' }}>
-                    {selectedWay.pickup.order.supplier.phone}
+                    {selectedWay.logisticService.order.supplier.phone}
                   </Typography>
                 </Box>
                 <Box sx={{ flex: 1, textAlign: 'end' }} />
@@ -271,16 +271,16 @@ export default function SideMap({ onClose, pickup, pickups }: {
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Avatar sx={{ mr: '1rem' }}>
                 <Typography variant="h5">
-                  {(pickup.logistic.firstname.charAt(0)?.toUpperCase() || '') + (pickup.logistic.lastname.charAt(0)?.toUpperCase() || '')}
+                  {(logisticService.logistic.firstname.charAt(0)?.toUpperCase() || '') + (logisticService.logistic.lastname.charAt(0)?.toUpperCase() || '')}
                 </Typography>
               </Avatar>
               <Box>
                 <Typography variant="h5">
-                  {pickup.logistic.firstname}
+                  {logisticService.logistic.firstname}
                   {' '}
-                  {pickup.logistic.lastname}
+                  {logisticService.logistic.lastname}
                 </Typography>
-                <Typography variant="body1">{pickup.logistic.username}</Typography>
+                <Typography variant="body1">{logisticService.logistic.username}</Typography>
               </Box>
             </Box>
             <Divider sx={{ mt: '.5rem' }} />
@@ -293,11 +293,11 @@ export default function SideMap({ onClose, pickup, pickups }: {
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Avatar sx={{ mr: '1rem' }}><LocalShippingOutlined sx={{ fontSize: '1.2rem' }} /></Avatar>
               <Typography variant="h5">
-                {pickup.logistic.username}
+                {logisticService.logistic.username}
               </Typography>
             </Box>
           </Box>
-          <Button size="small" variant="contained" sx={{ width: '100%', mt: '1rem' }} onClick={() => router.push(ORDERS_PURCHASES_EDIT.replace('[id]', pickup.order.id.toString()))}>
+          <Button size="small" variant="contained" sx={{ width: '100%', mt: '1rem' }} onClick={() => router.push(ORDERS_PURCHASES_EDIT.replace('[id]', logisticService.order.id.toString()))}>
             <VisibilityOutlined />
             {' '}
             {trans('viewOrder')}

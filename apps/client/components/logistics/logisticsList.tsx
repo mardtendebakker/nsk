@@ -1,7 +1,7 @@
 import {
   MenuItem, MenuList,
 } from '@mui/material';
-import { Logistic } from '../../utils/axios/models/pickup';
+import { Logistic } from '../../utils/axios/models/logistic';
 import MenuItemText from '../menuTextItem';
 import useTranslation from '../../hooks/useTranslation';
 
