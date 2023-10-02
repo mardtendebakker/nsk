@@ -7,17 +7,20 @@ import useTranslation from '../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../hooks/useForm';
 import TextField from '../../input/textField';
 import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
-import { AUTOCOMPLETE_ORDER_STATUSES_PATH, AUTOCOMPLETE_COMPANIES_PATH } from '../../../utils/axios';
+import { AUTOCOMPLETE_PURCHASE_STATUSES_PATH, AUTOCOMPLETE_SALE_STATUSES_PATH, AUTOCOMPLETE_COMPANIES_PATH } from '../../../utils/axios';
 import SearchAccordion from '../../searchAccordion';
 import useResponsive from '../../../hooks/useResponsive';
 import ListFilterDivider from '../../listFilterDivider';
+import { OrderType } from '../../../utils/axios/models/types';
 
 export default function Filter({
+  type,
   disabled,
   formRepresentation,
   setValue,
   onReset,
 }: {
+  type: OrderType,
   disabled: boolean,
   formRepresentation : FormRepresentation,
   setValue: SetValue,
@@ -114,7 +117,7 @@ export default function Filter({
           />
           <ListFilterDivider horizontal={!isDesktop} />
           <DataSourcePicker
-            url={AUTOCOMPLETE_ORDER_STATUSES_PATH}
+            url={type === 'purchase' ? AUTOCOMPLETE_PURCHASE_STATUSES_PATH : AUTOCOMPLETE_SALE_STATUSES_PATH}
             disabled={disabled}
             fullWidth
             displayFieldset={false}

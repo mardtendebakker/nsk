@@ -14,8 +14,8 @@ import { AServiceDiscrimination } from '../aservice/enum/aservice-discrimination
 import { AServiceStatus } from '../aservice/enum/aservice-status.enum';
 import { ImportDto } from './dto/import-dto';
 import { CreateAOrderDto } from '../aorder/dto/create-aorder.dto';
-import { OrderStatusService } from '../order-status/order-status.service';
-import { CreateOrderStatusDto } from '../order-status/dto/create-order-status.dto';
+import { OrderStatusService } from '../admin/order-status/order-status.service';
+import { CreateOrderStatusDto } from '../admin/order-status/dto/create-order-status.dto';
 import { CustomerService } from '../customer/customer.service';
 import { CreateCompanyDto } from '../company/dto/create-company.dto';
 import { IsPartner } from '../company/types/is-partner.enum';

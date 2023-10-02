@@ -3,7 +3,7 @@ import { IFindManyRespone } from "../../common/interface/find-many-respone";
 import { AOrderEntity } from "../entities/aorder.entity";
 import { ProductOrderEntity } from "../../stock/entities/product-order.entity";
 import { ProductEntity } from "../../stock/entities/product.entity";
-import { OrderStatusEntity } from "../../order-status/entities/order-status.entity";
+import { OrderStatusEntity } from "../../admin/order-status/entities/order-status.entity";
 import { CompanyEntity } from "../../company/entities/company.entity";
 
 class OrderStatus extends PickType(OrderStatusEntity, [

@@ -1,5 +1,5 @@
 import { ApiPropertyOptional } from "@nestjs/swagger";
-import { FindManyDto as BaseFindManyDto } from "../../common/dto/find-many.dto";
+import { FindManyDto as BaseFindManyDto } from "../../../common/dto/find-many.dto";
 import { IsString, ValidateIf } from "class-validator";
 
 export class FindManyDto extends BaseFindManyDto {

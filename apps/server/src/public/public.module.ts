@@ -6,7 +6,7 @@ import { PurchaseModule } from '../purchase/purchase.module';
 import { SupplierModule } from '../supplier/supplier.module';
 import { FileModule } from '../file/file.module';
 import { ProductModule } from '../product/product.module';
-import { OrderStatusModule } from '../order-status/order-status.module';
+import { OrderStatusModule } from '../admin/order-status/order-status.module';
 import { HttpModule } from '@nestjs/axios';
 import { CustomerModule } from '../customer/customer.module';
 import { SaleModule } from '../sale/sale.module';

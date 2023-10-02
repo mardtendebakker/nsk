@@ -10,16 +10,19 @@ import { FormRepresentation, SetValue } from '../../../hooks/useForm';
 import TextField from '../../memoizedInput/textField';
 import BaseTextField from '../../input/textField';
 import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
-import { AUTOCOMPLETE_ORDER_STATUSES_PATH } from '../../../utils/axios';
+import { AUTOCOMPLETE_SALE_STATUSES_PATH, AUTOCOMPLETE_PURCHASE_STATUSES_PATH } from '../../../utils/axios';
 import useResponsive from '../../../hooks/useResponsive';
+import { OrderType } from '../../../utils/axios/models/types';
 
 export default function BasicDetails({
   formRepresentation,
+  type,
   disabled,
   setValue,
   disableOrderStatus,
 }: {
   formRepresentation : FormRepresentation,
+  type: OrderType,
   disabled:boolean,
   setValue: SetValue,
   disableOrderStatus?: boolean
@@ -79,7 +82,7 @@ export default function BasicDetails({
             <Box sx={{ m: '.25rem' }} />
             <DataSourcePicker
               sx={{ flex: 1 }}
-              url={AUTOCOMPLETE_ORDER_STATUSES_PATH}
+              url={type === 'purchase' ? AUTOCOMPLETE_PURCHASE_STATUSES_PATH : AUTOCOMPLETE_SALE_STATUSES_PATH}
               disabled={disabled}
               fullWidth
               placeholder={trans('selectStatus')}
