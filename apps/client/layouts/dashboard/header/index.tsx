@@ -15,7 +15,8 @@ import {
   STOCKS_PRODUCTS,
   STOCKS_REPAIR_SERVICES,
   MY_TASKS,
-  LOGISTICS,
+  LOGISTICS_DELIVERY,
+  LOGISTICS_PICKUP,
   CONTACTS_CUSTOMERS,
   CONTACTS_SUPPLIERS,
   BULK_EMAIL,
@@ -134,8 +135,21 @@ export default function Header() {
     },
     {
       title: trans('logistics'),
-      path: LOGISTICS,
-      active: router.pathname.includes(LOGISTICS),
+      path: LOGISTICS_PICKUP,
+      active: router.pathname.includes(LOGISTICS_PICKUP)
+               || router.pathname.includes(LOGISTICS_DELIVERY),
+      subItems: [
+        {
+          title: trans('pickups'),
+          path: LOGISTICS_PICKUP,
+          active: router.pathname.includes(LOGISTICS_PICKUP),
+        },
+        {
+          title: trans('deliveries'),
+          path: LOGISTICS_DELIVERY,
+          active: router.pathname.includes(LOGISTICS_DELIVERY),
+        },
+      ],
     },
   ];
 

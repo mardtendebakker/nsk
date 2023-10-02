@@ -1,4 +1,4 @@
-export interface PickupListItem {
+export interface LogisticServiceListItem {
   id: number,
   logistic_date:string,
   order:Order,

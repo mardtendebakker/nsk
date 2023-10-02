@@ -1,22 +1,20 @@
 import {
   Box, Card, CardContent, Table, TableBody, TableCell, TableHead, TableRow, Typography,
 } from '@mui/material';
-import Head from 'next/head';
 import { useEffect, useState } from 'react';
 import Search from '@mui/icons-material/Search';
 import {
   addDays, addMinutes, areIntervalsOverlapping, differenceInMinutes, format, setHours, setMinutes, startOfWeek,
 } from 'date-fns';
-import DashboardLayout from '../../layouts/dashboard';
 import useTranslation from '../../hooks/useTranslation';
-import Event from '../../components/logistics/event';
+import Event from './event';
 import useAxios from '../../hooks/useAxios';
-import { CALENDAR_PICKUPS_PATH } from '../../utils/axios';
-import TextField from '../../components/input/textField';
-import { Logistic, Order, PickupListItem } from '../../utils/axios/models/pickup';
-import SideMap from '../../components/logistics/sideMap';
-import Pagination from '../../components/logistics/pagination';
-import LogisticsList from '../../components/logistics/logisticsList';
+import { CALENDAR_PICKUPS_PATH, CALENDAR_DELIVERIES_PATH } from '../../utils/axios';
+import TextField from '../input/textField';
+import { Logistic, Order, LogisticServiceListItem } from '../../utils/axios/models/logistic';
+import SideMap from './sideMap';
+import Pagination from './pagination';
+import LogisticsList from './logisticsList';
 
 const hours = [];
 const HOURS_PER_DAYS = 10;
@@ -28,12 +26,17 @@ for (let i = 0; i < HOURS_PER_DAYS; i++) {
   hours.push(`${STARTING_HOUR + i}:30`);
 }
 
-export default function Logistics() {
+export default function Logistics({ type }: { type: 'pickup' | 'delivery' }) {
+  const AJAX_PATH = type == 'pickup' ? CALENDAR_PICKUPS_PATH : CALENDAR_DELIVERIES_PATH;
+
   const { trans, locale } = useTranslation();
   const [firstDate, setFirstDate] = useState<Date>(setHours(setMinutes(startOfWeek(new Date(), { weekStartsOn: 1 }), 0), STARTING_HOUR));
   const [selectedLogisticIds, setSelectedLogisticIds] = useState<number[]>([0]);
   const [search, setSearch] = useState('');
-  const [clickedPickup, setClickedPickup] = useState<{ pickup: PickupListItem, allPickups: PickupListItem[] } | undefined>();
+  const [clickedLogisticService, setClickedLogisticService] = useState<{
+    logisticService: LogisticServiceListItem,
+    allLogisticServices: LogisticServiceListItem[]
+  } | undefined>();
 
   const dates: Date[] = [
     new Date(firstDate),
@@ -43,7 +46,7 @@ export default function Logistics() {
     addDays(firstDate, 4),
   ];
 
-  const { data: { data = [] } = {}, call } = useAxios('get', CALENDAR_PICKUPS_PATH.replace(':id', ''), { withProgressBar: true });
+  const { data: { data = [] } = {}, call } = useAxios('get', AJAX_PATH.replace(':id', ''), { withProgressBar: true });
 
   useEffect(() => {
     setSelectedLogisticIds([0]);
@@ -76,33 +79,33 @@ export default function Logistics() {
     }
   };
 
-  const formatPickupName = (order: Order) => order?.products[0]?.name || trans('pickup');
+  const formatLogisticServiceName = (order: Order) => order?.products[0]?.name || trans(type);
 
-  const pickups: PickupListItem[] = data.filter(({ logistic, order }) => {
+  const logisticServices: LogisticServiceListItem[] = data.filter(({ logistic, order }) => {
     const selected = selectedLogisticIds[0] === 0 || selectedLogisticIds.includes(logistic?.id);
 
-    return selected && (formatPickupName(order)?.includes(search) || order.order_nr.includes(search));
+    return selected && (formatLogisticServiceName(order)?.includes(search) || order.order_nr.includes(search));
   });
 
-  const overlappingPickups: PickupListItem[][] = [];
+  const overlappingLogisticServices: LogisticServiceListItem[][] = [];
 
-  const pickupsLength = pickups.length;
+  const logisticServicesLength = logisticServices.length;
 
-  for (let i = 0; i < pickupsLength; i++) {
-    const overlappingPickupsLength = overlappingPickups.length;
+  for (let i = 0; i < logisticServicesLength; i++) {
+    const overlappingLogisticServicesLength = overlappingLogisticServices.length;
     let pushedInGroup = false;
-    for (let j = 0; j < overlappingPickupsLength; j++) {
-      const overlappingPickupsGroup = overlappingPickups[j];
-      const overlappingPickupsGroupLength = overlappingPickupsGroup.length;
-      for (let k = 0; k < overlappingPickupsGroupLength; k++) {
+    for (let j = 0; j < overlappingLogisticServicesLength; j++) {
+      const overlappingLogisticServicesGroup = overlappingLogisticServices[j];
+      const overlappingLogisticServicesGroupLength = overlappingLogisticServicesGroup.length;
+      for (let k = 0; k < overlappingLogisticServicesGroupLength; k++) {
         if (areIntervalsOverlapping(
-          { start: new Date(overlappingPickupsGroup[k].logistic_date), end: addMinutes(new Date(overlappingPickupsGroup[k].logistic_date), 30) },
-          { start: new Date(pickups[i].logistic_date), end: addMinutes(new Date(pickups[i].logistic_date), 30) },
+          { start: new Date(overlappingLogisticServicesGroup[k].logistic_date), end: addMinutes(new Date(overlappingLogisticServicesGroup[k].logistic_date), 30) },
+          { start: new Date(logisticServices[i].logistic_date), end: addMinutes(new Date(logisticServices[i].logistic_date), 30) },
           {
             inclusive: false,
           },
         )) {
-          overlappingPickupsGroup.push(pickups[i]);
+          overlappingLogisticServicesGroup.push(logisticServices[i]);
           pushedInGroup = true;
           break;
         }
@@ -110,19 +113,16 @@ export default function Logistics() {
     }
 
     if (!pushedInGroup) {
-      overlappingPickups.push([pickups[i]]);
+      overlappingLogisticServices.push([logisticServices[i]]);
     }
   }
 
   return (
-    <DashboardLayout>
-      <Head>
-        <title>{trans('logistics')}</title>
-      </Head>
+    <>
       <Box sx={{ display: 'flex' }}>
         <Box sx={{ flex: 0.15, pr: '5rem', maxWidth: '25rem' }}>
           <Typography sx={(theme) => ({ color: theme.palette.text.secondary })}>
-            {trans('pickupsBy')}
+            {type == 'pickup' ? trans('pickupsBy') : trans('deliveriesBy')}
             :
           </Typography>
           <LogisticsList onClick={handleLogisticClick} logistics={logistics} selectedLogisticIds={selectedLogisticIds} />
@@ -168,12 +168,12 @@ export default function Logistics() {
                       <Box sx={{ marginTop: '-1.67em' }}>{hours[0]}</Box>
                     </TableCell>
                     {dates.map((date: Date) => {
-                      const thisDayPickups: PickupListItem[][] = [];
-                      const overlappingPickupsLength = overlappingPickups.length;
-                      for (let i = 0; i < overlappingPickupsLength; i++) {
-                        thisDayPickups.push(overlappingPickups[i].filter(({ logistic_date }) => {
-                          const realPickupDate = new Date(logistic_date);
-                          return format(realPickupDate, 'Y-MM-dd') == format(date, 'Y-MM-dd');
+                      const thisDayLogisticServices: LogisticServiceListItem[][] = [];
+                      const overlappingLogisticServicesLength = overlappingLogisticServices.length;
+                      for (let i = 0; i < overlappingLogisticServicesLength; i++) {
+                        thisDayLogisticServices.push(overlappingLogisticServices[i].filter(({ logistic_date }) => {
+                          const realLogisticServiceDate = new Date(logistic_date);
+                          return format(realLogisticServiceDate, 'Y-MM-dd') == format(date, 'Y-MM-dd');
                         }));
                       }
 
@@ -183,22 +183,23 @@ export default function Logistics() {
                           sx={{ position: 'relative', borderLeft: (theme) => `1px solid ${theme.palette.divider}` }}
                         >
                           {
-                        thisDayPickups.map((elements) => elements.map((pickup, i) => {
-                          const realPickupDate = new Date(pickup.logistic_date);
+                        thisDayLogisticServices.map((elements) => elements.map((logisticService, i) => {
+                          const realLogisticServiceDate = new Date(logisticService.logistic_date);
 
                           return (
                             <Event
+                              type={type}
                               onClick={() => {
-                                if (pickup.logistic) {
-                                  setClickedPickup({
-                                    pickup,
-                                    allPickups: thisDayPickups.flat().filter((element) => element.logistic && (element.logistic.id == pickup.logistic.id)),
+                                if (logisticService.logistic) {
+                                  setClickedLogisticService({
+                                    logisticService,
+                                    allLogisticServices: thisDayLogisticServices.flat().filter((element) => element.logistic && (element.logistic.id == logisticService.logistic.id)),
                                   });
                                 }
                               }}
-                              pickup={pickup}
-                              key={pickup.id}
-                              top={`${differenceInMinutes(realPickupDate, date) / 10}rem`}
+                              logisticService={logisticService}
+                              key={logisticService.id}
+                              top={`${differenceInMinutes(realLogisticServiceDate, date) / 10}rem`}
                               height={TILE_HEIGHT}
                               left={`${(100 / elements.length) * i}%`}
                               width={`${(100 / elements.length)}%`}
@@ -235,13 +236,13 @@ export default function Logistics() {
           </CardContent>
         </Card>
       </Box>
-      { clickedPickup && (
+      { clickedLogisticService && (
       <SideMap
-        pickups={clickedPickup.allPickups}
-        pickup={clickedPickup.pickup}
-        onClose={() => setClickedPickup(undefined)}
+        logisticServices={clickedLogisticService.allLogisticServices}
+        logisticService={clickedLogisticService.logisticService}
+        onClose={() => setClickedLogisticService(undefined)}
       />
       )}
-    </DashboardLayout>
+    </>
   );
 }

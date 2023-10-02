@@ -38,7 +38,8 @@ export const ADMIN_SETTINGS_MAILING_LISTS = '/admin/settings/mailing-lists';
 export const ADMIN_SETTINGS_CUSTOMER_TAGS = '/admin/settings/customer-tags';
 export const ADMIN_SETTINGS_PRODUCT_STATUSES = '/admin/settings/product-statuses';
 export const ADMIN_SETTINGS_ORDER_STATUSES = '/admin/settings/order-statuses';
-export const LOGISTICS = '/logistics';
+export const LOGISTICS_PICKUP = '/logistics/pickups';
+export const LOGISTICS_DELIVERY = '/logistics/deliveries';
 
 export const ROUTES_GROUPS: { [key: string]: Group[] } = {
   [ADMIN_USERS]: ['admin', 'super_admin'],
