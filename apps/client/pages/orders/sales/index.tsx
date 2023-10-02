@@ -3,7 +3,7 @@ import { Box } from '@mui/material';
 import useTranslation from '../../../hooks/useTranslation';
 import List from '../../../components/orders/list';
 import DashboardLayout from '../../../layouts/dashboard';
-import Header from '../../../components/orders/header';
+import Header from '../../../components/orders/sales/header';
 
 function SalesOrders() {
   const { trans } = useTranslation();

@@ -35,6 +35,7 @@ export const CALENDAR_PICKUPS_PATH = '/calendar/pickups/:id';
 export const CALENDAR_DELIVERIES_PATH = '/calendar/deliveries/:id';
 export const TASKS_PATH = '/tasks/:id';
 export const ATTRIBUTES_PATH = '/attributes/:id';
+export const SALES_IMPORT_PATH = '/sales/import';
 export const SPLIT_PRODUCT_INDIVIDUALIZE_PATH = '/split-product/:id/individualize-part-of-bundle';
 export const SPLIT_PRODUCT_STOCK_PART_PATH = '/split-product/:id/split-part-of-bundle';
 export const APRODUCT_BULK_PRINT_BARCODES = '/aproduct/bulk/print/barcodes';

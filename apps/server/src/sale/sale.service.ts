@@ -12,6 +12,16 @@ import { Prisma } from '@prisma/client';
 import { CreateAServiceDto } from '../aservice/dto/create-aservice.dto';
 import { AServiceDiscrimination } from '../aservice/enum/aservice-discrimination.enum';
 import { AServiceStatus } from '../aservice/enum/aservice-status.enum';
+import { ImportDto } from './dto/import-dto';
+import { CreateAOrderDto } from '../aorder/dto/create-aorder.dto';
+import { OrderStatusService } from '../order-status/order-status.service';
+import { CreateOrderStatusDto } from '../order-status/dto/create-order-status.dto';
+import { CustomerService } from '../customer/customer.service';
+import { CreateCompanyDto } from '../company/dto/create-company.dto';
+import { IsPartner } from '../company/types/is-partner.enum';
+import { AOrderPayload } from '../aorder/types/aorder-payload';
+import { IExcelColumn } from './types/excel-column';
+import * as xlsx from 'xlsx';
 
 @Injectable()
 export class SaleService extends AOrderService {
@@ -19,7 +29,9 @@ export class SaleService extends AOrderService {
     protected readonly repository: SaleRepository,
     protected readonly printService: PrintService,
     protected readonly fileService: FileService,
+    protected readonly customerService: CustomerService,
     protected readonly aProductService: AProductService,
+    protected readonly orderStatusService: OrderStatusService,
   ) {
     super(repository, printService, fileService, AOrderDiscrimination.SALE);
   }
@@ -79,6 +91,83 @@ export class SaleService extends AOrderService {
     return this.repository.update(this.commonIncludePart(deleteProductsFromOrderParams));
   }
 
+  async import({ partner_id }: ImportDto, file: Express.Multer.File): Promise<AOrderPayload[]> {
+    if (!file) {
+      throw new UnprocessableEntityException('file is invalid');
+    }
+  
+    const workbook = xlsx.read(file.buffer, { type: 'buffer' });
+    const sheetName = workbook.SheetNames[0];
+    const sheet = workbook.Sheets[sheetName];
+    const rows = <IExcelColumn[]>xlsx.utils.sheet_to_json(sheet);
+  
+    const sales: AOrderPayload[] = [];
+  
+    for (const row of rows) {
+      const {
+        Referentie,
+        Bedrijfsnaam,
+        Voornaam,
+        Achternaam,
+        Straatnaam,
+        Huisnummer,
+        'Huisnummer toevoeging': HuisnummerToevoeging,
+        Postcode,
+        Plaatsnaam,
+        Landcode,
+        Email,
+        Telefoon,
+        'Mobiel nummer': MobielNummer,
+        Gebouw,
+        Verdieping,
+        Afdeling,
+        Deurcode,
+        'Aflever referentie': AfleverReferentie,
+      } = row;
+  
+      if (!Bedrijfsnaam && !Voornaam && !Achternaam) continue;
+  
+      // Leergeld puts partner name in field Bedrijfsnaam :-(
+      const name = Bedrijfsnaam && !Bedrijfsnaam.includes('Leergeld')
+        ? Bedrijfsnaam
+        : `${Voornaam} ${Achternaam}`.trim();
+  
+      const customerData: CreateCompanyDto = {
+        name,
+        representative: `${Voornaam} ${Achternaam}`.trim(),
+        street: `${Straatnaam} ${Huisnummer} ${HuisnummerToevoeging}`.trim(),
+        zip: Postcode,
+        city: Plaatsnaam,
+        country: Landcode,
+        email: Email,
+        phone: Telefoon,
+        phone2: MobielNummer,
+        ...(partner_id && { partner_id: partner_id }),
+        ...(partner_id && { is_partner: IsPartner.HAS_PARTNER }),
+      };
+  
+      const customer = await this.customerService.checkExists(customerData);
+      const orderStatus = await this.findOrderStatusByNameOrCreate('Products to assign', false, true);
+      const remarks = `Referentie: ${Referentie || ''}\r\n` +
+                      `Gebouw: ${Gebouw || ''}\r\n` +
+                      `Verdieping: ${Verdieping || ''}\r\n` +
+                      `Afdeling: ${Afdeling || ''}\r\n` +
+                      `Deurcode: ${Deurcode || ''}\r\n` +
+                      `Aflever referentie: ${AfleverReferentie || ''}`;
+  
+      const saleData: CreateAOrderDto = {
+        customer_id: customer.id,
+        is_gift: false,
+        status_id: orderStatus.id,
+        remarks,
+      };
+  
+      sales.push(<AOrderPayload>await super.create(saleData));
+    }
+  
+    return sales;
+  }
+
   protected getCreateSalesServiceInput(description: string): CreateAServiceDto {
     const toDoServie: CreateAServiceDto = {
       discr: AServiceDiscrimination.SalesService,
@@ -87,6 +176,16 @@ export class SaleService extends AOrderService {
     };
 
     return toDoServie;
+  }
+
+  protected findOrderStatusByNameOrCreate(name: string, isPurchase: boolean, isSale: boolean) {
+    const createOrderStatusDto: CreateOrderStatusDto = {
+      name,
+      is_purchase: isPurchase,
+      is_sale: isSale,
+    };
+
+    return this.orderStatusService.findByNameOrCreate(createOrderStatusDto);
   }
 
   private areProductIdsEqual(poductIds1: number[], poductIds2: number[]): boolean {

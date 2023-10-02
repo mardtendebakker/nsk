@@ -9,6 +9,7 @@ import { Prisma } from '@prisma/client';
 import { SaleService } from '../sale/sale.service';
 import { AProductService } from '../aproduct/aproduct.service';
 import { REPAIR_PRODUCT_LOCATION_ID, REPAIR_PRODUCT_NAME } from '../to-repair/enum/repair-product.const';
+import { CustomerService } from '../customer/customer.service';
 
 @Injectable()
 export class RepairService extends SaleService {
@@ -16,10 +17,11 @@ export class RepairService extends SaleService {
     protected readonly repository: RepairRepository,
     protected readonly printService: PrintService,
     protected readonly fileService: FileService,
+    protected readonly customerService: CustomerService,
     protected readonly aProductService: AProductService,
-    private readonly orderStatusService: OrderStatusService,
+    protected readonly orderStatusService: OrderStatusService,
   ) {
-    super(repository, printService, fileService, aProductService);
+    super(repository, printService, fileService, customerService, aProductService, orderStatusService);
   }
 
   async create(orderDto: CreateAOrderDto) {
