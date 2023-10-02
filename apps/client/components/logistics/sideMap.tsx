@@ -87,9 +87,9 @@ export default function SideMap({ onClose, pickup, pickups }: {
     const clonedPickups = structuredClone(pickups);
 
     clonedPickups.sort((a: PickupListItem, b: PickupListItem) => {
-      if (a.real_pickup_date < b.real_pickup_date) {
+      if (a.logistic_date < b.logistic_date) {
         return -1;
-      } if (a.real_pickup_date > b.real_pickup_date) {
+      } if (a.logistic_date > b.logistic_date) {
         return 1;
       }
 

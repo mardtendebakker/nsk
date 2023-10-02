@@ -13,7 +13,7 @@ export class CompanyRepository {
   async findAll(params: Prisma.acompanyFindManyArgs) {
     const { skip, cursor, select, orderBy, where } = params;
     const maxQueryLimit = this.configService.get<number>('MAX_NONE_RELATION_QUERY_LIMIT');
-    const take = isFinite(params.take) && params.take <  maxQueryLimit ? params.take : maxQueryLimit;
+    const take = Number.isFinite(params.take) && params.take <  maxQueryLimit ? params.take : maxQueryLimit;
 
     const submission = await this.prisma.$transaction([
       this.prisma.acompany.count({where}),

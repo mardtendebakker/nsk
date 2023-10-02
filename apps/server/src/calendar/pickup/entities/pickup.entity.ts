@@ -1,28 +1,28 @@
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import { ApiProperty } from "@nestjs/swagger";
 import { pickup } from "@prisma/client";
 
 export class PickupEntity implements pickup {
   @ApiProperty()
   id: number;
 
-  @ApiPropertyOptional()
+  @ApiProperty()
   order_id: number | null;
   
-  @ApiPropertyOptional()
+  @ApiProperty()
   logistics_id: number | null;
   
-  @ApiPropertyOptional()
+  @ApiProperty()
   pickup_date: Date | null;
   
-  @ApiPropertyOptional()
+  @ApiProperty()
   real_pickup_date: Date | null;
   
-  @ApiPropertyOptional()
+  @ApiProperty()
   origin: string | null;
   
-  @ApiPropertyOptional()
+  @ApiProperty()
   data_destruction: number | null;
   
-  @ApiPropertyOptional()
+  @ApiProperty()
   description: string | null;
 }

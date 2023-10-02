@@ -3,7 +3,7 @@ import { Prisma } from "@prisma/client";
 import { Type } from "class-transformer";
 import { IsBoolean, IsInt, IsNumber, IsString, ValidateIf } from "class-validator";
 import { CreateCompanyDto } from "../../company/dto/create-company.dto";
-import { CreatePickupUncheckedWithoutAorderInputDto } from "../../pickup/dto/create-pickup-unchecked-without-aorder-input.dto";
+import { CreatePickupUncheckedWithoutAorderInputDto } from "../../calendar/pickup/dto/create-pickup-unchecked-without-aorder-input.dto";
 import { CreateRepairUncheckedWithoutAOrderInputDto } from "../../repair/dto/create-repair-unchecked-without-aorder-input.dt";
 
 export class PrismaAOrderCreateInputDto {

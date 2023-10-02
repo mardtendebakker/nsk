@@ -19,7 +19,8 @@ import { EmailModule } from '../email/email.module';
 import { ProductTypeModule } from '../product-type/product-type.module';
 import { ProductStatusModule } from '../product-status/product-status.module';
 import { OrderModule } from '../order/order.module';
-import { PickupModule } from '../pickup/pickup.module';
+import { PickupModule } from '../calendar/pickup/pickup.module';
+import { DeliveryModule } from '../calendar/delivery/delivery.module';
 import { LogisticModule } from '../logistic/logistic.module';
 import { AttributeModule } from '../attribute/attribute.module';
 import { TaskModule } from '../task/task.module';
@@ -74,6 +75,7 @@ import { AutocompleteModule } from '../autocomplete/autocomplete.module';
     ProductStatusModule,
     OrderModule,
     PickupModule,
+    DeliveryModule,
     LogisticModule,
     AttributeModule,
     TaskModule,

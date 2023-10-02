@@ -18,8 +18,8 @@ export default function Event({
 
   let title = '';
 
-  if (pickup.real_pickup_date) {
-    const realPickupDate = new Date(pickup.real_pickup_date);
+  if (pickup.logistic_date) {
+    const realPickupDate = new Date(pickup.logistic_date);
     title = format(realPickupDate, 'HH:mm');
   }
 
