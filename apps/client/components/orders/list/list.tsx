@@ -17,8 +17,7 @@ import Edit from '../../button/edit';
 import {
   CONTACTS_CUSTOMERS_EDIT, CONTACTS_SUPPLIERS_EDIT, ORDERS_PURCHASES_EDIT, ORDERS_REPAIRS_EDIT, ORDERS_SALES_EDIT,
 } from '../../../utils/routes';
-
-type Type = 'purchase' | 'sales' | 'repair';
+import { OrderType } from '../../../utils/axios/models/types';
 
 const EDIT_PATHS = {
   purchase: ORDERS_PURCHASES_EDIT,
@@ -26,7 +25,7 @@ const EDIT_PATHS = {
   repair: ORDERS_REPAIRS_EDIT,
 };
 
-function OrderNumber({ order, type }: { order: OrderListItem, type: Type }) {
+function OrderNumber({ order, type }: { order: OrderListItem, type: OrderType }) {
   let productsTooltip = '';
 
   for (let i = 0; i < 10; i++) {
@@ -61,7 +60,7 @@ function OrderNumber({ order, type }: { order: OrderListItem, type: Type }) {
   );
 }
 
-function Company({ company, type }: { company: CompanyModel, type: Type }) {
+function Company({ company, type }: { company: CompanyModel, type: OrderType }) {
   let tooltip = '';
 
   if (company.street) {
@@ -134,7 +133,7 @@ export default function List({
   disabled,
   onDelete,
 }: {
-  type: Type,
+  type: OrderType,
   orders: OrderListItem[],
   checkedOrderIds: number[],
   count: number,

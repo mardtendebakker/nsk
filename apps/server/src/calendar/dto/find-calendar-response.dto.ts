@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { OrderStatusEntity } from '../../order-status/entities/order-status.entity';
+import { OrderStatusEntity } from '../../admin/order-status/entities/order-status.entity';
 import { FindLogisticResponeDto } from '../../logistic/dto/find-logistic-response.dto';
 import { CompanyEntity } from '../../company/entities/company.entity';
 

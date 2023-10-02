@@ -36,10 +36,16 @@ export class AutocompleteController {
     return this.autocompleteService.findCompanies(query);
   }
 
-  @Get('/order-statuses')
+  @Get('/purchase-statuses')
   @ApiResponse({ type: AutocompleteResponseDto, isArray: true })
-  orderStatuses(@Query() query: AutocompleteDto) {
-    return this.autocompleteService.findOrderStatuses(query);
+  purchaseStatuses(@Query() query: AutocompleteDto) {
+    return this.autocompleteService.findPurchaseStatuses(query);
+  }
+
+  @Get('/sale-statuses')
+  @ApiResponse({ type: AutocompleteResponseDto, isArray: true })
+  saleStatuses(@Query() query: AutocompleteDto) {
+    return this.autocompleteService.findSaleStatuses(query);
   }
 
   @Get('/customers')

@@ -230,7 +230,7 @@ describe('OrderStatus', () => {
 
   it(`/GET find all`, () => {
     return request(app.getHttpServer())
-      .get('/order-statuses')
+      .get('/admin/order-statuses')
       .set({ Authorization: `Bearer ${token}` })
       .expect(200)
       .expect(orderStatusRepository.findAll());

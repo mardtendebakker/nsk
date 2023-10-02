@@ -6,7 +6,7 @@ import { PrismaModule } from '../prisma/prisma.module';
 import { PrintService } from '../print/print.service';
 import { FileModule } from '../file/file.module';
 import { AProductModule } from '../aproduct/aproduct.module';
-import { OrderStatusModule } from '../order-status/order-status.module';
+import { OrderStatusModule } from '../admin/order-status/order-status.module';
 import { CustomerModule } from '../customer/customer.module';
 
 @Module({

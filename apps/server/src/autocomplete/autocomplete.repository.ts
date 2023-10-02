@@ -24,8 +24,12 @@ export class AutocompleteRepository {
     return this.commonFind(autocompleteDto, this.prisma.attribute);
   }
 
-  async findOrderStatuses(autocompleteDto: AutocompleteDto): Promise<AutocompleteResponseDto[]> {
-    return this.commonFind(autocompleteDto, this.prisma.order_status);
+  async findPurchaseStatuses(autocompleteDto: AutocompleteDto): Promise<AutocompleteResponseDto[]> {
+    return this.commonFind(autocompleteDto, this.prisma.order_status, { is_purchase: true });
+  }
+
+  async findSaleStatuses(autocompleteDto: AutocompleteDto): Promise<AutocompleteResponseDto[]> {
+    return this.commonFind(autocompleteDto, this.prisma.order_status, { is_sale: true });
   }
 
   async findCustomers(autocompleteDto: AutocompleteDto): Promise<AutocompleteResponseDto[]> {

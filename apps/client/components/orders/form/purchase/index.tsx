@@ -88,7 +88,7 @@ function PurchaseForm({
 
   return (
     <>
-      <BasicDetails formRepresentation={formRepresentation} disabled={disabled} setValue={setValue} />
+      <BasicDetails type="purchase" formRepresentation={formRepresentation} disabled={disabled} setValue={setValue} />
       <Divider sx={{ mx: '1.5rem' }} />
       <CardContent sx={{ display: 'flex', flexDirection: isDesktop ? 'row' : 'column' }}>
         <Box sx={{ flex: 1 }}>
