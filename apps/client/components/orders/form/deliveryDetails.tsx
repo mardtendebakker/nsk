@@ -1,5 +1,5 @@
 import { Box, Grid, Typography } from '@mui/material';
-import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { DesktopDateTimePicker } from '@mui/x-date-pickers';
 import useTranslation from '../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../hooks/useForm';
 import BaseTextField from '../../input/textField';
@@ -31,11 +31,11 @@ export default function DeliveryDetails({
         sx={{ flexDirection: 'column' }}
       >
         <Grid sx={{ display: 'flex', flexDirection: 'column' }} item>
-          <DesktopDatePicker
+          <DesktopDateTimePicker
             disabled={disabled}
             onChange={(value) => setValue({ field: 'deliveryDate', value })}
             value={formRepresentation.deliveryDate.value || null}
-            inputFormat="yyyy/MM/dd"
+            inputFormat="yyyy/MM/dd HH:mm"
             label={trans('deliveryDate')}
             renderInput={(params) => (
               <BaseTextField
