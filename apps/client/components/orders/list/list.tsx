@@ -91,19 +91,19 @@ function Company({ company, type }: { company: CompanyModel, type: OrderType }) 
   );
 }
 
-function Supplier({ supplier }: { supplier: ACompany }) {
+function Partner({ partner }: { partner: ACompany }) {
   let tooltip = '';
 
-  if (supplier.street) {
-    tooltip += `${supplier?.street}\n`;
+  if (partner.street) {
+    tooltip += `${partner?.street}\n`;
   }
 
-  if (supplier.zip) {
-    tooltip += `${supplier?.zip} `;
+  if (partner.zip) {
+    tooltip += `${partner?.zip} `;
   }
 
-  if (supplier.city) {
-    tooltip += supplier.city;
+  if (partner.city) {
+    tooltip += partner.city;
   }
 
   return (
@@ -113,9 +113,9 @@ function Supplier({ supplier }: { supplier: ACompany }) {
       </Box>
     ) : undefined}
     >
-      <Box sx={{ textDecoration: tooltip ? 'underline' : undefined, display: 'inline' }}>
-        {supplier?.name || '--'}
-      </Box>
+      <Link href={CONTACTS_CUSTOMERS_EDIT.replace('[id]', partner.id)} style={{ color: 'unset' }}>
+        {partner?.name || '--'}
+      </Link>
     </Tooltip>
   );
 }
@@ -223,7 +223,7 @@ export default function List({
                 <Company company={company} type={type} />
               </TableCell>
               <TableCell>
-                { company?.acompany ? <Supplier supplier={company?.acompany} /> : '--'}
+                { company?.acompany && <Partner partner={company.acompany} /> }
               </TableCell>
               <TableCell>
                 {order.order_status && (
