@@ -4,7 +4,7 @@ import {
 import { useEffect, useState } from 'react';
 import Search from '@mui/icons-material/Search';
 import {
-  addDays, addMinutes, areIntervalsOverlapping, differenceInMinutes, format, setHours, setMinutes, startOfWeek,
+  addDays, addMinutes, areIntervalsOverlapping, differenceInMinutes, format, setHours, setMinutes, setSeconds, startOfWeek,
 } from 'date-fns';
 import useTranslation from '../../hooks/useTranslation';
 import Event from './event';
@@ -99,8 +99,8 @@ export default function Logistics({ type }: { type: 'pickup' | 'delivery' }) {
       const overlappingLogisticServicesGroupLength = overlappingLogisticServicesGroup.length;
       for (let k = 0; k < overlappingLogisticServicesGroupLength; k++) {
         if (areIntervalsOverlapping(
-          { start: new Date(overlappingLogisticServicesGroup[k].logistic_date), end: addMinutes(new Date(overlappingLogisticServicesGroup[k].logistic_date), 30) },
-          { start: new Date(logisticServices[i].logistic_date), end: addMinutes(new Date(logisticServices[i].logistic_date), 30) },
+          { start: setSeconds(new Date(overlappingLogisticServicesGroup[k].logistic_date), 0), end: addMinutes(setSeconds(new Date(overlappingLogisticServicesGroup[k].logistic_date), 0), 30) },
+          { start: setSeconds(new Date(logisticServices[i].logistic_date), 0), end: addMinutes(setSeconds(new Date(logisticServices[i].logistic_date), 0), 30) },
           {
             inclusive: false,
           },
