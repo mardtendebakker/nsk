@@ -50,7 +50,7 @@ export default function Logistics({ type }: { type: 'pickup' | 'delivery' }) {
 
   useEffect(() => {
     setSelectedLogisticIds([0]);
-    call({ params: { startsAt: format(firstDate, 'yyyy-MM-dd'), endsAt: format(dates[4], 'yyyy-MM-dd') } });
+    call({ params: { startsAt: format(firstDate, 'yyyy-MM-dd'), endsAt: format(addDays(firstDate, 5), 'yyyy-MM-dd') } });
   }, [firstDate]);
 
   useEffect(() => {
