@@ -59,6 +59,8 @@ const translation = {
   accountVerificationMessage: 'Voer uw gebruikersnaam en de code in, die u per email heeft gekregen.',
   accountVerification: 'Account bevestiging',
   confirm: 'Bevestigen',
+  reminder: 'Herinnering',
+  productEditConfirmation: 'Vergeet niet de verkoopprijs te controleren.',
   code: 'Code',
   oldPassword: 'Oud Wachtwoord',
   newPassword: 'Nieuw paswoord',
