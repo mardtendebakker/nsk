@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   Table, TableBody, TableCell, TableHead, TableRow, Tooltip,
 } from '@mui/material';
@@ -37,6 +37,7 @@ export default function EditModal(
   const { call: callPut, performing: performingPut } = useAxios('put', STOCK_PRODUCTS_PATH.replace(':id', id), { showSuccessMessage: true });
 
   const { formRepresentation, setValue, validate } = useForm(useMemo(() => initFormState(product), [product]));
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   useEffect(() => {
     call().catch(onClose);
@@ -48,6 +49,8 @@ export default function EditModal(
     if (validate() && !canSubmit()) {
       return;
     }
+
+    setShowConfirmation(false);
 
     callPut({
       body: formRepresentationToBody(formRepresentation),
@@ -74,59 +77,60 @@ export default function EditModal(
   };
 
   return (
-    <ConfirmationDialog
-      open
-      title={<>{trans('editProduct')}</>}
-      onClose={onClose}
-      onConfirm={handleSave}
-      disabled={!canSubmit()}
-      content={(
-        <>
-          <form onSubmit={(e) => { e.preventDefault(); handleSave(); }}>
-            <Form
-              setValue={setValue}
-              formRepresentation={formRepresentation}
-              disabled={!canSubmit()}
-              onPrintBarcode={handlePrintBarcode}
-            />
-            <input type="submit" style={{ display: 'none' }} />
-          </form>
-          <Table size="small" sx={{ mt: '.5rem' }}>
-            <TableHead>
-              <TableRow>
-                <TableCell>
-                  {trans('orderNumber')}
-                </TableCell>
-                <TableCell>
-                  {trans('company')}
-                </TableCell>
-                <TableCell>
-                  {trans('orderDate')}
-                </TableCell>
-                <TableCell>
-                  {trans('status')}
-                </TableCell>
-                <TableCell>
-                  {trans('quantity')}
-                </TableCell>
-                <TableCell>
-                  {trans('actions')}
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {(product as Product)?.product_orders?.map(({ quantity, order }) => (
-                <TableRow key={order.id}>
+    <>
+      <ConfirmationDialog
+        open
+        title={<>{trans('editProduct')}</>}
+        onClose={onClose}
+        onConfirm={() => setShowConfirmation(true)}
+        disabled={!canSubmit()}
+        content={(
+          <>
+            <form onSubmit={(e) => { e.preventDefault(); setShowConfirmation(true); }}>
+              <Form
+                setValue={setValue}
+                formRepresentation={formRepresentation}
+                disabled={!canSubmit()}
+                onPrintBarcode={handlePrintBarcode}
+              />
+              <input type="submit" style={{ display: 'none' }} />
+            </form>
+            <Table size="small" sx={{ mt: '.5rem' }}>
+              <TableHead>
+                <TableRow>
                   <TableCell>
-                    {order.discr == 'p' && (
+                    {trans('orderNumber')}
+                  </TableCell>
+                  <TableCell>
+                    {trans('company')}
+                  </TableCell>
+                  <TableCell>
+                    {trans('orderDate')}
+                  </TableCell>
+                  <TableCell>
+                    {trans('status')}
+                  </TableCell>
+                  <TableCell>
+                    {trans('quantity')}
+                  </TableCell>
+                  <TableCell>
+                    {trans('actions')}
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {(product as Product)?.product_orders?.map(({ quantity, order }) => (
+                  <TableRow key={order.id}>
+                    <TableCell>
+                      {order.discr == 'p' && (
                       <InputOutlinedIcon sx={{
                         color: (theme) => theme.palette.text.secondary,
                         mr: '1.5rem',
                         verticalAlign: 'middle',
                       }}
                       />
-                    )}
-                    {order.discr == 's' && (
+                      )}
+                      {order.discr == 's' && (
                       <OutputOutlinedIcon
                         sx={{
                           color: (theme) => theme.palette.text.secondary,
@@ -134,35 +138,43 @@ export default function EditModal(
                           verticalAlign: 'middle',
                         }}
                       />
-                    )}
-                    {order.order_nr}
-                  </TableCell>
-                  <TableCell>
-                    {order.company}
-                  </TableCell>
-                  <TableCell>
-                    {format(new Date(order.order_date), 'yyyy/MM/dd')}
-                  </TableCell>
-                  <TableCell>
-                    {order.status}
-                  </TableCell>
-                  <TableCell>
-                    {quantity}
-                  </TableCell>
-                  <TableCell>
-                    <Tooltip title={trans('showOrder')}>
-                      <Link href={editOrderUrl(order)} style={{ color: 'unset' }}>
-                        <Visibility sx={{ color: (theme) => theme.palette.text.secondary }} />
-                      </Link>
-                    </Tooltip>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </>
+                      )}
+                      {order.order_nr}
+                    </TableCell>
+                    <TableCell>
+                      {order.company}
+                    </TableCell>
+                    <TableCell>
+                      {format(new Date(order.order_date), 'yyyy/MM/dd')}
+                    </TableCell>
+                    <TableCell>
+                      {order.status}
+                    </TableCell>
+                    <TableCell>
+                      {quantity}
+                    </TableCell>
+                    <TableCell>
+                      <Tooltip title={trans('showOrder')}>
+                        <Link href={editOrderUrl(order)} style={{ color: 'unset' }}>
+                          <Visibility sx={{ color: (theme) => theme.palette.text.secondary }} />
+                        </Link>
+                      </Tooltip>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </>
       )}
-    />
+      />
+      <ConfirmationDialog
+        open={showConfirmation}
+        title={<>{trans('reminder')}</>}
+        content={<>{trans('productEditConfirmation')}</>}
+        onConfirm={handleSave}
+        onClose={() => setShowConfirmation(false)}
+      />
+    </>
   );
 }
 

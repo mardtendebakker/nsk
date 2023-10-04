@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import useAxios from '../../../hooks/useAxios';
 import useTranslation from '../../../hooks/useTranslation';
 import useForm, { FormRepresentation } from '../../../hooks/useForm';
@@ -87,6 +88,7 @@ export default function CreateModal({ onClose, onSubmit, additionalPayloadData }
 }) {
   const { trans } = useTranslation();
   const { formRepresentation, setValue, validate } = useForm(formState);
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   const { call, performing } = useAxios('post', STOCK_PRODUCTS_PATH.replace(':id', ''), { showSuccessMessage: true, withProgressBar: true });
 
@@ -108,19 +110,28 @@ export default function CreateModal({ onClose, onSubmit, additionalPayloadData }
   };
 
   return (
-    <ConfirmationDialog
-      open
-      title={<>{trans('createProduct')}</>}
-      onClose={onClose}
-      onConfirm={handleSave}
-      disabled={performing}
-      content={(
-        <form onSubmit={(e) => { e.preventDefault(); handleSave(); }}>
-          <Form setValue={setValue} formRepresentation={formRepresentation} disabled={performing} />
-          <input type="submit" style={{ display: 'none' }} />
-        </form>
+    <>
+      <ConfirmationDialog
+        open
+        title={<>{trans('createProduct')}</>}
+        onClose={onClose}
+        onConfirm={() => setShowConfirmation(true)}
+        disabled={performing}
+        content={(
+          <form onSubmit={(e) => { e.preventDefault(); setShowConfirmation(true); }}>
+            <Form setValue={setValue} formRepresentation={formRepresentation} disabled={performing} />
+            <input type="submit" style={{ display: 'none' }} />
+          </form>
       )}
-    />
+      />
+      <ConfirmationDialog
+        open={showConfirmation}
+        title={<>{trans('reminder')}</>}
+        content={<>{trans('productEditConfirmation')}</>}
+        onConfirm={handleSave}
+        onClose={() => setShowConfirmation(false)}
+      />
+    </>
   );
 }
 
