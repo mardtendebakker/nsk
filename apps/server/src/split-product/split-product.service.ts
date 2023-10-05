@@ -47,7 +47,7 @@ export class SplitProductService {
   async individualizeTheWholeStock(id: number, splitDto: SplitDto) {
     const { status, newSku } = splitDto;
     const product = await this.productService.findOneRelation(id);
-    const processedProduct = await this.productService.processStock(product);
+    const processedProduct = this.productService.processStock(product);
 
     const quantity = processedProduct.stock - 1;
     const individualize = true;
@@ -64,7 +64,7 @@ export class SplitProductService {
   async individualizeTheWholeBundle(id: number, splitDto: SplitDto) {
     const { status, newSku } = splitDto;
     const product = await this.productService.findOneRelation(id);
-    const processedProduct = await this.productService.processStock(product);
+    const processedProduct = this.productService.processStock(product);
 
     const quantity = processedProduct.purch - 1;
     const individualize = true;

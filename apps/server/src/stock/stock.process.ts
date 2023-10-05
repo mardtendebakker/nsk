@@ -1,7 +1,6 @@
-import { Prisma, aservice, product, product_order, product_type_task } from "@prisma/client";
+import { aservice, product, product_order, product_type_task } from "@prisma/client";
 import { AttributeType } from "../attribute/enum/attribute-type.enum";
 import { AOrderDiscrimination } from "../aorder/types/aorder-discrimination.enum";
-import { StockRepository } from "./stock.repository";
 import { AServiceStatus } from "../aservice/enum/aservice-status.enum";
 import { ProductRelation } from "./types/product-relation";
 import { ProcessedTask } from "./dto/processed-task.dto";
@@ -30,8 +29,8 @@ export class StockProcess {
   private productTypeTasks: product_type_task[];
   private rest: Partial<product>;
 
+  private attributedProducts: Pick<product, 'price'>[];
   private processedTasks: ProcessedTask[];
-  private attributedQuantity: number = null;
   private quantitySold: number = null;
   private quantityPurchased: number = null;
   private quantitySaleable: number = null;
@@ -40,9 +39,7 @@ export class StockProcess {
   private splittable: boolean;
 
   constructor(
-    private readonly repository: StockRepository,
     private readonly product: ProductRelation,
-    private readonly productSelect: Prisma.productSelect,
     private readonly orderId?: number,
   ) {
     this.init();
@@ -55,8 +52,6 @@ export class StockProcess {
       product_status,
       entity_status,
       location,
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      product_attribute_product_attribute_value_product_idToproduct,
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       product_attribute_product_attribute_product_idToproduct,
       ...rest
@@ -103,13 +98,14 @@ export class StockProcess {
     this.isSaleAndRepair = this.productSaleOrders.length == 1 && this.productSaleOrders?.[0]['aorder']?.repair?.id;
   }
   
-  public async run(): Promise<ProcessedStock> {
+  public run(): ProcessedStock {
     this.processedTasks = this.processTasks();
-    this.quantitySold = await this.getQuantitySold();
+    this.attributedProducts = this.getAttributedProducts();
+    this.quantitySold = this.getQuantitySold();
     this.quantityPurchased = this.getQuantityPurchased();
-    this.quantitySaleable = await this.getQuantitySaleable();
-    this.quantityInStock = await this.getQuantityInStock();
-    this.quantityOnHold = await this.getQuantityOnHold();
+    this.quantitySaleable = this.getQuantitySaleable();
+    this.quantityInStock = this.getQuantityInStock();
+    this.quantityOnHold = this.getQuantityOnHold();
     this.splittable = this.quantityPurchased > 1;
 
     const result: ProcessedStock = {
@@ -132,12 +128,29 @@ export class StockProcess {
       order_nr: this.orderNumber,
       tasks: this.processedTasks,
       splittable: this.splittable,
+      attributedProducts: this.attributedProducts,
       product_orders: this.product_orders,
       ...(this.orderId && {product_order: this.product_order}),
       ...(this.orderId && {services: this.aservices}),
     };
     
     return result;
+  }
+
+  private getAttributedProducts() {
+    const { product_attribute_product_attribute_product_idToproduct: product_attributes } = this.product;
+    const attributed_products = [];
+    for (const product_attribute of product_attributes) {
+      if (product_attribute['attribute'].type == AttributeType.TYPE_PRODUCT &&
+        product_attribute['product_product_attribute_value_product_idToproduct']) {
+        attributed_products.push(
+          product_attribute[
+            'product_product_attribute_value_product_idToproduct'
+          ],
+        );
+      }
+    }
+    return attributed_products;
   }
 
   private processTasks(): ProcessedTask[] {
@@ -158,54 +171,11 @@ export class StockProcess {
     });
   }
 
-  private getAttributedQuantity() {
-    const { product_attribute_product_attribute_value_product_idToproduct: product_attributeds } = this.product;
-    const product_attributed = product_attributeds[0];
-    let attributedQuantity = 1;
-    
-    if (product_attributed['attribute'].type == AttributeType.TYPE_PRODUCT &&
-      product_attributed['attribute'].has_quantity &&
-      product_attributed.quantity != null) {
-        attributedQuantity = product_attributed.quantity;
-    }
-
-    this.attributedQuantity = attributedQuantity;
-    return this.attributedQuantity;
-  }
-
-  private async getQuantitySold() {
-    const { product_attribute_product_attribute_value_product_idToproduct: product_attributeds } = this.product;
+  private getQuantitySold() {
     let quantitySold = 0;
 
     if (this.isSaleable) {
-      
       quantitySold += this.productSaleOrders.reduce((acc, cur) => acc + cur.quantity, 0);
-      
-      for (let i = 0; i < product_attributeds.length; i++) {
-
-        const product_attributed = product_attributeds[i];
-        const quantityPerUnit = this.getAttributedQuantity() || 1;
-        let parentProductQuantitySold = 0;
-
-        if (product_attributed['product_product_attribute_product_idToproduct'].id) {
-          
-          const newProduct = await this.repository.findOneSelect({
-            id: product_attributed['product_product_attribute_product_idToproduct'].id,
-            select: this.productSelect,
-          });
-
-          const newProductProcess = new StockProcess(
-            this.repository,
-            newProduct,
-            this.productSelect,
-            this.orderId
-          );
-
-          parentProductQuantitySold = await newProductProcess.getQuantitySold() || 0;
-
-        }
-        quantitySold += quantityPerUnit * parentProductQuantitySold;
-      }
     }
     
     this.quantitySold = quantitySold;
@@ -221,20 +191,20 @@ export class StockProcess {
     return this.quantityPurchased;
   }
 
-  private async getQuantitySaleable() {
+  private getQuantitySaleable() {
     let quantitySaleable = 0;
 
     if (this.isSaleable) {
       quantitySaleable = this.getQuantityPurchased();
     }
 
-    this.quantitySaleable = quantitySaleable - this.quantitySold ?? await this.getQuantitySold();
+    this.quantitySaleable = quantitySaleable - this.quantitySold ?? this.getQuantitySold();
     return this.quantitySaleable;
   }
 
-  private async getQuantityInStock() {
+  private getQuantityInStock() {
     const isStock = this.product?.product_status?.is_stock;
-    const quantitySold = this.quantitySold ?? await this.getQuantitySold();
+    const quantitySold = this.quantitySold ?? this.getQuantitySold();
     let quantityInStock = 0;
 
     if (isStock) {
@@ -249,9 +219,9 @@ export class StockProcess {
     return this.quantityInStock;
   }
 
-  private async getQuantityOnHold() {
-    const quantityInStock = this.quantityInStock ?? await this.getQuantityInStock();
-    const quantitySaleable = this.quantitySaleable ?? await this.getQuantitySaleable();
+  private getQuantityOnHold() {
+    const quantityInStock = this.quantityInStock ?? this.getQuantityInStock();
+    const quantitySaleable = this.quantitySaleable ?? this.getQuantitySaleable();
 
     this.quantityOnHold = quantityInStock - quantitySaleable > 0 ? quantityInStock - quantitySaleable : 0;
     return this.quantityOnHold;
