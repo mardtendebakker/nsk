@@ -37,9 +37,8 @@ export class StockService {
     protected readonly entityStatus: EntityStatus,
   ) {}
 
-  async processStock(product: ProductRelation, orderId?: number): Promise<ProcessedStock> {
-    const productSelect = this.processSelect();
-    const processProdcut = new StockProcess(this.repository, product, productSelect, orderId);
+  processStock(product: ProductRelation, orderId?: number): ProcessedStock {
+    const processProdcut = new StockProcess(product, orderId);
     return processProdcut.run();
   }
 
@@ -88,9 +87,9 @@ export class StockService {
       orderBy: productOrderBy,
     });
 
-    const data = await Promise.all(result.data.map(async product => {
+    const data = result.data.map(product => {
       return this.processStock(product, query.orderId);
-    }));
+    });
 
     return {
       count: result.count,
@@ -389,33 +388,26 @@ export class StockService {
 
     const attributeSelect: Prisma.attributeSelect = {
       name: true,
+      price: true,
       type: true,
       has_quantity: true,
       attribute_option: true,
     };
 
-    const ParrentProductSelect: Prisma.productSelect = {
-      id: true,
-    };
-
-    const productAttributedSelect: Prisma.product_attributeSelect = {
-      quantity: true,
-      product_product_attribute_product_idToproduct: {
-        select: ParrentProductSelect,
-      },
-      attribute: {
-        select: attributeSelect,
-      },
-      product_product_attribute_value_product_idToproduct: true,
+    const productAttributedSelect: Prisma.productSelect = {
+      price: true,
     };
 
     const productAttributeSelect: Prisma.product_attributeSelect = {
+      attribute: {
+        select: attributeSelect,
+      },
       attribute_id: true,
       value: true,
       value_product_id: true,
       quantity: true,
-      attribute: {
-        select: attributeSelect,
+      product_product_attribute_value_product_idToproduct: {
+        select: productAttributedSelect,
       },
     };
 
@@ -444,9 +436,6 @@ export class StockService {
       },
       product_order: {
         select: productOrderSelect,
-      },
-      product_attribute_product_attribute_value_product_idToproduct: {
-        select: productAttributedSelect,
       },
       product_attribute_product_attribute_product_idToproduct: {
         select: productAttributeSelect,

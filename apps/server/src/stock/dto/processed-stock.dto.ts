@@ -51,6 +51,9 @@ export class ProcessedStock extends PickType(ProductEntity, [
   
     @ApiProperty()
     splittable: boolean;
+
+    @ApiPropertyOptional()
+    attributedProducts?: Pick<ProductEntity, 'price'>[];
   
     @ApiPropertyOptional()
     product_order?: ProductOrderPayload;
