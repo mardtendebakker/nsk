@@ -10,11 +10,10 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import ReactMapGL, {
   Marker, NavigationControl, Source, Layer,
 } from 'react-map-gl';
-import { useRouter } from 'next/router';
 import { format } from 'date-fns';
 import { LogisticServiceListItem } from '../../utils/axios/models/logistic';
 import useTranslation from '../../hooks/useTranslation';
-import { ORDERS_PURCHASES_EDIT } from '../../utils/routes';
+import { ORDERS_PURCHASES_EDIT, ORDERS_SALES_EDIT } from '../../utils/routes';
 import Select from '../memoizedInput/select';
 import { fetchWayForLogisticServices, Way, fetchPolylineInfo } from '../../utils/map';
 
@@ -59,13 +58,18 @@ const getMapStyle = (url) => fetch(url)
     return mapStyle;
   });
 
-export default function SideMap({ onClose, logisticService, logisticServices }: {
+export default function SideMap({
+  type,
+  onClose,
+  logisticService,
+  logisticServices,
+}: {
+  type: 'pickup' | 'delivery',
   onClose: () => void,
   logisticService: LogisticServiceListItem,
   logisticServices: LogisticServiceListItem[]
 }) {
   const { trans } = useTranslation();
-  const router = useRouter();
 
   const [mapStyle, setMapStyle] = useState(initialMapStyle);
   const [viewport, setViewport] = useState(initViewport);
@@ -299,7 +303,12 @@ export default function SideMap({ onClose, logisticService, logisticServices }: 
               </Typography>
             </Box>
           </Box>
-          <Button size="small" variant="contained" sx={{ width: '100%', mt: '1rem' }} onClick={() => router.push(ORDERS_PURCHASES_EDIT.replace('[id]', logisticService.order.id.toString()))}>
+          <Button
+            size="small"
+            variant="contained"
+            sx={{ width: '100%', mt: '1rem' }}
+            onClick={() => window.open(type == 'delivery' ? ORDERS_SALES_EDIT : ORDERS_PURCHASES_EDIT.replace('[id]', logisticService.order.id.toString()), '_blank')}
+          >
             <VisibilityOutlined />
             {' '}
             {trans('viewOrder')}
