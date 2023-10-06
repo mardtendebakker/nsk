@@ -190,12 +190,12 @@ export default function Logistics({ type }: { type: 'pickup' | 'delivery' }) {
                             <Event
                               type={type}
                               onClick={() => {
-                                if (logisticService.logistic) {
-                                  setClickedLogisticService({
-                                    logisticService,
-                                    allLogisticServices: thisDayLogisticServices.flat().filter((element) => element.logistic && (element.logistic.id == logisticService.logistic.id)),
-                                  });
-                                }
+                                setClickedLogisticService({
+                                  logisticService,
+                                  allLogisticServices: logisticService.logistic
+                                    ? thisDayLogisticServices.flat().filter((element) => element.logistic && (element.logistic.id == logisticService.logistic.id))
+                                    : [],
+                                });
                               }}
                               logisticService={logisticService}
                               key={logisticService.id}

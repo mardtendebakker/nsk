@@ -31,7 +31,7 @@ export default function Event({
     <Box
       onClick={onClick}
       sx={{
-        cursor: logisticService.logistic ? 'pointer' : 'not-allowed',
+        cursor: 'pointer',
         top,
         height,
         bgcolor: 'white',
