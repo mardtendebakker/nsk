@@ -87,9 +87,9 @@ export default function SideMap({ onClose, logisticService, logisticServices }: 
     const clonedLogisticServices = structuredClone(logisticServices);
 
     clonedLogisticServices.sort((a: LogisticServiceListItem, b: LogisticServiceListItem) => {
-      if (a.logistic_date < b.logistic_date) {
+      if (a.event_date < b.event_date) {
         return -1;
-      } if (a.logistic_date > b.logistic_date) {
+      } if (a.event_date > b.event_date) {
         return 1;
       }
 
