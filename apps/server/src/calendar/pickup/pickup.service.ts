@@ -64,12 +64,12 @@ export class PickupService {
         ...prickupRest
       }) => ({
         ...prickupRest,
-        logistic_date: real_pickup_date,
+        event_date: real_pickup_date,
+        event_title: product_order.map(({ product }) => product)?.[0]?.name,
         order: { 
           id,
           order_nr,
           order_status,
-          products: product_order.map(({ product }) => product),
           supplier: acompany_aorder_supplier_idToacompany,
         },
         logistic: fos_user,

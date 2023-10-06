@@ -1,6 +1,7 @@
 export interface LogisticServiceListItem {
   id: number,
-  logistic_date:string,
+  event_date:string,
+  event_title:string,
   order:Order,
   logistic:Logistic,
 }
@@ -35,12 +36,6 @@ export interface Order {
   id:number,
   order_nr:string,
   order_status:OrderStatus,
-  products:Product[],
   supplier:Supplier,
   customer:Customer,
-}
-
-export interface Product {
-  id:number,
-  name:string
 }

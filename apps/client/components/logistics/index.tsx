@@ -11,7 +11,7 @@ import Event from './event';
 import useAxios from '../../hooks/useAxios';
 import { CALENDAR_PICKUPS_PATH, CALENDAR_DELIVERIES_PATH } from '../../utils/axios';
 import TextField from '../input/textField';
-import { Logistic, Order, LogisticServiceListItem } from '../../utils/axios/models/logistic';
+import { Logistic, LogisticServiceListItem } from '../../utils/axios/models/logistic';
 import SideMap from './sideMap';
 import Pagination from './pagination';
 import LogisticsList from './logisticsList';
@@ -79,12 +79,12 @@ export default function Logistics({ type }: { type: 'pickup' | 'delivery' }) {
     }
   };
 
-  const formatLogisticServiceName = (order: Order) => order?.products[0]?.name || trans(type);
+  const formatLogisticServiceName = (logisticService: LogisticServiceListItem) => logisticService.event_title || trans(type);
 
-  const logisticServices: LogisticServiceListItem[] = data.filter(({ logistic, order }) => {
-    const selected = selectedLogisticIds[0] === 0 || selectedLogisticIds.includes(logistic?.id);
+  const logisticServices: LogisticServiceListItem[] = data.filter((logisticService: LogisticServiceListItem) => {
+    const selected = selectedLogisticIds[0] === 0 || selectedLogisticIds.includes(logisticService.logistic?.id);
 
-    return selected && (formatLogisticServiceName(order)?.includes(search) || order.order_nr.includes(search));
+    return selected && (formatLogisticServiceName(logisticService)?.includes(search) || logisticService.order.order_nr.includes(search));
   });
 
   const overlappingLogisticServices: LogisticServiceListItem[][] = [];
@@ -99,8 +99,8 @@ export default function Logistics({ type }: { type: 'pickup' | 'delivery' }) {
       const overlappingLogisticServicesGroupLength = overlappingLogisticServicesGroup.length;
       for (let k = 0; k < overlappingLogisticServicesGroupLength; k++) {
         if (areIntervalsOverlapping(
-          { start: setSeconds(new Date(overlappingLogisticServicesGroup[k].logistic_date), 0), end: addMinutes(setSeconds(new Date(overlappingLogisticServicesGroup[k].logistic_date), 0), 30) },
-          { start: setSeconds(new Date(logisticServices[i].logistic_date), 0), end: addMinutes(setSeconds(new Date(logisticServices[i].logistic_date), 0), 30) },
+          { start: setSeconds(new Date(overlappingLogisticServicesGroup[k].event_date), 0), end: addMinutes(setSeconds(new Date(overlappingLogisticServicesGroup[k].event_date), 0), 30) },
+          { start: setSeconds(new Date(logisticServices[i].event_date), 0), end: addMinutes(setSeconds(new Date(logisticServices[i].event_date), 0), 30) },
           {
             inclusive: false,
           },
@@ -171,8 +171,8 @@ export default function Logistics({ type }: { type: 'pickup' | 'delivery' }) {
                       const thisDayLogisticServices: LogisticServiceListItem[][] = [];
                       const overlappingLogisticServicesLength = overlappingLogisticServices.length;
                       for (let i = 0; i < overlappingLogisticServicesLength; i++) {
-                        thisDayLogisticServices.push(overlappingLogisticServices[i].filter(({ logistic_date }) => {
-                          const realLogisticServiceDate = new Date(logistic_date);
+                        thisDayLogisticServices.push(overlappingLogisticServices[i].filter(({ event_date }) => {
+                          const realLogisticServiceDate = new Date(event_date);
                           return format(realLogisticServiceDate, 'Y-MM-dd') == format(date, 'Y-MM-dd');
                         }));
                       }
@@ -184,7 +184,7 @@ export default function Logistics({ type }: { type: 'pickup' | 'delivery' }) {
                         >
                           {
                         thisDayLogisticServices.map((elements) => elements.map((logisticService, i) => {
-                          const realLogisticServiceDate = new Date(logisticService.logistic_date);
+                          const realLogisticServiceDate = new Date(logisticService.event_date);
 
                           return (
                             <Event
