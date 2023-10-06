@@ -53,12 +53,12 @@ export class DeliveryService {
         acompany_aorder_customer_idToacompany,
       }) => ({
         id,
-        logistic_date: delivery_date,
+        event_date: delivery_date,
+        event_title: product_order.map(({ product }) => product)?.[0]?.name,
         order: {
           id,
           order_nr,
           order_status,
-          products: product_order.map(({ product }) => product),
           customer: acompany_aorder_customer_idToacompany,
         },
         logistic: null,

@@ -3,14 +3,6 @@ import { OrderStatusEntity } from '../../admin/order-status/entities/order-statu
 import { FindLogisticResponeDto } from '../../logistic/dto/find-logistic-response.dto';
 import { CompanyEntity } from '../../company/entities/company.entity';
 
-class CalendarProduct {
-  @ApiProperty()
-  id: number;
-
-  @ApiProperty()
-  name: string;
-}
-
 class CalendarOrder {
   @ApiProperty()
   id: number;
@@ -20,9 +12,6 @@ class CalendarOrder {
 
   @ApiProperty()
   order_status: OrderStatusEntity;
-
-  @ApiProperty()
-  products: CalendarProduct[];
 
   @ApiProperty()
   supplier?: CompanyEntity;
@@ -36,7 +25,10 @@ export class FindCalendarResponeDto {
   id: number;
   
   @ApiProperty()
-  logistic_date: Date;
+  event_date: Date;
+  
+  @ApiProperty()
+  event_title: string;
 
   @ApiProperty()
   order: CalendarOrder;

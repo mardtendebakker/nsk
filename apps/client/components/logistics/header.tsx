@@ -29,7 +29,7 @@ export default function Header() {
     }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
-        <Typography variant="h4" sx={{ mr: '.5rem', mb: '.5rem' }}>{trans('stock')}</Typography>
+        <Typography variant="h4" sx={{ mr: '.5rem', mb: '.5rem' }}>{trans('logistics')}</Typography>
         {isDesktop && ITEMS.map(({ text, href, active }) => (
           <HeaderItem text={text} active={active} href={href} key={text} />
         ))}

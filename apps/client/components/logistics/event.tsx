@@ -1,6 +1,6 @@
 import { Box, Tooltip, Typography } from '@mui/material';
 import { format } from 'date-fns';
-import { Order, LogisticServiceListItem } from '../../utils/axios/models/logistic';
+import { LogisticServiceListItem } from '../../utils/axios/models/logistic';
 import useTranslation from '../../hooks/useTranslation';
 
 export default function Event({
@@ -15,17 +15,16 @@ export default function Event({
   onClick: () => void,
 }) {
   const { trans } = useTranslation();
-  const formatLogisticServiceName = (order: Order) => order?.products[0]?.name || trans(type);
 
   let title = '';
 
-  if (logisticService.logistic_date) {
-    const realLogisticServiceDate = new Date(logisticService.logistic_date);
+  if (logisticService.event_date) {
+    const realLogisticServiceDate = new Date(logisticService.event_date);
     title = format(realLogisticServiceDate, 'HH:mm');
   }
 
   const color = logisticService?.order?.order_status?.color;
-  const body = formatLogisticServiceName(logisticService.order);
+  const body = logisticService.event_title || trans(type);
   const username = logisticService.logistic?.username || '';
 
   return (
