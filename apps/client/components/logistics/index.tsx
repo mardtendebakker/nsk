@@ -6,15 +6,18 @@ import Search from '@mui/icons-material/Search';
 import {
   addDays, addMinutes, areIntervalsOverlapping, differenceInMinutes, format, setHours, setMinutes, setSeconds, startOfWeek,
 } from 'date-fns';
+import { NextRouter, useRouter } from 'next/router';
 import useTranslation from '../../hooks/useTranslation';
 import Event from './event';
-import useAxios from '../../hooks/useAxios';
+import useAxios, { Call } from '../../hooks/useAxios';
 import { CALENDAR_PICKUPS_PATH, CALENDAR_DELIVERIES_PATH } from '../../utils/axios';
 import TextField from '../input/textField';
 import { Logistic, LogisticServiceListItem } from '../../utils/axios/models/logistic';
 import SideMap from './sideMap';
 import Pagination from './pagination';
 import LogisticsList from './logisticsList';
+import pushURLParams from '../../utils/pushURLParams';
+import { getQueryParam } from '../../utils/location';
 
 const hours = [];
 const HOURS_PER_DAYS = 10;
@@ -26,11 +29,46 @@ for (let i = 0; i < HOURS_PER_DAYS; i++) {
   hours.push(`${STARTING_HOUR + i}:30`);
 }
 
+const refreshList = ({
+  newDate,
+  router,
+  call,
+}: {
+  newDate: Date,
+  router: NextRouter,
+  call: Call,
+}) => {
+  const params = new URLSearchParams();
+  params.append('date', newDate.toISOString());
+  call({
+    params: {
+      startsAt: format(newDate, 'yyyy-MM-dd'),
+      endsAt: format(addDays(newDate, 5), 'yyyy-MM-dd'),
+    },
+  }).then(() => {
+    pushURLParams({ params, router });
+  });
+};
+
 export default function Logistics({ type }: { type: 'pickup' | 'delivery' }) {
   const AJAX_PATH = type == 'pickup' ? CALENDAR_PICKUPS_PATH : CALENDAR_DELIVERIES_PATH;
 
-  const { trans, locale } = useTranslation();
-  const [firstDate, setFirstDate] = useState<Date>(setHours(setMinutes(startOfWeek(new Date(), { weekStartsOn: 1 }), 0), STARTING_HOUR));
+  const { trans } = useTranslation();
+  const router = useRouter();
+
+  const [firstDate, setFirstDate] = useState<Date>(
+    setHours(
+      setMinutes(
+        startOfWeek(
+          new Date(getQueryParam('date', new Date().toISOString())),
+          { weekStartsOn: 1 },
+        ),
+        0,
+      ),
+      STARTING_HOUR,
+    ),
+  );
+
   const [selectedLogisticIds, setSelectedLogisticIds] = useState<number[]>([0]);
   const [search, setSearch] = useState('');
   const [clickedLogisticService, setClickedLogisticService] = useState<{
@@ -50,12 +88,8 @@ export default function Logistics({ type }: { type: 'pickup' | 'delivery' }) {
 
   useEffect(() => {
     setSelectedLogisticIds([0]);
-    call({ params: { startsAt: format(firstDate, 'yyyy-MM-dd'), endsAt: format(addDays(firstDate, 5), 'yyyy-MM-dd') } });
-  }, [firstDate]);
-
-  useEffect(() => {
-    setFirstDate(new Date(firstDate));
-  }, [locale]);
+    refreshList({ newDate: firstDate, router, call });
+  }, [firstDate.toISOString()]);
 
   const logistics: Logistic[] = [];
 
