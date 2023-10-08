@@ -238,6 +238,7 @@ export default function Logistics({ type }: { type: 'pickup' | 'delivery' }) {
       </Box>
       { clickedLogisticService && (
       <SideMap
+        type={type}
         logisticServices={clickedLogisticService.allLogisticServices}
         logisticService={clickedLogisticService.logisticService}
         onClose={() => setClickedLogisticService(undefined)}
