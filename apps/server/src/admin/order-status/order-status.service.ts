@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client';
 import { FindManyDto } from './dto/find-many.dto';
 import { OrderStatusRepository } from './order-status.repository';
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { UpdateOrderStatusDto } from './dto/update-order-status.dto';
 import { CreateOrderStatusDto } from './dto/create-order-status.dto';
 
@@ -41,9 +41,17 @@ export class OrderStatusService {
   }
 
   async delete(id: number) {
-    return this.repository.delete({
-      where: { id },
-    });
+    try {
+      return await this.repository.delete({
+        where: { id },
+      });
+    } catch (err) {
+      if (err.code === 'P2003') {
+        throw new ConflictException(err.message);
+      }
+
+      throw err;
+    }
   }
 
   async findByNameOrCreate(createOrderStatusDto: CreateOrderStatusDto) {
