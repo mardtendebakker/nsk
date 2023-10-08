@@ -9,7 +9,7 @@ import { CreateOrderStatusDto } from './dto/create-order-status.dto';
 export class OrderStatusService {
   constructor(protected readonly repository: OrderStatusRepository) {}
 
-  findAll(query: FindManyDto) {
+  async findAll(query: FindManyDto) {
     return this.repository.findAll({
       ...query,
       where: {
@@ -27,16 +27,22 @@ export class OrderStatusService {
     return this.repository.findOne(params);
   }
 
-  update(id: number, updateOrderStatusDto: UpdateOrderStatusDto) {
+  async create(createOrderStatusDto: CreateOrderStatusDto) {
+    return this.repository.create({
+      data: createOrderStatusDto,
+    });
+  }
+
+  async update(id: number, updateOrderStatusDto: UpdateOrderStatusDto) {
     return this.repository.update({
       where: { id },
       data: { ...updateOrderStatusDto }
     });
   }
 
-  create(createOrderStatusDto: CreateOrderStatusDto) {
-    return this.repository.create({
-      data: createOrderStatusDto,
+  async delete(id: number) {
+    return this.repository.delete({
+      where: { id },
     });
   }
 
