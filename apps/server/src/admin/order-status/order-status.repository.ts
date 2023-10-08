@@ -35,12 +35,10 @@ export class OrderStatusRepository {
   }
 
   update(params: Prisma.order_statusUpdateArgs) {
-
     return this.prisma.order_status.update(params);
   }
 
   create(params: Prisma.order_statusCreateArgs) {
-
     return this.prisma.order_status.create(params);
   }
 }

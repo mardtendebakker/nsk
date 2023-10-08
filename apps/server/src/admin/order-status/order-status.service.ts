@@ -28,16 +28,16 @@ export class OrderStatusService {
   }
 
   update(id: number, updateOrderStatusDto: UpdateOrderStatusDto) {
-
     return this.repository.update({
       where: { id },
       data: { ...updateOrderStatusDto }
     });
   }
 
-  create(params: Prisma.order_statusCreateArgs) {
-
-    return this.repository.create(params);
+  create(createOrderStatusDto: CreateOrderStatusDto) {
+    return this.repository.create({
+      data: createOrderStatusDto,
+    });
   }
 
   async findByNameOrCreate(createOrderStatusDto: CreateOrderStatusDto) {
@@ -46,7 +46,7 @@ export class OrderStatusService {
     });
 
     if (!orderStatus) {
-      orderStatus = await this.create({ data: createOrderStatusDto });
+      orderStatus = await this.create(createOrderStatusDto);
     }
 
     return orderStatus;
