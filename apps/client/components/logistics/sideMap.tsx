@@ -87,6 +87,10 @@ export default function SideMap({
     setSelectedWay(way);
   };
 
+  const getCompanyOfWay = (way: Way) => (type === 'delivery'
+    ? way.logisticService.order.customer
+    : way.logisticService.order.supplier);
+
   async function setUp() {
     const clonedLogisticServices = structuredClone(logisticServices);
 
@@ -237,30 +241,30 @@ export default function SideMap({
             options={ways
               .filter((way: Way) => !!way.logisticService)
               .map((way: Way) => ({
-                title: type == 'delivery' ? way.logisticService.order.customer.name : way.logisticService.order.supplier.name,
+                title: getCompanyOfWay(way).name,
                 value: way.logisticService.id,
               }))}
           />
           {selectedWay?.logisticService && (
             <Box sx={{ mb: '.5rem', mt: '.5rem' }}>
               <Typography color="divider" variant="body1" sx={{ mb: '.5rem' }}>
-                {trans('supplierInfo')}
+                {trans(type == 'delivery' ? 'customerInfo' : 'supplierInfo')}
                 :
               </Typography>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <Avatar sx={{ mr: '1rem' }}>
                   <Typography variant="h5">
-                    {selectedWay.logisticService.order.supplier.name.charAt(0)?.toUpperCase()}
+                    {getCompanyOfWay(selectedWay).name.charAt(0)?.toUpperCase()}
                   </Typography>
                 </Avatar>
                 <Box>
                   <Typography variant="h5">
-                    {selectedWay.logisticService.order.supplier.name}
+                    {getCompanyOfWay(selectedWay).name}
                   </Typography>
-                  <Typography variant="body1">{selectedWay.logisticService.order.supplier.representative}</Typography>
+                  <Typography variant="body1">{getCompanyOfWay(selectedWay).representative}</Typography>
 
                   <Typography variant="body1" sx={{ justifySelf: 'flex-end' }}>
-                    {selectedWay.logisticService.order.supplier.phone}
+                    {getCompanyOfWay(selectedWay).phone}
                   </Typography>
                 </Box>
                 <Box sx={{ flex: 1, textAlign: 'end' }} />
