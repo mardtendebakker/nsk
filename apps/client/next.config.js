@@ -21,8 +21,14 @@ const nextConfig = {
       'https://api.myptv.com/maps/v1/vector-tiles/{z}/{x}/{y}',
     MYPTV_WAY_POINTS_URL:
       'https://api.myptv.com/routing/v1/routes?results=POLYLINE&options[trafficMode]=AVERAGE',
+    MYPTV_WAY_POINTS_SEARCH_PREFIX:
+      'waypoints',
     MYPTV_SEARCH_TEXT_URL:
       'https://api.myptv.com/geocoding/v1/locations/by-text?searchText=',
+    MYPTV_UNKNOWN_ADDRESS:
+      'Yacuiba Null Cañitas',
+    MYPTV_FULFILLED_STATUS:
+      'fulfilled',
   },
 };
 

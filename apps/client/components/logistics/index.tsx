@@ -88,7 +88,9 @@ export default function Logistics({ type }: { type: 'pickup' | 'delivery' }) {
 
   const formattedDataWithDefaultLogistic = data.map(({ logistic, ...rest }) => ({
     ...rest,
-    logistic: logistic || { id: 1, firstname: 'DEFAULT', lastname: 'CAR' },
+    logistic: logistic || {
+      id: 1, firstname: 'Anonymous', lastname: 'Driver', username: 'Unknown',
+    },
   }));
 
   useEffect(() => {
@@ -178,6 +180,7 @@ export default function Logistics({ type }: { type: 'pickup' | 'delivery' }) {
                   startAdornment: <Search sx={{ color: (theme) => theme.palette.grey[40] }} />,
                 }}
                 sx={{ width: '20rem' }}
+                name="logistics-search"
                 placeholder={trans('logisticsPage.search.placeholder')}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
