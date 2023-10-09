@@ -7,10 +7,12 @@ import { OrderStatus } from '../../../../../utils/axios/models/order';
 import useTranslation from '../../../../../hooks/useTranslation';
 import PaginatedTable from '../../../../paginatedTable';
 import TableCell from '../../../../tableCell';
+import Delete from '../../../../button/delete';
 
 export default function List({
   orderStatuses,
   onEdit,
+  onDelete,
   disabled,
   count,
   page,
@@ -19,6 +21,7 @@ export default function List({
   rowsPerPage,
 }: {
   onEdit: (id: number) => void,
+  onDelete: (id: number) => void,
   orderStatuses: OrderStatus[],
   count: number,
   page: number,
@@ -80,6 +83,7 @@ export default function List({
             </TableCell>
             <TableCell>
               <Edit onClick={() => onEdit(orderStatus.id)} disabled={disabled} />
+              <Delete onClick={() => onDelete(orderStatus.id)} disabled={disabled} tooltip />
             </TableCell>
           </TableRow>
         ))}

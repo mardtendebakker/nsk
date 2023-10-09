@@ -64,7 +64,7 @@ function PurchaseForm({
     return (
       <Box sx={{ position: 'relative' }} key={file}>
         <Box sx={{ right: '.5rem', top: 0, position: 'absolute' }}>
-          { onFileDelete && <Delete tooltip onDelete={() => onFileDelete(aFile)} disabled={disabled} />}
+          { onFileDelete && <Delete tooltip onClick={() => onFileDelete(aFile)} disabled={disabled} />}
         </Box>
         <Box
           onClick={() => window.open(file, '_blank')}
@@ -188,7 +188,7 @@ function PurchaseForm({
                             <a href={buildAFileLink(agreementAFile)} target="_blank" rel="noreferrer" style={{ margin: '.5rem' }}>
                               {agreementAFile.original_client_filename}
                             </a>
-                            {onFileDelete && <Delete tooltip onDelete={() => onFileDelete(agreementAFile)} disabled={disabled} />}
+                            {onFileDelete && <Delete tooltip onClick={() => onFileDelete(agreementAFile)} disabled={disabled} />}
                           </>
                         )
                         : '--'

@@ -67,7 +67,7 @@ export default function Row({
         </TableCell>
         <TableCell>
           <AddButton title={trans('addService')} onClick={onAddService} />
-          <Delete onDelete={() => onDeleteProduct(product.id)} tooltip />
+          <Delete onClick={() => onDeleteProduct(product.id)} tooltip />
         </TableCell>
       </TableRow>
       {product.services && (
@@ -123,7 +123,7 @@ export default function Row({
                       />
                     </TableCell>
                     <TableCell>
-                      <Delete onDelete={() => onDeleteService(service.id)} tooltip />
+                      <Delete onClick={() => onDeleteService(service.id)} tooltip />
                     </TableCell>
                   </TableRow>
                 ))}

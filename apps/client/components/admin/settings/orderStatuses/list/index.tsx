@@ -30,13 +30,24 @@ export default function ListContainer() {
     },
   );
 
+  const { call: callDelete, performing: performingDelete } = useAxios(
+    'delete',
+    null,
+    {
+      withProgressBar: true,
+      customStatusesMessages: {
+        409: trans('deleteUsedOrderStatusMessage'),
+      },
+    },
+  );
+
   useEffect(() => {
     refreshList({
       page, rowsPerPage, router, call, search,
     });
   }, [page, rowsPerPage]);
 
-  const disabled = () => performing;
+  const disabled = () => performing || performingDelete;
 
   const handleSearchChange = useCallback(debounce((value: string) => {
     setPage(1);
@@ -44,6 +55,13 @@ export default function ListContainer() {
       page: 1, rowsPerPage, router, call, search: value,
     });
   }), [rowsPerPage]);
+
+  const handleDelete = (id: number) => {
+    callDelete({ path: ORDER_STATUSES_PATH.replace(':id', id.toString()) })
+      .then(() => {
+        setPage(1);
+      });
+  };
 
   return (
     <Box>
@@ -59,7 +77,7 @@ export default function ListContainer() {
               setSearch(e.target.value);
               handleSearchChange(e.target.value);
             }}
-            value={search}
+            defaultValue={search}
             placeholder={trans('orderStatusesList.search.placeholder')}
           />
           <Button
@@ -79,6 +97,7 @@ export default function ListContainer() {
         count={count}
         page={page}
         onEdit={(id) => setEditOrderStatusId(id)}
+        onDelete={handleDelete}
         onPageChange={(newPage: number) => setPage(newPage)}
         onRowsPerPageChange={(newRowsPerPage) => {
           setRowsPerPage(newRowsPerPage);

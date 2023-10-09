@@ -8,11 +8,11 @@ import ConfirmationDialog from '../confirmationDialog';
 
 export default function Delete({
   tooltip,
-  onDelete,
+  onClick,
   disabled,
 }: {
   tooltip?: boolean,
-  onDelete: () => void,
+  onClick: () => void,
   disabled?: boolean,
 }) {
   const { trans } = useTranslation();
@@ -55,7 +55,7 @@ export default function Delete({
         )}
         content={<>{trans('deleteResourceContent')}</>}
         onConfirm={() => {
-          onDelete();
+          onClick();
           setShowDeleteModal(false);
         }}
         onClose={() => setShowDeleteModal(false)}

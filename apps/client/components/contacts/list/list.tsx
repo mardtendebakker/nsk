@@ -83,7 +83,7 @@ export default function List({
               <TableCell>
                 <Edit href={(type === 'customer' ? CONTACTS_CUSTOMERS_EDIT : CONTACTS_SUPPLIERS_EDIT).replace('[id]', company.id.toString())} disabled={disabled} />
                 {company.orders?.length === 0
-                && (<Delete onDelete={() => onDelete(company.id)} disabled={disabled} tooltip />)}
+                && (<Delete onClick={() => onDelete(company.id)} disabled={disabled} tooltip />)}
               </TableCell>
             </TableRow>
           ))}

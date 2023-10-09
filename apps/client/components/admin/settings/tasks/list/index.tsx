@@ -59,7 +59,7 @@ export default function ListContainer() {
               setSearch(e.target.value);
               handleSearchChange(e.target.value);
             }}
-            value={search}
+            defaultValue={search}
             placeholder={trans('tasksList.search.placeholder')}
           />
           <Button

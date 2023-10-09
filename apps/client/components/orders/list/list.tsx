@@ -245,7 +245,7 @@ export default function List({
               </TableCell>
               <TableCell>
                 <Edit href={editPath.replace('[id]', order.id.toString())} disabled={disabled} />
-                <Delete onDelete={() => onDelete(order.id)} disabled={disabled} tooltip />
+                <Delete onClick={() => onDelete(order.id)} disabled={disabled} tooltip />
               </TableCell>
             </TableRow>
           );
