@@ -227,16 +227,17 @@ export default function SideMap({
             {travelTime}
           </Typography>
           <Divider sx={{ my: '.5rem' }} />
+
           <Select
             sx={{ width: '100%' }}
-            label={trans('supplier')}
-            placeholder={trans('selectSupplier')}
+            label={trans(type == 'delivery' ? 'customer' : 'supplier')}
+            placeholder={trans(type == 'delivery' ? 'selectCustomer' : 'selectSupplier')}
             value={selectedWay?.logisticService?.id || 'none'}
             onChange={(e) => handleSelectedWay(ways.find((way: Way) => e.target.value == way?.logisticService?.id?.toString()))}
             options={ways
               .filter((way: Way) => !!way.logisticService)
               .map((way: Way) => ({
-                title: way.logisticService.order.supplier.name,
+                title: type == 'delivery' ? way.logisticService.order.customer.name : way.logisticService.order.supplier.name,
                 value: way.logisticService.id,
               }))}
           />
@@ -307,7 +308,7 @@ export default function SideMap({
             size="small"
             variant="contained"
             sx={{ width: '100%', mt: '1rem' }}
-            onClick={() => window.open(type == 'delivery' ? ORDERS_SALES_EDIT : ORDERS_PURCHASES_EDIT.replace('[id]', logisticService.order.id.toString()), '_blank')}
+            onClick={() => window.open((type == 'delivery' ? ORDERS_SALES_EDIT : ORDERS_PURCHASES_EDIT).replace('[id]', logisticService.order.id.toString()), '_blank')}
           >
             <VisibilityOutlined />
             {' '}

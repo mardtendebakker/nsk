@@ -86,6 +86,11 @@ export default function Logistics({ type }: { type: 'pickup' | 'delivery' }) {
 
   const { data: { data = [] } = {}, call } = useAxios('get', AJAX_PATH.replace(':id', ''), { withProgressBar: true });
 
+  const formattedDataWithDefaultLogistic = data.map(({ logistic, ...rest }) => ({
+    ...rest,
+    logistic: logistic || { id: 1, firstname: 'DEFAULT', lastname: 'CAR' },
+  }));
+
   useEffect(() => {
     setSelectedLogisticIds([0]);
     refreshList({ newDate: firstDate, router, call });
@@ -93,11 +98,7 @@ export default function Logistics({ type }: { type: 'pickup' | 'delivery' }) {
 
   const logistics: Logistic[] = [];
 
-  data.forEach(({ logistic }) => {
-    if (!logistic) {
-      return;
-    }
-
+  formattedDataWithDefaultLogistic.forEach(({ logistic }) => {
     if (!logistics.find((element) => element.id == logistic.id)) {
       logistics.push(logistic);
     }
@@ -115,8 +116,8 @@ export default function Logistics({ type }: { type: 'pickup' | 'delivery' }) {
 
   const formatLogisticServiceName = (logisticService: LogisticServiceListItem) => logisticService.event_title || trans(type);
 
-  const logisticServices: LogisticServiceListItem[] = data.filter((logisticService: LogisticServiceListItem) => {
-    const selected = selectedLogisticIds[0] === 0 || selectedLogisticIds.includes(logisticService.logistic?.id);
+  const logisticServices: LogisticServiceListItem[] = formattedDataWithDefaultLogistic.filter((logisticService: LogisticServiceListItem) => {
+    const selected = selectedLogisticIds[0] === 0 || selectedLogisticIds.includes(logisticService.logistic.id);
 
     return selected && (formatLogisticServiceName(logisticService)?.includes(search) || logisticService.order.order_nr.includes(search));
   });
@@ -226,9 +227,8 @@ export default function Logistics({ type }: { type: 'pickup' | 'delivery' }) {
                               onClick={() => {
                                 setClickedLogisticService({
                                   logisticService,
-                                  allLogisticServices: logisticService.logistic
-                                    ? thisDayLogisticServices.flat().filter((element) => element.logistic && (element.logistic.id == logisticService.logistic.id))
-                                    : [],
+                                  allLogisticServices: thisDayLogisticServices.flat().filter((element) => element.logistic && (element.logistic.id == logisticService.logistic.id)),
+
                                 });
                               }}
                               logisticService={logisticService}
