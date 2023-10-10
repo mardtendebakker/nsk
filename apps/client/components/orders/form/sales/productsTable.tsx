@@ -172,7 +172,7 @@ export default function ProductsTable({ orderId, refreshOrder }:{ orderId: strin
                 />
               </TableCell>
               <TableCell>
-                <Delete onDelete={() => handleDeleteProduct(product.id)} tooltip />
+                <Delete onClick={() => handleDeleteProduct(product.id)} tooltip />
               </TableCell>
             </TableRow>
           ))}

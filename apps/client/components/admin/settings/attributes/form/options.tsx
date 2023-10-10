@@ -55,7 +55,7 @@ export default function Options({
               }}
             />
             <Delete
-              onDelete={() => {
+              onClick={() => {
                 setData(Object.keys(formRepresentation)
                   .filter((key) => key !== field)
                   .reduce((obj, key) => {

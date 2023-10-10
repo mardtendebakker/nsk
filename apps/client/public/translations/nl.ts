@@ -551,6 +551,7 @@ const translation = {
   driverInfo: 'Bestuurder informatie',
   vehicleInfo: 'Voertuig informatie',
   contacts: 'Contacten',
+  deleteUsedOrderStatusMessage: 'Bestelstatus gebruikt door een bestaande bestelling.',
   // http status
   200: 'Actie succesvol afgerond',
   201: 'Bron gemaakt',

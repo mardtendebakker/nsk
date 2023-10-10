@@ -24,13 +24,15 @@ const useAxios = (
     showSuccessMessage = false,
     customSuccessMessage,
     defaultParams = {},
+    customStatusesMessages,
   }
   : {
     withProgressBar? : boolean,
     showErrorMessage? : boolean,
     showSuccessMessage? : boolean,
     customSuccessMessage?: string
-    defaultParams?: object
+    defaultParams?: object,
+    customStatusesMessages?: { [key: number]: string }
   } = {},
 ) => {
   const [response, setResponse] = useState<AxiosResponse>();
@@ -72,19 +74,26 @@ const useAxios = (
 
   function handleError(e: Error | AxiosError) {
     const errorResponse = (e instanceof AxiosError && e.response) ? e.response : { status: 500, data: { message: undefined } };
+    const errorMessage = customStatusesMessages && customStatusesMessages[errorResponse.status];
+    let messages: string[] = [];
 
     switch (true) {
+      case typeof errorMessage == 'string':
+        messages.push(errorMessage);
+        break;
       case Array.isArray(errorResponse.data.message):
-        errorResponse.data.message.forEach((message: string) => {
-          enqueueSnackbar(message, { variant: 'error' });
-        });
+        messages = errorResponse.data.message;
         break;
       case typeof errorResponse.data.message == 'string' && !!errorResponse.data.message:
-        enqueueSnackbar(errorResponse.data.message, { variant: 'error' });
+        messages.push(errorResponse.data.message);
         break;
       default:
-        enqueueSnackbar(trans(errorResponse.status.toString()), { variant: 'error' });
+        messages.push(trans(errorResponse.status.toString()));
     }
+
+    messages.forEach((message) => {
+      enqueueSnackbar(message, { variant: 'error' });
+    });
   }
 
   return {

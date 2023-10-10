@@ -1,5 +1,5 @@
 import { Authentication } from "@nestjs-cognito/auth";
-import { Body, Controller, Get, Param, Post, Put, Query } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from "@nestjs/common";
 import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { OrderStatusService } from "./order-status.service";
 import { FindOrderStatusesResponeDto } from "./dto/find-order-status-response.dto";
@@ -36,5 +36,10 @@ export class OrderStatusController {
   @ApiResponse({type: OrderStatusEntity})
   update(@Param('id') id: number, @Body() updateOrderStatusDto: UpdateOrderStatusDto) {
     return this.orderStatusService.update(id, updateOrderStatusDto);
+  }
+  
+  @Delete(':id')
+  delete(@Param('id') id: number) {
+    return this.orderStatusService.delete(id);
   }
 }

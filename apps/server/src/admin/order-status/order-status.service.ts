@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client';
 import { FindManyDto } from './dto/find-many.dto';
 import { OrderStatusRepository } from './order-status.repository';
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { UpdateOrderStatusDto } from './dto/update-order-status.dto';
 import { CreateOrderStatusDto } from './dto/create-order-status.dto';
 
@@ -9,7 +9,7 @@ import { CreateOrderStatusDto } from './dto/create-order-status.dto';
 export class OrderStatusService {
   constructor(protected readonly repository: OrderStatusRepository) {}
 
-  findAll(query: FindManyDto) {
+  async findAll(query: FindManyDto) {
     return this.repository.findAll({
       ...query,
       where: {
@@ -27,17 +27,31 @@ export class OrderStatusService {
     return this.repository.findOne(params);
   }
 
-  update(id: number, updateOrderStatusDto: UpdateOrderStatusDto) {
+  async create(createOrderStatusDto: CreateOrderStatusDto) {
+    return this.repository.create({
+      data: createOrderStatusDto,
+    });
+  }
+
+  async update(id: number, updateOrderStatusDto: UpdateOrderStatusDto) {
     return this.repository.update({
       where: { id },
       data: { ...updateOrderStatusDto }
     });
   }
 
-  create(createOrderStatusDto: CreateOrderStatusDto) {
-    return this.repository.create({
-      data: createOrderStatusDto,
-    });
+  async delete(id: number) {
+    try {
+      return await this.repository.delete({
+        where: { id },
+      });
+    } catch (err) {
+      if (err.code === 'P2003') {
+        throw new ConflictException();
+      }
+
+      throw err;
+    }
   }
 
   async findByNameOrCreate(createOrderStatusDto: CreateOrderStatusDto) {

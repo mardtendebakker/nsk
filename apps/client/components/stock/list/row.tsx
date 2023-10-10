@@ -119,7 +119,7 @@ export default function Row(
         <TableCell>
           {onEdit && <Edit onClick={() => onEdit(product.id)} disabled={disabled} />}
           {onSplit && product.splittable && <Split onClick={() => onSplit(product)} disabled={disabled} />}
-          {onDelete && <Delete onDelete={() => onDelete(product.id)} disabled={disabled} tooltip />}
+          {onDelete && <Delete onClick={() => onDelete(product.id)} disabled={disabled} tooltip />}
         </TableCell>
         )}
       </TableRow>
