@@ -1,4 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
+import {
+  useEffect, useMemo, useState,
+} from 'react';
 import {
   Table, TableBody, TableCell, TableHead, TableRow, Tooltip,
 } from '@mui/material';
@@ -76,17 +78,24 @@ export default function EditModal(
     return ORDERS_SALES_EDIT.replace('[id]', order.id.toString());
   };
 
+  const handleSubmit = (event?: React.SyntheticEvent) => {
+    event?.preventDefault();
+    if (!validate()) {
+      setShowConfirmation(true);
+    }
+  };
+
   return (
     <>
       <ConfirmationDialog
         open
         title={<>{trans('editProduct')}</>}
         onClose={onClose}
-        onConfirm={() => setShowConfirmation(true)}
+        onConfirm={handleSubmit}
         disabled={!canSubmit()}
         content={(
           <>
-            <form onSubmit={(e) => { e.preventDefault(); setShowConfirmation(true); }}>
+            <form onSubmit={handleSubmit}>
               <Form
                 setValue={setValue}
                 formRepresentation={formRepresentation}

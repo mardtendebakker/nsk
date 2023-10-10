@@ -109,16 +109,23 @@ export default function CreateModal({ onClose, onSubmit, additionalPayloadData }
       });
   };
 
+  const handleSubmit = (event?: React.SyntheticEvent) => {
+    event?.preventDefault();
+    if (!validate()) {
+      setShowConfirmation(true);
+    }
+  };
+
   return (
     <>
       <ConfirmationDialog
         open
         title={<>{trans('createProduct')}</>}
         onClose={onClose}
-        onConfirm={() => setShowConfirmation(true)}
+        onConfirm={handleSubmit}
         disabled={performing}
         content={(
-          <form onSubmit={(e) => { e.preventDefault(); setShowConfirmation(true); }}>
+          <form onSubmit={handleSubmit}>
             <Form setValue={setValue} formRepresentation={formRepresentation} disabled={performing} />
             <input type="submit" style={{ display: 'none' }} />
           </form>
