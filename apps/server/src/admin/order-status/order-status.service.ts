@@ -47,7 +47,7 @@ export class OrderStatusService {
       });
     } catch (err) {
       if (err.code === 'P2003') {
-        throw new ConflictException(err.message);
+        throw new ConflictException();
       }
 
       throw err;
