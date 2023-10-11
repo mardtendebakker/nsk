@@ -10,6 +10,7 @@ import {
   Box,
 } from '@mui/material';
 import { DesktopDateTimePicker } from '@mui/x-date-pickers/DesktopDateTimePicker';
+import { useState } from 'react';
 import useTranslation from '../../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../../hooks/useForm';
 import BaseTextField from '../../../input/textField';
@@ -39,6 +40,7 @@ function PurchaseForm({
 }) {
   const { trans } = useTranslation();
   const isDesktop = useResponsive('up', 'md');
+  const [showPickupDateChangedMessage, setShowPickupDateChangedMessage] = useState(false);
 
   const DATA_DESTRUCTION = {
     0: trans('none'),
@@ -123,6 +125,7 @@ function PurchaseForm({
                 disableMaskedInput
                 onChange={(value) => {
                   setValue({ field: 'pickupDate', value });
+                  setShowPickupDateChangedMessage(true);
                 }}
                 value={formRepresentation.pickupDate.value || null}
                 inputFormat="yyyy/MM/dd HH:mm"
@@ -156,6 +159,7 @@ function PurchaseForm({
                 })}
               />
             </Grid>
+            {showPickupDateChangedMessage && <Typography color="error" sx={{ m: '.5rem' }}>{trans('orderMightShouldChangeWarning')}</Typography>}
             <Grid
               sx={{ display: 'flex', width: isDesktop ? '50%' : 'unset' }}
               item
