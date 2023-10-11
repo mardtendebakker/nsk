@@ -60,7 +60,7 @@ const translation = {
   accountVerification: 'Account bevestiging',
   confirm: 'Bevestigen',
   reminder: 'Herinnering',
-  productEditConfirmation: 'Vergeet niet de verkoopprijs te controleren.',
+  productEditConfirmation: 'Bent u zeker dat u de verkoopprijs correct heeft ingesteld? Verkoopprijs:',
   code: 'Code',
   oldPassword: 'Oud Wachtwoord',
   newPassword: 'Nieuw paswoord',

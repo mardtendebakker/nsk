@@ -21,8 +21,8 @@ export class StockRepository {
   
     if (this.isRepair === true) {
       where.product_order = {
-        some: { aorder: { isNot: null }, ...product_order?.some },
-        every: { aorder: { repair: { isNot: null }, ...product_order?.every } },
+        some: { aorder: {}, ...product_order?.some },
+        every: { aorder: { repair: { isNot: null } }, ...product_order?.every },
         ...(product_order?.none && { none: { ...product_order?.none } }),
       };
     } else if (this.isRepair === false) {
