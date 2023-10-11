@@ -134,7 +134,7 @@ export default function CreateModal({ onClose, onSubmit, additionalPayloadData }
       <ConfirmationDialog
         open={showConfirmation}
         title={<>{trans('reminder')}</>}
-        content={<>{trans('productEditConfirmation')}</>}
+        content={<span>{`${trans('productEditConfirmation')} ${formRepresentation?.price.value}`}</span>}
         onConfirm={handleSave}
         onClose={() => setShowConfirmation(false)}
       />

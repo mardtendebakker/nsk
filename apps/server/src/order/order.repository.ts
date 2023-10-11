@@ -4,7 +4,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { GroupBy } from './types/group-by.enum';
 import { AnalyticsResultDto } from './dto/analytics-result.dto';
 import { Prisma } from '@prisma/client';
-import { Sql } from '@prisma/client/runtime';
+import { Sql } from '@prisma/client/runtime/library';
 import { GroupByDateResult } from './dto/analytics-result.dto';
 import { AOrderDiscrimination } from '../aorder/types/aorder-discrimination.enum';
 import { ConfigService } from '@nestjs/config';

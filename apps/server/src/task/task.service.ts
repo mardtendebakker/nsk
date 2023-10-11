@@ -3,6 +3,7 @@ import { FindManyDto } from './dto/find-many.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { TaskRepository } from './task.repository';
 import { Injectable } from '@nestjs/common';
+import { TaskFindOneGetPayload } from './types/task-find-one-get-payload';
 
 @Injectable()
 export class TaskService {
@@ -52,7 +53,7 @@ export class TaskService {
       select: this.select,
     };
 
-    const task: Prisma.taskGetPayload<Record<'select', Prisma.taskSelect>> = await this.repository.findOne(params);
+    const task: TaskFindOneGetPayload = await this.repository.findOne(params);
 
     return {
       ...Object.assign({}, task, { product_type_task: undefined }), // removing extra fileds

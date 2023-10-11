@@ -245,7 +245,7 @@ export class AOrderService {
     return data;
   }
 
-  protected commonIncludePart<T extends Prisma.aorderArgs>(params: T): T {
+  protected commonIncludePart<T extends Prisma.aorderDefaultArgs>(params: T): T {
     params.include = {
       ...params.include,
       order_status: {

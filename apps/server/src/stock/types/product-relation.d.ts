@@ -1,3 +1,3 @@
 import { Prisma } from "@prisma/client";
 
-export type ProductRelation = Prisma.productGetPayload<Record<'select', Prisma.productSelect>>;
+export type ProductRelation = Partial<Prisma.productGetPayload<Record<'select', Prisma.productSelect>>>;
