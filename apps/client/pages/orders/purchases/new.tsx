@@ -65,7 +65,7 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
     order_nr: formRepresentation.orderNr.value || undefined,
     order_date: formRepresentation.orderDate.value || undefined,
     status_id: formRepresentation.orderStatus.value || undefined,
-    remarks: formRepresentation.remarks.value || undefined,
+    remarks: formRepresentation.remarks.value || '',
     transport: formRepresentation.transport.value || 0,
     discount: formRepresentation.discount.value || 0,
     is_gift: formRepresentation.isGift.value || false,
