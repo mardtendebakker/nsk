@@ -1,5 +1,6 @@
 import { Box, Grid, Typography } from '@mui/material';
 import { DesktopDateTimePicker } from '@mui/x-date-pickers';
+import { useState } from 'react';
 import useTranslation from '../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../hooks/useForm';
 import BaseTextField from '../../input/textField';
@@ -16,6 +17,7 @@ export default function DeliveryDetails({
   setValue: SetValue,
 }) {
   const { trans } = useTranslation();
+  const [showDeliveryDateChangedMessage, setShowDeliveryDateChangedMessage] = useState(false);
 
   return (
     <>
@@ -33,7 +35,10 @@ export default function DeliveryDetails({
         <Grid sx={{ display: 'flex', flexDirection: 'column' }} item>
           <DesktopDateTimePicker
             disabled={disabled}
-            onChange={(value) => setValue({ field: 'deliveryDate', value })}
+            onChange={(value) => {
+              setValue({ field: 'deliveryDate', value });
+              setShowDeliveryDateChangedMessage(true);
+            }}
             value={formRepresentation.deliveryDate.value || null}
             inputFormat="yyyy/MM/dd HH:mm"
             label={trans('deliveryDate')}
@@ -50,6 +55,7 @@ export default function DeliveryDetails({
               />
             )}
           />
+          {showDeliveryDateChangedMessage && <Typography color="error" sx={{ mt: '.5rem' }}>{trans('orderMightShouldChangeWarning')}</Typography>}
           <Box sx={{ m: '.25rem' }} />
           <Select
             disabled={disabled}

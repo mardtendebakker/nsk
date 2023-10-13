@@ -61,6 +61,7 @@ const translation = {
   confirm: 'Bevestigen',
   reminder: 'Herinnering',
   productEditConfirmation: 'Bent u zeker dat u de verkoopprijs correct heeft ingesteld? Verkoopprijs:',
+  orderMightShouldChangeWarning: 'De bestelstatus zou mogelijk ook moeten veranderen.',
   code: 'Code',
   oldPassword: 'Oud Wachtwoord',
   newPassword: 'Nieuw paswoord',
