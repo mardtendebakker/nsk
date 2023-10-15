@@ -1,11 +1,12 @@
 import { Authentication } from "@nestjs-cognito/auth";
-import { Body, Controller, Get, Param, Put, Query } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, Put, Query } from "@nestjs/common";
 import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { AttributeService } from "./attribute.service";
 import { FindAttributeResponseDto, FindAttributesResponeDto } from "./dto/find-attribute-response.dto";
 import { FindManyDto } from "./dto/find-many.dto";
 import { AttributeEntity } from "./entities/attribute.entity";
 import { UpdateAttributeDto } from "./dto/update-attribute.dto";
+import { CreateAttributeDto } from "./dto/create-attribute.dto";
 
 @ApiBearerAuth()
 @Authentication()
@@ -29,5 +30,11 @@ export class AttributeController {
   @ApiResponse({type: AttributeEntity})
   update(@Param('id') id: number, @Body() updateAttributeDto: UpdateAttributeDto) {
     return this.attributeService.update(id, updateAttributeDto);
+  }
+
+  @Post('')
+  @ApiResponse({type: AttributeEntity})
+  create(@Body() createAttributeDto: CreateAttributeDto) {
+    return this.attributeService.create(createAttributeDto);
   }
 }

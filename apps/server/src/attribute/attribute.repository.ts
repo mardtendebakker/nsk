@@ -36,6 +36,11 @@ export class AttributeRepository {
     return this.prisma.attribute.update(params);
   }
 
+  create(params: Prisma.attributeCreateArgs) {
+
+    return this.prisma.attribute.create(params);
+  }
+
   delete(params: Prisma.attributeDeleteArgs) {
 
     return this.prisma.attribute.delete(params);
