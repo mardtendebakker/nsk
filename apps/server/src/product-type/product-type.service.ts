@@ -5,6 +5,7 @@ import { ProductTypeRepository } from './product-type.repository';
 import { Injectable } from '@nestjs/common';
 import { ProductTypeProcess } from './product-type-process';
 import { ProductTypeRelation } from './types/product-type-relation';
+import { CreateProductTypeDto } from './dto/create-product-type.dto';
 
 @Injectable()
 export class ProductTypeService {
@@ -70,6 +71,21 @@ export class ProductTypeService {
               task_id: taskId,
             }))
           },
+        },
+      },
+    });
+  }
+
+  async create(createProductTypeDto: CreateProductTypeDto) {
+    const { attributes, tasks, ...rest } = createProductTypeDto;
+    return this.repository.create({
+      data: {
+        ...rest,
+        product_type_attribute: {
+          create: attributes.map(attributeId => ({ attribute_id: attributeId })),
+        },
+        product_type_task: {
+          create:  tasks.map(taskId => ({ task_id: taskId })),
         },
       },
     });

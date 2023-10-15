@@ -33,4 +33,8 @@ export class ProductStatusRepository {
   update(params: Prisma.product_statusUpdateArgs) {
     return this.prisma.product_status.update(params);
   }
+
+  create(params: Prisma.product_statusCreateArgs) {
+    return this.prisma.product_status.create(params);
+  }
 }

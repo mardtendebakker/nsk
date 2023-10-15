@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { LocationRepository } from './location.repository';
 import { FindManyDto } from './dto/find-many.dto';
 import { Prisma } from '@prisma/client';
@@ -34,7 +34,11 @@ export class LocationService {
     return this.repository.update({ where: {id}, data: body });
   }
 
-  create(body: CreateLocationDto) {
+  async create(body: CreateLocationDto) {
+    if(await this.repository.findOne({where: {name: body.name}}))  {
+      throw new ConflictException('Name already exist');
+    }
+
     return this.repository.create(body);
   }
 }

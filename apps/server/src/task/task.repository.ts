@@ -36,6 +36,11 @@ export class TaskRepository {
     return this.prisma.task.update(params);
   }
 
+  create(params: Prisma.taskCreateArgs) {
+
+    return this.prisma.task.create(params);
+  }
+
   delete(params: Prisma.taskDeleteArgs) {
 
     return this.prisma.task.delete(params);

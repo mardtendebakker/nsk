@@ -4,6 +4,7 @@ import { UpdateTaskDto } from './dto/update-task.dto';
 import { TaskRepository } from './task.repository';
 import { Injectable } from '@nestjs/common';
 import { TaskFindOneGetPayload } from './types/task-find-one-get-payload';
+import { CreateTaskDto } from './dto/create-task.dto';
 
 @Injectable()
 export class TaskService {
@@ -74,6 +75,23 @@ export class TaskService {
 
     return this.repository.update({
       where: { id },
+      data: {
+        ...rest,
+        product_type_task: { create: productTypeCreate },
+      },
+    });
+  }
+
+  async create(createTaskDto: CreateTaskDto) {
+    const {
+      productTypes,
+      ...rest
+    } = createTaskDto;
+
+    const productTypeCreate: Prisma.product_type_taskUncheckedCreateWithoutTaskInput[] =
+      productTypes.map(productTypeId => ({ product_type_id: productTypeId }));
+
+    return this.repository.create({
       data: {
         ...rest,
         product_type_task: { create: productTypeCreate },
