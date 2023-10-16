@@ -9,7 +9,7 @@ import ConfirmationDialog from '../../../../confirmationDialog';
 export function initFormState(task?: Task) {
   return {
     name: { value: task?.name, required: true },
-    description: { value: task?.description },
+    description: { value: task?.description, required: true },
     productTypes: { value: task?.productTypes?.map(({ id }) => id) || [] },
   };
 }

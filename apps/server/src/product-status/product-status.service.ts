@@ -3,6 +3,7 @@ import { FindManyDto } from './dto/find-many.dto';
 import { UpdateProductStatusDto } from './dto/update-product-status.dto';
 import { ProductStatusRepository } from './product-status.repository';
 import { Injectable } from '@nestjs/common';
+import { CreateProductStatusDto } from './dto/create-product-status.dto';
 
 @Injectable()
 export class ProductStatusService {
@@ -33,5 +34,9 @@ export class ProductStatusService {
       where: { id },
       data: { ...updateOrderStatusDto }
     });
+  }
+
+  create(createOrderStatusDto: CreateProductStatusDto) {
+    return this.repository.create({ data: createOrderStatusDto });
   }
 }
