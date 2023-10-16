@@ -2,8 +2,9 @@ import { Prisma } from '@prisma/client';
 import { FindManyDto } from './dto/find-many.dto';
 import { UpdateAttributeDto } from './dto/update-attribute.dto';
 import { AttributeRepository } from './attribute.repository';
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { AttributeGetPayload } from './types/attribute-get-payload';
+import { CreateAttributeDto } from './dto/create-attribute.dto';
 
 @Injectable()
 export class AttributeService {
@@ -94,5 +95,26 @@ export class AttributeService {
         attribute_option: { create: options }
       },
     });
+  }
+
+  async create(createAttributeDto: CreateAttributeDto) {
+    const {
+      productTypes,
+      options,
+      ...rest
+    } = createAttributeDto;
+
+    const productTypeCreate: Prisma.product_type_attributeUncheckedCreateWithoutAttributeInput[] =
+      productTypes.map(productTypeId => ({ product_type_id: productTypeId }));
+
+    if(await this.repository.findOne({where: {name: rest.name}}))  {
+      throw new ConflictException('Name already exist');
+    }
+
+    return this.repository.create({data: {
+      ...rest,
+        product_type_attribute: { create: productTypeCreate },
+      attribute_option: { connect: options }
+    }});
   }
 }
