@@ -1,12 +1,14 @@
-import { Body, Controller, Get, Post, Query, Render, Res, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Headers, Post, Query, Render, Res, UnauthorizedException, UploadedFile, UploadedFiles, UseInterceptors } from '@nestjs/common';
 import { Response } from 'express';
 import { PublicService } from './public.service';
 import { ApiTags } from '@nestjs/swagger';
-import { AnyFilesInterceptor } from '@nestjs/platform-express';
+import { AnyFilesInterceptor, FileInterceptor } from '@nestjs/platform-express';
 import { GetPickupDto } from './dto/get-pickup.dto';
 import { PostPickupDto } from './dto/post-pickup.dto';
 import { PostOrderDto } from './dto/post-order.dto';
 import { GetOrderDto } from './dto/get-order.dto';
+import { GetImportDto } from './dto/get-import.dto';
+import { PostImportDto } from './dto/post-import.dto';
 
 @ApiTags('nsk-public')
 @Controller('nsk/public')
@@ -78,6 +80,48 @@ export class PublicController {
       res.send(body.public_order_form.confirmPage);
     } else {
       res.send('Order added successfully');
+    }
+  }
+
+  @Get('importleergelddenhaag')
+  @Render('importleergelddenhaag')
+  getImportLeergeldDenHaag() {
+    return {};
+  }
+
+  @Get('import')
+  @Render('import')
+  async getImport(@Query() query: GetImportDto) {
+    return {
+      ...query
+    };
+  }
+
+  @Post('import')
+  @UseInterceptors(FileInterceptor('file'))
+  async importSales(
+    @Body() body: PostImportDto,
+    @UploadedFile() file: Express.Multer.File,
+    @Res() res: Response,
+    @Headers('authorization') authorization,
+  ) {
+    try {
+      if (!authorization) {
+        throw new UnauthorizedException('Please enter username and password!')
+      }
+
+      await this.publicService.importSales(authorization.replace('Basic ',''), body, file);
+      res.send('Import sales completed successfully');
+    } catch (e) {
+      if (e instanceof UnauthorizedException) {
+        res.setHeader(
+          'WWW-Authenticate',
+          'Basic realm="Access to site", charset="UTF-8"',
+        );
+        res.status(401).send('UnauthorizedAccess');
+      } 
+      
+      throw e;
     }
   }
 }

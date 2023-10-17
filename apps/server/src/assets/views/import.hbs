@@ -1,0 +1,55 @@
+<div id="importform"><form name="import_form" method="post" class="form-horizontal">
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <span class="glyphicon glyphicon-play" aria-hidden="true"></span> Sales Order Import
+    </div>
+    <div class="panel-body">
+      <div class="form-group">
+        <label class="col-sm-3 control-label" for="import_form_salesInput">Verzendlijst</label>
+        <div class="col-sm-9">
+          <input 
+            type="file"
+            id="import_form_salesInput"
+            name="salesInput"
+            class="filepond"
+            style="display: none;"
+            accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+          >
+          <div
+            id="uploadifive-import_form_salesInput"
+            class="uploadifive-button"
+            style="height: 30px; line-height: 30px; overflow: hidden; position: relative; text-align: center; width: 100px; user-select: none;"
+          >Select Files
+          </div>
+          <div id="import_form_salesInputPreview" class="uploadifive-queue image-preview"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-body">
+        
+        <div class="row">
+            <div class="col-sm-9 col-sm-offset-3">
+                <div class="g-recaptcha" data-sitekey="{{recaptchaKey}}"></div>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 10px">
+            <div class="col-sm-9 col-sm-offset-3">
+                <button type="submit" id="import_form_save" name="import_form[save]" class="btn-success btn" style="width: 150px;">Send</button>
+            </div>
+        </div>        
+    </div>
+  </div>
+
+  <input type="hidden" id="import_form_partnerId" name="import_form[partnerId]" value="{{partnerId}}">
+  </form>
+
+  <div id="errorContainer" style="color: red"></div>
+
+  <script src="https://www.google.com/recaptcha/api.js" async="" defer=""></script>
+
+</div>
