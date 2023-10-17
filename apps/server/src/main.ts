@@ -35,6 +35,8 @@ async function bootstrap() {
       '/nsk/public/pickuptest',
       '/nsk/public/order',
       '/nsk/public/ordertest',
+      '/nsk/public/import',
+      '/nsk/public/importleergelddenhaag',
     ],
   });
   app.useGlobalFilters(new NskNotFoundExceptionFilter());

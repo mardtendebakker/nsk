@@ -1,4 +1,4 @@
-import { BadRequestException, HttpException, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { PurchaseService } from '../purchase/purchase.service';
 import { PostPickupDto, PickupFormDto } from './dto/post-pickup.dto';
 import { SupplierService } from '../supplier/supplier.service';
@@ -23,6 +23,7 @@ import { AOrderPayload } from '../aorder/types/aorder-payload';
 import { PostOrderDto } from './dto/post-order.dto';
 import { CustomerService } from '../customer/customer.service';
 import { SaleService } from '../sale/sale.service';
+import { PostImportDto } from './dto/post-import.dto';
 @Injectable()
 export class PublicService {
   constructor(
@@ -147,7 +148,20 @@ export class PublicService {
       remarks: remarks,
     };
 
-    const sale = <AOrderPayload>await this.saleService.create(saleData);
+    const sale = await this.saleService.create(saleData);
+  }
+
+  async importSales(authorization:string, params: PostImportDto, file: Express.Multer.File): Promise<void> {
+    if (authorization !== this.configService.get<string>('LEERGELD_DENHAAG_AUTH')) {
+      throw new UnauthorizedException('Username or Password is invalid!');
+    }
+    const { import_form } = params;
+
+    await this.captchaVerify(params['g-recaptcha-response']);
+
+    const sales = await this.saleService.import({
+      partner_id: import_form.partnerId,
+    }, file);
   }
 
   private getCompanyForm() {
@@ -299,7 +313,7 @@ export class PublicService {
     if (data?.success) {
       return true;
     } else {
-      throw new BadRequestException(data['error-codes']);
+      throw new BadRequestException(`recaptcha failed: ${data['error-codes']}`);
     }
   }
 }
