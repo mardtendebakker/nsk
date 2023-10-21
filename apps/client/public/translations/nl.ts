@@ -414,7 +414,7 @@ const translation = {
   pickup: 'Ophalen',
   pickups: 'Ophalen',
   deliveries: 'Leveringen',
-  pickupsBy: 'Ophaal door',
+  pickupsBy: 'Ophalen door',
   deliveriesBy: 'Leveringen door',
   everyone: 'Iedereen',
   logisticsPage: {
