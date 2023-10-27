@@ -7,6 +7,7 @@ import { FileModule } from '../../file/file.module';
 import { LocationModule } from '../../location/location.module';
 import { PrismaModule } from '../../prisma/prisma.module';
 import { EntityStatus } from '../../common/types/entity-status.enum';
+import { LocationLabelModule } from '../../location-label/location-label.module';
 
 @Module({
   providers: [
@@ -19,7 +20,7 @@ import { EntityStatus } from '../../common/types/entity-status.enum';
     PrintService
   ],
   controllers: [ArchivedController],
-  imports: [PrismaModule, LocationModule, FileModule],
+  imports: [PrismaModule, LocationModule, LocationLabelModule, FileModule],
   exports: [ArchivedService],
 })
 export class ArchivedModule {}

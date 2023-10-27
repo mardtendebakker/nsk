@@ -7,6 +7,7 @@ import { ToRepairController } from './to-repair.controller';
 import { FileModule } from '../file/file.module';
 import { PrintService } from '../print/print.service';
 import { EntityStatus } from '../common/types/entity-status.enum';
+import { LocationLabelModule } from '../location-label/location-label.module';
 
 @Module({
   providers: [
@@ -23,7 +24,7 @@ import { EntityStatus } from '../common/types/entity-status.enum';
     PrintService,
   ],
   controllers: [ToRepairController],
-  imports: [PrismaModule, LocationModule, FileModule],
+  imports: [PrismaModule, LocationModule, LocationLabelModule, FileModule],
   exports: [ToRepairService],
 })
 export class ToRepairModule {}

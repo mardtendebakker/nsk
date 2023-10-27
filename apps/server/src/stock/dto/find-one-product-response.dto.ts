@@ -7,6 +7,7 @@ import { ProductAttributeEntity } from "../entities/product-attribute.entity";
 import { AOrderEntity } from "../../aorder/entities/aorder.entity";
 import { ProductTypeEntity } from "../../product-type/entities/product-type.entity";
 import { ProductStatusEntity } from "../../product-status/entities/product-status.entity";
+import { LocationLabelEntity } from "../../location-label/entities/location-label.entity";
 
 class ProductAttributeDto extends PickType(ProductAttributeEntity, [
   'quantity',
@@ -46,6 +47,11 @@ class LocationDto extends PickType(LocationEntity, [
   'name'
 ]) {}
 
+class LocationLabelDto extends PickType(LocationLabelEntity, [
+  'id',
+  'label'
+]) {}
+
 class ProductStatusDto extends PickType(ProductStatusEntity, [
   'id',
   'name'
@@ -76,6 +82,9 @@ export class FindOneProductResponeDto extends PickType(ProductEntity, [
   
   @ApiProperty()
   location: LocationDto;
+  
+  @ApiProperty()
+  location_label: LocationLabelDto;
   
   @ApiProperty()
   product_status: ProductStatusDto;
