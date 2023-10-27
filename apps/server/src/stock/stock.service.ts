@@ -27,11 +27,13 @@ import { ProductAttributeProcessed } from "./types/product-attribute-processed";
 import { ProductRelationAttributeProcessed } from "./types/product-relation-attribute-processed";
 import { ProductRelationAttributeOrderProcessed } from "./types/product-relation-attribute-order-processed";
 import { EntityStatus } from "../common/types/entity-status.enum";
+import { LocationLabelService } from "../location-label/location-label.service";
 
 export class StockService {
   constructor(
     protected readonly repository: StockRepository,
     protected readonly locationService: LocationService,
+    protected readonly locationLabelService: LocationLabelService,
     protected readonly fileService: FileService,
     protected readonly printService: PrintService,
     protected readonly entityStatus: EntityStatus,
@@ -56,6 +58,7 @@ export class StockService {
       },
       ...(query.productType && { type_id: query.productType }),
       ...(query.location && { location_id: query.location }),
+      ...(query.location_label && { location_label_id: query.location_label }),
       ...(query.productStatus && {product_status: { id: query.productStatus }} || {
         OR: [{
           status_id: null,
@@ -148,12 +151,25 @@ export class StockService {
     const {
       product_attributes,
       product_orders,
+      location_label,
       ...rest
     } = body;
+
+    let location_label_id: number;
+
+    if (location_label) {
+      const locationLabel = await this.locationLabelService.findByLabelOrCreate({
+        location_id: rest.location_id,
+        label: location_label,
+      });
+
+      location_label_id = locationLabel.id;
+    }
     
     const createInput: Prisma.productUncheckedCreateInput = {
       ...rest,
       ...(!rest.sku && { sku: Math.floor(Date.now() / 1000).toString() }),
+      ...(location_label_id && { location_label_id }),
       ...(product_orders?.length > 0 && {
         product_order: {
           connectOrCreate: product_orders.map(product_order => ({
@@ -186,9 +202,20 @@ export class StockService {
 
     const stock = await this.findOneCustomSelect(id);
 
-    const { product_attributes, product_orders, ...restBody } = body;
+    const { product_attributes, product_orders, location_label, ...restBody } = body;
     if (product_attributes && !Number.isFinite(body.type_id)) {
       throw new Error("missing type_id in body for updating product_attributes");
+    }
+
+    let location_label_id: number;
+
+    if (location_label) {
+      const locationLabel = await this.locationLabelService.findByLabelOrCreate({
+        location_id: stock.location.id,
+        label: location_label,
+      });
+
+      location_label_id = locationLabel.id;
     }
     
     const typeHasChanged = Number.isFinite(body.type_id) && body.type_id !== stock.product_type?.id;
@@ -212,6 +239,7 @@ export class StockService {
       id,
       data: {
         ...restBody,
+        ...(location_label_id && { location_label_id }),
         ...(product_orders?.length && {
           product_order: {
             update: product_orders.map(product_order => ({
@@ -321,6 +349,11 @@ export class StockService {
       name: true,
     };
 
+    const locationLabelSelect: Prisma.location_labelSelect = {
+      id: true,
+      label: true,
+    };
+
     const productTypeSelect: Prisma.product_typeSelect = {
       id: true,
       name: true,
@@ -427,6 +460,9 @@ export class StockService {
       entity_status: true,
       location: {
         select: locationSelect,
+      },
+      location_label: {
+        select: locationLabelSelect,
       },
       product_status: {
         select: productStatusSelect,

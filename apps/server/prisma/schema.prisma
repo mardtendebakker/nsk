@@ -163,11 +163,13 @@ model fos_user {
 }
 
 model location {
-  id            Int             @id @default(autoincrement())
-  name          String          @unique(map: "UNIQ_5E9E89CB5E237E06") @db.VarChar(255)
-  zipcodes      String?         @db.VarChar(255)
-  product       product[]
-  user_location user_location[]
+  id                Int                 @id @default(autoincrement())
+  name              String              @unique(map: "UNIQ_5E9E89CB5E237E06") @db.VarChar(255)
+  zipcodes          String?             @db.VarChar(255)
+  location_label    location_label[]
+  location_template location_template[]
+  product           product[]
+  user_location     user_location[]
 }
 
 model order_status {
@@ -203,6 +205,7 @@ model product {
   id                                                            Int                 @id @default(autoincrement())
   type_id                                                       Int?
   location_id                                                   Int
+  location_label_id                                             Int?
   status_id                                                     Int?
   owner_id                                                      Int?
   sku                                                           String              @db.VarChar(16)
@@ -218,6 +221,7 @@ model product {
   product_status                                                product_status?     @relation(fields: [status_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_D34A04AD6BF700BD")
   acompany                                                      acompany?           @relation(fields: [owner_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_D34A04AD7E3C61F9")
   product_type                                                  product_type?       @relation(fields: [type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_D34A04ADC54C8C93")
+  location_label                                                location_label?     @relation(fields: [location_label_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "product_location_label_id_fkey")
   product_attribute_product_attribute_product_idToproduct       product_attribute[] @relation("product_attribute_product_idToproduct")
   product_attribute_product_attribute_value_product_idToproduct product_attribute[] @relation("product_attribute_value_product_idToproduct")
   product_order                                                 product_order[]
@@ -226,6 +230,7 @@ model product {
   @@index([status_id], map: "IDX_D34A04AD6BF700BD")
   @@index([owner_id], map: "IDX_D34A04AD7E3C61F9")
   @@index([type_id], map: "IDX_D34A04ADC54C8C93")
+  @@index([location_label_id], map: "product_location_label_id_fkey")
 }
 
 model product_attribute {
@@ -331,4 +336,33 @@ model user_location {
   @@id([user_id, location_id])
   @@index([location_id], map: "IDX_BE136DCB64D218E")
   @@index([user_id], map: "IDX_BE136DCBA76ED395")
+}
+
+model location_template {
+  id          Int      @id @default(autoincrement())
+  location_id Int
+  template    String   @db.VarChar(255)
+  name        String   @db.VarChar(255)
+  description String?  @db.LongText
+  pindex      Int?
+  created_at  DateTime @default(now()) @db.DateTime(0)
+  updated_at  DateTime @default(now()) @updatedAt @db.DateTime(0)
+  location    location @relation(fields: [location_id], references: [id], map: "location_template_location_id_fkey")
+
+  @@unique([location_id, template], name: "location_template_location_id_template")
+  @@unique([location_id, name], name: "location_template_location_id_name")
+  @@index([location_id], map: "location_template_location_id_fkey")
+}
+
+model location_label {
+  id          Int       @id @default(autoincrement())
+  location_id Int
+  label       String    @db.VarChar(255)
+  created_at  DateTime  @default(now()) @db.DateTime(0)
+  updated_at  DateTime  @default(now()) @updatedAt @db.DateTime(0)
+  location    location  @relation(fields: [location_id], references: [id], map: "location_label_location_id_fkey")
+  product     product[]
+
+  @@unique([location_id, label], name: "location_label_location_id_label")
+  @@index([location_id], map: "location_label_location_id_fkey")
 }

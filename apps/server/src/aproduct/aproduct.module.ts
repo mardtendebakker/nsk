@@ -7,6 +7,7 @@ import { AProductRepository } from './aproduct.repository';
 import { AproductController } from './aproduct.controller';
 import { PrintService } from '../print/print.service';
 import { ArchivedModule } from './archived/archived.module';
+import { LocationLabelModule } from '../location-label/location-label.module';
 
 @Module({
   providers: [
@@ -19,7 +20,7 @@ import { ArchivedModule } from './archived/archived.module';
     PrintService
   ],
   controllers: [AproductController],
-  imports: [PrismaModule, LocationModule, FileModule, ArchivedModule],
+  imports: [PrismaModule, LocationModule, LocationLabelModule, FileModule, ArchivedModule],
   exports: [AProductService],
 })
 export class AProductModule {}

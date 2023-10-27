@@ -31,6 +31,7 @@ import { RepairModule } from '../repair/repair.module';
 import { AProductModule } from '../aproduct/aproduct.module';
 import { SalesServiceModule } from '../sales-service/sales-service.module';
 import { AutocompleteModule } from '../autocomplete/autocomplete.module';
+import { AdminModule } from '../admin/admin.module';
 
 @Module({
   imports: [
@@ -69,7 +70,6 @@ import { AutocompleteModule } from '../autocomplete/autocomplete.module';
     SplitProductModule,
     FileModule,
     CompanyModule,
-    OrderStatusModule,
     EmailModule,
     ProductTypeModule,
     ProductStatusModule,
@@ -79,11 +79,11 @@ import { AutocompleteModule } from '../autocomplete/autocomplete.module';
     LogisticModule,
     AttributeModule,
     TaskModule,
-    AdminUserModule,
     PublicModule,
     AProductModule,
     SalesServiceModule,
     AutocompleteModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [AppService],

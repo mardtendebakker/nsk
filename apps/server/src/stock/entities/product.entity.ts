@@ -21,6 +21,11 @@ export class ProductEntity implements product {
   @ApiPropertyOptional()
   @IsOptional()
   @Type(() => Number)
+  location_label_id: number | null;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @Type(() => Number)
   status_id: number | null;
 
   @ApiPropertyOptional()

@@ -58,10 +58,15 @@ export class CreateBodyStockDto {
 
   @ApiProperty()
   @Transform(formDataNumberTransform)
-  @IsOptional()
   @IsInt()
   @Type(() => Number)
   location_id: number;
+
+  @ApiPropertyOptional()
+  @Transform(formDataStringTransform)
+  @IsOptional()
+  @IsString()
+  location_label?: string;
 
   @ApiPropertyOptional({
     enum: EntityStatus,

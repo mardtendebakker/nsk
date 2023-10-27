@@ -4,7 +4,7 @@ import { Transform } from "class-transformer";
 export class FindOneDto {
   @ApiProperty()
   @Transform(({value}) => JSON.parse(value))
-  where: any;
+  where?: any;
 
   @ApiPropertyOptional()
   @Transform(({value}) => JSON.parse(value))

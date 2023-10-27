@@ -234,8 +234,9 @@ export class SplitProductService {
         ? String(Math.floor(Date.now() / 1000) + newSkuIndex)
         : product.sku,
       name: product.name + ' ' + nameSupplement,
+      location_id: product.location?.id,
+      ...(product.location_label?.id && { location_label_id: product.location_label.id }),
       ...(product.product_type?.id && { type_id: product.product_type.id }),
-      ...(product.location?.id && { location_id: product.location.id }),
       ...(product.product_status?.id && { status_id: product.product_status?.id }),
       ...(Number.isFinite(status) && { status_id: status }),
       ...(Number.isFinite(product.price) && { price: product.price }),
