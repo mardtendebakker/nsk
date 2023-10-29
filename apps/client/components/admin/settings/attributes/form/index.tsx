@@ -76,7 +76,7 @@ export default function Form({
             sx={{ flex: 0.5, flexGrow: 1 }}
             multiple
             disabled={disabled}
-            url={AUTOCOMPLETE_PRODUCT_TYPES_PATH}
+            path={AUTOCOMPLETE_PRODUCT_TYPES_PATH}
             fullWidth
             label={trans('attributeForm.productTypes.label')}
             placeholder={trans('attributeForm.productTypes.placeholder')}
@@ -103,7 +103,7 @@ export default function Form({
           <DataSourcePicker
             sx={{ flex: 0.5, flexGrow: 1, ml: '1rem' }}
             disabled={disabled}
-            url={AUTOCOMPLETE_PRODUCT_TYPES_PATH}
+            path={AUTOCOMPLETE_PRODUCT_TYPES_PATH}
             label={trans('attributeForm.productType.label')}
             placeholder={trans('attributeForm.productType.placeholder')}
             onChange={(value: { id: number }) => {

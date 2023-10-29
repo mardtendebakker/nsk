@@ -55,18 +55,16 @@ export class LocationTemplateService {
       location: createLocationLabelDto.location_id,
     });
 
-    let pass = false;
+    if(locationTemplates.data.length == 0) {
+      return true;
+    }
 
     for(const locationTemplate of locationTemplates.data) {
       if (new RegExp(locationTemplate.template).test(createLocationLabelDto.label)) {
-        pass = true;
-        break;
+        return true;
       }
     }
 
-    if (!pass) {
-      throw new UnprocessableEntityException("Invalid label: " + createLocationLabelDto.label);
-    }
-    return true;
+    throw new UnprocessableEntityException("Invalid label: " + createLocationLabelDto.label);
   }
 }

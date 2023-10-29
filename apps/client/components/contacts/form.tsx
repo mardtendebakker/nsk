@@ -127,7 +127,7 @@ function Form({
             {type == 'supplier' ? (
               <DataSourcePicker
                 sx={{ flex: isDesktop ? 0.33 : 1 }}
-                url={AUTOCOMPLETE_COMPANIES_PATH}
+                path={AUTOCOMPLETE_COMPANIES_PATH}
                 params={{ partnerOnly: '1' }}
                 disabled={disabled}
                 fullWidth
@@ -146,7 +146,7 @@ function Form({
                 {!formRepresentation.is_partner.value && (
                 <DataSourcePicker
                   label={trans('partner')}
-                  url={AUTOCOMPLETE_COMPANIES_PATH}
+                  path={AUTOCOMPLETE_COMPANIES_PATH}
                   params={{ partnerOnly: '1' }}
                   disabled={disabled}
                   fullWidth

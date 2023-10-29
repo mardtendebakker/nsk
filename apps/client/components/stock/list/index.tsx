@@ -3,16 +3,13 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import _ from 'lodash';
 import {
-  STOCK_PRODUCTS_PATH, STOCK_REPAIRS_PATH, SPLIT_PRODUCT_INDIVIDUALIZE_PATH, SPLIT_PRODUCT_STOCK_PART_PATH, APRODUCT_BULK_PRINT_BARCODES, AxiosResponse, APRODUCT_BULK_PRINT_CHECKLISTS, AUTOCOMPLETE_LOCATIONS_PATH, APRODUCT_BULK_PRINT_PRICECARDS, STOCK_ARCHIVED_PATH, APRODUCTS_ARCHIVE_SET, APRODUCTS_ARCHIVE_UNSET,
+  STOCK_PRODUCTS_PATH, STOCK_REPAIRS_PATH, SPLIT_PRODUCT_INDIVIDUALIZE_PATH, SPLIT_PRODUCT_STOCK_PART_PATH, APRODUCT_BULK_PRINT_BARCODES, AxiosResponse, APRODUCT_BULK_PRINT_CHECKLISTS, APRODUCT_BULK_PRINT_PRICECARDS, STOCK_ARCHIVED_PATH, APRODUCTS_ARCHIVE_SET, APRODUCTS_ARCHIVE_UNSET,
 } from '../../../utils/axios';
 import List from './list';
 import useAxios from '../../../hooks/useAxios';
 import useForm, { FieldPayload } from '../../../hooks/useForm';
 import Filter from './filter';
 import Action from './action';
-import ConfirmationDialog from '../../confirmationDialog';
-import useTranslation from '../../../hooks/useTranslation';
-import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
 import EditModal from '../editModal';
 import pushURLParams from '../../../utils/pushURLParams';
 import { ProductListItem } from '../../../utils/axios/models/product';
@@ -22,6 +19,7 @@ import { openBlob } from '../../../utils/blob';
 import Header from '../header';
 import can from '../../../utils/can';
 import useSecurity from '../../../hooks/useSecurity';
+import PatchLocationModal from './patchLocationModal';
 
 function initFormState(
   {
@@ -96,11 +94,9 @@ const AJAX_PATHS = {
 };
 
 export default function ListContainer({ type } : { type: 'product' | 'repair' | 'archived' }) {
-  const { trans } = useTranslation();
   const { state: { user } } = useSecurity();
   const router = useRouter();
   const [showChangeLocationModal, setShowChangeLocationModal] = useState(false);
-  const [changeLocationValue, setChangeLocationValue] = useState<number | undefined>();
   const [page, setPage] = useState<number>(parseInt(getQueryParam('page', '1'), 10));
   const [rowsPerPage, setRowsPerPage] = useState<number>(parseInt(getQueryParam('rowsPerPage', '10'), 10));
   const [editProductId, setEditProductId] = useState<number | undefined>();
@@ -211,15 +207,14 @@ export default function ListContainer({ type } : { type: 'product' | 'repair' | 
       });
   };
 
-  const handlePatchLocation = () => {
-    callPatchLocation({ body: { ids: checkedProductIds, product: { location_id: changeLocationValue } } })
+  const handlePatchLocation = (product) => {
+    callPatchLocation({ body: { ids: checkedProductIds, product } })
       .then(() => {
         setCheckedProductIds([]);
         defaultRefreshList();
       })
       .finally(() => {
         setShowChangeLocationModal(false);
-        setChangeLocationValue(undefined);
       });
   };
 
@@ -322,28 +317,9 @@ export default function ListContainer({ type } : { type: 'product' | 'repair' | 
         />
         )}
         {showChangeLocationModal && (
-        <ConfirmationDialog
-          disabled={!changeLocationValue}
-          title={<>{trans('changeLocation')}</>}
-          content={(
-            <form onSubmit={(e) => { e.preventDefault(); handlePatchLocation(); }}>
-              {trans('changeLocationContent')}
-              <Box sx={{ pb: '2rem' }} />
-              <DataSourcePicker
-                url={AUTOCOMPLETE_LOCATIONS_PATH}
-                searchKey="name"
-                disabled={disabled()}
-                fullWidth
-                placeholder={trans('selectLocation')}
-                onChange={(value: { id: number }) => setChangeLocationValue(value?.id)}
-                value={changeLocationValue?.toString()}
-              />
-              <input type="submit" style={{ display: 'none' }} />
-            </form>
-        )}
-          onConfirm={handlePatchLocation}
+        <PatchLocationModal
           onClose={() => setShowChangeLocationModal(false)}
-          confirmButtonText={trans('save')}
+          onSubmit={handlePatchLocation}
         />
         )}
         {splitProduct && (

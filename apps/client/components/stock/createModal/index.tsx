@@ -1,14 +1,14 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import useAxios from '../../../hooks/useAxios';
-import useTranslation from '../../../hooks/useTranslation';
+import useTranslation, { Trans } from '../../../hooks/useTranslation';
 import useForm, { FormRepresentation } from '../../../hooks/useForm';
 import Form from '../form';
 import { AxiosResponse, STOCK_PRODUCTS_PATH } from '../../../utils/axios';
-import { Product } from '../../../utils/axios/models/product';
+import { LocationTemplate, Product } from '../../../utils/axios/models/product';
 import ConfirmationDialog from '../../confirmationDialog';
 import { buildAttributeKey } from '../form/AttributeForm';
 
-export function initFormState(product?: Product) {
+export function initFormState(trans: Trans, product?: Product): FormRepresentation {
   const attributes = {};
 
   product?.product_attributes?.forEach((productAttribute) => {
@@ -29,7 +29,27 @@ export function initFormState(product?: Product) {
     sku: { value: product?.sku },
     name: { value: product?.name, required: true },
     type_id: { value: product?.product_type?.id },
-    location_id: { value: product?.location?.id, required: true },
+    location_id: { value: product?.location?.id, required: true, additionalData: { location_template: product?.location.location_template || [] } },
+    location_label: {
+      value: product?.location_label?.label,
+      validator: (formRepresentation: FormRepresentation) => {
+        const locationTemplates: LocationTemplate[] = formRepresentation.location_id.additionalData.location_template || [];
+        if (locationTemplates.length == 0) {
+          return undefined;
+        }
+
+        let supported = false;
+
+        locationTemplates.forEach((element) => {
+          if (new RegExp(element.template).test(formRepresentation.location_label.value)) {
+            supported = true;
+            return undefined;
+          }
+        });
+
+        return supported ? undefined : trans('invalidLocationLabelFormat', { vars: new Map().set('regex', locationTemplates.map(({ template }) => template).toString()) });
+      },
+    },
     status_id: { value: product?.product_status?.id },
     price: { value: product?.price || 0, required: true },
     description: { value: product?.description },
@@ -79,15 +99,14 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
   return formData;
 }
 
-const formState = initFormState();
-
 export default function CreateModal({ onClose, onSubmit, additionalPayloadData }: {
   onClose: () => void,
   onSubmit: (product: Product) => void,
   additionalPayloadData?: { [key: string]: string }
 }) {
   const { trans } = useTranslation();
-  const { formRepresentation, setValue, validate } = useForm(formState);
+
+  const { formRepresentation, setValue, validate } = useForm(useMemo(() => initFormState(trans, null), []));
   const [showConfirmation, setShowConfirmation] = useState(false);
 
   const { call, performing } = useAxios('post', STOCK_PRODUCTS_PATH.replace(':id', ''), { showSuccessMessage: true, withProgressBar: true });
@@ -134,7 +153,7 @@ export default function CreateModal({ onClose, onSubmit, additionalPayloadData }
       <ConfirmationDialog
         open={showConfirmation}
         title={<>{trans('reminder')}</>}
-        content={<span>{`${trans('productEditConfirmation')} ${formRepresentation?.price.value}`}</span>}
+        content={<span>{`${trans('productEditConfirmation', { vars: (new Map()).set('price', formRepresentation?.price.value) })}`}</span>}
         onConfirm={handleSave}
         onClose={() => setShowConfirmation(false)}
       />

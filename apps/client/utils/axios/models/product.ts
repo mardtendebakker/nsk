@@ -9,12 +9,18 @@ interface Order {
   status: string
 }
 
+export interface LocationTemplate {
+  id: number,
+  template: string,
+}
+
 export interface Product {
   id: number,
   name:string,
   price:number,
   sku:string,
-  location:{ id: number, name: string },
+  location:{ id: number, name: string, location_template: LocationTemplate[] },
+  location_label:{ id: number, label: string },
   product_orders: { quantity: number, order: Order }[],
   product_status:{ id: number, name: string },
   product_type:{ id: number, name: string },

@@ -19,7 +19,7 @@ export default function DataSourcePicker(
     displayFieldset,
     formatter,
     onChange,
-    url,
+    path,
     searchKey,
     helperText,
     error,
@@ -35,14 +35,14 @@ export default function DataSourcePicker(
     displayFieldset?: boolean,
     formatter?: (arg0: object) => { id: number, label: string },
     onChange: (arg0: undefined | object | object[])=>void,
-    url: string,
+    path: string,
     searchKey?: string,
     helperText?: string,
     error?: boolean,
     multiple?: boolean
   },
 ) {
-  const { data, call } = useAxios('get', url, { showErrorMessage: false });
+  const { data, call } = useAxios('get', path, { showErrorMessage: false });
   const debouncedCall = useCallback(debounce(call), []);
   const [currentValue, setCurrentValue] = useState(null);
 

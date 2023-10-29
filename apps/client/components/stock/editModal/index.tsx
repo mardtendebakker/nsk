@@ -38,7 +38,7 @@ export default function EditModal(
   const { call: bulkPrint, performing: performingBulkPrintBarcodes } = useAxios('get', APRODUCT_BULK_PRINT_BARCODES);
   const { call: callPut, performing: performingPut } = useAxios('put', STOCK_PRODUCTS_PATH.replace(':id', id), { showSuccessMessage: true });
 
-  const { formRepresentation, setValue, validate } = useForm(useMemo(() => initFormState(product), [product]));
+  const { formRepresentation, setValue, validate } = useForm(useMemo(() => initFormState(trans, product), [product]));
   const [showConfirmation, setShowConfirmation] = useState(false);
 
   useEffect(() => {
@@ -179,7 +179,7 @@ export default function EditModal(
       <ConfirmationDialog
         open={showConfirmation}
         title={<>{trans('reminder')}</>}
-        content={<span>{`${trans('productEditConfirmation')} ${formRepresentation?.price.value}`}</span>}
+        content={<span>{`${trans('productEditConfirmation', { vars: (new Map()).set('price', formRepresentation?.price.value) })}`}</span>}
         onConfirm={handleSave}
         onClose={() => setShowConfirmation(false)}
       />

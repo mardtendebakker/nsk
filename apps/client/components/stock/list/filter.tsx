@@ -39,7 +39,7 @@ export default function Filter({
         }}
         >
           <DataSourcePicker
-            url={AUTOCOMPLETE_PRODUCT_TYPES_PATH}
+            path={AUTOCOMPLETE_PRODUCT_TYPES_PATH}
             disabled={disabled}
             fullWidth
             displayFieldset={false}
@@ -49,7 +49,7 @@ export default function Filter({
           />
           <ListFilterDivider horizontal={!isDesktop} />
           <DataSourcePicker
-            url={AUTOCOMPLETE_LOCATIONS_PATH}
+            path={AUTOCOMPLETE_LOCATIONS_PATH}
             searchKey="name"
             disabled={disabled}
             fullWidth
@@ -60,7 +60,7 @@ export default function Filter({
           />
           <ListFilterDivider horizontal={!isDesktop} />
           <DataSourcePicker
-            url={AUTOCOMPLETE_PRODUCT_STATUSES_PATH}
+            path={AUTOCOMPLETE_PRODUCT_STATUSES_PATH}
             disabled={disabled}
             fullWidth
             displayFieldset={false}

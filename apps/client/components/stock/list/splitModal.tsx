@@ -92,7 +92,7 @@ export default function SplitModal({ onClose, onConfirm, product }:{
           <DataSourcePicker
             fullWidth
             sx={{ mt: '.5rem' }}
-            url={AUTOCOMPLETE_PRODUCT_STATUSES_PATH}
+            path={AUTOCOMPLETE_PRODUCT_STATUSES_PATH}
             label={trans('newStatus')}
             placeholder={trans('selectStatus')}
             onChange={(selected: { id: number }) => setValue({ field: 'statusId', value: selected?.id })}

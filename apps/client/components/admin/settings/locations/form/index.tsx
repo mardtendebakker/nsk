@@ -1,3 +1,4 @@
+import { Box } from '@mui/material';
 import ChipsInput from '../../../../memoizedInput/chipsInput';
 import { SetValue, FormRepresentation } from '../../../../../hooks/useForm';
 import useTranslation from '../../../../../hooks/useTranslation';
@@ -33,6 +34,14 @@ export default function Form({
         placeholder={trans('locationForm.zipcodes.placeholder')}
         value={formRepresentation.zipcodes.value || []}
         onChange={(value) => setValue({ field: 'zipcodes', value })}
+        fullWidth
+      />
+      <Box sx={{ mb: '1rem' }} />
+      <ChipsInput
+        label={trans('locationForm.locationTemplate.label')}
+        placeholder={trans('locationForm.locationTemplate.placeholder')}
+        value={formRepresentation.location_template.value || []}
+        onChange={(value) => setValue({ field: 'location_template', value })}
         fullWidth
       />
     </BorderedBox>

@@ -72,7 +72,7 @@ export default function ImportSalesModal({
             <Typography color="error">{formRepresentation.file.error}</Typography>
             <DataSourcePicker
               sx={{ mt: '.5rem' }}
-              url={AUTOCOMPLETE_COMPANIES_PATH}
+              path={AUTOCOMPLETE_COMPANIES_PATH}
               params={{ partnerOnly: '1' }}
               disabled={performing}
               fullWidth

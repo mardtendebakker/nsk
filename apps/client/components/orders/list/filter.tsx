@@ -81,7 +81,7 @@ export default function Filter({
           />
           <ListFilterDivider horizontal={!isDesktop} />
           <DataSourcePicker
-            url={AUTOCOMPLETE_COMPANIES_PATH}
+            path={AUTOCOMPLETE_COMPANIES_PATH}
             disabled={disabled}
             fullWidth
             displayFieldset={false}
@@ -118,7 +118,7 @@ export default function Filter({
           />
           <ListFilterDivider horizontal={!isDesktop} />
           <DataSourcePicker
-            url={autocompleteOrderStatusesPathMapper(type)}
+            path={autocompleteOrderStatusesPathMapper(type)}
             disabled={disabled}
             fullWidth
             displayFieldset={false}
@@ -128,7 +128,7 @@ export default function Filter({
           />
           <ListFilterDivider horizontal={!isDesktop} />
           <DataSourcePicker
-            url={AUTOCOMPLETE_COMPANIES_PATH}
+            path={AUTOCOMPLETE_COMPANIES_PATH}
             params={{ partnerOnly: '1' }}
             disabled={disabled}
             fullWidth

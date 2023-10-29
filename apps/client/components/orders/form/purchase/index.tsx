@@ -147,7 +147,7 @@ function PurchaseForm({
               <DataSourcePicker
                 fullWidth
                 disabled={disabled}
-                url={AUTOCOMPLETE_LOGISTICS_PATH}
+                path={AUTOCOMPLETE_LOGISTICS_PATH}
                 label={trans('logistic')}
                 placeholder={trans('selectLogistic')}
                 onChange={(value: { id: number }) => {

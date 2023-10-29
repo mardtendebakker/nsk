@@ -48,7 +48,7 @@ export default function Form({
         sx={{ mb: '1rem' }}
         disabled={disabled}
         searchKey="name"
-        url={AUTOCOMPLETE_TASKS_PATH}
+        path={AUTOCOMPLETE_TASKS_PATH}
         fullWidth
         label={trans('productTypeForm.tasks.label')}
         placeholder={trans('productTypeForm.tasks.placeholder')}
@@ -61,7 +61,7 @@ export default function Form({
         multiple
         sx={{ mb: '.5rem' }}
         disabled={disabled}
-        url={AUTOCOMPLETE_ATTRIBUTES_PATH}
+        path={AUTOCOMPLETE_ATTRIBUTES_PATH}
         searchKey="name"
         fullWidth
         label={trans('productTypeForm.attributes.label')}
