@@ -155,7 +155,7 @@ export class StockService {
       ...rest
     } = body;
 
-    let location_label_id: number;
+    let location_label_id: number = null;
 
     if (location_label) {
       const locationLabel = await this.locationLabelService.findByLabelOrCreate({
@@ -167,9 +167,9 @@ export class StockService {
     }
     
     const createInput: Prisma.productUncheckedCreateInput = {
+      location_label_id,
       ...rest,
       ...(!rest.sku && { sku: Math.floor(Date.now() / 1000).toString() }),
-      ...(location_label_id && { location_label_id }),
       ...(product_orders?.length > 0 && {
         product_order: {
           connectOrCreate: product_orders.map(product_order => ({
@@ -207,7 +207,7 @@ export class StockService {
       throw new Error("missing type_id in body for updating product_attributes");
     }
 
-    let location_label_id: number;
+    let location_label_id: number = null;
 
     if (location_label) {
       const locationLabel = await this.locationLabelService.findByLabelOrCreate({
@@ -238,8 +238,8 @@ export class StockService {
     return this.repository.updateOne({
       id,
       data: {
+        location_label_id,
         ...restBody,
-        ...(location_label_id && { location_label_id }),
         ...(product_orders?.length && {
           product_order: {
             update: product_orders.map(product_order => ({

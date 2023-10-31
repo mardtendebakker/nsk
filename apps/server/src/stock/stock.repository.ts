@@ -86,7 +86,7 @@ export class StockRepository {
     });
   }
 
-  updateOne(params: { id: number; data: Prisma.productUpdateInput }) {
+  updateOne(params: { id: number; data: Prisma.productUncheckedUpdateInput }) {
     const { id, data } = params;
     return this.prisma.product.update({
       where: { id },
