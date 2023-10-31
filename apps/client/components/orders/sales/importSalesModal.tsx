@@ -5,6 +5,7 @@ import { AUTOCOMPLETE_COMPANIES_PATH, SALES_IMPORT_PATH } from '../../../utils/a
 import useForm from '../../../hooks/useForm';
 import useTranslation from '../../../hooks/useTranslation';
 import useAxios from '../../../hooks/useAxios';
+import Can from '../../can';
 
 const initState = {
   file: { required: true },
@@ -70,18 +71,20 @@ export default function ImportSalesModal({
               }}
             />
             <Typography color="error">{formRepresentation.file.error}</Typography>
-            <DataSourcePicker
-              sx={{ mt: '.5rem' }}
-              path={AUTOCOMPLETE_COMPANIES_PATH}
-              params={{ partnerOnly: '1' }}
-              disabled={performing}
-              fullWidth
-              placeholder={trans('selectPartner')}
-              onChange={(value: { id: number }) => {
-                setValue({ field: 'partner_id', value: value?.id });
-              }}
-              value={formRepresentation.partner_id.value}
-            />
+            <Can requiredGroups={['manager', 'logistics']}>
+              <DataSourcePicker
+                sx={{ mt: '.5rem' }}
+                path={AUTOCOMPLETE_COMPANIES_PATH}
+                params={{ partnerOnly: '1' }}
+                disabled={performing}
+                fullWidth
+                placeholder={trans('selectPartner')}
+                onChange={(value: { id: number }) => {
+                  setValue({ field: 'partner_id', value: value?.id });
+                }}
+                value={formRepresentation.partner_id.value}
+              />
+            </Can>
           </form>
         </Box>
       )}

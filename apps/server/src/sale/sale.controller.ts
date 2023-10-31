@@ -42,7 +42,7 @@ export class SaleController extends AOrderController {
   ) {
     if (groups.some(group=> MANAGER_GROUPS.includes(group))) {
       return this.saleService.import(body, file);
-    } else if (groups.some(group=> [CognitoGroups.SALE_UPLOADER].includes(group))) {
+    } else if (groups.some(group=> [CognitoGroups.PARTNER_SALE_UPLOADER].includes(group))) {
       return this.saleService.import(body, file, email);
     } else {
       throw new UnauthorizedException("only SALE_UPLOADERs have access to this api!");

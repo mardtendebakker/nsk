@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import useSecurity from '../../hooks/useSecurity';
 import Header from './header';
 import {
-  SIGN_IN, ACCOUNT_VERIFICATION, ROUTES_GROUPS, DASHBOARD,
+  SIGN_IN, ACCOUNT_VERIFICATION, DASHBOARD, getRouteGroups,
 } from '../../utils/routes';
 import { Group } from '../../stores/security/types';
 import can from '../../utils/can';
@@ -20,7 +20,7 @@ export default function DashboardLayout({ children }: { children: JSX.Element | 
     } else if (!user.emailVerified) {
       router.push(ACCOUNT_VERIFICATION);
     } else {
-      const requiredGroups: undefined | Group[] = ROUTES_GROUPS[router.pathname];
+      const requiredGroups: undefined | Group[] = getRouteGroups(router.pathname);
 
       if (requiredGroups && !can(user.groups, requiredGroups)) {
         router.push(DASHBOARD);

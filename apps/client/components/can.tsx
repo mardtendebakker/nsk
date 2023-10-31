@@ -5,9 +5,13 @@ import can from '../utils/can';
 export default function Can({
   children,
   requiredGroups,
-}: { children: JSX.Element | JSX.Element[], requiredGroups: Group[] }) {
+}: { children: JSX.Element | JSX.Element[], requiredGroups?: Group[] }) {
   const { state: { user } } = useSecurity();
 
   // eslint-disable-next-line react/jsx-no-useless-fragment
-  return can(user?.groups || [], requiredGroups) && <>{children}</>;
+  return can(user?.groups || [], [...requiredGroups, 'admin', 'super_admin']) && <>{children}</>;
 }
+
+Can.defaultProps = {
+  requiredGroups: [],
+};
