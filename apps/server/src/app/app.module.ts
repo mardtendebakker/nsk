@@ -13,18 +13,14 @@ import { PurchaseModule } from '../purchase/purchase.module';
 import { ProductModule } from '../product/product.module';
 import { ToRepairModule } from '../to-repair/to-repair.module';
 import { FileModule } from '../file/file.module';
-import { OrderStatusModule } from '../admin/order-status/order-status.module';
 import { CompanyModule } from '../company/company.module';
 import { EmailModule } from '../email/email.module';
-import { ProductTypeModule } from '../product-type/product-type.module';
-import { ProductStatusModule } from '../product-status/product-status.module';
 import { OrderModule } from '../order/order.module';
 import { PickupModule } from '../calendar/pickup/pickup.module';
 import { DeliveryModule } from '../calendar/delivery/delivery.module';
 import { LogisticModule } from '../logistic/logistic.module';
 import { AttributeModule } from '../attribute/attribute.module';
 import { TaskModule } from '../task/task.module';
-import { AdminUserModule } from '../admin/user/user.module';
 import { PublicModule } from '../public/public.module';
 import { SplitProductModule } from '../split-product/split-product.module';
 import { RepairModule } from '../repair/repair.module';
@@ -71,8 +67,6 @@ import { AdminModule } from '../admin/admin.module';
     FileModule,
     CompanyModule,
     EmailModule,
-    ProductTypeModule,
-    ProductStatusModule,
     OrderModule,
     PickupModule,
     DeliveryModule,

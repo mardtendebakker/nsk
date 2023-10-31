@@ -1,4 +1,4 @@
-import { Authentication } from "@nestjs-cognito/auth";
+import { Authorization } from "@nestjs-cognito/auth";
 import { Body, Controller, Get, Param, Post, Put, Query } from "@nestjs/common";
 import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { LocationService } from "./location.service";
@@ -6,11 +6,12 @@ import { FindLocationResponeDto, FindLocationsResponeDto } from "./dto/find-loca
 import { FindManyDto } from "./dto/find-many.dto";
 import { UpdateLocationDto } from "./dto/update-location.dto";
 import { CreateLocationDto } from "./dto/create-location.dto";
+import { MANAGER_GROUPS } from "../../common/types/cognito-groups.enum";
 
 @ApiBearerAuth()
-@Authentication()
-@ApiTags('locations')
-@Controller('locations')
+@Authorization(MANAGER_GROUPS)
+@ApiTags('admin locations')
+@Controller('admin/locations')
 export class LocationController {
   constructor(protected readonly locationService: LocationService) {}
   @Get()

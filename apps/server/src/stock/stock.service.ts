@@ -1,5 +1,5 @@
 import { Prisma, attribute } from "@prisma/client";
-import { LocationService } from "../location/location.service";
+import { LocationService } from "../admin/location/location.service";
 import { StockRepository } from "./stock.repository";
 import { StockProcess } from "./stock.process";
 import { UpdateManyProductDto } from "./dto/update-many-product.dto";

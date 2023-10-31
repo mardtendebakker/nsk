@@ -91,9 +91,16 @@ export class SaleService extends AOrderService {
     return this.repository.update(this.commonIncludePart(deleteProductsFromOrderParams));
   }
 
-  async import({ partner_id }: ImportDto, file: Express.Multer.File): Promise<AOrderPayload[]> {
+  async import(importDto: ImportDto, file: Express.Multer.File, email?: string): Promise<AOrderPayload[]> {
     if (!file) {
       throw new UnprocessableEntityException('file is invalid');
+    }
+    
+    let partner_id: number;
+    if (email) {
+      partner_id = (await this.customerService.findFirstByEmail(email))?.id;
+    } else {
+      partner_id = importDto.partner_id;
     }
   
     const workbook = xlsx.read(file.buffer, { type: 'buffer' });

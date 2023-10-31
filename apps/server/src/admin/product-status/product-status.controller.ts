@@ -1,4 +1,4 @@
-import { Authentication } from "@nestjs-cognito/auth";
+import { Authorization } from "@nestjs-cognito/auth";
 import { Body, Controller, Get, Param, Post, Put, Query } from "@nestjs/common";
 import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { ProductStatusService } from "./product-status.service";
@@ -7,11 +7,12 @@ import { FindManyDto } from "./dto/find-many.dto";
 import { UpdateProductStatusDto } from "./dto/update-product-status.dto";
 import { ProductStatusEntity } from "./entities/product-status.entity";
 import { CreateProductStatusDto } from "./dto/create-product-status.dto";
+import { MANAGER_GROUPS } from "../../common/types/cognito-groups.enum";
 
 @ApiBearerAuth()
-@Authentication()
-@ApiTags('product statuses')
-@Controller('product-statuses')
+@Authorization(MANAGER_GROUPS)
+@ApiTags('admin product statuses')
+@Controller('admin/product-statuses')
 export class ProductStatusController {
   constructor(protected readonly productStatusService: ProductStatusService) {}
   @Get('')

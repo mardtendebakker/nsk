@@ -1,5 +1,5 @@
-import { Authentication } from "@nestjs-cognito/auth";
-import { Body, Controller, Get, Param, Post, Put, Query } from "@nestjs/common";
+import { Authorization, AuthorizationGuard } from "@nestjs-cognito/auth";
+import { Body, Controller, Get, Param, Post, Put, Query, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { ProductTypeService } from "./product-type.service";
 import { FindProductTypesResponeDto } from "./dto/find-product-type-response.dto";
@@ -7,11 +7,12 @@ import { FindManyDto } from "./dto/find-many.dto";
 import { ProductTypeEntity } from "./entities/product-type.entity";
 import { UpdateProductTypeDto } from "./dto/update-product-type.dto";
 import { CreateProductTypeDto } from "./dto/create-product-type.dto";
+import { INTERNAL_GROUPS, MANAGER_GROUPS } from "../../common/types/cognito-groups.enum";
 
 @ApiBearerAuth()
-@Authentication()
-@ApiTags('product types')
-@Controller('product-types')
+@Authorization(MANAGER_GROUPS)
+@ApiTags('admin product types')
+@Controller('admin/product-types')
 export class ProductTypeController {
   constructor(protected readonly productTypeService: ProductTypeService) {}
   @Get('')
@@ -21,6 +22,7 @@ export class ProductTypeController {
   }
 
   @Get(':id')
+  @UseGuards(AuthorizationGuard(INTERNAL_GROUPS))
   @ApiResponse({type: ProductTypeEntity})
   findOne(@Param('id') id: number) {
     return this.productTypeService.findOne(id);

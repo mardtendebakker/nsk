@@ -65,6 +65,14 @@ export class CompanyService {
     return this.repository.findOne({ id });
   }
 
+  async findFirstByEmail(email: string) {
+    return this.repository.findFirst({
+      where: {
+        email
+      },
+    });
+  }
+
   async delete(id: number) {
     return this.repository.delete({ where: { id } });
   }

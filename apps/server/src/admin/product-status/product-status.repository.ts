@@ -1,23 +1,23 @@
 import { Prisma } from '@prisma/client';
-import { PrismaService } from '../prisma/prisma.service';
+import { PrismaService } from '../../prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
-export class ProductTypeRepository {
+export class ProductStatusRepository {
   constructor(
     protected readonly prisma: PrismaService,
     protected readonly configService: ConfigService
   ) {}
 
-  async findAll(params: Prisma.product_typeFindManyArgs) {
+  async findAll(params: Prisma.product_statusFindManyArgs) {
     const { skip, cursor, where, select, orderBy } = params;
     const maxQueryLimit = this.configService.get<number>('MAX_NONE_RELATION_QUERY_LIMIT');
     const take = Number.isFinite(params.take) && params.take <  maxQueryLimit ? params.take : maxQueryLimit;
 
     const submission = await this.prisma.$transaction([
-      this.prisma.product_type.count({where}),
-      this.prisma.product_type.findMany({ skip, take, cursor, where, select, orderBy })
+      this.prisma.product_status.count({where}),
+      this.prisma.product_status.findMany({ skip, take, cursor, where, select, orderBy })
     ]);
   
     return {
@@ -26,15 +26,15 @@ export class ProductTypeRepository {
     };
   }
   
-  findOne(params: Prisma.product_typeFindUniqueArgs) {
-    return this.prisma.product_type.findUnique(params);
+  findOne(params: Prisma.product_statusFindUniqueArgs) {
+    return this.prisma.product_status.findUnique(params);
   }
 
-  update(params: Prisma.product_typeUpdateArgs) {
-    return this.prisma.product_type.update(params);
+  update(params: Prisma.product_statusUpdateArgs) {
+    return this.prisma.product_status.update(params);
   }
 
-  create(params: Prisma.product_typeCreateArgs) {
-    return this.prisma.product_type.create(params);
+  create(params: Prisma.product_statusCreateArgs) {
+    return this.prisma.product_status.create(params);
   }
 }

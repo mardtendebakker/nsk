@@ -35,6 +35,10 @@ export class CompanyRepository {
       where,
     });
   }
+
+  findFirst(params: Prisma.acompanyFindFirstArgs) {
+    return this.prisma.acompany.findFirst(params);
+  }
   
   update(params: {
     where: Prisma.acompanyWhereUniqueInput;
@@ -50,10 +54,5 @@ export class CompanyRepository {
   delete(params: {where: Prisma.acompanyWhereUniqueInput}) {
     const { where } = params;
     return this.prisma.acompany.delete({where});
-  }
-
-  findFirst(params: Prisma.acompanyFindFirstArgs) {
-
-    return this.prisma.acompany.findFirst(params);
   }
 }

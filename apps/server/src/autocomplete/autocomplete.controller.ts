@@ -3,10 +3,11 @@ import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AutocompleteService } from './autocomplete.service';
 import { AutocompleteDto } from './dto/autocomplete.dto';
 import { AutocompleteResponseDto, LocationAutocompleteResponseDto } from './dto/autocomplete-response.dto';
-import { Authentication } from '@nestjs-cognito/auth';
+import { Authorization } from '@nestjs-cognito/auth';
+import { ALL_MAIN_GROUPS } from '../common/types/cognito-groups.enum';
 
 @ApiBearerAuth()
-@Authentication()
+@Authorization(ALL_MAIN_GROUPS)
 @ApiTags('autocomplete')
 @Controller('autocomplete')
 export class AutocompleteController {

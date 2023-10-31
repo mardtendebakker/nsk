@@ -1,4 +1,4 @@
-import { Authentication } from '@nestjs-cognito/auth';
+import { Authorization } from '@nestjs-cognito/auth';
 import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LocationTemplateService } from './location-template.service';
@@ -7,9 +7,10 @@ import { FindManyDto } from './dto/find-many.dto';
 import { LocationTemplateEntity } from './entities/location-template.entity';
 import { CreateLocationTemplateDto } from './dto/create-location-template.dto';
 import { UpdateLocationTemplateDto } from './dto/update-location-template.dto';
+import { MANAGER_GROUPS } from '../../common/types/cognito-groups.enum';
 
 @ApiBearerAuth()
-@Authentication()
+@Authorization(MANAGER_GROUPS)
 @ApiTags('admin location template')
 @Controller('admin/location-template')
 export class LocationTemplateController {

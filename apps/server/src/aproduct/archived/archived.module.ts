@@ -4,7 +4,7 @@ import { ArchivedRepository } from './archived.repository';
 import { ArchivedController } from './archived.controller';
 import { PrintService } from '../../print/print.service';
 import { FileModule } from '../../file/file.module';
-import { LocationModule } from '../../location/location.module';
+import { LocationModule } from '../../admin/location/location.module';
 import { PrismaModule } from '../../prisma/prisma.module';
 import { EntityStatus } from '../../common/types/entity-status.enum';
 import { LocationLabelModule } from '../../location-label/location-label.module';
