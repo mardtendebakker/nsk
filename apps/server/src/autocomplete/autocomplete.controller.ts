@@ -2,7 +2,7 @@ import { Controller, Get, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AutocompleteService } from './autocomplete.service';
 import { AutocompleteDto } from './dto/autocomplete.dto';
-import { AutocompleteResponseDto } from './dto/autocomplete-response.dto';
+import { AutocompleteResponseDto, LocationAutocompleteResponseDto } from './dto/autocomplete-response.dto';
 import { Authentication } from '@nestjs-cognito/auth';
 
 @ApiBearerAuth()
@@ -73,7 +73,7 @@ export class AutocompleteController {
   }
 
   @Get('/locations')
-  @ApiResponse({ type: AutocompleteResponseDto, isArray: true })
+  @ApiResponse({ type: LocationAutocompleteResponseDto, isArray: true })
   locations(@Query() query: AutocompleteDto) {
     return this.autocompleteService.findLocations(query);
   }

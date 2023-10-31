@@ -91,7 +91,7 @@ export default function CustomerDetails({
           ) : (
             <DataSourcePicker
               label={trans('customer')}
-              url={AUTOCOMPLETE_CUSTOMERS_PATH}
+              path={AUTOCOMPLETE_CUSTOMERS_PATH}
               disabled={disabled}
               fullWidth
               placeholder={trans('selectCustomer')}

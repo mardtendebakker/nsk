@@ -45,7 +45,27 @@ export class AutocompleteRepository {
   }
 
   async findLocations(autocompleteDto: AutocompleteDto): Promise<AutocompleteResponseDto[]> {
-    return this.commonFind(autocompleteDto, this.prisma.location);
+    const firstResult = await this.prisma.location.findMany({
+      take: DEFAULT_TAKE,
+      where: {id: {in: autocompleteDto.ids}},
+      include: { location_template : { select: { id:true, template:true } }}
+    });
+
+    const secondResult = await this.prisma.location.findMany({
+      take: DEFAULT_TAKE,
+      where: {
+        name: {contains: autocompleteDto.search || ''},
+        id: {notIn: firstResult.map(({id}) => id)}
+      },
+      include: { location_template : { select: { id:true, template:true } }}
+    })
+
+    return [
+      ...firstResult,
+      ...secondResult
+    ]
+    .sort((a,b) => a.id > b.id ? 1 : -1)
+    .map(({id, name, location_template}) => ({id, label: name, location_template}));
   }
 
   async findProductStatuses(autocompleteDto: AutocompleteDto): Promise<AutocompleteResponseDto[]> {
@@ -89,10 +109,12 @@ export class AutocompleteRepository {
     autocompleteDto: AutocompleteDto,
     prismaModel,
     additionalWhereCondition = {},
+    include = undefined
   ): Promise<AutocompleteResponseDto[]> {
     const firstResult = await prismaModel.findMany({
       take: DEFAULT_TAKE,
       where: {id: {in: autocompleteDto.ids}, ...additionalWhereCondition},
+      include: include || undefined
     });
 
     const secondResult = await prismaModel.findMany({
@@ -102,6 +124,7 @@ export class AutocompleteRepository {
         id: {notIn: firstResult.map(({id}) => id)},
         ...additionalWhereCondition
       },
+      include: include || undefined
     })
 
     return [

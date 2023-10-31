@@ -78,7 +78,7 @@ export default function BasicDetails({
           <Box sx={{ m: '.25rem' }} />
           <DataSourcePicker
             sx={{ flex: 1 }}
-            url={autocompleteOrderStatusesPathMapper(type)}
+            path={autocompleteOrderStatusesPathMapper(type)}
             disabled={disabled}
             fullWidth
             placeholder={trans('selectStatus')}

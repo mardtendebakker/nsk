@@ -10,6 +10,7 @@ export function initFormState(location?: Location) {
   return {
     name: { value: location?.name, required: true },
     zipcodes: { value: location?.zipcodes?.split(',') },
+    location_template: { value: location?.location_template?.map(({ template }) => template) },
   };
 }
 
@@ -23,6 +24,7 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
   return {
     name: formRepresentation.name.value,
     zipcodes,
+    location_template: formRepresentation.location_template.value,
   };
 }
 

@@ -7,9 +7,12 @@ import useTranslation from '../../../hooks/useTranslation';
 import BorderedBox from '../../borderedBox';
 import TextField from '../../memoizedInput/textField';
 import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
-import { AUTOCOMPLETE_PRODUCT_TYPES_PATH, AUTOCOMPLETE_LOCATIONS_PATH, AUTOCOMPLETE_PRODUCT_STATUSES_PATH } from '../../../utils/axios';
+import {
+  AUTOCOMPLETE_PRODUCT_TYPES_PATH, AUTOCOMPLETE_LOCATIONS_PATH, AUTOCOMPLETE_PRODUCT_STATUSES_PATH,
+} from '../../../utils/axios';
 import AttributeForm, { buildProductTypeKey } from './AttributeForm';
 import { price } from '../../../utils/formatter';
+import { LocationTemplate } from '../../../utils/axios/models/product';
 
 export default function Form({
   setValue,
@@ -85,7 +88,7 @@ export default function Form({
             />
             <DataSourcePicker
               sx={{ flex: 0.33 }}
-              url={AUTOCOMPLETE_PRODUCT_TYPES_PATH}
+              path={AUTOCOMPLETE_PRODUCT_TYPES_PATH}
               label={trans('productType')}
               placeholder={trans('selectProductType')}
               onChange={(selected: { id: number }) => setValue({ field: 'type_id', value: selected?.id })}
@@ -100,19 +103,31 @@ export default function Form({
           >
             <DataSourcePicker
               sx={{ flex: 0.33, mr: '.5rem' }}
-              url={AUTOCOMPLETE_LOCATIONS_PATH}
+              path={AUTOCOMPLETE_LOCATIONS_PATH}
               searchKey="name"
               label={trans('location')}
               placeholder={trans('selectLocation')}
-              onChange={(selected: { id: number }) => setValue({ field: 'location_id', value: selected?.id })}
+              onChange={(selected: { id: number, location_template: LocationTemplate[] }) => {
+                setValue({ field: 'location_id', value: selected?.id, additionalData: { location_template: selected?.location_template || [] } });
+              }}
               value={formRepresentation.location_id.value?.toString()}
               helperText={formRepresentation.location_id.error}
               error={!!formRepresentation.location_id.error}
               disabled={disabled}
             />
+            <TextField
+              sx={{ flex: 0.33, mr: '.5rem' }}
+              label={trans('locationLabel')}
+              placeholder={trans('selectLocationLabel')}
+              value={formRepresentation.location_label.value || ''}
+              helperText={formRepresentation.location_label.error}
+              error={!!formRepresentation.location_label.error}
+              onChange={(e) => setValue({ field: 'location_label', value: e.target.value })}
+              disabled={disabled || !formRepresentation.location_id.value}
+            />
             <DataSourcePicker
               sx={{ flex: 0.33, mr: '.5rem' }}
-              url={AUTOCOMPLETE_PRODUCT_STATUSES_PATH}
+              path={AUTOCOMPLETE_PRODUCT_STATUSES_PATH}
               label={trans('status')}
               placeholder={trans('selectStatus')}
               onChange={(selected: { id: number }) => setValue({ field: 'status_id', value: selected?.id })}

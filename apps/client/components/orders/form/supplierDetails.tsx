@@ -91,7 +91,7 @@ export default function SupplierDetails({
           ) : (
             <DataSourcePicker
               label={trans('supplier')}
-              url={AUTOCOMPLETE_SUPPLIERS_PATH}
+              path={AUTOCOMPLETE_SUPPLIERS_PATH}
               disabled={disabled}
               fullWidth
               placeholder={trans('selectSupplier')}

@@ -45,7 +45,7 @@ export default function Form({
       <DataSourcePicker
         multiple
         disabled={disabled}
-        url={AUTOCOMPLETE_PRODUCT_TYPES_PATH}
+        path={AUTOCOMPLETE_PRODUCT_TYPES_PATH}
         fullWidth
         label={trans('taskForm.productTypes.label')}
         placeholder={trans('taskForm.productTypes.placeholder')}

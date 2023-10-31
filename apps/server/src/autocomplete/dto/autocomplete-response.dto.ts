@@ -7,3 +7,8 @@ export class AutocompleteResponseDto {
   @ApiProperty()
   label: string;
 }
+
+export class LocationAutocompleteResponseDto extends AutocompleteResponseDto {
+  @ApiProperty()
+  location_template: string[];
+}

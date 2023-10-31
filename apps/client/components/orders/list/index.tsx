@@ -286,7 +286,7 @@ export default function ListContainer({ type }: { type: OrderType }) {
             {trans('changeStatusContent')}
             <Box sx={{ pb: '2rem' }} />
             <DataSourcePicker
-              url={autocompleteOrderStatusesPathMapper(type)}
+              path={autocompleteOrderStatusesPathMapper(type)}
               disabled={disabled()}
               fullWidth
               placeholder={trans('selectStatus')}

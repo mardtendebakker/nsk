@@ -211,7 +211,7 @@ export class StockService {
 
     if (location_label) {
       const locationLabel = await this.locationLabelService.findByLabelOrCreate({
-        location_id: stock.location.id,
+        location_id: body.location_id || stock.location.id,
         label: location_label,
       });
 
@@ -272,8 +272,21 @@ export class StockService {
   }
 
   async updateManyLocation(updateManyProductDto: UpdateManyProductDto) {
-    const { ids, product } = updateManyProductDto;
-    return this.updateMany(ids, product);
+    const { ids, product: { location_id, location_label } } = updateManyProductDto;
+
+    if(!location_id) {
+      return;
+    }
+
+    let location_label_id = undefined;
+
+    if (location_label) {
+      const locationLabel = await this.locationLabelService.findByLabelOrCreate({ location_id, label: location_label });
+
+      location_label_id = locationLabel.id;
+    }
+
+    return this.updateMany(ids, {location_id, location_label_id});
   }
 
   async getAllPublicTypes() {
@@ -347,6 +360,7 @@ export class StockService {
     const locationSelect: Prisma.locationSelect = {
       id: true,
       name: true,
+      location_template: true
     };
 
     const locationLabelSelect: Prisma.location_labelSelect = {

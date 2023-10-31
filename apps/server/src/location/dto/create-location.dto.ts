@@ -12,4 +12,8 @@ export class CreateLocationDto {
   @IsString()
   @IsOptional()
   zipcodes?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  location_template?: string[];
 }
