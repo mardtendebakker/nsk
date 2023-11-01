@@ -1,6 +1,8 @@
 import { Box, MenuList } from '@mui/material';
 import Image from 'next/image';
 import NavItem, { MenuItemDescription } from '../../../components/navItem';
+import Can from '../../../components/can';
+import { getRouteGroups } from '../../../utils/routes';
 
 export default function NavSection({ menuDescription }: { menuDescription: MenuItemDescription[] }) {
   return (
@@ -10,10 +12,12 @@ export default function NavSection({ menuDescription }: { menuDescription: MenuI
       </Box>
       <MenuList disablePadding sx={{ p: '1rem' }}>
         {menuDescription.map((menuItemDescription) => (
-          <NavItem
-            key={menuItemDescription.path}
-            menuItemDescription={menuItemDescription}
-          />
+          <Can requiredGroups={getRouteGroups(menuItemDescription.path)}>
+            <NavItem
+              key={menuItemDescription.path}
+              menuItemDescription={menuItemDescription}
+            />
+          </Can>
         ))}
       </MenuList>
     </nav>

@@ -1,4 +1,4 @@
-import { Group } from '../stores/security/types';
+import { Group, User } from '../stores/security/types';
 
 export const DASHBOARD = '/';
 export const SIGN_IN = '/sign-in';
@@ -52,7 +52,7 @@ export const getRouteGroups = (uri: string): Group[] => {
     return ['admin', 'super_admin', 'manager', 'logistics'];
   }
 
-  if (uri.startsWith('/orders')) {
+  if (uri.startsWith('/orders') || uri == DASHBOARD) {
     return ['admin', 'super_admin', 'manager', 'logistics', 'partner_sale_uploader', 'partner'];
   }
 
@@ -60,3 +60,5 @@ export const getRouteGroups = (uri: string): Group[] => {
     return ['admin', 'super_admin'];
   }
 };
+
+export const getDefaultPath = (user: User) => DASHBOARD;
