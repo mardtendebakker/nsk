@@ -1,4 +1,4 @@
-import { Authentication } from "@nestjs-cognito/auth";
+import { Authorization } from "@nestjs-cognito/auth";
 import { Body, Controller, Delete, Get, Param, Post, Put, Query } from "@nestjs/common";
 import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { OrderStatusService } from "./order-status.service";
@@ -7,9 +7,10 @@ import { FindManyDto } from "./dto/find-many.dto";
 import { OrderStatusEntity } from "./entities/order-status.entity";
 import { UpdateOrderStatusDto } from "./dto/update-order-status.dto";
 import { CreateOrderStatusDto } from "./dto/create-order-status.dto";
+import { MANAGER_GROUPS } from "../../common/types/cognito-groups.enum";
 
 @ApiBearerAuth()
-@Authentication()
+@Authorization(MANAGER_GROUPS)
 @ApiTags('admin order statuses')
 @Controller('admin/order-statuses')
 export class OrderStatusController {

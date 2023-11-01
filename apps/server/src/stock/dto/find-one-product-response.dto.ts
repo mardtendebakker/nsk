@@ -1,12 +1,12 @@
 import { ApiProperty, ApiPropertyOptional, PickType } from "@nestjs/swagger";
 import { FileEntity } from "../../file/entities/file.entity";
-import { LocationEntity } from "../../location/entities/location.entity";
+import { LocationEntity } from "../../admin/location/entities/location.entity";
 import { ProductOrderEntity } from "../entities/product-order.entity";
 import { ProductEntity } from "../entities/product.entity";
 import { ProductAttributeEntity } from "../entities/product-attribute.entity";
 import { AOrderEntity } from "../../aorder/entities/aorder.entity";
-import { ProductTypeEntity } from "../../product-type/entities/product-type.entity";
-import { ProductStatusEntity } from "../../product-status/entities/product-status.entity";
+import { ProductTypeEntity } from "../../admin/product-type/entities/product-type.entity";
+import { ProductStatusEntity } from "../../admin/product-status/entities/product-status.entity";
 import { LocationLabelEntity } from "../../location-label/entities/location-label.entity";
 
 class ProductAttributeDto extends PickType(ProductAttributeEntity, [

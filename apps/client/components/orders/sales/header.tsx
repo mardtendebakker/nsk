@@ -6,6 +6,7 @@ import useTranslation from '../../../hooks/useTranslation';
 import { ORDERS_SALES_NEW } from '../../../utils/routes';
 import HeaderItems from '../header/headerItems';
 import ImportSalesModal from './importSalesModal';
+import Can from '../../can';
 
 export default function Header() {
   const [showImport, setShowImport] = useState(false);
@@ -20,24 +21,28 @@ export default function Header() {
     >
       <HeaderItems />
       <Box>
-        <Button
-          sx={{ mb: '.5rem', mr: '.5rem' }}
-          size="small"
-          variant="contained"
-          onClick={() => setShowImport(true)}
-        >
-          <Add />
-          {trans('importSales')}
-        </Button>
-        <Button
-          sx={{ mb: '.5rem' }}
-          size="small"
-          variant="contained"
-          onClick={() => router.push(ORDERS_SALES_NEW)}
-        >
-          <Add />
-          {trans('newSales')}
-        </Button>
+        <Can requiredGroups={['manager', 'partner_sale_uploader']}>
+          <Button
+            sx={{ mb: '.5rem', mr: '.5rem' }}
+            size="small"
+            variant="contained"
+            onClick={() => setShowImport(true)}
+          >
+            <Add />
+            {trans('importSales')}
+          </Button>
+        </Can>
+        <Can requiredGroups={['manager']}>
+          <Button
+            sx={{ mb: '.5rem' }}
+            size="small"
+            variant="contained"
+            onClick={() => router.push(ORDERS_SALES_NEW)}
+          >
+            <Add />
+            {trans('newSales')}
+          </Button>
+        </Can>
       </Box>
       <ImportSalesModal
         open={showImport}

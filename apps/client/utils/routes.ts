@@ -41,16 +41,22 @@ export const ADMIN_SETTINGS_ORDER_STATUSES = '/admin/settings/order-statuses';
 export const LOGISTICS_PICKUP = '/logistics/pickups';
 export const LOGISTICS_DELIVERY = '/logistics/deliveries';
 
-export const ROUTES_GROUPS: { [key: string]: Group[] } = {
-  [ADMIN_USERS]: ['admin', 'super_admin'],
-  [ADMIN_SETTINGS]: ['admin', 'super_admin'],
-  [ADMIN_SETTINGS_LOCATIONS]: ['admin', 'super_admin'],
-  [ADMIN_SETTINGS_PRODUCT_TYPES]: ['admin', 'super_admin'],
-  [ADMIN_SETTINGS_ATTRIBUTES]: ['admin', 'super_admin'],
-  [ADMIN_SETTINGS_TASKS]: ['admin', 'super_admin'],
-  [ADMIN_SETTINGS_STATUS]: ['admin', 'super_admin'],
-  [ADMIN_SETTINGS_MAILING_LISTS]: ['admin', 'super_admin'],
-  [ADMIN_SETTINGS_CUSTOMER_TAGS]: ['admin', 'super_admin'],
-  [ADMIN_SETTINGS_PRODUCT_STATUSES]: ['admin', 'super_admin'],
-  [ADMIN_SETTINGS_ORDER_STATUSES]: ['admin', 'super_admin'],
+export const getRouteGroups = (uri: string): Group[] => {
+  if (
+    uri.startsWith('/stock')
+    || uri.startsWith('/my-tasks')
+    || uri.startsWith('/contacts')
+    || uri.startsWith('/bulk-email')
+    || uri.startsWith('/logistics')
+  ) {
+    return ['admin', 'super_admin', 'manager', 'logistics'];
+  }
+
+  if (uri.startsWith('/orders')) {
+    return ['admin', 'super_admin', 'manager', 'logistics', 'partner_sale_uploader', 'partner'];
+  }
+
+  if (uri.startsWith('/admin')) {
+    return ['admin', 'super_admin'];
+  }
 };

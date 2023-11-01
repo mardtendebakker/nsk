@@ -1,4 +1,4 @@
-import { Authentication } from "@nestjs-cognito/auth";
+import { Authorization } from "@nestjs-cognito/auth";
 import { Body, Controller, Get, Param, Post, Put, Query } from "@nestjs/common";
 import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { TaskService } from "./task.service";
@@ -7,9 +7,10 @@ import { FindManyDto } from "./dto/find-many.dto";
 import { TaskEntity } from "./entities/task.entity";
 import { UpdateTaskDto } from "./dto/update-task.dto";
 import { CreateTaskDto } from "./dto/create-task.dto";
+import { INTERNAL_GROUPS } from "../common/types/cognito-groups.enum";
 
 @ApiBearerAuth()
-@Authentication()
+@Authorization(INTERNAL_GROUPS)
 @ApiTags('tasks')
 @Controller('tasks')
 export class TaskController {

@@ -4,7 +4,7 @@ import { FindManyDto } from './dto/find-many.dto';
 import { Prisma } from '@prisma/client';
 import { UpdateLocationDto } from './dto/update-location.dto';
 import { CreateLocationDto } from './dto/create-location.dto';
-import { PrismaService } from '../prisma/prisma.service';
+import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
 export class LocationService {

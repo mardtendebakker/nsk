@@ -1,4 +1,4 @@
-import { Authentication } from "@nestjs-cognito/auth";
+import { Authorization } from "@nestjs-cognito/auth";
 import { Body, Controller, Delete, Get, Param, Post, Put, Query } from "@nestjs/common";
 import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { CompanyService } from "./company.service";
@@ -7,9 +7,10 @@ import { UpdateCompanyDto } from "./dto/update-company.dto";
 import { CompanyEntity } from "./entities/company.entity";
 import { CreateCompanyDto } from "./dto/create-company.dto";
 import { FindManyDto } from "./dto/find-many.dto";
+import { INTERNAL_GROUPS } from "../common/types/cognito-groups.enum";
 
 @ApiBearerAuth()
-@Authentication()
+@Authorization(INTERNAL_GROUPS)
 @ApiTags('companies')
 @Controller('companies')
 export class CompanyController {

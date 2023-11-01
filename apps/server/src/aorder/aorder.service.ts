@@ -22,7 +22,7 @@ export class AOrderService {
     protected readonly type?: AOrderDiscrimination
   ) {}
 
-  async findAll(query: FindManyDto) {
+  async findAll(query: FindManyDto, email?: string) {
     const {
       search,
       status,
@@ -74,18 +74,20 @@ export class AOrderService {
         ...(this.type && { discr: this.type }),
         ...(search && { order_nr: { contains: search } }),
         ...(status && { status_id: { equals: status } }),
-        ...((createdBy || partner) && {
+        ...((createdBy || partner || email) && {
           OR: [
             {
               acompany_aorder_supplier_idToacompany: {
                 ...(createdBy && { id: createdBy }),
                 ...(partner && { partner_id: partner }),
+                ...(email && { acompany: { email } }),
               },
             },
             {
               acompany_aorder_customer_idToacompany: {
                 ...(createdBy && { id: createdBy }),
                 ...(partner && { partner_id: partner }),
+                ...(email && { acompany: { email } }),
               },
             },
           ],
@@ -205,10 +207,24 @@ export class AOrderService {
     return this.fileService.deleteMany(fileIds);
   }
 
-  async findByIds(ids: number[]) {
+  async findByIds(ids: number[], email?: string) {
     const params: Prisma.aorderFindManyArgs = {
       where: {
         id: { in: ids },
+        ...(email && {
+          OR: [
+            {
+              acompany_aorder_supplier_idToacompany: {
+                ...(email && { acompany: { email } }),
+              },
+            },
+            {
+              acompany_aorder_customer_idToacompany: {
+                ...(email && { acompany: { email } }),
+              },
+            },
+          ],
+        })
       },
       orderBy: { id: 'asc', },
     };
@@ -218,8 +234,8 @@ export class AOrderService {
     return result.map(order => new AOrderProcess(order).run());
   }
 
-  async printAOrders(ids: number[]) {
-    const aorders = await this.findByIds(ids);
+  async printAOrders(ids: number[], email?: string): Promise<Buffer> {
+    const aorders = await this.findByIds(ids, email);
     return this.printService.printAOrders(aorders);
   }
 

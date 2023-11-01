@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { StockService } from '../stock/stock.service';
-import { LocationService } from '../location/location.service';
+import { LocationService } from '../admin/location/location.service';
 import { FileService } from '../file/file.service';
 import { AProductRepository } from './aproduct.repository';
 import { PrintService } from '../print/print.service';

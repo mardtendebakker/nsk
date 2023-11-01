@@ -1,12 +1,13 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Query, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AutocompleteService } from './autocomplete.service';
 import { AutocompleteDto } from './dto/autocomplete.dto';
 import { AutocompleteResponseDto, LocationAutocompleteResponseDto } from './dto/autocomplete-response.dto';
-import { Authentication } from '@nestjs-cognito/auth';
+import { Authorization, AuthorizationGuard, CognitoUser } from '@nestjs-cognito/auth';
+import { ALL_MAIN_GROUPS, CognitoGroups, INTERNAL_GROUPS, PARTNERS_GROUPS } from '../common/types/cognito-groups.enum';
 
 @ApiBearerAuth()
-@Authentication()
+@Authorization(ALL_MAIN_GROUPS)
 @ApiTags('autocomplete')
 @Controller('autocomplete')
 export class AutocompleteController {
@@ -32,8 +33,31 @@ export class AutocompleteController {
 
   @Get('/companies')
   @ApiResponse({ type: AutocompleteResponseDto, isArray: true })
-  companies(@Query() query: AutocompleteDto) {
-    return this.autocompleteService.findCompanies(query);
+  companies(
+    @Query() query: AutocompleteDto,
+    @CognitoUser(["groups", "email"])
+    {
+      groups,
+      email,
+    }: {
+      groups: CognitoGroups[];
+      email: string;
+    }
+  ) {
+    if (groups.some(group=> INTERNAL_GROUPS.includes(group))) {
+      return this.autocompleteService.findCompanies(query);
+    } else if (groups.some(group=> PARTNERS_GROUPS.includes(group))) {
+      return this.autocompleteService.findCompanies(query, email);
+    } else {
+      throw new UnauthorizedException("only MAIN GROUPs have access to this api!");
+    }
+  }
+
+  @Get('/partners')
+  @UseGuards(AuthorizationGuard(INTERNAL_GROUPS))
+  @ApiResponse({ type: AutocompleteResponseDto, isArray: true })
+  partners(@Query() query: AutocompleteDto) {
+    return this.autocompleteService.findPartners(query);
   }
 
   @Get('/purchase-statuses')

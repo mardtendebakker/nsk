@@ -3,6 +3,7 @@ import Loop from '@mui/icons-material/Loop';
 import ChevronRight from '@mui/icons-material/ChevronRight';
 import useTranslation from '../../../hooks/useTranslation';
 import Checkbox from '../../checkbox';
+import Can from '../../can';
 
 export default function Action({
   disabled,
@@ -32,10 +33,12 @@ export default function Action({
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         {checkedOrdersCount > 0
         && (
-        <Button size="small" onClick={onChangeStatus} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
-          <Loop sx={{ mr: '.1rem' }} />
-          {trans('changeStatus')}
-        </Button>
+          <Can requiredGroups={['manager', 'logistics']}>
+            <Button size="small" onClick={onChangeStatus} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
+              <Loop sx={{ mr: '.1rem' }} />
+              {trans('changeStatus')}
+            </Button>
+          </Can>
         )}
         {checkedOrdersCount > 0
         && (

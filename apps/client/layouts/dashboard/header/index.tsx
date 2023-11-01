@@ -22,11 +22,13 @@ import {
   BULK_EMAIL,
   ORDERS_REPAIRS,
   STOCKS_ARCHIVED,
+  getRouteGroups,
 } from '../../../utils/routes';
 import useTranslation from '../../../hooks/useTranslation';
 import useResponsive from '../../../hooks/useResponsive';
 import NavSection from './navSection';
 import MenuItemText from '../../../components/menuTextItem';
+import Can from '../../../components/can';
 
 function MenuItem(
   {
@@ -37,17 +39,19 @@ function MenuItem(
   : { item : { title: string, path: string, active: boolean } },
 ) {
   return (
-    <Link
-      href={path}
-      passHref
-      style={{ textDecoration: 'none' }}
-    >
-      <Box sx={{ ml: '2rem' }}>
-        <MenuItemText active={active}>
-          {title}
-        </MenuItemText>
-      </Box>
-    </Link>
+    <Can requiredGroups={getRouteGroups(path)}>
+      <Link
+        href={path}
+        passHref
+        style={{ textDecoration: 'none' }}
+      >
+        <Box sx={{ ml: '2rem' }}>
+          <MenuItemText active={active}>
+            {title}
+          </MenuItemText>
+        </Box>
+      </Link>
+    </Can>
   );
 }
 

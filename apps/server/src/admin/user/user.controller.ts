@@ -4,17 +4,13 @@ import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AdminUserService } from './user.service';
 import { ListUserDto } from './dto/list-user.dto';
 import { ListUserResponseDto } from './dto/list-user-response.dto';
-import { CognitoGroups } from '../../common/types/cognito-groups.enum';
+import { CognitoGroups, MANAGER_GROUPS } from '../../common/types/cognito-groups.enum';
 import { UpdateUserGroupDto } from './dto/update-user-group.dto';
 
 @ApiTags('admin-users')
 @Controller('admin/users')
 @ApiBearerAuth()
-@Authorization([
-  CognitoGroups.SUPER_ADMIN,
-  CognitoGroups.MANAGER,
-  CognitoGroups.ADMIN
-])
+@Authorization(MANAGER_GROUPS)
 export class AdminUserController {
   constructor(private readonly adminUserService: AdminUserService) {}
 

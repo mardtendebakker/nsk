@@ -1,4 +1,4 @@
-import { Authentication, AuthorizationGuard } from "@nestjs-cognito/auth";
+import { Authorization, AuthorizationGuard } from "@nestjs-cognito/auth";
 import { Body, Delete, Get, HttpStatus, Param, Patch, Post, Put, Query, Res, StreamableFile, UploadedFiles, UseGuards, UseInterceptors } from "@nestjs/common";
 import { ApiBearerAuth, ApiResponse } from "@nestjs/swagger";
 import { FindOneProductResponeDto } from "./dto/find-one-product-response.dto";
@@ -12,10 +12,10 @@ import { AnyFilesInterceptor } from "@nestjs/platform-express";
 import { CreateBodyStockDto } from "./dto/create-body-stock.dto";
 import { BulkPrintDTO } from "../print/dto/bulk-print.dto";
 import type { Response } from 'express';
-import { CognitoGroups } from "../common/types/cognito-groups.enum";
+import { INTERNAL_GROUPS, MANAGER_GROUPS } from "../common/types/cognito-groups.enum";
 
 @ApiBearerAuth()
-@Authentication()
+@Authorization(INTERNAL_GROUPS)
 export class StockController {
   constructor(protected readonly stockService: StockService) {}
 
@@ -59,13 +59,7 @@ export class StockController {
   }
 
   @Delete(':id')
-  @UseGuards(
-    AuthorizationGuard([
-      CognitoGroups.SUPER_ADMIN,
-      CognitoGroups.ADMIN,
-      CognitoGroups.MANAGER,
-    ])
-  )
+  @UseGuards(AuthorizationGuard(MANAGER_GROUPS))
   deleteOne(@Param('id') id: number) {
     return this.stockService.deleteOne(id);
   }

@@ -1,4 +1,4 @@
-import { Authentication } from "@nestjs-cognito/auth";
+import { Authorization } from "@nestjs-cognito/auth";
 import { Body, Controller, Get, Param, Post, Put, Query } from "@nestjs/common";
 import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { AttributeService } from "./attribute.service";
@@ -7,9 +7,10 @@ import { FindManyDto } from "./dto/find-many.dto";
 import { AttributeEntity } from "./entities/attribute.entity";
 import { UpdateAttributeDto } from "./dto/update-attribute.dto";
 import { CreateAttributeDto } from "./dto/create-attribute.dto";
+import { INTERNAL_GROUPS } from "../common/types/cognito-groups.enum";
 
 @ApiBearerAuth()
-@Authentication()
+@Authorization(INTERNAL_GROUPS)
 @ApiTags('attributes')
 @Controller('attributes')
 export class AttributeController {

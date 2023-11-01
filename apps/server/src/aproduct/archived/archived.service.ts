@@ -4,7 +4,7 @@ import { FileService } from '../../file/file.service';
 import { PrintService } from '../../print/print.service';
 import { EntityStatus } from '../../common/types/entity-status.enum';
 import { AProductService } from '../aproduct.service';
-import { LocationService } from '../../location/location.service';
+import { LocationService } from '../../admin/location/location.service';
 import { LocationLabelService } from '../../location-label/location-label.service';
 
 @Injectable()

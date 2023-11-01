@@ -1,6 +1,5 @@
 import { AutocompleteRepository } from './autocomplete.repository';
 import { AutocompleteDto } from './dto/autocomplete.dto';
-import { AutocompleteCompanyDto } from './dto/autocomplete.company.dto';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
@@ -19,39 +18,43 @@ export class AutocompleteService {
     return this.repository.findAttributes(autocompleteDto);
   }
 
-  async findCompanies(autocompleteDto: AutocompleteCompanyDto) {
-    return this.repository.findCompanies(autocompleteDto);
+  async findCompanies(autocompleteDto: AutocompleteDto, email?: string) {
+    return this.repository.findCompanies(autocompleteDto, email);
   }
 
-  async findPurchaseStatuses(autocompleteDto: AutocompleteCompanyDto) {
+  async findPartners(autocompleteDto: AutocompleteDto) {
+    return this.repository.findPartners(autocompleteDto);
+  }
+
+  async findPurchaseStatuses(autocompleteDto: AutocompleteDto) {
     return this.repository.findPurchaseStatuses(autocompleteDto);
   }
 
-  async findSalesStatuses(autocompleteDto: AutocompleteCompanyDto) {
+  async findSalesStatuses(autocompleteDto: AutocompleteDto) {
     return this.repository.findSalesStatuses(autocompleteDto);
   }
 
-  async findRepairStatuses(autocompleteDto: AutocompleteCompanyDto) {
+  async findRepairStatuses(autocompleteDto: AutocompleteDto) {
     return this.repository.findRepairStatuses(autocompleteDto);
   }
 
-  async findCustomers(autocompleteDto: AutocompleteCompanyDto) {
+  async findCustomers(autocompleteDto: AutocompleteDto) {
     return this.repository.findCustomers(autocompleteDto);
   }
 
-  async findSuppliers(autocompleteDto: AutocompleteCompanyDto) {
+  async findSuppliers(autocompleteDto: AutocompleteDto) {
     return this.repository.findSuppliers(autocompleteDto);
   }
 
-  async findLogistics(autocompleteDto: AutocompleteCompanyDto) {
+  async findLogistics(autocompleteDto: AutocompleteDto) {
     return this.repository.findLogistics(autocompleteDto);
   }
 
-  async findLocations(autocompleteDto: AutocompleteCompanyDto) {
+  async findLocations(autocompleteDto: AutocompleteDto) {
     return this.repository.findLocations(autocompleteDto);
   }
 
-  async findProductStatuses(autocompleteDto: AutocompleteCompanyDto) {
+  async findProductStatuses(autocompleteDto: AutocompleteDto) {
     return this.repository.findProductStatuses(autocompleteDto);
   }
 }

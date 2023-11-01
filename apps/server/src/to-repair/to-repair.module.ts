@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { PrismaModule } from '../prisma/prisma.module';
-import { LocationModule } from '../location/location.module';
+import { LocationModule } from '../admin/location/location.module';
 import { ToRepairRepository } from './to-repair.repository';
 import { ToRepairService } from './to-repair.service';
 import { ToRepairController } from './to-repair.controller';

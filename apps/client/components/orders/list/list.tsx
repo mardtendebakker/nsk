@@ -18,6 +18,7 @@ import {
   CONTACTS_CUSTOMERS_EDIT, CONTACTS_SUPPLIERS_EDIT, ORDERS_PURCHASES_EDIT, ORDERS_REPAIRS_EDIT, ORDERS_SALES_EDIT,
 } from '../../../utils/routes';
 import { OrderType } from '../../../utils/axios/models/types';
+import Can from '../../can';
 
 const EDIT_PATHS = {
   purchase: ORDERS_PURCHASES_EDIT,
@@ -244,8 +245,10 @@ export default function List({
                 )}
               </TableCell>
               <TableCell>
-                <Edit href={editPath.replace('[id]', order.id.toString())} disabled={disabled} />
-                <Delete onClick={() => onDelete(order.id)} disabled={disabled} tooltip />
+                <Can requiredGroups={['manager', 'logistics']}>
+                  <Edit href={editPath.replace('[id]', order.id.toString())} disabled={disabled} />
+                  <Delete onClick={() => onDelete(order.id)} disabled={disabled} tooltip />
+                </Can>
               </TableCell>
             </TableRow>
           );

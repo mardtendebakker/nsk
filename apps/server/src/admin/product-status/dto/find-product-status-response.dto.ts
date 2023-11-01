@@ -1,5 +1,5 @@
 import { ApiProperty, PickType } from "@nestjs/swagger";
-import { IFindManyRespone } from "../../common/interface/find-many-respone";
+import { IFindManyRespone } from "../../../common/interface/find-many-respone";
 import { ProductStatusEntity } from "../entities/product-status.entity";
 
 class FindProductTypeResponseDto extends PickType(ProductStatusEntity, [
