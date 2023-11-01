@@ -1,7 +1,7 @@
 import { Box, Typography } from '@mui/material';
 import ConfirmationDialog from '../../confirmationDialog';
 import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
-import { AUTOCOMPLETE_COMPANIES_PATH, SALES_IMPORT_PATH } from '../../../utils/axios';
+import { AUTOCOMPLETE_PARTNERS_PATH, SALES_IMPORT_PATH } from '../../../utils/axios';
 import useForm from '../../../hooks/useForm';
 import useTranslation from '../../../hooks/useTranslation';
 import useAxios from '../../../hooks/useAxios';
@@ -71,11 +71,10 @@ export default function ImportSalesModal({
               }}
             />
             <Typography color="error">{formRepresentation.file.error}</Typography>
-            <Can requiredGroups={['manager', 'logistics']}>
+            <Can requiredGroups={['manager']}>
               <DataSourcePicker
                 sx={{ mt: '.5rem' }}
-                path={AUTOCOMPLETE_COMPANIES_PATH}
-                params={{ partnerOnly: '1' }}
+                path={AUTOCOMPLETE_PARTNERS_PATH}
                 disabled={performing}
                 fullWidth
                 placeholder={trans('selectPartner')}

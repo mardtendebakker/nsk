@@ -6,7 +6,7 @@ import {
   Grid,
   Typography,
 } from '@mui/material';
-import { AUTOCOMPLETE_COMPANIES_PATH } from '../../utils/axios';
+import { AUTOCOMPLETE_PARTNERS_PATH } from '../../utils/axios';
 import useTranslation from '../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../hooks/useForm';
 import TextField from '../memoizedInput/textField';
@@ -127,8 +127,7 @@ function Form({
             {type == 'supplier' ? (
               <DataSourcePicker
                 sx={{ flex: isDesktop ? 0.33 : 1 }}
-                path={AUTOCOMPLETE_COMPANIES_PATH}
-                params={{ partnerOnly: '1' }}
+                path={AUTOCOMPLETE_PARTNERS_PATH}
                 disabled={disabled}
                 fullWidth
                 label={trans('partner')}
@@ -146,8 +145,7 @@ function Form({
                 {!formRepresentation.is_partner.value && (
                 <DataSourcePicker
                   label={trans('partner')}
-                  path={AUTOCOMPLETE_COMPANIES_PATH}
-                  params={{ partnerOnly: '1' }}
+                  path={AUTOCOMPLETE_PARTNERS_PATH}
                   disabled={disabled}
                   fullWidth
                   placeholder={trans('selectPartner')}

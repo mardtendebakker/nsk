@@ -47,6 +47,7 @@ export const AUTOCOMPLETE_PRODUCT_TYPES_PATH = '/autocomplete/product-types';
 export const AUTOCOMPLETE_TASKS_PATH = '/autocomplete/tasks';
 export const AUTOCOMPLETE_ATTRIBUTES_PATH = '/autocomplete/attributes';
 export const AUTOCOMPLETE_COMPANIES_PATH = '/autocomplete/companies';
+export const AUTOCOMPLETE_PARTNERS_PATH = '/autocomplete/partners';
 export const AUTOCOMPLETE_PURCHASE_STATUSES_PATH = '/autocomplete/purchase-statuses';
 export const AUTOCOMPLETE_SALE_STATUSES_PATH = '/autocomplete/sale-statuses';
 export const AUTOCOMPLETE_REPAIR_STATUSES_PATH = '/autocomplete/repair-statuses';

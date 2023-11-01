@@ -19,7 +19,8 @@ import {
   CognitoGroups,
   ADMINS_GROUPS,
   ALL_MAIN_GROUPS,
-  INTERNAL_GROUPS
+  INTERNAL_GROUPS,
+  PARTNERS_GROUPS
 } from "../common/types/cognito-groups.enum";
 
 @ApiBearerAuth()
@@ -41,7 +42,7 @@ export class AOrderController {
   ) {
     if (groups.some(group=> INTERNAL_GROUPS.includes(group))) {
       return this.aorderService.findAll(query);
-    } else if (groups.some(group=> [CognitoGroups.PARTNER].includes(group))) {
+    } else if (groups.some(group=> PARTNERS_GROUPS.includes(group))) {
       return this.aorderService.findAll(query, email);
     } else {
       throw new UnauthorizedException("only PARTNERs have access to this api!");
@@ -121,7 +122,7 @@ export class AOrderController {
     let pdfStream: Buffer;
     if (groups.some(group=> INTERNAL_GROUPS.includes(group))) {
       pdfStream = await this.aorderService.printAOrders(ids);
-    } else if (groups.some(group=> [CognitoGroups.PARTNER].includes(group))) {
+    } else if (groups.some(group=> PARTNERS_GROUPS.includes(group))) {
       pdfStream = await this.aorderService.printAOrders(ids, email);
     } else {
       throw new UnauthorizedException("only PARTNERs have access to this api!");

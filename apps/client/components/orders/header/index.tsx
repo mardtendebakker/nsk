@@ -6,6 +6,7 @@ import {
   ORDERS_PURCHASES, ORDERS_PURCHASES_NEW, ORDERS_REPAIRS, ORDERS_REPAIRS_NEW, ORDERS_SALES, ORDERS_SALES_NEW,
 } from '../../../utils/routes';
 import HeaderItems from './headerItems';
+import Can from '../../can';
 
 const NEW_ORDER_PATH = {
   [ORDERS_PURCHASES]: ORDERS_PURCHASES_NEW,
@@ -29,15 +30,17 @@ export default function Header() {
     }}
     >
       <HeaderItems />
-      <Button
-        sx={{ mb: '.5rem' }}
-        size="small"
-        variant="contained"
-        onClick={() => router.push(NEW_ORDER_PATH[router.pathname] || ORDERS_PURCHASES_NEW)}
-      >
-        <Add />
-        {trans(NEW_ORDER_LABEL[router.pathname])}
-      </Button>
+      <Can requiredGroups={['manager']}>
+        <Button
+          sx={{ mb: '.5rem' }}
+          size="small"
+          variant="contained"
+          onClick={() => router.push(NEW_ORDER_PATH[router.pathname] || ORDERS_PURCHASES_NEW)}
+        >
+          <Add />
+          {trans(NEW_ORDER_LABEL[router.pathname])}
+        </Button>
+      </Can>
     </Box>
   );
 }

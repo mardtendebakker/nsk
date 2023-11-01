@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { AutocompleteDto } from './dto/autocomplete.dto';
 import { AutocompleteResponseDto } from './dto/autocomplete-response.dto';
 import { PrismaService } from '../prisma/prisma.service';
-import { AutocompleteCompanyDto } from './dto/autocomplete.company.dto';
 import { CompanyDiscrimination } from '../company/types/company-discrimination.enum';
 import { LogisticRole } from '../logistic/types/logistic-role.enum';
 
@@ -97,11 +96,19 @@ export class AutocompleteRepository {
     .map(({id, username}) => ({id, label: username}));
   }
 
-  async findCompanies(autocompleteDto: AutocompleteCompanyDto): Promise<AutocompleteResponseDto[]> {
+  async findCompanies(autocompleteDto: AutocompleteDto, email?: string): Promise<AutocompleteResponseDto[]> {
     return this.commonFind(
       autocompleteDto,
       this.prisma.acompany,
-      { is_partner: { gt: autocompleteDto.partnerOnly == 1 ? 0 : undefined }}
+      { ...(email && { acompany: { email } }) }
+    );
+  }
+
+  async findPartners(autocompleteDto: AutocompleteDto): Promise<AutocompleteResponseDto[]> {
+    return this.commonFind(
+      autocompleteDto,
+      this.prisma.acompany,
+      { is_partner: { gt: 0 } }
     );
   }
 

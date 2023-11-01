@@ -12,6 +12,7 @@ import DueToday from '../components/dashboard/dueToday';
 import UpcomingDeliveries from '../components/dashboard/upcomingDeliveries';
 import Analytics from '../components/dashboard/analytics';
 import { ORDERS_ANALYTICS_PATH } from '../utils/axios';
+import Can from '../components/can';
 
 function Dashboard() {
   const { state: { user } } = useSecurity();
@@ -28,22 +29,24 @@ function Dashboard() {
         {user?.username}
         !
       </Typography>
-      <Box sx={{ m: '.5rem' }} />
-      <IndicatorRow />
-      <Box sx={{ mt: '.5rem', display: 'flex' }}>
-        <Box sx={{ flex: '.8', mr: '.5rem' }}>
-          <Analytics label={trans('productAnalytics')} path={ORDERS_ANALYTICS_PATH} />
-          <Box sx={{ m: '.5rem' }} />
-          <LocationCapacity />
-          <Box sx={{ m: '.5rem' }} />
-          <ResourceManagement />
-          <Box sx={{ m: '.5rem' }} />
-          <DueToday />
+      <Can requiredGroups={['manager', 'logistics']}>
+        <Box sx={{ m: '.5rem' }} />
+        <IndicatorRow />
+        <Box sx={{ mt: '.5rem', display: 'flex' }}>
+          <Box sx={{ flex: '.8', mr: '.5rem' }}>
+            <Analytics label={trans('productAnalytics')} path={ORDERS_ANALYTICS_PATH} />
+            <Box sx={{ m: '.5rem' }} />
+            <LocationCapacity />
+            <Box sx={{ m: '.5rem' }} />
+            <ResourceManagement />
+            <Box sx={{ m: '.5rem' }} />
+            <DueToday />
+          </Box>
+          <Box sx={{ flex: '.2' }}>
+            <UpcomingDeliveries />
+          </Box>
         </Box>
-        <Box sx={{ flex: '.2' }}>
-          <UpcomingDeliveries />
-        </Box>
-      </Box>
+      </Can>
     </DashboardLayout>
   );
 }

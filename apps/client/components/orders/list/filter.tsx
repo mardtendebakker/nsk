@@ -7,12 +7,13 @@ import useTranslation from '../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../hooks/useForm';
 import TextField from '../../input/textField';
 import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
-import { AUTOCOMPLETE_COMPANIES_PATH } from '../../../utils/axios';
+import { AUTOCOMPLETE_COMPANIES_PATH, AUTOCOMPLETE_PARTNERS_PATH } from '../../../utils/axios';
 import SearchAccordion from '../../searchAccordion';
 import useResponsive from '../../../hooks/useResponsive';
 import ListFilterDivider from '../../listFilterDivider';
 import { OrderType } from '../../../utils/axios/models/types';
 import { autocompleteOrderStatusesPathMapper } from '../../../utils/axios/helpers/typeMapper';
+import Can from '../../can';
 
 export default function Filter({
   type,
@@ -126,17 +127,18 @@ export default function Filter({
             onChange={(selected: { id: number }) => setValue({ field: 'status', value: selected?.id })}
             value={formRepresentation.status.value?.toString()}
           />
-          <ListFilterDivider horizontal={!isDesktop} />
-          <DataSourcePicker
-            path={AUTOCOMPLETE_COMPANIES_PATH}
-            params={{ partnerOnly: '1' }}
-            disabled={disabled}
-            fullWidth
-            displayFieldset={false}
-            placeholder={trans('partner')}
-            onChange={(selected: { id: number }) => setValue({ field: 'partner', value: selected?.id })}
-            value={formRepresentation.partner.value?.toString()}
-          />
+          <Can requiredGroups={['manager']}>
+            <ListFilterDivider horizontal={!isDesktop} />
+            <DataSourcePicker
+              path={AUTOCOMPLETE_PARTNERS_PATH}
+              disabled={disabled}
+              fullWidth
+              displayFieldset={false}
+              placeholder={trans('partner')}
+              onChange={(selected: { id: number }) => setValue({ field: 'partner', value: selected?.id })}
+              value={formRepresentation.partner.value?.toString()}
+            />
+          </Can>
         </Box>
       </SearchAccordion>
     </BorderedBox>

@@ -53,7 +53,7 @@ export const getRouteGroups = (uri: string): Group[] => {
   }
 
   if (uri.startsWith('/orders')) {
-    return ['admin', 'super_admin', 'manager', 'logistics', 'partner'];
+    return ['admin', 'super_admin', 'manager', 'logistics', 'partner_sale_uploader', 'partner'];
   }
 
   if (uri.startsWith('/admin')) {

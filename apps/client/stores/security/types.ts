@@ -1,4 +1,4 @@
-export type Group = 'super_admin' | 'manager' | 'admin' | 'logistics' | 'partner' | 'local';
+export type Group = 'super_admin' | 'manager' | 'admin' | 'logistics' | 'partner_sale_uploader' | 'partner' | 'local';
 
 export interface State {
   user?: User,

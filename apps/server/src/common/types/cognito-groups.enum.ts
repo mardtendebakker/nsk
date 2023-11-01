@@ -23,12 +23,17 @@ export const INTERNAL_GROUPS = [
   CognitoGroups.LOGISTICS,
 ];
 
-export const SALE_UPLOADER_GROUPS = [
-  ...INTERNAL_GROUPS,
+export const PARTNERS_GROUPS = [
   CognitoGroups.PARTNER_SALE_UPLOADER,
+  CognitoGroups.PARTNER,
 ];
 
 export const ALL_MAIN_GROUPS = [
-  ...SALE_UPLOADER_GROUPS,
-  CognitoGroups.PARTNER,
+  ...INTERNAL_GROUPS,
+  ...PARTNERS_GROUPS,
+];
+
+export const SALE_UPLOADER_GROUPS = [
+  ...MANAGER_GROUPS,
+  CognitoGroups.PARTNER_SALE_UPLOADER,
 ];
