@@ -47,7 +47,7 @@ export class LocationService {
 
       if(Array.isArray(location_template)) {
         await tx.location_template.deleteMany({ where: { location_id: id }});
-        await tx.location_template.createMany({ data: location_template.map((template) => ({ template, name:template, location_id: id })) });
+        await tx.location_template.createMany({ data: location_template.map((template) => ({ template, location_id: id })) });
       }
     });
 
@@ -65,7 +65,7 @@ export class LocationService {
     await this.prisma.$transaction(async (tx) => {
       result = await tx.location.create({ data : { name, zipcodes } });
       if(location_template?.length > 1) {
-        await tx.location_template.createMany({ data: location_template.map((template) => ({ template, name:template, location_id: result.id })) })
+        await tx.location_template.createMany({ data: location_template.map((template) => ({ template, location_id: result.id })) })
       }
     });
 
