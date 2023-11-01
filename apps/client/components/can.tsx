@@ -9,7 +9,7 @@ export default function Can({
   const { state: { user } } = useSecurity();
 
   // eslint-disable-next-line react/jsx-no-useless-fragment
-  return can(user?.groups || [], [...requiredGroups, 'admin', 'super_admin']) && <>{children}</>;
+  return can(user?.groups || [], requiredGroups) && <>{children}</>;
 }
 
 Can.defaultProps = {
