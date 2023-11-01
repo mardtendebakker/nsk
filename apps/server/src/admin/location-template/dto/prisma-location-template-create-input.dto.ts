@@ -20,20 +20,6 @@ export class PrismaLocationTemplateCreateInputDto implements Prisma.location_tem
   template: string;
 
   @ApiProperty()
-  @IsString()
-  name: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  description?: string;
-
-  @ApiPropertyOptional()
-  @IsInt()
-  @Type(() => Number)
-  pindex?: number;
-
-  @ApiProperty()
   created_at: string | Date;
 
   @ApiProperty()

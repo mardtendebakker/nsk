@@ -6,9 +6,6 @@ class FindLocationTemplateResponeDto extends PickType(LocationTemplateEntity, [
   "id",
   "location_id",
   "template",
-  "name",
-  "description",
-  "pindex",
   "created_at",
   "updated_at",
 ] as const) {}

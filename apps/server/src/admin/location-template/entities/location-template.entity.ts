@@ -1,5 +1,5 @@
 import { location_template } from '@prisma/client';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class LocationTemplateEntity implements location_template {
   @ApiProperty()
@@ -10,15 +10,6 @@ export class LocationTemplateEntity implements location_template {
 
   @ApiProperty({ example: '^\\d-\\d-\\d$' })
   template: string;
-  
-  @ApiProperty()
-  name: string;
-
-  @ApiPropertyOptional()
-  description: string | null;
-  
-  @ApiPropertyOptional()
-  pindex: number | null;
 
   @ApiProperty()
   created_at: Date;
