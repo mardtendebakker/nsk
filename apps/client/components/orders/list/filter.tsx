@@ -127,7 +127,7 @@ export default function Filter({
             onChange={(selected: { id: number }) => setValue({ field: 'status', value: selected?.id })}
             value={formRepresentation.status.value?.toString()}
           />
-          <Can requiredGroups={['manager']}>
+          <Can requiredGroups={['manager', 'logistics']}>
             <ListFilterDivider horizontal={!isDesktop} />
             <DataSourcePicker
               path={AUTOCOMPLETE_PARTNERS_PATH}
