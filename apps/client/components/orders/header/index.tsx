@@ -30,7 +30,7 @@ export default function Header() {
     }}
     >
       <HeaderItems />
-      <Can requiredGroups={['manager']}>
+      <Can requiredGroups={['manager', 'logistics']}>
         <Button
           sx={{ mb: '.5rem' }}
           size="small"
