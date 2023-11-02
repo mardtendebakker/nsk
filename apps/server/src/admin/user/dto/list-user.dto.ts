@@ -16,5 +16,5 @@ export class ListUserDto {
   limit?: number;
   
   @ApiPropertyOptional()
-  pagetoken?: string;
+  pageToken?: string;
 }

@@ -1,4 +1,5 @@
 import { Box, Table, TablePagination } from '@mui/material';
+import useTranslation from '../hooks/useTranslation';
 
 export default function PaginatedTable({
   children,
@@ -18,11 +19,13 @@ export default function PaginatedTable({
   disabled?: boolean,
 }) {
   const currentPage = count > 0 ? page - 1 : 0;
+  const { trans } = useTranslation();
 
   return (
     <Box sx={{ width: '100%', overflowX: 'scroll' }}>
       <Table size="small">{children}</Table>
       <TablePagination
+        labelRowsPerPage={trans('rowsPerPage')}
         size="small"
         component="div"
         sx={{
