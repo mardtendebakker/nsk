@@ -10,7 +10,7 @@ import { CreateProductTypeDto } from "./dto/create-product-type.dto";
 import { INTERNAL_GROUPS, MANAGER_GROUPS } from "../../common/types/cognito-groups.enum";
 
 @ApiBearerAuth()
-@Authorization(MANAGER_GROUPS)
+@Authorization(INTERNAL_GROUPS)
 @ApiTags('admin product types')
 @Controller('admin/product-types')
 export class ProductTypeController {
@@ -22,19 +22,20 @@ export class ProductTypeController {
   }
 
   @Get(':id')
-  @UseGuards(AuthorizationGuard(INTERNAL_GROUPS))
   @ApiResponse({type: ProductTypeEntity})
   findOne(@Param('id') id: number) {
     return this.productTypeService.findOne(id);
   }
 
   @Put(':id')
+  @UseGuards(AuthorizationGuard(MANAGER_GROUPS))
   @ApiResponse({type: ProductTypeEntity})
   update(@Param('id') id: number, @Body() updateProductTypeDto: UpdateProductTypeDto) {
     return this.productTypeService.update(id, updateProductTypeDto);
   }
 
   @Post()
+  @UseGuards(AuthorizationGuard(MANAGER_GROUPS))
   @ApiResponse({type: ProductTypeEntity})
   create(@Body() createProductTypeDto: CreateProductTypeDto) {
     return this.productTypeService.create(createProductTypeDto);
