@@ -84,11 +84,17 @@ export class AOrderService {
               },
             },
             {
+              ...(email && { acompany_aorder_supplier_idToacompany: { email } }),
+            },
+            {
               acompany_aorder_customer_idToacompany: {
                 ...(createdBy && { id: createdBy }),
                 ...(partner && { partner_id: partner }),
                 ...(email && { acompany: { email } }),
               },
+            },
+            {
+              ...(email && { acompany_aorder_customer_idToacompany: { email } }),
             },
           ],
         }),
