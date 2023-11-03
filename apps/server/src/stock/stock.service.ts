@@ -44,14 +44,26 @@ export class StockService {
     return processProdcut.run();
   }
 
-  async findAll(query: FindManyDto) {
+  async findAll(query: FindManyDto, email?: string) {
     const productwhere: Prisma.productWhereInput = {
       ...query.where,
       ...(Number.isFinite(query.entityStatus) && { entity_status: query.entityStatus }),
       ...(Number.isFinite(this.entityStatus) && { entity_status: this.entityStatus }),
-      ...(query.orderId || query.excludeByOrderId || query.excludeByOrderDiscr) && {
+      ...(query.orderId || query.excludeByOrderId || query.excludeByOrderDiscr || email) && {
         product_order: {
-          ...(query.orderId && { some: { order_id: query.orderId } }),
+          ...(query.orderId || email) && {
+            some: {
+              ...(query.orderId && { order_id: query.orderId }),
+              ...(email && { aorder: {
+                OR: [
+                  { acompany_aorder_supplier_idToacompany: { acompany: { email } } },
+                  { acompany_aorder_supplier_idToacompany: { email } },
+                  { acompany_aorder_customer_idToacompany: { acompany: { email } } },
+                  { acompany_aorder_customer_idToacompany: { email } },
+                ],
+              }}),
+            } 
+          },
           ...(query.excludeByOrderId && { none: { order_id: query.excludeByOrderId } }),
           ...(query.excludeByOrderDiscr && { none: { aorder: { discr: query.excludeByOrderDiscr } } }),
         },
