@@ -1,5 +1,5 @@
-import { Authorization, AuthorizationGuard } from "@nestjs-cognito/auth";
-import { Body, Delete, Get, HttpStatus, Param, Patch, Post, Put, Query, Res, StreamableFile, UploadedFiles, UseGuards, UseInterceptors } from "@nestjs/common";
+import { Authorization, AuthorizationGuard, CognitoUser } from "@nestjs-cognito/auth";
+import { Body, Delete, Get, HttpStatus, Param, Patch, Post, Put, Query, Res, StreamableFile, UnauthorizedException, UploadedFiles, UseGuards, UseInterceptors } from "@nestjs/common";
 import { ApiBearerAuth, ApiResponse } from "@nestjs/swagger";
 import { FindOneProductResponeDto } from "./dto/find-one-product-response.dto";
 import { FindProductsResponseDto } from "./dto/find-product-respone.dto";
@@ -12,26 +12,44 @@ import { AnyFilesInterceptor } from "@nestjs/platform-express";
 import { CreateBodyStockDto } from "./dto/create-body-stock.dto";
 import { BulkPrintDTO } from "../print/dto/bulk-print.dto";
 import type { Response } from 'express';
-import { INTERNAL_GROUPS, MANAGER_GROUPS } from "../common/types/cognito-groups.enum";
+import { ALL_MAIN_GROUPS, CognitoGroups, INTERNAL_GROUPS, MANAGER_GROUPS, PARTNERS_GROUPS } from "../common/types/cognito-groups.enum";
 
 @ApiBearerAuth()
-@Authorization(INTERNAL_GROUPS)
+@Authorization(ALL_MAIN_GROUPS)
 export class StockController {
   constructor(protected readonly stockService: StockService) {}
 
   @Get('')
   @ApiResponse({type: FindProductsResponseDto})
-  findAll(@Query() query: FindManyDto) {
-    return this.stockService.findAll(query);
+  findAll(
+    @Query() query: FindManyDto,
+    @CognitoUser(["groups", "email"])
+    {
+      groups,
+      email,
+    }: {
+      groups: CognitoGroups[];
+      email: string;
+    }
+  ) {
+    if (groups.some(group=> INTERNAL_GROUPS.includes(group))) {
+      return this.stockService.findAll(query);
+    } else if (groups.some(group=> PARTNERS_GROUPS.includes(group))) {
+      return this.stockService.findAll(query, email);
+    } else {
+      throw new UnauthorizedException("only PARTNERs have access to this api!");
+    }
   }
 
   @Get(':id')
+  @UseGuards(AuthorizationGuard(INTERNAL_GROUPS))
   @ApiResponse({type: FindOneProductResponeDto})
   findOne(@Param('id') id: number) {
     return this.stockService.findOneCustomSelect(id);
   }
 
   @Post('')
+  @UseGuards(AuthorizationGuard(INTERNAL_GROUPS))
   @UseInterceptors(AnyFilesInterceptor())
   @ApiResponse({type: FindOneProductResponeDto})
   create(
@@ -42,6 +60,7 @@ export class StockController {
   }
 
   @Put(':id')
+  @UseGuards(AuthorizationGuard(INTERNAL_GROUPS))
   @UseInterceptors(AnyFilesInterceptor())
   @ApiResponse({type: FindOneProductResponeDto})
   updateOne(
@@ -53,6 +72,7 @@ export class StockController {
   }
 
   @Patch('')
+  @UseGuards(AuthorizationGuard(INTERNAL_GROUPS))
   @ApiResponse({type: UpdateManyResponseProductDto})
   updateMany(@Body() updateManyProductDto: UpdateManyProductDto) {
     return this.stockService.updateManyLocation(updateManyProductDto);

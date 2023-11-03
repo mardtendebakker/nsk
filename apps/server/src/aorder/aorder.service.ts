@@ -110,14 +110,24 @@ export class AOrderService {
     };
   }
 
-  async findOne(id: number) {
+  async findOne(id: number, email?: string) {
     const params: Prisma.aorderFindUniqueArgs = {
-      where: { id }
+      where: {
+        id,
+        ...(email && {
+          OR: [
+            { acompany_aorder_supplier_idToacompany: { acompany: { email } } },
+            { acompany_aorder_supplier_idToacompany: { email } },
+            { acompany_aorder_customer_idToacompany: { acompany: { email } } },
+            { acompany_aorder_customer_idToacompany: { email } },
+          ],
+        }),
+      },
     };
 
     const order = await this.repository.findOne(this.commonIncludePart(params));
 
-    if (!order || order?.discr !== this.type) {
+    if (!order || (this.type && order?.discr !== this.type)) {
       throw new NotFoundException(`Order with ID ${id} not found`);
     }
     

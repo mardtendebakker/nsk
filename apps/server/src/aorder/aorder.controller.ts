@@ -49,18 +49,33 @@ export class AOrderController {
     }
   }
 
+  @Get(':id')
+  @ApiResponse({type: AOrderEntity})
+  findOne(
+    @Param('id') id: number,
+    @CognitoUser(["groups", "email"])
+    {
+      groups,
+      email,
+    }: {
+      groups: CognitoGroups[];
+      email: string;
+    }
+  ) {
+    if (groups.some(group=> INTERNAL_GROUPS.includes(group))) {
+      return this.aorderService.findOne(id);
+    } else if (groups.some(group=> PARTNERS_GROUPS.includes(group))) {
+      return this.aorderService.findOne(id, email);
+    } else {
+      throw new UnauthorizedException("only PARTNERs have access to this api!");
+    }
+  }
+
   @Post('')
   @UseGuards(AuthorizationGuard(INTERNAL_GROUPS))
   @ApiResponse({type: AOrderEntity})
   create(@Body() body: CreateAOrderDto) {
     return this.aorderService.create(body);
-  }
-
-  @Get(':id')
-  @UseGuards(AuthorizationGuard(INTERNAL_GROUPS))
-  @ApiResponse({type: AOrderEntity})
-  findOne(@Param('id') id: number) {
-    return this.aorderService.findOne(id);
   }
 
   @Put(':id')
