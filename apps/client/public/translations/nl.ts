@@ -13,6 +13,8 @@ const translation = {
   print: 'Afdrukken',
   delete: 'Verwijderen',
   newSupplier: 'Nieuwe leverancier',
+  rowsPerPage: 'Rijen per pagina',
+  users: 'Gebruikers',
   newSales: 'Nieuwe Verkoop',
   newPurchase: 'Nieuwe Inkoop',
   editCustomer: 'Klantgegevens wijzigen',

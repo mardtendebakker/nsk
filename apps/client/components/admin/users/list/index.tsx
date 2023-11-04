@@ -32,17 +32,13 @@ function initFormState(
 }
 
 function refreshList({
-  page,
+  pageToken,
   rowsPerPage = 10,
   formRepresentation,
   router,
   call,
 }) {
   const params = new URLSearchParams();
-
-  if (page > 1) {
-    params.append('page', page.toString());
-  }
 
   params.append('rowsPerPage', rowsPerPage.toString());
 
@@ -56,19 +52,23 @@ function refreshList({
     }
   });
 
-  call({
+  return call({
     params: {
       limit: rowsPerPage,
-      skip: (page - 1) * rowsPerPage,
+      pageToken,
       ...paramsToSend,
     },
-  }).finally(() => pushURLParams({ params, router }));
+  })
+    .then((result) => result)
+    .finally(() => pushURLParams({ params, router }));
 }
 
 export default function ListContainer() {
   const router = useRouter();
-  const [page, setPage] = useState<number>(parseInt(getQueryParam('page', '1'), 10));
   const [rowsPerPage, setRowsPerPage] = useState<number>(parseInt(getQueryParam('rowsPerPage', '10'), 10));
+  const [users, setUsers] = useState([]);
+  const [pagination, setPagination] = useState([]);
+  const [hasNextPage, setHasNextPage] = useState(false);
 
   const { formRepresentation, setValue, setData } = useForm(initFormState({
     search: getQueryParam('search'),
@@ -77,7 +77,7 @@ export default function ListContainer() {
     lastActive: getQueryParam('lastActive'),
   }));
 
-  const { data: { data = [], count = 0 } = {}, call, performing } = useAxios(
+  const { call, performing } = useAxios(
     'get',
     ADMIN_USERS_PATH.replace(':id', ''),
     {
@@ -87,48 +87,80 @@ export default function ListContainer() {
 
   useEffect(() => {
     refreshList({
-      page,
+      pageToken: undefined,
       rowsPerPage,
       formRepresentation,
       router,
       call,
+    }).then(({ data: { data: userList, pageToken } }) => {
+      setHasNextPage(!!pageToken);
+      setPagination([undefined, pageToken]);
+      setUsers(userList);
     });
   }, [
-    page,
     rowsPerPage,
     formRepresentation.search.value,
     formRepresentation.createdAt.value,
-    formRepresentation.lastActive.value,
     formRepresentation.createdBy.value,
+    formRepresentation.lastActive.value,
   ]);
 
-  const handleReset = () => {
-    setPage(1);
-    setData(initFormState({}));
+  const handleNextPageClicked = () => {
+    refreshList({
+      pageToken: pagination[pagination.length - 1],
+      rowsPerPage,
+      formRepresentation,
+      router,
+      call,
+    }).then(({ data: { data: userList, pageToken } }) => {
+      setHasNextPage(!!pageToken);
+      if (pageToken) {
+        setPagination([...pagination, pageToken]);
+      }
+      setUsers(userList);
+    });
+  };
+
+  const handlePreviousPageClicked = () => {
+    const paginationCopy = [...pagination];
+    paginationCopy.splice(paginationCopy.length - 2);
+
+    refreshList({
+      pageToken: paginationCopy[paginationCopy.length - 1],
+      rowsPerPage,
+      formRepresentation,
+      router,
+      call,
+    }).then(({ data: { data: userList, pageToken } }) => {
+      setHasNextPage(!!pageToken);
+      setPagination([...paginationCopy, pageToken]);
+      setUsers(userList);
+    });
+  };
+
+  const handleRowsPerPageChange = (newRowsPerPage: number) => {
+    setRowsPerPage(newRowsPerPage);
+    setPagination([]);
   };
 
   return (
     <Card sx={{ overflowX: 'auto', p: '1.5rem' }}>
       <Filter
-        onReset={handleReset}
+        onReset={() => { setData(initFormState({})); }}
         disabled={performing}
         formRepresentation={formRepresentation}
-        setValue={(payload: FieldPayload) => {
-          setValue(payload);
-          setPage(1);
-        }}
+        setValue={(payload: FieldPayload) => setValue(payload)}
       />
       <Box sx={{ m: '1rem' }} />
       <List
         disabled={performing}
-        users={data}
-        count={count}
-        page={page}
-        onPageChange={(newPage) => setPage(newPage)}
-        onRowsPerPageChange={(newRowsPerPage) => {
-          setRowsPerPage(newRowsPerPage);
-          setPage(1);
-        }}
+        users={users}
+        count={0}
+        hasNextPage={hasNextPage}
+        hasPreviousPage={pagination.length > 2}
+        onGoNext={handleNextPageClicked}
+        onGoPrevious={handlePreviousPageClicked}
+        onRowsPerPageChange={handleRowsPerPageChange}
         rowsPerPage={rowsPerPage}
       />
     </Card>
