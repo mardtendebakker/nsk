@@ -13,6 +13,7 @@ import TextField from '../memoizedInput/textField';
 import DataSourcePicker from '../memoizedInput/dataSourcePicker';
 import Checkbox from '../checkbox';
 import useResponsive from '../../hooks/useResponsive';
+import Can from '../can';
 
 function Form({
   formRepresentation,
@@ -119,43 +120,45 @@ function Form({
               value={formRepresentation.phone2.value || ''}
             />
           </Grid>
-          <Grid
-            item
-            xs={12}
-            sx={{ display: 'flex', flex: 1, alignItems: 'center' }}
-          >
-            {type == 'supplier' ? (
-              <DataSourcePicker
-                sx={{ flex: isDesktop ? 0.33 : 1 }}
-                path={AUTOCOMPLETE_PARTNERS_PATH}
-                disabled={disabled}
-                fullWidth
-                label={trans('partner')}
-                placeholder={trans('selectPartner')}
-                onChange={(value: { id: number }) => setValue({ field: 'partner', value: value?.id || null })}
-                value={formRepresentation.partner.value}
-              />
-            ) : (
-              <Box sx={{ flex: isDesktop ? 0.33 : 1 }}>
-                <Checkbox
-                  checked={formRepresentation.is_partner.value}
-                  onCheck={(checked) => setValue({ field: 'is_partner', value: checked })}
-                  label={trans('isPartner')}
-                />
-                {!formRepresentation.is_partner.value && (
+          <Can requiredGroups={['manager', 'logistics']}>
+            <Grid
+              item
+              xs={12}
+              sx={{ display: 'flex', flex: 1, alignItems: 'center' }}
+            >
+              {type == 'supplier' ? (
                 <DataSourcePicker
-                  label={trans('partner')}
+                  sx={{ flex: isDesktop ? 0.33 : 1 }}
                   path={AUTOCOMPLETE_PARTNERS_PATH}
                   disabled={disabled}
                   fullWidth
+                  label={trans('partner')}
                   placeholder={trans('selectPartner')}
-                  value={formRepresentation.partner.value}
                   onChange={(value: { id: number }) => setValue({ field: 'partner', value: value?.id || null })}
+                  value={formRepresentation.partner.value}
                 />
-                )}
-              </Box>
-            )}
-          </Grid>
+              ) : (
+                <Box sx={{ flex: isDesktop ? 0.33 : 1 }}>
+                  <Checkbox
+                    checked={formRepresentation.is_partner.value}
+                    onCheck={(checked) => setValue({ field: 'is_partner', value: checked })}
+                    label={trans('isPartner')}
+                  />
+                  {!formRepresentation.is_partner.value && (
+                  <DataSourcePicker
+                    label={trans('partner')}
+                    path={AUTOCOMPLETE_PARTNERS_PATH}
+                    disabled={disabled}
+                    fullWidth
+                    placeholder={trans('selectPartner')}
+                    value={formRepresentation.partner.value}
+                    onChange={(value: { id: number }) => setValue({ field: 'partner', value: value?.id || null })}
+                  />
+                  )}
+                </Box>
+              )}
+            </Grid>
+          </Can>
         </Grid>
       </CardContent>
       <Divider sx={{ mx: '1.5rem' }} />

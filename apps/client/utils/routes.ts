@@ -45,14 +45,16 @@ export const getRouteGroups = (uri: string): Group[] => {
   if (
     uri.startsWith('/stock')
     || uri.startsWith('/my-tasks')
-    || uri.startsWith('/contacts')
     || uri.startsWith('/bulk-email')
     || uri.startsWith('/logistics')
   ) {
     return ['admin', 'super_admin', 'manager', 'logistics'];
   }
 
-  if (uri.startsWith('/orders') || uri == DASHBOARD) {
+  if (
+    uri.startsWith('/orders')
+    || uri.startsWith('/contacts')
+    || uri == DASHBOARD) {
     return ['admin', 'super_admin', 'manager', 'logistics', 'partner_sale_uploader', 'partner'];
   }
 
