@@ -1,10 +1,12 @@
 import { CompanyRepository } from './company.repository';
 import { UpdateCompanyDto } from './dto/update-company.dto';
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { FindManyDto } from './dto/find-many.dto';
 import { CompanyEntity } from './entities/company.entity';
 import { CompanyDiscrimination } from './types/company-discrimination.enum';
+import { Prisma } from '@prisma/client';
+import { IsPartner } from './types/is-partner.enum';
 @Injectable()
 export class CompanyService {
   constructor(
@@ -12,15 +14,19 @@ export class CompanyService {
     @Inject('TYPE') protected readonly type?: CompanyDiscrimination,
   ) {}
 
-  async findAll(query: FindManyDto) {
-    const { representative } = query;
-    const where = {
+  async findAll(query: FindManyDto, email?: string) {
+    const { search, representative } = query;
+    const where: Prisma.acompanyWhereInput = {
       ...query.where,
-      ...(representative && { representative: { contains: representative }}),
+      ...(email && {
+        OR: [
+          { email },
+          { acompany: { email } },
+        ],
+      }),
       ...(this.type && { discr: this.type }),
-      name: {
-        contains: query.search
-      }
+      ...(representative && { representative: { contains: representative }}),
+      ...(search && { name: { contains: search } }),
     }
 
     const { count, data } = await this.repository.findAll({
@@ -48,21 +54,29 @@ export class CompanyService {
     }
   }
 
-  async create(comapnyDto: CreateCompanyDto) {
+  async findOne(id: number, email?: string) {
+    return this.repository.findOne({
+      id,
+      ...(email && {
+        OR: [
+          { email },
+          { acompany: { email } },
+        ],
+      }),
+    });
+  }
+
+  async create(comapnyDto: CreateCompanyDto, email?: string) {
     if (this.type === undefined) {
       throw new BadRequestException('The operation requires a specific company type');
     }
 
     return this.repository.create({
       data: {
-        ...this.prepareIsPartnerField(comapnyDto),
         discr: this.type,
-      }
+        ...await this.prepareIsPartnerField(comapnyDto, email),
+      },
     });
-  }
-
-  async findOne(id: number) {
-    return this.repository.findOne({ id });
   }
 
   async findFirstByEmail(email: string) {
@@ -73,15 +87,41 @@ export class CompanyService {
     });
   }
 
-  async delete(id: number) {
-    return this.repository.delete({ where: { id } });
+  async delete(id: number, email?: string) {
+    return this.repository.delete({
+      where: {
+        id,
+        ...(email && {
+          OR: [
+            { email },
+            { acompany: { email } },
+          ],
+        }),
+      },
+    });
   }
 
-  async update(id: number, comapnyDto: UpdateCompanyDto) {
-    return this.repository.update({
-      data: this.prepareIsPartnerField(comapnyDto),
-      where: { id }
-    });
+  async update(id: number, comapnyDto: UpdateCompanyDto, email?: string) {
+    try {
+      return await this.repository.update({
+        data: await this.prepareIsPartnerField(comapnyDto, email),
+        where: {
+          id,
+          ...(email && {
+            OR: [
+              { email },
+              { acompany: { email } },
+            ],
+          }),
+        },
+      });
+    } catch (err) {
+      if (err.code === 'P2025') {
+        throw new UnprocessableEntityException('Record to update not found.');
+      } else {
+        throw err;
+      }
+    }
   }
 
   async checkExists(comapnyData: Partial<CompanyEntity>) {
@@ -113,11 +153,14 @@ export class CompanyService {
     return company;
   }
 
-  prepareIsPartnerField<T extends { is_partner?: number; partner_id?: number }>(acompanyDto: T): T {
+  async prepareIsPartnerField<T extends { is_partner?: number; partner_id?: number }>(acompanyDto: T, email?: string): Promise<T> {
     const acompany = { ...acompanyDto };
-  
-    if (acompany.is_partner === 0 && Number.isFinite(acompany.partner_id)) {
-      acompany.is_partner = -1;
+
+    if (email) {
+      acompany.is_partner = IsPartner.HAS_PARTNER;
+      acompany.partner_id = (await this.findFirstByEmail(email)).id;
+    } else if (acompany.is_partner === 0 && Number.isFinite(acompany.partner_id)) {
+      acompany.is_partner = IsPartner.HAS_PARTNER;
     }
   
     return acompany;
