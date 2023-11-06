@@ -1,5 +1,5 @@
 import { Authorization, AuthorizationGuard, CognitoUser } from "@nestjs-cognito/auth";
-import { Body, Delete, Get, HttpStatus, Param, Patch, Post, Put, Query, Res, StreamableFile, UnauthorizedException, UploadedFiles, UseGuards, UseInterceptors } from "@nestjs/common";
+import { Body, Delete, ForbiddenException, Get, HttpStatus, Param, Patch, Post, Put, Query, Res, StreamableFile, UploadedFiles, UseGuards, UseInterceptors } from "@nestjs/common";
 import { ApiBearerAuth, ApiResponse } from "@nestjs/swagger";
 import { FindOneProductResponeDto } from "./dto/find-one-product-response.dto";
 import { FindProductsResponseDto } from "./dto/find-product-respone.dto";
@@ -37,7 +37,7 @@ export class StockController {
     } else if (groups.some(group=> PARTNERS_GROUPS.includes(group))) {
       return this.stockService.findAll(query, email);
     } else {
-      throw new UnauthorizedException("only PARTNERs have access to this api!");
+      throw new ForbiddenException("Insufficient permissions to access this api!");
     }
   }
 

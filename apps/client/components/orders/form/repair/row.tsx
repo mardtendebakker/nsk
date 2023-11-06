@@ -11,6 +11,9 @@ import AddButton from '../../../button/add';
 import Select from '../../../memoizedInput/select';
 import Delete from '../../../button/delete';
 import TableCell from '../../../tableCell';
+import can from '../../../../utils/can';
+import useSecurity from '../../../../hooks/useSecurity';
+import Can from '../../../can';
 
 export default function Row({
   product,
@@ -27,6 +30,7 @@ export default function Row({
   onProductPropertyChange: (payload: ProductListItem, property: string, value) => void,
   onServicePropertyChange: (payload: Service, property: string, value) => void,
 }) {
+  const { state: { user } } = useSecurity();
   const { trans } = useTranslation();
 
   return (
@@ -51,6 +55,7 @@ export default function Row({
               'price',
               e.target.value,
             )}
+            disabled={!can(user?.groups || [], ['manager', 'logistics'])}
           />
         </TableCell>
         <TableCell>
@@ -63,11 +68,14 @@ export default function Row({
               'quantity',
               e.target.value,
             )}
+            disabled={!can(user?.groups || [], ['manager', 'logistics'])}
           />
         </TableCell>
         <TableCell>
-          <AddButton title={trans('addService')} onClick={onAddService} />
-          <Delete onClick={() => onDeleteProduct(product.id)} tooltip />
+          <Can requiredGroups={['manager', 'logistics']}>
+            <AddButton title={trans('addService')} onClick={onAddService} />
+            <Delete onClick={() => onDeleteProduct(product.id)} tooltip />
+          </Can>
         </TableCell>
       </TableRow>
       {product.services && (
@@ -95,6 +103,7 @@ export default function Row({
                           'description',
                           e.target.value,
                         )}
+                        disabled={!can(user?.groups || [], ['manager', 'logistics'])}
                       />
                     </TableCell>
                     <TableCell colSpan={2}>
@@ -106,7 +115,8 @@ export default function Row({
                           { title: trans('done'), value: '3' },
                           { title: trans('cancel'), value: '4' },
                         ]}
-                        onChange={(e) => onServicePropertyChange(service, 'status', e.target.value)}
+                        onChange={(e) => can(user?.groups || [], ['manager', 'logistics'])
+                          && onServicePropertyChange(service, 'status', e.target.value)}
                         defaultValue={service.status.toString()}
                       />
                     </TableCell>
@@ -120,10 +130,13 @@ export default function Row({
                           'price',
                           e.target.value,
                         )}
+                        disabled={!can(user?.groups || [], ['manager', 'logistics'])}
                       />
                     </TableCell>
                     <TableCell>
-                      <Delete onClick={() => onDeleteService(service.id)} tooltip />
+                      <Can requiredGroups={['manager', 'logistics']}>
+                        <Delete onClick={() => onDeleteService(service.id)} tooltip />
+                      </Can>
                     </TableCell>
                   </TableRow>
                 ))}

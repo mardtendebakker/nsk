@@ -20,8 +20,12 @@ import EditModal from '../../../stock/editModal';
 import Edit from '../../../button/edit';
 import PaginatedTable from '../../../paginatedTable';
 import TableCell from '../../../tableCell';
+import can from '../../../../utils/can';
+import useSecurity from '../../../../hooks/useSecurity';
+import Can from '../../../can';
 
 export default function ProductsTable({ orderId }:{ orderId: string }) {
+  const { state: { user } } = useSecurity();
   const [showForm, setShowForm] = useState<boolean>(false);
   const [editProductId, setEditProductId] = useState<number | undefined>();
   const [page, setPage] = useState<number>(1);
@@ -68,12 +72,14 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
 
   return (
     <>
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <Button size="small" onClick={() => setShowForm(true)} sx={{ mb: '.5rem' }}>
-          <Add />
-          {trans('addAnotherProduct')}
-        </Button>
-      </Box>
+      <Can requiredGroups={['manager', 'logistics']}>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <Button size="small" onClick={() => setShowForm(true)} sx={{ mb: '.5rem' }}>
+            <Add />
+            {trans('addAnotherProduct')}
+          </Button>
+        </Box>
+      </Can>
       <PaginatedTable
         count={count}
         page={page}
@@ -130,6 +136,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
                       'price',
                       e.target.value,
                     )}
+                    disabled={!can(user?.groups || [], ['manager', 'logistics'])}
                   />
                 </TableCell>
                 <TableCell>
@@ -142,10 +149,13 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
                       'quantity',
                       e.target.value,
                     )}
+                    disabled={!can(user?.groups || [], ['manager', 'logistics'])}
                   />
                 </TableCell>
                 <TableCell>
-                  <Edit onClick={() => setEditProductId(product.id)} />
+                  <Can requiredGroups={['manager', 'logistics']}>
+                    <Edit onClick={() => setEditProductId(product.id)} />
+                  </Can>
                 </TableCell>
               </TableRow>
             ),

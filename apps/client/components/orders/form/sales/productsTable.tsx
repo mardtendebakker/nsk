@@ -17,8 +17,12 @@ import Delete from '../../../button/delete';
 import PaginatedTable from '../../../paginatedTable';
 import TableCell from '../../../tableCell';
 import AddProductsModal from '../addProductsModal';
+import can from '../../../../utils/can';
+import useSecurity from '../../../../hooks/useSecurity';
+import Can from '../../../can';
 
 export default function ProductsTable({ orderId, refreshOrder }:{ orderId: string, refreshOrder: () => void }) {
+  const { state: { user } } = useSecurity();
   const { trans } = useTranslation();
   const [showProductsModal, setShowProductsModal] = useState(false);
   const [page, setPage] = useState<number>(1);
@@ -94,12 +98,14 @@ export default function ProductsTable({ orderId, refreshOrder }:{ orderId: strin
 
   return (
     <>
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <Button size="small" onClick={() => setShowProductsModal(true)} sx={{ mb: '.5rem' }}>
-          <Add />
-          {trans('addProducts')}
-        </Button>
-      </Box>
+      <Can requiredGroups={['manager', 'logistics']}>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <Button size="small" onClick={() => setShowProductsModal(true)} sx={{ mb: '.5rem' }}>
+            <Add />
+            {trans('addProducts')}
+          </Button>
+        </Box>
+      </Can>
       <PaginatedTable
         count={count}
         page={page}
@@ -157,6 +163,7 @@ export default function ProductsTable({ orderId, refreshOrder }:{ orderId: strin
                     'price',
                     e.target.value,
                   )}
+                  disabled={!can(user?.groups || [], ['manager', 'logistics'])}
                 />
               </TableCell>
               <TableCell>
@@ -169,10 +176,13 @@ export default function ProductsTable({ orderId, refreshOrder }:{ orderId: strin
                     'quantity',
                     e.target.value,
                   )}
+                  disabled={!can(user?.groups || [], ['manager', 'logistics'])}
                 />
               </TableCell>
               <TableCell>
-                <Delete onClick={() => handleDeleteProduct(product.id)} tooltip />
+                <Can requiredGroups={['manager', 'logistics']}>
+                  <Delete onClick={() => handleDeleteProduct(product.id)} tooltip />
+                </Can>
               </TableCell>
             </TableRow>
           ))}

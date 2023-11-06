@@ -1,6 +1,6 @@
 import { CompanyRepository } from './company.repository';
 import { UpdateCompanyDto } from './dto/update-company.dto';
-import { BadRequestException, Inject, Injectable, UnprocessableEntityException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Inject, Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { FindManyDto } from './dto/find-many.dto';
 import { CompanyEntity } from './entities/company.entity';
@@ -118,7 +118,7 @@ export class CompanyService {
       });
     } catch (err) {
       if (err.code === 'P2025') {
-        throw new UnprocessableEntityException('Record to update not found.');
+        throw new ForbiddenException("Insufficient permissions to access this api!");
       } else {
         throw err;
       }

@@ -245,8 +245,8 @@ export default function List({
                 )}
               </TableCell>
               <TableCell>
+                <Edit href={editPath.replace('[id]', order.id.toString())} disabled={disabled} />
                 <Can requiredGroups={['manager', 'logistics']}>
-                  <Edit href={editPath.replace('[id]', order.id.toString())} disabled={disabled} />
                   <Delete onClick={() => onDelete(order.id)} disabled={disabled} tooltip />
                 </Can>
               </TableCell>
