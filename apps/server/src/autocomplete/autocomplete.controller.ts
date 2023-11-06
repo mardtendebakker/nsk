@@ -1,4 +1,4 @@
-import { Controller, Get, Query, UnauthorizedException, UseGuards } from '@nestjs/common';
+import { Controller, ForbiddenException, Get, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AutocompleteService } from './autocomplete.service';
 import { AutocompleteDto } from './dto/autocomplete.dto';
@@ -49,7 +49,7 @@ export class AutocompleteController {
     } else if (groups.some(group=> PARTNERS_GROUPS.includes(group))) {
       return this.autocompleteService.findCompanies(query, email);
     } else {
-      throw new UnauthorizedException("only MAIN GROUPs have access to this api!");
+      throw new ForbiddenException("Insufficient permissions to access this api!");
     }
   }
 

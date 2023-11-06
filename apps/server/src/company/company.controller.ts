@@ -1,5 +1,5 @@
 import { Authorization, CognitoUser } from "@nestjs-cognito/auth";
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, UnauthorizedException } from "@nestjs/common";
+import { Body, Controller, Delete, ForbiddenException, Get, Param, Post, Put, Query } from "@nestjs/common";
 import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { CompanyService } from "./company.service";
 import { FindCompaniesResponeDto } from "./dto/find-company-response.dto";
@@ -33,7 +33,7 @@ export class CompanyController {
     } else if (groups.some(group=> PARTNERS_GROUPS.includes(group))) {
       return this.companyService.findAll(query, email);
     } else {
-      throw new UnauthorizedException("only PARTNERs have access to this api!");
+      throw new ForbiddenException("Insufficient permissions to access this api!");
     }
   }
 
@@ -55,7 +55,7 @@ export class CompanyController {
     } else if (groups.some(group=> PARTNERS_GROUPS.includes(group))) {
       return this.companyService.findOne(id, email);
     } else {
-      throw new UnauthorizedException("only PARTNERs have access to this api!");
+      throw new ForbiddenException("Insufficient permissions to access this api!");
     }
   }
 
@@ -77,7 +77,7 @@ export class CompanyController {
     } else if (groups.some(group=> PARTNERS_GROUPS.includes(group))) {
       return this.companyService.create(body, email);
     } else {
-      throw new UnauthorizedException("only PARTNERs have access to this api!");
+      throw new ForbiddenException("Insufficient permissions to access this api!");
     }
   }
 
@@ -100,7 +100,7 @@ export class CompanyController {
     } else if (groups.some(group=> PARTNERS_GROUPS.includes(group))) {
       return this.companyService.update(id, updateCompanyDto, email);
     } else {
-      throw new UnauthorizedException("only PARTNERs have access to this api!");
+      throw new ForbiddenException("Insufficient permissions to access this api!");
     }
   }
 
@@ -121,7 +121,7 @@ export class CompanyController {
     } else if (groups.some(group=> PARTNERS_GROUPS.includes(group))) {
       return this.companyService.delete(id, email);
     } else {
-      throw new UnauthorizedException("only PARTNERs have access to this api!");
+      throw new ForbiddenException("Insufficient permissions to access this api!");
     }
   }
 }

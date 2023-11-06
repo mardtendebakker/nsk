@@ -2,7 +2,7 @@ import { Authorization, AuthorizationGuard, CognitoUser } from "@nestjs-cognito/
 import { 
   Get, Post, Put, Patch, Delete,
   Body, Param, Query,
-  HttpStatus, Res, StreamableFile, UseGuards, UnauthorizedException
+  HttpStatus, Res, StreamableFile, UseGuards, ForbiddenException
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiResponse } from "@nestjs/swagger";
 import { AOrderService } from "./aorder.service";
@@ -45,7 +45,7 @@ export class AOrderController {
     } else if (groups.some(group=> PARTNERS_GROUPS.includes(group))) {
       return this.aorderService.findAll(query, email);
     } else {
-      throw new UnauthorizedException("only PARTNERs have access to this api!");
+      throw new ForbiddenException("Insufficient permissions to access this api!");
     }
   }
 
@@ -67,7 +67,7 @@ export class AOrderController {
     } else if (groups.some(group=> PARTNERS_GROUPS.includes(group))) {
       return this.aorderService.findOne(id, email);
     } else {
-      throw new UnauthorizedException("only PARTNERs have access to this api!");
+      throw new ForbiddenException("Insufficient permissions to access this api!");
     }
   }
 
@@ -140,7 +140,7 @@ export class AOrderController {
     } else if (groups.some(group=> PARTNERS_GROUPS.includes(group))) {
       pdfStream = await this.aorderService.printAOrders(ids, email);
     } else {
-      throw new UnauthorizedException("only PARTNERs have access to this api!");
+      throw new ForbiddenException("Insufficient permissions to access this api!");
     }
 
     res.set({

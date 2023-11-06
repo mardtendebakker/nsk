@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Param, Post, Put, UnauthorizedException, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, ForbiddenException, Param, Post, Put, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { SaleService } from './sale.service';
 import { AOrderController } from '../aorder/aorder.controller';
@@ -45,7 +45,7 @@ export class SaleController extends AOrderController {
     } else if (groups.some(group=> [CognitoGroups.PARTNER_SALE_UPLOADER].includes(group))) {
       return this.saleService.import(body, file, email);
     } else {
-      throw new UnauthorizedException("only SALE_UPLOADERs have access to this api!");
+      throw new ForbiddenException("Insufficient permissions to access this api!");
     }
   }
 }

@@ -18,6 +18,7 @@ import PaginatedTable from '../../../paginatedTable';
 import TableCell from '../../../tableCell';
 import AddProductsModal from '../addProductsModal';
 import Row from './row';
+import Can from '../../../can';
 
 export default function ProductsTable({ orderId, refreshOrder }:{ orderId: string, refreshOrder: () => void }) {
   const { trans } = useTranslation();
@@ -129,12 +130,14 @@ export default function ProductsTable({ orderId, refreshOrder }:{ orderId: strin
 
   return (
     <>
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <Button size="small" onClick={() => setShowProductsModal(true)} sx={{ mb: '.5rem' }}>
-          <Add />
-          {trans('addProducts')}
-        </Button>
-      </Box>
+      <Can requiredGroups={['manager', 'logistics']}>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <Button size="small" onClick={() => setShowProductsModal(true)} sx={{ mb: '.5rem' }}>
+            <Add />
+            {trans('addProducts')}
+          </Button>
+        </Box>
+      </Can>
       <PaginatedTable
         count={count}
         page={page}
