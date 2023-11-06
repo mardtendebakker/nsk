@@ -98,7 +98,7 @@ export class SaleService extends AOrderService {
     
     let partner_id: number;
     if (email) {
-      partner_id = (await this.customerService.findFirstByEmail(email))?.id;
+      partner_id = (await this.customerService.findPartnerByEmail(email))?.id;
     } else {
       partner_id = importDto.partner_id;
     }
