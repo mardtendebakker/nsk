@@ -13,6 +13,13 @@ jest.mock('next/router', () => ({
 
 jest.mock('../../../hooks/useResponsive', () => jest.fn(() => true));
 
+const mockUseSecurity = {
+  signOut: jest.fn(() => Promise.resolve()),
+  state: { get user() { return { groups: ['super_admin'] }; } },
+};
+
+jest.mock('../../../hooks/useSecurity', () => jest.fn(() => mockUseSecurity));
+
 describe('Header', () => {
   it('matches snapshot', () => {
     const { asFragment } = render(<Header />);

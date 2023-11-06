@@ -15,6 +15,8 @@ import useTranslation from '../../../../hooks/useTranslation';
 import { UserListItem } from '../../../../utils/axios/models/user';
 import TableCell from '../../../tableCell';
 import Select from '../../../input/select';
+import Edit from '../../../button/edit';
+import Can from '../../../can';
 
 export default function List({
   users = [],
@@ -26,6 +28,7 @@ export default function List({
   rowsPerPage,
   count,
   disabled,
+  onEdit,
 }: {
   users: UserListItem[],
   hasNextPage: boolean,
@@ -36,6 +39,7 @@ export default function List({
   rowsPerPage: number,
   count,
   disabled: boolean,
+  onEdit: (username: string) => void
 }) {
   const { trans } = useTranslation();
 
@@ -59,6 +63,9 @@ export default function List({
             <TableCell>
               {trans('lastModifiedAt')}
             </TableCell>
+            <TableCell>
+              {trans('actions')}
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -78,6 +85,11 @@ export default function List({
               </TableCell>
               <TableCell>
                 {user.UserLastModifiedDate && format(new Date(user.UserLastModifiedDate), 'yyyy/MM/dd')}
+              </TableCell>
+              <TableCell>
+                <Can requiredGroups={['super_admin']} disableDefaultGroups>
+                  <Edit onClick={() => onEdit(user.Username)} disabled={disabled} />
+                </Can>
               </TableCell>
             </TableRow>
           ))}
