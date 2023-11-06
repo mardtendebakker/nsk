@@ -1,5 +1,5 @@
-import { Authorization } from '@nestjs-cognito/auth';
-import { Body, Controller, Get, Param, Put, Query } from '@nestjs/common';
+import { Authorization, AuthorizationGuard } from '@nestjs-cognito/auth';
+import { Body, Controller, Get, Param, Put, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AdminUserService } from './user.service';
 import { ListUserDto } from './dto/list-user.dto';
@@ -29,6 +29,7 @@ export class AdminUserController {
   }
 
   @Put('groups/:username')
+  @UseGuards(AuthorizationGuard([CognitoGroups.SUPER_ADMIN]))
   @ApiResponse({ type: [UpdateUserGroupDto] })
   @ApiBody({ 
     type: [UpdateUserGroupDto],
