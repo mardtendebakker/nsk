@@ -79,10 +79,11 @@ export class CompanyService {
     });
   }
 
-  async findFirstByEmail(email: string) {
+  async findPartnerByEmail(email: string) {
     return this.repository.findFirst({
       where: {
-        email
+        email,
+        is_partner: { gte: IsPartner.PARTNER }
       },
     });
   }
@@ -104,7 +105,7 @@ export class CompanyService {
   async update(id: number, comapnyDto: UpdateCompanyDto, email?: string) {
     try {
       return await this.repository.update({
-        data: await this.prepareIsPartnerField(comapnyDto, email),
+        data: await this.prepareIsPartnerField({ id, ...comapnyDto }, email),
         where: {
           id,
           ...(email && {
@@ -153,12 +154,23 @@ export class CompanyService {
     return company;
   }
 
-  async prepareIsPartnerField<T extends { is_partner?: number; partner_id?: number }>(acompanyDto: T, email?: string): Promise<T> {
+  async prepareIsPartnerField<T extends { id?: number, email?: string, is_partner?: number; partner_id?: number }>(acompanyDto: T, email?: string): Promise<T> {
     const acompany = { ...acompanyDto };
 
     if (email) {
-      acompany.is_partner = IsPartner.HAS_PARTNER;
-      acompany.partner_id = (await this.findFirstByEmail(email)).id;
+      const partner = await this.findPartnerByEmail(email);
+
+      if (!partner) {
+        throw new UnprocessableEntityException('No partner for provided user!');
+      }
+
+      if (acompany.id === partner.id) {
+        acompany.email = partner.email; // to make sure partner can not change own email
+      } else {
+        acompany.is_partner = IsPartner.HAS_PARTNER;
+        acompany.partner_id = partner.id;
+      }
+
     } else if (acompany.is_partner === 0 && Number.isFinite(acompany.partner_id)) {
       acompany.is_partner = IsPartner.HAS_PARTNER;
     }
