@@ -33,7 +33,7 @@ export default function DataSourcePicker(
     label?: string,
     placeholder?: string,
     displayFieldset?: boolean,
-    formatter?: (arg0: object) => { id: number, label: string },
+    formatter?: (arg0: object) => { id: number | string, label: string },
     onChange: (arg0: undefined | object | object[])=>void,
     path: string,
     searchKey?: string,
@@ -98,7 +98,6 @@ export default function DataSourcePicker(
         onChange(selected);
       }}
       filterSelectedOptions
-      isOptionEqualToValue={(option, usedValue) => option.id == usedValue.id}
       renderInput={
                 (inputParams) => (
                   <TextField
@@ -134,7 +133,7 @@ DataSourcePicker.defaultProps = {
   label: undefined,
   placeholder: undefined,
   displayFieldset: true,
-  formatter: (object): { id: number, label: string } => object,
+  formatter: (object): { id: number | string, label: string } => object,
   helperText: undefined,
   error: false,
   multiple: false,

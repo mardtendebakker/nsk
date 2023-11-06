@@ -8,6 +8,7 @@ import { ADMIN_USERS_PATH } from '../../../../utils/axios';
 import useForm, { FieldPayload } from '../../../../hooks/useForm';
 import pushURLParams from '../../../../utils/pushURLParams';
 import { getQueryParam } from '../../../../utils/location';
+import Edit from '../edit';
 
 function initFormState(
   {
@@ -69,6 +70,7 @@ export default function ListContainer() {
   const [users, setUsers] = useState([]);
   const [pagination, setPagination] = useState([]);
   const [hasNextPage, setHasNextPage] = useState(false);
+  const [editUsername, setEditUsername] = useState<string | undefined>();
 
   const { formRepresentation, setValue, setData } = useForm(initFormState({
     search: getQueryParam('search'),
@@ -77,7 +79,7 @@ export default function ListContainer() {
     lastActive: getQueryParam('lastActive'),
   }));
 
-  const { call, performing } = useAxios(
+  const { data: { count = 0 } = {}, call, performing } = useAxios(
     'get',
     ADMIN_USERS_PATH.replace(':id', ''),
     {
@@ -155,14 +157,16 @@ export default function ListContainer() {
       <List
         disabled={performing}
         users={users}
-        count={0}
+        count={count}
         hasNextPage={hasNextPage}
         hasPreviousPage={pagination.length > 2}
         onGoNext={handleNextPageClicked}
         onGoPrevious={handlePreviousPageClicked}
         onRowsPerPageChange={handleRowsPerPageChange}
         rowsPerPage={rowsPerPage}
+        onEdit={setEditUsername}
       />
+      {editUsername && <Edit username={editUsername} onClose={() => setEditUsername(undefined)} onConfirm={() => setEditUsername(undefined)} />}
     </Card>
   );
 }
