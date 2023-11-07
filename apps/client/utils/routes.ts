@@ -42,24 +42,31 @@ export const LOGISTICS_PICKUP = '/logistics/pickups';
 export const LOGISTICS_DELIVERY = '/logistics/deliveries';
 
 export const getRouteGroups = (uri: string): Group[] => {
+  if (uri.startsWith('/admin')) {
+    return ['admin', 'super_admin'];
+  }
+
+  if (uri.startsWith('/bulk-email')) {
+    return ['admin', 'super_admin', 'manager'];
+  }
+
+  if (uri.startsWith('/logistics')) {
+    return ['admin', 'super_admin', 'manager', 'logistics'];
+  }
+
   if (
     uri.startsWith('/stock')
     || uri.startsWith('/my-tasks')
     || uri.startsWith('/bulk-email')
-    || uri.startsWith('/logistics')
   ) {
-    return ['admin', 'super_admin', 'manager', 'logistics'];
+    return ['admin', 'super_admin', 'manager', 'logistics', 'local'];
   }
 
   if (
     uri.startsWith('/orders')
     || uri.startsWith('/contacts')
     || uri == DASHBOARD) {
-    return ['admin', 'super_admin', 'manager', 'logistics', 'partner_sale_uploader', 'partner'];
-  }
-
-  if (uri.startsWith('/admin')) {
-    return ['admin', 'super_admin'];
+    return ['admin', 'super_admin', 'manager', 'logistics', 'local', 'partner_sale_uploader', 'partner'];
   }
 };
 

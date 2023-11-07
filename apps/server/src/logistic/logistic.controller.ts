@@ -4,10 +4,10 @@ import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LogisticService } from './logistic.service';
 import { FindLogisticResponeDto, FindLogisticsResponeDto } from './dto/find-logistic-response.dto';
 import { FindManyDto } from './dto/find-many.dto';
-import { INTERNAL_GROUPS } from '../common/types/cognito-groups.enum';
+import { LOGISTICS_GROUPS } from '../common/types/cognito-groups.enum';
 
 @ApiBearerAuth()
-@Authorization(INTERNAL_GROUPS)
+@Authorization(LOGISTICS_GROUPS)
 @ApiTags('logistics')
 @Controller('logistics')
 export class LogisticController {

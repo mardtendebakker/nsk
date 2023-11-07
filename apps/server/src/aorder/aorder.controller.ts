@@ -19,7 +19,7 @@ import {
   CognitoGroups,
   ADMINS_GROUPS,
   ALL_MAIN_GROUPS,
-  INTERNAL_GROUPS,
+  LOCAL_GROUPS,
   PARTNERS_GROUPS
 } from "../common/types/cognito-groups.enum";
 
@@ -40,7 +40,7 @@ export class AOrderController {
       email: string;
     }
   ) {
-    if (groups.some(group=> INTERNAL_GROUPS.includes(group))) {
+    if (groups.some(group=> LOCAL_GROUPS.includes(group))) {
       return this.aorderService.findAll(query);
     } else if (groups.some(group=> PARTNERS_GROUPS.includes(group))) {
       return this.aorderService.findAll(query, email);
@@ -62,7 +62,7 @@ export class AOrderController {
       email: string;
     }
   ) {
-    if (groups.some(group=> INTERNAL_GROUPS.includes(group))) {
+    if (groups.some(group=> LOCAL_GROUPS.includes(group))) {
       return this.aorderService.findOne(id);
     } else if (groups.some(group=> PARTNERS_GROUPS.includes(group))) {
       return this.aorderService.findOne(id, email);
@@ -72,21 +72,21 @@ export class AOrderController {
   }
 
   @Post('')
-  @UseGuards(AuthorizationGuard(INTERNAL_GROUPS))
+  @UseGuards(AuthorizationGuard(LOCAL_GROUPS))
   @ApiResponse({type: AOrderEntity})
   create(@Body() body: CreateAOrderDto) {
     return this.aorderService.create(body);
   }
 
   @Put(':id')
-  @UseGuards(AuthorizationGuard(INTERNAL_GROUPS))
+  @UseGuards(AuthorizationGuard(LOCAL_GROUPS))
   @ApiResponse({type: AOrderEntity})
   update(@Param('id') id: number, @Body() updateAOrderDto: UpdateAOrderDto) {
     return this.aorderService.update(id, updateAOrderDto);
   }
 
   @Patch('')
-  @UseGuards(AuthorizationGuard(INTERNAL_GROUPS))
+  @UseGuards(AuthorizationGuard(LOCAL_GROUPS))
   @ApiResponse({type: UpdateManyResponseAOrderDto})
   updateMany(@Body() updateManyAOrderDto: UpdateManyAOrderDto) {
     return this.aorderService.updateMany(updateManyAOrderDto)
@@ -135,7 +135,7 @@ export class AOrderController {
     const { ids } = bulkPrintDTO;
     
     let pdfStream: Buffer;
-    if (groups.some(group=> INTERNAL_GROUPS.includes(group))) {
+    if (groups.some(group=> LOCAL_GROUPS.includes(group))) {
       pdfStream = await this.aorderService.printAOrders(ids);
     } else if (groups.some(group=> PARTNERS_GROUPS.includes(group))) {
       pdfStream = await this.aorderService.printAOrders(ids, email);

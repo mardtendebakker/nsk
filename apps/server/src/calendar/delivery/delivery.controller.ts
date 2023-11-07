@@ -4,10 +4,10 @@ import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { DeliveryService } from "./delivery.service";
 import { FindDeliveriesResponeDto } from "./dto/find-delivery-response.dto";
 import { FindManyDto } from "../dto/find-many.dto";
-import { INTERNAL_GROUPS } from "../../common/types/cognito-groups.enum";
+import { LOCAL_GROUPS } from "../../common/types/cognito-groups.enum";
 
 @ApiBearerAuth()
-@Authorization(INTERNAL_GROUPS)
+@Authorization(LOCAL_GROUPS)
 @ApiTags('calendar-deliveries')
 @Controller('calendar/deliveries')
 export class DeliveryController {
