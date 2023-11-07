@@ -7,10 +7,10 @@ import { FindManyDto } from "./dto/find-many.dto";
 import { TaskEntity } from "./entities/task.entity";
 import { UpdateTaskDto } from "./dto/update-task.dto";
 import { CreateTaskDto } from "./dto/create-task.dto";
-import { INTERNAL_GROUPS } from "../common/types/cognito-groups.enum";
+import { LOCAL_GROUPS } from "../common/types/cognito-groups.enum";
 
 @ApiBearerAuth()
-@Authorization(INTERNAL_GROUPS)
+@Authorization(LOCAL_GROUPS)
 @ApiTags('tasks')
 @Controller('tasks')
 export class TaskController {

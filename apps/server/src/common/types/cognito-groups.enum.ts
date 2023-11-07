@@ -3,9 +3,9 @@ export enum CognitoGroups {
   ADMIN = 'admin',
   MANAGER = 'manager',
   LOGISTICS = 'logistics',
+  LOCAL = 'local',
   PARTNER_SALE_UPLOADER = 'partner_sale_uploader',
   PARTNER = 'partner',
-  LOCAL = 'local',
 }
 
 export const ADMINS_GROUPS = [
@@ -18,9 +18,14 @@ export const MANAGER_GROUPS = [
   CognitoGroups.MANAGER,
 ];
 
-export const INTERNAL_GROUPS = [
+export const LOGISTICS_GROUPS = [
   ...MANAGER_GROUPS,
   CognitoGroups.LOGISTICS,
+];
+
+export const LOCAL_GROUPS = [
+  ...LOGISTICS_GROUPS,
+  CognitoGroups.LOCAL,
 ];
 
 export const PARTNERS_GROUPS = [
@@ -29,7 +34,7 @@ export const PARTNERS_GROUPS = [
 ];
 
 export const ALL_MAIN_GROUPS = [
-  ...INTERNAL_GROUPS,
+  ...LOCAL_GROUPS,
   ...PARTNERS_GROUPS,
 ];
 

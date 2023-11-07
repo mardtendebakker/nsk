@@ -4,10 +4,10 @@ import { AServiceService } from "./aservice-service";
 import { Body, Delete, Param, Post, Put } from "@nestjs/common";
 import { UpdateServiceDto } from "./dto/update-aservice.dto";
 import { CreateServiceDto } from "./dto/create-service.dto";
-import { INTERNAL_GROUPS } from "../common/types/cognito-groups.enum";
+import { LOCAL_GROUPS } from "../common/types/cognito-groups.enum";
 
 @ApiBearerAuth()
-@Authorization(INTERNAL_GROUPS)
+@Authorization(LOCAL_GROUPS)
 export class AServiceController {
   constructor(protected readonly aServiceService: AServiceService) {}
 

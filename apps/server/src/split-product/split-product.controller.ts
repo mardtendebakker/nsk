@@ -3,10 +3,10 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { SplitProductService } from './split-product.service';
 import { SplitDto } from './dto/split.dto';
 import { Authorization } from '@nestjs-cognito/auth';
-import { INTERNAL_GROUPS } from '../common/types/cognito-groups.enum';
+import { LOCAL_GROUPS } from '../common/types/cognito-groups.enum';
 
 @ApiBearerAuth()
-@Authorization(INTERNAL_GROUPS)
+@Authorization(LOCAL_GROUPS)
 @ApiTags('split-product')
 @Controller('split-product')
 export class SplitProductController {

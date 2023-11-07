@@ -7,7 +7,7 @@ import { UpdateCompanyDto } from "./dto/update-company.dto";
 import { CompanyEntity } from "./entities/company.entity";
 import { CreateCompanyDto } from "./dto/create-company.dto";
 import { FindManyDto } from "./dto/find-many.dto";
-import { ALL_MAIN_GROUPS, CognitoGroups, INTERNAL_GROUPS, PARTNERS_GROUPS } from "../common/types/cognito-groups.enum";
+import { ALL_MAIN_GROUPS, CognitoGroups, LOCAL_GROUPS, PARTNERS_GROUPS } from "../common/types/cognito-groups.enum";
 
 @ApiBearerAuth()
 @Authorization(ALL_MAIN_GROUPS)
@@ -28,7 +28,7 @@ export class CompanyController {
       email: string;
     }
   ) {
-    if (groups.some(group=> INTERNAL_GROUPS.includes(group))) {
+    if (groups.some(group=> LOCAL_GROUPS.includes(group))) {
       return this.companyService.findAll(query);
     } else if (groups.some(group=> PARTNERS_GROUPS.includes(group))) {
       return this.companyService.findAll(query, email);
@@ -50,7 +50,7 @@ export class CompanyController {
       email: string;
     }
   ) {
-    if (groups.some(group=> INTERNAL_GROUPS.includes(group))) {
+    if (groups.some(group=> LOCAL_GROUPS.includes(group))) {
       return this.companyService.findOne(id);
     } else if (groups.some(group=> PARTNERS_GROUPS.includes(group))) {
       return this.companyService.findOne(id, email);
@@ -72,7 +72,7 @@ export class CompanyController {
       email: string;
     }
   ) {
-    if (groups.some(group=> INTERNAL_GROUPS.includes(group))) {
+    if (groups.some(group=> LOCAL_GROUPS.includes(group))) {
       return this.companyService.create(body);
     } else if (groups.some(group=> PARTNERS_GROUPS.includes(group))) {
       return this.companyService.create(body, email);
@@ -95,7 +95,7 @@ export class CompanyController {
       email: string;
     }
   ) {
-    if (groups.some(group=> INTERNAL_GROUPS.includes(group))) {
+    if (groups.some(group=> LOCAL_GROUPS.includes(group))) {
       return this.companyService.update(id, updateCompanyDto);
     } else if (groups.some(group=> PARTNERS_GROUPS.includes(group))) {
       return this.companyService.update(id, updateCompanyDto, email);
@@ -116,7 +116,7 @@ export class CompanyController {
       email: string;
     }
   ) {
-    if (groups.some(group=> INTERNAL_GROUPS.includes(group))) {
+    if (groups.some(group=> LOCAL_GROUPS.includes(group))) {
       return this.companyService.delete(id);
     } else if (groups.some(group=> PARTNERS_GROUPS.includes(group))) {
       return this.companyService.delete(id, email);

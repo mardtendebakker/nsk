@@ -4,7 +4,7 @@ import { AutocompleteService } from './autocomplete.service';
 import { AutocompleteDto } from './dto/autocomplete.dto';
 import { AutocompleteResponseDto, LocationAutocompleteResponseDto } from './dto/autocomplete-response.dto';
 import { Authorization, AuthorizationGuard, CognitoUser } from '@nestjs-cognito/auth';
-import { ALL_MAIN_GROUPS, CognitoGroups, INTERNAL_GROUPS, PARTNERS_GROUPS } from '../common/types/cognito-groups.enum';
+import { ALL_MAIN_GROUPS, CognitoGroups, LOCAL_GROUPS, PARTNERS_GROUPS } from '../common/types/cognito-groups.enum';
 
 @ApiBearerAuth()
 @Authorization(ALL_MAIN_GROUPS)
@@ -44,7 +44,7 @@ export class AutocompleteController {
       email: string;
     }
   ) {
-    if (groups.some(group=> INTERNAL_GROUPS.includes(group))) {
+    if (groups.some(group=> LOCAL_GROUPS.includes(group))) {
       return this.autocompleteService.findCompanies(query);
     } else if (groups.some(group=> PARTNERS_GROUPS.includes(group))) {
       return this.autocompleteService.findCompanies(query, email);
@@ -54,7 +54,7 @@ export class AutocompleteController {
   }
 
   @Get('/partners')
-  @UseGuards(AuthorizationGuard(INTERNAL_GROUPS))
+  @UseGuards(AuthorizationGuard(LOCAL_GROUPS))
   @ApiResponse({ type: AutocompleteResponseDto, isArray: true })
   partners(@Query() query: AutocompleteDto) {
     return this.autocompleteService.findPartners(query);

@@ -7,10 +7,10 @@ import { FindManyDto } from "./dto/find-many.dto";
 import { AttributeEntity } from "./entities/attribute.entity";
 import { UpdateAttributeDto } from "./dto/update-attribute.dto";
 import { CreateAttributeDto } from "./dto/create-attribute.dto";
-import { INTERNAL_GROUPS } from "../common/types/cognito-groups.enum";
+import { LOCAL_GROUPS } from "../common/types/cognito-groups.enum";
 
 @ApiBearerAuth()
-@Authorization(INTERNAL_GROUPS)
+@Authorization(LOCAL_GROUPS)
 @ApiTags('attributes')
 @Controller('attributes')
 export class AttributeController {

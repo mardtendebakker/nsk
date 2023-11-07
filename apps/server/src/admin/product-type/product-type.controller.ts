@@ -7,10 +7,10 @@ import { FindManyDto } from "./dto/find-many.dto";
 import { ProductTypeEntity } from "./entities/product-type.entity";
 import { UpdateProductTypeDto } from "./dto/update-product-type.dto";
 import { CreateProductTypeDto } from "./dto/create-product-type.dto";
-import { INTERNAL_GROUPS, MANAGER_GROUPS } from "../../common/types/cognito-groups.enum";
+import { LOCAL_GROUPS, MANAGER_GROUPS } from "../../common/types/cognito-groups.enum";
 
 @ApiBearerAuth()
-@Authorization(INTERNAL_GROUPS)
+@Authorization(LOCAL_GROUPS)
 @ApiTags('admin product types')
 @Controller('admin/product-types')
 export class ProductTypeController {
