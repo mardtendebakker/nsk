@@ -21,7 +21,7 @@ export default function Header() {
     >
       <HeaderItems />
       <Box>
-        <Can requiredGroups={['manager', 'partner_sale_uploader']}>
+        <Can requiredGroups={['admin', 'super_admin', 'manager', 'partner_sale_uploader']}>
           <Button
             sx={{ mb: '.5rem', mr: '.5rem' }}
             size="small"
@@ -32,7 +32,7 @@ export default function Header() {
             {trans('importSales')}
           </Button>
         </Can>
-        <Can requiredGroups={['manager', 'logistics', 'local']}>
+        <Can requiredGroups={['admin', 'super_admin', 'manager', 'logistics', 'local']}>
           <Button
             sx={{ mb: '.5rem' }}
             size="small"

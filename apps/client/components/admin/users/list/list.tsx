@@ -87,7 +87,7 @@ export default function List({
                 {user.UserLastModifiedDate && format(new Date(user.UserLastModifiedDate), 'yyyy/MM/dd')}
               </TableCell>
               <TableCell>
-                <Can requiredGroups={['super_admin']} disableDefaultGroups>
+                <Can requiredGroups={['super_admin']}>
                   <Edit onClick={() => onEdit(user.Username)} disabled={disabled} />
                 </Can>
               </TableCell>

@@ -72,7 +72,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
 
   return (
     <>
-      <Can requiredGroups={['manager', 'logistics', 'local']}>
+      <Can requiredGroups={['admin', 'super_admin', 'manager', 'logistics', 'local']}>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Button size="small" onClick={() => setShowForm(true)} sx={{ mb: '.5rem' }}>
             <Add />
@@ -136,7 +136,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
                       'price',
                       e.target.value,
                     )}
-                    disabled={!can(user?.groups || [], ['manager', 'logistics', 'local'])}
+                    disabled={!can(user?.groups || [], ['admin', 'super_admin', 'manager', 'logistics', 'local'])}
                   />
                 </TableCell>
                 <TableCell>
@@ -149,11 +149,11 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
                       'quantity',
                       e.target.value,
                     )}
-                    disabled={!can(user?.groups || [], ['manager', 'logistics', 'local'])}
+                    disabled={!can(user?.groups || [], ['admin', 'super_admin', 'manager', 'logistics', 'local'])}
                   />
                 </TableCell>
                 <TableCell>
-                  <Can requiredGroups={['manager', 'logistics', 'local']}>
+                  <Can requiredGroups={['admin', 'super_admin', 'manager', 'logistics', 'local']}>
                     <Edit onClick={() => setEditProductId(product.id)} />
                   </Can>
                 </TableCell>

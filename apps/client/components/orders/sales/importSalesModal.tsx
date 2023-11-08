@@ -71,7 +71,7 @@ export default function ImportSalesModal({
               }}
             />
             <Typography color="error">{formRepresentation.file.error}</Typography>
-            <Can requiredGroups={['manager']}>
+            <Can requiredGroups={['admin', 'super_admin', 'manager']}>
               <DataSourcePicker
                 sx={{ mt: '.5rem' }}
                 path={AUTOCOMPLETE_PARTNERS_PATH}

@@ -98,7 +98,7 @@ export default function ProductsTable({ orderId, refreshOrder }:{ orderId: strin
 
   return (
     <>
-      <Can requiredGroups={['manager', 'logistics', 'local']}>
+      <Can requiredGroups={['admin', 'super_admin', 'manager', 'logistics', 'local']}>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Button size="small" onClick={() => setShowProductsModal(true)} sx={{ mb: '.5rem' }}>
             <Add />
@@ -163,7 +163,7 @@ export default function ProductsTable({ orderId, refreshOrder }:{ orderId: strin
                     'price',
                     e.target.value,
                   )}
-                  disabled={!can(user?.groups || [], ['manager', 'logistics', 'local'])}
+                  disabled={!can(user?.groups || [], ['admin', 'super_admin', 'manager', 'logistics', 'local'])}
                 />
               </TableCell>
               <TableCell>
@@ -176,11 +176,11 @@ export default function ProductsTable({ orderId, refreshOrder }:{ orderId: strin
                     'quantity',
                     e.target.value,
                   )}
-                  disabled={!can(user?.groups || [], ['manager', 'logistics', 'local'])}
+                  disabled={!can(user?.groups || [], ['admin', 'super_admin', 'manager', 'logistics', 'local'])}
                 />
               </TableCell>
               <TableCell>
-                <Can requiredGroups={['manager', 'logistics', 'local']}>
+                <Can requiredGroups={['admin', 'super_admin', 'manager', 'logistics', 'local']}>
                   <Delete onClick={() => handleDeleteProduct(product.id)} tooltip />
                 </Can>
               </TableCell>
