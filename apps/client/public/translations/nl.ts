@@ -100,7 +100,7 @@ const translation = {
   pricingDetails: 'Prijsdetails',
   transportCost: 'Transportkosten',
   forgotPasswordSuccessMessage: 'Er is een email verzonden met een verificatiecode.',
-  invalidLocationLabelFormat: 'Locatielabel moet een van de volgende reguliere expressies respecteren : %regex%',
+  invalidLocationLabelFormat: 'Locatie label is als volgt:  Stelling 1-2, Compartiment 1-24, Vak 1-4. Noteer bijvoorbeeld als volgt: %e.g.%',
   emailOrUsername: 'Email of gebruikersnaam',
   orderDetails: 'Besteldetails',
   pricing: 'Prijzen',
