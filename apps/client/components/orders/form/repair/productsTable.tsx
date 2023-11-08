@@ -130,7 +130,7 @@ export default function ProductsTable({ orderId, refreshOrder }:{ orderId: strin
 
   return (
     <>
-      <Can requiredGroups={['manager', 'logistics']}>
+      <Can requiredGroups={['manager', 'logistics', 'local']}>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Button size="small" onClick={() => setShowProductsModal(true)} sx={{ mb: '.5rem' }}>
             <Add />

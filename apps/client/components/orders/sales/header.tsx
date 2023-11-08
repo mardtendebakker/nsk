@@ -32,7 +32,7 @@ export default function Header() {
             {trans('importSales')}
           </Button>
         </Can>
-        <Can requiredGroups={['manager', 'logistics']}>
+        <Can requiredGroups={['manager', 'logistics', 'local']}>
           <Button
             sx={{ mb: '.5rem' }}
             size="small"
