@@ -33,7 +33,7 @@ export default function Action({
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         {checkedOrdersCount > 0
         && (
-          <Can requiredGroups={['manager', 'logistics']}>
+          <Can requiredGroups={['manager', 'logistics', 'local']}>
             <Button size="small" onClick={onChangeStatus} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
               <Loop sx={{ mr: '.1rem' }} />
               {trans('changeStatus')}
