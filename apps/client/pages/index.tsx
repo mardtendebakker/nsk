@@ -29,7 +29,7 @@ function Dashboard() {
         {user?.username}
         !
       </Typography>
-      <Can requiredGroups={['manager', 'logistics', 'local']}>
+      <Can requiredGroups={['admin', 'super_admin', 'manager', 'logistics', 'local']}>
         <Box sx={{ m: '.5rem' }} />
         <IndicatorRow />
         <Box sx={{ mt: '.5rem', display: 'flex' }}>

@@ -55,7 +55,7 @@ export default function Row({
               'price',
               e.target.value,
             )}
-            disabled={!can(user?.groups || [], ['manager', 'logistics', 'local'])}
+            disabled={!can(user?.groups || [], ['admin', 'super_admin', 'manager', 'logistics', 'local'])}
           />
         </TableCell>
         <TableCell>
@@ -68,11 +68,11 @@ export default function Row({
               'quantity',
               e.target.value,
             )}
-            disabled={!can(user?.groups || [], ['manager', 'logistics', 'local'])}
+            disabled={!can(user?.groups || [], ['admin', 'super_admin', 'manager', 'logistics', 'local'])}
           />
         </TableCell>
         <TableCell>
-          <Can requiredGroups={['manager', 'logistics', 'local']}>
+          <Can requiredGroups={['admin', 'super_admin', 'manager', 'logistics', 'local']}>
             <AddButton title={trans('addService')} onClick={onAddService} />
             <Delete onClick={() => onDeleteProduct(product.id)} tooltip />
           </Can>
@@ -103,7 +103,7 @@ export default function Row({
                           'description',
                           e.target.value,
                         )}
-                        disabled={!can(user?.groups || [], ['manager', 'logistics', 'local'])}
+                        disabled={!can(user?.groups || [], ['admin', 'super_admin', 'manager', 'logistics', 'local'])}
                       />
                     </TableCell>
                     <TableCell colSpan={2}>
@@ -115,7 +115,7 @@ export default function Row({
                           { title: trans('done'), value: '3' },
                           { title: trans('cancel'), value: '4' },
                         ]}
-                        onChange={(e) => can(user?.groups || [], ['manager', 'logistics', 'local'])
+                        onChange={(e) => can(user?.groups || [], ['admin', 'super_admin', 'manager', 'logistics', 'local'])
                           && onServicePropertyChange(service, 'status', e.target.value)}
                         defaultValue={service.status.toString()}
                       />
@@ -130,11 +130,11 @@ export default function Row({
                           'price',
                           e.target.value,
                         )}
-                        disabled={!can(user?.groups || [], ['manager', 'logistics', 'local'])}
+                        disabled={!can(user?.groups || [], ['admin', 'super_admin', 'manager', 'logistics', 'local'])}
                       />
                     </TableCell>
                     <TableCell>
-                      <Can requiredGroups={['manager', 'logistics', 'local']}>
+                      <Can requiredGroups={['admin', 'super_admin', 'manager', 'logistics', 'local']}>
                         <Delete onClick={() => onDeleteService(service.id)} tooltip />
                       </Can>
                     </TableCell>

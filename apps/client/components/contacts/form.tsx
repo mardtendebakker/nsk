@@ -120,7 +120,7 @@ function Form({
               value={formRepresentation.phone2.value || ''}
             />
           </Grid>
-          <Can requiredGroups={['manager', 'logistics', 'local']}>
+          <Can requiredGroups={['admin', 'super_admin', 'manager', 'logistics', 'local']}>
             <Grid
               item
               xs={12}

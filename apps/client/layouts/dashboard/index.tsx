@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import useSecurity from '../../hooks/useSecurity';
 import Header from './header';
 import {
-  SIGN_IN, ACCOUNT_VERIFICATION, DASHBOARD, getRouteGroups, getDefaultPath,
+  SIGN_IN, ACCOUNT_VERIFICATION, getRouteGroups, getDefaultPath,
 } from '../../utils/routes';
 import { Group } from '../../stores/security/types';
 import can from '../../utils/can';

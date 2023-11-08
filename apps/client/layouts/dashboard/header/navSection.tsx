@@ -12,9 +12,8 @@ export default function NavSection({ menuDescription }: { menuDescription: MenuI
       </Box>
       <MenuList disablePadding sx={{ p: '1rem' }}>
         {menuDescription.map((menuItemDescription) => (
-          <Can requiredGroups={getRouteGroups(menuItemDescription.path)}>
+          <Can requiredGroups={getRouteGroups(menuItemDescription.path)} key={menuItemDescription.path}>
             <NavItem
-              key={menuItemDescription.path}
               menuItemDescription={menuItemDescription}
             />
           </Can>

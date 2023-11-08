@@ -65,7 +65,7 @@ export const getRouteGroups = (uri: string): Group[] => {
   if (
     uri.startsWith('/orders')
     || uri.startsWith('/contacts')
-    || uri == DASHBOARD) {
+  ) {
     return ['admin', 'super_admin', 'manager', 'logistics', 'local', 'partner_sale_uploader', 'partner'];
   }
 };

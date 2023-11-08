@@ -53,7 +53,7 @@ export default function AccountPopover() {
               {trans('settings')}
             </MenuItem>
           </Link>
-          <Can>
+          <Can requiredGroups={['admin', 'super_admin']}>
             <Link href={ADMIN_USERS} style={{ textDecoration: 'none', color: 'inherit' }} passHref>
               <MenuItem>
                 {trans('admin')}
