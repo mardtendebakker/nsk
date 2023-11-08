@@ -26,7 +26,7 @@ const initFormState = (trans: Trans) => ({
         }
       });
 
-      return supported ? undefined : trans('invalidLocationLabelFormat', { vars: new Map().set('regex', locationTemplates.map(({ template }) => template).toString()) });
+      return supported ? undefined : trans('invalidLocationLabelFormat', { vars: new Map().set('e.g.', '1-22-3') });
     },
   },
 });

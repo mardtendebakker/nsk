@@ -19,7 +19,7 @@ export class LocationTemplateService {
         ...(location && { location_id: location }),
         ...(search && { name: { contains: search } }),
       },
-      orderBy: Object.keys(query?.orderBy || {})?.length ? query.orderBy : { pindex: 'asc' },
+      orderBy: Object.keys(query?.orderBy || {})?.length ? query.orderBy : { id: 'asc' },
     });
   }
 

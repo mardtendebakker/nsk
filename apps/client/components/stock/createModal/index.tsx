@@ -47,7 +47,7 @@ export function initFormState(trans: Trans, product?: Product): FormRepresentati
           }
         });
 
-        return supported ? undefined : trans('invalidLocationLabelFormat', { vars: new Map().set('regex', locationTemplates.map(({ template }) => template).toString()) });
+        return supported ? undefined : trans('invalidLocationLabelFormat', { vars: new Map().set('e.g.', '1-22-3') });
       },
     },
     status_id: { value: product?.product_status?.id },
