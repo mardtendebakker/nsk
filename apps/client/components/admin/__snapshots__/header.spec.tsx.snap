@@ -1,0 +1,60 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Header component matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="MuiBox-root css-1lxwves"
+  >
+    <div
+      class="MuiBox-root css-1yblesk"
+    >
+      <h4
+        class="MuiTypography-root MuiTypography-h4 css-f4qrnb-MuiTypography-root"
+      >
+        adminCenter
+      </h4>
+      <a
+        href="/admin/users"
+        style="text-decoration: none;"
+      >
+        <h5
+          class="MuiTypography-root MuiTypography-h5 css-1qlpo0y-MuiTypography-root"
+        >
+          manageUsers
+        </h5>
+      </a>
+      <a
+        href="/admin/settings/locations"
+        style="text-decoration: none;"
+      >
+        <h5
+          class="MuiTypography-root MuiTypography-h5 css-1k3vp8i-MuiTypography-root"
+        >
+          manageAppSettings
+        </h5>
+      </a>
+    </div>
+    <button
+      class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeSmall MuiButton-containedSizeSmall MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeSmall MuiButton-containedSizeSmall css-11qr2p8-MuiButtonBase-root-MuiButton-root"
+      tabindex="0"
+      type="button"
+    >
+      <svg
+        aria-hidden="true"
+        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+        data-testid="AddIcon"
+        focusable="false"
+        viewBox="0 0 24 24"
+      >
+        <path
+          d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"
+        />
+      </svg>
+      newUser
+      <span
+        class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+      />
+    </button>
+  </div>
+</DocumentFragment>
+`;
