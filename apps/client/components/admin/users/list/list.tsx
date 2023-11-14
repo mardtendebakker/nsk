@@ -96,10 +96,10 @@ export default function List({
         </TableBody>
       </Table>
       <Box sx={{
-        display: 'flex', justifyContent: 'flex-end', alignItems: ' center', mt: '2rem',
+        display: 'flex', justifyContent: 'flex-end', alignItems: ' center', mt: '2rem', overflowX: 'scroll', minWidth: '25rem',
       }}
       >
-        <Typography variant="body2" sx={{ mr: '1.5rem' }}>
+        <Typography variant="body2" sx={{ mr: '.5rem' }}>
           {trans('rowsPerPage')}
         </Typography>
         <Select
