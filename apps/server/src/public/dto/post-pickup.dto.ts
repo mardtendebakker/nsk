@@ -3,7 +3,7 @@ import { DataDestruction } from "../../calendar/pickup/types/destruction.enum";
 import { IsInt, IsOptional, IsString } from "class-validator";
 import { Transform, Type } from "class-transformer";
 import { formDataDateTransform, formDataNumberTransform, formDataStringTransform } from "../../common/transforms/form-date.transform";
-import { NewCompanyDto } from "./new-company.dto";
+import { NewContactDto } from "./new-contact.dto";
 import { CommonFormDto } from "./common-form.dto";
 import { PostCommonDto } from "./PostCommon.dto";
 
@@ -43,8 +43,8 @@ export class PickupFormDto extends CommonFormDto {
   locationId: number;
 
   @ApiProperty()
-  @Type(() => NewCompanyDto)
-  supplier: NewCompanyDto;
+  @Type(() => NewContactDto)
+  supplier: NewContactDto;
 
   @ApiProperty()
   @Transform(formDataNumberTransform)

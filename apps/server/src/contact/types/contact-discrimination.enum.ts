@@ -1,4 +1,4 @@
-export enum CompanyDiscrimination {
+export enum ContactDiscrimination {
   CUSTOMER = 'c',
   SUPLLIER = 's',
 }

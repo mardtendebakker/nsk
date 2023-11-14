@@ -4,20 +4,20 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
-export class CompanyRepository {
+export class ContactRepository {
   constructor(
     protected readonly prisma: PrismaService,
     protected readonly configService: ConfigService
   ) {}
 
-  async findAll(params: Prisma.acompanyFindManyArgs) {
+  async findAll(params: Prisma.contactFindManyArgs) {
     const { skip, cursor, select, orderBy, where } = params;
     const maxQueryLimit = this.configService.get<number>('MAX_NONE_RELATION_QUERY_LIMIT');
     const take = Number.isFinite(params.take) && params.take <  maxQueryLimit ? params.take : maxQueryLimit;
 
     const submission = await this.prisma.$transaction([
-      this.prisma.acompany.count({where}),
-      this.prisma.acompany.findMany({ skip, take, cursor, where, select, orderBy })
+      this.prisma.contact.count({where}),
+      this.prisma.contact.findMany({ skip, take, cursor, where, select, orderBy })
     ]);
   
     return {
@@ -26,33 +26,33 @@ export class CompanyRepository {
     };
   }
   
-  create(companyCreateArgs: Prisma.acompanyCreateArgs) {
-    return this.prisma.acompany.create(companyCreateArgs);
+  create(contactCreateArgs: Prisma.contactCreateArgs) {
+    return this.prisma.contact.create(contactCreateArgs);
   }
   
-  findOne(where: Prisma.acompanyWhereUniqueInput) {
-    return this.prisma.acompany.findUnique({
+  findOne(where: Prisma.contactWhereUniqueInput) {
+    return this.prisma.contact.findUnique({
       where,
     });
   }
 
-  findFirst(params: Prisma.acompanyFindFirstArgs) {
-    return this.prisma.acompany.findFirst(params);
+  findFirst(params: Prisma.contactFindFirstArgs) {
+    return this.prisma.contact.findFirst(params);
   }
   
   update(params: {
-    where: Prisma.acompanyWhereUniqueInput;
-    data: Prisma.acompanyUpdateInput;
+    where: Prisma.contactWhereUniqueInput;
+    data: Prisma.contactUpdateInput;
   }) {
     const { where, data } = params;
-    return this.prisma.acompany.update({
+    return this.prisma.contact.update({
       data,
       where,
     });
   }
 
-  delete(params: {where: Prisma.acompanyWhereUniqueInput}) {
+  delete(params: {where: Prisma.contactWhereUniqueInput}) {
     const { where } = params;
-    return this.prisma.acompany.delete({where});
+    return this.prisma.contact.delete({where});
   }
 }

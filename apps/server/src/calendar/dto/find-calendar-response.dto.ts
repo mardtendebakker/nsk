@@ -1,7 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { OrderStatusEntity } from '../../admin/order-status/entities/order-status.entity';
 import { FindLogisticResponeDto } from '../../logistic/dto/find-logistic-response.dto';
-import { CompanyEntity } from '../../company/entities/company.entity';
+import { ContactEntity } from '../../contact/entities/contact.entity';
 
 class CalendarOrder {
   @ApiProperty()
@@ -14,10 +14,10 @@ class CalendarOrder {
   order_status: OrderStatusEntity;
 
   @ApiProperty()
-  supplier?: CompanyEntity;
+  supplier?: ContactEntity;
 
   @ApiProperty()
-  customer?: CompanyEntity;
+  customer?: ContactEntity;
 }
 
 export class FindCalendarResponeDto {

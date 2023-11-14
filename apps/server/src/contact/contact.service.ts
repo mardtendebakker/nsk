@@ -1,27 +1,27 @@
-import { CompanyRepository } from './company.repository';
-import { UpdateCompanyDto } from './dto/update-company.dto';
+import { ContactRepository } from './contact.repository';
+import { UpdateContactDto } from './dto/update-contact.dto';
 import { BadRequestException, ForbiddenException, Inject, Injectable, UnprocessableEntityException } from '@nestjs/common';
-import { CreateCompanyDto } from './dto/create-company.dto';
+import { CreateContactDto } from './dto/create-contact.dto';
 import { FindManyDto } from './dto/find-many.dto';
-import { CompanyEntity } from './entities/company.entity';
-import { CompanyDiscrimination } from './types/company-discrimination.enum';
+import { ContactEntity } from './entities/contact.entity';
+import { ContactDiscrimination } from './types/contact-discrimination.enum';
 import { Prisma } from '@prisma/client';
 import { IsPartner } from './types/is-partner.enum';
 @Injectable()
-export class CompanyService {
+export class ContactService {
   constructor(
-    protected readonly repository: CompanyRepository,
-    @Inject('TYPE') protected readonly type?: CompanyDiscrimination,
+    protected readonly repository: ContactRepository,
+    @Inject('TYPE') protected readonly type?: ContactDiscrimination,
   ) {}
 
   async findAll(query: FindManyDto, email?: string) {
     const { search, representative } = query;
-    const where: Prisma.acompanyWhereInput = {
+    const where: Prisma.contactWhereInput = {
       ...query.where,
       ...(email && {
         OR: [
           { email },
-          { acompany: { email } },
+          { contact: { email } },
         ],
       }),
       ...(this.type && { discr: this.type }),
@@ -60,15 +60,15 @@ export class CompanyService {
       ...(email && {
         OR: [
           { email },
-          { acompany: { email } },
+          { contact: { email } },
         ],
       }),
     });
   }
 
-  async create(comapnyDto: CreateCompanyDto, email?: string) {
+  async create(comapnyDto: CreateContactDto, email?: string) {
     if (this.type === undefined) {
-      throw new BadRequestException('The operation requires a specific company type');
+      throw new BadRequestException('The operation requires a specific contact type');
     }
 
     return this.repository.create({
@@ -95,14 +95,14 @@ export class CompanyService {
         ...(email && {
           OR: [
             { email },
-            { acompany: { email } },
+            { contact: { email } },
           ],
         }),
       },
     });
   }
 
-  async update(id: number, comapnyDto: UpdateCompanyDto, email?: string) {
+  async update(id: number, comapnyDto: UpdateContactDto, email?: string) {
     try {
       return await this.repository.update({
         data: await this.prepareIsPartnerField({ id, ...comapnyDto }, email),
@@ -111,7 +111,7 @@ export class CompanyService {
           ...(email && {
             OR: [
               { email },
-              { acompany: { email } },
+              { contact: { email } },
             ],
           }),
         },
@@ -125,12 +125,12 @@ export class CompanyService {
     }
   }
 
-  async checkExists(comapnyData: Partial<CompanyEntity>) {
+  async checkExists(comapnyData: Partial<ContactEntity>) {
     const zip = (comapnyData.zip ?? comapnyData.zip2);
-    let company: CompanyEntity;
+    let contact: ContactEntity;
 
     if (zip) {
-      company = await this.repository.findFirst({
+      contact = await this.repository.findFirst({
         where: {
           ...(this.type && { discr: this.type }),
           AND: [
@@ -147,15 +147,15 @@ export class CompanyService {
       });
     }
 
-    if (!company) {
-      company = await this.create(comapnyData as CreateCompanyDto);
+    if (!contact) {
+      contact = await this.create(comapnyData as CreateContactDto);
     }
 
-    return company;
+    return contact;
   }
 
-  async prepareIsPartnerField<T extends { id?: number, email?: string, is_partner?: number; partner_id?: number }>(acompanyDto: T, email?: string): Promise<T> {
-    const acompany = { ...acompanyDto };
+  async prepareIsPartnerField<T extends { id?: number, email?: string, is_partner?: number; partner_id?: number }>(contactDto: T, email?: string): Promise<T> {
+    const contact = { ...contactDto };
 
     if (email) {
       const partner = await this.findPartnerByEmail(email);
@@ -164,17 +164,17 @@ export class CompanyService {
         throw new UnprocessableEntityException('No partner for provided user!');
       }
 
-      if (acompany.id === partner.id) {
-        acompany.email = partner.email; // to make sure partner can not change own email
+      if (contact.id === partner.id) {
+        contact.email = partner.email; // to make sure partner can not change own email
       } else {
-        acompany.is_partner = IsPartner.HAS_PARTNER;
-        acompany.partner_id = partner.id;
+        contact.is_partner = IsPartner.HAS_PARTNER;
+        contact.partner_id = partner.id;
       }
 
-    } else if (acompany.is_partner === 0 && Number.isFinite(acompany.partner_id)) {
-      acompany.is_partner = IsPartner.HAS_PARTNER;
+    } else if (contact.is_partner === 0 && Number.isFinite(contact.partner_id)) {
+      contact.is_partner = IsPartner.HAS_PARTNER;
     }
   
-    return acompany;
+    return contact;
   }
 }

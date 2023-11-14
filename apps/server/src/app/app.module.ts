@@ -13,7 +13,7 @@ import { PurchaseModule } from '../purchase/purchase.module';
 import { ProductModule } from '../product/product.module';
 import { ToRepairModule } from '../to-repair/to-repair.module';
 import { FileModule } from '../file/file.module';
-import { CompanyModule } from '../company/company.module';
+import { ContactModule } from '../contact/contact.module';
 import { EmailModule } from '../email/email.module';
 import { OrderModule } from '../order/order.module';
 import { PickupModule } from '../calendar/pickup/pickup.module';
@@ -65,7 +65,7 @@ import { AdminModule } from '../admin/admin.module';
     ToRepairModule,
     SplitProductModule,
     FileModule,
-    CompanyModule,
+    ContactModule,
     EmailModule,
     OrderModule,
     PickupModule,

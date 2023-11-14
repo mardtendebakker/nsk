@@ -4,7 +4,7 @@ import { AOrderEntity } from "../entities/aorder.entity";
 import { ProductOrderEntity } from "../../stock/entities/product-order.entity";
 import { ProductEntity } from "../../stock/entities/product.entity";
 import { OrderStatusEntity } from "../../admin/order-status/entities/order-status.entity";
-import { CompanyEntity } from "../../company/entities/company.entity";
+import { ContactEntity } from "../../contact/entities/contact.entity";
 
 class OrderStatus extends PickType(OrderStatusEntity, [
   'id',
@@ -12,7 +12,7 @@ class OrderStatus extends PickType(OrderStatusEntity, [
   'color',
 ]) {}
 
-class ACompany extends PickType(CompanyEntity, [
+class SubContact extends PickType(ContactEntity, [
   'id',
   'name',
   'street',
@@ -20,7 +20,7 @@ class ACompany extends PickType(CompanyEntity, [
   'zip',
 ]) {}
 
-class Company extends PickType(CompanyEntity, [
+class Contact extends PickType(ContactEntity, [
   'id',
   'name',
   'street',
@@ -28,7 +28,7 @@ class Company extends PickType(CompanyEntity, [
   'zip',
 ]) {
   @ApiPropertyOptional()
-  acompany?: ACompany;
+  contact?: SubContact;
 }
 
 class ProductDto extends PickType(ProductEntity, [
@@ -51,10 +51,10 @@ class FindAOrderResponeDto extends PickType(AOrderEntity, [
   order_status?: OrderStatus;
 
   @ApiPropertyOptional()
-  acompany_aorder_supplier_idToacompany?: Company;
+  contact_aorder_supplier_idTocontact?: Contact;
 
   @ApiPropertyOptional()
-  acompany_aorder_customer_idToacompany?: Company;
+  contact_aorder_customer_idTocontact?: Contact;
 
   @ApiPropertyOptional()
   product_orders?: ProductOrderDto[];

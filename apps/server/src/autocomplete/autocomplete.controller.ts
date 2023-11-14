@@ -31,9 +31,9 @@ export class AutocompleteController {
     return this.autocompleteService.findAttributes(query);
   }
 
-  @Get('/companies')
+  @Get('/contacts')
   @ApiResponse({ type: AutocompleteResponseDto, isArray: true })
-  companies(
+  contacts(
     @Query() query: AutocompleteDto,
     @CognitoUser(["groups", "email"])
     {
@@ -45,9 +45,9 @@ export class AutocompleteController {
     }
   ) {
     if (groups.some(group=> LOCAL_GROUPS.includes(group))) {
-      return this.autocompleteService.findCompanies(query);
+      return this.autocompleteService.findContacts(query);
     } else if (groups.some(group=> PARTNERS_GROUPS.includes(group))) {
-      return this.autocompleteService.findCompanies(query, email);
+      return this.autocompleteService.findContacts(query, email);
     } else {
       throw new ForbiddenException("Insufficient permissions to access this api!");
     }

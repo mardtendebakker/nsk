@@ -1,13 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CompanyService } from '../company/company.service';
+import { ContactService } from '../contact/contact.service';
 import { SupplierRepository } from './supplier.repository';
-import { CompanyDiscrimination } from '../company/types/company-discrimination.enum';
+import { ContactDiscrimination } from '../contact/types/contact-discrimination.enum';
 
 @Injectable()
-export class SupplierService extends CompanyService {
+export class SupplierService extends ContactService {
   constructor(
     protected readonly repository: SupplierRepository,
-    @Inject('TYPE') protected readonly type: CompanyDiscrimination
+    @Inject('TYPE') protected readonly type: ContactDiscrimination
   ) {
     super(repository, type);
   }

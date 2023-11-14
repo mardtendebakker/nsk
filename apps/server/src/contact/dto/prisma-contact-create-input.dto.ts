@@ -4,7 +4,7 @@ import { Type } from "class-transformer";
 import { IsEmail, IsEnum, IsInt, IsOptional } from "class-validator";
 import { IsPartner } from "../types/is-partner.enum";
 
-export class PrismaCompanyCreateInputDto implements Prisma.acompanyUncheckedCreateInput {
+export class PrismaContactCreateInputDto implements Prisma.contactUncheckedCreateInput {
   @ApiPropertyOptional()
   @IsOptional()
   @IsInt()
@@ -109,17 +109,17 @@ export class PrismaCompanyCreateInputDto implements Prisma.acompanyUncheckedCrea
   external_id?: number;
 
   @ApiPropertyOptional()
-  other_acompany?: Prisma.acompanyUncheckedCreateNestedManyWithoutAcompanyInput;
+  other_contact?: Prisma.contactUncheckedCreateNestedManyWithoutContactInput;
 
   @ApiPropertyOptional()
-  supplierOrders?: Prisma.aorderUncheckedCreateNestedManyWithoutAcompany_aorder_supplier_idToacompanyInput;
+  supplierOrders?: Prisma.aorderUncheckedCreateNestedManyWithoutContact_aorder_supplier_idTocontactInput;
 
   @ApiPropertyOptional()
-  customerOrders?: Prisma.aorderUncheckedCreateNestedManyWithoutAcompany_aorder_customer_idToacompanyInput;
+  customerOrders?: Prisma.aorderUncheckedCreateNestedManyWithoutContact_aorder_customer_idTocontactInput;
 
   @ApiPropertyOptional()
-  fos_user?: Prisma.fos_userUncheckedCreateNestedManyWithoutAcompanyInput;
+  fos_user?: Prisma.fos_userUncheckedCreateNestedManyWithoutContactInput;
 
   @ApiPropertyOptional()
-  product?: Prisma.productUncheckedCreateNestedManyWithoutAcompanyInput;
+  product?: Prisma.productUncheckedCreateNestedManyWithoutContactInput;
 }

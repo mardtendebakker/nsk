@@ -3,14 +3,14 @@ import { CustomerService } from './customer.service';
 import { CustomerController } from './customer.controller';
 import { CustomerRepository } from './customer.repository';
 import { PrismaModule } from '../prisma/prisma.module';
-import { CompanyDiscrimination } from '../company/types/company-discrimination.enum';
+import { ContactDiscrimination } from '../contact/types/contact-discrimination.enum';
 
 @Module({
   providers: [
     CustomerService,
     {
       provide: 'TYPE',
-      useValue: CompanyDiscrimination.CUSTOMER,
+      useValue: ContactDiscrimination.CUSTOMER,
     },
     CustomerRepository,
   ],
