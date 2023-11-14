@@ -11,7 +11,7 @@ import useTranslation from '../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../hooks/useForm';
 import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
 import { AUTOCOMPLETE_CUSTOMERS_PATH } from '../../../utils/axios';
-import Company from './company';
+import Contact from './contact';
 
 export default function CustomerDetails({
   formRepresentation,
@@ -87,7 +87,7 @@ export default function CustomerDetails({
           }}
         >
           {formRepresentation.newCustomer.value ? (
-            <Company formRepresentation={formRepresentation} setValue={setValue} />
+            <Contact formRepresentation={formRepresentation} setValue={setValue} />
           ) : (
             <DataSourcePicker
               label={trans('customer')}

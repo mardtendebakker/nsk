@@ -1,4 +1,4 @@
-export interface CompanyListItem {
+export interface ContactListItem {
   id: number,
   name:string,
   email:string,
@@ -8,7 +8,7 @@ export interface CompanyListItem {
   orders:[],
 }
 
-export interface Company {
+export interface Contact {
   id:number,
   name:string,
   representative:string,

@@ -5,15 +5,15 @@ interface ProductOrder {
   product: { name: string }
 }
 
-export interface Company {
+export interface Contact {
   id:string,
   name:string,
   city?: string,
   street?: string,
   zip?: string,
-  acompany: ACompany
+  contact: SubContact
 }
-export interface ACompany {
+export interface SubContact {
   id:string,
   name:string,
   city?: string,
@@ -39,8 +39,8 @@ export interface OrderListItem {
   delivery_date: string,
   order_status: { id: number, name:string, color:string }
   product_orders: ProductOrder[];
-  acompany_aorder_supplier_idToacompany:Company,
-  acompany_aorder_customer_idToacompany:Company
+  contact_aorder_supplier_idTocontact:Contact,
+  contact_aorder_customer_idTocontact:Contact
 }
 
 export interface Order {
@@ -62,7 +62,7 @@ export interface Order {
   delivery_type:number,
   delivery_instructions:string,
   totalPrice: number,
-  acompany_aorder_customer_idToacompany:Company
+  contact_aorder_customer_idTocontact:Contact
   totalPerProductType: object
 }
 

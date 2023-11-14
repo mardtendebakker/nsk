@@ -3,7 +3,7 @@ import useTranslation from '../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../hooks/useForm';
 import TextField from '../../memoizedInput/textField';
 
-export default function Company(
+export default function Contact(
   {
     formRepresentation,
     setValue,

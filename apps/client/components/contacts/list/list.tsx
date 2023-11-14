@@ -9,12 +9,12 @@ import {
 import Edit from '../../button/edit';
 import Delete from '../../button/delete';
 import useTranslation from '../../../hooks/useTranslation';
-import { CompanyListItem } from '../../../utils/axios/models/company';
+import { ContactListItem } from '../../../utils/axios/models/contact';
 import { CONTACTS_CUSTOMERS_EDIT, CONTACTS_SUPPLIERS_EDIT } from '../../../utils/routes';
 
 export default function List({
   type,
-  companies = [],
+  contacts = [],
   onDelete,
   count,
   page,
@@ -24,7 +24,7 @@ export default function List({
   disabled,
 }: {
   type: 'customer' | 'supplier',
-  companies: CompanyListItem[],
+  contacts: ContactListItem[],
   onDelete: (id: number)=>void,
   count: number,
   page: number,
@@ -58,32 +58,32 @@ export default function List({
           </TableRow>
         </TableHead>
         <TableBody>
-          {companies.map((company: CompanyListItem) => (
+          {contacts.map((contact: ContactListItem) => (
             <TableRow
               sx={{
                 height: 60,
               }}
               hover
-              key={company.id}
+              key={contact.id}
             >
               <TableCell>
-                <b>{company.name}</b>
+                <b>{contact.name}</b>
               </TableCell>
               <TableCell>
-                {company.representative || '--'}
+                {contact.representative || '--'}
               </TableCell>
               <TableCell>
-                {company.email || '--'}
+                {contact.email || '--'}
               </TableCell>
               <TableCell>
                 {type === 'customer'
-                  ? (Boolean(company.is_partner) || '--')
-                  : company.partner?.name || '--'}
+                  ? (Boolean(contact.is_partner) || '--')
+                  : contact.partner?.name || '--'}
               </TableCell>
               <TableCell>
-                <Edit href={(type === 'customer' ? CONTACTS_CUSTOMERS_EDIT : CONTACTS_SUPPLIERS_EDIT).replace('[id]', company.id.toString())} disabled={disabled} />
-                {company.orders?.length === 0
-                && (<Delete onClick={() => onDelete(company.id)} disabled={disabled} tooltip />)}
+                <Edit href={(type === 'customer' ? CONTACTS_CUSTOMERS_EDIT : CONTACTS_SUPPLIERS_EDIT).replace('[id]', contact.id.toString())} disabled={disabled} />
+                {contact.orders?.length === 0
+                && (<Delete onClick={() => onDelete(contact.id)} disabled={disabled} tooltip />)}
               </TableCell>
             </TableRow>
           ))}

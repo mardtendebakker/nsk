@@ -111,7 +111,7 @@ export default function EditModal(
                     {trans('orderNumber')}
                   </TableCell>
                   <TableCell>
-                    {trans('company')}
+                    {trans('contact')}
                   </TableCell>
                   <TableCell>
                     {trans('orderDate')}
@@ -151,7 +151,7 @@ export default function EditModal(
                       {order.order_nr}
                     </TableCell>
                     <TableCell>
-                      {order.company}
+                      {order.contact}
                     </TableCell>
                     <TableCell>
                       {format(new Date(order.order_date), 'yyyy/MM/dd')}

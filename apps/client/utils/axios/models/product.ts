@@ -3,7 +3,7 @@ import { AFile } from './aFile';
 interface Order {
   id: number,
   discr: 'p' | 's',
-  company: string,
+  contact: string,
   order_date: string,
   order_nr: string,
   status: string
