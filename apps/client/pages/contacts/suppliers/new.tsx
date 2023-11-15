@@ -13,70 +13,70 @@ import { AxiosResponse, SUPPLIERS_PATH } from '../../../utils/axios';
 import { CONTACTS_SUPPLIERS_EDIT, CONTACTS_SUPPLIERS } from '../../../utils/routes';
 import useForm, { FormRepresentation } from '../../../hooks/useForm';
 import useTranslation, { Trans } from '../../../hooks/useTranslation';
-import { Company } from '../../../utils/axios/models/company';
+import { Contact } from '../../../utils/axios/models/contact';
 import { isEmail } from '../../../utils/validator';
 
-export function initFormState(trans: Trans, company?: Company) {
+export function initFormState(trans: Trans, contact?: Contact) {
   return {
     name: {
-      value: company?.name,
+      value: contact?.name,
       required: true,
     },
     representative: {
-      value: company?.representative,
+      value: contact?.representative,
     },
     kvk_nr: {
-      value: company?.kvk_nr,
+      value: contact?.kvk_nr,
     },
     email: {
-      value: company?.email,
+      value: contact?.email,
       validator: (data: FormRepresentation) => (!isEmail(data.email.value?.toString()) ? trans('invalidEmail') : undefined),
     },
     phone: {
-      value: company?.phone,
+      value: contact?.phone,
     },
     phone2: {
-      value: company?.phone2,
+      value: contact?.phone2,
     },
     street: {
-      value: company?.street,
+      value: contact?.street,
     },
     street_extra: {
-      value: company?.street_extra,
+      value: contact?.street_extra,
     },
     city: {
-      value: company?.city,
+      value: contact?.city,
     },
     country: {
-      value: company?.country,
+      value: contact?.country,
     },
     state: {
-      value: company?.state,
+      value: contact?.state,
     },
     zip: {
-      value: company?.zip,
+      value: contact?.zip,
     },
     street2: {
-      value: company?.street2,
+      value: contact?.street2,
     },
     street_extra2: {
-      value: company?.street_extra2,
+      value: contact?.street_extra2,
     },
     city2: {
-      value: company?.city2,
+      value: contact?.city2,
     },
     country2: {
-      value: company?.country2,
+      value: contact?.country2,
     },
     state2: {
-      value: company?.state2,
+      value: contact?.state2,
     },
     zip2: {
-      value: company?.zip2,
+      value: contact?.zip2,
     },
 
     partner: {
-      value: company?.partner_id,
+      value: contact?.partner_id,
     },
   };
 }

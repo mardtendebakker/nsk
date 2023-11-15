@@ -24,7 +24,7 @@ export class PickupService {
               id: true,
               order_nr: true,
               order_status: true,
-              acompany_aorder_supplier_idToacompany: true,
+              contact_aorder_supplier_idTocontact: true,
               product_order: {
                 select: {
                   id: true,
@@ -57,7 +57,7 @@ export class PickupService {
           order_nr,
           order_status,
           product_order,
-          acompany_aorder_supplier_idToacompany,
+          contact_aorder_supplier_idTocontact,
         },
         real_pickup_date,
         fos_user,
@@ -70,7 +70,7 @@ export class PickupService {
           id,
           order_nr,
           order_status,
-          supplier: acompany_aorder_supplier_idToacompany,
+          supplier: contact_aorder_supplier_idTocontact,
         },
         logistic: fos_user,
       })

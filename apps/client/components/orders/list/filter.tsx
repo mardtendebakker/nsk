@@ -7,7 +7,7 @@ import useTranslation from '../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../hooks/useForm';
 import TextField from '../../input/textField';
 import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
-import { AUTOCOMPLETE_COMPANIES_PATH, AUTOCOMPLETE_PARTNERS_PATH } from '../../../utils/axios';
+import { AUTOCOMPLETE_CONTACTS_PATH, AUTOCOMPLETE_PARTNERS_PATH } from '../../../utils/axios';
 import SearchAccordion from '../../searchAccordion';
 import useResponsive from '../../../hooks/useResponsive';
 import ListFilterDivider from '../../listFilterDivider';
@@ -82,7 +82,7 @@ export default function Filter({
           />
           <ListFilterDivider horizontal={!isDesktop} />
           <DataSourcePicker
-            path={AUTOCOMPLETE_COMPANIES_PATH}
+            path={AUTOCOMPLETE_CONTACTS_PATH}
             disabled={disabled}
             fullWidth
             displayFieldset={false}

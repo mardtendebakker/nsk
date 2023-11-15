@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { CompanyRepository } from '../company/company.repository';
+import { ContactRepository } from '../contact/contact.repository';
 import { PrismaService } from '../prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
-export class CustomerRepository extends CompanyRepository {
+export class CustomerRepository extends ContactRepository {
   constructor(
     protected readonly prisma: PrismaService,
     protected readonly configService: ConfigService

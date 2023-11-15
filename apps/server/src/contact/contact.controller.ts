@@ -1,22 +1,22 @@
 import { Authorization, CognitoUser } from "@nestjs-cognito/auth";
 import { Body, Controller, Delete, ForbiddenException, Get, Param, Post, Put, Query } from "@nestjs/common";
 import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
-import { CompanyService } from "./company.service";
-import { FindCompaniesResponeDto } from "./dto/find-company-response.dto";
-import { UpdateCompanyDto } from "./dto/update-company.dto";
-import { CompanyEntity } from "./entities/company.entity";
-import { CreateCompanyDto } from "./dto/create-company.dto";
+import { ContactService } from "./contact.service";
+import { FindContactsResponeDto } from "./dto/find-contact-response.dto";
+import { UpdateContactDto } from "./dto/update-contact.dto";
+import { ContactEntity } from "./entities/contact.entity";
+import { CreateContactDto } from "./dto/create-contact.dto";
 import { FindManyDto } from "./dto/find-many.dto";
 import { ALL_MAIN_GROUPS, CognitoGroups, LOCAL_GROUPS, PARTNERS_GROUPS } from "../common/types/cognito-groups.enum";
 
 @ApiBearerAuth()
 @Authorization(ALL_MAIN_GROUPS)
-@ApiTags('companies')
-@Controller('companies')
-export class CompanyController {
-  constructor(protected readonly companyService: CompanyService) {}
+@ApiTags('contacts')
+@Controller('contacts')
+export class ContactController {
+  constructor(protected readonly contactService: ContactService) {}
   @Get('')
-  @ApiResponse({type: FindCompaniesResponeDto})
+  @ApiResponse({type: FindContactsResponeDto})
   findAll(
     @Query() query: FindManyDto,
     @CognitoUser(["groups", "email"])
@@ -29,16 +29,16 @@ export class CompanyController {
     }
   ) {
     if (groups.some(group=> LOCAL_GROUPS.includes(group))) {
-      return this.companyService.findAll(query);
+      return this.contactService.findAll(query);
     } else if (groups.some(group=> PARTNERS_GROUPS.includes(group))) {
-      return this.companyService.findAll(query, email);
+      return this.contactService.findAll(query, email);
     } else {
       throw new ForbiddenException("Insufficient permissions to access this api!");
     }
   }
 
   @Get(':id')
-  @ApiResponse({type: CompanyEntity})
+  @ApiResponse({type: ContactEntity})
   findOne(
     @Param('id') id: number,
     @CognitoUser(["groups", "email"])
@@ -51,18 +51,18 @@ export class CompanyController {
     }
   ) {
     if (groups.some(group=> LOCAL_GROUPS.includes(group))) {
-      return this.companyService.findOne(id);
+      return this.contactService.findOne(id);
     } else if (groups.some(group=> PARTNERS_GROUPS.includes(group))) {
-      return this.companyService.findOne(id, email);
+      return this.contactService.findOne(id, email);
     } else {
       throw new ForbiddenException("Insufficient permissions to access this api!");
     }
   }
 
   @Post('')
-  @ApiResponse({type: CompanyEntity})
+  @ApiResponse({type: ContactEntity})
   create(
-    @Body() body: CreateCompanyDto,
+    @Body() body: CreateContactDto,
     @CognitoUser(["groups", "email"])
     {
       groups,
@@ -73,19 +73,19 @@ export class CompanyController {
     }
   ) {
     if (groups.some(group=> LOCAL_GROUPS.includes(group))) {
-      return this.companyService.create(body);
+      return this.contactService.create(body);
     } else if (groups.some(group=> PARTNERS_GROUPS.includes(group))) {
-      return this.companyService.create(body, email);
+      return this.contactService.create(body, email);
     } else {
       throw new ForbiddenException("Insufficient permissions to access this api!");
     }
   }
 
   @Put(':id')
-  @ApiResponse({type: CompanyEntity})
+  @ApiResponse({type: ContactEntity})
   update(
     @Param('id') id: number,
-    @Body() updateCompanyDto: UpdateCompanyDto,
+    @Body() updateContactDto: UpdateContactDto,
     @CognitoUser(["groups", "email"])
     {
       groups,
@@ -96,9 +96,9 @@ export class CompanyController {
     }
   ) {
     if (groups.some(group=> LOCAL_GROUPS.includes(group))) {
-      return this.companyService.update(id, updateCompanyDto);
+      return this.contactService.update(id, updateContactDto);
     } else if (groups.some(group=> PARTNERS_GROUPS.includes(group))) {
-      return this.companyService.update(id, updateCompanyDto, email);
+      return this.contactService.update(id, updateContactDto, email);
     } else {
       throw new ForbiddenException("Insufficient permissions to access this api!");
     }
@@ -117,9 +117,9 @@ export class CompanyController {
     }
   ) {
     if (groups.some(group=> LOCAL_GROUPS.includes(group))) {
-      return this.companyService.delete(id);
+      return this.contactService.delete(id);
     } else if (groups.some(group=> PARTNERS_GROUPS.includes(group))) {
-      return this.companyService.delete(id, email);
+      return this.contactService.delete(id, email);
     } else {
       throw new ForbiddenException("Insufficient permissions to access this api!");
     }

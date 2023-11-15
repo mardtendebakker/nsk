@@ -48,16 +48,16 @@ export class AOrderProcess extends PrintProcess {
       order_status: {
         name: this.aorder.order_status?.name ?? 'Unknown',
       },
-      ...(this.aorder.acompany_aorder_customer_idToacompany && {
+      ...(this.aorder.contact_aorder_customer_idTocontact && {
         customer: {
-          ...this.aorder.acompany_aorder_customer_idToacompany,
+          ...this.aorder.contact_aorder_customer_idTocontact,
         },
       }),
-      ...(this.aorder.acompany_aorder_supplier_idToacompany && {
+      ...(this.aorder.contact_aorder_supplier_idTocontact && {
         supplier: {
-          ...this.aorder.acompany_aorder_supplier_idToacompany,
+          ...this.aorder.contact_aorder_supplier_idTocontact,
           barcode: await this.getBarcode({
-            text: this.aorder.acompany_aorder_supplier_idToacompany.name.substring(
+            text: this.aorder.contact_aorder_supplier_idTocontact.name.substring(
               0,
               25
             ),

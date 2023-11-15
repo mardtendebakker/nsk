@@ -148,7 +148,7 @@ export default function ListContainer({ type }: { type: 'customer' | 'supplier' 
       <List
         type={type}
         disabled={disabled()}
-        companies={data}
+        contacts={data}
         count={count}
         page={page}
         onDelete={handleDelete}

@@ -19,7 +19,7 @@ export class DeliveryService {
           order_nr: true,
           order_status: true,
           delivery_date: true,
-          acompany_aorder_customer_idToacompany: true,
+          contact_aorder_customer_idTocontact: true,
           product_order: {
             select: {
               id: true,
@@ -50,7 +50,7 @@ export class DeliveryService {
         delivery_date,
         order_status,
         product_order,
-        acompany_aorder_customer_idToacompany,
+        contact_aorder_customer_idTocontact,
       }) => ({
         id,
         event_date: delivery_date,
@@ -59,7 +59,7 @@ export class DeliveryService {
           id,
           order_nr,
           order_status,
-          customer: acompany_aorder_customer_idToacompany,
+          customer: contact_aorder_customer_idTocontact,
         },
         logistic: null,
       })

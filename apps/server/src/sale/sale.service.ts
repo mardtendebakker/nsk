@@ -17,8 +17,8 @@ import { CreateAOrderDto } from '../aorder/dto/create-aorder.dto';
 import { OrderStatusService } from '../admin/order-status/order-status.service';
 import { CreateOrderStatusDto } from '../admin/order-status/dto/create-order-status.dto';
 import { CustomerService } from '../customer/customer.service';
-import { CreateCompanyDto } from '../company/dto/create-company.dto';
-import { IsPartner } from '../company/types/is-partner.enum';
+import { CreateContactDto } from '../contact/dto/create-contact.dto';
+import { IsPartner } from '../contact/types/is-partner.enum';
 import { AOrderPayload } from '../aorder/types/aorder-payload';
 import { IExcelColumn } from './types/excel-column';
 import * as xlsx from 'xlsx';
@@ -139,7 +139,7 @@ export class SaleService extends AOrderService {
         ? Bedrijfsnaam
         : `${Voornaam} ${Achternaam}`.trim();
   
-      const customerData: CreateCompanyDto = {
+      const customerData: CreateContactDto = {
         name,
         representative: `${Voornaam} ${Achternaam}`.trim(),
         street: `${Straatnaam} ${Huisnummer} ${HuisnummerToevoeging}`.trim(),

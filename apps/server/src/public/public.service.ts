@@ -55,7 +55,7 @@ export class PublicService {
   getPickupForm() {
     return {
       form: {
-        supplier: this.getCompanyForm(),
+        supplier: this.getContactForm(),
         countAddresses: {
           label: 'Aantal ophaaladressen',
           required: true,
@@ -115,7 +115,7 @@ export class PublicService {
   getOrderForm() {
     return {
       form: {
-        customer: this.getCompanyForm(),
+        customer: this.getContactForm(),
       },
     };
   }
@@ -164,7 +164,7 @@ export class PublicService {
     }, file);
   }
 
-  private getCompanyForm() {
+  private getContactForm() {
     return {
       name: {
         label: 'Klantnaam',

@@ -9,40 +9,6 @@ datasource db {
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
-model acompany {
-  id             Int        @id @default(autoincrement())
-  partner_id     Int?
-  name           String     @db.VarChar(255)
-  kvk_nr         Int?
-  representative String?    @db.VarChar(255)
-  email          String?    @db.VarChar(255)
-  phone          String?    @db.VarChar(255)
-  phone2         String?    @db.VarChar(255)
-  street         String?    @db.VarChar(255)
-  street_extra   String?    @db.VarChar(255)
-  city           String?    @db.VarChar(255)
-  country        String?    @db.VarChar(255)
-  state          String?    @db.VarChar(255)
-  zip            String?    @db.VarChar(255)
-  street2        String?    @db.VarChar(255)
-  street_extra2  String?    @db.VarChar(255)
-  city2          String?    @db.VarChar(255)
-  country2       String?    @db.VarChar(255)
-  state2         String?    @db.VarChar(255)
-  zip2           String?    @db.VarChar(255)
-  discr          String     @db.VarChar(255)
-  is_partner     Int?
-  external_id    Int?
-  acompany       acompany?  @relation("acompanyToacompany", fields: [partner_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_ABB0A97D9393F8FE")
-  other_acompany acompany[] @relation("acompanyToacompany")
-  supplierOrders aorder[]   @relation("aorder_supplier_idToacompany")
-  customerOrders aorder[]   @relation("aorder_customer_idToacompany")
-  fos_user       fos_user[]
-  product        product[]
-
-  @@index([partner_id], map: "IDX_ABB0A97D9393F8FE")
-}
-
 model afile {
   id                       Int      @id @default(autoincrement())
   product_id               Int?
@@ -62,31 +28,31 @@ model afile {
 }
 
 model aorder {
-  id                                    Int             @id @default(autoincrement())
-  status_id                             Int?
-  customer_id                           Int?
-  supplier_id                           Int?
-  order_nr                              String?         @unique(map: "UNIQ_416119D9360A4EAE") @db.VarChar(16)
-  remarks                               String?         @db.VarChar(255)
-  order_date                            DateTime        @db.DateTime(0)
-  discount                              Int?
-  transport                             Int?
-  is_gift                               Boolean?
-  discr                                 String          @db.VarChar(255)
-  backingPurchaseOrder_id               Int?
-  external_id                           Int?
-  delivery_type                         Int?
-  delivery_date                         DateTime?       @db.DateTime(0)
-  delivery_instructions                 String?         @db.LongText
-  afile                                 afile[]
-  acompany_aorder_supplier_idToacompany acompany?       @relation("aorder_supplier_idToacompany", fields: [supplier_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_416119D92ADD6D8C")
-  aorder                                aorder?         @relation("aorderToaorder", fields: [backingPurchaseOrder_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_416119D930005451")
-  other_aorder                          aorder[]        @relation("aorderToaorder")
-  order_status                          order_status?   @relation(fields: [status_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_416119D96BF700BD")
-  acompany_aorder_customer_idToacompany acompany?       @relation("aorder_customer_idToacompany", fields: [customer_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_416119D99395C3F3")
-  pickup                                pickup?
-  product_order                         product_order[]
-  repair                                repair?
+  id                                  Int             @id @default(autoincrement())
+  status_id                           Int?
+  customer_id                         Int?
+  supplier_id                         Int?
+  order_nr                            String?         @unique(map: "UNIQ_416119D9360A4EAE") @db.VarChar(16)
+  remarks                             String?         @db.VarChar(255)
+  order_date                          DateTime        @db.DateTime(0)
+  discount                            Int?
+  transport                           Int?
+  is_gift                             Boolean?
+  discr                               String          @db.VarChar(255)
+  backingPurchaseOrder_id             Int?
+  external_id                         Int?
+  delivery_type                       Int?
+  delivery_date                       DateTime?       @db.DateTime(0)
+  delivery_instructions               String?         @db.LongText
+  afile                               afile[]
+  contact_aorder_supplier_idTocontact contact?        @relation("aorder_supplier_idTocontact", fields: [supplier_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_416119D92ADD6D8C")
+  aorder                              aorder?         @relation("aorderToaorder", fields: [backingPurchaseOrder_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_416119D930005451")
+  other_aorder                        aorder[]        @relation("aorderToaorder")
+  order_status                        order_status?   @relation(fields: [status_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_416119D96BF700BD")
+  contact_aorder_customer_idTocontact contact?        @relation("aorder_customer_idTocontact", fields: [customer_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_416119D99395C3F3")
+  pickup                              pickup?
+  product_order                       product_order[]
+  repair                              repair?
 
   @@index([supplier_id], map: "IDX_416119D92ADD6D8C")
   @@index([backingPurchaseOrder_id], map: "IDX_416119D930005451")
@@ -155,7 +121,7 @@ model fos_user {
   lastname              String?         @db.VarChar(255)
   emailCanonical        String          @db.VarChar(255)
   partner_id            Int?
-  acompany              acompany?       @relation(fields: [partner_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_957A64799393F8FE")
+  contact               contact?        @relation(fields: [partner_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_957A64799393F8FE")
   pickup                pickup[]
   user_location         user_location[]
 
@@ -219,7 +185,7 @@ model product {
   afile                                                         afile[]
   location                                                      location            @relation(fields: [location_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_D34A04AD64D218E")
   product_status                                                product_status?     @relation(fields: [status_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_D34A04AD6BF700BD")
-  acompany                                                      acompany?           @relation(fields: [owner_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_D34A04AD7E3C61F9")
+  contact                                                       contact?            @relation(fields: [owner_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_D34A04AD7E3C61F9")
   product_type                                                  product_type?       @relation(fields: [type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_D34A04ADC54C8C93")
   location_label                                                location_label?     @relation(fields: [location_label_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "product_location_label_id_fkey")
   product_attribute_product_attribute_product_idToproduct       product_attribute[] @relation("product_attribute_product_idToproduct")
@@ -361,4 +327,38 @@ model location_label {
 
   @@unique([location_id, label], name: "location_label_location_id_label")
   @@index([location_id], map: "location_label_location_id_fkey")
+}
+
+model contact {
+  id             Int        @id @default(autoincrement())
+  partner_id     Int?
+  name           String     @db.VarChar(255)
+  kvk_nr         Int?
+  representative String?    @db.VarChar(255)
+  email          String?    @db.VarChar(255)
+  phone          String?    @db.VarChar(255)
+  phone2         String?    @db.VarChar(255)
+  street         String?    @db.VarChar(255)
+  street_extra   String?    @db.VarChar(255)
+  city           String?    @db.VarChar(255)
+  country        String?    @db.VarChar(255)
+  state          String?    @db.VarChar(255)
+  zip            String?    @db.VarChar(255)
+  street2        String?    @db.VarChar(255)
+  street_extra2  String?    @db.VarChar(255)
+  city2          String?    @db.VarChar(255)
+  country2       String?    @db.VarChar(255)
+  state2         String?    @db.VarChar(255)
+  zip2           String?    @db.VarChar(255)
+  discr          String     @db.VarChar(255)
+  is_partner     Int?
+  external_id    Int?
+  supplierOrders aorder[]   @relation("aorder_supplier_idTocontact")
+  customerOrders aorder[]   @relation("aorder_customer_idTocontact")
+  contact        contact?   @relation("contactTocontact", fields: [partner_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_ABB0A97D9393F8FE")
+  other_contact  contact[]  @relation("contactTocontact")
+  fos_user       fos_user[]
+  product        product[]
+
+  @@index([partner_id], map: "IDX_ABB0A97D9393F8FE")
 }

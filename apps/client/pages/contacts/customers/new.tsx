@@ -13,13 +13,13 @@ import { AxiosResponse, CUSTOMERS_PATH } from '../../../utils/axios';
 import { CONTACTS_CUSTOMERS_EDIT, CONTACTS_CUSTOMERS } from '../../../utils/routes';
 import useForm, { FormRepresentation } from '../../../hooks/useForm';
 import useTranslation, { Trans } from '../../../hooks/useTranslation';
-import { Company } from '../../../utils/axios/models/company';
+import { Contact } from '../../../utils/axios/models/contact';
 import { initFormState as baseInitFormState, formRepresentationToBody as baseFormRepresentationToBody } from '../suppliers/new';
 
-export const initFormState = (trans: Trans, company?: Company) => ({
-  ...baseInitFormState(trans, company),
+export const initFormState = (trans: Trans, contact?: Contact) => ({
+  ...baseInitFormState(trans, contact),
   is_partner: {
-    value: company?.is_partner > 0,
+    value: contact?.is_partner > 0,
   },
 });
 

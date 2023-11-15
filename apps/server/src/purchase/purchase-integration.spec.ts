@@ -44,7 +44,7 @@ describe('Purchase', () => {
                 }
               },
             ],
-            "acompany_aorder_supplier_idToacompany": {
+            "contact_aorder_supplier_idTocontact": {
               "name": "IT Plus",
               "kvk_nr": 76697460,
               "representative": "Makiato / Nasa",
@@ -56,7 +56,7 @@ describe('Purchase', () => {
               "zip": "7513 PG",
               "state": null,
               "country": "nl",
-              "acompany": null
+              "contact": null
             }
           },
           {
@@ -85,7 +85,7 @@ describe('Purchase', () => {
                 }
               },
             ],
-            "acompany_aorder_supplier_idToacompany": {
+            "contact_aorder_supplier_idTocontact": {
               "name": "Rain BV",
               "kvk_nr": null,
               "representative": "Rain Kamran",
@@ -97,7 +97,7 @@ describe('Purchase', () => {
               "zip": "6050JR",
               "state": null,
               "country": null,
-              "acompany": null
+              "contact": null
             }
           }
         ]

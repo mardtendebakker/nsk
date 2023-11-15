@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { AutocompleteDto } from './dto/autocomplete.dto';
 import { AutocompleteResponseDto } from './dto/autocomplete-response.dto';
 import { PrismaService } from '../prisma/prisma.service';
-import { CompanyDiscrimination } from '../company/types/company-discrimination.enum';
+import { ContactDiscrimination } from '../contact/types/contact-discrimination.enum';
 import { LogisticRole } from '../logistic/types/logistic-role.enum';
 
 const DEFAULT_TAKE = 50;
@@ -36,11 +36,11 @@ export class AutocompleteRepository {
   }
 
   async findCustomers(autocompleteDto: AutocompleteDto): Promise<AutocompleteResponseDto[]> {
-    return this.commonFind(autocompleteDto, this.prisma.acompany, { discr: CompanyDiscrimination.CUSTOMER });
+    return this.commonFind(autocompleteDto, this.prisma.contact, { discr: ContactDiscrimination.CUSTOMER });
   }
 
   async findSuppliers(autocompleteDto: AutocompleteDto): Promise<AutocompleteResponseDto[]> {
-    return this.commonFind(autocompleteDto, this.prisma.acompany, { discr: CompanyDiscrimination.SUPLLIER });
+    return this.commonFind(autocompleteDto, this.prisma.contact, { discr: ContactDiscrimination.SUPLLIER });
   }
 
   async findLocations(autocompleteDto: AutocompleteDto): Promise<AutocompleteResponseDto[]> {
@@ -96,18 +96,18 @@ export class AutocompleteRepository {
     .map(({id, username}) => ({id, label: username}));
   }
 
-  async findCompanies(autocompleteDto: AutocompleteDto, email?: string): Promise<AutocompleteResponseDto[]> {
+  async findContacts(autocompleteDto: AutocompleteDto, email?: string): Promise<AutocompleteResponseDto[]> {
     return this.commonFind(
       autocompleteDto,
-      this.prisma.acompany,
-      { ...(email && { acompany: { email } }) }
+      this.prisma.contact,
+      { ...(email && { contact: { email } }) }
     );
   }
 
   async findPartners(autocompleteDto: AutocompleteDto): Promise<AutocompleteResponseDto[]> {
     return this.commonFind(
       autocompleteDto,
-      this.prisma.acompany,
+      this.prisma.contact,
       { is_partner: { gt: 0 } }
     );
   }

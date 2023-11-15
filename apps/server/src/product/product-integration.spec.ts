@@ -64,8 +64,8 @@ describe('Products', () => {
           "id": 5769,
           "order_nr": "2022005769",
           "order_date": "2022-09-26T00:00:00.000Z",
-          "acompany_aorder_customer_idToacompany": null,
-          "acompany_aorder_supplier_idToacompany": {
+          "contact_aorder_customer_idTocontact": null,
+          "contact_aorder_supplier_idTocontact": {
             "name": "TOP Week"
           },
           "order_status": {

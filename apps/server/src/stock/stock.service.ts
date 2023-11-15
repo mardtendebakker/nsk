@@ -56,10 +56,10 @@ export class StockService {
               ...(query.orderId && { order_id: query.orderId }),
               ...(email && { aorder: {
                 OR: [
-                  { acompany_aorder_supplier_idToacompany: { acompany: { email } } },
-                  { acompany_aorder_supplier_idToacompany: { email } },
-                  { acompany_aorder_customer_idToacompany: { acompany: { email } } },
-                  { acompany_aorder_customer_idToacompany: { email } },
+                  { contact_aorder_supplier_idTocontact: { contact: { email } } },
+                  { contact_aorder_supplier_idTocontact: { email } },
+                  { contact_aorder_customer_idTocontact: { contact: { email } } },
+                  { contact_aorder_customer_idTocontact: { email } },
                 ],
               }}),
             } 
@@ -360,9 +360,9 @@ export class StockService {
         order_nr: order.order_nr,
         order_date: order.order_date,
         discr: order.discr,
-        company:
-          order?.acompany_aorder_customer_idToacompany?.name ||
-          order?.acompany_aorder_supplier_idToacompany?.name,
+        contact:
+          order?.contact_aorder_customer_idTocontact?.name ||
+          order?.contact_aorder_supplier_idTocontact?.name,
         status: order?.order_status?.name,
       },
     };
@@ -402,12 +402,12 @@ export class StockService {
       order_date: true,
       order_nr: true,
       discr: true,
-      acompany_aorder_customer_idToacompany: {
+      contact_aorder_customer_idTocontact: {
         select: {
           name: true,
         },
       },
-      acompany_aorder_supplier_idToacompany: {
+      contact_aorder_supplier_idTocontact: {
         select: {
           name: true,
         },

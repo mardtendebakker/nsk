@@ -7,7 +7,7 @@ import { FindManyDto } from './dto/find-many.dto';
 import { UpdateManyAOrderDto } from './dto/update-many-aorder.dto';
 import { AOrderProcess } from './aorder.process';
 import { PrintService } from '../print/print.service';
-import { CompanyDiscrimination } from '../company/types/company-discrimination.enum';
+import { ContactDiscrimination } from '../contact/types/contact-discrimination.enum';
 import { FileService } from '../file/file.service';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { AOrderProductProcess } from './aorder-product.process';
@@ -62,11 +62,11 @@ export class AOrderService {
           },
         }),
         delivery_date: true,
-        acompany_aorder_supplier_idToacompany: {
-          select: this.getCompanySelect(),
+        contact_aorder_supplier_idTocontact: {
+          select: this.getContactSelect(),
         },
-        acompany_aorder_customer_idToacompany: {
-          select: this.getCompanySelect(),
+        contact_aorder_customer_idTocontact: {
+          select: this.getContactSelect(),
         },
       },
       where: {
@@ -77,24 +77,24 @@ export class AOrderService {
         ...((createdBy || partner || email) && {
           OR: [
             {
-              acompany_aorder_supplier_idToacompany: {
+              contact_aorder_supplier_idTocontact: {
                 ...(createdBy && { id: createdBy }),
                 ...(partner && { partner_id: partner }),
-                ...(email && { acompany: { email } }),
+                ...(email && { contact: { email } }),
               },
             },
             {
-              ...(email && { acompany_aorder_supplier_idToacompany: { email } }),
+              ...(email && { contact_aorder_supplier_idTocontact: { email } }),
             },
             {
-              acompany_aorder_customer_idToacompany: {
+              contact_aorder_customer_idTocontact: {
                 ...(createdBy && { id: createdBy }),
                 ...(partner && { partner_id: partner }),
-                ...(email && { acompany: { email } }),
+                ...(email && { contact: { email } }),
               },
             },
             {
-              ...(email && { acompany_aorder_customer_idToacompany: { email } }),
+              ...(email && { contact_aorder_customer_idTocontact: { email } }),
             },
           ],
         }),
@@ -116,10 +116,10 @@ export class AOrderService {
         id,
         ...(email && {
           OR: [
-            { acompany_aorder_supplier_idToacompany: { acompany: { email } } },
-            { acompany_aorder_supplier_idToacompany: { email } },
-            { acompany_aorder_customer_idToacompany: { acompany: { email } } },
-            { acompany_aorder_customer_idToacompany: { email } },
+            { contact_aorder_supplier_idTocontact: { contact: { email } } },
+            { contact_aorder_supplier_idTocontact: { email } },
+            { contact_aorder_customer_idTocontact: { contact: { email } } },
+            { contact_aorder_customer_idTocontact: { email } },
           ],
         }),
       },
@@ -230,13 +230,13 @@ export class AOrderService {
         ...(email && {
           OR: [
             {
-              acompany_aorder_supplier_idToacompany: {
-                ...(email && { acompany: { email } }),
+              contact_aorder_supplier_idTocontact: {
+                ...(email && { contact: { email } }),
               },
             },
             {
-              acompany_aorder_customer_idToacompany: {
-                ...(email && { acompany: { email } }),
+              contact_aorder_customer_idTocontact: {
+                ...(email && { contact: { email } }),
               },
             },
           ],
@@ -268,10 +268,10 @@ export class AOrderService {
     const data: CommonAOrderInput = {
       ...rest,
       ...(status_id && { order_status: { connect: { id: status_id } } }),
-      ...(supplier_id && { acompany_aorder_supplier_idToacompany: { connect: { id: supplier_id } } }),
-      ...(supplier && { acompany_aorder_supplier_idToacompany: { create: { ...supplier, discr: CompanyDiscrimination.SUPLLIER } } }),
-      ...(customer_id && { acompany_aorder_customer_idToacompany: { connect: { id: customer_id } } }),
-      ...(customer && { acompany_aorder_customer_idToacompany: { create: { ...customer, discr: CompanyDiscrimination.CUSTOMER } } }),
+      ...(supplier_id && { contact_aorder_supplier_idTocontact: { connect: { id: supplier_id } } }),
+      ...(supplier && { contact_aorder_supplier_idTocontact: { create: { ...supplier, discr: ContactDiscrimination.SUPLLIER } } }),
+      ...(customer_id && { contact_aorder_customer_idTocontact: { connect: { id: customer_id } } }),
+      ...(customer && { contact_aorder_customer_idTocontact: { create: { ...customer, discr: ContactDiscrimination.CUSTOMER } } }),
     };
 
     return data;
@@ -329,8 +329,8 @@ export class AOrderService {
             },
           },
         },
-        acompany_aorder_supplier_idToacompany: {
-          select: this.getCompanySelect()
+        contact_aorder_supplier_idTocontact: {
+          select: this.getContactSelect()
         },
       };
     }
@@ -346,8 +346,8 @@ export class AOrderService {
             discr: true,
           },
         },
-        acompany_aorder_customer_idToacompany: {
-          select: this.getCompanySelect()
+        contact_aorder_customer_idTocontact: {
+          select: this.getContactSelect()
         },
         repair: true
       };
@@ -356,7 +356,7 @@ export class AOrderService {
     return params;
   }
 
-  protected getCompanySelect(): Prisma.acompanySelect {
+  protected getContactSelect(): Prisma.contactSelect {
     return {
       id: true,
       name: true,
@@ -370,7 +370,7 @@ export class AOrderService {
       zip: true,
       state: true,
       country: true,
-      acompany: {
+      contact: {
         select: {
           id: true,
           name: true,

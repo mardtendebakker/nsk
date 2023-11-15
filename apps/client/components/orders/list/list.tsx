@@ -9,7 +9,7 @@ import {
 import { format } from 'date-fns';
 import Link from 'next/link';
 import useTranslation from '../../../hooks/useTranslation';
-import { ACompany, Company as CompanyModel, OrderListItem } from '../../../utils/axios/models/order';
+import { SubContact, Contact as ContactModel, OrderListItem } from '../../../utils/axios/models/order';
 import PaginatedTable from '../../paginatedTable';
 import TableCell from '../../tableCell';
 import Delete from '../../button/delete';
@@ -61,19 +61,19 @@ function OrderNumber({ order, type }: { order: OrderListItem, type: OrderType })
   );
 }
 
-function Company({ company, type }: { company: CompanyModel, type: OrderType }) {
+function Contact({ contact, type }: { contact: ContactModel, type: OrderType }) {
   let tooltip = '';
 
-  if (company.street) {
-    tooltip += `${company?.street}\n`;
+  if (contact.street) {
+    tooltip += `${contact?.street}\n`;
   }
 
-  if (company.zip) {
-    tooltip += `${company?.zip} `;
+  if (contact.zip) {
+    tooltip += `${contact?.zip} `;
   }
 
-  if (company.city) {
-    tooltip += company.city;
+  if (contact.city) {
+    tooltip += contact.city;
   }
 
   const target = type === 'purchase' ? CONTACTS_SUPPLIERS_EDIT : CONTACTS_CUSTOMERS_EDIT;
@@ -85,14 +85,14 @@ function Company({ company, type }: { company: CompanyModel, type: OrderType }) 
       </Box>
     ) : undefined}
     >
-      <Link href={target.replace('[id]', company.id)} style={{ color: 'unset' }}>
-        {company?.name || '--'}
+      <Link href={target.replace('[id]', contact.id)} style={{ color: 'unset' }}>
+        {contact?.name || '--'}
       </Link>
     </Tooltip>
   );
 }
 
-function Partner({ partner }: { partner: ACompany }) {
+function Partner({ partner }: { partner: SubContact }) {
   let tooltip = '';
 
   if (partner.street) {
@@ -189,7 +189,7 @@ export default function List({
       </TableHead>
       <TableBody>
         {orders.map((order: OrderListItem) => {
-          const company = type === 'purchase' ? order.acompany_aorder_supplier_idToacompany : order.acompany_aorder_customer_idToacompany;
+          const contact = type === 'purchase' ? order.contact_aorder_supplier_idTocontact : order.contact_aorder_customer_idTocontact;
           const deliveryOrPickupDate = type === 'purchase'
             ? order?.pickup?.real_pickup_date
             : order.delivery_date;
@@ -221,10 +221,10 @@ export default function List({
                 ) : '--'}
               </TableCell>
               <TableCell>
-                <Company company={company} type={type} />
+                <Contact contact={contact} type={type} />
               </TableCell>
               <TableCell>
-                { company?.acompany && <Partner partner={company.acompany} /> }
+                { contact?.contact && <Partner partner={contact.contact} /> }
               </TableCell>
               <TableCell>
                 {order.order_status && (

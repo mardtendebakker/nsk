@@ -16,9 +16,9 @@ export interface Way {
 
 export async function fetchWayForLogisticService(logisticServiceItem: LogisticServiceListItem): Promise<Way> {
   const { supplier, customer } = logisticServiceItem.order;
-  const company = supplier || customer;
+  const contact = supplier || customer;
 
-  const address = `${company.street}, ${company.zip}, ${company.city}, ${company.state}, ${company.country}`;
+  const address = `${contact.street}, ${contact.zip}, ${contact.city}, ${contact.state}, ${contact.country}`;
   const result = await axios.get(`${SEARCH_TEXT_URL}${address}`, { headers: { apiKey: API_KEY } });
 
   return {

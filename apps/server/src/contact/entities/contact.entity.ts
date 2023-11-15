@@ -1,7 +1,7 @@
-import { acompany } from '@prisma/client';
+import { contact } from '@prisma/client';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
-export class CompanyEntity implements acompany {
+export class ContactEntity implements contact {
   @ApiProperty()
   id: number;
 

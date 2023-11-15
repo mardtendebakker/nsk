@@ -13,9 +13,9 @@ import { CUSTOMERS_PATH } from '../../utils/axios';
 import { BULK_EMAIL } from '../../utils/routes';
 import useForm, { FormRepresentation } from '../../hooks/useForm';
 import useTranslation from '../../hooks/useTranslation';
-import { Company } from '../../utils/axios/models/company';
+import { Contact } from '../../utils/axios/models/contact';
 
-export function initFormState(customer?: Company) {
+export function initFormState(customer?: Contact) {
   return {
   };
 }

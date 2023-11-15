@@ -42,7 +42,7 @@ describe('Sale', () => {
             }
           },
         ],
-        "acompany_aorder_customer_idToacompany": {
+        "contact_aorder_customer_idTocontact": {
           "name": "Co Plus Enterprise LTD",
           "kvk_nr": 0,
           "representative": "Hasir Kamal",
@@ -54,7 +54,7 @@ describe('Sale', () => {
           "zip": null,
           "state": null,
           "country": "US",
-          "acompany": {
+          "contact": {
             "id": 2822,
             "name": "Co Plus Enterprise"
           }
@@ -86,7 +86,7 @@ describe('Sale', () => {
             }
           }
         ],
-        "acompany_aorder_customer_idToacompany": {
+        "contact_aorder_customer_idTocontact": {
           "name": "Salim\tKara",
           "kvk_nr": null,
           "representative": "Salim\tKara",
@@ -98,7 +98,7 @@ describe('Sale', () => {
           "zip": "3514 GM",
           "state": null,
           "country": null,
-          "acompany": {
+          "contact": {
             "id": 754,
             "name": "Seada"
           }

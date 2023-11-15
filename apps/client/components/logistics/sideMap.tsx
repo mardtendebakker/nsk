@@ -87,7 +87,7 @@ export default function SideMap({
     setSelectedWay(way);
   };
 
-  const getCompanyOfWay = (way: Way) => (type === 'delivery'
+  const getContactOfWay = (way: Way) => (type === 'delivery'
     ? way.logisticService.order.customer
     : way.logisticService.order.supplier);
 
@@ -241,7 +241,7 @@ export default function SideMap({
             options={ways
               .filter((way: Way) => !!way.logisticService)
               .map((way: Way) => ({
-                title: getCompanyOfWay(way).name,
+                title: getContactOfWay(way).name,
                 value: way.logisticService.id,
               }))}
           />
@@ -254,17 +254,17 @@ export default function SideMap({
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <Avatar sx={{ mr: '1rem' }}>
                   <Typography variant="h5">
-                    {getCompanyOfWay(selectedWay).name.charAt(0)?.toUpperCase()}
+                    {getContactOfWay(selectedWay).name.charAt(0)?.toUpperCase()}
                   </Typography>
                 </Avatar>
                 <Box>
                   <Typography variant="h5">
-                    {getCompanyOfWay(selectedWay).name}
+                    {getContactOfWay(selectedWay).name}
                   </Typography>
-                  <Typography variant="body1">{getCompanyOfWay(selectedWay).representative}</Typography>
+                  <Typography variant="body1">{getContactOfWay(selectedWay).representative}</Typography>
 
                   <Typography variant="body1" sx={{ justifySelf: 'flex-end' }}>
-                    {getCompanyOfWay(selectedWay).phone}
+                    {getContactOfWay(selectedWay).phone}
                   </Typography>
                 </Box>
                 <Box sx={{ flex: 1, textAlign: 'end' }} />

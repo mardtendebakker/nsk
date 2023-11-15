@@ -46,7 +46,7 @@ export class CreateLogisticInputDto implements Prisma.fos_userCreateInput {
   emailCanonical: string;
 
   @ApiPropertyOptional()
-  acompany?: Prisma.acompanyCreateNestedOneWithoutFos_userInput;
+  contact?: Prisma.contactCreateNestedOneWithoutFos_userInput;
 
   @ApiPropertyOptional()
   pickup?: Prisma.pickupCreateNestedManyWithoutFos_userInput;
