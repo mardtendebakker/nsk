@@ -3,8 +3,7 @@ import {
   render, fireEvent, waitFor,
 } from '@testing-library/react';
 
-import EditModal from '.';
-import { initFormState } from '../createModal';
+import CreateModal, { initFormState, formRepresentationToBody } from '.';
 
 const mockAxios = {
   call: jest.fn(() => Promise.resolve({})),
@@ -20,26 +19,7 @@ jest.mock('../form', () => function TestC() {
 });
 
 const mockForm = {
-  formRepresentation: initFormState({
-    id: 1,
-    attr_code: 7,
-    name: 'name',
-    type: 1,
-    is_public: true,
-    productTypes: [{
-      id: 2,
-      name: 'name',
-      pindex: 1,
-      comment: 'comment',
-      is_attribute: true,
-      is_public: true,
-      attributes: [],
-      tasks: [],
-    }],
-    product_type_id: 3,
-    price: 4,
-    options: [],
-  }),
+  formRepresentation: initFormState(),
   setValue: jest.fn(() => {}),
   validate: jest.fn((): void | { [key: string]: string } => {}),
   setData: jest.fn(() => {}),
@@ -47,51 +27,58 @@ const mockForm = {
 
 jest.mock('../../../../../hooks/useForm', () => () => mockForm);
 
-describe('EditModal', () => {
+describe('CreateModal', () => {
   const onCloseMock = jest.fn();
   const onSubmitMock = jest.fn();
 
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
   it('matches snapshot', () => {
-    const { asFragment } = render(<EditModal id="1" onClose={onCloseMock} onSubmit={onSubmitMock} />);
+    const { asFragment } = render(<CreateModal onClose={onCloseMock} onSubmit={onSubmitMock} />);
     expect(asFragment()).toMatchSnapshot();
   });
   it('Prevents submit while performing', () => {
     jest.spyOn(mockAxios, 'performing', 'get').mockReturnValueOnce(true);
-    const { getByText } = render(<EditModal id="1" onClose={onCloseMock} onSubmit={onSubmitMock} />);
+    const { getByText } = render(<CreateModal onClose={onCloseMock} onSubmit={onSubmitMock} />);
     fireEvent.click(getByText('confirm'));
     waitFor(() => expect(onSubmitMock).not.toBeCalled());
-    expect(mockAxios.call).toHaveBeenCalledWith();
-    expect(mockAxios.call).toHaveBeenCalledTimes(1);
+    expect(mockAxios.call).not.toBeCalled();
   });
   it('Prevents submit with invalid payload', () => {
     jest.spyOn(mockForm, 'validate').mockReturnValueOnce({ error: 'error' });
-    const { getByText } = render(<EditModal id="1" onClose={onCloseMock} onSubmit={onSubmitMock} />);
+    const { getByText } = render(<CreateModal onClose={onCloseMock} onSubmit={onSubmitMock} />);
     fireEvent.click(getByText('confirm'));
     waitFor(() => expect(onSubmitMock).not.toBeCalled());
-    expect(mockAxios.call).toHaveBeenCalledWith();
-    expect(mockAxios.call).toHaveBeenCalledTimes(1);
+    expect(mockAxios.call).not.toBeCalled();
   });
   it('submits properly', () => {
-    const { getByText } = render(<EditModal id="1" onClose={onCloseMock} onSubmit={onSubmitMock} />);
+    const { getByText } = render(<CreateModal onClose={onCloseMock} onSubmit={onSubmitMock} />);
     fireEvent.click(getByText('confirm'));
     waitFor(() => expect(onSubmitMock).toBeCalled());
     expect(mockAxios.call).toBeCalledWith({
       body: {
-        attr_code: 7,
-        is_public: true,
-        name: 'name',
-        options: [],
-        productTypes: [2],
-        type: 1,
+        location_template: undefined,
+        zipcodes: null,
       },
     });
   });
   it('closes properly', () => {
-    const { getByText } = render(<EditModal id="1" onClose={onCloseMock} onSubmit={onSubmitMock} />);
+    const { getByText } = render(<CreateModal onClose={onCloseMock} onSubmit={onSubmitMock} />);
     fireEvent.click(getByText('cancel'));
     expect(onCloseMock).toBeCalled();
+  });
+  it('inits state properly', () => {
+    expect(initFormState({
+      id: 0,
+      name: 'name',
+      zipcodes: '10000,10001',
+      location_template: [],
+    })).toEqual({ location_template: { value: [] }, name: { required: true, value: 'name' }, zipcodes: { value: ['10000', '10001'] } });
+  });
+
+  it('build payload properly', () => {
+    expect(formRepresentationToBody({
+      location_template: { value: [] },
+      name: { required: true, value: 'name' },
+      zipcodes: { value: ['10000', '10001'] },
+    })).toEqual({ location_template: [], name: 'name', zipcodes: '10000,10001' });
   });
 });

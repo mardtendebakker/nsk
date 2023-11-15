@@ -21,7 +21,7 @@ jest.mock('../form', () => function TestC() {
 const mockForm = {
   formRepresentation: initFormState(),
   setValue: jest.fn(() => {}),
-  validate: jest.fn(() => {}),
+  validate: jest.fn((): void | { [key: string]: string } => {}),
   setData: jest.fn(() => {}),
 };
 
