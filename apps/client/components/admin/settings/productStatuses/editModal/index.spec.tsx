@@ -21,24 +21,7 @@ jest.mock('../form', () => function TestC() {
 
 const mockForm = {
   formRepresentation: initFormState({
-    id: 1,
-    attr_code: 7,
-    name: 'name',
-    type: 1,
-    is_public: true,
-    productTypes: [{
-      id: 2,
-      name: 'name',
-      pindex: 1,
-      comment: 'comment',
-      is_attribute: true,
-      is_public: true,
-      attributes: [],
-      tasks: [],
-    }],
-    product_type_id: 3,
-    price: 4,
-    options: [],
+    id: 0, color: '#000000', is_saleable: true, is_stock: true, name: 'name',
   }),
   setValue: jest.fn(() => {}),
   validate: jest.fn((): void | { [key: string]: string } => {}),
@@ -80,12 +63,7 @@ describe('EditModal', () => {
     waitFor(() => expect(onSubmitMock).toBeCalled());
     expect(mockAxios.call).toBeCalledWith({
       body: {
-        attr_code: 7,
-        is_public: true,
-        name: 'name',
-        options: [],
-        productTypes: [2],
-        type: 1,
+        color: '#000000', is_saleable: true, is_stock: true, name: 'name',
       },
     });
   });

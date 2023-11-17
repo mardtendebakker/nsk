@@ -36,7 +36,7 @@ export default function CreateModal({ onClose, onSubmit }: {
   const { call, performing } = useAxios('post', PRODUCT_STATUSES_PATH.replace(':id', ''), { showSuccessMessage: true, withProgressBar: true });
 
   const handleSave = () => {
-    if (validate()) {
+    if (validate() || performing) {
       return;
     }
 
