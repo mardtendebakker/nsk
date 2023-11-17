@@ -15,7 +15,7 @@ export default function Edit({
   return (
     <Tooltip title={<Typography>{trans('edit')}</Typography>}>
       <span>
-        <IconButton href={href} size="small" onClick={onClick} disabled={disabled} sx={{ borderRadius: 0, border: 0, ...sx }}>
+        <IconButton href={href} size="small" onClick={onClick} disabled={disabled} sx={{ borderRadius: 0, border: 0, ...sx }} data-testid="edit-icon-button">
           <EditIcon sx={{ mr: '.1rem', fontSize: '1rem' }} />
         </IconButton>
       </span>
