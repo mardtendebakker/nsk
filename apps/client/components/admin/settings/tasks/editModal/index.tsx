@@ -25,7 +25,7 @@ export default function EditModal({ onClose, onSubmit, id }: {
   const canSubmit = () => !performing && !performingPut;
 
   const handleSave = () => {
-    if (validate() && !canSubmit()) {
+    if (validate() || !canSubmit()) {
       return;
     }
 
