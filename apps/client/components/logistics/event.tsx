@@ -29,6 +29,7 @@ export default function Event({
 
   return (
     <Box
+      data-testid="event"
       onClick={onClick}
       sx={{
         cursor: 'pointer',

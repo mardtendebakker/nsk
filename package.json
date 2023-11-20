@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "prepare": "husky install",
-    "test:client": "jest apps/client --env=jsdom --coverage"
+    "test:client": "jest apps/client --env=jsdom"
   },
   "private": true,
   "dependencies": {

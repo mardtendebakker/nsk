@@ -12,10 +12,6 @@ jest.mock('next/router', () => ({
   useRouter: () => mockRouter,
 }));
 
-jest.mock('../../hooks/useTranslation', () => jest.fn(() => ({
-  trans: (key: string) => key,
-})));
-
 describe('Header component', () => {
   it('matches snapshot', () => {
     const { asFragment } = render(<Header />);

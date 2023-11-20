@@ -1,0 +1,54 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Header component matches snapshot 1`] = `
+<DocumentFragment>
+  <ul
+    class="MuiList-root MuiList-padding css-h4y409-MuiList-root"
+    role="menu"
+    tabindex="-1"
+  >
+    <li
+      class="MuiButtonBase-root MuiMenuItem-root MuiMenuItem-gutters MuiMenuItem-root MuiMenuItem-gutters css-165f8jw-MuiButtonBase-root-MuiMenuItem-root"
+      role="menuitem"
+      tabindex="0"
+    >
+      <p
+        class="MuiTypography-root MuiTypography-body1 css-vkc4v8-MuiTypography-root"
+      >
+        everyone
+      </p>
+      <span
+        class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+      />
+    </li>
+    <li
+      class="MuiButtonBase-root MuiMenuItem-root MuiMenuItem-gutters MuiMenuItem-root MuiMenuItem-gutters css-17nos47-MuiButtonBase-root-MuiMenuItem-root"
+      role="menuitem"
+      tabindex="-1"
+    >
+      <p
+        class="MuiTypography-root MuiTypography-body1 css-1we0tu4-MuiTypography-root"
+      >
+        username
+      </p>
+      <span
+        class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+      />
+    </li>
+    <li
+      class="MuiButtonBase-root MuiMenuItem-root MuiMenuItem-gutters MuiMenuItem-root MuiMenuItem-gutters css-5785nc-MuiButtonBase-root-MuiMenuItem-root"
+      role="menuitem"
+      tabindex="-1"
+    >
+      <p
+        class="MuiTypography-root MuiTypography-body1 css-vkc4v8-MuiTypography-root"
+      >
+        username2
+      </p>
+      <span
+        class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+      />
+    </li>
+  </ul>
+</DocumentFragment>
+`;
