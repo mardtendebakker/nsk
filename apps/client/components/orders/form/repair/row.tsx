@@ -110,7 +110,7 @@ export default function Row({
                       <Select
                         fullWidth
                         options={[
-                          { title: trans('todo'), value: '0' },
+                          { title: trans('toDo'), value: '0' },
                           { title: trans('hold'), value: '1' },
                           { title: trans('done'), value: '3' },
                           { title: trans('cancel'), value: '4' },
