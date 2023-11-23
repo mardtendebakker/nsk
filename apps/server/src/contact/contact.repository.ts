@@ -26,14 +26,14 @@ export class ContactRepository {
     };
   }
   
-  create(contactCreateArgs: Prisma.contactCreateArgs) {
-    return this.prisma.contact.create(contactCreateArgs);
+  create(contactCreateInput: Prisma.contactCreateInput) {
+    return this.prisma.contact.create({
+      data: contactCreateInput
+    });
   }
   
-  findOne(where: Prisma.contactWhereUniqueInput) {
-    return this.prisma.contact.findUnique({
-      where,
-    });
+  findOne(params: Prisma.contactFindUniqueArgs) {
+    return this.prisma.contact.findUnique(params);
   }
 
   findFirst(params: Prisma.contactFindFirstArgs) {

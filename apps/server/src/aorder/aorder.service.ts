@@ -11,6 +11,7 @@ import { ContactDiscrimination } from '../contact/types/contact-discrimination.e
 import { FileService } from '../file/file.service';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { AOrderProductProcess } from './aorder-product.process';
+import { AOrderPayload } from './types/aorder-payload';
 type CommonAOrderDto = Partial<Omit<CreateAOrderDto, 'pickup' | 'repair'>>;
 type CommonAOrderInput = Partial<Omit<Prisma.aorderCreateInput, 'pickup' | 'repair'>>;
 
@@ -106,7 +107,7 @@ export class AOrderService {
     
     return {
       count: result.count,
-      data: result.data.map(order => new AOrderProductProcess(order).run()),
+      data: result.data.map(order => new AOrderProductProcess(new AOrderProcess(order).run()).run()),
     };
   }
 
@@ -125,7 +126,7 @@ export class AOrderService {
       },
     };
 
-    const order = await this.repository.findOne(this.commonIncludePart(params));
+    const order = <AOrderPayload>await this.repository.findOne(this.commonIncludePart(params));
 
     if (!order || (this.type && order?.discr !== this.type)) {
       throw new NotFoundException(`Order with ID ${id} not found`);
@@ -152,7 +153,7 @@ export class AOrderService {
       }
     };
 
-    const order = await this.repository.create(this.commonIncludePart(params));
+    const order = <AOrderPayload>await this.repository.create(this.commonIncludePart(params));
 
     if (commonDto.order_nr === undefined) {
       const { id, order_date } = order;
@@ -188,7 +189,7 @@ export class AOrderService {
       where: { id }
     };
 
-    const order = await this.repository.update(this.commonIncludePart(params));
+    const order = <AOrderPayload>await this.repository.update(this.commonIncludePart(params));
 
     return new AOrderProcess(order).run();
   }
@@ -245,7 +246,7 @@ export class AOrderService {
       orderBy: { id: 'asc', },
     };
 
-    const result = await this.repository.findBy(this.commonIncludePart(params));
+    const result = <AOrderPayload[]>await this.repository.findBy(this.commonIncludePart(params));
 
     return result.map(order => new AOrderProcess(order).run());
   }
@@ -259,19 +260,49 @@ export class AOrderService {
     const {
       status_id,
       supplier_id,
-      supplier,
+      supplier: {
+        company_name: company_name_supplier,
+        company_kvk_nr: company_kvk_nr_supplier,
+        ...rest_supplier
+      } = {},
       customer_id,
-      customer,
+      customer: {
+        company_name: company_name_customer,
+        company_kvk_nr: company_kvk_nr_customer,
+        ...rest_customer
+      } = {},
       ...rest
     } = orderDto;
+
+    const supplier: Prisma.contactCreateWithoutSupplierOrdersInput = {
+      ...rest_supplier,
+      discr: ContactDiscrimination.SUPLLIER,
+      company_contact_company_idTocompany: {
+        create: {
+          name: company_name_supplier,
+          kvk_nr: company_kvk_nr_supplier,
+        },
+      },
+    };
+
+    const customer: Prisma.contactCreateWithoutCustomerOrdersInput = {
+      ...rest_customer,
+      discr: ContactDiscrimination.CUSTOMER,
+      company_contact_company_idTocompany: {
+        create: {
+          name: company_name_customer,
+          kvk_nr: company_kvk_nr_customer,
+        },
+      },
+    };
 
     const data: CommonAOrderInput = {
       ...rest,
       ...(status_id && { order_status: { connect: { id: status_id } } }),
       ...(supplier_id && { contact_aorder_supplier_idTocontact: { connect: { id: supplier_id } } }),
-      ...(supplier && { contact_aorder_supplier_idTocontact: { create: { ...supplier, discr: ContactDiscrimination.SUPLLIER } } }),
+      ...(company_name_supplier && { contact_aorder_supplier_idTocontact: { create: { ...supplier } } }),
       ...(customer_id && { contact_aorder_customer_idTocontact: { connect: { id: customer_id } } }),
-      ...(customer && { contact_aorder_customer_idTocontact: { create: { ...customer, discr: ContactDiscrimination.CUSTOMER } } }),
+      ...(company_kvk_nr_customer && { contact_aorder_customer_idTocontact: { create: { ...customer } } }),
     };
 
     return data;
@@ -359,9 +390,8 @@ export class AOrderService {
   protected getContactSelect(): Prisma.contactSelect {
     return {
       id: true,
+      company_contact_company_idTocompany: true,
       name: true,
-      kvk_nr: true,
-      representative: true,
       email: true,
       phone: true,
       street: true,
@@ -373,6 +403,7 @@ export class AOrderService {
       contact: {
         select: {
           id: true,
+          company_contact_company_idTocompany: true,
           name: true,
           street: true,
           city: true,

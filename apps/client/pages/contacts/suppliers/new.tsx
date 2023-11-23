@@ -20,13 +20,13 @@ export function initFormState(trans: Trans, contact?: Contact) {
   return {
     name: {
       value: contact?.name,
+    },
+    company_name: {
+      value: contact?.company_name,
       required: true,
     },
-    representative: {
-      value: contact?.representative,
-    },
-    kvk_nr: {
-      value: contact?.kvk_nr,
+    company_kvk_nr: {
+      value: contact?.company_kvk_nr,
     },
     email: {
       value: contact?.email,
@@ -83,9 +83,9 @@ export function initFormState(trans: Trans, contact?: Contact) {
 
 export function formRepresentationToBody(formRepresentation: FormRepresentation): object {
   return {
-    name: formRepresentation.name.value,
-    representative: formRepresentation.representative.value || undefined,
-    kvk_nr: formRepresentation.kvk_nr.value || undefined,
+    company_name: formRepresentation.company_name.value,
+    name: formRepresentation.name.value || undefined,
+    company_kvk_nr: formRepresentation.company_kvk_nr.value || undefined,
     email: formRepresentation.email.value || undefined,
     phone: formRepresentation.phone.value || undefined,
     phone2: formRepresentation.phone2.value || undefined,

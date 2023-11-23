@@ -24,14 +24,14 @@ export default function Filter({
   setValue: SetValue,
   onReset: () => void
 }) {
-  const representativeInputRef = useRef<HTMLInputElement>(null);
+  const nameInputRef = useRef<HTMLInputElement>(null);
   const { trans } = useTranslation();
   const isDesktop = useResponsive('up', 'sm');
   const debouncedSetValue = debounce(setValue.bind(null));
 
   const handleReset = () => {
     onReset();
-    representativeInputRef.current.value = '';
+    nameInputRef.current.value = '';
   };
 
   return (
@@ -101,13 +101,13 @@ export default function Filter({
           />
           <ListFilterDivider horizontal={!isDesktop} />
           <MemoizedTextField
-            inputRef={representativeInputRef}
+            inputRef={nameInputRef}
             disabled={disabled}
             name="search"
-            placeholder={trans('representative')}
+            placeholder={trans('company')}
             fullWidth
-            defaultValue={formRepresentation.representative.value || ''}
-            onChange={(e) => debouncedSetValue({ field: 'representative', value: e.target.value })}
+            defaultValue={formRepresentation.company.value || ''}
+            onChange={(e) => debouncedSetValue({ field: 'company', value: e.target.value })}
             type="text"
             sx={{
               fieldset: {

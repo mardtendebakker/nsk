@@ -9,13 +9,10 @@ export class ContactEntity implements contact {
   partner_id: number | null;
 
   @ApiProperty()
-  name: string;
+  company_id: number;
   
   @ApiPropertyOptional()
-  kvk_nr: number | null;
-  
-  @ApiPropertyOptional()
-  representative: string | null;
+  name: string | null;
   
   @ApiPropertyOptional()
   email: string | null;
@@ -67,6 +64,9 @@ export class ContactEntity implements contact {
   
   @ApiPropertyOptional()
   is_partner: number | null;
+
+  @ApiPropertyOptional()
+  is_main: boolean | null;
   
   @ApiPropertyOptional()
   external_id: number | null;

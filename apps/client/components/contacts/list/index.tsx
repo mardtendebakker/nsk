@@ -11,9 +11,9 @@ import { getQueryParam } from '../../../utils/location';
 
 function initFormState(
   {
-    search, createdAt, representative, list,
+    search, createdAt, company, list,
   }:
-  { search?: string, createdAt?: string, representative?: string, list?: string },
+  { search?: string, createdAt?: string, company?: string, list?: string },
 ) {
   return {
     search: {
@@ -22,8 +22,8 @@ function initFormState(
     createdAt: {
       value: createdAt || null,
     },
-    representative: {
-      value: representative,
+    company: {
+      value: company,
     },
     list: {
       value: list || undefined,
@@ -48,7 +48,7 @@ function refreshList({
 
   const paramsToSend = {};
 
-  ['search', 'createdAt', 'representative', 'list'].forEach((filter) => {
+  ['search', 'createdAt', 'company', 'list'].forEach((filter) => {
     if (formRepresentation[filter].value || formRepresentation[filter].value === 0) {
       const value = formRepresentation[filter].value.toString();
       params.append(filter, value);
@@ -73,7 +73,7 @@ export default function ListContainer({ type }: { type: 'customer' | 'supplier' 
   const { formRepresentation, setValue, setData } = useForm(initFormState({
     search: getQueryParam('search'),
     createdAt: getQueryParam('createdAt'),
-    representative: getQueryParam('representative'),
+    company: getQueryParam('company'),
     list: getQueryParam('list'),
   }));
 
@@ -109,7 +109,7 @@ export default function ListContainer({ type }: { type: 'customer' | 'supplier' 
     rowsPerPage,
     formRepresentation.search.value,
     formRepresentation.createdAt.value,
-    formRepresentation.representative.value,
+    formRepresentation.company.value,
     formRepresentation.list.value?.toString(),
   ]);
 

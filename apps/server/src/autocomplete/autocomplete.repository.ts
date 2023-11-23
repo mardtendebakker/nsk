@@ -4,6 +4,7 @@ import { AutocompleteResponseDto } from './dto/autocomplete-response.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { ContactDiscrimination } from '../contact/types/contact-discrimination.enum';
 import { LogisticRole } from '../logistic/types/logistic-role.enum';
+import { IsPartner } from '../contact/types/is-partner.enum';
 
 const DEFAULT_TAKE = 50;
 
@@ -36,11 +37,21 @@ export class AutocompleteRepository {
   }
 
   async findCustomers(autocompleteDto: AutocompleteDto): Promise<AutocompleteResponseDto[]> {
-    return this.commonFind(autocompleteDto, this.prisma.contact, { discr: ContactDiscrimination.CUSTOMER });
+    return this.commonFind(
+      autocompleteDto,
+      this.prisma.contact,
+      { discr: ContactDiscrimination.CUSTOMER },
+      { key: 'company_contact_company_idTocompany', field: 'name' }
+    );
   }
 
   async findSuppliers(autocompleteDto: AutocompleteDto): Promise<AutocompleteResponseDto[]> {
-    return this.commonFind(autocompleteDto, this.prisma.contact, { discr: ContactDiscrimination.SUPLLIER });
+    return this.commonFind(
+      autocompleteDto,
+      this.prisma.contact,
+      { discr: ContactDiscrimination.SUPLLIER },
+      { key: 'company_contact_company_idTocompany', field: 'name' }
+    );
   }
 
   async findLocations(autocompleteDto: AutocompleteDto): Promise<AutocompleteResponseDto[]> {
@@ -100,7 +111,8 @@ export class AutocompleteRepository {
     return this.commonFind(
       autocompleteDto,
       this.prisma.contact,
-      { ...(email && { contact: { email } }) }
+      { ...(email && { contact: { email } }) },
+      { key: 'company_contact_company_idTocompany', field: 'name' }
     );
   }
 
@@ -108,7 +120,8 @@ export class AutocompleteRepository {
     return this.commonFind(
       autocompleteDto,
       this.prisma.contact,
-      { is_partner: { gt: 0 } }
+      { is_partner: { gte: IsPartner.PARTNER } },
+      { key: 'company_contact_company_idTocompany', field: 'name' }
     );
   }
 
@@ -116,29 +129,39 @@ export class AutocompleteRepository {
     autocompleteDto: AutocompleteDto,
     prismaModel,
     additionalWhereCondition = {},
-    include = undefined
+    relation?: {
+      key: string;
+      field: string;
+    }
   ): Promise<AutocompleteResponseDto[]> {
+    const include = relation ? { [relation.key] : { select: { id:true, [relation.field]:true } }} : undefined;
     const firstResult = await prismaModel.findMany({
       take: DEFAULT_TAKE,
       where: {id: {in: autocompleteDto.ids}, ...additionalWhereCondition},
-      include: include || undefined
+      include
     });
 
     const secondResult = await prismaModel.findMany({
       take: DEFAULT_TAKE,
       where: {
-        name: {contains: autocompleteDto.search || ''},
+        [relation?.field || 'name']: {contains: autocompleteDto.search || ''},
+        ...(relation && { [relation.key]: { [relation.field]: {contains: autocompleteDto.search || ''} } }),
         id: {notIn: firstResult.map(({id}) => id)},
         ...additionalWhereCondition
       },
-      include: include || undefined
-    })
+      include
+    });
 
-    return [
+    const result = [
       ...firstResult,
       ...secondResult
     ]
-    .sort((a,b) => a.id > b.id ? 1 : -1)
-    .map(({id, name}) => ({id, label: name}));
+    .sort((a,b) => a.id > b.id ? 1 : -1);
+
+    if (relation) {
+      return result.map(({id, name, [relation.key]: key}) => ({id, label: `${name} - ${key[relation.field]}`}));
+    } else {
+      return result.map(({id, name}) => ({id, label: name}));
+    }
   }
 }

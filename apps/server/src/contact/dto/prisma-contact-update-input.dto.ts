@@ -4,7 +4,7 @@ import { Type } from "class-transformer";
 import { IsBoolean, IsEmail, IsEnum, IsInt, IsOptional } from "class-validator";
 import { IsPartner } from "../types/is-partner.enum";
 
-export class PrismaContactCreateInputDto implements Prisma.contactCreateInput {
+export class PrismaContactUpdateInputDto implements Prisma.contactUpdateInput {
   @ApiPropertyOptional()
   @IsOptional()
   name?: string;
@@ -69,8 +69,9 @@ export class PrismaContactCreateInputDto implements Prisma.contactCreateInput {
   @IsOptional()
   zip2?: string;
 
-  @ApiProperty()
-  discr: string;
+  @ApiPropertyOptional()
+  @IsOptional()
+  discr?: string;
 
   @ApiPropertyOptional({
     enum: IsPartner,
@@ -94,23 +95,23 @@ export class PrismaContactCreateInputDto implements Prisma.contactCreateInput {
   external_id?: number;
 
   @ApiPropertyOptional()
-  supplierOrders?: Prisma.aorderUncheckedCreateNestedManyWithoutContact_aorder_supplier_idTocontactInput;
+  supplierOrders?: Prisma.aorderUpdateManyWithoutContact_aorder_supplier_idTocontactNestedInput;
 
   @ApiPropertyOptional()
-  customerOrders?: Prisma.aorderUncheckedCreateNestedManyWithoutContact_aorder_customer_idTocontactInput;
+  customerOrders?: Prisma.aorderUpdateManyWithoutContact_aorder_customer_idTocontactNestedInput;
 
   @ApiPropertyOptional()
-  contact?: Prisma.contactCreateNestedOneWithoutOther_contactInput;
+  contact?: Prisma.contactUpdateOneWithoutOther_contactNestedInput;
 
   @ApiPropertyOptional()
-  other_contact?: Prisma.contactUncheckedCreateNestedManyWithoutContactInput;
+  other_contact?: Prisma.contactUpdateManyWithoutContactNestedInput;
 
   @ApiProperty()
-  company_contact_company_idTocompany: Prisma.companyCreateNestedOneWithoutContact_contact_company_idTocompanyInput;
+  company_contact_company_idTocompany?: Prisma.companyUpdateOneRequiredWithoutContact_contact_company_idTocompanyNestedInput;
 
   @ApiPropertyOptional()
-  fos_user?: Prisma.fos_userUncheckedCreateNestedManyWithoutContactInput;
+  fos_user?: Prisma.fos_userUpdateManyWithoutContactNestedInput;
 
   @ApiPropertyOptional()
-  product?: Prisma.productUncheckedCreateNestedManyWithoutContactInput;
+  product?: Prisma.productUpdateManyWithoutContactNestedInput;
 }

@@ -1,20 +1,107 @@
 import { AOrderDiscrimination } from "./types/aorder-discrimination.enum";
 import { AServiceStatus } from "../aservice/enum/aservice-status.enum";
 import { AOrderPayload } from "./types/aorder-payload";
-export type AOrderProcessed = AOrderPayload & {totalPrice: number};
+import { ContactSelect } from "../contact/types/contact-select";
+
+type TotalPerProductReturn = Record<string, number>;
+type ContactProcessed = Omit<
+  ContactSelect,
+  'company_contact_company_idTocompany' |
+  'contact'
+> & {
+  company_id: number,
+  company_name: string,
+  company_kvk_nr: number,
+  contact: ContactProcessed
+}
+export type AOrderProcessed = Omit<
+  AOrderPayload,
+  'contact_aorder_supplier_idTocontact' | 
+  'contact_aorder_customer_idTocontact'
+> & {
+  totalPrice: number,
+  totalPerProductType: TotalPerProductReturn,
+  contact_aorder_supplier_idTocontact?: ContactProcessed,
+  contact_aorder_customer_idTocontact?: ContactProcessed,
+};
 
 export class AOrderProcess {
   private totalPrice: number;
-  private totalPerProductType: Record<string, number>;
+  private totalPerProductType: TotalPerProductReturn;
 
   constructor( private readonly aorder: AOrderPayload ) {}
 
-  public run() {
+  public run(): AOrderProcessed {
+    const {
+      contact_aorder_supplier_idTocontact,
+      contact_aorder_customer_idTocontact,
+      ...restAOrder
+    } = this.aorder;
+    const {
+      company_contact_company_idTocompany: company_supplier,
+      contact: contact_supplier,
+      ...rest_supplier
+    } = contact_aorder_supplier_idTocontact || {};
+    const {
+      company_contact_company_idTocompany: partner_company_supplier,
+      ...rest_partner_supplier
+    } = contact_supplier || {};
+
+    const {
+      company_contact_company_idTocompany: company_customer,
+      contact: contact_customer,
+      ...rest_customer
+    } = contact_aorder_customer_idTocontact || {};
+    const {
+      company_contact_company_idTocompany: partner_company_customer,
+      ...rest_partner_customer
+    } = contact_customer || {};
+
     this.totalPrice = this.calculateTotalPrice();
     this.totalPerProductType = this.calculateTotalPerProductType();
 
     return {
-      ...this.aorder,
+      ...restAOrder,
+      ...(company_supplier && {
+        contact_aorder_supplier_idTocontact: {
+          ...rest_supplier,
+          ...(company_supplier && {
+            company_id: company_supplier.id,
+            company_name: company_supplier.name,
+            company_kvk_nr: company_supplier.kvk_nr,
+          }),
+          ...(partner_company_supplier && {
+            contact: {
+              ...rest_partner_supplier,
+              ...(partner_company_supplier && {
+                company_id: partner_company_supplier.id,
+                company_name: partner_company_supplier.name,
+                company_kvk_nr: partner_company_supplier.kvk_nr,
+              }),
+            },
+          }),
+        },
+      }),
+      ...(company_customer && {
+        contact_aorder_customer_idTocontact: {
+          ...rest_customer,
+          ...(company_customer && {
+            company_id: company_customer.id,
+            company_name: company_customer.name,
+            company_kvk_nr: company_customer.kvk_nr,
+          }),
+          ...(partner_company_customer && {
+            contact: {
+              ...rest_partner_customer,
+              ...(partner_company_customer && {
+                company_id: partner_company_customer.id,
+                company_name: partner_company_customer.name,
+                company_kvk_nr: partner_company_customer.kvk_nr,
+              }),
+            },
+          }),
+        },
+      }),
       totalPrice: this.totalPrice,
       totalPerProductType: this.totalPerProductType,
     };
@@ -51,8 +138,8 @@ export class AOrderProcess {
     return price;
   }
 
-  private calculateTotalPerProductType(): Record<string, number> {
-    const result: Record<string, number> = {};
+  private calculateTotalPerProductType(): TotalPerProductReturn {
+    const result: TotalPerProductReturn = {};
 
     const productOrders = this.aorder?.product_order || [];
 

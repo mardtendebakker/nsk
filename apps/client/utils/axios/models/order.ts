@@ -11,6 +11,9 @@ export interface Contact {
   city?: string,
   street?: string,
   zip?: string,
+  company_id:string,
+  company_name:string,
+  company_kvk_nr: string,
   contact: SubContact
 }
 export interface SubContact {
@@ -19,6 +22,9 @@ export interface SubContact {
   city?: string,
   street?: string,
   zip?: string,
+  company_id:string,
+  company_name:string,
+  company_kvk_nr: string,
 }
 
 export interface OrderStatus {

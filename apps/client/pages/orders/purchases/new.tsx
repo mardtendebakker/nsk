@@ -46,9 +46,9 @@ export function initFormState(trans, order?: Order) {
       value: order?.pickup?.logistics_id,
     },
     newSupplier: { value: false },
-    name: { validator: requiredSupplierFieldValidator('name', trans) },
-    kvkNr: {},
-    representative: {},
+    name: {},
+    company_name: { validator: requiredSupplierFieldValidator('company_name', trans) },
+    company_kvk_nr: {},
     email: { validator: requiredSupplierFieldValidator('email', trans) },
     phone: { validator: requiredSupplierFieldValidator('phone', trans) },
     street: { validator: requiredSupplierFieldValidator('street', trans) },
@@ -80,8 +80,8 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
   } else {
     payload.supplier = {
       name: formRepresentation.name.value || undefined,
-      kvk_nr: formRepresentation.kvkNr.value || undefined,
-      representative: formRepresentation.representative.value || undefined,
+      company_name: formRepresentation.company_name.value || undefined,
+      company_kvk_nr: formRepresentation.company_kvk_nr.value || undefined,
       email: formRepresentation.email.value || undefined,
       phone: formRepresentation.phone.value || undefined,
       street: formRepresentation.street.value || undefined,

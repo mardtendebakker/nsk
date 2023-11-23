@@ -25,6 +25,9 @@ class AOrderDto extends PickType(AOrderEntity, [
   contact: string;
 
   @ApiProperty()
+  company: string;
+
+  @ApiProperty()
   status: string;
 }
 

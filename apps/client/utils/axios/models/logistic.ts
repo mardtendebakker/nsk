@@ -13,9 +13,9 @@ export interface Supplier {
   zip:string,
   street:string,
   phone:string,
-  name:string,
+  company_name:string,
   email:string,
-  representative:string
+  name:string
 }
 
 export type Customer = Supplier;

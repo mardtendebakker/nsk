@@ -352,7 +352,7 @@ export class StockService {
   }
 
   private productOrderProcess(productOrder: ProductOrderRelation): ProductOrderDto {
-    const order = <AOrderPayload>productOrder?.aorder;
+    const order = productOrder?.aorder;
     return {
       quantity: productOrder?.quantity,
       order: order && {
@@ -363,6 +363,9 @@ export class StockService {
         contact:
           order?.contact_aorder_customer_idTocontact?.name ||
           order?.contact_aorder_supplier_idTocontact?.name,
+        company: 
+          order?.contact_aorder_customer_idTocontact?.company_contact_company_idTocompany?.name ||
+          order?.contact_aorder_supplier_idTocontact?.company_contact_company_idTocompany?.name,
         status: order?.order_status?.name,
       },
     };
@@ -405,11 +408,21 @@ export class StockService {
       contact_aorder_customer_idTocontact: {
         select: {
           name: true,
+          company_contact_company_idTocompany: {
+            select: {
+              name: true,
+            },
+          },
         },
       },
       contact_aorder_supplier_idTocontact: {
         select: {
           name: true,
+          company_contact_company_idTocompany: {
+            select: {
+              name: true,
+            },
+          },
         },
       },
       order_status: {

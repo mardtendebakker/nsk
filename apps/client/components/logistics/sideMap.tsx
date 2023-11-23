@@ -241,7 +241,7 @@ export default function SideMap({
             options={ways
               .filter((way: Way) => !!way.logisticService)
               .map((way: Way) => ({
-                title: getContactOfWay(way).name,
+                title: `${getContactOfWay(way).name} - ${getContactOfWay(selectedWay).company_name}`,
                 value: way.logisticService.id,
               }))}
           />
@@ -258,10 +258,10 @@ export default function SideMap({
                   </Typography>
                 </Avatar>
                 <Box>
+                  <Typography variant="body1">{getContactOfWay(selectedWay).name}</Typography>
                   <Typography variant="h5">
-                    {getContactOfWay(selectedWay).name}
+                    {getContactOfWay(selectedWay).company_name}
                   </Typography>
-                  <Typography variant="body1">{getContactOfWay(selectedWay).representative}</Typography>
 
                   <Typography variant="body1" sx={{ justifySelf: 'flex-end' }}>
                     {getContactOfWay(selectedWay).phone}

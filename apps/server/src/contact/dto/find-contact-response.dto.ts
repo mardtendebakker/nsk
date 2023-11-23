@@ -5,10 +5,12 @@ import { ContactEntity } from "../entities/contact.entity";
 class FindContactResponeDto extends PickType(ContactEntity, [
   "id",
   "name",
-  "representative",
   "email",
   "partner_id",
-] as const) {}
+] as const) {
+  @ApiProperty()
+  compnay_name: string;
+}
 
 export class FindContactsResponeDto implements IFindManyRespone<FindContactResponeDto> {
   @ApiProperty()

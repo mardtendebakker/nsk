@@ -234,9 +234,9 @@
           </div>
           {{/if}}
           <table class="table">
-            <tr><td width="50%">Name</td><td>{{#if customer}}{{ customer.name }}{{else}}{{ supplier.name }}{{/if}}</td></tr>
-            <tr><td>KvK nr</td><td>{{#if customer}}{{ customer.kvk_nr }}{{else}}{{ supplier.kvk_nr }}{{/if}}</td></tr>
-            <tr><td>Representative</td><td>{{#if customer}}{{ customer.representative }}{{else}}{{ supplier.representative }}{{/if}}</td></tr>
+            <tr><td>Contact Person</td><td>{{#if customer}}{{ customer.name }}{{else}}{{ supplier.name }}{{/if}}</td></tr>
+            <tr><td width="50%">Company Name</td><td>{{#if customer}}{{ customer.company_name }}{{else}}{{ supplier.company_name }}{{/if}}</td></tr>
+            <tr><td>KvK nr</td><td>{{#if customer}}{{ customer.company_kvk_nr }}{{else}}{{ supplier.company_kvk_nr }}{{/if}}</td></tr>
             <tr><td>E-mail</td><td>{{#if customer}}{{ customer.email }}{{else}}{{ supplier.email }}{{/if}}</td></tr>
             <tr><td>Phone</td><td>{{#if customer}}{{ customer.phone }}{{else}}{{ supplier.phone }}{{/if}}</td></tr>
             <tr><td>Street</td><td>{{#if customer}}{{ customer.street }}{{else}}{{ supplier.street }}{{/if}}</td></tr>

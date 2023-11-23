@@ -1,8 +1,8 @@
 export interface ContactListItem {
   id: number,
   name:string,
+  company_name:string,
   email:string,
-  representative:string,
   partner:{ id: number, name: string },
   is_partner:boolean,
   orders:[],
@@ -11,7 +11,8 @@ export interface ContactListItem {
 export interface Contact {
   id:number,
   name:string,
-  representative:string,
+  company_name:string,
+  company_kvk_nr:string,
   email:string,
   phone:string,
   phone2:string,
@@ -27,7 +28,6 @@ export interface Contact {
   country2:string,
   state2:string,
   zip2:string,
-  kvk_nr:string,
   is_partner:number,
   partner_id:number,
 }

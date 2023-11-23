@@ -61,24 +61,24 @@ function Form({
             <Box sx={{ m: '.25rem' }} />
             <TextField
               sx={{ flex: 0.33 }}
-              error={Boolean(formRepresentation.kvk_nr.error)}
-              helperText={formRepresentation.kvk_nr.error}
-              label={trans('contactForm.kvkNr.label')}
-              placeholder={trans('contactForm.kvkNr.placeholder')}
-              name="kvk_nr"
-              onChange={(e) => setValue({ field: 'kvk_nr', value: e.target.value })}
-              value={formRepresentation.kvk_nr.value || ''}
+              error={Boolean(formRepresentation.company_name.error)}
+              helperText={formRepresentation.company_name.error}
+              label={trans('contactForm.company_name.label')}
+              placeholder={trans('contactForm.company_name.placeholder')}
+              name="company_name"
+              onChange={(e) => setValue({ field: 'company_name', value: e.target.value })}
+              value={formRepresentation.company_name.value || ''}
             />
             <Box sx={{ m: '.25rem' }} />
             <TextField
               sx={{ flex: 0.33 }}
-              error={Boolean(formRepresentation.representative.error)}
-              helperText={formRepresentation.representative.error}
-              label={trans('contactForm.representative.label')}
-              placeholder={trans('contactForm.representative.placeholder')}
-              name="representative"
-              onChange={(e) => setValue({ field: 'representative', value: e.target.value })}
-              value={formRepresentation.representative.value || ''}
+              error={Boolean(formRepresentation.company_kvk_nr.error)}
+              helperText={formRepresentation.company_kvk_nr.error}
+              label={trans('contactForm.company_kvk_nr.label')}
+              placeholder={trans('contactForm.company_kvk_nr.placeholder')}
+              name="company_kvk_nr"
+              onChange={(e) => setValue({ field: 'company_kvk_nr', value: e.target.value })}
+              value={formRepresentation.company_kvk_nr.value || ''}
             />
           </Grid>
           <Grid

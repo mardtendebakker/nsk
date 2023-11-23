@@ -57,7 +57,7 @@ export class AOrderProcess extends PrintProcess {
         supplier: {
           ...this.aorder.contact_aorder_supplier_idTocontact,
           barcode: await this.getBarcode({
-            text: this.aorder.contact_aorder_supplier_idTocontact.name.substring(
+            text: this.aorder.contact_aorder_supplier_idTocontact.company_name.substring(
               0,
               25
             ),

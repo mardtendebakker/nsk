@@ -46,9 +46,9 @@ export function initFormState(trans, order?: Order) {
       value: order?.customer_id,
     },
     newCustomer: { value: false },
-    name: { validator: requiredCustomerFieldValidator('name', trans) },
-    kvkNr: {},
-    representative: {},
+    name: {},
+    company_name: { validator: requiredCustomerFieldValidator('company_name', trans) },
+    company_kvk_nr: {},
     email: { validator: requiredCustomerFieldValidator('email', trans) },
     phone: { validator: requiredCustomerFieldValidator('phone', trans) },
     street: { validator: requiredCustomerFieldValidator('street', trans) },
@@ -80,8 +80,8 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
   } else {
     payload.customer = {
       name: formRepresentation.name.value || undefined,
-      kvk_nr: formRepresentation.kvkNr.value || undefined,
-      representative: formRepresentation.representative.value || undefined,
+      company_name: formRepresentation.company_name.value || undefined,
+      company_kvk_nr: formRepresentation.company_kvk_nr.value || undefined,
       email: formRepresentation.email.value || undefined,
       phone: formRepresentation.phone.value || undefined,
       street: formRepresentation.street.value || undefined,

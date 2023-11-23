@@ -2,7 +2,6 @@ import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Prisma } from "@prisma/client";
 import { Type } from "class-transformer";
 import { IsBoolean, IsInt, IsNumber, IsString, ValidateIf } from "class-validator";
-import { CreateContactDto } from "../../contact/dto/create-contact.dto";
 import { CreatePickupUncheckedWithoutAorderInputDto } from "../../calendar/pickup/dto/create-pickup-unchecked-without-aorder-input.dto";
 import { CreateRepairUncheckedWithoutAOrderInputDto } from "../../repair/dto/create-repair-unchecked-without-aorder-input.dt";
 
@@ -70,20 +69,12 @@ export class PrismaAOrderCreateInputDto {
   @Type(() => Number)
   @ValidateIf((_, value) => value !== undefined)
   supplier_id?: number;
-
-  @ApiPropertyOptional()
-  @Type(() => CreateContactDto)
-  supplier?: CreateContactDto;
   
   @ApiPropertyOptional()
   @IsInt()
   @Type(() => Number)
   @ValidateIf((_, value) => value !== undefined)
   customer_id?: number;
-
-  @ApiPropertyOptional()
-  @Type(() => CreateContactDto)
-  customer?: CreateContactDto;
   
   @ApiPropertyOptional()
   @Type(() => CreatePickupUncheckedWithoutAorderInputDto)
