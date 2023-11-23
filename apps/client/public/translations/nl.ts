@@ -48,12 +48,12 @@ const translation = {
   username: 'Gebruikersnaam',
   phone: 'Telefoon',
   phone2: 'Mobiel',
-  kvkNr: 'Numéro Kvk',
+  company_name: 'Bedrijfsnaam',
+  company_kvk_nr: 'Kvk Nummer',
   street: 'Straat',
   street_extra: 'Toevoeging',
   zipcode: 'Postcode',
   state: 'Provincie',
-  representative: 'Contactpersoon',
   createOrder: 'Maak een bestelling aan',
   save: 'Opslaan',
   address: 'Adres',
@@ -195,16 +195,16 @@ const translation = {
   },
   contactForm: {
     name: {
-      placeholder: 'Typ naam',
+      placeholder: 'Typ de naam van de klant/verkoper',
       label: 'Naam',
     },
-    kvkNr: {
+    company_name: {
+      placeholder: 'Typ de Bedrijfsnaam van de klant/verkoper',
+      label: 'Bedrijfsnaam',
+    },
+    company_kvk_nr: {
       placeholder: 'Typ nummer',
       label: 'Kamer van Koophandel nr.',
-    },
-    representative: {
-      placeholder: 'Typ contactpersoon',
-      label: 'Contactpersoon',
     },
     email: {
       placeholder: 'uw@emailadres.com',

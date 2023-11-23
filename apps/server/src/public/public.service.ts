@@ -19,7 +19,6 @@ import { DataDestructionChoice } from './types/data-destruction-choise';
 import { afile } from '@prisma/client';
 import { CreateBodyStockDto } from '../stock/dto/create-body-stock.dto';
 import { ProductRelation } from '../stock/types/product-relation';
-import { AOrderPayload } from '../aorder/types/aorder-payload';
 import { PostOrderDto } from './dto/post-order.dto';
 import { CustomerService } from '../customer/customer.service';
 import { SaleService } from '../sale/sale.service';
@@ -101,7 +100,7 @@ export class PublicService {
       status_id: orderStatus.id
     };
 
-    const purchase = <AOrderPayload>await this.purchaseService.create(purchaseData);
+    const purchase = await this.purchaseService.create(purchaseData);
     
     if (files?.length) {
       await this.uploadFiles(purchase.pickup.id, files);
@@ -167,12 +166,12 @@ export class PublicService {
   private getContactForm() {
     return {
       name: {
-        label: 'Klantnaam',
-        required: true,
-      },
-      representative: {
         label: 'Contactpersoon',
         required: false,
+      },
+      company_name: {
+        label: 'Bedrijfsnaam van de klant',
+        required: true,
       },
       email: {
         label: 'E-mail',

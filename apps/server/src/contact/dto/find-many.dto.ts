@@ -11,5 +11,5 @@ export class FindManyDto extends BaseFindManyDto {
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
-  representative?: string;
+  company?: string;
 }

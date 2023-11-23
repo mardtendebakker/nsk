@@ -1,12 +1,15 @@
-import { AOrderPayload } from "./types/aorder-payload";
 import { ProductOrderRelation } from "../stock/types/product-order-relation";
 import { ProductOrderDto } from "./dto/find-aorder-response.dto";
-export type AOrderProductProcessed = AOrderPayload & {product_orders: ProductOrderDto[]};
+import { AOrderProcessed } from "./aorder.process";
+export type AOrderProductProcessed = Omit<
+ AOrderProcessed,
+  'product_order'
+> & {product_orders: ProductOrderDto[]};
 
 export class AOrderProductProcess {
   private product_orders: ProductOrderDto[];
 
-  constructor( private readonly aorder: AOrderPayload ) {}
+  constructor( private readonly aorder: AOrderProcessed ) {}
 
   public run(): AOrderProductProcessed {
     const {

@@ -48,12 +48,12 @@ const translation = {
   username: 'Nom d\'utilisateur',
   phone: 'Téléphone',
   phone2: 'Mobile',
-  kvkNr: 'Numéro de la Chambre de Commerce',
+  company_name: 'Nom de l\'entreprise',
+  company_kvk_nr: 'Numéro de la Chambre de Commerce',
   street: 'Rue',
   street_extra: 'Complément d\'adresse',
   zipcode: 'Code postal',
   state: 'État',
-  representative: 'Représentant',
   createOrder: 'Créer une commande',
   save: 'Enregistrer',
   address: 'Adresse',
@@ -195,16 +195,16 @@ const translation = {
   },
   contactForm: {
     name: {
-      placeholder: 'Saisissez le nom',
+      placeholder: 'Saisissez le nom du client/vendeur',
       label: 'Nom',
     },
-    kvkNr: {
+    company_name: {
+      placeholder: 'Tapez le nom de l\'entreprise du client/vendeur',
+      label: 'Nom de l\'entreprise',
+    },
+    company_kvk_nr: {
       placeholder: 'Saisissez le numéro',
       label: 'Numéro de la Chambre de Commerce',
-    },
-    representative: {
-      placeholder: 'Saisissez le représentant',
-      label: 'Représentant',
     },
     email: {
       placeholder: 'votre@adresseemail.com',

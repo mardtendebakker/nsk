@@ -86,7 +86,7 @@ function Contact({ contact, type }: { contact: ContactModel, type: OrderType }) 
     ) : undefined}
     >
       <Link href={target.replace('[id]', contact.id)} style={{ color: 'unset' }}>
-        {contact?.name || '--'}
+        {`${contact?.name} - ${contact?.company_name}` || '--'}
       </Link>
     </Tooltip>
   );
@@ -115,7 +115,7 @@ function Partner({ partner }: { partner: SubContact }) {
     ) : undefined}
     >
       <Link href={CONTACTS_CUSTOMERS_EDIT.replace('[id]', partner.id)} style={{ color: 'unset' }}>
-        {partner?.name || '--'}
+        {`${partner?.name} - ${partner?.company_name}` || '--'}
       </Link>
     </Tooltip>
   );

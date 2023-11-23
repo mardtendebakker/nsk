@@ -4,6 +4,7 @@ interface Order {
   id: number,
   discr: 'p' | 's',
   contact: string,
+  company: string,
   order_date: string,
   order_nr: string,
   status: string

@@ -43,9 +43,9 @@ describe('Sale', () => {
           },
         ],
         "contact_aorder_customer_idTocontact": {
-          "name": "Co Plus Enterprise LTD",
-          "kvk_nr": 0,
-          "representative": "Hasir Kamal",
+          "name": "Hasir Kamal",
+          "company_name": "Co Plus Enterprise LTD",
+          "company_kvk_nr": 0,
           "email": "user@mail.nl",
           "phone": "+31611111111",
           "street": "Document is known",
@@ -88,8 +88,8 @@ describe('Sale', () => {
         ],
         "contact_aorder_customer_idTocontact": {
           "name": "Salim\tKara",
-          "kvk_nr": null,
-          "representative": "Salim\tKara",
+          "company_name": "Salim\tKara",
+          "company_kvk_nr": null,
           "email": "Salimara@gmail.com",
           "phone": "0031 (6) 212 111 11",
           "street": "James Catsstraat\t100",

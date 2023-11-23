@@ -14,15 +14,15 @@ describe('Supplier', () => {
   const findSupplierResponse =  [
     {
       "id": 39,
-      "name": "Giga",
-      "representative": "Berno / Xaomi",
+      "name": "Berno / Xaomi",
+      "company_name": "Giga",
       "email": "info@giga.nl",
       "partner_id": null
     },
     {
       "id": 41,
-      "name": "Jorden.nl",
-      "representative": null,
+      "name": null,
+      "company_name": "Jorden.nl",
       "email": "info@jorden.nl",
       "partner_id": null
     },
@@ -30,9 +30,9 @@ describe('Supplier', () => {
   const supplier = {
     "id": 50,
     "partner_id": null,
-    "name": "supplier_test",
-    "kvk_nr": null,
-    "representative": null,
+    "name": null,
+    "company_name": "supplier_test",
+    "company_kvk_nr": null,
     "email": null,
     "phone": null,
     "phone2": null,

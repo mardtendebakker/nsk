@@ -24,7 +24,19 @@ export class PickupService {
               id: true,
               order_nr: true,
               order_status: true,
-              contact_aorder_supplier_idTocontact: true,
+              contact_aorder_supplier_idTocontact: {
+                select: {
+                  name: true,
+                  email: true,
+                  city: true,
+                  country: true,
+                  state: true,
+                  zip: true,
+                  street: true,
+                  phone: true,
+                  company_contact_company_idTocompany: true,
+                }
+              },
               product_order: {
                 select: {
                   id: true,
@@ -57,7 +69,10 @@ export class PickupService {
           order_nr,
           order_status,
           product_order,
-          contact_aorder_supplier_idTocontact,
+          contact_aorder_supplier_idTocontact: {
+            company_contact_company_idTocompany: company_supplier,
+            ...rest_supplier
+          },
         },
         real_pickup_date,
         fos_user,
@@ -70,7 +85,10 @@ export class PickupService {
           id,
           order_nr,
           order_status,
-          supplier: contact_aorder_supplier_idTocontact,
+          supplier: {
+            ...rest_supplier,
+            company_name: company_supplier.name,
+          },
         },
         logistic: fos_user,
       })

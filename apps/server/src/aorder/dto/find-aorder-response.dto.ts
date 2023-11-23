@@ -14,19 +14,23 @@ class OrderStatus extends PickType(OrderStatusEntity, [
 
 class SubContact extends PickType(ContactEntity, [
   'id',
-  'name',
-  'street',
-  'city',
-  'zip',
-]) {}
-
-class Contact extends PickType(ContactEntity, [
-  'id',
-  'name',
   'street',
   'city',
   'zip',
 ]) {
+  @ApiProperty()
+  name: string;
+}
+
+class Contact extends PickType(ContactEntity, [
+  'id',
+  'street',
+  'city',
+  'zip',
+]) {
+  @ApiProperty()
+  name: string;
+  
   @ApiPropertyOptional()
   contact?: SubContact;
 }

@@ -19,7 +19,7 @@ import { CreateOrderStatusDto } from '../admin/order-status/dto/create-order-sta
 import { CustomerService } from '../customer/customer.service';
 import { CreateContactDto } from '../contact/dto/create-contact.dto';
 import { IsPartner } from '../contact/types/is-partner.enum';
-import { AOrderPayload } from '../aorder/types/aorder-payload';
+import { AOrderProcessed } from '../aorder/aorder.process';
 import { IExcelColumn } from './types/excel-column';
 import * as xlsx from 'xlsx';
 
@@ -91,7 +91,7 @@ export class SaleService extends AOrderService {
     return this.repository.update(this.commonIncludePart(deleteProductsFromOrderParams));
   }
 
-  async import(importDto: ImportDto, file: Express.Multer.File, email?: string): Promise<AOrderPayload[]> {
+  async import(importDto: ImportDto, file: Express.Multer.File, email?: string): Promise<AOrderProcessed[]> {
     if (!file) {
       throw new UnprocessableEntityException('file is invalid');
     }
@@ -108,7 +108,7 @@ export class SaleService extends AOrderService {
     const sheet = workbook.Sheets[sheetName];
     const rows = <IExcelColumn[]>xlsx.utils.sheet_to_json(sheet);
   
-    const sales: AOrderPayload[] = [];
+    const sales: AOrderProcessed[] = [];
   
     for (const row of rows) {
       const {
@@ -135,13 +135,13 @@ export class SaleService extends AOrderService {
       if (!Bedrijfsnaam && !Voornaam && !Achternaam) continue;
   
       // Leergeld puts partner name in field Bedrijfsnaam :-(
-      const name = Bedrijfsnaam && !Bedrijfsnaam.includes('Leergeld')
+      const company_name = Bedrijfsnaam && !Bedrijfsnaam.includes('Leergeld')
         ? Bedrijfsnaam
         : `${Voornaam} ${Achternaam}`.trim();
   
       const customerData: CreateContactDto = {
-        name,
-        representative: `${Voornaam} ${Achternaam}`.trim(),
+        name: `${Voornaam} ${Achternaam}`.trim(),
+        company_name,
         street: `${Straatnaam} ${Huisnummer} ${HuisnummerToevoeging}`.trim(),
         zip: Postcode,
         city: Plaatsnaam,
@@ -169,7 +169,7 @@ export class SaleService extends AOrderService {
         remarks,
       };
   
-      sales.push(<AOrderPayload>await super.create(saleData));
+      sales.push(await super.create(saleData));
     }
   
     return sales;

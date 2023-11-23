@@ -330,35 +330,44 @@ model location_label {
 }
 
 model contact {
-  id             Int        @id @default(autoincrement())
-  partner_id     Int?
-  name           String     @db.VarChar(255)
-  kvk_nr         Int?
-  representative String?    @db.VarChar(255)
-  email          String?    @db.VarChar(255)
-  phone          String?    @db.VarChar(255)
-  phone2         String?    @db.VarChar(255)
-  street         String?    @db.VarChar(255)
-  street_extra   String?    @db.VarChar(255)
-  city           String?    @db.VarChar(255)
-  country        String?    @db.VarChar(255)
-  state          String?    @db.VarChar(255)
-  zip            String?    @db.VarChar(255)
-  street2        String?    @db.VarChar(255)
-  street_extra2  String?    @db.VarChar(255)
-  city2          String?    @db.VarChar(255)
-  country2       String?    @db.VarChar(255)
-  state2         String?    @db.VarChar(255)
-  zip2           String?    @db.VarChar(255)
-  discr          String     @db.VarChar(255)
-  is_partner     Int?
-  external_id    Int?
-  supplierOrders aorder[]   @relation("aorder_supplier_idTocontact")
-  customerOrders aorder[]   @relation("aorder_customer_idTocontact")
-  contact        contact?   @relation("contactTocontact", fields: [partner_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_ABB0A97D9393F8FE")
-  other_contact  contact[]  @relation("contactTocontact")
-  fos_user       fos_user[]
-  product        product[]
+  id                                  Int        @id @default(autoincrement())
+  partner_id                          Int?
+  company_id                          Int
+  name                                String?    @db.VarChar(255)
+  email                               String?    @db.VarChar(255)
+  phone                               String?    @db.VarChar(255)
+  phone2                              String?    @db.VarChar(255)
+  street                              String?    @db.VarChar(255)
+  street_extra                        String?    @db.VarChar(255)
+  city                                String?    @db.VarChar(255)
+  country                             String?    @db.VarChar(255)
+  state                               String?    @db.VarChar(255)
+  zip                                 String?    @db.VarChar(255)
+  street2                             String?    @db.VarChar(255)
+  street_extra2                       String?    @db.VarChar(255)
+  city2                               String?    @db.VarChar(255)
+  country2                            String?    @db.VarChar(255)
+  state2                              String?    @db.VarChar(255)
+  zip2                                String?    @db.VarChar(255)
+  discr                               String     @db.VarChar(255)
+  is_partner                          Int?
+  is_main                             Boolean?
+  external_id                         Int?
+  supplierOrders                      aorder[]   @relation("aorder_supplier_idTocontact")
+  customerOrders                      aorder[]   @relation("aorder_customer_idTocontact")
+  contact                             contact?   @relation("contactTocontact", fields: [partner_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_ABB0A97D9393F8FE")
+  other_contact                       contact[]  @relation("contactTocontact")
+  company_contact_company_idTocompany company    @relation("contact_company_idTocompany", fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  fos_user                            fos_user[]
+  product                             product[]
 
   @@index([partner_id], map: "IDX_ABB0A97D9393F8FE")
+  @@index([company_id], map: "contact_company_id_fkey")
+}
+
+model company {
+  id                                  Int       @id @default(autoincrement())
+  name                                String    @unique(map: "name") @db.VarChar(255)
+  kvk_nr                              Int?
+  contact_contact_company_idTocompany contact[] @relation("contact_company_idTocompany")
 }

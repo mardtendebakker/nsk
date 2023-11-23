@@ -29,24 +29,24 @@ export default function Contact(
           placeholder={trans('name')}
           onChange={(e) => setValue({ field: 'name', value: e.target.value })}
           value={formRepresentation.name.value || ''}
-          error={!!formRepresentation.name.error}
-          helperText={formRepresentation.name.error}
         />
         <Box sx={{ m: '.25rem' }} />
         <TextField
           fullWidth
-          label={trans('kvkNr')}
-          placeholder={trans('kvkNr')}
-          onChange={(e) => setValue({ field: 'kvkNr', value: e.target.value })}
-          value={formRepresentation.kvkNr.value || ''}
+          label={trans('company_name')}
+          placeholder={trans('company_name')}
+          onChange={(e) => setValue({ field: 'company_name', value: e.target.value })}
+          value={formRepresentation.company_name.value || ''}
+          error={!!formRepresentation.company_name.error}
+          helperText={formRepresentation.company_name.error}
         />
         <Box sx={{ m: '.25rem' }} />
         <TextField
           fullWidth
-          label={trans('representative')}
-          placeholder={trans('representative')}
-          onChange={(e) => setValue({ field: 'representative', value: e.target.value })}
-          value={formRepresentation.representative.value || ''}
+          label={trans('company_kvk_nr')}
+          placeholder={trans('company_kvk_nr')}
+          onChange={(e) => setValue({ field: 'company_kvk_nr', value: e.target.value })}
+          value={formRepresentation.company_kvk_nr.value || ''}
         />
       </Grid>
       <Grid

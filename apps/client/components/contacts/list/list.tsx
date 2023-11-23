@@ -44,7 +44,7 @@ export default function List({
               {trans('name')}
             </TableCell>
             <TableCell>
-              {trans('representative')}
+              {trans('company')}
             </TableCell>
             <TableCell>
               {trans('email')}
@@ -67,10 +67,10 @@ export default function List({
               key={contact.id}
             >
               <TableCell>
-                <b>{contact.name}</b>
+                {contact.name || '--'}
               </TableCell>
               <TableCell>
-                {contact.representative || '--'}
+                <b>{contact.company_name}</b>
               </TableCell>
               <TableCell>
                 {contact.email || '--'}

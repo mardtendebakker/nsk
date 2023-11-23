@@ -14,15 +14,15 @@ describe('Customer', () => {
   const findCustomerResponse =  [
     {
       "id": 40,
+      "company_name": "Dini Met",
       "name": "Dini Met",
-      "representative": "Dini Met",
       "email": "info@dini.nl",
       "partner_id": 8
     },
     {
       "id": 44,
-      "name": "Zuid Groningen",
-      "representative": "Hans Neiman",
+      "company_name": "Zuid Groningen",
+      "name": "Hans Neiman",
       "email": "info@doost.nl",
       "partner_id": null
     },
@@ -31,9 +31,9 @@ describe('Customer', () => {
   const customer = {
     "id": 55,
     "partner_id": null,
-    "name": "customer_test",
-    "kvk_nr": null,
-    "representative": null,
+    "company_name": "customer_test",
+    "company_kvk_nr": null,
+    "name": null,
     "email": null,
     "phone": null,
     "phone2": null,
