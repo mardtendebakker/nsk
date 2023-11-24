@@ -150,7 +150,6 @@ export class SaleService extends AOrderService {
         phone: Telefoon,
         phone2: MobielNummer,
         ...(partner_id && { partner_id: partner_id }),
-        ...(partner_id && { is_partner: IsPartner.HAS_PARTNER }),
       };
   
       const customer = await this.customerService.checkExists(customerData);

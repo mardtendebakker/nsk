@@ -209,7 +209,7 @@ export class ContactService {
         createContactDto.contact = { connect: { id: partner_id }};
       }
 
-    } else if (is_partner === 0 && Number.isFinite(partner_id)) {
+    } else if (Number.isFinite(partner_id)) {
       createContactDto.is_partner = IsPartner.HAS_PARTNER;
       createContactDto.contact = { connect: { id: partner_id }};
     } else if (is_partner === 0 && !Number.isFinite(partner_id)) {
@@ -218,7 +218,7 @@ export class ContactService {
         createContactDto.contact = { disconnect: true };
       }
     } else if (is_partner === 1) {
-      createContactDto.is_partner = is_partner;
+      createContactDto.is_partner = IsPartner.PARTNER;
       if (id) { // only for update
         createContactDto.contact = { disconnect: true };
       }

@@ -144,8 +144,10 @@ export class AutocompleteRepository {
     const secondResult = await prismaModel.findMany({
       take: DEFAULT_TAKE,
       where: {
-        [relation?.field || 'name']: {contains: autocompleteDto.search || ''},
-        ...(relation && { [relation.key]: { [relation.field]: {contains: autocompleteDto.search || ''} } }),
+        OR: [
+          { [relation?.field || 'name']: {contains: autocompleteDto.search || ''} },
+          { ...(relation && { [relation.key]: { [relation.field]: {contains: autocompleteDto.search || ''} } }) },
+        ],
         id: {notIn: firstResult.map(({id}) => id)},
         ...additionalWhereCondition
       },

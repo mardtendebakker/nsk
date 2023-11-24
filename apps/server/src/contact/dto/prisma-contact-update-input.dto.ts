@@ -1,8 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Prisma } from "@prisma/client";
 import { Type } from "class-transformer";
-import { IsBoolean, IsEmail, IsEnum, IsInt, IsOptional } from "class-validator";
-import { IsPartner } from "../types/is-partner.enum";
+import { IsBoolean, IsEmail, IsInt, IsOptional, Max, Min } from "class-validator";
 
 export class PrismaContactUpdateInputDto implements Prisma.contactUpdateInput {
   @ApiPropertyOptional()
@@ -73,14 +72,13 @@ export class PrismaContactUpdateInputDto implements Prisma.contactUpdateInput {
   @IsOptional()
   discr?: string;
 
-  @ApiPropertyOptional({
-    enum: IsPartner,
-    enumName: 'IsPartner',
-  })
+  @ApiPropertyOptional()
   @IsOptional()
-  @IsEnum(IsPartner)
+  @IsInt()
   @Type(() => Number)
-  is_partner?: IsPartner;
+  @Min(0)
+  @Max(1)
+  is_partner?: number;
 
 
   @ApiPropertyOptional()
