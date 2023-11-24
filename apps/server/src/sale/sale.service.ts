@@ -18,7 +18,6 @@ import { OrderStatusService } from '../admin/order-status/order-status.service';
 import { CreateOrderStatusDto } from '../admin/order-status/dto/create-order-status.dto';
 import { CustomerService } from '../customer/customer.service';
 import { CreateContactDto } from '../contact/dto/create-contact.dto';
-import { IsPartner } from '../contact/types/is-partner.enum';
 import { AOrderProcessed } from '../aorder/aorder.process';
 import { IExcelColumn } from './types/excel-column';
 import * as xlsx from 'xlsx';
