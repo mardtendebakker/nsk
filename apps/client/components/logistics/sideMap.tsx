@@ -241,7 +241,7 @@ export default function SideMap({
             options={ways
               .filter((way: Way) => !!way.logisticService)
               .map((way: Way) => ({
-                title: `${getContactOfWay(way).name} - ${getContactOfWay(selectedWay).company_name}`,
+                title: `${getContactOfWay(way).name} - ${getContactOfWay(way).company_name}`,
                 value: way.logisticService.id,
               }))}
           />
