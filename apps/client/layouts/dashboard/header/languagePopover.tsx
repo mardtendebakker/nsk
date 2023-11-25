@@ -21,6 +21,11 @@ const LOCALES = [
     icon: '/assets/icons/ic_flag_de.svg',
   },
   {
+    value: 'ar',
+    label: 'عربي',
+    icon: '/assets/icons/ic_flag_ar.png',
+  },
+  {
     value: 'fr',
     label: 'Français',
     icon: '/assets/icons/ic_flag_fr.svg',
