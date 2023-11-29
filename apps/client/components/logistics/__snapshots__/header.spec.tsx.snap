@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Header component matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="MuiBox-root css-1su3en"
+  >
+    <div
+      class="MuiBox-root css-1dtnjt5"
+    >
+      <h4
+        class="MuiTypography-root MuiTypography-h4 css-xou334-MuiTypography-root"
+      >
+        logistics
+      </h4>
+      <a
+        href="/logistics/pickups"
+        style="text-decoration: none;"
+      >
+        <h5
+          class="MuiTypography-root MuiTypography-h5 css-1k3vp8i-MuiTypography-root"
+        >
+          pickups
+        </h5>
+      </a>
+      <a
+        href="/logistics/deliveries"
+        style="text-decoration: none;"
+      >
+        <h5
+          class="MuiTypography-root MuiTypography-h5 css-1k3vp8i-MuiTypography-root"
+        >
+          deliveries
+        </h5>
+      </a>
+    </div>
+  </div>
+</DocumentFragment>
+`;

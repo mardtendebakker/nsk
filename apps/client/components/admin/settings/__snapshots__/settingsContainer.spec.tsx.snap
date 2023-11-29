@@ -1,0 +1,143 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`settingsContainer matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-bhp9pd-MuiPaper-root-MuiCard-root"
+  >
+    <div
+      class="MuiCardContent-root css-1u0k5eo-MuiCardContent-root"
+    >
+      <div
+        class="MuiBox-root css-8joivn"
+      >
+        <ul
+          class="MuiList-root MuiList-padding css-h4y409-MuiList-root"
+          role="menu"
+          tabindex="-1"
+        >
+          <a
+            href="/admin/settings/locations"
+            style="text-decoration: none;"
+          >
+            <li
+              class="MuiButtonBase-root MuiMenuItem-root MuiMenuItem-gutters MuiMenuItem-root MuiMenuItem-gutters css-10xdxf9-MuiButtonBase-root-MuiMenuItem-root"
+              role="menuitem"
+              tabindex="-1"
+            >
+              <p
+                class="MuiTypography-root MuiTypography-body1 css-vkc4v8-MuiTypography-root"
+              >
+                locations
+              </p>
+              <span
+                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              />
+            </li>
+          </a>
+          <a
+            href="/admin/settings/product-types"
+            style="text-decoration: none;"
+          >
+            <li
+              class="MuiButtonBase-root MuiMenuItem-root MuiMenuItem-gutters MuiMenuItem-root MuiMenuItem-gutters css-10xdxf9-MuiButtonBase-root-MuiMenuItem-root"
+              role="menuitem"
+              tabindex="-1"
+            >
+              <p
+                class="MuiTypography-root MuiTypography-body1 css-vkc4v8-MuiTypography-root"
+              >
+                productTypes
+              </p>
+              <span
+                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              />
+            </li>
+          </a>
+          <a
+            href="/admin/settings/attributes"
+            style="text-decoration: none;"
+          >
+            <li
+              class="MuiButtonBase-root MuiMenuItem-root MuiMenuItem-gutters MuiMenuItem-root MuiMenuItem-gutters css-10xdxf9-MuiButtonBase-root-MuiMenuItem-root"
+              role="menuitem"
+              tabindex="-1"
+            >
+              <p
+                class="MuiTypography-root MuiTypography-body1 css-vkc4v8-MuiTypography-root"
+              >
+                attributes
+              </p>
+              <span
+                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              />
+            </li>
+          </a>
+          <a
+            href="/admin/settings/tasks"
+            style="text-decoration: none;"
+          >
+            <li
+              class="MuiButtonBase-root MuiMenuItem-root MuiMenuItem-gutters MuiMenuItem-root MuiMenuItem-gutters css-10xdxf9-MuiButtonBase-root-MuiMenuItem-root"
+              role="menuitem"
+              tabindex="-1"
+            >
+              <p
+                class="MuiTypography-root MuiTypography-body1 css-vkc4v8-MuiTypography-root"
+              >
+                tasks
+              </p>
+              <span
+                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              />
+            </li>
+          </a>
+          <a
+            href="/admin/settings/product-statuses"
+            style="text-decoration: none;"
+          >
+            <li
+              class="MuiButtonBase-root MuiMenuItem-root MuiMenuItem-gutters MuiMenuItem-root MuiMenuItem-gutters css-10xdxf9-MuiButtonBase-root-MuiMenuItem-root"
+              role="menuitem"
+              tabindex="-1"
+            >
+              <p
+                class="MuiTypography-root MuiTypography-body1 css-vkc4v8-MuiTypography-root"
+              >
+                productStatuses
+              </p>
+              <span
+                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              />
+            </li>
+          </a>
+          <a
+            href="/admin/settings/order-statuses"
+            style="text-decoration: none;"
+          >
+            <li
+              class="MuiButtonBase-root MuiMenuItem-root MuiMenuItem-gutters MuiMenuItem-root MuiMenuItem-gutters css-10xdxf9-MuiButtonBase-root-MuiMenuItem-root"
+              role="menuitem"
+              tabindex="-1"
+            >
+              <p
+                class="MuiTypography-root MuiTypography-body1 css-vkc4v8-MuiTypography-root"
+              >
+                orderStatuses
+              </p>
+              <span
+                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              />
+            </li>
+          </a>
+        </ul>
+      </div>
+      <div
+        class="MuiBox-root css-1p0to43"
+      >
+        <div />
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

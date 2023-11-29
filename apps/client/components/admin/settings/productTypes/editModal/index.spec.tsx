@@ -7,13 +7,10 @@ import EditModal from '.';
 import { initFormState } from '../createModal';
 
 const mockAxios = {
-  call: jest.fn(() => Promise.resolve({})),
+  call: jest.fn(() => Promise.resolve()),
   get performing() { return false; },
 };
 
-jest.mock('../../../../../hooks/useTranslation', () => jest.fn(() => ({
-  trans: (key: string) => key,
-})));
 jest.mock('../../../../../hooks/useAxios', () => () => mockAxios);
 jest.mock('../form', () => function TestC() {
   return <div />;

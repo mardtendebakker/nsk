@@ -8,6 +8,7 @@ import HeaderItem from '../list/headerItem';
 export default function Header() {
   const router = useRouter();
   const { trans } = useTranslation();
+
   const isDesktop = useResponsive('up', 'md');
 
   const ITEMS = [

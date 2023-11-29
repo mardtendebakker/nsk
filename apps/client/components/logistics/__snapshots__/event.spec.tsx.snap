@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`event matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="MuiBox-root css-eu1845"
+    data-testid="event"
+  >
+    <div
+      class="MuiBox-root css-cvabll"
+      data-mui-internal-clone-element="true"
+    >
+      <p
+        class="MuiTypography-root MuiTypography-inherit css-37jdci-MuiTypography-root"
+      >
+        eventTitle, 
+      </p>
+    </div>
+  </div>
+</DocumentFragment>
+`;

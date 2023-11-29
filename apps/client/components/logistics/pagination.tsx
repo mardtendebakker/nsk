@@ -17,6 +17,7 @@ export default function Pagination({
   return (
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
       <IconButton
+        data-testid="previous"
         size="small"
         sx={{ borderRadius: 0, border: '1px solid', mr: '1rem' }}
         onClick={onPrevious}
@@ -27,6 +28,7 @@ export default function Pagination({
         {format(date, 'dd MMMM Y')}
       </Typography>
       <IconButton
+        data-testid="next"
         size="small"
         sx={{ borderRadius: 0, border: '1px solid', ml: '1rem' }}
         onClick={onNext}
