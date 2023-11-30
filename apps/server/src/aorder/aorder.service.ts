@@ -207,9 +207,11 @@ export class AOrderService {
     const order = await this.findOne(id);
     if (order.discr === AOrderDiscrimination.PURCHASE) {
       order?.pickup?.['afile']?.length &&
-        this.fileService.deleteMany(
+        await this.fileService.deleteMany(
           order?.pickup?.['afile']?.map((file) => file.id)
         );
+      order?.pickup?.id &&
+        await this.repository.deletePickup(order?.pickup?.id);
     } else if (order.discr === AOrderDiscrimination.SALE) {
       order['afile']?.length &&
         this.fileService.deleteMany(order['afile']?.map((file) => file.id));
