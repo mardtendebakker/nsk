@@ -1,46 +1,47 @@
 import Head from 'next/head';
 import {
-  Box, Button, IconButton, Typography,
+  Box, Button, Card, IconButton, Typography,
 } from '@mui/material';
 import { useRouter } from 'next/router';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import Check from '@mui/icons-material/Check';
 import { SyntheticEvent, useMemo } from 'react';
-import Form from '../../../components/contacts/form';
-import DashboardLayout from '../../../layouts/dashboard';
-import useAxios from '../../../hooks/useAxios';
-import { AxiosResponse, CUSTOMERS_PATH } from '../../../utils/axios';
-import { CONTACTS_CUSTOMERS_EDIT, CONTACTS_CUSTOMERS } from '../../../utils/routes';
-import useForm, { FormRepresentation } from '../../../hooks/useForm';
-import useTranslation, { Trans } from '../../../hooks/useTranslation';
-import { Contact } from '../../../utils/axios/models/contact';
-import { initFormState as baseInitFormState, formRepresentationToBody as baseFormRepresentationToBody } from '../suppliers/new';
+import Form from '../../components/companies/form';
+import DashboardLayout from '../../layouts/dashboard';
+import useAxios from '../../hooks/useAxios';
+import { AxiosResponse, COMPANIES_PATH } from '../../utils/axios';
+import { COMPANIES_EDIT, COMPANIES } from '../../utils/routes';
+import useForm, { FormRepresentation } from '../../hooks/useForm';
+import useTranslation from '../../hooks/useTranslation';
+import { Company } from '../../utils/axios/models/company';
 
-export const initFormState = (trans: Trans, contact?: Contact) => ({
-  ...baseInitFormState(trans, contact),
-  is_partner: {
-    value: contact?.is_partner > 0,
-  },
-});
-
-export function formRepresentationToBody(formRepresentation: FormRepresentation): object {
-  const isPartner = formRepresentation.is_partner.value ? 1 : 0;
-
+export function initFormState(company?: Company) {
   return {
-    ...baseFormRepresentationToBody(formRepresentation),
-    is_partner: isPartner,
-    partner_id: isPartner ? null : formRepresentation.partner.value,
+    name: {
+      value: company?.name,
+      required: true,
+    },
+    kvk_nr: {
+      value: company?.kvk_nr,
+    },
   };
 }
 
-function NewCustomerContact() {
+export function formRepresentationToBody(formRepresentation: FormRepresentation): object {
+  return {
+    name: formRepresentation.name.value || undefined,
+    kvk_nr: formRepresentation.kvk_nr.value || undefined,
+  };
+}
+
+function NewCompany() {
   const { trans } = useTranslation();
   const router = useRouter();
-  const formState = useMemo(() => initFormState(trans), []);
+  const formState = useMemo(() => initFormState(), []);
 
   const { call, performing } = useAxios(
     'post',
-    CUSTOMERS_PATH.replace(':id', ''),
+    COMPANIES_PATH.replace(':id', ''),
     { withProgressBar: true, showSuccessMessage: true },
   );
 
@@ -56,7 +57,7 @@ function NewCustomerContact() {
     call({
       body: formRepresentationToBody(formRepresentation),
     }).then((response: AxiosResponse) => {
-      router.push(CONTACTS_CUSTOMERS_EDIT.replace('[id]', response.data.id));
+      router.push(COMPANIES_EDIT.replace('[id]', response.data.id));
     });
   };
 
@@ -64,7 +65,7 @@ function NewCustomerContact() {
     <DashboardLayout>
       <Head>
         <title>
-          {trans('newContact')}
+          {trans('newCompany')}
         </title>
       </Head>
       <form onSubmit={handleSubmit}>
@@ -78,10 +79,10 @@ function NewCustomerContact() {
           }}
         >
           <Typography variant="h4">
-            <IconButton onClick={() => router.push(CONTACTS_CUSTOMERS)}>
+            <IconButton onClick={() => router.push(COMPANIES)}>
               <ArrowBack />
             </IconButton>
-            {trans('newContact')}
+            {trans('newCompany')}
           </Typography>
           <Box>
             <Button
@@ -92,19 +93,20 @@ function NewCustomerContact() {
               onClick={handleSubmit}
             >
               <Check />
-              {trans('saveContact')}
+              {trans('save')}
             </Button>
           </Box>
         </Box>
-        <Form
-          type="customer"
-          formRepresentation={formRepresentation}
-          disabled={performing}
-          setValue={setValue}
-        />
+        <Card>
+          <Form
+            disabled={performing}
+            formRepresentation={formRepresentation}
+            setValue={setValue}
+          />
+        </Card>
       </form>
     </DashboardLayout>
   );
 }
 
-export default NewCustomerContact;
+export default NewCompany;

@@ -119,7 +119,7 @@ function UpdatePurchaseOrder() {
               onClick={handleSubmit}
             >
               <Check />
-              {trans('savePurchase')}
+              {trans('save')}
             </Button>
           </Box>
         </Box>

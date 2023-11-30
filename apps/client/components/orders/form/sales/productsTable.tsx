@@ -136,7 +136,7 @@ export default function ProductsTable({ orderId, refreshOrder }:{ orderId: strin
             <TableCell>
               {trans('quantity')}
             </TableCell>
-            <TableCell>
+            <TableCell align="right">
               {trans('actions')}
             </TableCell>
           </TableRow>
@@ -179,7 +179,7 @@ export default function ProductsTable({ orderId, refreshOrder }:{ orderId: strin
                   disabled={!can(user?.groups || [], ['admin', 'super_admin', 'manager', 'logistics', 'local'])}
                 />
               </TableCell>
-              <TableCell>
+              <TableCell align="right">
                 <Can requiredGroups={['admin', 'super_admin', 'manager', 'logistics', 'local']}>
                   <Delete onClick={() => handleDeleteProduct(product.id)} tooltip />
                 </Can>

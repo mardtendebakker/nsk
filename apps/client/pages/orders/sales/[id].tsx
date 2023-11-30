@@ -101,7 +101,7 @@ function UpdateSalesOrder() {
               onClick={handleSubmit}
             >
               <Check />
-              {trans('saveSales')}
+              {trans('save')}
             </Button>
           </Box>
         </Box>

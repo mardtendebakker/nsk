@@ -89,7 +89,7 @@ function NewBulkEmail() {
             onClick={handleSubmit}
           >
             <Check />
-            {trans('saveEmail')}
+            {trans('save')}
           </Button>
         </Box>
       </Box>

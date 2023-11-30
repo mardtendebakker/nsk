@@ -110,7 +110,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
             <TableCell>
               {trans('purchaseQuantity')}
             </TableCell>
-            <TableCell>
+            <TableCell align="right">
               {trans('actions')}
             </TableCell>
           </TableRow>
@@ -152,7 +152,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
                     disabled={!can(user?.groups || [], ['admin', 'super_admin', 'manager', 'logistics', 'local'])}
                   />
                 </TableCell>
-                <TableCell>
+                <TableCell align="right">
                   <Can requiredGroups={['admin', 'super_admin', 'manager', 'logistics', 'local']}>
                     <Edit onClick={() => setEditProductId(product.id)} />
                   </Can>

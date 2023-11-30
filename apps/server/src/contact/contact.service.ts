@@ -1,12 +1,10 @@
 import { ContactRepository } from './contact.repository';
 import { UpdateContactDto } from './dto/update-contact.dto';
-import { BadRequestException, ForbiddenException, Inject, Injectable, UnprocessableEntityException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { FindManyDto } from './dto/find-many.dto';
 import { ContactEntity } from './entities/contact.entity';
-import { ContactDiscrimination } from './types/contact-discrimination.enum';
 import { Prisma } from '@prisma/client';
-import { IsPartner } from './types/is-partner.enum';
 import { PrismaContactCreateInputDto } from './dto/prisma-contact-create-input.dto';
 import { ContactSelect } from './types/contact-select';
 import { PrismaContactUpdateInputDto } from './dto/prisma-contact-update-input.dto';
@@ -14,11 +12,10 @@ import { PrismaContactUpdateInputDto } from './dto/prisma-contact-update-input.d
 export class ContactService {
   constructor(
     protected readonly repository: ContactRepository,
-    @Inject('TYPE') protected readonly type?: ContactDiscrimination,
   ) {}
 
   async findAll(query: FindManyDto, email?: string) {
-    const { search, company } = query;
+    const { search, company, is_customer, is_partner, is_supplier } = query;
     const where: Prisma.contactWhereInput = {
       ...query.where,
       ...(email && {
@@ -27,7 +24,9 @@ export class ContactService {
           { contact: { email } },
         ],
       }),
-      ...(this.type && { discr: this.type }),
+      is_customer,
+      is_partner,
+      is_supplier,
       ...(company && { company_contact_company_idTocompany: { name: { contains: company } } }),
       ...(search && { OR: [
         { name: { contains: search } },
@@ -43,8 +42,15 @@ export class ContactService {
         name: true,
         email: true,
         partner_id: true,
-        customerOrders: true,
-        supplierOrders: true,
+        is_partner: true,
+        is_customer: true,
+        is_supplier: true,
+        _count: {
+          select: {
+            customerOrders: true,
+            supplierOrders: true,
+          }
+        },
         company_contact_company_idTocompany: true,
       },
       where
@@ -53,10 +59,10 @@ export class ContactService {
     //TODO refacto response DTO
     return {
       count,
-      data: data.map(({ customerOrders, supplierOrders, company_contact_company_idTocompany, ...rest }) => ({
+      data: data.map(({ _count, company_contact_company_idTocompany, ...rest }) => ({
         ...rest,
         company_name: company_contact_company_idTocompany?.name,
-        orders: customerOrders.length > 0 ? customerOrders : supplierOrders
+        ordersCount: _count.customerOrders + _count.supplierOrders
       }))
     }
   }
@@ -85,18 +91,15 @@ export class ContactService {
   }
 
   async create(createDto: CreateContactDto, email?: string) {
-    const { company_id, company_name, company_kvk_nr, ...rest } = createDto;
-    if (this.type === undefined) {
-      throw new BadRequestException('The operation requires a specific contact type');
-    }
-
+    const { company_id, company_name, company_kvk_nr, is_customer, is_supplier, ...rest } = createDto;
     if (!company_id && !company_name) {
       throw new BadRequestException('Either company_id or company name is required');
     }
 
     return this.repository.create({
-      discr: this.type,
-      ...await this.prepareIsPartnerField(rest, email),
+      ...(await this.prepareIsPartnerField(rest, email)) as PrismaContactCreateInputDto,
+      is_customer,
+      is_supplier,
       company_contact_company_idTocompany: {
         connectOrCreate: {
           where: {
@@ -115,7 +118,7 @@ export class ContactService {
     return this.repository.findFirst({
       where: {
         email,
-        is_partner: { gte: IsPartner.PARTNER }
+        is_partner: true
       },
     });
   }
@@ -136,6 +139,7 @@ export class ContactService {
 
   async update(id: number, updateDto: UpdateContactDto, email?: string) {
     const { company_name, company_kvk_nr, ...rest } = updateDto;
+
     try {
       return await this.repository.update({
         data: {
@@ -169,7 +173,6 @@ export class ContactService {
     if (zip) {
       contact = await this.repository.findFirst({
         where: {
-          ...(this.type && { discr: this.type }),
           AND: [
             { zip: zip },
             {
@@ -190,9 +193,13 @@ export class ContactService {
     return contact;
   }
 
-  async prepareIsPartnerField<T extends { id?: number, email?: string, is_partner?: number; partner_id?: number }>(contactDto: T, email?: string): Promise<Partial<PrismaContactCreateInputDto>> {
+  async prepareIsPartnerField<T extends { id?: number, email?: string, is_partner?: boolean; partner_id?: number }>(contactDto: T, email?: string): Promise<Partial<PrismaContactCreateInputDto>> {
     const { id, is_partner, partner_id, ...rest } = contactDto;
     const createContactDto: PrismaContactUpdateInputDto = { ...rest };
+
+    if (is_partner !== undefined && is_partner !== null) {
+      createContactDto.is_partner = is_partner;
+    }
 
     if (email) {
       const partner = await this.findPartnerByEmail(email);
@@ -203,25 +210,14 @@ export class ContactService {
 
       if (id === partner.id) {
         createContactDto.email = partner.email; // to make sure partner can not change own email
-        createContactDto.is_partner = partner.is_partner;
       } else {
-        createContactDto.is_partner = IsPartner.HAS_PARTNER;
+        createContactDto.is_partner = false;
         createContactDto.contact = { connect: { id: partner_id }};
       }
 
     } else if (Number.isFinite(partner_id)) {
-      createContactDto.is_partner = IsPartner.HAS_PARTNER;
+      createContactDto.is_partner = false;
       createContactDto.contact = { connect: { id: partner_id }};
-    } else if (is_partner === 0 && !Number.isFinite(partner_id)) {
-      createContactDto.is_partner = IsPartner.HAS_NO_PARTNER;
-      if (id) { // only for update
-        createContactDto.contact = { disconnect: true };
-      }
-    } else if (is_partner === 1) {
-      createContactDto.is_partner = IsPartner.PARTNER;
-      if (id) { // only for update
-        createContactDto.contact = { disconnect: true };
-      }
     }
   
     return createContactDto;

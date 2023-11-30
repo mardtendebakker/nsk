@@ -349,8 +349,9 @@ model contact {
   country2                            String?    @db.VarChar(255)
   state2                              String?    @db.VarChar(255)
   zip2                                String?    @db.VarChar(255)
-  discr                               String     @db.VarChar(255)
-  is_partner                          Int?
+  is_partner                          Boolean
+  is_supplier                         Boolean
+  is_customer                         Boolean
   is_main                             Boolean?
   external_id                         Int?
   supplierOrders                      aorder[]   @relation("aorder_supplier_idTocontact")

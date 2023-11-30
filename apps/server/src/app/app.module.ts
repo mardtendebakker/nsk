@@ -28,6 +28,7 @@ import { AProductModule } from '../aproduct/aproduct.module';
 import { SalesServiceModule } from '../sales-service/sales-service.module';
 import { AutocompleteModule } from '../autocomplete/autocomplete.module';
 import { AdminModule } from '../admin/admin.module';
+import { CompanyModule } from '../company/company.module';
 
 @Module({
   imports: [
@@ -78,6 +79,7 @@ import { AdminModule } from '../admin/admin.module';
     SalesServiceModule,
     AutocompleteModule,
     AdminModule,
+    CompanyModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -6,14 +6,13 @@ import {
   TableRow,
   TablePagination,
 } from '@mui/material';
+import Check from '@mui/icons-material/Check';
 import Edit from '../../button/edit';
 import Delete from '../../button/delete';
 import useTranslation from '../../../hooks/useTranslation';
 import { ContactListItem } from '../../../utils/axios/models/contact';
-import { CONTACTS_CUSTOMERS_EDIT, CONTACTS_SUPPLIERS_EDIT } from '../../../utils/routes';
 
 export default function List({
-  type,
   contacts = [],
   onDelete,
   count,
@@ -22,8 +21,8 @@ export default function List({
   onRowsPerPageChange,
   rowsPerPage,
   disabled,
+  editContactRouteBuilder,
 }: {
-  type: 'customer' | 'supplier',
   contacts: ContactListItem[],
   onDelete: (id: number)=>void,
   count: number,
@@ -31,7 +30,8 @@ export default function List({
   onPageChange: (newPage: number)=>void,
   onRowsPerPageChange: (rowsPerPage: number)=>void,
   rowsPerPage: number,
-  disabled: boolean
+  disabled: boolean,
+  editContactRouteBuilder: (contact: ContactListItem) => string
 }) {
   const { trans } = useTranslation();
 
@@ -50,9 +50,15 @@ export default function List({
               {trans('email')}
             </TableCell>
             <TableCell>
-              {trans(type === 'customer' ? 'isPartner' : 'partner')}
+              {trans('isPartner')}
             </TableCell>
             <TableCell>
+              {trans('isSupplier')}
+            </TableCell>
+            <TableCell>
+              {trans('isCustomer')}
+            </TableCell>
+            <TableCell align="right">
               {trans('actions')}
             </TableCell>
           </TableRow>
@@ -76,13 +82,17 @@ export default function List({
                 {contact.email || '--'}
               </TableCell>
               <TableCell>
-                {type === 'customer'
-                  ? (Boolean(contact.is_partner) || '--')
-                  : contact.partner?.name || '--'}
+                {contact.is_partner && <Check />}
               </TableCell>
               <TableCell>
-                <Edit href={(type === 'customer' ? CONTACTS_CUSTOMERS_EDIT : CONTACTS_SUPPLIERS_EDIT).replace('[id]', contact.id.toString())} disabled={disabled} />
-                {contact.orders?.length === 0
+                {contact.is_supplier && <Check />}
+              </TableCell>
+              <TableCell>
+                {contact.is_customer && <Check />}
+              </TableCell>
+              <TableCell align="right">
+                <Edit href={editContactRouteBuilder(contact)} disabled={disabled} />
+                {contact.ordersCount === 0
                 && (<Delete onClick={() => onDelete(contact.id)} disabled={disabled} tooltip />)}
               </TableCell>
             </TableRow>

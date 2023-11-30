@@ -1,6 +1,7 @@
 export const CUSTOMERS_PATH = '/customers/:id';
+export const CONTACTS_PATH = '/contacts/:id';
+export const COMPANIES_PATH = '/companies/:id';
 export const SUPPLIERS_PATH = '/suppliers/:id';
-export const PARTNERS_PATH = '/partners/:id';
 export const SIGN_IN_PATH = '/auth/login';
 export const SIGN_UP_PATH = '/auth/signup';
 export const REFRESH_TOKEN_PATH = '/auth/refresh';
@@ -56,4 +57,5 @@ export const AUTOCOMPLETE_SUPPLIERS_PATH = '/autocomplete/suppliers';
 export const AUTOCOMPLETE_LOGISTICS_PATH = '/autocomplete/logistics';
 export const AUTOCOMPLETE_LOCATIONS_PATH = '/autocomplete/locations';
 export const AUTOCOMPLETE_PRODUCT_STATUSES_PATH = '/autocomplete/product-statuses';
+export const AUTOCOMPLETE_COMPANIES_PATH = '/autocomplete/companies';
 export const ADMIN_USERS_GROUPS = '/admin/users/groups/:username';

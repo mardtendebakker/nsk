@@ -58,11 +58,11 @@ export default function SearchAccordion({
                 inputRef.current.value = '';
               }
             }}
-            sx={{ mr: '.5rem' }}
+            sx={{ mr: '.5rem', px: '1rem' }}
           >
             {trans('reset')}
           </Button>
-          <Button size="small" variant="outlined" color="primary" onClick={() => setShowFilter((oldValue) => !oldValue)}>
+          <Button size="small" variant="outlined" color="primary" onClick={() => setShowFilter((oldValue) => !oldValue)} sx={{ px: '1rem' }}>
             {trans('filter')}
             <ChevronRight sx={{ transform: `rotate(${showFilter ? '-90deg' : '90deg'})` }} />
           </Button>

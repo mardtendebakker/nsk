@@ -48,7 +48,7 @@ export default function List({
           <TableCell>
             {trans('numberOfProductTypes')}
           </TableCell>
-          <TableCell>
+          <TableCell align="right">
             {trans('actions')}
           </TableCell>
         </TableRow>
@@ -65,7 +65,7 @@ export default function List({
             <TableCell>
               {task.productTypes?.length || 0}
             </TableCell>
-            <TableCell>
+            <TableCell align="right">
               <Edit onClick={() => onEdit(task.id)} disabled={disabled} />
             </TableCell>
           </TableRow>

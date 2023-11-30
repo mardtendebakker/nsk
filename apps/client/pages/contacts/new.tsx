@@ -6,27 +6,27 @@ import { useRouter } from 'next/router';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import Check from '@mui/icons-material/Check';
 import { SyntheticEvent, useMemo } from 'react';
-import Form from '../../../components/contacts/form';
-import DashboardLayout from '../../../layouts/dashboard';
-import useAxios from '../../../hooks/useAxios';
-import { AxiosResponse, SUPPLIERS_PATH } from '../../../utils/axios';
-import { CONTACTS_SUPPLIERS_EDIT, CONTACTS_SUPPLIERS } from '../../../utils/routes';
-import useForm, { FormRepresentation } from '../../../hooks/useForm';
-import useTranslation, { Trans } from '../../../hooks/useTranslation';
-import { Contact } from '../../../utils/axios/models/contact';
-import { isEmail } from '../../../utils/validator';
+import Form from '../../components/contacts/form';
+import DashboardLayout from '../../layouts/dashboard';
+import useAxios from '../../hooks/useAxios';
+import { AxiosResponse, CONTACTS_PATH } from '../../utils/axios';
+import { CONTACTS_EDIT, CONTACTS } from '../../utils/routes';
+import useForm, { FormRepresentation } from '../../hooks/useForm';
+import useTranslation, { Trans } from '../../hooks/useTranslation';
+import { Contact } from '../../utils/axios/models/contact';
+import { isEmail } from '../../utils/validator';
 
 export function initFormState(trans: Trans, contact?: Contact) {
   return {
+    id: {
+      value: contact?.id,
+    },
     name: {
       value: contact?.name,
     },
-    company_name: {
-      value: contact?.company_name,
+    company_id: {
+      value: contact?.company_id,
       required: true,
-    },
-    company_kvk_nr: {
-      value: contact?.company_kvk_nr,
     },
     email: {
       value: contact?.email,
@@ -74,7 +74,15 @@ export function initFormState(trans: Trans, contact?: Contact) {
     zip2: {
       value: contact?.zip2,
     },
-
+    is_partner: {
+      value: contact?.is_partner === true,
+    },
+    is_customer: {
+      value: contact?.is_customer === true,
+    },
+    is_supplier: {
+      value: contact?.is_supplier === true,
+    },
     partner: {
       value: contact?.partner_id,
     },
@@ -83,9 +91,8 @@ export function initFormState(trans: Trans, contact?: Contact) {
 
 export function formRepresentationToBody(formRepresentation: FormRepresentation): object {
   return {
-    company_name: formRepresentation.company_name.value,
+    company_id: formRepresentation.company_id.value,
     name: formRepresentation.name.value || undefined,
-    company_kvk_nr: formRepresentation.company_kvk_nr.value || undefined,
     email: formRepresentation.email.value || undefined,
     phone: formRepresentation.phone.value || undefined,
     phone2: formRepresentation.phone2.value || undefined,
@@ -101,7 +108,10 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
     country2: formRepresentation.country2.value || undefined,
     state2: formRepresentation.state2.value || undefined,
     zip2: formRepresentation.zip2.value || undefined,
-    partner_id: formRepresentation.partner.value,
+    is_partner: formRepresentation.is_partner.value,
+    is_customer: formRepresentation.is_customer.value,
+    is_supplier: formRepresentation.is_supplier.value,
+    partner_id: formRepresentation.is_partner.value ? null : formRepresentation.partner.value,
   };
 }
 
@@ -112,7 +122,7 @@ function NewSupplierContact() {
 
   const { call, performing } = useAxios(
     'post',
-    SUPPLIERS_PATH.replace(':id', ''),
+    CONTACTS_PATH.replace(':id', ''),
     { withProgressBar: true, showSuccessMessage: true },
   );
 
@@ -128,7 +138,7 @@ function NewSupplierContact() {
     call({
       body: formRepresentationToBody(formRepresentation),
     }).then((response: AxiosResponse) => {
-      router.push(CONTACTS_SUPPLIERS_EDIT.replace('[id]', response.data.id));
+      router.push(CONTACTS_EDIT.replace('[id]', response.data.id));
     });
   };
 
@@ -150,7 +160,7 @@ function NewSupplierContact() {
           }}
         >
           <Typography variant="h4">
-            <IconButton onClick={() => router.push(CONTACTS_SUPPLIERS)}>
+            <IconButton onClick={() => router.push(CONTACTS)}>
               <ArrowBack />
             </IconButton>
             {trans('newContact')}
@@ -164,12 +174,11 @@ function NewSupplierContact() {
               onClick={handleSubmit}
             >
               <Check />
-              {trans('saveContact')}
+              {trans('save')}
             </Button>
           </Box>
         </Box>
         <Form
-          type="supplier"
           formRepresentation={formRepresentation}
           disabled={performing}
           setValue={setValue}

@@ -71,7 +71,7 @@ export default function Row({
             disabled={!can(user?.groups || [], ['admin', 'super_admin', 'manager', 'logistics', 'local'])}
           />
         </TableCell>
-        <TableCell>
+        <TableCell align="right">
           <Can requiredGroups={['admin', 'super_admin', 'manager', 'logistics', 'local']}>
             <AddButton title={trans('addService')} onClick={onAddService} />
             <Delete onClick={() => onDeleteProduct(product.id)} tooltip />

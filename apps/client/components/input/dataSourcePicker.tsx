@@ -19,6 +19,7 @@ export default function DataSourcePicker(
     displayFieldset,
     formatter,
     onChange,
+    onCurrentValueChange,
     path,
     searchKey,
     helperText,
@@ -35,6 +36,7 @@ export default function DataSourcePicker(
     displayFieldset?: boolean,
     formatter?: (arg0: object) => { id: number | string, label: string },
     onChange: (arg0: undefined | object | object[])=>void,
+    onCurrentValueChange?: (arg0: undefined | object | object[])=>void,
     path: string,
     searchKey?: string,
     helperText?: string,
@@ -78,6 +80,12 @@ export default function DataSourcePicker(
       }
     });
   }, [value?.toString()]);
+
+  useEffect(() => {
+    if (onCurrentValueChange) {
+      onCurrentValueChange(currentValue);
+    }
+  }, [currentValue]);
 
   return (
     <Autocomplete
@@ -132,6 +140,7 @@ DataSourcePicker.defaultProps = {
   fullWidth: undefined,
   label: undefined,
   placeholder: undefined,
+  onCurrentValueChange: undefined,
   displayFieldset: true,
   formatter: (object): { id: number | string, label: string } => object,
   helperText: undefined,

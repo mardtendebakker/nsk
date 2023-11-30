@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Header component matches snapshot 1`] = `
+exports[`LogisticsList component matches snapshot 1`] = `
 <DocumentFragment>
   <ul
     class="MuiList-root MuiList-padding css-h4y409-MuiList-root"

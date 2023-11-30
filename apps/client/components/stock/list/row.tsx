@@ -116,7 +116,7 @@ export default function Row(
             ) : '--'}
         </TableCell>
         {hasAction && (
-        <TableCell>
+        <TableCell align="right">
           {onEdit && <Edit onClick={() => onEdit(product.id)} disabled={disabled} />}
           {onSplit && product.splittable && <Split onClick={() => onSplit(product)} disabled={disabled} />}
           {onDelete && <Delete onClick={() => onDelete(product.id)} disabled={disabled} tooltip />}

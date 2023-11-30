@@ -1,17 +1,13 @@
 import { Box } from '@mui/material';
-import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { useRef } from 'react';
-import { format } from 'date-fns';
 import MemoizedTextField from '../../memoizedInput/textField';
-import Autocomplete from '../../memoizedInput/autocomplete';
 import useTranslation from '../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../hooks/useForm';
-import TextField from '../../input/textField';
 import BorderedBox from '../../borderedBox';
 import SearchAccordion from '../../searchAccordion';
 import debounce from '../../../utils/debounce';
 import useResponsive from '../../../hooks/useResponsive';
-import ListFilterDivider from '../../listFilterDivider';
+import Checkbox from '../../checkbox';
 
 export default function Filter({
   disabled,
@@ -24,14 +20,14 @@ export default function Filter({
   setValue: SetValue,
   onReset: () => void
 }) {
-  const nameInputRef = useRef<HTMLInputElement>(null);
+  const companyInputRef = useRef<HTMLInputElement>(null);
   const { trans } = useTranslation();
   const isDesktop = useResponsive('up', 'sm');
   const debouncedSetValue = debounce(setValue.bind(null));
 
   const handleReset = () => {
     onReset();
-    nameInputRef.current.value = '';
+    if (!formRepresentation.company.disabled) { companyInputRef.current.value = ''; }
   };
 
   return (
@@ -50,59 +46,9 @@ export default function Filter({
           flexDirection: isDesktop ? 'unset' : 'column',
         }}
         >
-          <Autocomplete
-            disabled={disabled}
-            fullWidth
-            size="small"
-            options={[]}
-            filterSelectedOptions
-            renderInput={
-                (params) => (
-                  <TextField
-                    {...params}
-                    placeholder={trans('list')}
-                    sx={{
-                      fieldset: {
-                        display: 'none',
-                      },
-                    }}
-                  />
-                )
-            }
-          />
-          <ListFilterDivider horizontal={!isDesktop} />
-          <Autocomplete
-            disabled={disabled}
-            fullWidth
-            size="small"
-            options={[]}
-            /*
-            onChange={
-            (_, option) => setValue({
-               field: 'status', value: option?.id === undefined ? null : option.id }
-               )}
-           */
-            value={[].find(({ id }) => id === formRepresentation.status.value) || null}
-                // isOptionEqualToValue={(option, value) => option.id === value?.id}
-            filterSelectedOptions
-            renderInput={
-                (params) => (
-                  <TextField
-                    {...params}
-                    placeholder={trans('tags')}
-                    sx={{
-                      fieldset: {
-                        display: 'none',
-                      },
-                    }}
-                  />
-                )
-            }
-          />
-          <ListFilterDivider horizontal={!isDesktop} />
           <MemoizedTextField
-            inputRef={nameInputRef}
-            disabled={disabled}
+            inputRef={companyInputRef}
+            disabled={disabled || formRepresentation.company?.disabled}
             name="search"
             placeholder={trans('company')}
             fullWidth
@@ -115,30 +61,23 @@ export default function Filter({
               },
             }}
           />
-          <ListFilterDivider horizontal={!isDesktop} />
-          <DesktopDatePicker
-            disabled={disabled}
-            inputFormat="yyyy/MM/dd"
-            value={formRepresentation.createdAt.value}
-            onChange={(value) => setValue({ field: 'createdAt', value: format(new Date(value.toString()), 'yyyy/MM/dd') })}
-            renderInput={(params) => (
-              <TextField
-                placeholder={trans('createdAt')}
-                fullWidth
-                size="small"
-                {...params}
-                inputProps={{
-                  ...params.inputProps,
-                  placeholder: trans('createdAt'),
-                }}
-                sx={{
-                  fieldset: {
-                    display: 'none',
-                  },
-                }}
-              />
-            )}
-          />
+          <Box sx={{ flex: 0.33, display: 'flex' }}>
+            <Checkbox
+              checked={formRepresentation.is_customer.value}
+              onCheck={(checked) => setValue({ field: 'is_customer', value: checked })}
+              label={trans('isCustomer')}
+            />
+            <Checkbox
+              checked={formRepresentation.is_supplier.value}
+              onCheck={(checked) => setValue({ field: 'is_supplier', value: checked })}
+              label={trans('isSupplier')}
+            />
+            <Checkbox
+              checked={formRepresentation.is_partner.value}
+              onCheck={(checked) => setValue({ field: 'is_partner', value: checked })}
+              label={trans('isPartner')}
+            />
+          </Box>
         </Box>
       </SearchAccordion>
     </BorderedBox>

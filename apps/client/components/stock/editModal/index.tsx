@@ -122,7 +122,7 @@ export default function EditModal(
                   <TableCell>
                     {trans('quantity')}
                   </TableCell>
-                  <TableCell>
+                  <TableCell align="right">
                     {trans('actions')}
                   </TableCell>
                 </TableRow>
@@ -162,7 +162,7 @@ export default function EditModal(
                     <TableCell>
                       {quantity}
                     </TableCell>
-                    <TableCell>
+                    <TableCell align="right">
                       <Tooltip title={trans('showOrder')}>
                         <Link href={editOrderUrl(order)} style={{ color: 'unset' }}>
                           <Visibility sx={{ color: (theme) => theme.palette.text.secondary }} />

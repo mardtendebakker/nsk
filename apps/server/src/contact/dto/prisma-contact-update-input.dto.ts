@@ -70,15 +70,18 @@ export class PrismaContactUpdateInputDto implements Prisma.contactUpdateInput {
 
   @ApiPropertyOptional()
   @IsOptional()
-  discr?: string;
+  @IsBoolean()
+  is_partner?: boolean;
 
   @ApiPropertyOptional()
   @IsOptional()
-  @IsInt()
-  @Type(() => Number)
-  @Min(0)
-  @Max(1)
-  is_partner?: number;
+  @IsBoolean()
+  is_customer?: boolean;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsBoolean()
+  is_supplier?: boolean;
 
 
   @ApiPropertyOptional()

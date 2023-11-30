@@ -148,6 +148,9 @@ export class SaleService extends AOrderService {
         email: Email,
         phone: Telefoon,
         phone2: MobielNummer,
+        is_customer: true,
+        is_partner: false,
+        is_supplier: false,
         ...(partner_id && { partner_id: partner_id }),
       };
   

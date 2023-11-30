@@ -4,7 +4,6 @@ import { IsInt, IsOptional } from "class-validator";
 import { Type } from "class-transformer";
 
 export class UpdateContactDto extends OmitType(PrismaContactUpdateInputDto, [
-    'discr',
     'supplierOrders',
     'customerOrders',
     'company_contact_company_idTocompany',

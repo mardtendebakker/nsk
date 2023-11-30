@@ -1,7 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Prisma } from "@prisma/client";
 import { Type } from "class-transformer";
-import { IsBoolean, IsEmail, IsInt, IsOptional, Max, Min } from "class-validator";
+import { IsBoolean, IsEmail, IsInt, IsOptional } from "class-validator";
 
 export class PrismaContactCreateInputDto implements Prisma.contactCreateInput {
   @ApiPropertyOptional()
@@ -68,17 +68,17 @@ export class PrismaContactCreateInputDto implements Prisma.contactCreateInput {
   @IsOptional()
   zip2?: string;
 
-  @ApiProperty()
-  discr: string;
-
   @ApiPropertyOptional()
-  @IsOptional()
-  @IsInt()
-  @Type(() => Number)
-  @Min(0)
-  @Max(1)
-  is_partner?: number;
+  @IsBoolean()
+  is_partner: boolean;
 
+  @ApiProperty()
+  @IsBoolean()
+  is_customer: boolean;
+
+  @ApiProperty()
+  @IsBoolean()
+  is_supplier: boolean;
 
   @ApiPropertyOptional()
   @IsOptional()

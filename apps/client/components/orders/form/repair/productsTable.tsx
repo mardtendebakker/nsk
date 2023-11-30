@@ -168,7 +168,7 @@ export default function ProductsTable({ orderId, refreshOrder }:{ orderId: strin
             <TableCell>
               {trans('quantity')}
             </TableCell>
-            <TableCell>
+            <TableCell align="right">
               {trans('actions')}
             </TableCell>
           </TableRow>

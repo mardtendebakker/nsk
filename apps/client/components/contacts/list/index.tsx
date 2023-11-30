@@ -1,32 +1,38 @@
-import { Box, Card } from '@mui/material';
+import { Box } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import List from './list';
 import Filter from './filter';
 import useAxios from '../../../hooks/useAxios';
-import { CUSTOMERS_PATH, SUPPLIERS_PATH } from '../../../utils/axios';
+import { CONTACTS_PATH } from '../../../utils/axios';
 import useForm, { FieldPayload } from '../../../hooks/useForm';
 import pushURLParams from '../../../utils/pushURLParams';
 import { getQueryParam } from '../../../utils/location';
+import { Company } from '../../../utils/axios/models/company';
+import { ContactListItem } from '../../../utils/axios/models/contact';
 
 function initFormState(
   {
-    search, createdAt, company, list,
+    search, company, disableCompany, is_customer, is_supplier, is_partner,
   }:
-  { search?: string, createdAt?: string, company?: string, list?: string },
+  { search?: string, company?: string, disableCompany?: boolean, is_customer?: boolean, is_supplier?: boolean, is_partner?: boolean },
 ) {
   return {
     search: {
       value: search,
     },
-    createdAt: {
-      value: createdAt || null,
-    },
     company: {
       value: company,
+      disabled: !!disableCompany,
     },
-    list: {
-      value: list || undefined,
+    is_customer: {
+      value: is_customer === true,
+    },
+    is_supplier: {
+      value: is_supplier === true,
+    },
+    is_partner: {
+      value: is_partner === true,
     },
   };
 }
@@ -48,11 +54,19 @@ function refreshList({
 
   const paramsToSend = {};
 
-  ['search', 'createdAt', 'company', 'list'].forEach((filter) => {
+  ['search', 'company'].forEach((filter) => {
     if (formRepresentation[filter].value || formRepresentation[filter].value === 0) {
       const value = formRepresentation[filter].value.toString();
       params.append(filter, value);
       paramsToSend[filter] = formRepresentation[filter].value;
+    }
+  });
+
+  ['is_customer', 'is_supplier', 'is_partner'].forEach((filter) => {
+    if (formRepresentation[filter].value) {
+      const value = formRepresentation[filter].value ? '1' : '0';
+      params.append(filter, value);
+      paramsToSend[filter] = value;
     }
   });
 
@@ -65,23 +79,23 @@ function refreshList({
   }).finally(() => pushURLParams({ params, router }));
 }
 
-export default function ListContainer({ type }: { type: 'customer' | 'supplier' }) {
+export default function ListContainer({ company, editContactRouteBuilder }: { company?: Company, editContactRouteBuilder: (contact: ContactListItem) => string }) {
   const router = useRouter();
   const [page, setPage] = useState<number>(parseInt(getQueryParam('page', '1'), 10));
   const [rowsPerPage, setRowsPerPage] = useState<number>(parseInt(getQueryParam('rowsPerPage', '10'), 10));
 
   const { formRepresentation, setValue, setData } = useForm(initFormState({
     search: getQueryParam('search'),
-    createdAt: getQueryParam('createdAt'),
-    company: getQueryParam('company'),
-    list: getQueryParam('list'),
+    company: company?.name || getQueryParam('company'),
+    is_customer: getQueryParam('is_customer') === '1',
+    is_partner: getQueryParam('is_partner') === '1',
+    is_supplier: getQueryParam('is_supplier') === '1',
+    disableCompany: !!company,
   }));
-
-  const ajaxPath = type == 'customer' ? CUSTOMERS_PATH : SUPPLIERS_PATH;
 
   const { data: { data = [], count = 0 } = {}, call, performing } = useAxios(
     'get',
-    ajaxPath.replace(':id', ''),
+    CONTACTS_PATH.replace(':id', ''),
     {
       withProgressBar: true,
     },
@@ -89,7 +103,7 @@ export default function ListContainer({ type }: { type: 'customer' | 'supplier' 
 
   const { call: callDelete, performing: performingDelete } = useAxios(
     'delete',
-    ajaxPath.replace(':id', ''),
+    CONTACTS_PATH.replace(':id', ''),
     {
       withProgressBar: true,
       showSuccessMessage: true,
@@ -108,18 +122,19 @@ export default function ListContainer({ type }: { type: 'customer' | 'supplier' 
     page,
     rowsPerPage,
     formRepresentation.search.value,
-    formRepresentation.createdAt.value,
     formRepresentation.company.value,
-    formRepresentation.list.value?.toString(),
+    formRepresentation.is_customer.value,
+    formRepresentation.is_supplier.value,
+    formRepresentation.is_partner.value,
   ]);
 
   const handleReset = () => {
     setPage(1);
-    setData(initFormState({}));
+    setData(initFormState({ company: formRepresentation.company.value, disableCompany: !!company }));
   };
 
   const handleDelete = (id: number) => {
-    callDelete({ path: ajaxPath.replace(':id', id.toString()) })
+    callDelete({ path: CONTACTS_PATH.replace(':id', id.toString()) })
       .then(() => {
         refreshList({
           page,
@@ -134,7 +149,7 @@ export default function ListContainer({ type }: { type: 'customer' | 'supplier' 
   const disabled = (): boolean => performing || performingDelete;
 
   return (
-    <Card sx={{ overflowX: 'auto', p: '1.5rem' }}>
+    <>
       <Filter
         onReset={handleReset}
         disabled={disabled()}
@@ -146,7 +161,6 @@ export default function ListContainer({ type }: { type: 'customer' | 'supplier' 
       />
       <Box sx={{ m: '1rem' }} />
       <List
-        type={type}
         disabled={disabled()}
         contacts={data}
         count={count}
@@ -160,7 +174,10 @@ export default function ListContainer({ type }: { type: 'customer' | 'supplier' 
           setPage(1);
         }}
         rowsPerPage={rowsPerPage}
+        editContactRouteBuilder={editContactRouteBuilder}
       />
-    </Card>
+    </>
   );
 }
+
+ListContainer.defaultProps = { company: undefined };
