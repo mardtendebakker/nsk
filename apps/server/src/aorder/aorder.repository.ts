@@ -72,4 +72,8 @@ export class AOrderRepository {
   deleteOne(id: number) {
     return this.prisma.aorder.delete({ where: { id } })
   }
+
+  deletePickup(id: number) {
+    return this.prisma.pickup.delete({ where: { id } })
+  }
 }
