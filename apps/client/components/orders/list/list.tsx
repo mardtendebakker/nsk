@@ -64,15 +64,15 @@ function OrderNumber({ order, type }: { order: OrderListItem, type: OrderType })
 function Contact({ contact, type }: { contact: ContactModel, type: OrderType }) {
   let tooltip = '';
 
-  if (contact.street) {
+  if (contact?.street) {
     tooltip += `${contact?.street}\n`;
   }
 
-  if (contact.zip) {
+  if (contact?.zip) {
     tooltip += `${contact?.zip} `;
   }
 
-  if (contact.city) {
+  if (contact?.city) {
     tooltip += contact.city;
   }
 
@@ -85,7 +85,7 @@ function Contact({ contact, type }: { contact: ContactModel, type: OrderType }) 
       </Box>
     ) : undefined}
     >
-      <Link href={target.replace('[id]', contact.id)} style={{ color: 'unset' }}>
+      <Link href={target.replace('[id]', contact?.id)} style={{ color: 'unset' }}>
         {`${contact?.name} - ${contact?.company_name}` || '--'}
       </Link>
     </Tooltip>
@@ -95,15 +95,15 @@ function Contact({ contact, type }: { contact: ContactModel, type: OrderType }) 
 function Partner({ partner }: { partner: SubContact }) {
   let tooltip = '';
 
-  if (partner.street) {
+  if (partner?.street) {
     tooltip += `${partner?.street}\n`;
   }
 
-  if (partner.zip) {
+  if (partner?.zip) {
     tooltip += `${partner?.zip} `;
   }
 
-  if (partner.city) {
+  if (partner?.city) {
     tooltip += partner.city;
   }
 
