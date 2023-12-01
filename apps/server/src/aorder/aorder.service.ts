@@ -280,9 +280,14 @@ export class AOrderService {
       ...rest_supplier,
       discr: ContactDiscrimination.SUPLLIER,
       company_contact_company_idTocompany: {
-        create: {
-          name: company_name_supplier,
-          kvk_nr: company_kvk_nr_supplier,
+        connectOrCreate: {
+          where: {
+            name: company_name_supplier,
+          },
+          create: {
+            name: company_name_supplier,
+            kvk_nr: company_kvk_nr_supplier,
+          },
         },
       },
     };
@@ -291,9 +296,14 @@ export class AOrderService {
       ...rest_customer,
       discr: ContactDiscrimination.CUSTOMER,
       company_contact_company_idTocompany: {
-        create: {
-          name: company_name_customer,
-          kvk_nr: company_kvk_nr_customer,
+        connectOrCreate: {
+          where: {
+            name: company_name_customer,
+          },
+          create: {
+            name: company_name_customer,
+            kvk_nr: company_kvk_nr_customer,
+          },
         },
       },
     };
@@ -304,7 +314,7 @@ export class AOrderService {
       ...(supplier_id && { contact_aorder_supplier_idTocontact: { connect: { id: supplier_id } } }),
       ...(company_name_supplier && { contact_aorder_supplier_idTocontact: { create: { ...supplier } } }),
       ...(customer_id && { contact_aorder_customer_idTocontact: { connect: { id: customer_id } } }),
-      ...(company_kvk_nr_customer && { contact_aorder_customer_idTocontact: { create: { ...customer } } }),
+      ...(company_name_customer && { contact_aorder_customer_idTocontact: { create: { ...customer } } }),
     };
 
     return data;
