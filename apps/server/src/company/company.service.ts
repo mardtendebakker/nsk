@@ -25,6 +25,9 @@ export class CompanyService {
         id: true,
         name: true,
         kvk_nr: true,
+        is_customer: true,
+        is_partner: true,
+        is_supplier: true,
         _count: {
           select: { contact_contact_company_idTocompany: true }
         },

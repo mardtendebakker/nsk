@@ -10,7 +10,7 @@ import Form from '../../../../components/contacts/form';
 import DashboardLayout from '../../../../layouts/dashboard';
 import useAxios from '../../../../hooks/useAxios';
 import {
-  AxiosResponse, CONTACTS_PATH, CUSTOMERS_PATH, SUPPLIERS_PATH,
+  AxiosResponse, CONTACTS_PATH,
 } from '../../../../utils/axios';
 import { COMPANIES_EDIT, COMPANIES_CONTACTS_EDIT } from '../../../../utils/routes';
 import useForm from '../../../../hooks/useForm';
@@ -41,7 +41,7 @@ function NewSupplierContact() {
     }
 
     call({
-      path: (formRepresentation.is_customer.value ? CUSTOMERS_PATH : SUPPLIERS_PATH).replace(':id', ''),
+      path: CONTACTS_PATH.replace(':id', ''),
       body: formRepresentationToBody(formRepresentation),
     }).then((response: AxiosResponse) => {
       router.push(COMPANIES_CONTACTS_EDIT.replace('[contact_id]', response.data.id));

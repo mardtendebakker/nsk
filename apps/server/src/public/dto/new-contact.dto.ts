@@ -58,7 +58,7 @@ export class NewContactDto extends PickType(CreateContactDto, [
   @Type(() => String)
   city?: string;
 
-  @ApiPropertyOptional()
+  @ApiProperty()
   @IsBoolean()
   is_partner: boolean;
 

@@ -69,16 +69,19 @@ export class PrismaContactCreateInputDto implements Prisma.contactCreateInput {
   zip2?: string;
 
   @ApiPropertyOptional()
+  @IsOptional()
   @IsBoolean()
-  is_partner: boolean;
+  is_partner?: boolean;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
+  @IsOptional()
   @IsBoolean()
-  is_customer: boolean;
+  is_customer?: boolean;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
+  @IsOptional()
   @IsBoolean()
-  is_supplier: boolean;
+  is_supplier?: boolean;
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -96,12 +99,6 @@ export class PrismaContactCreateInputDto implements Prisma.contactCreateInput {
 
   @ApiPropertyOptional()
   customerOrders?: Prisma.aorderUncheckedCreateNestedManyWithoutContact_aorder_customer_idTocontactInput;
-
-  @ApiPropertyOptional()
-  contact?: Prisma.contactCreateNestedOneWithoutOther_contactInput;
-
-  @ApiPropertyOptional()
-  other_contact?: Prisma.contactUncheckedCreateNestedManyWithoutContactInput;
 
   @ApiProperty()
   company_contact_company_idTocompany: Prisma.companyCreateNestedOneWithoutContact_contact_company_idTocompanyInput;

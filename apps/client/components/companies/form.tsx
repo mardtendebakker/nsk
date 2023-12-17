@@ -8,6 +8,10 @@ import useTranslation from '../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../hooks/useForm';
 import TextField from '../memoizedInput/textField';
 import useResponsive from '../../hooks/useResponsive';
+import DataSourcePicker from '../memoizedInput/dataSourcePicker';
+import Checkbox from '../checkbox';
+import Can from '../can';
+import { AUTOCOMPLETE_PARTNERS_PATH } from '../../utils/axios';
 
 function Form({ formRepresentation, disabled, setValue }: {
   formRepresentation : FormRepresentation,
@@ -59,6 +63,46 @@ function Form({ formRepresentation, disabled, setValue }: {
             value={formRepresentation.kvk_nr.value || ''}
             disabled={disabled}
           />
+          <Can requiredGroups={['admin', 'super_admin', 'manager', 'logistics', 'local']}>
+            <Box sx={{ m: '.25rem' }} />
+            <Box sx={{ flex: 0.33, display: 'flex' }}>
+              <Checkbox
+                checked={formRepresentation.is_customer.value}
+                onCheck={(checked) => setValue({ field: 'is_customer', value: checked })}
+                label={trans('isCustomer')}
+              />
+              <Checkbox
+                checked={formRepresentation.is_supplier.value}
+                onCheck={(checked) => setValue({ field: 'is_supplier', value: checked })}
+                label={trans('isSupplier')}
+              />
+              <Checkbox
+                checked={formRepresentation.is_partner.value}
+                onCheck={(checked) => setValue({ field: 'is_partner', value: checked })}
+                label={trans('isPartner')}
+              />
+            </Box>
+          </Can>
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          sx={{ display: 'flex', flex: 1, flexDirection: isDesktop ? 'row' : 'column' }}
+        >
+          <Can requiredGroups={['admin', 'super_admin', 'manager', 'logistics', 'local']}>
+            {!formRepresentation.is_partner.value && (
+              <DataSourcePicker
+                sx={{ flex: 0.33 }}
+                label={trans('partner')}
+                path={AUTOCOMPLETE_PARTNERS_PATH}
+                disabled={disabled}
+                fullWidth
+                placeholder={trans('selectPartner')}
+                value={formRepresentation.partner.value}
+                onChange={(value: { id: number }) => setValue({ field: 'partner', value: value?.id || null })}
+              />
+            )}
+          </Can>
         </Grid>
       </Grid>
     </CardContent>

@@ -7,17 +7,9 @@ export class CreateContactDto extends OmitType(PrismaContactCreateInputDto, [
   'supplierOrders',
   'customerOrders',
   'company_contact_company_idTocompany',
-  'other_contact',
   'fos_user',
   'product',
-  'contact',
 ] as const) {
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsInt()
-  @Type(() => Number)
-  partner_id?: number;
-
   @ApiPropertyOptional()
   @IsOptional()
   @IsInt()

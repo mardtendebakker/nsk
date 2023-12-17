@@ -101,13 +101,7 @@ export class PrismaContactUpdateInputDto implements Prisma.contactUpdateInput {
   customerOrders?: Prisma.aorderUpdateManyWithoutContact_aorder_customer_idTocontactNestedInput;
 
   @ApiPropertyOptional()
-  contact?: Prisma.contactUpdateOneWithoutOther_contactNestedInput;
-
-  @ApiPropertyOptional()
-  other_contact?: Prisma.contactUpdateManyWithoutContactNestedInput;
-
-  @ApiProperty()
-  company_contact_company_idTocompany?: Prisma.companyUpdateOneRequiredWithoutContact_contact_company_idTocompanyNestedInput;
+  partner_id?: number;
 
   @ApiPropertyOptional()
   fos_user?: Prisma.fos_userUpdateManyWithoutContactNestedInput;

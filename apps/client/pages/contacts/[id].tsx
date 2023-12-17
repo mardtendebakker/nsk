@@ -9,7 +9,7 @@ import { SyntheticEvent, useEffect, useMemo } from 'react';
 import Form from '../../components/contacts/form';
 import DashboardLayout from '../../layouts/dashboard';
 import useAxios from '../../hooks/useAxios';
-import { CONTACTS_PATH, CUSTOMERS_PATH, SUPPLIERS_PATH } from '../../utils/axios';
+import { CONTACTS_PATH } from '../../utils/axios';
 import { CONTACTS_NEW, CONTACTS } from '../../utils/routes';
 import useForm from '../../hooks/useForm';
 import useTranslation from '../../hooks/useTranslation';
@@ -45,7 +45,7 @@ function EditContact() {
 
     call({
       body: { ...formRepresentationToBody(formRepresentation), company_id: undefined },
-      path: (formRepresentation.is_customer.value ? CUSTOMERS_PATH : SUPPLIERS_PATH).replace(':id', id?.toString()),
+      path: CONTACTS_PATH.replace(':id', id?.toString()),
     });
   };
 

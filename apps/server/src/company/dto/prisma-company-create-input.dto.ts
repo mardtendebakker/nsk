@@ -1,7 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Prisma } from "@prisma/client";
 import { Type } from "class-transformer";
-import { IsInt, IsOptional } from "class-validator";
+import { IsBoolean, IsInt, IsOptional } from "class-validator";
 
 export class PrismaCompanyCreateInputDto implements Prisma.companyUncheckedCreateInput {
     @ApiPropertyOptional()
@@ -19,6 +19,18 @@ export class PrismaCompanyCreateInputDto implements Prisma.companyUncheckedCreat
     @Type(() => Number)
     kvk_nr?: number;
 
+    @ApiProperty()
+    @IsBoolean()
+    is_partner: boolean;
+  
+    @ApiProperty()
+    @IsBoolean()
+    is_customer: boolean;
+  
+    @ApiProperty()
+    @IsBoolean()
+    is_supplier: boolean;
+
     @ApiPropertyOptional()
-    contact_contact_company_idTocompany?: Prisma.contactUncheckedCreateNestedManyWithoutCompany_contact_company_idTocompanyInput;
+    partner_id?: number;
 }

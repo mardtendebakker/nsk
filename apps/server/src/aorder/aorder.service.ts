@@ -116,9 +116,7 @@ export class AOrderService {
         id,
         ...(email && {
           OR: [
-            { contact_aorder_supplier_idTocontact: { contact: { email } } },
             { contact_aorder_supplier_idTocontact: { email } },
-            { contact_aorder_customer_idTocontact: { contact: { email } } },
             { contact_aorder_customer_idTocontact: { email } },
           ],
         }),
@@ -227,23 +225,7 @@ export class AOrderService {
 
   async findByIds(ids: number[], email?: string) {
     const params: Prisma.aorderFindManyArgs = {
-      where: {
-        id: { in: ids },
-        ...(email && {
-          OR: [
-            {
-              contact_aorder_supplier_idTocontact: {
-                ...(email && { contact: { email } }),
-              },
-            },
-            {
-              contact_aorder_customer_idTocontact: {
-                ...(email && { contact: { email } }),
-              },
-            },
-          ],
-        })
-      },
+      where: { id: { in: ids } },
       orderBy: { id: 'asc', },
     };
 
@@ -275,9 +257,6 @@ export class AOrderService {
 
     const supplier: Prisma.contactCreateWithoutSupplierOrdersInput = {
       ...rest_supplier,
-      is_supplier: true,
-      is_customer: false,
-      is_partner: false,
       company_contact_company_idTocompany: {
         connect: { id: supplier_company_id },
       },
@@ -285,9 +264,6 @@ export class AOrderService {
 
     const customer: Prisma.contactCreateWithoutCustomerOrdersInput = {
       ...rest_customer,
-      is_customer: true,
-      is_partner: false,
-      is_supplier: false,
       company_contact_company_idTocompany: {
         connect: { id: customer_company_id },
       },
@@ -396,17 +372,7 @@ export class AOrderService {
       city: true,
       zip: true,
       state: true,
-      country: true,
-      contact: {
-        select: {
-          id: true,
-          company_contact_company_idTocompany: true,
-          name: true,
-          street: true,
-          city: true,
-          zip: true,
-        }
-      }
+      country: true
     };
   }
 }
