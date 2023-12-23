@@ -19,6 +19,7 @@ import { initFormState, formRepresentationToBody } from './new';
 import List from '../../components/contacts/list';
 import Header from '../../components/contacts/header';
 import { ContactListItem } from '../../utils/axios/models/contact';
+import { Company } from '../../utils/axios/models/company';
 
 function EditContact() {
   const { trans } = useTranslation();
@@ -31,7 +32,7 @@ function EditContact() {
     { withProgressBar: true, showSuccessMessage: true },
   );
 
-  const { call: callGet, performing: performingGet, data: company } = useAxios(
+  const { call: callGet, performing: performingGet, data: company } = useAxios<undefined | Company>(
     'get',
     COMPANIES_PATH.replace(':id', id?.toString()),
     { withProgressBar: true },

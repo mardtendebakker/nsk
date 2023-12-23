@@ -14,6 +14,7 @@ import { CONTACTS_NEW, CONTACTS } from '../../utils/routes';
 import useForm from '../../hooks/useForm';
 import useTranslation from '../../hooks/useTranslation';
 import { initFormState, formRepresentationToBody } from './new';
+import { Contact } from '../../utils/axios/models/contact';
 
 function EditContact() {
   const { trans } = useTranslation();
@@ -26,7 +27,7 @@ function EditContact() {
     { withProgressBar: true, showSuccessMessage: true },
   );
 
-  const { call: callGet, performing: performingGet, data: contact } = useAxios(
+  const { call: callGet, performing: performingGet, data: contact } = useAxios<undefined | Contact>(
     'get',
     CONTACTS_PATH.replace(':id', id?.toString()),
     { withProgressBar: true },

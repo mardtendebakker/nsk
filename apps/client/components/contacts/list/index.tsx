@@ -93,7 +93,7 @@ export default function ListContainer({ company, editContactRouteBuilder }: { co
     disableCompany: !!company,
   }));
 
-  const { data: { data = [], count = 0 } = {}, call, performing } = useAxios(
+  const { data: { data = [], count = 0 } = {}, call, performing } = useAxios<undefined | { data?: ContactListItem[], count?: number }>(
     'get',
     CONTACTS_PATH.replace(':id', ''),
     {

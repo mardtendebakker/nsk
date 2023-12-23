@@ -59,7 +59,7 @@ export default function ListContainer() {
     },
   });
 
-  const { data: { data = [], count = 0 } = {}, call, performing } = useAxios(
+  const { data: { data = [], count = 0 } = {}, call, performing } = useAxios<undefined | { data?: object[], count?:number }>(
     'get',
     CUSTOMERS_PATH.replace(':id', ''),
     {

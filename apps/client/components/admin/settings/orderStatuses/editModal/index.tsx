@@ -6,6 +6,7 @@ import Form from '../form';
 import { ORDER_STATUSES_PATH } from '../../../../../utils/axios';
 import { initFormState, formRepresentationToBody } from '../createModal';
 import ConfirmationDialog from '../../../../confirmationDialog';
+import { OrderStatus } from '../../../../../utils/axios/models/order';
 
 export default function EditModal({ onClose, onSubmit, id }: {
   onClose: () => void,
@@ -14,7 +15,7 @@ export default function EditModal({ onClose, onSubmit, id }: {
 }) {
   const { trans } = useTranslation();
 
-  const { data: orderStatus, call, performing } = useAxios('get', ORDER_STATUSES_PATH.replace(':id', id));
+  const { data: orderStatus, call, performing } = useAxios<undefined | OrderStatus>('get', ORDER_STATUSES_PATH.replace(':id', id));
   const { call: callPut, performing: performingPut } = useAxios('put', ORDER_STATUSES_PATH.replace(':id', id), { showSuccessMessage: true });
   const { formRepresentation, setValue, validate } = useForm(useMemo(() => initFormState(orderStatus), [orderStatus]));
 

@@ -33,7 +33,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
 
   const { trans } = useTranslation();
 
-  const { data: { data = [], count = 0 } = {}, call } = useAxios(
+  const { data: { data = [], count = 0 } = {}, call } = useAxios<undefined | { data?: ProductListItem[], count?: number }>(
     'get',
     APRODUCT_PATH.replace(':id', ''),
     {

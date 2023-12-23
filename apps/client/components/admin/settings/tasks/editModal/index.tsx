@@ -6,6 +6,7 @@ import Form from '../form';
 import { TASKS_PATH } from '../../../../../utils/axios';
 import { initFormState, formRepresentationToBody } from '../createModal';
 import ConfirmationDialog from '../../../../confirmationDialog';
+import { Task } from '../../../../../utils/axios/models/product';
 
 export default function EditModal({ onClose, onSubmit, id }: {
   onClose: () => void,
@@ -14,7 +15,7 @@ export default function EditModal({ onClose, onSubmit, id }: {
 }) {
   const { trans } = useTranslation();
 
-  const { data: task, call, performing } = useAxios('get', TASKS_PATH.replace(':id', id));
+  const { data: task, call, performing } = useAxios<undefined | Task>('get', TASKS_PATH.replace(':id', id));
   const { call: callPut, performing: performingPut } = useAxios('put', TASKS_PATH.replace(':id', id), { showSuccessMessage: true });
   const { formRepresentation, setValue, validate } = useForm(useMemo(() => initFormState(task), [task]));
 
