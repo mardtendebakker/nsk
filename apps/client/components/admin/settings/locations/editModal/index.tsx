@@ -6,6 +6,7 @@ import Form from '../form';
 import { LOCATIONS_PATH } from '../../../../../utils/axios';
 import { initFormState, formRepresentationToBody } from '../createModal';
 import ConfirmationDialog from '../../../../confirmationDialog';
+import { Location } from '../../../../../utils/axios/models/location';
 
 export default function EditModal({ onClose, onSubmit, id }: {
   onClose: () => void,
@@ -14,7 +15,7 @@ export default function EditModal({ onClose, onSubmit, id }: {
 }) {
   const { trans } = useTranslation();
 
-  const { data: location, call, performing } = useAxios('get', LOCATIONS_PATH.replace(':id', id));
+  const { data: location, call, performing } = useAxios<Location | undefined>('get', LOCATIONS_PATH.replace(':id', id));
   const { call: callPut, performing: performingPut } = useAxios('put', LOCATIONS_PATH.replace(':id', id), { showSuccessMessage: true });
   const { formRepresentation, setValue, validate } = useForm(useMemo(() => initFormState(location), [location]));
 

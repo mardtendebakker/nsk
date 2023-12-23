@@ -15,6 +15,7 @@ import useTranslation from '../../../hooks/useTranslation';
 import { initFormState, formRepresentationToBody } from './new';
 import { ORDERS_SALES, ORDERS_SALES_NEW } from '../../../utils/routes';
 import ProductsTable from '../../../components/orders/form/sales/productsTable';
+import { Order } from '../../../utils/axios/models/order';
 
 function UpdateSalesOrder() {
   const { trans } = useTranslation();
@@ -27,7 +28,7 @@ function UpdateSalesOrder() {
     { withProgressBar: true, showSuccessMessage: true },
   );
 
-  const { call: fetchSalesOrder, performing: performingFetchSalesOrder, data: salesOrder } = useAxios(
+  const { call: fetchSalesOrder, performing: performingFetchSalesOrder, data: salesOrder } = useAxios<undefined | Order>(
     'get',
     SALES_ORDERS_PATH.replace(':id', id?.toString()),
     { withProgressBar: true },

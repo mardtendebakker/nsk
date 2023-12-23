@@ -140,7 +140,7 @@ export default function ListContainer({ type }: { type: OrderType }) {
     createdBy: getQueryParam('createdBy'),
   }));
 
-  const { data: { data = [], count = 0 } = {}, call, performing } = useAxios(
+  const { data: { data = [], count = 0 } = {}, call, performing } = useAxios<undefined | { data?: OrderListItem[], count?: number }>(
     'get',
     ajaxPath.replace(':id', ''),
     {

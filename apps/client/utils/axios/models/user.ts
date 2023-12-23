@@ -9,3 +9,8 @@ export interface UserListItem {
   UserLastModifiedDate:string,
   UserStatus:string,
 }
+
+export interface Group {
+  group:string,
+  assign:boolean,
+}
