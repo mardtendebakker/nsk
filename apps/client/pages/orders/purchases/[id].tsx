@@ -18,6 +18,7 @@ import { initFormState, formRepresentationToBody } from './new';
 import { ORDERS_PURCHASES, ORDERS_PURCHASES_NEW } from '../../../utils/routes';
 import ProductsTable from '../../../components/orders/form/purchase/productsTable';
 import { AFile } from '../../../utils/axios/models/aFile';
+import { Order } from '../../../utils/axios/models/order';
 
 function UpdatePurchaseOrder() {
   const { trans } = useTranslation();
@@ -30,7 +31,7 @@ function UpdatePurchaseOrder() {
     { withProgressBar: true, showSuccessMessage: true },
   );
 
-  const { call: fetchPurchaseOrder, performing: performingFetchPurchaseOrder, data: purchaseOrder } = useAxios(
+  const { call: fetchPurchaseOrder, performing: performingFetchPurchaseOrder, data: purchaseOrder } = useAxios<undefined | Order>(
     'get',
     PURCHASE_ORDERS_PATH.replace(':id', id?.toString()),
     { withProgressBar: true },
@@ -119,7 +120,7 @@ function UpdatePurchaseOrder() {
               onClick={handleSubmit}
             >
               <Check />
-              {trans('savePurchase')}
+              {trans('save')}
             </Button>
           </Box>
         </Box>

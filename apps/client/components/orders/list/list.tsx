@@ -15,7 +15,7 @@ import TableCell from '../../tableCell';
 import Delete from '../../button/delete';
 import Edit from '../../button/edit';
 import {
-  CONTACTS_CUSTOMERS_EDIT, CONTACTS_SUPPLIERS_EDIT, ORDERS_PURCHASES_EDIT, ORDERS_REPAIRS_EDIT, ORDERS_SALES_EDIT,
+  CONTACTS_EDIT, ORDERS_PURCHASES_EDIT, ORDERS_REPAIRS_EDIT, ORDERS_SALES_EDIT,
 } from '../../../utils/routes';
 import { OrderType } from '../../../utils/axios/models/types';
 import Can from '../../can';
@@ -61,7 +61,7 @@ function OrderNumber({ order, type }: { order: OrderListItem, type: OrderType })
   );
 }
 
-function Contact({ contact, type }: { contact: ContactModel, type: OrderType }) {
+function Contact({ contact }: { contact: ContactModel }) {
   let tooltip = '';
 
   if (contact?.street) {
@@ -76,8 +76,6 @@ function Contact({ contact, type }: { contact: ContactModel, type: OrderType }) 
     tooltip += contact.city;
   }
 
-  const target = type === 'purchase' ? CONTACTS_SUPPLIERS_EDIT : CONTACTS_CUSTOMERS_EDIT;
-
   return (
     <Tooltip title={tooltip ? (
       <Box sx={{ whiteSpace: 'pre' }}>
@@ -85,7 +83,7 @@ function Contact({ contact, type }: { contact: ContactModel, type: OrderType }) 
       </Box>
     ) : undefined}
     >
-      <Link href={target.replace('[id]', contact?.id)} style={{ color: 'unset' }}>
+      <Link href={CONTACTS_EDIT.replace('[id]', contact?.id)} style={{ color: 'unset' }}>
         {`${contact?.name} - ${contact?.company_name}` || '--'}
       </Link>
     </Tooltip>
@@ -114,7 +112,7 @@ function Partner({ partner }: { partner: SubContact }) {
       </Box>
     ) : undefined}
     >
-      <Link href={CONTACTS_CUSTOMERS_EDIT.replace('[id]', partner.id)} style={{ color: 'unset' }}>
+      <Link href={CONTACTS_EDIT.replace('[id]', partner.id)} style={{ color: 'unset' }}>
         {`${partner?.name} - ${partner?.company_name}` || '--'}
       </Link>
     </Tooltip>
@@ -182,7 +180,7 @@ export default function List({
           <TableCell>
             {trans('status')}
           </TableCell>
-          <TableCell>
+          <TableCell align="right">
             {trans('actions')}
           </TableCell>
         </TableRow>
@@ -221,7 +219,7 @@ export default function List({
                 ) : '--'}
               </TableCell>
               <TableCell>
-                <Contact contact={contact} type={type} />
+                <Contact contact={contact} />
               </TableCell>
               <TableCell>
                 { contact?.contact && <Partner partner={contact.contact} /> }
@@ -244,7 +242,7 @@ export default function List({
                   </Box>
                 )}
               </TableCell>
-              <TableCell>
+              <TableCell align="right">
                 <Edit href={editPath.replace('[id]', order.id.toString())} disabled={disabled} />
                 <Can requiredGroups={['admin', 'super_admin', 'manager', 'logistics', 'local']}>
                   <Delete onClick={() => onDelete(order.id)} disabled={disabled} tooltip />

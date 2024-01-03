@@ -1,8 +1,10 @@
 import { fireEvent, render, waitFor } from '@testing-library/react';
 import Logistics from '.';
+import { LOGISTICS_DELIVERY } from '../../utils/routes';
 
 const mockRouter = {
   replace: jest.fn(),
+  asPath: LOGISTICS_DELIVERY,
 };
 
 const customer = {

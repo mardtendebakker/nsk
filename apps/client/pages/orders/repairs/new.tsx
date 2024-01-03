@@ -102,7 +102,7 @@ function NewRepairOrder() {
               onClick={handleSubmit}
             >
               <Check />
-              {trans('saveRepair')}
+              {trans('save')}
             </Button>
           </Box>
         </Box>

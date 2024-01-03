@@ -2,9 +2,11 @@ import { NextRouter } from 'next/router';
 
 export default ({ params, router }: { params: URLSearchParams, router: NextRouter }) => {
   const paramsString = params.toString();
-  const newPath = paramsString ? `${router.pathname}?${params.toString()}` : router.pathname;
+  const uri = router.asPath.split('?')[0];
 
-  if (newPath != router.asPath) {
+  const newPath = paramsString ? `${uri}?${params.toString()}` : uri;
+
+  if (newPath != uri) {
     router.replace(newPath);
   }
 };

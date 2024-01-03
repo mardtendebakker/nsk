@@ -75,7 +75,7 @@ export class ContactController {
     if (groups.some(group=> LOCAL_GROUPS.includes(group))) {
       return this.contactService.create(body);
     } else if (groups.some(group=> PARTNERS_GROUPS.includes(group))) {
-      return this.contactService.create(body, email);
+      return this.contactService.create(body);
     } else {
       throw new ForbiddenException("Insufficient permissions to access this api!");
     }

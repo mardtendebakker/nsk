@@ -31,7 +31,7 @@ export default function ProductsTable({ orderId, refreshOrder }:{ orderId: strin
   const { call: callPut } = useAxios('put', undefined, { withProgressBar: true });
   const { call: callPutWithProgressBar } = useAxios('put', undefined, { withProgressBar: true });
   const { call: callDelete } = useAxios('delete', undefined, { withProgressBar: true, showSuccessMessage: true });
-  const { data: { data = [], count = 0 } = {}, call } = useAxios(
+  const { data: { data = [], count = 0 } = {}, call } = useAxios<undefined | { data?: ProductListItem[], count?: number }>(
     'get',
     APRODUCT_PATH.replace(':id', ''),
     {
@@ -136,7 +136,7 @@ export default function ProductsTable({ orderId, refreshOrder }:{ orderId: strin
             <TableCell>
               {trans('quantity')}
             </TableCell>
-            <TableCell>
+            <TableCell align="right">
               {trans('actions')}
             </TableCell>
           </TableRow>
@@ -179,7 +179,7 @@ export default function ProductsTable({ orderId, refreshOrder }:{ orderId: strin
                   disabled={!can(user?.groups || [], ['admin', 'super_admin', 'manager', 'logistics', 'local'])}
                 />
               </TableCell>
-              <TableCell>
+              <TableCell align="right">
                 <Can requiredGroups={['admin', 'super_admin', 'manager', 'logistics', 'local']}>
                   <Delete onClick={() => handleDeleteProduct(product.id)} tooltip />
                 </Can>

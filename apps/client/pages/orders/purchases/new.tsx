@@ -47,8 +47,7 @@ export function initFormState(trans, order?: Order) {
     },
     newSupplier: { value: false },
     name: {},
-    company_name: { validator: requiredSupplierFieldValidator('company_name', trans) },
-    company_kvk_nr: {},
+    company_id: { validator: requiredSupplierFieldValidator('company_id', trans) },
     email: { validator: requiredSupplierFieldValidator('email', trans) },
     phone: { validator: requiredSupplierFieldValidator('phone', trans) },
     street: { validator: requiredSupplierFieldValidator('street', trans) },
@@ -80,8 +79,7 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
   } else {
     payload.supplier = {
       name: formRepresentation.name.value || undefined,
-      company_name: formRepresentation.company_name.value || undefined,
-      company_kvk_nr: formRepresentation.company_kvk_nr.value || undefined,
+      company_id: formRepresentation.company_id.value || undefined,
       email: formRepresentation.email.value || undefined,
       phone: formRepresentation.phone.value || undefined,
       street: formRepresentation.street.value || undefined,
@@ -161,7 +159,7 @@ function NewPurchaseOrder() {
               onClick={handleSubmit}
             >
               <Check />
-              {trans('savePurchase')}
+              {trans('save')}
             </Button>
           </Box>
         </Box>

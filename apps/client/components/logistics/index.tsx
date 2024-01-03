@@ -84,12 +84,12 @@ export default function Logistics({ type }: { type: 'pickup' | 'delivery' }) {
     addDays(firstDate, 4),
   ];
 
-  const { data: { data = [] } = {}, call } = useAxios('get', AJAX_PATH.replace(':id', ''), { withProgressBar: true });
+  const { data: { data = [] } = {}, call } = useAxios<undefined | { data?: LogisticServiceListItem[] }>('get', AJAX_PATH.replace(':id', ''), { withProgressBar: true });
 
-  const formattedDataWithDefaultLogistic = data.map(({ logistic, ...rest }) => ({
+  const formattedDataWithDefaultLogistic = data.map(({ logistic, ...rest }): LogisticServiceListItem => ({
     ...rest,
     logistic: logistic || {
-      id: 1, firstname: 'Anonymous', lastname: 'Driver', username: 'Unknown',
+      id: 1, firstname: 'Anonymous', lastname: 'Driver', username: 'Unknown', email: 'Unknown',
     },
   }));
 

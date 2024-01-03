@@ -6,14 +6,13 @@ import {
   TableRow,
   TablePagination,
 } from '@mui/material';
+import Check from '@mui/icons-material/Check';
 import Edit from '../../button/edit';
 import Delete from '../../button/delete';
 import useTranslation from '../../../hooks/useTranslation';
 import { ContactListItem } from '../../../utils/axios/models/contact';
-import { CONTACTS_CUSTOMERS_EDIT, CONTACTS_SUPPLIERS_EDIT } from '../../../utils/routes';
 
 export default function List({
-  type,
   contacts = [],
   onDelete,
   count,
@@ -22,8 +21,9 @@ export default function List({
   onRowsPerPageChange,
   rowsPerPage,
   disabled,
+  editContactRouteBuilder,
+  hideCompanyFields,
 }: {
-  type: 'customer' | 'supplier',
   contacts: ContactListItem[],
   onDelete: (id: number)=>void,
   count: number,
@@ -31,7 +31,9 @@ export default function List({
   onPageChange: (newPage: number)=>void,
   onRowsPerPageChange: (rowsPerPage: number)=>void,
   rowsPerPage: number,
-  disabled: boolean
+  disabled: boolean,
+  editContactRouteBuilder: (contact: ContactListItem) => string,
+  hideCompanyFields?: boolean
 }) {
   const { trans } = useTranslation();
 
@@ -49,10 +51,20 @@ export default function List({
             <TableCell>
               {trans('email')}
             </TableCell>
-            <TableCell>
-              {trans(type === 'customer' ? 'isPartner' : 'partner')}
-            </TableCell>
-            <TableCell>
+            {!hideCompanyFields && (
+            <>
+              <TableCell>
+                {trans('isPartner')}
+              </TableCell>
+              <TableCell>
+                {trans('isSupplier')}
+              </TableCell>
+              <TableCell>
+                {trans('isCustomer')}
+              </TableCell>
+            </>
+            )}
+            <TableCell align="right">
               {trans('actions')}
             </TableCell>
           </TableRow>
@@ -70,19 +82,27 @@ export default function List({
                 {contact.name || '--'}
               </TableCell>
               <TableCell>
-                <b>{contact.company_name}</b>
+                <b>{contact.company.name}</b>
               </TableCell>
               <TableCell>
                 {contact.email || '--'}
               </TableCell>
-              <TableCell>
-                {type === 'customer'
-                  ? (Boolean(contact.is_partner) || '--')
-                  : contact.partner?.name || '--'}
-              </TableCell>
-              <TableCell>
-                <Edit href={(type === 'customer' ? CONTACTS_CUSTOMERS_EDIT : CONTACTS_SUPPLIERS_EDIT).replace('[id]', contact.id.toString())} disabled={disabled} />
-                {contact.orders?.length === 0
+              {!hideCompanyFields && (
+              <>
+                <TableCell>
+                  {contact.company.is_partner && <Check />}
+                </TableCell>
+                <TableCell>
+                  {contact.company.is_supplier && <Check />}
+                </TableCell>
+                <TableCell>
+                  {contact.company.is_customer && <Check />}
+                </TableCell>
+              </>
+              )}
+              <TableCell align="right">
+                <Edit href={editContactRouteBuilder(contact)} disabled={disabled} />
+                {contact.ordersCount === 0
                 && (<Delete onClick={() => onDelete(contact.id)} disabled={disabled} tooltip />)}
               </TableCell>
             </TableRow>
@@ -111,3 +131,7 @@ export default function List({
     </>
   );
 }
+
+List.defaultProps = {
+  hideCompanyFields: false,
+};

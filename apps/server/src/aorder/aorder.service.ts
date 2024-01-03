@@ -7,7 +7,6 @@ import { FindManyDto } from './dto/find-many.dto';
 import { UpdateManyAOrderDto } from './dto/update-many-aorder.dto';
 import { AOrderProcess } from './aorder.process';
 import { PrintService } from '../print/print.service';
-import { ContactDiscrimination } from '../contact/types/contact-discrimination.enum';
 import { FileService } from '../file/file.service';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { AOrderProductProcess } from './aorder-product.process';
@@ -117,9 +116,7 @@ export class AOrderService {
         id,
         ...(email && {
           OR: [
-            { contact_aorder_supplier_idTocontact: { contact: { email } } },
             { contact_aorder_supplier_idTocontact: { email } },
-            { contact_aorder_customer_idTocontact: { contact: { email } } },
             { contact_aorder_customer_idTocontact: { email } },
           ],
         }),
@@ -228,23 +225,7 @@ export class AOrderService {
 
   async findByIds(ids: number[], email?: string) {
     const params: Prisma.aorderFindManyArgs = {
-      where: {
-        id: { in: ids },
-        ...(email && {
-          OR: [
-            {
-              contact_aorder_supplier_idTocontact: {
-                ...(email && { contact: { email } }),
-              },
-            },
-            {
-              contact_aorder_customer_idTocontact: {
-                ...(email && { contact: { email } }),
-              },
-            },
-          ],
-        })
-      },
+      where: { id: { in: ids } },
       orderBy: { id: 'asc', },
     };
 
@@ -263,14 +244,12 @@ export class AOrderService {
       status_id,
       supplier_id,
       supplier: {
-        company_name: company_name_supplier,
-        company_kvk_nr: company_kvk_nr_supplier,
+        company_id: supplier_company_id,
         ...rest_supplier
       } = {},
       customer_id,
       customer: {
-        company_name: company_name_customer,
-        company_kvk_nr: company_kvk_nr_customer,
+        company_id: customer_company_id,
         ...rest_customer
       } = {},
       ...rest
@@ -278,33 +257,15 @@ export class AOrderService {
 
     const supplier: Prisma.contactCreateWithoutSupplierOrdersInput = {
       ...rest_supplier,
-      discr: ContactDiscrimination.SUPLLIER,
       company_contact_company_idTocompany: {
-        connectOrCreate: {
-          where: {
-            name: company_name_supplier,
-          },
-          create: {
-            name: company_name_supplier,
-            kvk_nr: company_kvk_nr_supplier,
-          },
-        },
+        connect: { id: supplier_company_id },
       },
     };
 
     const customer: Prisma.contactCreateWithoutCustomerOrdersInput = {
       ...rest_customer,
-      discr: ContactDiscrimination.CUSTOMER,
       company_contact_company_idTocompany: {
-        connectOrCreate: {
-          where: {
-            name: company_name_customer,
-          },
-          create: {
-            name: company_name_customer,
-            kvk_nr: company_kvk_nr_customer,
-          },
-        },
+        connect: { id: customer_company_id },
       },
     };
 
@@ -312,9 +273,9 @@ export class AOrderService {
       ...rest,
       ...(status_id && { order_status: { connect: { id: status_id } } }),
       ...(supplier_id && { contact_aorder_supplier_idTocontact: { connect: { id: supplier_id } } }),
-      ...(company_name_supplier && { contact_aorder_supplier_idTocontact: { create: { ...supplier } } }),
+      ...(supplier_company_id && { contact_aorder_supplier_idTocontact: { create: { ...supplier } } }),
       ...(customer_id && { contact_aorder_customer_idTocontact: { connect: { id: customer_id } } }),
-      ...(company_name_customer && { contact_aorder_customer_idTocontact: { create: { ...customer } } }),
+      ...(customer_company_id && { contact_aorder_customer_idTocontact: { create: { ...customer } } }),
     };
 
     return data;
@@ -411,17 +372,7 @@ export class AOrderService {
       city: true,
       zip: true,
       state: true,
-      country: true,
-      contact: {
-        select: {
-          id: true,
-          company_contact_company_idTocompany: true,
-          name: true,
-          street: true,
-          city: true,
-          zip: true,
-        }
-      }
+      country: true
     };
   }
 }

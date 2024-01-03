@@ -2,6 +2,8 @@ import { Box, Grid } from '@mui/material';
 import useTranslation from '../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../hooks/useForm';
 import TextField from '../../memoizedInput/textField';
+import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
+import { AUTOCOMPLETE_COMPANIES_PATH } from '../../../utils/axios';
 
 export default function Contact(
   {
@@ -31,22 +33,17 @@ export default function Contact(
           value={formRepresentation.name.value || ''}
         />
         <Box sx={{ m: '.25rem' }} />
-        <TextField
+        <DataSourcePicker
           fullWidth
-          label={trans('company_name')}
-          placeholder={trans('company_name')}
-          onChange={(e) => setValue({ field: 'company_name', value: e.target.value })}
-          value={formRepresentation.company_name.value || ''}
-          error={!!formRepresentation.company_name.error}
-          helperText={formRepresentation.company_name.error}
-        />
-        <Box sx={{ m: '.25rem' }} />
-        <TextField
-          fullWidth
-          label={trans('company_kvk_nr')}
-          placeholder={trans('company_kvk_nr')}
-          onChange={(e) => setValue({ field: 'company_kvk_nr', value: e.target.value })}
-          value={formRepresentation.company_kvk_nr.value || ''}
+          path={AUTOCOMPLETE_COMPANIES_PATH}
+          label={trans('company')}
+          placeholder={trans('selectCompany')}
+          onChange={(value: { id: number }) => {
+            setValue({ field: 'company_id', value: value?.id });
+          }}
+          value={formRepresentation.company_id.value}
+          error={Boolean(formRepresentation.company_id.error)}
+          helperText={formRepresentation.company_id.error}
         />
       </Grid>
       <Grid

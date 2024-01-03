@@ -15,6 +15,7 @@ import useTranslation from '../../../hooks/useTranslation';
 import { initFormState, formRepresentationToBody } from './new';
 import { ORDERS_REPAIRS, ORDERS_REPAIRS_NEW } from '../../../utils/routes';
 import ProductsTable from '../../../components/orders/form/repair/productsTable';
+import { Order } from '../../../utils/axios/models/order';
 
 function UpdateRepairOrder() {
   const { trans } = useTranslation();
@@ -27,7 +28,7 @@ function UpdateRepairOrder() {
     { withProgressBar: true, showSuccessMessage: true },
   );
 
-  const { call: fetchRepairOrder, performing: performingFetchRepairOrder, data: repairOrder } = useAxios(
+  const { call: fetchRepairOrder, performing: performingFetchRepairOrder, data: repairOrder } = useAxios<Order>(
     'get',
     REPAIR_ORDERS_PATH.replace(':id', id?.toString()),
     { withProgressBar: true },
@@ -102,7 +103,7 @@ function UpdateRepairOrder() {
               onClick={handleSubmit}
             >
               <Check />
-              {trans('saveRepair')}
+              {trans('save')}
             </Button>
           </Box>
         </Box>

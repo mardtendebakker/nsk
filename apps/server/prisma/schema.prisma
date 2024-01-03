@@ -349,25 +349,28 @@ model contact {
   country2                            String?    @db.VarChar(255)
   state2                              String?    @db.VarChar(255)
   zip2                                String?    @db.VarChar(255)
-  discr                               String     @db.VarChar(255)
-  is_partner                          Int?
   is_main                             Boolean?
   external_id                         Int?
   supplierOrders                      aorder[]   @relation("aorder_supplier_idTocontact")
   customerOrders                      aorder[]   @relation("aorder_customer_idTocontact")
-  contact                             contact?   @relation("contactTocontact", fields: [partner_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_ABB0A97D9393F8FE")
-  other_contact                       contact[]  @relation("contactTocontact")
   company_contact_company_idTocompany company    @relation("contact_company_idTocompany", fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   fos_user                            fos_user[]
   product                             product[]
 
-  @@index([partner_id], map: "IDX_ABB0A97D9393F8FE")
   @@index([company_id], map: "contact_company_id_fkey")
 }
 
 model company {
   id                                  Int       @id @default(autoincrement())
+  partner_id                          Int?
   name                                String    @unique(map: "name") @db.VarChar(255)
   kvk_nr                              Int?
+  is_partner                          Boolean
+  is_supplier                         Boolean
+  is_customer                         Boolean
+  company                             company?   @relation("companyToCompany", fields: [partner_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "company_partner_id_fk")
+  other_company                       company[]  @relation("companyToCompany")
   contact_contact_company_idTocompany contact[] @relation("contact_company_idTocompany")
+
+  @@index([partner_id], map: "company_partner_id_idx")
 }

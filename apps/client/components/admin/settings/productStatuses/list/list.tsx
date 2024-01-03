@@ -49,7 +49,7 @@ export default function List({
           <TableCell>
             {trans('stock')}
           </TableCell>
-          <TableCell>
+          <TableCell align="right">
             {trans('actions')}
           </TableCell>
         </TableRow>
@@ -72,7 +72,7 @@ export default function List({
             <TableCell>
               {productStatus.is_stock && <Check />}
             </TableCell>
-            <TableCell>
+            <TableCell align="right">
               <Edit onClick={() => onEdit(productStatus.id)} disabled={disabled} />
             </TableCell>
           </TableRow>

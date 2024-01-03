@@ -60,6 +60,13 @@ export class AutocompleteController {
     return this.autocompleteService.findPartners(query);
   }
 
+  @Get('/companies')
+  @UseGuards(AuthorizationGuard(LOCAL_GROUPS))
+  @ApiResponse({ type: AutocompleteResponseDto, isArray: true })
+  companies(@Query() query: AutocompleteDto) {
+    return this.autocompleteService.findCompanies(query);
+  }
+
   @Get('/purchase-statuses')
   @ApiResponse({ type: AutocompleteResponseDto, isArray: true })
   purchaseStatuses(@Query() query: AutocompleteDto) {

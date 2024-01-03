@@ -70,15 +70,18 @@ export class PrismaContactUpdateInputDto implements Prisma.contactUpdateInput {
 
   @ApiPropertyOptional()
   @IsOptional()
-  discr?: string;
+  @IsBoolean()
+  is_partner?: boolean;
 
   @ApiPropertyOptional()
   @IsOptional()
-  @IsInt()
-  @Type(() => Number)
-  @Min(0)
-  @Max(1)
-  is_partner?: number;
+  @IsBoolean()
+  is_customer?: boolean;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsBoolean()
+  is_supplier?: boolean;
 
 
   @ApiPropertyOptional()
@@ -97,12 +100,6 @@ export class PrismaContactUpdateInputDto implements Prisma.contactUpdateInput {
 
   @ApiPropertyOptional()
   customerOrders?: Prisma.aorderUpdateManyWithoutContact_aorder_customer_idTocontactNestedInput;
-
-  @ApiPropertyOptional()
-  contact?: Prisma.contactUpdateOneWithoutOther_contactNestedInput;
-
-  @ApiPropertyOptional()
-  other_contact?: Prisma.contactUpdateManyWithoutContactNestedInput;
 
   @ApiProperty()
   company_contact_company_idTocompany?: Prisma.companyUpdateOneRequiredWithoutContact_contact_company_idTocompanyNestedInput;
