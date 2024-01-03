@@ -30,7 +30,7 @@ export default function ProductsTable({ orderId, refreshOrder }:{ orderId: strin
   const { call: callPutWithProgressBar } = useAxios('put', undefined, { withProgressBar: true });
   const { call: postService } = useAxios('post', SALES_SERVICES_PATH.replace(':id', ''), { showSuccessMessage: true, withProgressBar: true });
   const { call: callDelete } = useAxios('delete', undefined, { withProgressBar: true, showSuccessMessage: true });
-  const { data: { data = [], count = 0 } = {}, call } = useAxios(
+  const { data: { data = [], count = 0 } = {}, call } = useAxios<undefined | { data?: ProductListItem[], count?: number }>(
     'get',
     APRODUCT_PATH.replace(':id', ''),
     {

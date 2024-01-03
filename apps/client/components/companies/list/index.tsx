@@ -8,6 +8,7 @@ import { COMPANIES_PATH } from '../../../utils/axios';
 import useForm, { FieldPayload } from '../../../hooks/useForm';
 import pushURLParams from '../../../utils/pushURLParams';
 import { getQueryParam } from '../../../utils/location';
+import { CompanyListItem } from '../../../utils/axios/models/company';
 
 function initFormState({ search }: { search?: string }) {
   return {
@@ -58,7 +59,7 @@ export default function ListContainer() {
 
   const { formRepresentation, setValue, setData } = useForm(initFormState({ search: getQueryParam('search') }));
 
-  const { data: { data = [], count = 0 } = {}, call, performing } = useAxios(
+  const { data: { data = [], count = 0 } = {}, call, performing } = useAxios<undefined | { data?: CompanyListItem[], count?: number }>(
     'get',
     COMPANIES_PATH.replace(':id', ''),
     {

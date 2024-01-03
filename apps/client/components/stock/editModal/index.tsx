@@ -34,7 +34,7 @@ export default function EditModal(
   },
 ) {
   const { trans } = useTranslation();
-  const { data: product, call, performing } = useAxios('get', STOCK_PRODUCTS_PATH.replace(':id', id));
+  const { data: product, call, performing } = useAxios<undefined | Product>('get', STOCK_PRODUCTS_PATH.replace(':id', id));
   const { call: bulkPrint, performing: performingBulkPrintBarcodes } = useAxios('get', APRODUCT_BULK_PRINT_BARCODES);
   const { call: callPut, performing: performingPut } = useAxios('put', STOCK_PRODUCTS_PATH.replace(':id', id), { showSuccessMessage: true });
 

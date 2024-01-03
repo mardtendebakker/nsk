@@ -44,7 +44,7 @@ export default function DataSourcePicker(
     multiple?: boolean
   },
 ) {
-  const { data, call } = useAxios('get', path, { showErrorMessage: false });
+  const { data, call } = useAxios<undefined | object[]>('get', path, { showErrorMessage: false });
   const debouncedCall = useCallback(debounce(call), []);
   const [currentValue, setCurrentValue] = useState(null);
 
