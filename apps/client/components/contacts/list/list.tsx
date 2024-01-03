@@ -22,6 +22,7 @@ export default function List({
   rowsPerPage,
   disabled,
   editContactRouteBuilder,
+  hideCompanyFields,
 }: {
   contacts: ContactListItem[],
   onDelete: (id: number)=>void,
@@ -31,7 +32,8 @@ export default function List({
   onRowsPerPageChange: (rowsPerPage: number)=>void,
   rowsPerPage: number,
   disabled: boolean,
-  editContactRouteBuilder: (contact: ContactListItem) => string
+  editContactRouteBuilder: (contact: ContactListItem) => string,
+  hideCompanyFields?: boolean
 }) {
   const { trans } = useTranslation();
 
@@ -49,15 +51,19 @@ export default function List({
             <TableCell>
               {trans('email')}
             </TableCell>
-            <TableCell>
-              {trans('isPartner')}
-            </TableCell>
-            <TableCell>
-              {trans('isSupplier')}
-            </TableCell>
-            <TableCell>
-              {trans('isCustomer')}
-            </TableCell>
+            {!hideCompanyFields && (
+            <>
+              <TableCell>
+                {trans('isPartner')}
+              </TableCell>
+              <TableCell>
+                {trans('isSupplier')}
+              </TableCell>
+              <TableCell>
+                {trans('isCustomer')}
+              </TableCell>
+            </>
+            )}
             <TableCell align="right">
               {trans('actions')}
             </TableCell>
@@ -81,15 +87,19 @@ export default function List({
               <TableCell>
                 {contact.email || '--'}
               </TableCell>
-              <TableCell>
-                {contact.company.is_partner && <Check />}
-              </TableCell>
-              <TableCell>
-                {contact.company.is_supplier && <Check />}
-              </TableCell>
-              <TableCell>
-                {contact.company.is_customer && <Check />}
-              </TableCell>
+              {!hideCompanyFields && (
+              <>
+                <TableCell>
+                  {contact.company.is_partner && <Check />}
+                </TableCell>
+                <TableCell>
+                  {contact.company.is_supplier && <Check />}
+                </TableCell>
+                <TableCell>
+                  {contact.company.is_customer && <Check />}
+                </TableCell>
+              </>
+              )}
               <TableCell align="right">
                 <Edit href={editContactRouteBuilder(contact)} disabled={disabled} />
                 {contact.ordersCount === 0
@@ -121,3 +131,7 @@ export default function List({
     </>
   );
 }
+
+List.defaultProps = {
+  hideCompanyFields: false,
+};

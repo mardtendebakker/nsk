@@ -161,6 +161,7 @@ export default function ListContainer({ company, editContactRouteBuilder }: { co
       />
       <Box sx={{ m: '1rem' }} />
       <List
+        hideCompanyFields={!!company}
         disabled={disabled()}
         contacts={data}
         count={count}

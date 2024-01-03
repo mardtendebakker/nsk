@@ -38,11 +38,14 @@ export default function Filter({
         onSearchChange={(value: string) => setValue({ field: 'search', value })}
         searchValue={formRepresentation.search.value?.toString() || ''}
         onReset={handleReset}
+        disabledFilter={formRepresentation.company.disabled}
       >
+        {!formRepresentation.company.disabled
+        && (
         <Box sx={{
           flex: 1,
           display: 'flex',
-          alignItems: 'center',
+          justifyContent: 'space-between',
           flexDirection: isDesktop ? 'unset' : 'column',
         }}
         >
@@ -56,12 +59,13 @@ export default function Filter({
             onChange={(e) => debouncedSetValue({ field: 'company', value: e.target.value })}
             type="text"
             sx={{
+              flex: 0.5,
               fieldset: {
                 display: 'none',
               },
             }}
           />
-          <Box sx={{ flex: 0.33, display: 'flex' }}>
+          <Box sx={{ display: 'flex' }}>
             <Checkbox
               checked={formRepresentation.is_customer.value}
               onCheck={(checked) => setValue({ field: 'is_customer', value: checked })}
@@ -79,6 +83,7 @@ export default function Filter({
             />
           </Box>
         </Box>
+        )}
       </SearchAccordion>
     </BorderedBox>
   );

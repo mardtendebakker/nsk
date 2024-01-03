@@ -10,10 +10,25 @@ import pushURLParams from '../../../utils/pushURLParams';
 import { getQueryParam } from '../../../utils/location';
 import { CompanyListItem } from '../../../utils/axios/models/company';
 
-function initFormState({ search }: { search?: string }) {
+function initFormState(
+  {
+    search, is_customer, is_supplier, is_partner,
+  }:
+  { search?: string, is_customer?: boolean, is_supplier?: boolean, is_partner?: boolean },
+
+) {
   return {
     search: {
       value: search,
+    },
+    is_customer: {
+      value: is_customer === true,
+    },
+    is_supplier: {
+      value: is_supplier === true,
+    },
+    is_partner: {
+      value: is_partner === true,
     },
   };
 }
@@ -43,6 +58,14 @@ function refreshList({
     }
   });
 
+  ['is_customer', 'is_supplier', 'is_partner'].forEach((filter) => {
+    if (formRepresentation[filter].value) {
+      const value = formRepresentation[filter].value ? '1' : '0';
+      params.append(filter, value);
+      paramsToSend[filter] = value;
+    }
+  });
+
   call({
     params: {
       take: rowsPerPage,
@@ -57,7 +80,12 @@ export default function ListContainer() {
   const [page, setPage] = useState<number>(parseInt(getQueryParam('page', '1'), 10));
   const [rowsPerPage, setRowsPerPage] = useState<number>(parseInt(getQueryParam('rowsPerPage', '10'), 10));
 
-  const { formRepresentation, setValue, setData } = useForm(initFormState({ search: getQueryParam('search') }));
+  const { formRepresentation, setValue, setData } = useForm(initFormState({
+    search: getQueryParam('search'),
+    is_customer: getQueryParam('is_customer') === '1',
+    is_partner: getQueryParam('is_partner') === '1',
+    is_supplier: getQueryParam('is_supplier') === '1',
+  }));
 
   const { data: { data = [], count = 0 } = {}, call, performing } = useAxios<undefined | { data?: CompanyListItem[], count?: number }>(
     'get',
@@ -88,6 +116,9 @@ export default function ListContainer() {
     page,
     rowsPerPage,
     formRepresentation.search.value,
+    formRepresentation.is_customer.value,
+    formRepresentation.is_supplier.value,
+    formRepresentation.is_partner.value,
   ]);
 
   const handleReset = () => {
