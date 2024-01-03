@@ -10,4 +10,16 @@ export class CompanyEntity implements company {
   
   @ApiPropertyOptional()
   kvk_nr: number | null;
+
+  @ApiProperty()
+  is_partner: boolean;
+
+  @ApiProperty()
+  is_supplier: boolean;
+
+  @ApiProperty()
+  is_customer: boolean;
+
+  @ApiPropertyOptional()
+  partner_id: number | null;
 }

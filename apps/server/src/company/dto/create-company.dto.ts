@@ -1,9 +1,9 @@
-import { ApiPropertyOptional, OmitType } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional, OmitType } from '@nestjs/swagger';
 import { PrismaCompanyCreateInputDto } from './prisma-company-create-input.dto';
-import { IsInt, IsOptional } from 'class-validator';
+import { IsBoolean, IsInt, IsOptional } from 'class-validator';
 import { Type } from 'class-transformer';
 
-export class CreateCompanyDto extends OmitType(PrismaCompanyCreateInputDto, ['id','contact_contact_company_idTocompany'] as const) {
+export class CreateCompanyDto extends OmitType(PrismaCompanyCreateInputDto, ['id'] as const) {
   @ApiPropertyOptional()
   @IsOptional()
   name: string;
@@ -13,4 +13,16 @@ export class CreateCompanyDto extends OmitType(PrismaCompanyCreateInputDto, ['id
   @IsInt()
   @Type(() => Number)
   kvk_nr?: number;
+
+  @ApiProperty()
+  @IsBoolean()
+  is_partner: boolean;
+
+  @ApiProperty()
+  @IsBoolean()
+  is_customer: boolean;
+
+  @ApiProperty()
+  @IsBoolean()
+  is_supplier: boolean;
 }

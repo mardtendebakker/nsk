@@ -1,13 +1,11 @@
 import { ContactRepository } from './contact.repository';
 import { UpdateContactDto } from './dto/update-contact.dto';
-import { BadRequestException, ForbiddenException, Injectable, UnprocessableEntityException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable } from '@nestjs/common';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { FindManyDto } from './dto/find-many.dto';
 import { ContactEntity } from './entities/contact.entity';
 import { Prisma } from '@prisma/client';
-import { PrismaContactCreateInputDto } from './dto/prisma-contact-create-input.dto';
 import { ContactSelect } from './types/contact-select';
-import { PrismaContactUpdateInputDto } from './dto/prisma-contact-update-input.dto';
 @Injectable()
 export class ContactService {
   constructor(
@@ -24,14 +22,17 @@ export class ContactService {
           { contact: { email } },
         ],
       }),
-      is_customer,
-      is_partner,
-      is_supplier,
-      ...(company && { company_contact_company_idTocompany: { name: { contains: company } } }),
+      ...{ company_contact_company_idTocompany: {
+         name: { contains: company },
+         is_customer,
+         is_partner,
+         is_supplier
+        }
+      },
       ...(search && { OR: [
         { name: { contains: search } },
         { email: { contains: search } },
-      ] }),
+      ] })
     };
 
     const { count, data } = await this.repository.findAll({
@@ -42,9 +43,6 @@ export class ContactService {
         name: true,
         email: true,
         partner_id: true,
-        is_partner: true,
-        is_customer: true,
-        is_supplier: true,
         _count: {
           select: {
             customerOrders: true,
@@ -61,7 +59,7 @@ export class ContactService {
       count,
       data: data.map(({ _count, company_contact_company_idTocompany, ...rest }) => ({
         ...rest,
-        company_name: company_contact_company_idTocompany?.name,
+        company: company_contact_company_idTocompany,
         ordersCount: _count.customerOrders + _count.supplierOrders
       }))
     }
@@ -74,7 +72,6 @@ export class ContactService {
         ...(email && {
           OR: [
             { email },
-            { contact: { email } },
           ],
         }),
       },
@@ -90,16 +87,15 @@ export class ContactService {
     }
   }
 
-  async create(createDto: CreateContactDto, email?: string) {
-    const { company_id, company_name, company_kvk_nr, is_customer, is_supplier, ...rest } = createDto;
+  async create(createDto: CreateContactDto) {
+    console.log(createDto)
+
+    const { company_id, company_name = '', company_kvk_nr, is_customer = false, is_supplier = false, is_partner = false } = createDto;
     if (!company_id && !company_name) {
       throw new BadRequestException('Either company_id or company name is required');
     }
-
+    
     return this.repository.create({
-      ...(await this.prepareIsPartnerField(rest, email)) as PrismaContactCreateInputDto,
-      is_customer,
-      is_supplier,
       company_contact_company_idTocompany: {
         connectOrCreate: {
           where: {
@@ -108,6 +104,9 @@ export class ContactService {
           create: {
             name: company_name,
             kvk_nr: company_kvk_nr,
+            is_supplier,
+            is_customer,
+            is_partner
           },
         },
       },
@@ -118,7 +117,9 @@ export class ContactService {
     return this.repository.findFirst({
       where: {
         email,
-        is_partner: true
+        company_contact_company_idTocompany: {
+          is_partner: true
+        }
       },
     });
   }
@@ -130,7 +131,6 @@ export class ContactService {
         ...(email && {
           OR: [
             { email },
-            { contact: { email } },
           ],
         }),
       },
@@ -138,12 +138,11 @@ export class ContactService {
   }
 
   async update(id: number, updateDto: UpdateContactDto, email?: string) {
-    const { company_name, company_kvk_nr, ...rest } = updateDto;
+    const { company_name, company_kvk_nr } = updateDto;
 
     try {
       return await this.repository.update({
         data: {
-          ...await this.prepareIsPartnerField({ id, ...rest }, email),
           ...(company_name && { company_contact_company_idTocompany: { update: { name: company_name } } }),
           ...(company_kvk_nr && { company_contact_company_idTocompany: { update: { kvk_nr: company_kvk_nr } } }),
         },
@@ -152,7 +151,6 @@ export class ContactService {
           ...(email && {
             OR: [
               { email },
-              { contact: { email } },
             ],
           }),
         },
@@ -191,35 +189,5 @@ export class ContactService {
     }
 
     return contact;
-  }
-
-  async prepareIsPartnerField<T extends { id?: number, email?: string, is_partner?: boolean; partner_id?: number }>(contactDto: T, email?: string): Promise<Partial<PrismaContactCreateInputDto>> {
-    const { id, is_partner, partner_id, ...rest } = contactDto;
-    const createContactDto: PrismaContactUpdateInputDto = { ...rest };
-
-    if (is_partner !== undefined && is_partner !== null) {
-      createContactDto.is_partner = is_partner;
-    }
-
-    if (email) {
-      const partner = await this.findPartnerByEmail(email);
-
-      if (!partner) {
-        throw new UnprocessableEntityException('No partner for provided user!');
-      }
-
-      if (id === partner.id) {
-        createContactDto.email = partner.email; // to make sure partner can not change own email
-      } else {
-        createContactDto.is_partner = false;
-        createContactDto.contact = { connect: { id: partner_id }};
-      }
-
-    } else if (Number.isFinite(partner_id)) {
-      createContactDto.is_partner = false;
-      createContactDto.contact = { connect: { id: partner_id }};
-    }
-  
-    return createContactDto;
   }
 }

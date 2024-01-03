@@ -58,15 +58,6 @@ export class ContactEntity implements contact {
   
   @ApiPropertyOptional()
   zip2: string | null;
-  
-  @ApiProperty()
-  is_partner: boolean;
-  
-  @ApiProperty()
-  is_customer: boolean;
-  
-  @ApiProperty()
-  is_supplier: boolean;
 
   @ApiPropertyOptional()
   is_main: boolean | null;

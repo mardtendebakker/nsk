@@ -59,7 +59,7 @@ export class AutocompleteRepository {
     return this.contactFind({
       autocompleteDto,
       prismaModel: this.prisma.contact,
-      additionalWhereCondition: { is_customer: true }
+      additionalWhereCondition: { company_contact_company_idTocompany : { is_customer: true } }
     });
   }
 
@@ -67,7 +67,7 @@ export class AutocompleteRepository {
     return this.contactFind({
       autocompleteDto,
       prismaModel: this.prisma.contact,
-      additionalWhereCondition: { is_supplier: true }
+      additionalWhereCondition: { company_contact_company_idTocompany : { is_supplier: true } }
     });
   }
 
@@ -139,7 +139,7 @@ export class AutocompleteRepository {
     return this.contactFind({
       autocompleteDto,
       prismaModel: this.prisma.contact,
-      additionalWhereCondition: { is_partner: true }
+      additionalWhereCondition: { company_contact_company_idTocompany : { is_partner: true } }
     });
   }
 

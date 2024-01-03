@@ -76,19 +76,19 @@ export default function List({
                 {contact.name || '--'}
               </TableCell>
               <TableCell>
-                <b>{contact.company_name}</b>
+                <b>{contact.company.name}</b>
               </TableCell>
               <TableCell>
                 {contact.email || '--'}
               </TableCell>
               <TableCell>
-                {contact.is_partner && <Check />}
+                {contact.company.is_partner && <Check />}
               </TableCell>
               <TableCell>
-                {contact.is_supplier && <Check />}
+                {contact.company.is_supplier && <Check />}
               </TableCell>
               <TableCell>
-                {contact.is_customer && <Check />}
+                {contact.company.is_customer && <Check />}
               </TableCell>
               <TableCell align="right">
                 <Edit href={editContactRouteBuilder(contact)} disabled={disabled} />

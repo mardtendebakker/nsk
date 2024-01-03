@@ -24,6 +24,18 @@ export function initFormState(company?: Company) {
     kvk_nr: {
       value: company?.kvk_nr,
     },
+    is_partner: {
+      value: company?.is_partner === true,
+    },
+    is_customer: {
+      value: company?.is_customer === true,
+    },
+    is_supplier: {
+      value: company?.is_supplier === true,
+    },
+    partner: {
+      value: company?.partner_id,
+    },
   };
 }
 
@@ -31,6 +43,10 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
   return {
     name: formRepresentation.name.value || undefined,
     kvk_nr: formRepresentation.kvk_nr.value || undefined,
+    is_partner: formRepresentation.is_partner.value,
+    is_customer: formRepresentation.is_customer.value,
+    is_supplier: formRepresentation.is_supplier.value,
+    partner_id: formRepresentation.is_partner.value ? null : formRepresentation.partner.value,
   };
 }
 

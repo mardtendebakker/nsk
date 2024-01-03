@@ -6,6 +6,7 @@ import {
   TableRow,
   TablePagination,
 } from '@mui/material';
+import Check from '@mui/icons-material/Check';
 import Edit from '../../button/edit';
 import Delete from '../../button/delete';
 import useTranslation from '../../../hooks/useTranslation';
@@ -44,6 +45,15 @@ export default function List({
             <TableCell>
               {trans('company_kvk_nr')}
             </TableCell>
+            <TableCell>
+              {trans('isPartner')}
+            </TableCell>
+            <TableCell>
+              {trans('isSupplier')}
+            </TableCell>
+            <TableCell>
+              {trans('isCustomer')}
+            </TableCell>
             <TableCell align="right">
               {trans('actions')}
             </TableCell>
@@ -64,7 +74,15 @@ export default function List({
               <TableCell>
                 {company.kvk_nr || '--'}
               </TableCell>
-
+              <TableCell>
+                {company.is_partner && <Check />}
+              </TableCell>
+              <TableCell>
+                {company.is_supplier && <Check />}
+              </TableCell>
+              <TableCell>
+                {company.is_customer && <Check />}
+              </TableCell>
               <TableCell align="right">
                 <Edit href={COMPANIES_EDIT.replace('[id]', company.id.toString())} disabled={disabled} />
                 {company.contactsCount == 0 && <Delete onClick={() => onDelete(company.id)} disabled={disabled} tooltip />}

@@ -74,18 +74,6 @@ export function initFormState(trans: Trans, contact?: Contact) {
     zip2: {
       value: contact?.zip2,
     },
-    is_partner: {
-      value: contact?.is_partner === true,
-    },
-    is_customer: {
-      value: contact?.is_customer === true,
-    },
-    is_supplier: {
-      value: contact?.is_supplier === true,
-    },
-    partner: {
-      value: contact?.partner_id,
-    },
   };
 }
 
@@ -108,10 +96,6 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
     country2: formRepresentation.country2.value || undefined,
     state2: formRepresentation.state2.value || undefined,
     zip2: formRepresentation.zip2.value || undefined,
-    is_partner: formRepresentation.is_partner.value,
-    is_customer: formRepresentation.is_customer.value,
-    is_supplier: formRepresentation.is_supplier.value,
-    partner_id: formRepresentation.is_partner.value ? null : formRepresentation.partner.value,
   };
 }
 
