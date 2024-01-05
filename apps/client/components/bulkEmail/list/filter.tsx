@@ -1,6 +1,5 @@
 import { Box } from '@mui/material';
 import Search from '@mui/icons-material/Search';
-import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { format } from 'date-fns';
 import MemoizedTextField from '../../memoizedInput/textField';
 import Autocomplete from '../../memoizedInput/autocomplete';
@@ -8,6 +7,7 @@ import useTranslation from '../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../hooks/useForm';
 import TextField from '../../input/textField';
 import BorderedBox from '../../borderedBox';
+import DatePicker from '../../input/datePicker';
 
 export default function Filter({
   disabled,
@@ -41,11 +41,16 @@ export default function Filter({
             },
           }}
         />
-        <DesktopDatePicker
+        <DatePicker
           disabled={disabled}
-          inputFormat="yyyy/MM/dd"
           value={formRepresentation.createdAt.value}
-          onChange={(value) => setValue({ field: 'createdAt', value: format(new Date(value.toString()), 'yyyy/MM/dd') })}
+          onChange={(value) => {
+            if (!value) {
+              setValue({ field: 'createdAt', value });
+            } else {
+              setValue({ field: 'createdAt', value: format(new Date(value.toString()), 'yyyy/MM/dd') });
+            }
+          }}
           renderInput={(params) => (
             <TextField
               size="small"

@@ -1,11 +1,11 @@
 import { Box, Grid, Typography } from '@mui/material';
-import { DesktopDateTimePicker } from '@mui/x-date-pickers';
 import { useState } from 'react';
 import useTranslation from '../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../hooks/useForm';
 import BaseTextField from '../../input/textField';
 import Select from '../../memoizedInput/select';
 import TextField from '../../memoizedInput/textField';
+import DateTimePicker from '../../input/dateTimePicker';
 
 export default function DeliveryDetails({
   formRepresentation,
@@ -33,7 +33,7 @@ export default function DeliveryDetails({
         sx={{ flexDirection: 'column' }}
       >
         <Grid sx={{ display: 'flex', flexDirection: 'column' }} item>
-          <DesktopDateTimePicker
+          <DateTimePicker
             disabled={disabled}
             onChange={(value) => {
               setValue({ field: 'deliveryDate', value });
@@ -45,13 +45,9 @@ export default function DeliveryDetails({
             renderInput={(params) => (
               <BaseTextField
                 {...params}
-                fullWidth
-                helperText={formRepresentation.deliveryDate.error}
-                error={!!formRepresentation.deliveryDate.error}
-                inputProps={{
-                  ...params.inputProps,
-                  placeholder: trans('selectDeliveryDate'),
-                }}
+                helperText={formRepresentation.orderDate.error}
+                sx={{ flex: 1 }}
+                error={!!formRepresentation.orderDate.error}
               />
             )}
           />

@@ -1,10 +1,10 @@
 import { Box, Typography } from '@mui/material';
-import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import useTranslation from '../../../hooks/useTranslation';
 import Autocomplete from '../../memoizedInput/autocomplete';
 import TextField from '../../memoizedInput/textField';
 import BaseTextField from '../../input/textField';
 import ConfirmationDialog from '../../confirmationDialog';
+import DatePicker from '../../input/datePicker';
 
 export default function Edit({ open, onClose }: { open: boolean, onClose: () => void }) {
   const { trans } = useTranslation();
@@ -71,11 +71,10 @@ export default function Edit({ open, onClose }: { open: boolean, onClose: () => 
                 )
                }
             />
-            <DesktopDatePicker
-              onChange={() => {}}
+            <DatePicker
               value={null}
               label={trans('dueBy')}
-              inputFormat="yyyy/MM/dd"
+              onChange={() => {}}
               renderInput={(params) => (
                 <TextField
                   sx={{ mt: '3rem' }}

@@ -1,5 +1,4 @@
 import { Box } from '@mui/material';
-import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { format } from 'date-fns';
 import Autocomplete from '../../../memoizedInput/autocomplete';
 import useTranslation from '../../../../hooks/useTranslation';
@@ -9,6 +8,7 @@ import BorderedBox from '../../../borderedBox';
 import SearchAccordion from '../../../searchAccordion';
 import useResponsive from '../../../../hooks/useResponsive';
 import ListFilterDivider from '../../../listFilterDivider';
+import DatePicker from '../../../input/datePicker';
 
 export default function Filter({
   disabled,
@@ -82,28 +82,17 @@ export default function Filter({
             }
           />
           <ListFilterDivider horizontal={!isDesktop} />
-          <DesktopDatePicker
+          <DatePicker
             disabled={disabled}
-            inputFormat="yyyy/MM/dd"
             value={formRepresentation.createdAt.value}
-            onChange={(value) => setValue({ field: 'createdAt', value: format(new Date(value.toString()), 'yyyy/MM/dd') })}
-            renderInput={(params) => (
-              <TextField
-                placeholder={trans('createdAt')}
-                fullWidth
-                size="small"
-                {...params}
-                inputProps={{
-                  ...params.inputProps,
-                  placeholder: trans('createdAt'),
-                }}
-                sx={{
-                  fieldset: {
-                    display: 'none',
-                  },
-                }}
-              />
-            )}
+            placeholder={trans('createdAt')}
+            onChange={(value) => {
+              if (!value) {
+                setValue({ field: 'createdAt', value });
+              } else {
+                setValue({ field: 'createdAt', value: format(new Date(value.toString()), 'yyyy/MM/dd') });
+              }
+            }}
           />
         </Box>
       </SearchAccordion>
