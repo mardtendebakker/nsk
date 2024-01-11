@@ -9,6 +9,7 @@ import {
   useState, useEffect, useCallback,
 } from 'react';
 import Add from '@mui/icons-material/Add';
+import { useRouter } from 'next/router';
 import { Product, ProductListItem } from '../../../../utils/axios/models/product';
 import debounce from '../../../../utils/debounce';
 import TextField from '../../../memoizedInput/textField';
@@ -23,17 +24,31 @@ import TableCell from '../../../tableCell';
 import can from '../../../../utils/can';
 import useSecurity from '../../../../hooks/useSecurity';
 import Can from '../../../can';
+import Filter from '../../../stock/list/filter';
+import useForm, { FieldPayload } from '../../../../hooks/useForm';
+import { getQueryParam } from '../../../../utils/location';
+import initFormState from '../productsInitFormState';
+import refreshList from '../productsRefreshList';
 
 export default function ProductsTable({ orderId }:{ orderId: string }) {
   const { state: { user } } = useSecurity();
+  const router = useRouter();
   const [showForm, setShowForm] = useState<boolean>(false);
+  const { formRepresentation, setValue, setData } = useForm(initFormState({
+    search: getQueryParam('search'),
+    productType: getQueryParam('productType'),
+    location: getQueryParam('location'),
+    productStatus: getQueryParam('productStatus'),
+    orderId,
+  }));
+
   const [editProductId, setEditProductId] = useState<number | undefined>();
   const [page, setPage] = useState<number>(1);
   const [rowsPerPage, setRowsPerPage] = useState<number>(5);
 
   const { trans } = useTranslation();
 
-  const { data: { data = [], count = 0 } = {}, call } = useAxios<undefined | { data?: ProductListItem[], count?: number }>(
+  const { data: { data = [], count = 0 } = {}, call, performing } = useAxios<undefined | { data?: ProductListItem[], count?: number }>(
     'get',
     APRODUCT_PATH.replace(':id', ''),
     {
@@ -44,7 +59,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
     },
   );
 
-  const { call: callPut } = useAxios('put', undefined, { withProgressBar: true });
+  const { call: callPut, performing: performingPut } = useAxios('put', undefined, { withProgressBar: true });
 
   const handleProductPropertyChange = useCallback(debounce((product: ProductListItem, property: string, value) => {
     callPut({
@@ -60,15 +75,31 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
     });
   }), []);
 
+  const defaultRefreshList = () => refreshList({
+    page,
+    rowsPerPage,
+    formRepresentation,
+    router,
+    call,
+  });
+
   useEffect(() => {
-    call({
-      params: {
-        take: rowsPerPage,
-        skip: (page - 1) * rowsPerPage,
-        orderId,
-      },
-    }).catch(() => {});
-  }, [page, rowsPerPage, orderId]);
+    defaultRefreshList();
+  }, [
+    page,
+    rowsPerPage,
+    formRepresentation.search.value,
+    formRepresentation.productType.value?.toString(),
+    formRepresentation.productStatus.value?.toString(),
+    formRepresentation.location.value?.toString(),
+  ]);
+
+  const disabled = (): boolean => performing || performingPut;
+
+  const handleReset = () => {
+    setData(initFormState({ orderId }));
+    setPage(1);
+  };
 
   return (
     <>
@@ -80,6 +111,16 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
           </Button>
         </Box>
       </Can>
+      <Filter
+        onReset={handleReset}
+        disabled={disabled()}
+        formRepresentation={formRepresentation}
+        setValue={(payload: FieldPayload) => {
+          setValue(payload);
+          setPage(1);
+        }}
+      />
+      <Box sx={{ m: '.5rem' }} />
       <PaginatedTable
         count={count}
         page={page}
@@ -100,6 +141,9 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
             </TableCell>
             <TableCell>
               {trans('productType')}
+            </TableCell>
+            <TableCell>
+              {trans('location')}
             </TableCell>
             <TableCell>
               {trans('retailPrice')}
@@ -123,6 +167,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
                 <TableCell>{product.sku}</TableCell>
                 <TableCell>{product.name}</TableCell>
                 <TableCell>{product.type}</TableCell>
+                <TableCell>{product.location}</TableCell>
                 <TableCell>
                   {product.price}
                 </TableCell>

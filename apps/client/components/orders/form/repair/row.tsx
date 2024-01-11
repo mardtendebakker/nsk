@@ -39,6 +39,7 @@ export default function Row({
         <TableCell>{product.sku}</TableCell>
         <TableCell>{product.name}</TableCell>
         <TableCell>{product.type}</TableCell>
+        <TableCell>{product.location}</TableCell>
         <TableCell>
           {product.price}
         </TableCell>
@@ -80,7 +81,7 @@ export default function Row({
       </TableRow>
       {product.services && (
         <TableRow>
-          <TableCell colSpan={8} sx={{ p: 0 }}>
+          <TableCell colSpan={9} sx={{ p: 0 }}>
             <Table sx={{ borderRadius: 0 }} size="small">
               <TableHead>
                 <TableRow>
