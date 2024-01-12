@@ -7,7 +7,7 @@ import { PrintService } from '../print/print.service';
 import { FileModule } from '../file/file.module';
 import { AProductModule } from '../aproduct/aproduct.module';
 import { OrderStatusModule } from '../admin/order-status/order-status.module';
-import { CustomerModule } from '../customer/customer.module';
+import { ContactModule } from '../contact/contact.module';
 
 @Module({
   providers: [
@@ -23,7 +23,7 @@ import { CustomerModule } from '../customer/customer.module';
   imports: [
     PrismaModule,
     FileModule,
-    CustomerModule,
+    ContactModule,
     AProductModule,
     OrderStatusModule,
   ],

@@ -5,9 +5,6 @@ export class ContactEntity implements contact {
   @ApiProperty()
   id: number;
 
-  @ApiPropertyOptional()
-  partner_id: number | null;
-
   @ApiProperty()
   company_id: number;
   

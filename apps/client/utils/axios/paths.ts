@@ -1,7 +1,5 @@
-export const CUSTOMERS_PATH = '/customers/:id';
 export const CONTACTS_PATH = '/contacts/:id';
 export const COMPANIES_PATH = '/companies/:id';
-export const SUPPLIERS_PATH = '/suppliers/:id';
 export const SIGN_IN_PATH = '/auth/login';
 export const SIGN_UP_PATH = '/auth/signup';
 export const REFRESH_TOKEN_PATH = '/auth/refresh';

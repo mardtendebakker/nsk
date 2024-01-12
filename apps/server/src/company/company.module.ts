@@ -8,14 +8,11 @@ import { ContactRepository } from '../contact/contact.repository';
 @Module({
   providers: [
     CompanyService,
-    {
-      provide: 'TYPE',
-      useValue: undefined,
-    },
     CompanyRepository,
     ContactRepository,
   ],
   controllers: [CompanyController],
   imports: [PrismaModule],
+  exports: [CompanyService],
 })
 export class CompanyModule {}

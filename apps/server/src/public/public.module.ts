@@ -3,13 +3,12 @@ import { PublicService } from './public.service';
 import { PublicController } from './public.controller';
 import { PrintService } from '../print/print.service';
 import { PurchaseModule } from '../purchase/purchase.module';
-import { SupplierModule } from '../supplier/supplier.module';
 import { FileModule } from '../file/file.module';
 import { ProductModule } from '../product/product.module';
 import { OrderStatusModule } from '../admin/order-status/order-status.module';
 import { HttpModule } from '@nestjs/axios';
-import { CustomerModule } from '../customer/customer.module';
 import { SaleModule } from '../sale/sale.module';
+import { ContactModule } from '../contact/contact.module';
 
 @Module({
   providers: [ PublicService, PrintService ],
@@ -18,8 +17,7 @@ import { SaleModule } from '../sale/sale.module';
     HttpModule,
     PurchaseModule,
     SaleModule,
-    SupplierModule,
-    CustomerModule,
+    ContactModule,
     FileModule,
     ProductModule,
     OrderStatusModule

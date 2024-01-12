@@ -54,14 +54,7 @@ export class StockService {
           ...(query.orderId || email) && {
             some: {
               ...(query.orderId && { order_id: query.orderId }),
-              ...(email && { aorder: {
-                OR: [
-                  { contact_aorder_supplier_idTocontact: { contact: { email } } },
-                  { contact_aorder_supplier_idTocontact: { email } },
-                  { contact_aorder_customer_idTocontact: { contact: { email } } },
-                  { contact_aorder_customer_idTocontact: { email } },
-                ],
-              }}),
+              ...this.getPartnerWhereInput(email),
             } 
           },
           ...(query.excludeByOrderId && { none: { order_id: query.excludeByOrderId } }),
@@ -805,5 +798,27 @@ export class StockService {
     };
     
     return productAttributeUpdate;
+  }
+
+  private getPartnerWhereInput(email?: string): Prisma.product_orderWhereInput {
+    return {
+      ...(email && { aorder: {
+        OR: [
+          { contact_aorder_customer_idTocontact: this.getContactWhereInput(email) },
+          { contact_aorder_supplier_idTocontact: this.getContactWhereInput(email) },
+        ]
+      }}),
+    };
+  }
+
+  private getContactWhereInput(email?: string): Prisma.contactWhereInput {
+    return {
+      ...(email && {
+        OR: [
+          { email },
+          { company_contact_company_idTocompany: { company: { companyContacts: { every: { email } } } } },
+        ],
+      }),
+    };
   }
 }

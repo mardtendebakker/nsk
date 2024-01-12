@@ -21,16 +21,22 @@ export class PrismaCompanyCreateInputDto implements Prisma.companyUncheckedCreat
 
     @ApiProperty()
     @IsBoolean()
+    @Type(() => Boolean)
     is_partner: boolean;
   
     @ApiProperty()
     @IsBoolean()
+    @Type(() => Boolean)
     is_customer: boolean;
   
     @ApiProperty()
     @IsBoolean()
+    @Type(() => Boolean)
     is_supplier: boolean;
 
     @ApiPropertyOptional()
+    @IsOptional()
+    @IsInt()
+    @Type(() => Number)
     partner_id?: number;
 }

@@ -13,9 +13,10 @@ export class CompanyService {
     protected readonly contactRepository: ContactRepository
   ) {}
 
-  async findAll(query: FindManyDto) {
+  async findAll(query: FindManyDto, email?: string) {
     const { search, is_customer, is_partner, is_supplier } = query;
     const where: Prisma.companyWhereInput = {
+      ...this.getPartnerWhereInput(email),
       name: { contains: search || '' },
       is_customer,
       is_partner,
@@ -32,7 +33,7 @@ export class CompanyService {
         is_partner: true,
         is_supplier: true,
         _count: {
-          select: { contact_contact_company_idTocompany: true }
+          select: { companyContacts: true }
         },
       },
       where,
@@ -43,38 +44,76 @@ export class CompanyService {
       count,
       data: data.map(({_count, ...rest}) => ({
         ...rest,
-        contactsCount: _count.contact_contact_company_idTocompany
+        contactsCount: _count.companyContacts
       }))
     }
   }
 
-  findOne(id: number) {
-    return this.repository.findOne({ where: { id } });
+  findOne(id: number, email?: string) {
+    return this.repository.findOne({
+      where: {
+        id,
+        ...this.getPartnerWhereInput(email),
+      } 
+    });
   }
 
-  async create(createDto: CreateCompanyDto) {
+  async create(createDto: CreateCompanyDto, email?: string) {
     if(await this.repository.findOne({where: { name:createDto.name }}))  {
       throw new ConflictException('Name already exist');
     }
 
-    return this.repository.create(createDto);
+    return this.repository.create({
+      ...createDto,
+      ...(email && { partner_id: (await this.findPartnerByEmail(email))?.id}),
+    });
   }
 
-  async update(id: number, updateDto: UpdateCompanyDto) {
+  async update(id: number, updateDto: UpdateCompanyDto, email?: string) {
     if(await this.repository.findOne({where: { name:updateDto.name, NOT : {id} }}))  {
       throw new ConflictException('Name already exist');
     }
 
-    return this.repository.update({ where:{id}, data: updateDto});
+    return this.repository.update({
+      where:{
+        id,
+        ...this.getPartnerWhereInput(email),
+      },
+      data: updateDto
+    });
   }
 
-  async delete(id: number) {
+  async delete(id: number, email?: string) {
     if((await this.contactRepository.count({ where : { company_id:id} })) > 0){
       throw new ConflictException('All of this company\'s contacts should be deleted first.');
     }
 
     return this.repository.delete({
-      where: { id },
+      where: {
+        id,
+        ...this.getPartnerWhereInput(email),
+      },
     });
+  }
+
+  async findPartnerByEmail(email: string) {
+    return this.repository.findFirst({
+      where: {
+        companyContacts: {
+          every: { email, is_main: true }
+        },
+      },
+    });
+  }
+
+  private getPartnerWhereInput(email?: string): Omit<Prisma.companyWhereInput, 'id' | 'name'> {
+    return {
+      ...(email && {
+        OR: [
+          { companyContacts: { every: { email } } },
+          { company: { companyContacts: { every: { email } } } },
+        ],
+      }),
+    };
   }
 }

@@ -242,7 +242,6 @@ export class SplitProductService {
       ...(Number.isFinite(product.price) && { price: product.price }),
       ...(Number.isFinite(product.entity_status) && { entity_status: product.entity_status }),
       ...(product.description && { description: product.description }),
-      ...(product.contact?.id && { owner_id: product.contact.id }),
       product_orders,
       product_attributes,
     };

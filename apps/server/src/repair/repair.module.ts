@@ -8,7 +8,7 @@ import { FileModule } from '../file/file.module';
 import { OrderStatusModule } from '../admin/order-status/order-status.module';
 import { SaleModule } from '../sale/sale.module';
 import { AProductModule } from '../aproduct/aproduct.module';
-import { CustomerModule } from '../customer/customer.module';
+import { ContactModule } from '../contact/contact.module';
 
 @Module({
   providers: [
@@ -25,7 +25,7 @@ import { CustomerModule } from '../customer/customer.module';
     PrismaModule,
     SaleModule,
     FileModule,
-    CustomerModule,
+    ContactModule,
     AProductModule,
     OrderStatusModule,
   ],

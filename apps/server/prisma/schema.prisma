@@ -121,11 +121,8 @@ model fos_user {
   lastname              String?         @db.VarChar(255)
   emailCanonical        String          @db.VarChar(255)
   partner_id            Int?
-  contact               contact?        @relation(fields: [partner_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_957A64799393F8FE")
   pickup                pickup[]
   user_location         user_location[]
-
-  @@index([partner_id], map: "IDX_957A64799393F8FE")
 }
 
 model location {
@@ -185,7 +182,6 @@ model product {
   afile                                                         afile[]
   location                                                      location            @relation(fields: [location_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_D34A04AD64D218E")
   product_status                                                product_status?     @relation(fields: [status_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_D34A04AD6BF700BD")
-  contact                                                       contact?            @relation(fields: [owner_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_D34A04AD7E3C61F9")
   product_type                                                  product_type?       @relation(fields: [type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_D34A04ADC54C8C93")
   location_label                                                location_label?     @relation(fields: [location_label_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "product_location_label_id_fkey")
   product_attribute_product_attribute_product_idToproduct       product_attribute[] @relation("product_attribute_product_idToproduct")
@@ -194,7 +190,6 @@ model product {
 
   @@index([location_id], map: "IDX_D34A04AD64D218E")
   @@index([status_id], map: "IDX_D34A04AD6BF700BD")
-  @@index([owner_id], map: "IDX_D34A04AD7E3C61F9")
   @@index([type_id], map: "IDX_D34A04ADC54C8C93")
   @@index([location_label_id], map: "product_location_label_id_fkey")
 }
@@ -330,47 +325,44 @@ model location_label {
 }
 
 model contact {
-  id                                  Int        @id @default(autoincrement())
-  partner_id                          Int?
+  id                                  Int      @id @default(autoincrement())
   company_id                          Int
-  name                                String?    @db.VarChar(255)
-  email                               String?    @db.VarChar(255)
-  phone                               String?    @db.VarChar(255)
-  phone2                              String?    @db.VarChar(255)
-  street                              String?    @db.VarChar(255)
-  street_extra                        String?    @db.VarChar(255)
-  city                                String?    @db.VarChar(255)
-  country                             String?    @db.VarChar(255)
-  state                               String?    @db.VarChar(255)
-  zip                                 String?    @db.VarChar(255)
-  street2                             String?    @db.VarChar(255)
-  street_extra2                       String?    @db.VarChar(255)
-  city2                               String?    @db.VarChar(255)
-  country2                            String?    @db.VarChar(255)
-  state2                              String?    @db.VarChar(255)
-  zip2                                String?    @db.VarChar(255)
+  name                                String?  @db.VarChar(255)
+  email                               String?  @db.VarChar(255)
+  phone                               String?  @db.VarChar(255)
+  phone2                              String?  @db.VarChar(255)
+  street                              String?  @db.VarChar(255)
+  street_extra                        String?  @db.VarChar(255)
+  city                                String?  @db.VarChar(255)
+  country                             String?  @db.VarChar(255)
+  state                               String?  @db.VarChar(255)
+  zip                                 String?  @db.VarChar(255)
+  street2                             String?  @db.VarChar(255)
+  street_extra2                       String?  @db.VarChar(255)
+  city2                               String?  @db.VarChar(255)
+  country2                            String?  @db.VarChar(255)
+  state2                              String?  @db.VarChar(255)
+  zip2                                String?  @db.VarChar(255)
   is_main                             Boolean?
   external_id                         Int?
-  supplierOrders                      aorder[]   @relation("aorder_supplier_idTocontact")
-  customerOrders                      aorder[]   @relation("aorder_customer_idTocontact")
-  company_contact_company_idTocompany company    @relation("contact_company_idTocompany", fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  fos_user                            fos_user[]
-  product                             product[]
+  supplierOrders                      aorder[] @relation("aorder_supplier_idTocontact")
+  customerOrders                      aorder[] @relation("aorder_customer_idTocontact")
+  company_contact_company_idTocompany company  @relation("contact_company_idTocompany", fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([company_id], map: "contact_company_id_fkey")
 }
 
 model company {
-  id                                  Int       @id @default(autoincrement())
-  partner_id                          Int?
-  name                                String    @unique(map: "name") @db.VarChar(255)
-  kvk_nr                              Int?
-  is_partner                          Boolean
-  is_supplier                         Boolean
-  is_customer                         Boolean
-  company                             company?   @relation("companyToCompany", fields: [partner_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "company_partner_id_fk")
-  other_company                       company[]  @relation("companyToCompany")
-  contact_contact_company_idTocompany contact[] @relation("contact_company_idTocompany")
+  id              Int       @id @default(autoincrement())
+  partner_id      Int?
+  name            String    @unique(map: "name") @db.VarChar(255)
+  kvk_nr          Int?
+  is_customer     Boolean   @default(false)
+  is_supplier     Boolean   @default(false)
+  is_partner      Boolean   @default(false)
+  company         company?  @relation("companyToCompany", fields: [partner_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "company_partner_id_fk")
+  other_company   company[] @relation("companyToCompany")
+  companyContacts contact[] @relation("contact_company_idTocompany")
 
-  @@index([partner_id], map: "company_partner_id_idx")
+  @@index([partner_id])
 }

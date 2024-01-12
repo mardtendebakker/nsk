@@ -30,7 +30,7 @@ export class CompanyRepository {
     return this.prisma.company.findUnique(params);
   }
 
-  create(companyCreateInput: Prisma.companyCreateInput) {
+  create(companyCreateInput: Prisma.companyUncheckedCreateWithoutCompanyContactsInput) {
     return this.prisma.company.create({
       data: companyCreateInput
     });
@@ -50,5 +50,9 @@ export class CompanyRepository {
   delete(params: {where: Prisma.companyWhereUniqueInput}) {
     const { where } = params;
     return this.prisma.company.delete({where});
+  }
+
+  findFirst(params: Prisma.companyFindFirstArgs) {
+    return this.prisma.company.findFirst(params);
   }
 }

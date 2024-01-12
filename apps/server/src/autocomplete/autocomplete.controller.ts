@@ -61,10 +61,25 @@ export class AutocompleteController {
   }
 
   @Get('/companies')
-  @UseGuards(AuthorizationGuard(LOCAL_GROUPS))
   @ApiResponse({ type: AutocompleteResponseDto, isArray: true })
-  companies(@Query() query: AutocompleteDto) {
-    return this.autocompleteService.findCompanies(query);
+  companies(
+    @Query() query: AutocompleteDto,
+    @CognitoUser(["groups", "email"])
+    {
+      groups,
+      email,
+    }: {
+      groups: CognitoGroups[];
+      email: string;
+    }
+  ) {
+    if (groups.some(group=> LOCAL_GROUPS.includes(group))) {
+      return this.autocompleteService.findCompanies(query);
+    } else if (groups.some(group=> PARTNERS_GROUPS.includes(group))) {
+      return this.autocompleteService.findCompanies(query, email);
+    } else {
+      throw new ForbiddenException("Insufficient permissions to access this api!");
+    }
   }
 
   @Get('/purchase-statuses')

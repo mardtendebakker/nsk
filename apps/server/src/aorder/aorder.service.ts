@@ -74,30 +74,7 @@ export class AOrderService {
         ...(this.type && { discr: this.type }),
         ...(search && { order_nr: { contains: search } }),
         ...(status && { status_id: { equals: status } }),
-        ...((createdBy || partner || email) && {
-          OR: [
-            {
-              contact_aorder_supplier_idTocontact: {
-                ...(createdBy && { id: createdBy }),
-                ...(partner && { partner_id: partner }),
-                ...(email && { contact: { email } }),
-              },
-            },
-            {
-              ...(email && { contact_aorder_supplier_idTocontact: { email } }),
-            },
-            {
-              contact_aorder_customer_idTocontact: {
-                ...(createdBy && { id: createdBy }),
-                ...(partner && { partner_id: partner }),
-                ...(email && { contact: { email } }),
-              },
-            },
-            {
-              ...(email && { contact_aorder_customer_idTocontact: { email } }),
-            },
-          ],
-        }),
+        ...this.getPartnerWhereInput({createdBy, partner, email}),
       },
       orderBy: Object.keys(query?.orderBy || {})?.length ? query.orderBy : { id: 'desc' },
     };
@@ -114,12 +91,7 @@ export class AOrderService {
     const params: Prisma.aorderFindUniqueArgs = {
       where: {
         id,
-        ...(email && {
-          OR: [
-            { contact_aorder_supplier_idTocontact: { email } },
-            { contact_aorder_customer_idTocontact: { email } },
-          ],
-        }),
+        ...this.getPartnerWhereInput({email}),
       },
     };
 
@@ -225,8 +197,13 @@ export class AOrderService {
 
   async findByIds(ids: number[], email?: string) {
     const params: Prisma.aorderFindManyArgs = {
-      where: { id: { in: ids } },
-      orderBy: { id: 'asc', },
+      where: {
+        id: { in: ids },
+        ...this.getPartnerWhereInput({email}),
+      },
+      orderBy: {
+        id: 'asc',
+      },
     };
 
     const result = <AOrderPayload[]>await this.repository.findBy(this.commonIncludePart(params));
@@ -373,6 +350,40 @@ export class AOrderService {
       zip: true,
       state: true,
       country: true
+    };
+  }
+
+  private getPartnerWhereInput(params: {
+    createdBy?: number,
+    partner?: number,
+    email?: string
+  }): Omit<Prisma.aorderWhereInput, 'id' | 'order_nr'> {
+    const { createdBy, partner, email } = params;
+    return {
+      ...((createdBy || partner || email) && {
+        OR: [
+          { contact_aorder_supplier_idTocontact: this.getContactWhereInput({createdBy, partner, email}) },
+          { contact_aorder_customer_idTocontact: this.getContactWhereInput({createdBy, partner, email}) },
+        ],
+      }),
+    };
+  }
+
+  private getContactWhereInput(params: {
+    createdBy?: number,
+    partner?: number,
+    email?: string
+  }): Prisma.contactWhereInput {
+    const { createdBy, partner, email } = params;
+    return {
+      ...(createdBy && { id: createdBy }),
+      ...(partner && { company_contact_company_idTocompany: {partner_id : partner } }),
+      ...(email && {
+        OR: [
+          { email },
+          { company_contact_company_idTocompany: { company: { companyContacts: { every: { email } } } } },
+        ],
+      }),
     };
   }
 }

@@ -85,11 +85,4 @@ export class CreateBodyStockDto {
   @ApiPropertyOptional()
   @Type(() => ProductOrderCreateDto)
   product_orders?: ProductOrderCreateDto[];
-
-  @ApiPropertyOptional()
-  @Transform(formDataNumberTransform)
-  @IsOptional()
-  @IsNumber()
-  @Type(() => Number)
-  owner_id?: number;
 }
