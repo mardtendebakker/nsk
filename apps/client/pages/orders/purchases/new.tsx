@@ -47,7 +47,27 @@ export function initFormState(trans, order?: Order) {
     },
     newSupplier: { value: false },
     name: {},
-    company_id: { validator: requiredSupplierFieldValidator('company_id', trans) },
+    companyId: {
+      validator: (formRepresentation: FormRepresentation): string | undefined | null => {
+        if (!formRepresentation.newCompany.value && !formRepresentation.companyId.value) {
+          return trans('requiredField');
+        }
+      },
+      value: order?.contact_aorder_supplier_idTocontact?.company_id,
+    },
+    newCompany: { value: false },
+    companyName: {
+      validator: (formRepresentation: FormRepresentation): string | undefined | null => {
+        if (formRepresentation.newCompany.value && !formRepresentation.companyName.value) {
+          return trans('requiredField');
+        }
+      },
+    },
+    companyKvkNr: {},
+    companyIsCustomer: { value: false },
+    companyIsSupplier: { value: false },
+    companyIsPartner: { value: false },
+    companyPartner: {},
     email: { validator: requiredSupplierFieldValidator('email', trans) },
     phone: { validator: requiredSupplierFieldValidator('phone', trans) },
     street: { validator: requiredSupplierFieldValidator('street', trans) },
@@ -75,11 +95,10 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
   };
 
   if (!formRepresentation.newSupplier.value) {
-    payload.supplier_id = formRepresentation.supplierId.value || undefined;
+    payload.supplier_id = formRepresentation.supplierId.value;
   } else {
     payload.supplier = {
       name: formRepresentation.name.value || undefined,
-      company_id: formRepresentation.company_id.value || undefined,
       email: formRepresentation.email.value || undefined,
       phone: formRepresentation.phone.value || undefined,
       street: formRepresentation.street.value || undefined,
@@ -89,6 +108,17 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
       state: formRepresentation.state.value || undefined,
       country: formRepresentation.country.value || undefined,
     };
+
+    if (!formRepresentation.newCompany.value) {
+      payload.supplier.company_id = formRepresentation.companyId.value;
+    } else {
+      payload.supplier.company_name = formRepresentation.companyName.value;
+      payload.supplier.company_kvk_nr = formRepresentation.companyKvkNr.value;
+      payload.supplier.is_customer = formRepresentation.companyIsCustomer.value;
+      payload.supplier.is_supplier = formRepresentation.companyIsSupplier.value;
+      payload.supplier.is_partner = formRepresentation.companyIsPartner.value;
+      payload.supplier.partner_id = formRepresentation.companyPartner.value;
+    }
   }
 
   return payload;
@@ -145,16 +175,6 @@ function NewPurchaseOrder() {
           <Box>
             <Button
               size="small"
-              sx={{ ml: '1.5rem' }}
-              color="inherit"
-              variant="outlined"
-              onClick={() => router.push(ORDERS_PURCHASES)}
-            >
-              {trans('cancel')}
-            </Button>
-            <Button
-              size="small"
-              sx={{ ml: '1.5rem' }}
               variant="contained"
               onClick={handleSubmit}
             >

@@ -36,7 +36,6 @@ export function initFormState(trans, order?: Order) {
     deliveryDate: { value: order?.delivery_date, required: true },
     deliveryType: { value: order?.delivery_type, required: true },
     deliveryInstructions: { value: order?.delivery_instructions },
-    partnerId: { value: order?.contact_aorder_customer_idTocontact?.contact?.id },
     customerId: {
       validator: (formRepresentation: FormRepresentation) => {
         if (!formRepresentation.newCustomer.value && formRepresentation.customerId.value == undefined) {
@@ -46,8 +45,28 @@ export function initFormState(trans, order?: Order) {
       value: order?.customer_id,
     },
     newCustomer: { value: false },
+    companyId: {
+      validator: (formRepresentation: FormRepresentation): string | undefined | null => {
+        if (!formRepresentation.newCompany.value && !formRepresentation.companyId.value) {
+          return trans('requiredField');
+        }
+      },
+      value: order?.contact_aorder_customer_idTocontact?.company_id,
+    },
+    newCompany: { value: false },
+    companyName: {
+      validator: (formRepresentation: FormRepresentation): string | undefined | null => {
+        if (formRepresentation.newCompany.value && !formRepresentation.companyName.value) {
+          return trans('requiredField');
+        }
+      },
+    },
+    companyKvkNr: {},
+    companyIsCustomer: { value: false },
+    companyIsSupplier: { value: false },
+    companyIsPartner: { value: false },
+    companyPartner: {},
     name: {},
-    company_id: { validator: requiredCustomerFieldValidator('company_id', trans) },
     email: { validator: requiredCustomerFieldValidator('email', trans) },
     phone: { validator: requiredCustomerFieldValidator('phone', trans) },
     street: { validator: requiredCustomerFieldValidator('street', trans) },
@@ -79,7 +98,6 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
   } else {
     payload.customer = {
       name: formRepresentation.name.value || undefined,
-      company_id: formRepresentation.company_id.value || undefined,
       email: formRepresentation.email.value || undefined,
       phone: formRepresentation.phone.value || undefined,
       street: formRepresentation.street.value || undefined,
@@ -89,6 +107,17 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
       state: formRepresentation.state.value || undefined,
       country: formRepresentation.country.value || undefined,
     };
+
+    if (!formRepresentation.newCompany.value) {
+      payload.customer.company_id = formRepresentation.companyId.value;
+    } else {
+      payload.customer.company_name = formRepresentation.companyName.value;
+      payload.customer.company_kvk_nr = formRepresentation.companyKvkNr.value;
+      payload.customer.is_customer = formRepresentation.companyIsCustomer.value;
+      payload.customer.is_supplier = formRepresentation.companyIsSupplier.value;
+      payload.customer.is_customer = formRepresentation.companyIsPartner.value;
+      payload.customer.partner_id = formRepresentation.companyPartner.value;
+    }
   }
 
   return payload;
@@ -145,16 +174,6 @@ function NewSalesOrder() {
           <Box>
             <Button
               size="small"
-              sx={{ ml: '1.5rem' }}
-              color="inherit"
-              variant="outlined"
-              onClick={() => router.push(ORDERS_SALES)}
-            >
-              {trans('cancel')}
-            </Button>
-            <Button
-              size="small"
-              sx={{ ml: '1.5rem' }}
               variant="contained"
               onClick={handleSubmit}
             >

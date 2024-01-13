@@ -68,7 +68,8 @@ export interface Order {
   delivery_type:number,
   delivery_instructions:string,
   totalPrice: number,
-  contact_aorder_customer_idTocontact:Contact
+  contact_aorder_customer_idTocontact:Contact,
+  contact_aorder_supplier_idTocontact:Contact
   totalPerProductType: object
 }
 

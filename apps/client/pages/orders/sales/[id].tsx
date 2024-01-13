@@ -51,6 +51,7 @@ function UpdateSalesOrder() {
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
+    console.log(validate());
 
     if (validate() || !canSubmit()) {
       return;
@@ -88,16 +89,6 @@ function UpdateSalesOrder() {
           <Box>
             <Button
               size="small"
-              sx={{ ml: '1.5rem' }}
-              color="inherit"
-              variant="outlined"
-              onClick={() => router.push(ORDERS_SALES)}
-            >
-              {trans('cancel')}
-            </Button>
-            <Button
-              size="small"
-              sx={{ ml: '1.5rem' }}
               variant="contained"
               onClick={handleSubmit}
             >
