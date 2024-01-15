@@ -27,15 +27,24 @@ export class CreateContactDto extends OmitType(PrismaContactCreateInputDto, [
   @ApiPropertyOptional()
   @IsOptional()
   @IsBoolean()
-  is_partner?: boolean;
+  @Type(() => Boolean)
+  company_is_partner?: boolean;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsBoolean()
-  is_customer?: boolean;
+  @Type(() => Boolean)
+  company_is_customer?: boolean;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsBoolean()
-  is_supplier?: boolean;
+  @Type(() => Boolean)
+  company_is_supplier?: boolean;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsInt()
+  @Type(() => Number)
+  company_partner_id?: number;
 }

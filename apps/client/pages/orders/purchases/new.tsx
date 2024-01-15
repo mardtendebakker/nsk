@@ -64,8 +64,6 @@ export function initFormState(trans, order?: Order) {
       },
     },
     companyKvkNr: {},
-    companyIsCustomer: { value: false },
-    companyIsSupplier: { value: false },
     companyIsPartner: { value: false },
     companyPartner: {},
     email: { validator: requiredSupplierFieldValidator('email', trans) },
@@ -114,10 +112,8 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
     } else {
       payload.supplier.company_name = formRepresentation.companyName.value;
       payload.supplier.company_kvk_nr = formRepresentation.companyKvkNr.value;
-      payload.supplier.is_customer = formRepresentation.companyIsCustomer.value;
-      payload.supplier.is_supplier = formRepresentation.companyIsSupplier.value;
-      payload.supplier.is_partner = formRepresentation.companyIsPartner.value;
-      payload.supplier.partner_id = formRepresentation.companyPartner.value;
+      payload.supplier.company_is_partner = formRepresentation.companyIsPartner.value;
+      payload.supplier.company_partner_id = formRepresentation.companyPartner.value;
     }
   }
 

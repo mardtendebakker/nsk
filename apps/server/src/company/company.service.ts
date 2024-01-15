@@ -37,7 +37,7 @@ export class CompanyService {
         },
       },
       where,
-      orderBy: { id: 'desc' }
+      orderBy: Object.keys(query?.orderBy || {})?.length ? query.orderBy : { id: 'desc' },
     });
 
     return {

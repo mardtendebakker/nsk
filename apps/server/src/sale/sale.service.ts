@@ -32,7 +32,7 @@ export class SaleService extends AOrderService {
     protected readonly aProductService: AProductService,
     protected readonly orderStatusService: OrderStatusService,
   ) {
-    super(repository, printService, fileService, AOrderDiscrimination.SALE);
+    super(repository, printService, fileService, contactService, AOrderDiscrimination.SALE);
   }
 
   async addProducts(id: number, productIds: number[]) {
@@ -148,10 +148,10 @@ export class SaleService extends AOrderService {
         email: Email,
         phone: Telefoon,
         phone2: MobielNummer,
-        is_customer: true,
-        is_partner: false,
-        is_supplier: false,
-        ...(partner_id && { partner_id: partner_id }),
+        company_is_customer: true,
+        company_is_partner: false,
+        company_is_supplier: false,
+        ...(partner_id && { company_partner_id: partner_id }),
       };
   
       const customer = await this.contactService.checkExists(customerData);

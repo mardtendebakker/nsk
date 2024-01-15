@@ -58,16 +58,6 @@ function Form({ formRepresentation, disabled, setValue }: {
           <Box sx={{ m: '.25rem' }} />
           <Box sx={{ flex: 0.33, display: 'flex' }}>
             <Checkbox
-              checked={formRepresentation.companyIsCustomer.value}
-              onCheck={(checked) => setValue({ field: 'companyIsCustomer', value: checked })}
-              label={trans('isCustomer')}
-            />
-            <Checkbox
-              checked={formRepresentation.companyIsSupplier.value}
-              onCheck={(checked) => setValue({ field: 'companyIsSupplier', value: checked })}
-              label={trans('isSupplier')}
-            />
-            <Checkbox
               checked={formRepresentation.companyIsPartner.value}
               onCheck={(checked) => setValue({ field: 'companyIsPartner', value: checked })}
               label={trans('isPartner')}

@@ -62,8 +62,6 @@ export function initFormState(trans, order?: Order) {
       },
     },
     companyKvkNr: {},
-    companyIsCustomer: { value: false },
-    companyIsSupplier: { value: false },
     companyIsPartner: { value: false },
     companyPartner: {},
     name: {},
@@ -113,10 +111,8 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
     } else {
       payload.customer.company_name = formRepresentation.companyName.value;
       payload.customer.company_kvk_nr = formRepresentation.companyKvkNr.value;
-      payload.customer.is_customer = formRepresentation.companyIsCustomer.value;
-      payload.customer.is_supplier = formRepresentation.companyIsSupplier.value;
-      payload.customer.is_customer = formRepresentation.companyIsPartner.value;
-      payload.customer.partner_id = formRepresentation.companyPartner.value;
+      payload.customer.company_is_partner = formRepresentation.companyIsPartner.value;
+      payload.customer.company_partner_id = formRepresentation.companyPartner.value;
     }
   }
 

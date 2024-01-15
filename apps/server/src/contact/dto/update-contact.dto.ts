@@ -27,16 +27,22 @@ export class UpdateContactDto extends OmitType(PrismaContactUpdateInputDto, [
     @ApiPropertyOptional()
     @IsOptional()
     @IsBoolean()
-    is_partner?: boolean;
+    company_is_partner?: boolean;
   
     @ApiPropertyOptional()
     @IsOptional()
     @IsBoolean()
-    is_customer?: boolean;
+    company_is_customer?: boolean;
   
     @ApiPropertyOptional()
     @IsOptional()
     @IsBoolean()
-    is_supplier?: boolean;
+    company_is_supplier?: boolean;
+
+    @ApiPropertyOptional()
+    @IsOptional()
+    @IsInt()
+    @Type(() => Number)
+    company_partner_id?: number;
   }
   

@@ -47,7 +47,8 @@ export class ContactService {
         },
         company_contact_company_idTocompany: true,
       },
-      where
+      where,
+      orderBy: Object.keys(query?.orderBy || {})?.length ? query.orderBy : { id: 'desc' },
     });
 
     //TODO refacto response DTO
@@ -82,26 +83,25 @@ export class ContactService {
   async create(createDto: CreateContactDto, email?: string) {
     const {
       company_id,
-      company_name = '',
+      company_name,
       company_kvk_nr,
-      is_partner = false,
-      is_customer = false,
-      is_supplier = false,
+      company_is_partner,
+      company_is_customer,
+      company_is_supplier,
+      company_partner_id,
+      ...restContactDto
     } = createDto;
-
-    let { is_main } = createDto;
 
     if (!company_id && !company_name) {
       throw new BadRequestException('Either company_id or company name is required');
     }
 
-    if (is_main == undefined && !isFinite(company_id)) {
-      is_main = true;
+    if (restContactDto.is_main == undefined && !isFinite(company_id)) { // check if it is the first contact of a new company
+      restContactDto.is_main = true;
     }
     
     return this.repository.create({
-      ...createDto,
-      is_main,
+      ...restContactDto,
       company_contact_company_idTocompany: {
         connectOrCreate: {
           where: {
@@ -110,9 +110,10 @@ export class ContactService {
           create: {
             name: company_name,
             kvk_nr: company_kvk_nr,
-            is_supplier,
-            is_customer,
-            is_partner,
+            is_partner: company_is_partner,
+            is_customer: company_is_customer,
+            is_supplier: company_is_supplier,
+            ...(company_partner_id && { partner_id: company_partner_id }),
             ...(email && { partner_id: (await this.findPartnerByEmail(email))?.id}),
           },
         },
@@ -137,20 +138,28 @@ export class ContactService {
     const {
       company_name,
       company_kvk_nr,
-      is_partner = false,
-      is_customer = false,
-      is_supplier = false,
+      company_is_partner = false,
+      company_is_customer = false,
+      company_is_supplier = false,
+      company_partner_id,
     } = updateDto;
 
     try {
       return await this.repository.update({
         data: {
           ...updateDto,
-          ...(company_name && { company_contact_company_idTocompany: { update: { name: company_name } } }),
-          ...(company_kvk_nr && { company_contact_company_idTocompany: { update: { kvk_nr: company_kvk_nr } } }),
-          ...(is_partner && { company_contact_company_idTocompany: { update: { is_partner } } }),
-          ...(is_customer && { company_contact_company_idTocompany: { update: { is_customer } } }),
-          ...(is_supplier && { company_contact_company_idTocompany: { update: { is_supplier } } }),
+          ...((company_name || company_kvk_nr || company_is_partner || company_is_customer || company_is_supplier || company_partner_id)) && {
+            company_contact_company_idTocompany: {
+              update: {
+                ...(company_name && { name: company_name }),
+                ...(company_kvk_nr && { kvk_nr: company_kvk_nr }),
+                ...(company_is_partner && { is_partner: company_is_partner }),
+                ...(company_is_customer && { is_customer: company_is_customer }),
+                ...(company_is_supplier && { is_supplier: company_is_supplier }),
+                ...(company_partner_id && { partner_id: company_partner_id }),
+              },
+            },
+          },
         },
         where: {
           id,
@@ -173,9 +182,9 @@ export class ContactService {
     if (zip) {
       contact = await this.repository.findFirst({
         where: {
-          ...(createDto.is_partner && { company_contact_company_idTocompany: { is_partner: true } }),
-          ...(createDto.is_customer && { company_contact_company_idTocompany: { is_customer: true } }),
-          ...(createDto.is_supplier && { company_contact_company_idTocompany: { is_supplier: true } }),
+          ...(createDto.company_is_partner && { company_contact_company_idTocompany: { is_partner: true } }),
+          ...(createDto.company_is_customer && { company_contact_company_idTocompany: { is_customer: true } }),
+          ...(createDto.company_is_supplier && { company_contact_company_idTocompany: { is_supplier: true } }),
           AND: [
             { zip: zip },
             {

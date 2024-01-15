@@ -68,13 +68,13 @@ export class PrismaAOrderCreateInputDto {
   @IsInt()
   @Type(() => Number)
   @ValidateIf((_, value) => value !== undefined)
-  supplier_id?: number;
+  customer_id?: number;
   
   @ApiPropertyOptional()
   @IsInt()
   @Type(() => Number)
   @ValidateIf((_, value) => value !== undefined)
-  customer_id?: number;
+  supplier_id?: number;
   
   @ApiPropertyOptional()
   @Type(() => CreatePickupUncheckedWithoutAorderInputDto)

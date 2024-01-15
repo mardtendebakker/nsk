@@ -11,6 +11,7 @@ import { FileService } from '../file/file.service';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { AOrderProductProcess } from './aorder-product.process';
 import { AOrderPayload } from './types/aorder-payload';
+import { ContactService } from '../contact/contact.service';
 type CommonAOrderDto = Partial<Omit<CreateAOrderDto, 'pickup' | 'repair'>>;
 type CommonAOrderInput = Partial<Omit<Prisma.aorderCreateInput, 'pickup' | 'repair'>>;
 
@@ -19,7 +20,8 @@ export class AOrderService {
     protected readonly repository: AOrderRepository,
     protected readonly printService: PrintService,
     protected readonly fileService: FileService,
-    protected readonly type?: AOrderDiscrimination
+    protected readonly contactService: ContactService,
+    protected readonly type?: AOrderDiscrimination,
   ) {}
 
   async findAll(query: FindManyDto, email?: string) {
@@ -109,12 +111,12 @@ export class AOrderService {
       throw new BadRequestException('The operation requires a specific order type');
     }
 
-    const { pickup, repair, ...commonDto } = aorderDto;
+    const { pickup, repair, ...orderDto } = aorderDto;
 
     const params: Prisma.aorderCreateArgs = {
       data: {
-        ...this.processCreateOrUpdateOrderInput(commonDto),
-        order_nr: commonDto.order_nr || 'TEMP' + Math.floor(Date.now() / 1000).toString(),
+        ...await this.processCreateOrUpdateOrderInput(orderDto),
+        order_nr: orderDto.order_nr || 'TEMP' + Math.floor(Date.now() / 1000).toString(),
         discr: this.type,
         order_date: new Date(),
         ...(pickup && { pickup: { create: { ...pickup } } }),
@@ -124,7 +126,7 @@ export class AOrderService {
 
     const order = <AOrderPayload>await this.repository.create(this.commonIncludePart(params));
 
-    if (commonDto.order_nr === undefined) {
+    if (orderDto.order_nr === undefined) {
       const { id, order_date } = order;
 
       const order_nr = order_date.getFullYear() + id.toString().padStart(6, "0");
@@ -148,7 +150,7 @@ export class AOrderService {
     const { pickup, repair, ...commonDto } = aorderDto;
 
     const data: Prisma.aorderUpdateInput = {
-      ...this.processCreateOrUpdateOrderInput(commonDto),
+      ...await this.processCreateOrUpdateOrderInput(commonDto),
       ...(pickup && { pickup: { upsert: { update: { ...pickup }, create: { ...pickup } } } }),
       ...(repair && { repair: { upsert: { update: { ...repair }, create: { ...repair } } } }),
     };
@@ -216,43 +218,41 @@ export class AOrderService {
     return this.printService.printAOrders(aorders);
   }
 
-  protected processCreateOrUpdateOrderInput(orderDto: CommonAOrderDto): CommonAOrderInput {
+  protected async processCreateOrUpdateOrderInput(orderDto: CommonAOrderDto): Promise<CommonAOrderInput> {
     const {
       status_id,
-      supplier_id,
-      supplier: {
-        company_id: supplier_company_id,
-        ...rest_supplier
-      } = {},
       customer_id,
-      customer: {
-        company_id: customer_company_id,
-        ...rest_customer
-      } = {},
+      customer,
+      supplier_id,
+      supplier,
       ...rest
     } = orderDto;
 
-    const supplier: Prisma.contactCreateWithoutSupplierOrdersInput = {
-      ...rest_supplier,
-      company_contact_company_idTocompany: {
-        connect: { id: supplier_company_id },
-      },
-    };
+    let customerId: number;
+    let supplierId: number;
 
-    const customer: Prisma.contactCreateWithoutCustomerOrdersInput = {
-      ...rest_customer,
-      company_contact_company_idTocompany: {
-        connect: { id: customer_company_id },
-      },
-    };
+    if (!customer_id && (customer?.company_id || customer?.company_name)) {
+      customerId = (await this.contactService.checkExists({
+        ...customer,
+        company_is_partner: false,
+        company_is_customer: true,
+        company_is_supplier: false,
+      }))?.id;
+    }
+    if (!supplier_id && (supplier?.company_id || supplier?.company_name)) {
+      supplierId = (await this.contactService.checkExists({
+        ...supplier,
+        company_is_partner: false,
+        company_is_customer: false,
+        company_is_supplier: true,
+      })).id;
+    }
 
     const data: CommonAOrderInput = {
       ...rest,
       ...(status_id && { order_status: { connect: { id: status_id } } }),
-      ...(supplier_id && { contact_aorder_supplier_idTocontact: { connect: { id: supplier_id } } }),
-      ...(supplier_company_id && { contact_aorder_supplier_idTocontact: { create: { ...supplier } } }),
-      ...(customer_id && { contact_aorder_customer_idTocontact: { connect: { id: customer_id } } }),
-      ...(customer_company_id && { contact_aorder_customer_idTocontact: { create: { ...customer } } }),
+      ...((customer_id || customerId) && { contact_aorder_customer_idTocontact: { connect: { id: customer_id || customerId } } }),
+      ...((supplier_id || supplierId) && { contact_aorder_supplier_idTocontact: { connect: { id: supplier_id || supplierId } } }),
     };
 
     return data;
@@ -340,7 +340,28 @@ export class AOrderService {
   protected getContactSelect(): Prisma.contactSelect {
     return {
       id: true,
-      company_contact_company_idTocompany: true,
+      company_contact_company_idTocompany: {
+        select: {
+          id: true,
+          name: true,
+          company: {
+            select: {
+              id: true,
+              name: true,
+              companyContacts: {
+                select: {
+                  id: true,
+                  name: true,
+                  street: true,
+                  city: true,
+                  zip: true,
+                  is_main: true,
+                },
+              },
+            },
+          },
+        }
+      },
       name: true,
       email: true,
       phone: true,
@@ -349,7 +370,7 @@ export class AOrderService {
       city: true,
       zip: true,
       state: true,
-      country: true
+      country: true,
     };
   }
 
