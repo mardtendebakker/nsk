@@ -99,13 +99,18 @@ export class ContactService {
     if (restContactDto.is_main == undefined && !isFinite(company_id)) { // check if it is the first contact of a new company
       restContactDto.is_main = true;
     }
-    
-    return this.repository.create({
-      ...restContactDto,
-      company_contact_company_idTocompany: {
+
+    let customConnectOrCreate: Prisma.companyCreateNestedOneWithoutCompanyContactsInput;
+
+    if (company_id) {
+      customConnectOrCreate = {
+        connect: { id: company_id },
+      }
+    } else {
+      customConnectOrCreate = {
         connectOrCreate: {
           where: {
-            ...(company_id && { id: company_id } || { name: company_name }),
+            name: company_name,
           },
           create: {
             name: company_name,
@@ -117,7 +122,12 @@ export class ContactService {
             ...(email && { partner_id: (await this.findPartnerByEmail(email))?.id}),
           },
         },
-      },
+      };
+    }
+    
+    return this.repository.create({
+      ...restContactDto,
+      company_contact_company_idTocompany: customConnectOrCreate,
     });
   }
   

@@ -111,12 +111,12 @@ export class AOrderService {
       throw new BadRequestException('The operation requires a specific order type');
     }
 
-    const { pickup, repair, ...orderDto } = aorderDto;
+    const { pickup, repair, ...commonDto } = aorderDto;
 
     const params: Prisma.aorderCreateArgs = {
       data: {
-        ...await this.processCreateOrUpdateOrderInput(orderDto),
-        order_nr: orderDto.order_nr || 'TEMP' + Math.floor(Date.now() / 1000).toString(),
+        ...await this.processCreateOrUpdateOrderInput(commonDto),
+        order_nr: commonDto.order_nr || 'TEMP' + Math.floor(Date.now() / 1000).toString(),
         discr: this.type,
         order_date: new Date(),
         ...(pickup && { pickup: { create: { ...pickup } } }),
@@ -126,7 +126,7 @@ export class AOrderService {
 
     const order = <AOrderPayload>await this.repository.create(this.commonIncludePart(params));
 
-    if (orderDto.order_nr === undefined) {
+    if (commonDto.order_nr === undefined) {
       const { id, order_date } = order;
 
       const order_nr = order_date.getFullYear() + id.toString().padStart(6, "0");
