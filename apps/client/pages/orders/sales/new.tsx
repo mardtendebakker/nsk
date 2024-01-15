@@ -47,7 +47,7 @@ export function initFormState(trans, order?: Order) {
     newCustomer: { value: false },
     companyId: {
       validator: (formRepresentation: FormRepresentation): string | undefined | null => {
-        if (!formRepresentation.newCompany.value && !formRepresentation.companyId.value) {
+        if (formRepresentation.newCustomer.value && !formRepresentation.newCompany.value && !formRepresentation.companyId.value) {
           return trans('requiredField');
         }
       },

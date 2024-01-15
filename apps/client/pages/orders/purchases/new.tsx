@@ -49,7 +49,7 @@ export function initFormState(trans, order?: Order) {
     name: {},
     companyId: {
       validator: (formRepresentation: FormRepresentation): string | undefined | null => {
-        if (!formRepresentation.newCompany.value && !formRepresentation.companyId.value) {
+        if (formRepresentation.newSupplier.value && !formRepresentation.newCompany.value && !formRepresentation.companyId.value) {
           return trans('requiredField');
         }
       },
@@ -134,6 +134,7 @@ function NewPurchaseOrder() {
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
+    console.log(validate());
     if (validate() || performing) {
       return;
     }
