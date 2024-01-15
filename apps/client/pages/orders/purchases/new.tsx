@@ -134,7 +134,6 @@ function NewPurchaseOrder() {
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    console.log(validate());
     if (validate() || performing) {
       return;
     }
