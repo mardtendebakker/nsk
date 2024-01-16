@@ -61,8 +61,10 @@ function refreshList({
       ...paramsToSend,
     },
   })
-    .then((result) => result)
-    .finally(() => pushURLParams({ params, router }));
+    .then((result) => {
+      pushURLParams({ params, router });
+      return result;
+    }).catch(() => {});
 }
 
 export default function ListContainer() {

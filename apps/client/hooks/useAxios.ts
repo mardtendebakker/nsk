@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useSnackbar } from 'notistack';
 import { trans } from 'itranslator';
 import axios, {
-  AxiosResponse, AxiosPromise, CancelToken, AxiosError,
+  AxiosResponse, AxiosPromise, CancelToken, AxiosError, CanceledError,
 } from '../utils/axios';
 import { hideProgress, showProgress } from '../components/topLinearProgress';
 
@@ -137,6 +137,10 @@ const useAxios = <Data>(
 
         return resp;
       } catch (e) {
+        if (e instanceof CanceledError) {
+          throw new Error(explicitPath + path);
+        }
+
         setError(e);
         if (showErrorMessage) {
           handleError(e);

@@ -32,7 +32,7 @@ export default function DashboardLayout({ children }: { children: JSX.Element | 
 
   useEffect(() => {
     if (user?.emailVerified) {
-      refreshUserInfo();
+      refreshUserInfo().catch(() => {});
     }
   }, []);
 

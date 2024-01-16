@@ -65,7 +65,7 @@ export default function ProductsTable({ orderId, refreshOrder }:{ orderId: strin
         skip: (page - 1) * rowsPerPage,
         orderId,
       },
-    });
+    }).catch(() => {});
   }, [page, rowsPerPage, orderId]);
 
   const handleProductsAdded = (productIds: number[]) => {

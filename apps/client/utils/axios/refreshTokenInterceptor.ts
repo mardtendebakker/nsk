@@ -14,7 +14,7 @@ export default async (err: AxiosError): Promise<any> => {
   const { config, response: originalResponse } = err;
 
   if (err instanceof CanceledError) {
-    return Promise.resolve();
+    return Promise.reject(err);
   }
 
   if (EXCLUDED_PATHS.includes(config.url)) {

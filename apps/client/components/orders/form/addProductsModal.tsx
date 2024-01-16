@@ -46,7 +46,7 @@ function refreshList({
       skip: (page - 1) * rowsPerPage,
       ...paramsToSend,
     },
-  });
+  }).catch(() => {});
 }
 
 export default function AddProductsModal({

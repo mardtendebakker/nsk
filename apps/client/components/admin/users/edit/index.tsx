@@ -13,7 +13,7 @@ export default function Edit({ username, onClose, onConfirm }: { username: strin
   const [selectedOptions, setSelectedOptions] = useState<{ id: string, label: string }[]>([]);
 
   useEffect(() => {
-    call();
+    call().catch(() => {});
   }, []);
 
   useEffect(() => {

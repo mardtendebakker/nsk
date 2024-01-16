@@ -78,7 +78,7 @@ export default function DataSourcePicker(
           setCurrentValue(undefined);
         }
       }
-    });
+    }).catch(() => {});
   }, [value?.toString()]);
 
   useEffect(() => {

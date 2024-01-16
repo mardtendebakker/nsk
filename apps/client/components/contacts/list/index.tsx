@@ -76,7 +76,7 @@ function refreshList({
       skip: (page - 1) * rowsPerPage,
       ...paramsToSend,
     },
-  }).finally(() => pushURLParams({ params, router }));
+  }).then(() => pushURLParams({ params, router })).catch(() => {});
 }
 
 export default function ListContainer({ company, editContactRouteBuilder }: { company?: Company, editContactRouteBuilder: (contact: ContactListItem) => string }) {
