@@ -26,6 +26,10 @@ export class AutocompleteService {
     return this.repository.findPartners(autocompleteDto);
   }
 
+  async findCompanies(autocompleteDto: AutocompleteDto, email?: string) {
+    return this.repository.findCompanies(autocompleteDto, email);
+  }
+
   async findPurchaseStatuses(autocompleteDto: AutocompleteDto) {
     return this.repository.findPurchaseStatuses(autocompleteDto);
   }

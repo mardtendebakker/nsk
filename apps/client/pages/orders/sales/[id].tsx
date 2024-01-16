@@ -15,6 +15,7 @@ import useTranslation from '../../../hooks/useTranslation';
 import { initFormState, formRepresentationToBody } from './new';
 import { ORDERS_SALES, ORDERS_SALES_NEW } from '../../../utils/routes';
 import ProductsTable from '../../../components/orders/form/sales/productsTable';
+import { Order } from '../../../utils/axios/models/order';
 
 function UpdateSalesOrder() {
   const { trans } = useTranslation();
@@ -27,7 +28,7 @@ function UpdateSalesOrder() {
     { withProgressBar: true, showSuccessMessage: true },
   );
 
-  const { call: fetchSalesOrder, performing: performingFetchSalesOrder, data: salesOrder } = useAxios(
+  const { call: fetchSalesOrder, performing: performingFetchSalesOrder, data: salesOrder } = useAxios<undefined | Order>(
     'get',
     SALES_ORDERS_PATH.replace(':id', id?.toString()),
     { withProgressBar: true },
@@ -50,6 +51,7 @@ function UpdateSalesOrder() {
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
+    console.log(validate());
 
     if (validate() || !canSubmit()) {
       return;
@@ -87,21 +89,11 @@ function UpdateSalesOrder() {
           <Box>
             <Button
               size="small"
-              sx={{ ml: '1.5rem' }}
-              color="inherit"
-              variant="outlined"
-              onClick={() => router.push(ORDERS_SALES)}
-            >
-              {trans('cancel')}
-            </Button>
-            <Button
-              size="small"
-              sx={{ ml: '1.5rem' }}
               variant="contained"
               onClick={handleSubmit}
             >
               <Check />
-              {trans('saveSales')}
+              {trans('save')}
             </Button>
           </Box>
         </Box>

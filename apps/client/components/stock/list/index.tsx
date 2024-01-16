@@ -112,7 +112,7 @@ export default function ListContainer({ type } : { type: 'product' | 'repair' | 
     productStatus: getQueryParam('productStatus'),
   }));
 
-  const { data: { data = [], count = 0 } = {}, call, performing } = useAxios(
+  const { data: { data = [], count = 0 } = {}, call, performing } = useAxios<undefined | { data?: ProductListItem[], count?: number }>(
     'get',
     ajaxPath.replace(':id', ''),
     {

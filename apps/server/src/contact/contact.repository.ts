@@ -25,6 +25,12 @@ export class ContactRepository {
       data: submission[1],
     };
   }
+
+  count(params: Prisma.contactFindManyArgs) {
+    const { where } = params;
+
+    return this.prisma.contact.count({where});
+  }
   
   create(contactCreateInput: Prisma.contactCreateInput) {
     return this.prisma.contact.create({

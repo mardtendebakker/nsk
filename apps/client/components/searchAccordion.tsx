@@ -15,13 +15,15 @@ export default function SearchAccordion({
   searchLabel,
   onSearchChange,
   onReset,
+  disabledFilter,
 }: {
   children: JSX.Element,
   disabled?: boolean,
   searchValue: string,
   searchLabel?: string,
   onSearchChange: (searchValue: string) => void,
-  onReset: () => void
+  onReset: () => void,
+  disabledFilter?: boolean
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [showFilter, setShowFilter] = useState(false);
@@ -58,14 +60,16 @@ export default function SearchAccordion({
                 inputRef.current.value = '';
               }
             }}
-            sx={{ mr: '.5rem' }}
+            sx={{ mr: '.5rem', px: '1rem' }}
           >
             {trans('reset')}
           </Button>
-          <Button size="small" variant="outlined" color="primary" onClick={() => setShowFilter((oldValue) => !oldValue)}>
+          {!disabledFilter && (
+          <Button size="small" variant="outlined" color="primary" onClick={() => setShowFilter((oldValue) => !oldValue)} sx={{ px: '1rem' }}>
             {trans('filter')}
             <ChevronRight sx={{ transform: `rotate(${showFilter ? '-90deg' : '90deg'})` }} />
           </Button>
+          )}
         </Box>
       </AccordionSummary>
       <Divider />
@@ -79,4 +83,5 @@ export default function SearchAccordion({
 SearchAccordion.defaultProps = {
   searchLabel: undefined,
   disabled: false,
+  disabledFilter: false,
 };

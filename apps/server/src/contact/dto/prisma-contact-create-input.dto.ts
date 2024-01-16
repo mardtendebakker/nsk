@@ -1,7 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Prisma } from "@prisma/client";
 import { Type } from "class-transformer";
-import { IsBoolean, IsEmail, IsInt, IsOptional, Max, Min } from "class-validator";
+import { IsBoolean, IsEmail, IsInt, IsOptional } from "class-validator";
 
 export class PrismaContactCreateInputDto implements Prisma.contactCreateInput {
   @ApiPropertyOptional()
@@ -68,18 +68,6 @@ export class PrismaContactCreateInputDto implements Prisma.contactCreateInput {
   @IsOptional()
   zip2?: string;
 
-  @ApiProperty()
-  discr: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsInt()
-  @Type(() => Number)
-  @Min(0)
-  @Max(1)
-  is_partner?: number;
-
-
   @ApiPropertyOptional()
   @IsOptional()
   @IsBoolean()
@@ -97,18 +85,6 @@ export class PrismaContactCreateInputDto implements Prisma.contactCreateInput {
   @ApiPropertyOptional()
   customerOrders?: Prisma.aorderUncheckedCreateNestedManyWithoutContact_aorder_customer_idTocontactInput;
 
-  @ApiPropertyOptional()
-  contact?: Prisma.contactCreateNestedOneWithoutOther_contactInput;
-
-  @ApiPropertyOptional()
-  other_contact?: Prisma.contactUncheckedCreateNestedManyWithoutContactInput;
-
   @ApiProperty()
-  company_contact_company_idTocompany: Prisma.companyCreateNestedOneWithoutContact_contact_company_idTocompanyInput;
-
-  @ApiPropertyOptional()
-  fos_user?: Prisma.fos_userUncheckedCreateNestedManyWithoutContactInput;
-
-  @ApiPropertyOptional()
-  product?: Prisma.productUncheckedCreateNestedManyWithoutContactInput;
+  company_contact_company_idTocompany: Prisma.companyCreateNestedOneWithoutCompanyContactsInput;
 }

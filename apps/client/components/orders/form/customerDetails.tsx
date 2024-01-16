@@ -83,11 +83,11 @@ export default function CustomerDetails({
           item
           xs={12}
           sx={{
-            display: 'flex', flex: 1, alignItems: 'center', flexDirection: 'column',
+            display: 'flex', flex: 1, flexDirection: 'column',
           }}
         >
           {formRepresentation.newCustomer.value ? (
-            <Contact formRepresentation={formRepresentation} setValue={setValue} />
+            <Contact formRepresentation={formRepresentation} setValue={setValue} disabled={disabled} />
           ) : (
             <DataSourcePicker
               label={trans('customer')}

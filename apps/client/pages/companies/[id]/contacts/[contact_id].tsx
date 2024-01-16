@@ -6,33 +6,35 @@ import { useRouter } from 'next/router';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import Check from '@mui/icons-material/Check';
 import { SyntheticEvent, useEffect, useMemo } from 'react';
-import Form from '../../../components/contacts/form';
-import DashboardLayout from '../../../layouts/dashboard';
-import useAxios from '../../../hooks/useAxios';
-import { SUPPLIERS_PATH } from '../../../utils/axios';
-import { CONTACTS_SUPPLIERS_NEW, CONTACTS_SUPPLIERS } from '../../../utils/routes';
-import useForm from '../../../hooks/useForm';
-import useTranslation from '../../../hooks/useTranslation';
-import { initFormState, formRepresentationToBody } from './new';
+import Form from '../../../../components/contacts/form';
+import DashboardLayout from '../../../../layouts/dashboard';
+import useAxios from '../../../../hooks/useAxios';
+import { CONTACTS_PATH } from '../../../../utils/axios';
+import { COMPANIES_EDIT, COMPANIES_CONTACTS_NEW } from '../../../../utils/routes';
+import useForm from '../../../../hooks/useForm';
+import useTranslation from '../../../../hooks/useTranslation';
+import { initFormState, formRepresentationToBody } from '../../../contacts/new';
+import { Contact } from '../../../../utils/axios/models/contact';
 
-function EditSupplierContact() {
+function EditContact() {
   const { trans } = useTranslation();
   const router = useRouter();
-  const { id } = router.query;
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  const { id, contact_id } = router.query;
 
   const { call, performing } = useAxios(
     'put',
-    SUPPLIERS_PATH.replace(':id', id?.toString()),
+    CONTACTS_PATH.replace(':id', contact_id?.toString()),
     { withProgressBar: true, showSuccessMessage: true },
   );
 
-  const { call: callGet, performing: performingGet, data: supplier } = useAxios(
+  const { call: callGet, performing: performingGet, data: contact } = useAxios<undefined | Contact>(
     'get',
-    SUPPLIERS_PATH.replace(':id', id?.toString()),
+    CONTACTS_PATH.replace(':id', contact_id?.toString()),
     { withProgressBar: true },
   );
 
-  const { formRepresentation, setValue, validate } = useForm(useMemo(() => initFormState(trans, supplier), [supplier]));
+  const { formRepresentation, setValue, validate } = useForm(useMemo(() => initFormState(trans, contact), [contact]));
 
   const canSubmit = () => !performing && !performingGet;
 
@@ -44,8 +46,8 @@ function EditSupplierContact() {
     }
 
     call({
-      body: formRepresentationToBody(formRepresentation),
-      path: SUPPLIERS_PATH.replace(':id', id?.toString()),
+      body: { ...formRepresentationToBody(formRepresentation), company_id: undefined },
+      path: CONTACTS_PATH.replace(':id', id?.toString()),
     });
   };
 
@@ -54,7 +56,7 @@ function EditSupplierContact() {
       callGet()
         .catch((error) => {
           if (error && error?.status !== 200) {
-            router.push(CONTACTS_SUPPLIERS_NEW);
+            router.push(COMPANIES_CONTACTS_NEW.replace('[id]', id.toString()));
           }
         });
     }
@@ -78,7 +80,7 @@ function EditSupplierContact() {
           }}
         >
           <Typography variant="h4">
-            <IconButton onClick={() => router.push(CONTACTS_SUPPLIERS)}>
+            <IconButton onClick={() => router.push(COMPANIES_EDIT.replace('[id]', id.toString()))}>
               <ArrowBack />
             </IconButton>
             {trans('editContact')}
@@ -92,12 +94,11 @@ function EditSupplierContact() {
               onClick={handleSubmit}
             >
               <Check />
-              {trans('saveContact')}
+              {trans('save')}
             </Button>
           </Box>
         </Box>
         <Form
-          type="supplier"
           formRepresentation={formRepresentation}
           disabled={!canSubmit()}
           setValue={setValue}
@@ -107,4 +108,4 @@ function EditSupplierContact() {
   );
 }
 
-export default EditSupplierContact;
+export default EditContact;

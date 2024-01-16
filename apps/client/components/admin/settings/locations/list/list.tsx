@@ -45,7 +45,7 @@ export default function List({
           <TableCell>
             {trans('zipcodes')}
           </TableCell>
-          <TableCell>
+          <TableCell align="right">
             {trans('actions')}
           </TableCell>
         </TableRow>
@@ -59,7 +59,7 @@ export default function List({
             <TableCell>
               {location.zipcodes}
             </TableCell>
-            <TableCell>
+            <TableCell align="right">
               <Edit onClick={() => onEdit(location.id)} disabled={disabled} />
             </TableCell>
           </TableRow>

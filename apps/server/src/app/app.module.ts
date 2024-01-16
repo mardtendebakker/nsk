@@ -1,9 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CognitoAuthModule } from '@nestjs-cognito/auth';
-import { CustomerModule } from '../customer/customer.module';
 import { DashboardModule } from '../dashboard/dashboard.module';
-import { SupplierModule } from '../supplier/supplier.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from '../auth/auth.module';
@@ -28,6 +26,7 @@ import { AProductModule } from '../aproduct/aproduct.module';
 import { SalesServiceModule } from '../sales-service/sales-service.module';
 import { AutocompleteModule } from '../autocomplete/autocomplete.module';
 import { AdminModule } from '../admin/admin.module';
+import { CompanyModule } from '../company/company.module';
 
 @Module({
   imports: [
@@ -56,8 +55,6 @@ import { AdminModule } from '../admin/admin.module';
     AuthModule,
     UserModule,
     DashboardModule,
-    CustomerModule,
-    SupplierModule,
     PurchaseModule,
     SaleModule,
     RepairModule,
@@ -78,6 +75,7 @@ import { AdminModule } from '../admin/admin.module';
     SalesServiceModule,
     AutocompleteModule,
     AdminModule,
+    CompanyModule,
   ],
   controllers: [AppController],
   providers: [AppService],

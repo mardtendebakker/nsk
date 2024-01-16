@@ -48,7 +48,7 @@ export default function List({
           <TableCell>
             {trans('type')}
           </TableCell>
-          <TableCell>
+          <TableCell align="right">
             {trans('actions')}
           </TableCell>
         </TableRow>
@@ -65,7 +65,7 @@ export default function List({
             <TableCell>
               {attribute.type}
             </TableCell>
-            <TableCell>
+            <TableCell align="right">
               <Edit onClick={() => onEdit(attribute.id)} disabled={disabled} />
             </TableCell>
           </TableRow>

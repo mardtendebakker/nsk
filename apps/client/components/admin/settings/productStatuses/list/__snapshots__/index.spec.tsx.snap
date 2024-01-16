@@ -100,7 +100,7 @@ exports[`List matches snapshot 1`] = `
               stock
             </th>
             <th
-              class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-1howxi1-MuiTableCell-root"
+              class="MuiTableCell-root MuiTableCell-head MuiTableCell-alignRight MuiTableCell-sizeSmall css-6qfsqn-MuiTableCell-root"
               scope="col"
             >
               actions

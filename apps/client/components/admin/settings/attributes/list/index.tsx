@@ -12,6 +12,7 @@ import refreshList from '../../refreshList';
 import debounce from '../../../../../utils/debounce';
 import TextField from '../../../../memoizedInput/textField';
 import { getQueryParam } from '../../../../../utils/location';
+import { Attribute } from '../../../../../utils/axios/models/product';
 
 export default function ListContainer() {
   const { trans } = useTranslation();
@@ -21,7 +22,7 @@ export default function ListContainer() {
   const [editAttributeId, setEditAttributeId] = useState<number | undefined>();
   const [search, setSearch] = useState(getQueryParam('search', ''));
 
-  const { data: { data = [], count = 0 } = {}, call, performing } = useAxios(
+  const { data: { data = [], count = 0 } = {}, call, performing } = useAxios<undefined | { data?: Attribute[], count?:number }>(
     'get',
     ATTRIBUTES_PATH.replace(':id', ''),
     {

@@ -2,16 +2,18 @@ import { AOrderDiscrimination } from "./types/aorder-discrimination.enum";
 import { AServiceStatus } from "../aservice/enum/aservice-status.enum";
 import { AOrderPayload } from "./types/aorder-payload";
 import { ContactSelect } from "../contact/types/contact-select";
+import { company } from "@prisma/client";
 
 type TotalPerProductReturn = Record<string, number>;
+type AaOrderCompany = {
+  company_id: number,
+  company_name: string,
+};
 type ContactProcessed = Omit<
   ContactSelect,
   'company_contact_company_idTocompany' |
   'contact'
-> & {
-  company_id: number,
-  company_name: string,
-  company_kvk_nr: number,
+> & AaOrderCompany & {
   contact: ContactProcessed
 }
 export type AOrderProcessed = Omit<
@@ -33,71 +35,62 @@ export class AOrderProcess {
 
   public run(): AOrderProcessed {
     const {
-      contact_aorder_supplier_idTocontact,
       contact_aorder_customer_idTocontact,
+      contact_aorder_supplier_idTocontact,
       ...restAOrder
     } = this.aorder;
     const {
-      company_contact_company_idTocompany: company_supplier,
-      contact: contact_supplier,
-      ...rest_supplier
-    } = contact_aorder_supplier_idTocontact || {};
-    const {
-      company_contact_company_idTocompany: partner_company_supplier,
-      ...rest_partner_supplier
-    } = contact_supplier || {};
-
-    const {
       company_contact_company_idTocompany: company_customer,
-      contact: contact_customer,
       ...rest_customer
     } = contact_aorder_customer_idTocontact || {};
     const {
-      company_contact_company_idTocompany: partner_company_customer,
-      ...rest_partner_customer
-    } = contact_customer || {};
+      company: partner_company_customer,
+      ...rest_company_customer
+    } = company_customer || {};
+    const {
+      companyContacts: partner_contacts_customer,
+      ...rest_partner_company_customer
+    } = partner_company_customer || {};
+    const partner_main_contact_customer = partner_contacts_customer?.find(c => c.is_main);
 
+    const {
+      company_contact_company_idTocompany: company_supplier,
+      ...rest_supplier
+    } = contact_aorder_supplier_idTocontact || {};
+    const {
+      company: partner_company_supplier,
+      ...rest_company_supplier
+    } = company_supplier || {};
+    const {
+      companyContacts: partner_contacts_supplier,
+      ...rest_partner_company_supplier
+    } = partner_company_supplier || {};
+    const partner_main_contact_supplier = partner_contacts_supplier?.find(c => c.is_main);
     this.totalPrice = this.calculateTotalPrice();
     this.totalPerProductType = this.calculateTotalPerProductType();
 
     return {
       ...restAOrder,
-      ...(company_supplier && {
-        contact_aorder_supplier_idTocontact: {
-          ...rest_supplier,
-          ...(company_supplier && {
-            company_id: company_supplier.id,
-            company_name: company_supplier.name,
-            company_kvk_nr: company_supplier.kvk_nr,
-          }),
-          ...(partner_company_supplier && {
+      ...(company_customer && {
+        contact_aorder_customer_idTocontact: {
+          ...rest_customer,
+          ...this.companyFieldsMapper(rest_company_customer),
+          ...(partner_company_customer && {
             contact: {
-              ...rest_partner_supplier,
-              ...(partner_company_supplier && {
-                company_id: partner_company_supplier.id,
-                company_name: partner_company_supplier.name,
-                company_kvk_nr: partner_company_supplier.kvk_nr,
-              }),
+              ...partner_main_contact_customer,
+              ...this.companyFieldsMapper(rest_partner_company_customer),
             },
           }),
         },
       }),
-      ...(company_customer && {
-        contact_aorder_customer_idTocontact: {
-          ...rest_customer,
-          ...(company_customer && {
-            company_id: company_customer.id,
-            company_name: company_customer.name,
-            company_kvk_nr: company_customer.kvk_nr,
-          }),
-          ...(partner_company_customer && {
+      ...(company_supplier && {
+        contact_aorder_supplier_idTocontact: {
+          ...rest_supplier,
+          ...this.companyFieldsMapper(rest_company_supplier),
+          ...(partner_company_supplier && {
             contact: {
-              ...rest_partner_customer,
-              ...(partner_company_customer && {
-                company_id: partner_company_customer.id,
-                company_name: partner_company_customer.name,
-                company_kvk_nr: partner_company_customer.kvk_nr,
-              }),
+              ...partner_main_contact_supplier,
+              ...this.companyFieldsMapper(rest_partner_company_supplier),
             },
           }),
         },
@@ -155,5 +148,14 @@ export class AOrderProcess {
     }
 
     return result;
+  }
+
+  private companyFieldsMapper(company: company): AaOrderCompany {
+    return {
+      ...(company && {
+        company_id: company.id,
+        company_name: company.name,
+      }),
+    };
   }
 }

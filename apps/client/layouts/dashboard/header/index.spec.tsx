@@ -1,10 +1,9 @@
 import { fireEvent, render } from '@testing-library/react';
-import { BULK_EMAIL, CONTACTS_CUSTOMERS, MY_TASKS } from '../../../utils/routes';
+import { BULK_EMAIL, CONTACTS, MY_TASKS } from '../../../utils/routes';
 import Header from './index';
-import useResponsive from '../../../hooks/useResponsive';
 
 const mockRouter = {
-  get pathname() { return CONTACTS_CUSTOMERS; },
+  get pathname() { return CONTACTS; },
 };
 
 jest.mock('next/router', () => ({
@@ -32,6 +31,7 @@ describe('Header', () => {
       expect(getByText('contacts')).toHaveStyle({ fontWeight: 700 });
 
       expect(getByText('dashboard')).toHaveStyle({ fontWeight: 400 });
+      expect(getByText('companies')).toHaveStyle({ fontWeight: 400 });
       expect(getByText('stock')).toHaveStyle({ fontWeight: 400 });
       expect(getByText('orders')).toHaveStyle({ fontWeight: 400 });
       expect(getByText('bulkEmail')).toHaveStyle({ fontWeight: 400 });
@@ -46,6 +46,7 @@ describe('Header', () => {
 
       expect(getByText('contacts')).toHaveStyle({ fontWeight: 400 });
       expect(getByText('dashboard')).toHaveStyle({ fontWeight: 400 });
+      expect(getByText('companies')).toHaveStyle({ fontWeight: 400 });
       expect(getByText('stock')).toHaveStyle({ fontWeight: 400 });
       expect(getByText('orders')).toHaveStyle({ fontWeight: 400 });
       expect(getByText('bulkEmail')).toHaveStyle({ fontWeight: 400 });
@@ -55,7 +56,7 @@ describe('Header', () => {
 
   describe('Side nav menu', () => {
     it('should open menu', () => {
-      useResponsive.mockReturnValue(false);
+      jest.requireMock('../../../hooks/useResponsive').mockReturnValue(false);
       const { getByTestId, queryByText } = render(<Header />);
 
       expect(queryByText('dashboard')).toBeNull();
@@ -64,7 +65,7 @@ describe('Header', () => {
     });
 
     it('should highlight the active menu item', () => {
-      useResponsive.mockReturnValue(false);
+      jest.requireMock('../../../hooks/useResponsive').mockReturnValue(false);
       jest.spyOn(mockRouter, 'pathname', 'get').mockReturnValue(BULK_EMAIL);
       const { getByText, getByTestId } = render(<Header />);
       fireEvent.click(getByTestId('openMenuButton'));
@@ -72,6 +73,7 @@ describe('Header', () => {
       expect(getByText('bulkEmail')).toHaveStyle({ fontWeight: 700 });
 
       expect(getByText('dashboard')).toHaveStyle({ fontWeight: 400 });
+      expect(getByText('companies')).toHaveStyle({ fontWeight: 400 });
       expect(getByText('stock')).toHaveStyle({ fontWeight: 400 });
       expect(getByText('orders')).toHaveStyle({ fontWeight: 400 });
       expect(getByText('contacts')).toHaveStyle({ fontWeight: 400 });
@@ -79,7 +81,7 @@ describe('Header', () => {
     });
 
     it('should highlight myTasks menu item', () => {
-      useResponsive.mockReturnValue(false);
+      jest.requireMock('../../../hooks/useResponsive').mockReturnValue(false);
       jest.spyOn(mockRouter, 'pathname', 'get').mockReturnValue(MY_TASKS);
       const { getByText, getByTestId } = render(<Header />);
       fireEvent.click(getByTestId('openMenuButton'));
@@ -87,6 +89,7 @@ describe('Header', () => {
       expect(getByText('myTasks')).toHaveStyle({ fontWeight: 700 });
 
       expect(getByText('contacts')).toHaveStyle({ fontWeight: 400 });
+      expect(getByText('companies')).toHaveStyle({ fontWeight: 400 });
       expect(getByText('dashboard')).toHaveStyle({ fontWeight: 400 });
       expect(getByText('stock')).toHaveStyle({ fontWeight: 400 });
       expect(getByText('orders')).toHaveStyle({ fontWeight: 400 });

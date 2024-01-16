@@ -12,6 +12,7 @@ import refreshList from '../../refreshList';
 import debounce from '../../../../../utils/debounce';
 import TextField from '../../../../memoizedInput/textField';
 import { getQueryParam } from '../../../../../utils/location';
+import { ProductType } from '../../../../../utils/axios/models/product';
 
 export default function ListContainer() {
   const { trans } = useTranslation();
@@ -22,7 +23,7 @@ export default function ListContainer() {
   const [editProductTypeId, setEditProductTypeId] = useState<number | undefined>();
   const [search, setSearch] = useState(getQueryParam('search', ''));
 
-  const { data: { data = [], count = 0 } = {}, call, performing } = useAxios(
+  const { data: { data = [], count = 0 } = {}, call, performing } = useAxios<undefined | { data?: ProductType[], count?: number }>(
     'get',
     PRODUCT_TYPES_PATH.replace(':id', ''),
     {

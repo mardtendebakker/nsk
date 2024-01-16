@@ -6,41 +6,28 @@ import { useRouter } from 'next/router';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import Check from '@mui/icons-material/Check';
 import { SyntheticEvent, useMemo } from 'react';
-import Form from '../../../components/contacts/form';
-import DashboardLayout from '../../../layouts/dashboard';
-import useAxios from '../../../hooks/useAxios';
-import { AxiosResponse, CUSTOMERS_PATH } from '../../../utils/axios';
-import { CONTACTS_CUSTOMERS_EDIT, CONTACTS_CUSTOMERS } from '../../../utils/routes';
-import useForm, { FormRepresentation } from '../../../hooks/useForm';
-import useTranslation, { Trans } from '../../../hooks/useTranslation';
-import { Contact } from '../../../utils/axios/models/contact';
-import { initFormState as baseInitFormState, formRepresentationToBody as baseFormRepresentationToBody } from '../suppliers/new';
+import Form from '../../../../components/contacts/form';
+import DashboardLayout from '../../../../layouts/dashboard';
+import useAxios from '../../../../hooks/useAxios';
+import {
+  AxiosResponse, CONTACTS_PATH,
+} from '../../../../utils/axios';
+import { COMPANIES_EDIT, COMPANIES_CONTACTS_EDIT } from '../../../../utils/routes';
+import useForm from '../../../../hooks/useForm';
+import useTranslation from '../../../../hooks/useTranslation';
+import { Contact } from '../../../../utils/axios/models/contact';
+import { initFormState, formRepresentationToBody } from '../../../contacts/new';
 
-export const initFormState = (trans: Trans, contact?: Contact) => ({
-  ...baseInitFormState(trans, contact),
-  is_partner: {
-    value: contact?.is_partner > 0,
-  },
-});
-
-export function formRepresentationToBody(formRepresentation: FormRepresentation): object {
-  const isPartner = formRepresentation.is_partner.value ? 1 : 0;
-
-  return {
-    ...baseFormRepresentationToBody(formRepresentation),
-    is_partner: isPartner,
-    partner_id: isPartner ? null : formRepresentation.partner.value,
-  };
-}
-
-function NewCustomerContact() {
+function NewSupplierContact() {
   const { trans } = useTranslation();
   const router = useRouter();
-  const formState = useMemo(() => initFormState(trans), []);
+  const { id } = router.query;
+
+  const formState = useMemo(() => initFormState(trans, { id: 999, company_id: id ? parseInt(id.toString(), 10) : undefined } as Contact), [id || '']);
 
   const { call, performing } = useAxios(
     'post',
-    CUSTOMERS_PATH.replace(':id', ''),
+    CONTACTS_PATH.replace(':id', ''),
     { withProgressBar: true, showSuccessMessage: true },
   );
 
@@ -54,9 +41,10 @@ function NewCustomerContact() {
     }
 
     call({
+      path: CONTACTS_PATH.replace(':id', ''),
       body: formRepresentationToBody(formRepresentation),
     }).then((response: AxiosResponse) => {
-      router.push(CONTACTS_CUSTOMERS_EDIT.replace('[id]', response.data.id));
+      router.push(COMPANIES_CONTACTS_EDIT.replace('[contact_id]', response.data.id));
     });
   };
 
@@ -78,7 +66,7 @@ function NewCustomerContact() {
           }}
         >
           <Typography variant="h4">
-            <IconButton onClick={() => router.push(CONTACTS_CUSTOMERS)}>
+            <IconButton onClick={() => router.push(COMPANIES_EDIT.replace('[id]', id.toString()))}>
               <ArrowBack />
             </IconButton>
             {trans('newContact')}
@@ -92,12 +80,11 @@ function NewCustomerContact() {
               onClick={handleSubmit}
             >
               <Check />
-              {trans('saveContact')}
+              {trans('save')}
             </Button>
           </Box>
         </Box>
         <Form
-          type="customer"
           formRepresentation={formRepresentation}
           disabled={performing}
           setValue={setValue}
@@ -107,4 +94,4 @@ function NewCustomerContact() {
   );
 }
 
-export default NewCustomerContact;
+export default NewSupplierContact;

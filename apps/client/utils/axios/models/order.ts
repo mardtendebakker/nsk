@@ -13,7 +13,6 @@ export interface Contact {
   zip?: string,
   company_id:string,
   company_name:string,
-  company_kvk_nr: string,
   contact: SubContact
 }
 export interface SubContact {
@@ -24,7 +23,6 @@ export interface SubContact {
   zip?: string,
   company_id:string,
   company_name:string,
-  company_kvk_nr: string,
 }
 
 export interface OrderStatus {
@@ -68,7 +66,8 @@ export interface Order {
   delivery_type:number,
   delivery_instructions:string,
   totalPrice: number,
-  contact_aorder_customer_idTocontact:Contact
+  contact_aorder_customer_idTocontact:Contact,
+  contact_aorder_supplier_idTocontact:Contact
   totalPerProductType: object
 }
 
