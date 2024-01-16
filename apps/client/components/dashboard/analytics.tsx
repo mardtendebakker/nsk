@@ -21,7 +21,7 @@ export default function Analytics({ path, label }: { path: string, label: string
   };
 
   useEffect(() => {
-    call({ path, params: { groupby } });
+    call({ path, params: { groupby } }).catch(() => {});
   }, [path, groupby]);
 
   const values = Object.values(data);

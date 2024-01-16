@@ -45,9 +45,7 @@ const refreshList = ({
       startsAt: format(newDate, 'yyyy-MM-dd'),
       endsAt: format(addDays(newDate, 5), 'yyyy-MM-dd'),
     },
-  }).then(() => {
-    pushURLParams({ params, router });
-  });
+  }).then(() => pushURLParams({ params, router })).catch(() => {});
 };
 
 export default function Logistics({ type }: { type: 'pickup' | 'delivery' }) {

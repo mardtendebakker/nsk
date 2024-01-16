@@ -31,7 +31,7 @@ export default function AttributeForm({
   const { trans } = useTranslation();
   const { data: productTypeRelation, call } = useAxios<undefined | ProductType>('get', PRODUCT_TYPES_PATH.replace(':id', productTypeId));
   useEffect(() => {
-    call();
+    call().catch(() => {});
   }, [productTypeId]);
 
   const handleAttributeChange = (attribute: Attribute, value: any) => {

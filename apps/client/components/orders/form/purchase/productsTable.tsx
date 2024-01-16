@@ -67,7 +67,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
         skip: (page - 1) * rowsPerPage,
         orderId,
       },
-    });
+    }).catch(() => {});
   }, [page, rowsPerPage, orderId]);
 
   return (
