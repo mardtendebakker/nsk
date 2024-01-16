@@ -80,7 +80,7 @@ export class PublicService {
 
     await this.captchaVerify(params['g-recaptcha-response']);
 
-    pickup_form.supplier.is_supplier = true;
+    pickup_form.supplier.company_is_supplier = true;
     const supplier = await this.contactService.checkExists(pickup_form.supplier);
 
     const pickupData: CreatePickupUncheckedWithoutAorderInputDto = {
@@ -123,7 +123,7 @@ export class PublicService {
 
     await this.captchaVerify(params['g-recaptcha-response']);
 
-    public_order_form.customer.is_customer = true;
+    public_order_form.customer.company_is_customer = true;
     const customer = await this.contactService.checkExists(public_order_form.customer);
 
     const orderStatus = await this.findOrderStatusByNameOrCreate(public_order_form.orderStatusName, false, true, false);

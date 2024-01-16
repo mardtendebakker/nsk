@@ -60,13 +60,13 @@ export class NewContactDto extends PickType(CreateContactDto, [
 
   @ApiProperty()
   @IsBoolean()
-  is_partner: boolean;
+  company_is_partner: boolean;
 
   @ApiProperty()
   @IsBoolean()
-  is_customer: boolean;
+  company_is_customer: boolean;
 
   @ApiProperty()
   @IsBoolean()
-  is_supplier: boolean;
+  company_is_supplier: boolean;
 }
