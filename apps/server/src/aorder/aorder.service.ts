@@ -398,11 +398,11 @@ export class AOrderService {
     const { createdBy, partner, email } = params;
     return {
       ...(createdBy && { id: createdBy }),
-      ...(partner && { company_contact_company_idTocompany: {partner_id : partner } }),
+      ...(partner && { company_contact_company_idTocompany: { company: { id: partner } } }),
       ...(email && {
         OR: [
           { email },
-          { company_contact_company_idTocompany: { company: { companyContacts: { every: { email } } } } },
+          { company_contact_company_idTocompany: { company: { companyContacts: { some: { email } } } } },
         ],
       }),
     };

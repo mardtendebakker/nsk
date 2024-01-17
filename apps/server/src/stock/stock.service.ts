@@ -815,7 +815,7 @@ export class StockService {
       ...(email && {
         OR: [
           { email },
-          { company_contact_company_idTocompany: { company: { companyContacts: { every: { email } } } } },
+          { company_contact_company_idTocompany: { company: { companyContacts: { some: { email } } } } },
         ],
       }),
     };

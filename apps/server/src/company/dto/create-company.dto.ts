@@ -1,16 +1,4 @@
-import { ApiPropertyOptional, OmitType } from '@nestjs/swagger';
+import { OmitType } from '@nestjs/swagger';
 import { PrismaCompanyCreateInputDto } from './prisma-company-create-input.dto';
-import { IsInt, IsOptional } from 'class-validator';
-import { Type } from 'class-transformer';
 
-export class CreateCompanyDto extends OmitType(PrismaCompanyCreateInputDto, ['id'] as const) {
-  @ApiPropertyOptional()
-  @IsOptional()
-  name: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsInt()
-  @Type(() => Number)
-  kvk_nr?: number;
-}
+export class CreateCompanyDto extends OmitType(PrismaCompanyCreateInputDto, ['id'] as const) {}

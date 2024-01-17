@@ -70,7 +70,7 @@ export class CompanyService {
   }
 
   async update(id: number, updateDto: UpdateCompanyDto, email?: string) {
-    if(await this.repository.findOne({where: { name:updateDto.name, NOT : {id} }}))  {
+    if(await this.repository.findOne({where: { name:updateDto.name, NOT : {id} }})) {
       throw new ConflictException('Name already exist');
     }
 
@@ -100,7 +100,7 @@ export class CompanyService {
     return this.repository.findFirst({
       where: {
         companyContacts: {
-          every: { email, is_main: true }
+          some: { email, is_main: true }
         },
       },
     });
@@ -110,8 +110,8 @@ export class CompanyService {
     return {
       ...(email && {
         OR: [
-          { companyContacts: { every: { email } } },
-          { company: { companyContacts: { every: { email } } } },
+          { companyContacts: { some: { email } } },
+          { company: { companyContacts: { some: { email } } } },
         ],
       }),
     };

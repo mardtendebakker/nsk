@@ -42,7 +42,7 @@ export function initFormState(company?: Company) {
 export function formRepresentationToBody(formRepresentation: FormRepresentation): object {
   return {
     name: formRepresentation.name.value || undefined,
-    kvk_nr: formRepresentation.kvk_nr.value || undefined,
+    kvk_nr: formRepresentation.kvk_nr.value || '',
     is_partner: formRepresentation.is_partner.value,
     is_customer: formRepresentation.is_customer.value,
     is_supplier: formRepresentation.is_supplier.value,
