@@ -9,7 +9,6 @@ import {
   TableBody,
   Box,
 } from '@mui/material';
-import { DesktopDateTimePicker } from '@mui/x-date-pickers/DesktopDateTimePicker';
 import { useState } from 'react';
 import useTranslation from '../../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../../hooks/useForm';
@@ -24,6 +23,7 @@ import { buildAFileLink } from '../../../../utils/afile';
 import { AFile } from '../../../../utils/axios/models/aFile';
 import Delete from '../../../button/delete';
 import useResponsive from '../../../../hooks/useResponsive';
+import DateTimePicker from '../../../input/dateTimePicker';
 
 function PurchaseForm({
   formRepresentation,
@@ -121,14 +121,13 @@ function PurchaseForm({
               sx={{ display: 'flex', width: isDesktop ? '50%' : 'unset' }}
               item
             >
-              <DesktopDateTimePicker
-                disableMaskedInput
+              <DateTimePicker
+                disabled={disabled}
                 onChange={(value) => {
                   setValue({ field: 'pickupDate', value });
                   setShowPickupDateChangedMessage(true);
                 }}
                 value={formRepresentation.pickupDate.value || null}
-                inputFormat="yyyy/MM/dd HH:mm"
                 label={trans('pickupDate')}
                 renderInput={(params) => (
                   <BaseTextField
