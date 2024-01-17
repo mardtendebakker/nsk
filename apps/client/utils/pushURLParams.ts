@@ -7,6 +7,6 @@ export default ({ params, router }: { params: URLSearchParams, router: NextRoute
   const newPath = paramsString ? `${uri}?${params.toString()}` : uri;
 
   if (newPath != uri) {
-    router.replace(newPath);
+    router.replace(newPath, undefined, { scroll: false });
   }
 };
