@@ -5,6 +5,7 @@ import { AnalyticsResultDto } from './dto/analytics-result.dto';
 import { PrintService } from '../print/print.service';
 import { FileService } from '../file/file.service';
 import { AOrderService } from '../aorder/aorder.service';
+import { ContactService } from '../contact/contact.service';
 
 @Injectable()
 export class OrderService extends AOrderService {
@@ -12,8 +13,9 @@ export class OrderService extends AOrderService {
     protected readonly repository: OrderRepository,
     protected readonly printService: PrintService,
     protected readonly fileService: FileService,
+    protected readonly contactService: ContactService,
   ) {
-    super(repository, printService, fileService);
+    super(repository, printService, fileService, contactService);
   }
 
   async analytics(groupBy: GroupBy): Promise<AnalyticsResultDto> {

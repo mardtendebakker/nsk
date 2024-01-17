@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { Grid, Typography } from '@mui/material';
 import { FormRepresentation, SetValue } from '../../../hooks/useForm';
 import useTranslation from '../../../hooks/useTranslation';
-import { Attribute, AttributeOption } from '../../../utils/axios/models/product';
+import { Attribute, AttributeOption, ProductType } from '../../../utils/axios/models/product';
 import BorderedBox from '../../borderedBox';
 import AutocompleteAttribute from './AutocompleteAttribute';
 import FileAttribute from './FileAttribute';
@@ -29,9 +29,9 @@ export default function AttributeForm({
   disabled?: boolean
 }) {
   const { trans } = useTranslation();
-  const { data: productTypeRelation, call } = useAxios('get', PRODUCT_TYPES_PATH.replace(':id', productTypeId));
+  const { data: productTypeRelation, call } = useAxios<undefined | ProductType>('get', PRODUCT_TYPES_PATH.replace(':id', productTypeId));
   useEffect(() => {
-    call();
+    call().catch(() => {});
   }, [productTypeId]);
 
   const handleAttributeChange = (attribute: Attribute, value: any) => {

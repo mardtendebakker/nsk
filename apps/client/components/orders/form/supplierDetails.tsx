@@ -3,7 +3,6 @@ import {
   Typography,
   FormControl,
   FormControlLabel,
-  FormLabel,
   Radio,
   RadioGroup,
 } from '@mui/material';
@@ -43,7 +42,6 @@ export default function SupplierDetails({
           sx={{ display: 'flex', flex: 1, alignItems: 'center' }}
         >
           <FormControl sx={{ flex: 1 }}>
-            <FormLabel sx={{ mb: '.5rem' }}>{trans('supplierType')}</FormLabel>
             <RadioGroup
               row
               defaultValue={formRepresentation.newSupplier.value ? 'new' : 'existing'}
@@ -83,11 +81,11 @@ export default function SupplierDetails({
           item
           xs={12}
           sx={{
-            display: 'flex', flex: 1, alignItems: 'center', flexDirection: 'column',
+            display: 'flex', flex: 1, flexDirection: 'column',
           }}
         >
           {formRepresentation.newSupplier.value ? (
-            <Contact formRepresentation={formRepresentation} setValue={setValue} />
+            <Contact formRepresentation={formRepresentation} setValue={setValue} disabled={disabled} />
           ) : (
             <DataSourcePicker
               label={trans('supplier')}

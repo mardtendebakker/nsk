@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import List from './list';
 import Filter from './filter';
 import useAxios from '../../../hooks/useAxios';
-import { CUSTOMERS_PATH } from '../../../utils/axios';
+import { CONTACTS_PATH } from '../../../utils/axios';
 import useForm from '../../../hooks/useForm';
 import pushURLParams from '../../../utils/pushURLParams';
 import { getQueryParam } from '../../../utils/location';
@@ -38,7 +38,7 @@ function refreshList({
       skip: (page - 1) * rowsPerPage,
       ...paramsToSend,
     },
-  }).finally(pushURLParams({ params, router }));
+  }).then(() => pushURLParams({ params, router })).catch(() => {});
 }
 
 export default function ListContainer() {
@@ -59,9 +59,9 @@ export default function ListContainer() {
     },
   });
 
-  const { data: { data = [], count = 0 } = {}, call, performing } = useAxios(
+  const { data: { data = [], count = 0 } = {}, call, performing } = useAxios<undefined | { data?: object[], count?:number }>(
     'get',
-    CUSTOMERS_PATH.replace(':id', ''),
+    CONTACTS_PATH.replace(':id', ''),
     {
       withProgressBar: true,
     },

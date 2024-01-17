@@ -99,7 +99,7 @@ export default function List({
             {trans('taskStatus')}
           </TableCell>
           {hasAction && (
-          <TableCell>
+          <TableCell align="right">
             {trans('actions')}
           </TableCell>
           )}

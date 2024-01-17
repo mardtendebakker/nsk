@@ -1,24 +1,13 @@
 import { ApiPropertyOptional, OmitType } from "@nestjs/swagger";
 import { PrismaContactUpdateInputDto } from "./prisma-contact-update-input.dto";
-import { IsInt, IsOptional } from "class-validator";
+import { IsBoolean, IsInt, IsOptional } from "class-validator";
 import { Type } from "class-transformer";
 
 export class UpdateContactDto extends OmitType(PrismaContactUpdateInputDto, [
-    'discr',
     'supplierOrders',
     'customerOrders',
     'company_contact_company_idTocompany',
-    'other_contact',
-    'fos_user',
-    'product',
-    'contact',
   ] as const) {
-    @ApiPropertyOptional()
-    @IsOptional()
-    @IsInt()
-    @Type(() => Number)
-    partner_id?: number;
-  
     @ApiPropertyOptional()
     @IsOptional()
     @IsInt()
@@ -34,5 +23,26 @@ export class UpdateContactDto extends OmitType(PrismaContactUpdateInputDto, [
     @IsInt()
     @Type(() => Number)
     company_kvk_nr?: number;
+
+    @ApiPropertyOptional()
+    @IsOptional()
+    @IsBoolean()
+    company_is_partner?: boolean;
+  
+    @ApiPropertyOptional()
+    @IsOptional()
+    @IsBoolean()
+    company_is_customer?: boolean;
+  
+    @ApiPropertyOptional()
+    @IsOptional()
+    @IsBoolean()
+    company_is_supplier?: boolean;
+
+    @ApiPropertyOptional()
+    @IsOptional()
+    @IsInt()
+    @Type(() => Number)
+    company_partner_id?: number;
   }
   

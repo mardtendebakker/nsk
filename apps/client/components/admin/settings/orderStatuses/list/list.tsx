@@ -55,7 +55,7 @@ export default function List({
           <TableCell>
             {trans('repair')}
           </TableCell>
-          <TableCell>
+          <TableCell align="right">
             {trans('actions')}
           </TableCell>
         </TableRow>
@@ -81,7 +81,7 @@ export default function List({
             <TableCell>
               {orderStatus.is_repair && <Check />}
             </TableCell>
-            <TableCell>
+            <TableCell align="right">
               <Edit onClick={() => onEdit(orderStatus.id)} disabled={disabled} />
               <Delete onClick={() => onDelete(orderStatus.id)} disabled={disabled} tooltip />
             </TableCell>

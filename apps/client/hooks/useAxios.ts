@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useSnackbar } from 'notistack';
 import { trans } from 'itranslator';
 import axios, {
-  AxiosResponse, AxiosPromise, CancelToken, AxiosError,
+  AxiosResponse, AxiosPromise, CancelToken, AxiosError, CanceledError,
 } from '../utils/axios';
 import { hideProgress, showProgress } from '../components/topLinearProgress';
 
@@ -15,7 +15,7 @@ export const PUT = 'put';
 type Method = 'get' | 'post' | 'patch' | 'delete' | 'put';
 type ResponseType = 'json' | 'blob';
 
-const useAxios = (
+const useAxios = <Data>(
   method: Method,
   path: string,
   {
@@ -34,7 +34,13 @@ const useAxios = (
     defaultParams?: object,
     customStatusesMessages?: { [key: number]: string }
   } = {},
-) => {
+) : {
+    data?: Data,
+    response?: AxiosResponse,
+    error?: AxiosError,
+    performing: boolean,
+    call: Call,
+  } => {
   const [response, setResponse] = useState<AxiosResponse>();
   const [error, setError] = useState<AxiosError>();
   const [performing, setPerforming] = useState<boolean>(false);
@@ -131,6 +137,10 @@ const useAxios = (
 
         return resp;
       } catch (e) {
+        if (e instanceof CanceledError) {
+          throw new Error(explicitPath + path);
+        }
+
         setError(e);
         if (showErrorMessage) {
           handleError(e);
@@ -155,7 +165,7 @@ const useAxios = (
 };
 
 export type Call = (
-  arg0: { params?: object, body?: object, path?: string, responseType?: ResponseType, headers?: object },
+  arg0?: { params?: object, body?: object, path?: string, responseType?: ResponseType, headers?: object },
   cb?: (e: Error, axiosResponse?: AxiosResponse) => void,
 ) => Promise<AxiosResponse | void>;
 

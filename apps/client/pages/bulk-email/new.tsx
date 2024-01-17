@@ -9,7 +9,7 @@ import { SyntheticEvent } from 'react';
 import Form from '../../components/bulkEmail/form';
 import DashboardLayout from '../../layouts/dashboard';
 import useAxios from '../../hooks/useAxios';
-import { CUSTOMERS_PATH } from '../../utils/axios';
+import { CONTACTS_PATH } from '../../utils/axios';
 import { BULK_EMAIL } from '../../utils/routes';
 import useForm, { FormRepresentation } from '../../hooks/useForm';
 import useTranslation from '../../hooks/useTranslation';
@@ -49,7 +49,7 @@ function NewBulkEmail() {
     call(
       {
         body: formRepresentationToBody(formRepresentation),
-        path: CUSTOMERS_PATH.replace(':id', ''),
+        path: CONTACTS_PATH.replace(':id', ''),
       },
       (err) => {
         if (!err) {
@@ -89,7 +89,7 @@ function NewBulkEmail() {
             onClick={handleSubmit}
           >
             <Check />
-            {trans('saveEmail')}
+            {trans('save')}
           </Button>
         </Box>
       </Box>

@@ -6,7 +6,6 @@ class FindContactResponeDto extends PickType(ContactEntity, [
   "id",
   "name",
   "email",
-  "partner_id",
 ] as const) {
   @ApiProperty()
   compnay_name: string;

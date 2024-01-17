@@ -5,10 +5,11 @@ import { OrderRepository } from './order.repository';
 import { PrintService } from '../print/print.service';
 import { PrismaModule } from '../prisma/prisma.module';
 import { FileModule } from '../file/file.module';
+import { ContactModule } from '../contact/contact.module';
 
 @Module({
   providers: [OrderService, OrderRepository, PrintService],
   controllers: [OrderController],
-  imports: [PrismaModule,  FileModule]
+  imports: [PrismaModule,  FileModule, ContactModule]
 })
 export class OrderModule {}

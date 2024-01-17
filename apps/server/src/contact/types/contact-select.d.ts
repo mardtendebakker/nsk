@@ -1,9 +1,6 @@
 import { Prisma } from "@prisma/client";
 
 export type ContactPayload = Prisma.contactGetPayload<Record<'select', Prisma.contactSelect>>;
-export type ContactSelect = Omit<
-  ContactPayload,
-  'contact'
-> & {
+export type ContactSelect = ContactPayload & {
   contact?: ContactPayload
 };

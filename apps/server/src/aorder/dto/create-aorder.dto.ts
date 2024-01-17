@@ -11,9 +11,9 @@ export class CreateAOrderDto extends OmitType(PrismaAOrderCreateInputDto, [
 ] as const) {
   @ApiPropertyOptional()
   @Type(() => CreateContactAOrderDto)
-  supplier?: CreateContactAOrderDto;
+  customer?: CreateContactAOrderDto;
 
   @ApiPropertyOptional()
   @Type(() => CreateContactAOrderDto)
-  customer?: CreateContactAOrderDto;
+  supplier?: CreateContactAOrderDto;
 }

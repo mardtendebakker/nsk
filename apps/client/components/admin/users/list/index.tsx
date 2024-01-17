@@ -9,6 +9,7 @@ import useForm, { FieldPayload } from '../../../../hooks/useForm';
 import pushURLParams from '../../../../utils/pushURLParams';
 import { getQueryParam } from '../../../../utils/location';
 import Edit from '../edit';
+import { UserListItem } from '../../../../utils/axios/models/user';
 
 function initFormState(
   {
@@ -60,14 +61,16 @@ function refreshList({
       ...paramsToSend,
     },
   })
-    .then((result) => result)
-    .finally(() => pushURLParams({ params, router }));
+    .then((result) => {
+      pushURLParams({ params, router });
+      return result;
+    }).catch(() => {});
 }
 
 export default function ListContainer() {
   const router = useRouter();
   const [rowsPerPage, setRowsPerPage] = useState<number>(parseInt(getQueryParam('rowsPerPage', '10'), 10));
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<UserListItem[]>([]);
   const [pagination, setPagination] = useState([]);
   const [hasNextPage, setHasNextPage] = useState(false);
   const [editUsername, setEditUsername] = useState<string | undefined>();
@@ -79,7 +82,7 @@ export default function ListContainer() {
     lastActive: getQueryParam('lastActive'),
   }));
 
-  const { data: { count = 0 } = {}, call, performing } = useAxios(
+  const { data: { count = 0 } = {}, call, performing } = useAxios<undefined | { count?:number }>(
     'get',
     ADMIN_USERS_PATH.replace(':id', ''),
     {

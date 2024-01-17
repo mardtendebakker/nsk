@@ -16,11 +16,11 @@ import { ImportDto } from './dto/import-dto';
 import { CreateAOrderDto } from '../aorder/dto/create-aorder.dto';
 import { OrderStatusService } from '../admin/order-status/order-status.service';
 import { CreateOrderStatusDto } from '../admin/order-status/dto/create-order-status.dto';
-import { CustomerService } from '../customer/customer.service';
 import { CreateContactDto } from '../contact/dto/create-contact.dto';
 import { AOrderProcessed } from '../aorder/aorder.process';
 import { IExcelColumn } from './types/excel-column';
 import * as xlsx from 'xlsx';
+import { ContactService } from '../contact/contact.service';
 
 @Injectable()
 export class SaleService extends AOrderService {
@@ -28,11 +28,11 @@ export class SaleService extends AOrderService {
     protected readonly repository: SaleRepository,
     protected readonly printService: PrintService,
     protected readonly fileService: FileService,
-    protected readonly customerService: CustomerService,
+    protected readonly contactService: ContactService,
     protected readonly aProductService: AProductService,
     protected readonly orderStatusService: OrderStatusService,
   ) {
-    super(repository, printService, fileService, AOrderDiscrimination.SALE);
+    super(repository, printService, fileService, contactService, AOrderDiscrimination.SALE);
   }
 
   async addProducts(id: number, productIds: number[]) {
@@ -97,7 +97,7 @@ export class SaleService extends AOrderService {
     
     let partner_id: number;
     if (email) {
-      partner_id = (await this.customerService.findPartnerByEmail(email))?.id;
+      partner_id = (await this.contactService.findPartnerByEmail(email))?.id;
     } else {
       partner_id = importDto.partner_id;
     }
@@ -148,10 +148,13 @@ export class SaleService extends AOrderService {
         email: Email,
         phone: Telefoon,
         phone2: MobielNummer,
-        ...(partner_id && { partner_id: partner_id }),
+        company_is_customer: true,
+        company_is_partner: false,
+        company_is_supplier: false,
+        ...(partner_id && { company_partner_id: partner_id }),
       };
   
-      const customer = await this.customerService.checkExists(customerData);
+      const customer = await this.contactService.checkExists(customerData);
       const orderStatus = await this.findOrderStatusByNameOrCreate('Products to assign', false, true, false);
       const remarks = `Referentie: ${Referentie || ''}\r\n` +
                       `Gebouw: ${Gebouw || ''}\r\n` +

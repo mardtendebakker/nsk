@@ -1,7 +1,6 @@
 import { BadRequestException, HttpException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { PurchaseService } from '../purchase/purchase.service';
 import { PostPickupDto, PickupFormDto } from './dto/post-pickup.dto';
-import { SupplierService } from '../supplier/supplier.service';
 import { OrderStatusService } from '../admin/order-status/order-status.service';
 import { CreateOrderStatusDto } from '../admin/order-status/dto/create-order-status.dto';
 import { FileService } from '../file/file.service';
@@ -20,16 +19,15 @@ import { afile } from '@prisma/client';
 import { CreateBodyStockDto } from '../stock/dto/create-body-stock.dto';
 import { ProductRelation } from '../stock/types/product-relation';
 import { PostOrderDto } from './dto/post-order.dto';
-import { CustomerService } from '../customer/customer.service';
 import { SaleService } from '../sale/sale.service';
 import { PostImportDto } from './dto/post-import.dto';
+import { ContactService } from '../contact/contact.service';
 @Injectable()
 export class PublicService {
   constructor(
     private readonly purchaseService: PurchaseService,
     private readonly saleService: SaleService,
-    private readonly supplierService: SupplierService,
-    private readonly customerService: CustomerService,
+    private readonly contactService: ContactService,
     private readonly orderStatusService: OrderStatusService,
     private readonly fileService: FileService,
     private readonly productService: ProductService,
@@ -82,7 +80,8 @@ export class PublicService {
 
     await this.captchaVerify(params['g-recaptcha-response']);
 
-    const supplier = await this.supplierService.checkExists(pickup_form.supplier);
+    pickup_form.supplier.company_is_supplier = true;
+    const supplier = await this.contactService.checkExists(pickup_form.supplier);
 
     const pickupData: CreatePickupUncheckedWithoutAorderInputDto = {
       origin: pickup_form.origin,
@@ -124,7 +123,8 @@ export class PublicService {
 
     await this.captchaVerify(params['g-recaptcha-response']);
 
-    const customer = await this.customerService.checkExists(public_order_form.customer);
+    public_order_form.customer.company_is_customer = true;
+    const customer = await this.contactService.checkExists(public_order_form.customer);
 
     const orderStatus = await this.findOrderStatusByNameOrCreate(public_order_form.orderStatusName, false, true, false);
 

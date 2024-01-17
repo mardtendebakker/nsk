@@ -4,15 +4,16 @@ import useTranslation from '../../../../hooks/useTranslation';
 import ConfirmationDialog from '../../../confirmationDialog';
 import { ADMIN_USERS_GROUPS } from '../../../../utils/axios';
 import useAxios from '../../../../hooks/useAxios';
+import { Group } from '../../../../utils/axios/models/user';
 
 export default function Edit({ username, onClose, onConfirm }: { username: string, onClose: () => void, onConfirm: () => void }) {
   const { trans } = useTranslation();
-  const { call, data = [], performing } = useAxios('get', ADMIN_USERS_GROUPS.replace(':username', username), { withProgressBar: true });
+  const { call, data = [], performing } = useAxios<undefined | Group[]>('get', ADMIN_USERS_GROUPS.replace(':username', username), { withProgressBar: true });
   const { call: callPut, performing: performingPut } = useAxios('put', ADMIN_USERS_GROUPS.replace(':username', username), { withProgressBar: true, showSuccessMessage: true });
   const [selectedOptions, setSelectedOptions] = useState<{ id: string, label: string }[]>([]);
 
   useEffect(() => {
-    call();
+    call().catch(() => {});
   }, []);
 
   useEffect(() => {

@@ -46,7 +46,7 @@ function refreshList({
       skip: (page - 1) * rowsPerPage,
       ...paramsToSend,
     },
-  });
+  }).catch(() => {});
 }
 
 export default function AddProductsModal({
@@ -64,7 +64,7 @@ export default function AddProductsModal({
   const [checkedProductIds, setCheckedProductIds] = useState<number[]>([]);
   const { formRepresentation, setValue } = useForm(initFormState);
 
-  const { data: { data = [], count = 0 } = {}, call, performing } = useAxios(
+  const { data: { data = [], count = 0 } = {}, call, performing } = useAxios<undefined | { data?: ProductListItem[], count?: number }>(
     'get',
     APRODUCT_PATH.replace(':id', ''),
     {

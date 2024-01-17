@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
-import { IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsOptional, IsString } from 'class-validator';
 import { formDataStringTransform } from '../../common/transforms/form-date.transform';
 import { CreateContactDto } from '../../contact/dto/create-contact.dto';
 
@@ -57,4 +57,16 @@ export class NewContactDto extends PickType(CreateContactDto, [
   @IsString()
   @Type(() => String)
   city?: string;
+
+  @ApiProperty()
+  @IsBoolean()
+  company_is_partner: boolean;
+
+  @ApiProperty()
+  @IsBoolean()
+  company_is_customer: boolean;
+
+  @ApiProperty()
+  @IsBoolean()
+  company_is_supplier: boolean;
 }

@@ -17,12 +17,12 @@ import {
   MY_TASKS,
   LOGISTICS_DELIVERY,
   LOGISTICS_PICKUP,
-  CONTACTS_CUSTOMERS,
-  CONTACTS_SUPPLIERS,
+  CONTACTS,
   BULK_EMAIL,
   ORDERS_REPAIRS,
   STOCKS_ARCHIVED,
   getRouteGroups,
+  COMPANIES,
 } from '../../../utils/routes';
 import useTranslation from '../../../hooks/useTranslation';
 import useResponsive from '../../../hooks/useResponsive';
@@ -70,88 +70,80 @@ export default function Header() {
     {
       title: trans('stock'),
       path: STOCKS_PRODUCTS,
-      active: router.pathname.includes(STOCKS_PRODUCTS)
-              || router.pathname.includes(STOCKS_REPAIR_SERVICES),
+      active: router.pathname.startsWith(STOCKS_PRODUCTS)
+              || router.pathname.startsWith(STOCKS_REPAIR_SERVICES),
       subItems: [
         {
           title: trans('products'),
           path: STOCKS_PRODUCTS,
-          active: router.pathname.includes(STOCKS_PRODUCTS),
+          active: router.pathname.startsWith(STOCKS_PRODUCTS),
         },
         {
           title: trans('repairServices'),
           path: STOCKS_REPAIR_SERVICES,
-          active: router.pathname.includes(STOCKS_REPAIR_SERVICES),
+          active: router.pathname.startsWith(STOCKS_REPAIR_SERVICES),
         },
         {
           title: trans('archived'),
           path: STOCKS_ARCHIVED,
-          active: router.pathname.includes(STOCKS_ARCHIVED),
+          active: router.pathname.startsWith(STOCKS_ARCHIVED),
         },
       ],
     },
     {
       title: trans('orders'),
       path: ORDERS_PURCHASES,
-      active: router.pathname.includes(ORDERS_PURCHASES)
-      || router.pathname.includes(ORDERS_SALES)
-      || router.pathname.includes(ORDERS_REPAIRS),
+      active: router.pathname.startsWith(ORDERS_PURCHASES)
+      || router.pathname.startsWith(ORDERS_SALES)
+      || router.pathname.startsWith(ORDERS_REPAIRS),
       subItems: [
         {
           title: trans('purchaseOrders'),
           path: ORDERS_PURCHASES,
-          active: router.pathname.includes(ORDERS_PURCHASES),
+          active: router.pathname.startsWith(ORDERS_PURCHASES),
         },
         {
           title: trans('salesOrders'),
           path: ORDERS_SALES,
-          active: router.pathname.includes(ORDERS_SALES),
+          active: router.pathname.startsWith(ORDERS_SALES),
         },
         {
           title: trans('repairOrders'),
           path: ORDERS_REPAIRS,
-          active: router.pathname.includes(ORDERS_REPAIRS),
+          active: router.pathname.startsWith(ORDERS_REPAIRS),
         },
       ],
     },
     {
       title: trans('contacts'),
-      path: CONTACTS_CUSTOMERS,
-      active: router.pathname.includes(CONTACTS_CUSTOMERS)
-               || router.pathname.includes(CONTACTS_SUPPLIERS),
-      subItems: [
-        {
-          title: trans('customers'),
-          path: CONTACTS_CUSTOMERS,
-          active: router.pathname.includes(CONTACTS_CUSTOMERS),
-        },
-        {
-          title: trans('suppliers'),
-          path: CONTACTS_SUPPLIERS,
-          active: router.pathname.includes(CONTACTS_SUPPLIERS),
-        },
-      ],
+      path: CONTACTS,
+      active: router.pathname.startsWith(CONTACTS),
+    },
+    {
+      title: trans('companies'),
+      path: COMPANIES,
+      active: router.pathname.startsWith(COMPANIES),
     },
     {
       title: trans('bulkEmail'),
       path: BULK_EMAIL,
-      active: router.pathname.includes(BULK_EMAIL),
+      active: router.pathname.startsWith(BULK_EMAIL),
     },
     {
       title: trans('logistics'),
       path: LOGISTICS_PICKUP,
-      active: router.pathname.includes(LOGISTICS_PICKUP)
-               || router.pathname.includes(LOGISTICS_DELIVERY),
+      active: router.pathname.startsWith(LOGISTICS_PICKUP)
+               || router.pathname.startsWith(LOGISTICS_DELIVERY),
       subItems: [
         {
           title: trans('pickups'),
           path: LOGISTICS_PICKUP,
-          active: router.pathname.includes(LOGISTICS_PICKUP),
+          active: router.pathname.startsWith(LOGISTICS_PICKUP),
         },
         {
           title: trans('deliveries'),
           path: LOGISTICS_DELIVERY,
-          active: router.pathname.includes(LOGISTICS_DELIVERY),
+          active: router.pathname.startsWith(LOGISTICS_DELIVERY),
         },
       ],
     },

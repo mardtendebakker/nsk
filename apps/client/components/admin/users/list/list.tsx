@@ -63,7 +63,7 @@ export default function List({
             <TableCell>
               {trans('lastModifiedAt')}
             </TableCell>
-            <TableCell>
+            <TableCell align="right">
               {trans('actions')}
             </TableCell>
           </TableRow>
@@ -86,7 +86,7 @@ export default function List({
               <TableCell>
                 {user.UserLastModifiedDate && format(new Date(user.UserLastModifiedDate), 'yyyy/MM/dd')}
               </TableCell>
-              <TableCell>
+              <TableCell align="right">
                 <Can requiredGroups={['super_admin']}>
                   <Edit onClick={() => onEdit(user.Username)} disabled={disabled} />
                 </Can>

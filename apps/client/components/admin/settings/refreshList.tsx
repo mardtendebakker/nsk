@@ -33,5 +33,5 @@ export default function refreshList({
       skip: (page - 1) * rowsPerPage,
       search,
     },
-  }).finally(() => pushURLParams({ params, router }));
+  }).then(() => pushURLParams({ params, router })).catch(() => {});
 }

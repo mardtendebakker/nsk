@@ -65,7 +65,7 @@ exports[`Header matches snapshot 1`] = `
           </div>
         </a>
         <a
-          href="/contacts/customers"
+          href="/contacts"
           style="text-decoration: none;"
         >
           <div
@@ -75,6 +75,20 @@ exports[`Header matches snapshot 1`] = `
               class="MuiTypography-root MuiTypography-body1 css-1we0tu4-MuiTypography-root"
             >
               contacts
+            </p>
+          </div>
+        </a>
+        <a
+          href="/companies"
+          style="text-decoration: none;"
+        >
+          <div
+            class="MuiBox-root css-1fojr6f"
+          >
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-vkc4v8-MuiTypography-root"
+            >
+              companies
             </p>
           </div>
         </a>

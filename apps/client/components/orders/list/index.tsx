@@ -104,7 +104,7 @@ function refreshList({
       ...paramsToSend,
       orderBy: JSON.stringify(orderBy),
     },
-  }).finally(() => pushURLParams({ params, router }));
+  }).then(() => pushURLParams({ params, router })).catch(() => {});
 }
 const AJAX_PATHS = {
   purchase: PURCHASE_ORDERS_PATH,
@@ -140,7 +140,7 @@ export default function ListContainer({ type }: { type: OrderType }) {
     createdBy: getQueryParam('createdBy'),
   }));
 
-  const { data: { data = [], count = 0 } = {}, call, performing } = useAxios(
+  const { data: { data = [], count = 0 } = {}, call, performing } = useAxios<undefined | { data?: OrderListItem[], count?: number }>(
     'get',
     ajaxPath.replace(':id', ''),
     {
