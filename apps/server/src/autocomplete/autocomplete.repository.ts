@@ -134,17 +134,17 @@ export class AutocompleteRepository {
       additionalWhereCondition: { ...(email && {
         OR: [
           { email },
-          { company_contact_company_idTocompany: { company: { companyContacts: { every: { email } } } } },
+          { company_contact_company_idTocompany: { company: { companyContacts: { some: { email } } } } },
         ],
       })},
     });
   }
 
   async findPartners(autocompleteDto: AutocompleteDto): Promise<AutocompleteResponseDto[]> {
-    return this.contactFind({
+    return this.commonFind({
       autocompleteDto,
-      prismaModel: this.prisma.contact,
-      additionalWhereCondition: { company_contact_company_idTocompany : { is_partner: true } }
+      prismaModel: this.prisma.company,
+      additionalWhereCondition: { is_partner: true },
     });
   }
 
@@ -155,8 +155,8 @@ export class AutocompleteRepository {
       selectProperties: ['kvk_nr'],
       additionalWhereCondition: { ...(email && {
         OR: [
-          { companyContacts: { every: { email } } },
-          { company: { companyContacts: { every: { email } } } },
+          { companyContacts: { some: { email } } },
+          { company: { companyContacts: { some: { email } } } },
         ],
       })},
     });
