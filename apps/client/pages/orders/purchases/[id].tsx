@@ -1,10 +1,9 @@
 import Head from 'next/head';
 import {
-  Box, Button, IconButton, Typography, Card, CardContent, Divider, Grid,
+  Box, IconButton, Typography, Card, CardContent, Divider, Grid,
 } from '@mui/material';
 import { useRouter } from 'next/router';
 import ArrowBack from '@mui/icons-material/ArrowBack';
-import Check from '@mui/icons-material/Check';
 import {
   SyntheticEvent, useEffect, useMemo, useState,
 } from 'react';
@@ -19,7 +18,7 @@ import { ORDERS_PURCHASES, ORDERS_PURCHASES_NEW } from '../../../utils/routes';
 import ProductsTable from '../../../components/orders/form/purchase/productsTable';
 import { AFile } from '../../../utils/axios/models/aFile';
 import { Order } from '../../../utils/axios/models/order';
-import BulkPrintOrder from '../../../components/button/bulkPrintOrder';
+import Action from '../../../components/orders/form/action';
 
 function UpdatePurchaseOrder() {
   const { trans } = useTranslation();
@@ -105,17 +104,13 @@ function UpdatePurchaseOrder() {
             </IconButton>
             {trans('editPurchase')}
           </Typography>
-          <Box>
-            {id && <BulkPrintOrder ids={[id.toString()]} onPerforming={(state:boolean) => setPerformingPrint(state)} type="purchase" disabled={!canSubmit()} sx={{ m: '.5rem .5rem' }} />}
-            <Button
-              size="small"
-              variant="contained"
-              onClick={handleSubmit}
-            >
-              <Check />
-              {trans('save')}
-            </Button>
-          </Box>
+          <Action
+            disabled={!canSubmit()}
+            onSave={handleSubmit}
+            setPerformingPrint={setPerformingPrint}
+            id={id?.toString()}
+            type="purchase"
+          />
         </Box>
         <Card>
           <Form
@@ -144,6 +139,13 @@ function UpdatePurchaseOrder() {
                 { id && <ProductsTable orderId={id.toString()} /> }
               </Grid>
             </Grid>
+            <Action
+              disabled={!canSubmit()}
+              onSave={handleSubmit}
+              setPerformingPrint={setPerformingPrint}
+              id={id?.toString()}
+              type="purchase"
+            />
           </CardContent>
         </Card>
       </form>
