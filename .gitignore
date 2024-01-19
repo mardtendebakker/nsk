@@ -47,3 +47,6 @@ Thumbs.db
 
 #pm2
 ecosystem.config.js
+
+# Nx
+.nx/cache

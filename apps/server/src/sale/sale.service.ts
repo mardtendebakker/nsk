@@ -105,7 +105,7 @@ export class SaleService extends AOrderService {
     const workbook = xlsx.read(file.buffer, { type: 'buffer' });
     const sheetName = workbook.SheetNames[0];
     const sheet = workbook.Sheets[sheetName];
-    const rows = <IExcelColumn[]>xlsx.utils.sheet_to_json(sheet);
+    const rows = <IExcelColumn[]>xlsx.utils.sheet_to_json(sheet, { rawNumbers: false });
   
     const sales: AOrderProcessed[] = [];
   
