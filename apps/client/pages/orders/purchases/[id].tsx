@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import Check from '@mui/icons-material/Check';
 import {
-  SyntheticEvent, useEffect, useMemo,
+  SyntheticEvent, useEffect, useMemo, useState,
 } from 'react';
 import Form from '../../../components/orders/form/purchase';
 import DashboardLayout from '../../../layouts/dashboard';
@@ -19,11 +19,13 @@ import { ORDERS_PURCHASES, ORDERS_PURCHASES_NEW } from '../../../utils/routes';
 import ProductsTable from '../../../components/orders/form/purchase/productsTable';
 import { AFile } from '../../../utils/axios/models/aFile';
 import { Order } from '../../../utils/axios/models/order';
+import BulkPrintOrder from '../../../components/button/bulkPrintOrder';
 
 function UpdatePurchaseOrder() {
   const { trans } = useTranslation();
   const router = useRouter();
   const { id } = router.query;
+  const [performingPrint, setPerformingPrint] = useState(false);
 
   const { call, performing } = useAxios(
     'put',
@@ -58,7 +60,7 @@ function UpdatePurchaseOrder() {
     }
   }, [id]);
 
-  const canSubmit = () => !performing && !performingFetchPurchaseOrder && !performingDeleteFilte;
+  const canSubmit = () => !performing && !performingFetchPurchaseOrder && !performingDeleteFilte && !performingPrint;
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
@@ -104,6 +106,7 @@ function UpdatePurchaseOrder() {
             {trans('editPurchase')}
           </Typography>
           <Box>
+            {id && <BulkPrintOrder ids={[id.toString()]} onPerforming={(state:boolean) => setPerformingPrint(state)} type="purchase" disabled={!canSubmit()} sx={{ m: '.5rem .5rem' }} />}
             <Button
               size="small"
               variant="contained"

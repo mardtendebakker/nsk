@@ -5,7 +5,9 @@ import {
 import { useRouter } from 'next/router';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import Check from '@mui/icons-material/Check';
-import { SyntheticEvent, useEffect, useMemo } from 'react';
+import {
+  SyntheticEvent, useEffect, useMemo, useState,
+} from 'react';
 import Form from '../../../components/orders/form/repair';
 import DashboardLayout from '../../../layouts/dashboard';
 import useAxios from '../../../hooks/useAxios';
@@ -16,11 +18,13 @@ import { initFormState, formRepresentationToBody } from './new';
 import { ORDERS_REPAIRS, ORDERS_REPAIRS_NEW } from '../../../utils/routes';
 import ProductsTable from '../../../components/orders/form/repair/productsTable';
 import { Order } from '../../../utils/axios/models/order';
+import BulkPrintOrder from '../../../components/button/bulkPrintOrder';
 
 function UpdateRepairOrder() {
   const { trans } = useTranslation();
   const router = useRouter();
   const { id } = router.query;
+  const [performingPrint, setPerformingPrint] = useState(false);
 
   const { call, performing } = useAxios(
     'put',
@@ -47,7 +51,7 @@ function UpdateRepairOrder() {
     }
   }, [id]);
 
-  const canSubmit = () => !performing && !performingFetchRepairOrder;
+  const canSubmit = () => !performing && !performingFetchRepairOrder && !performingPrint;
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
@@ -86,6 +90,7 @@ function UpdateRepairOrder() {
             {trans('editRepair')}
           </Typography>
           <Box>
+            {id && <BulkPrintOrder ids={[id.toString()]} onPerforming={(state:boolean) => setPerformingPrint(state)} type="repair" disabled={!canSubmit()} sx={{ m: '.5rem .5rem' }} />}
             <Button
               size="small"
               variant="contained"

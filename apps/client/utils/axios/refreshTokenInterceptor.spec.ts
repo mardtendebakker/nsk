@@ -41,10 +41,15 @@ describe('refreshTokenInterceptor', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
-  it('returns a resolved promise for CanceledError', async () => {
+  it('rejects for CanceledError', async () => {
     const error = new CanceledError();
-    const result = await refreshTokenInterceptor(error);
-    expect(result).toBe(undefined);
+    expect.assertions(1);
+
+    try {
+      await refreshTokenInterceptor(error);
+    } catch (e) {
+      expect(e).toBe(error);
+    }
   });
 
   it('returns a rejected promise for excluded paths', async () => {
