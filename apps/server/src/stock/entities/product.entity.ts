@@ -54,6 +54,9 @@ export class ProductEntity implements product {
   updated_at: Date;
 
   @ApiPropertyOptional()
+  order_updated_at: Date | null;
+
+  @ApiPropertyOptional()
   @IsOptional()
   @Type(() => Number)
   external_id: number | null;

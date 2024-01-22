@@ -53,7 +53,7 @@ export class SaleService extends AOrderService {
       );
     }
 
-    const productOrderData = products.data.map((product) => ({
+    const productOrderData: Prisma.product_orderCreateManyAorderInput[] = products.data.map((product) => ({
       product_id: product.id,
       price: product.price,
       quantity: 1,
@@ -69,6 +69,12 @@ export class SaleService extends AOrderService {
         },
       },
     };
+
+    this.aProductService.updateMany(
+      productIds, {
+        order_updated_at: new Date(),
+      }
+    );
 
     return this.repository.update(this.commonIncludePart(addProductsToOrderParams));
   }
