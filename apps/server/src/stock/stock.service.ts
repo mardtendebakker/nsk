@@ -44,26 +44,41 @@ export class StockService {
   }
 
   async findAll(query: FindManyDto, email?: string) {
+    const {
+      where,
+      entityStatus,
+      orderId,
+      excludeByOrderId,
+      excludeByOrderDiscr,
+      productType,
+      location,
+      location_label,
+      productStatus,
+      search,
+      orderBy,
+      select,
+      ...restQuery
+    } = query;
     const productwhere: Prisma.productWhereInput = {
-      ...query.where,
-      ...(Number.isFinite(query.entityStatus) && { entity_status: query.entityStatus }),
+      ...where,
+      ...(Number.isFinite(entityStatus) && { entity_status: entityStatus }),
       ...(Number.isFinite(this.entityStatus) && { entity_status: this.entityStatus }),
-      ...(query.orderId || query.excludeByOrderId || query.excludeByOrderDiscr || email) && {
+      ...(orderId || excludeByOrderId || excludeByOrderDiscr || email) && {
         product_order: {
-          ...(query.orderId || email) && {
+          ...(orderId || email) && {
             some: {
-              ...(query.orderId && { order_id: query.orderId }),
+              ...(orderId && { order_id: orderId }),
               ...this.getPartnerWhereInput(email),
             } 
           },
-          ...(query.excludeByOrderId && { none: { order_id: query.excludeByOrderId } }),
-          ...(query.excludeByOrderDiscr && { none: { aorder: { discr: query.excludeByOrderDiscr } } }),
+          ...(excludeByOrderId && { none: { order_id: excludeByOrderId } }),
+          ...(excludeByOrderDiscr && { none: { aorder: { discr: excludeByOrderDiscr } } }),
         },
       },
-      ...(query.productType && { type_id: query.productType }),
-      ...(query.location && { location_id: query.location }),
-      ...(query.location_label && { location_label_id: query.location_label }),
-      ...(query.productStatus && {product_status: { id: query.productStatus }} || {
+      ...(productType && { type_id: productType }),
+      ...(location && { location_id: location }),
+      ...(location_label && { location_label_id: location_label }),
+      ...(productStatus && {product_status: { id: productStatus }} || {
         OR: [{
           status_id: null,
         }, {
@@ -76,26 +91,26 @@ export class StockService {
           }
         }],
       }),
-      ...(query.search && {
-        OR: [{name: {contains: query.search}}, {sku: { contains: query.search}}]
+      ...(search && {
+        OR: [{name: {contains: search}}, {sku: { contains: search}}]
       }),
-    }
+    };
 
-    const productOrderBy: Prisma.productOrderByWithRelationInput[] = query.orderBy || [
+    const productOrderBy: Prisma.productOrderByWithRelationInput[] = orderBy || [
       {
         id: 'desc',
       },
     ];
 
     const result = await this.repository.findAll({
-      ...query,
-      select: this.processSelect(query.select),
+      ...restQuery,
+      select: this.processSelect(select),
       where: productwhere,
       orderBy: productOrderBy,
     });
 
     const data = result.data.map(product => {
-      return this.processStock(product, query.orderId);
+      return this.processStock(product, orderId);
     });
 
     return {

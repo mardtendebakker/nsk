@@ -54,7 +54,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
     {
       withProgressBar: true,
       defaultParams: {
-        orderBy: JSON.stringify({ created_at: 'asc' }),
+        orderBy: JSON.stringify({ order_updated_at: 'desc' }),
       },
     },
   );
