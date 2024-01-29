@@ -26,6 +26,7 @@
     "@nestjs/platform-express": "10.2.0",
     "@nestjs/swagger": "7.1.8",
     "@prisma/client": "^5.4.2",
+    "adm-zip": "^0.5.10",
     "amazon-cognito-identity-js": "^6.1.2",
     "axios": "^1.4.0",
     "bwip-js": "^3.4.0",
@@ -64,6 +65,7 @@
     "@nestjs/testing": "10.2.0",
     "@nx-tools/nx-prisma": "5.1.0",
     "@nx/cypress": "17.2.8",
+    "@nx/eslint": "17.2.8",
     "@nx/eslint-plugin": "17.2.8",
     "@nx/jest": "17.2.8",
     "@nx/js": "17.2.8",
@@ -105,7 +107,6 @@
     "supertest": "^6.3.3",
     "ts-jest": "29.1.1",
     "ts-node": "10.9.1",
-    "typescript": "5.2.2",
-    "@nx/eslint": "17.2.8"
+    "typescript": "5.2.2"
   }
 }

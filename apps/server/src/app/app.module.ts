@@ -27,6 +27,7 @@ import { SalesServiceModule } from '../sales-service/sales-service.module';
 import { AutocompleteModule } from '../autocomplete/autocomplete.module';
 import { AdminModule } from '../admin/admin.module';
 import { CompanyModule } from '../company/company.module';
+import { BlanccoModule } from '../blancco/blancco.module';
 
 @Module({
   imports: [
@@ -76,6 +77,7 @@ import { CompanyModule } from '../company/company.module';
     AutocompleteModule,
     AdminModule,
     CompanyModule,
+    BlanccoModule,
   ],
   controllers: [AppController],
   providers: [AppService],
