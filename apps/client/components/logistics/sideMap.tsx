@@ -254,7 +254,8 @@ export default function SideMap({
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <Avatar sx={{ mr: '1rem' }}>
                   <Typography variant="h5">
-                    {getContactOfWay(selectedWay).name.charAt(0)?.toUpperCase()}
+                    {getContactOfWay(selectedWay)?.name?.charAt(0)?.toUpperCase()
+                    || getContactOfWay(selectedWay)?.company_name?.charAt(0)?.toUpperCase()}
                   </Typography>
                 </Avatar>
                 <Box>
