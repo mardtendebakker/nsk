@@ -38,7 +38,7 @@ export class FindManyDto extends BaseFindManyDto {
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  location_label?: number;
+  locationLabel?: number;
 
   @ApiPropertyOptional()
   @IsOptional()

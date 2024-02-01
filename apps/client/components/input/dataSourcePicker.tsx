@@ -79,7 +79,7 @@ export default function DataSourcePicker(
         }
       }
     }).catch(() => {});
-  }, [value?.toString()]);
+  }, [value?.toString(), JSON.stringify(params)]);
 
   useEffect(() => {
     if (onCurrentValueChange) {

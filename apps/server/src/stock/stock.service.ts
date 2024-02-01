@@ -52,7 +52,7 @@ export class StockService {
       excludeByOrderDiscr,
       productType,
       location,
-      location_label,
+      locationLabel,
       productStatus,
       search,
       orderBy,
@@ -77,7 +77,7 @@ export class StockService {
       },
       ...(productType && { type_id: productType }),
       ...(location && { location_id: location }),
-      ...(location_label && { location_label_id: location_label }),
+      ...(locationLabel && { location_label_id: locationLabel }),
       ...(productStatus && {product_status: { id: productStatus }} || {
         OR: [{
           status_id: null,
