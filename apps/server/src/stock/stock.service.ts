@@ -504,6 +504,7 @@ export class StockService {
       name: true,
       price: true,
       entity_status: true,
+      description: true,
       location: {
         select: locationSelect,
       },
