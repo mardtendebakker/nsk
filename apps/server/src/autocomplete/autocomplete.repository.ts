@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { AutocompleteDto } from './dto/autocomplete.dto';
+import { AutocompleteDto, LocationLabelsAutocompleteDto } from './dto/autocomplete.dto';
 import { AutocompleteResponseDto } from './dto/autocomplete-response.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { LogisticRole } from '../logistic/types/logistic-role.enum';
@@ -8,7 +8,7 @@ const DEFAULT_TAKE = 50;
 
 @Injectable()
 export class AutocompleteRepository {
-  constructor(protected readonly prisma: PrismaService) {}
+  constructor(protected readonly prisma: PrismaService) { }
 
   async findProductTypes(autocompleteDto: AutocompleteDto): Promise<AutocompleteResponseDto[]> {
     return this.commonFind({
@@ -59,7 +59,7 @@ export class AutocompleteRepository {
     return this.contactFind({
       autocompleteDto,
       prismaModel: this.prisma.contact,
-      additionalWhereCondition: { company_contact_company_idTocompany : { is_customer: true } }
+      additionalWhereCondition: { company_contact_company_idTocompany: { is_customer: true } }
     });
   }
 
@@ -67,32 +67,41 @@ export class AutocompleteRepository {
     return this.contactFind({
       autocompleteDto,
       prismaModel: this.prisma.contact,
-      additionalWhereCondition: { company_contact_company_idTocompany : { is_supplier: true } }
+      additionalWhereCondition: { company_contact_company_idTocompany: { is_supplier: true } }
     });
   }
 
   async findLocations(autocompleteDto: AutocompleteDto): Promise<AutocompleteResponseDto[]> {
     const firstResult = await this.prisma.location.findMany({
       take: DEFAULT_TAKE,
-      where: {id: {in: autocompleteDto.ids}},
-      include: { location_template : { select: { id:true, template:true } }}
+      where: { id: { in: autocompleteDto.ids } },
+      include: { location_template: { select: { id: true, template: true } } }
     });
 
     const secondResult = await this.prisma.location.findMany({
       take: DEFAULT_TAKE,
       where: {
-        name: {contains: autocompleteDto.search || ''},
-        id: {notIn: firstResult.map(({id}) => id)}
+        name: { contains: autocompleteDto.search || '' },
+        id: { notIn: firstResult.map(({ id }) => id) }
       },
-      include: { location_template : { select: { id:true, template:true } }}
+      include: { location_template: { select: { id: true, template: true } } }
     })
 
     return [
       ...firstResult,
       ...secondResult
     ]
-    .sort((a,b) => a.id > b.id ? 1 : -1)
-    .map(({id, name, location_template}) => ({id, label: name, location_template}));
+      .sort((a, b) => a.id > b.id ? 1 : -1)
+      .map(({ id, name, location_template }) => ({ id, label: name, location_template }));
+  }
+
+  async findLocationLabels(autocompleteDto: LocationLabelsAutocompleteDto): Promise<AutocompleteResponseDto[]> {
+    return this.commonFind({
+      autocompleteDto,
+      prismaModel: this.prisma.location_label,
+      additionalWhereCondition: { location_id: autocompleteDto.location_id },
+      searchKey: 'label'
+    });
   }
 
   async findProductStatuses(autocompleteDto: AutocompleteDto): Promise<AutocompleteResponseDto[]> {
@@ -103,18 +112,20 @@ export class AutocompleteRepository {
   }
 
   async findLogistics(autocompleteDto: AutocompleteDto): Promise<AutocompleteResponseDto[]> {
-    
+
     const firstResult = await this.prisma.fos_user.findMany({
       take: DEFAULT_TAKE,
-      where: {id: {in: autocompleteDto.ids}, 
-      roles: LogisticRole.LOGISTIC_ROLE},
+      where: {
+        id: { in: autocompleteDto.ids },
+        roles: LogisticRole.LOGISTIC_ROLE
+      },
     });
 
     const secondResult = await this.prisma.fos_user.findMany({
       take: DEFAULT_TAKE,
       where: {
-        username: {contains: autocompleteDto.search || ''},
-        id: {notIn: firstResult.map(({id}) => id)},
+        username: { contains: autocompleteDto.search || '' },
+        id: { notIn: firstResult.map(({ id }) => id) },
         roles: LogisticRole.LOGISTIC_ROLE
       },
     })
@@ -123,20 +134,22 @@ export class AutocompleteRepository {
       ...firstResult,
       ...secondResult
     ]
-    .sort((a,b) => a.id > b.id ? 1 : -1)
-    .map(({id, username}) => ({id, label: username}));
+      .sort((a, b) => a.id > b.id ? 1 : -1)
+      .map(({ id, username }) => ({ id, label: username }));
   }
 
   async findContacts(autocompleteDto: AutocompleteDto, email?: string): Promise<AutocompleteResponseDto[]> {
     return this.contactFind({
       autocompleteDto,
       prismaModel: this.prisma.contact,
-      additionalWhereCondition: { ...(email && {
-        OR: [
-          { email },
-          { company_contact_company_idTocompany: { company: { companyContacts: { some: { email } } } } },
-        ],
-      })},
+      additionalWhereCondition: {
+        ...(email && {
+          OR: [
+            { email },
+            { company_contact_company_idTocompany: { company: { companyContacts: { some: { email } } } } },
+          ],
+        })
+      },
     });
   }
 
@@ -153,12 +166,14 @@ export class AutocompleteRepository {
       autocompleteDto,
       prismaModel: this.prisma.company,
       selectProperties: ['kvk_nr'],
-      additionalWhereCondition: { ...(email && {
-        OR: [
-          { companyContacts: { some: { email } } },
-          { company: { companyContacts: { some: { email } } } },
-        ],
-      })},
+      additionalWhereCondition: {
+        ...(email && {
+          OR: [
+            { companyContacts: { some: { email } } },
+            { company: { companyContacts: { some: { email } } } },
+          ],
+        })
+      },
     });
   }
 
@@ -166,23 +181,25 @@ export class AutocompleteRepository {
     autocompleteDto,
     prismaModel,
     additionalWhereCondition = {},
-    selectProperties = []
+    selectProperties = [],
+    searchKey = 'name'
   }: {
     autocompleteDto: AutocompleteDto,
     prismaModel,
     additionalWhereCondition?: object,
-    selectProperties?: string[]
+    selectProperties?: string[],
+    searchKey?: string
   }): Promise<AutocompleteResponseDto[]> {
     const firstResult = await prismaModel.findMany({
       take: DEFAULT_TAKE,
-      where: {id: {in: autocompleteDto.ids}, ...additionalWhereCondition}
+      where: { id: { in: autocompleteDto.ids }, ...additionalWhereCondition }
     });
 
     const secondResult = await prismaModel.findMany({
       take: DEFAULT_TAKE,
       where: {
-        name: {contains: autocompleteDto.search || ''},
-        id: {notIn: firstResult.map(({id}) => id)},
+        [searchKey]: { contains: autocompleteDto.search || '' },
+        id: { notIn: firstResult.map(({ id }) => id) },
         ...additionalWhereCondition
       }
     });
@@ -191,11 +208,11 @@ export class AutocompleteRepository {
       ...firstResult,
       ...secondResult
     ]
-    .sort((a,b) => a.id > b.id ? 1 : -1);
+      .sort((a, b) => a.id > b.id ? 1 : -1);
 
-    
-    return result.map(({ id, name, ...rest }) => {
-      const obj = { id, label: name };
+
+    return result.map(({ id, ...rest }) => {
+      const obj = { id, label: rest[searchKey] };
       selectProperties.forEach((property: string) => {
         obj[property] = rest[property];
       })
@@ -208,36 +225,36 @@ export class AutocompleteRepository {
     autocompleteDto,
     prismaModel,
     additionalWhereCondition = {},
-  }:{
+  }: {
     autocompleteDto: AutocompleteDto,
     prismaModel,
     additionalWhereCondition?: object,
   }): Promise<AutocompleteResponseDto[]> {
     const firstResult = await prismaModel.findMany({
       take: DEFAULT_TAKE,
-      where: {id: {in: autocompleteDto.ids}, ...additionalWhereCondition},
-      include: { company_contact_company_idTocompany : { select: { name:true } }}
+      where: { id: { in: autocompleteDto.ids }, ...additionalWhereCondition },
+      include: { company_contact_company_idTocompany: { select: { name: true } } }
     });
 
     const secondResult = await prismaModel.findMany({
       take: DEFAULT_TAKE,
       where: {
         OR: [
-          { name: {contains: autocompleteDto.search || ''} },
-          { company_contact_company_idTocompany: { name: { contains: autocompleteDto.search || '' }}},
+          { name: { contains: autocompleteDto.search || '' } },
+          { company_contact_company_idTocompany: { name: { contains: autocompleteDto.search || '' } } },
         ],
-        id: {notIn: firstResult.map(({id}) => id)},
+        id: { notIn: firstResult.map(({ id }) => id) },
         ...additionalWhereCondition
       },
-      include: { company_contact_company_idTocompany : { select: { name:true } }}
+      include: { company_contact_company_idTocompany: { select: { name: true } } }
     });
 
     const result = [
       ...firstResult,
       ...secondResult
     ]
-    .sort((a,b) => a.id > b.id ? 1 : -1);
+      .sort((a, b) => a.id > b.id ? 1 : -1);
 
-    return result.map(({id, name, company_contact_company_idTocompany }) => ({id, label: `${name} - ${company_contact_company_idTocompany.name}`}));
+    return result.map(({ id, name, company_contact_company_idTocompany }) => ({ id, label: `${name} - ${company_contact_company_idTocompany.name}` }));
   }
 }

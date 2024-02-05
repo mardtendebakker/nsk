@@ -1,7 +1,7 @@
 import { Controller, ForbiddenException, Get, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AutocompleteService } from './autocomplete.service';
-import { AutocompleteDto } from './dto/autocomplete.dto';
+import { AutocompleteDto, LocationLabelsAutocompleteDto } from './dto/autocomplete.dto';
 import { AutocompleteResponseDto, LocationAutocompleteResponseDto } from './dto/autocomplete-response.dto';
 import { Authorization, AuthorizationGuard, CognitoUser } from '@nestjs-cognito/auth';
 import { ALL_MAIN_GROUPS, CognitoGroups, LOCAL_GROUPS, PARTNERS_GROUPS } from '../common/types/cognito-groups.enum';
@@ -11,7 +11,7 @@ import { ALL_MAIN_GROUPS, CognitoGroups, LOCAL_GROUPS, PARTNERS_GROUPS } from '.
 @ApiTags('autocomplete')
 @Controller('autocomplete')
 export class AutocompleteController {
-  constructor(protected readonly autocompleteService: AutocompleteService) {}
+  constructor(protected readonly autocompleteService: AutocompleteService) { }
 
   @Get('/product-types')
   @ApiResponse({ type: AutocompleteResponseDto, isArray: true })
@@ -44,9 +44,9 @@ export class AutocompleteController {
       email: string;
     }
   ) {
-    if (groups.some(group=> LOCAL_GROUPS.includes(group))) {
+    if (groups.some(group => LOCAL_GROUPS.includes(group))) {
       return this.autocompleteService.findContacts(query);
-    } else if (groups.some(group=> PARTNERS_GROUPS.includes(group))) {
+    } else if (groups.some(group => PARTNERS_GROUPS.includes(group))) {
       return this.autocompleteService.findContacts(query, email);
     } else {
       throw new ForbiddenException("Insufficient permissions to access this api!");
@@ -73,9 +73,9 @@ export class AutocompleteController {
       email: string;
     }
   ) {
-    if (groups.some(group=> LOCAL_GROUPS.includes(group))) {
+    if (groups.some(group => LOCAL_GROUPS.includes(group))) {
       return this.autocompleteService.findCompanies(query);
-    } else if (groups.some(group=> PARTNERS_GROUPS.includes(group))) {
+    } else if (groups.some(group => PARTNERS_GROUPS.includes(group))) {
       return this.autocompleteService.findCompanies(query, email);
     } else {
       throw new ForbiddenException("Insufficient permissions to access this api!");
@@ -122,6 +122,12 @@ export class AutocompleteController {
   @ApiResponse({ type: LocationAutocompleteResponseDto, isArray: true })
   locations(@Query() query: AutocompleteDto) {
     return this.autocompleteService.findLocations(query);
+  }
+
+  @Get('/location-labels')
+  @ApiResponse({ type: AutocompleteResponseDto, isArray: true })
+  locationLabels(@Query() query: LocationLabelsAutocompleteDto) {
+    return this.autocompleteService.findLocationLabels(query);
   }
 
   @Get('/product-statuses')

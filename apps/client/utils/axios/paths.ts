@@ -54,6 +54,7 @@ export const AUTOCOMPLETE_CUSTOMERS_PATH = '/autocomplete/customers';
 export const AUTOCOMPLETE_SUPPLIERS_PATH = '/autocomplete/suppliers';
 export const AUTOCOMPLETE_LOGISTICS_PATH = '/autocomplete/logistics';
 export const AUTOCOMPLETE_LOCATIONS_PATH = '/autocomplete/locations';
+export const AUTOCOMPLETE_LOCATION_LABELS_PATH = '/autocomplete/location-labels';
 export const AUTOCOMPLETE_PRODUCT_STATUSES_PATH = '/autocomplete/product-statuses';
 export const AUTOCOMPLETE_COMPANIES_PATH = '/autocomplete/companies';
 export const ADMIN_USERS_GROUPS = '/admin/users/groups/:username';
