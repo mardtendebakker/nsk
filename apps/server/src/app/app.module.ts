@@ -28,6 +28,8 @@ import { AutocompleteModule } from '../autocomplete/autocomplete.module';
 import { AdminModule } from '../admin/admin.module';
 import { CompanyModule } from '../company/company.module';
 import { BlanccoModule } from '../blancco/blancco.module';
+import { VehicleModule } from '../vehicle/vehicle.module';
+import { FleetGoModule } from '../fleet-go/fleet-go.module';
 
 @Module({
   imports: [
@@ -78,8 +80,10 @@ import { BlanccoModule } from '../blancco/blancco.module';
     AdminModule,
     CompanyModule,
     BlanccoModule,
+    FleetGoModule,
+    VehicleModule
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }
