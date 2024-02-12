@@ -2,9 +2,10 @@ import { Module } from '@nestjs/common';
 import { BlanccoService } from './blancco.service';
 import { HttpModule } from '@nestjs/axios';
 import { PurchaseModule } from '../purchase/purchase.module';
+import { BlanccoRepository } from './blancco.repository';
 
 @Module({
-  providers: [BlanccoService],
+  providers: [BlanccoService, BlanccoRepository],
   imports: [
     HttpModule,
     PurchaseModule,

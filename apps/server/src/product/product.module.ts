@@ -8,6 +8,7 @@ import { FileModule } from '../file/file.module';
 import { PrintService } from '../print/print.service';
 import { EntityStatus } from '../common/types/entity-status.enum';
 import { LocationLabelModule } from '../location-label/location-label.module';
+import { BlanccoModule } from '../blancco/blancco.module';
 
 @Module({
   providers: [
@@ -24,7 +25,13 @@ import { LocationLabelModule } from '../location-label/location-label.module';
     PrintService,
   ],
   controllers: [ProductController],
-  imports: [PrismaModule, LocationModule, LocationLabelModule, FileModule],
+  imports: [
+    PrismaModule,
+    LocationModule,
+    LocationLabelModule,
+    FileModule,
+    BlanccoModule,
+  ],
   exports: [ProductService],
 })
 export class ProductModule {}

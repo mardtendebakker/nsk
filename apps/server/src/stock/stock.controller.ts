@@ -130,8 +130,6 @@ export class StockController {
     return new StreamableFile(pdfStream);
   }
 
-
-
   @Get('bulk/print/pricecards')
   @ApiResponse({
     status: HttpStatus.OK,
@@ -154,4 +152,11 @@ export class StockController {
     });
     return new StreamableFile(pdfStream);
   }
+
+  @Patch('blancco/:orderId')
+  @UseGuards(AuthorizationGuard(LOCAL_GROUPS))
+  async importFromBlancco(@Param('orderId') orderId: number) {
+    return this.stockService.importFromBlancco(orderId);
+  }
+  
 }

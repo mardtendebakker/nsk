@@ -8,6 +8,7 @@ import { AproductController } from './aproduct.controller';
 import { PrintService } from '../print/print.service';
 import { ArchivedModule } from './archived/archived.module';
 import { LocationLabelModule } from '../location-label/location-label.module';
+import { BlanccoModule } from '../blancco/blancco.module';
 
 @Module({
   providers: [
@@ -20,7 +21,14 @@ import { LocationLabelModule } from '../location-label/location-label.module';
     PrintService
   ],
   controllers: [AproductController],
-  imports: [PrismaModule, LocationModule, LocationLabelModule, FileModule, ArchivedModule],
+  imports: [
+    PrismaModule,
+    LocationModule,
+    LocationLabelModule,
+    FileModule,
+    ArchivedModule,
+    BlanccoModule,
+  ],
   exports: [AProductService],
 })
 export class AProductModule {}
