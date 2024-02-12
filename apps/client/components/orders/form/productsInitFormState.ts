@@ -1,11 +1,12 @@
 export default function initFormState(
   {
-    search, productType, location, productStatus, orderId,
+    search, productType, location, locationLabel, productStatus, orderId,
   }:
   {
     search?: string,
     productType?: string,
     location?: string,
+    locationLabel?: string,
     productStatus?: string,
     orderId: string,
   },
@@ -19,6 +20,9 @@ export default function initFormState(
     },
     location: {
       value: location || undefined,
+    },
+    locationLabel: {
+      value: locationLabel || undefined,
     },
     productStatus: {
       value: productStatus || undefined,

@@ -39,6 +39,7 @@ export default function ProductsTable({ orderId, refreshOrder }:{ orderId: strin
     search: getQueryParam('search'),
     productType: getQueryParam('productType'),
     location: getQueryParam('location'),
+    locationLabel: getQueryParam('locationLabel'),
     productStatus: getQueryParam('productStatus'),
     orderId,
   }));
@@ -90,6 +91,7 @@ export default function ProductsTable({ orderId, refreshOrder }:{ orderId: strin
     formRepresentation.productType.value?.toString(),
     formRepresentation.productStatus.value?.toString(),
     formRepresentation.location.value?.toString(),
+    formRepresentation.locationLabel.value?.toString(),
   ]);
 
   const handleProductsAdded = (productIds: number[]) => {

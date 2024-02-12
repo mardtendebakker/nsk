@@ -38,6 +38,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
     search: getQueryParam('search'),
     productType: getQueryParam('productType'),
     location: getQueryParam('location'),
+    locationLabel: getQueryParam('locationLabel'),
     productStatus: getQueryParam('productStatus'),
     orderId,
   }));
@@ -92,6 +93,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
     formRepresentation.productType.value?.toString(),
     formRepresentation.productStatus.value?.toString(),
     formRepresentation.location.value?.toString(),
+    formRepresentation.locationLabel.value?.toString(),
   ]);
 
   const disabled = (): boolean => performing || performingPut;
