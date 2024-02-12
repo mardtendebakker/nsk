@@ -52,8 +52,7 @@ export class StockProcess {
       product_status,
       entity_status,
       location,
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      product_attribute_product_attribute_product_idToproduct,
+      product_attribute_product_attribute_product_idToproduct: _,
       ...rest
     } = this.product;
 

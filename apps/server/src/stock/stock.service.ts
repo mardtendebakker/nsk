@@ -27,6 +27,11 @@ import { ProductRelationAttributeProcessed } from "./types/product-relation-attr
 import { ProductRelationAttributeOrderProcessed } from "./types/product-relation-attribute-order-processed";
 import { EntityStatus } from "../common/types/entity-status.enum";
 import { LocationLabelService } from "../location-label/location-label.service";
+import { BlanccoService } from "../blancco/blancco.service";
+import { BlanccoDefaultProductType } from "../blancco/types/blancco-defualt-product-type.enum";
+import { BlanccoReportV1 } from "../blancco/types/blancco-report-v1";
+import { BlanccoCustomFiled } from "../blancco/types/blancco-custom-field.enum";
+import * as BlanccoCopiatekAttributes from "../assets/blancco-copiatek-attributes.json";
 
 export class StockService {
   constructor(
@@ -35,6 +40,7 @@ export class StockService {
     protected readonly locationLabelService: LocationLabelService,
     protected readonly fileService: FileService,
     protected readonly printService: PrintService,
+    protected readonly blanccoService: BlanccoService,
     protected readonly entityStatus: EntityStatus,
   ) {}
 
@@ -153,11 +159,9 @@ export class StockService {
 
     const {
       product_order,
-      product_attribute_product_attribute_product_idToproduct,
+      product_attribute_product_attribute_product_idToproduct: product_attributes,
       ...rest
     } = stock;
-
-    const product_attributes = product_attribute_product_attribute_product_idToproduct
 
     return {
       ...rest,
@@ -334,6 +338,25 @@ export class StockService {
   async printPriceCards(ids: number[]) {
     const products = await this.findAllRelationAttributeProcessed({ where: { id: { in: ids } } });
     return this.printService.printPriceCards(products);
+  }
+
+  async importFromBlancco(orderId: number) {
+    const reports = await this.blanccoService.getReports(orderId);
+
+    for (const uuid in reports) {
+      await this.updateAttributeWithBlanccoReport(uuid, reports[uuid].report);
+    }
+
+    return reports;
+  }
+
+  private async updateAttributeWithBlanccoReport(uuid: string, report: BlanccoReportV1) {
+    const productTypeName = report?.user_data?.fields?.[0]?.[BlanccoCustomFiled.PRODUCT_TYPE] || BlanccoDefaultProductType.NAME;
+    BlanccoCopiatekAttributes.forEach(attribute => {
+      const value = this.blanccoService.getValueFromReportByKey(report.blancco_data.blancco_hardware_report, attribute.attr_code);
+      // TODO: should be upsert to product_attribute
+      console.log("should be upsert to product_attribute", uuid, productTypeName, attribute, value);
+    });
   }
 
   private productAttributeProcess(productAttribute: ProductAttributeIncludeAttribute): ProductAttributeProcessed {
