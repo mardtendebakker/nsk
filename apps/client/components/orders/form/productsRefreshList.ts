@@ -21,6 +21,7 @@ export default function refreshList({
     'search',
     'productType',
     'location',
+    'locationLabel',
     'productStatus',
     'orderId',
   ].forEach((filter) => {
