@@ -64,7 +64,7 @@ function refreshList({
 
   ['is_customer', 'is_supplier', 'is_partner'].forEach((filter) => {
     if (formRepresentation[filter].value) {
-      const value = formRepresentation[filter].value ? '1' : '0';
+      const value = formRepresentation[filter].value ? 'true' : 'false';
       params.append(filter, value);
       paramsToSend[filter] = value;
     }
@@ -87,9 +87,9 @@ export default function ListContainer({ company, editContactRouteBuilder }: { co
   const { formRepresentation, setValue, setData } = useForm(initFormState({
     search: getQueryParam('search'),
     company: company?.name || getQueryParam('company'),
-    is_customer: getQueryParam('is_customer') === '1',
-    is_partner: getQueryParam('is_partner') === '1',
-    is_supplier: getQueryParam('is_supplier') === '1',
+    is_customer: getQueryParam('is_customer') === 'true',
+    is_partner: getQueryParam('is_partner') === 'true',
+    is_supplier: getQueryParam('is_supplier') === 'true',
     disableCompany: !!company,
   }));
 

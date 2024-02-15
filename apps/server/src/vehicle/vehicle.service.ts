@@ -22,6 +22,7 @@ export class VehicleService {
         model: equipment.EquipmentHeader.Model,
         driverName: equipment.DriverName,
         description: equipment.Description,
+        running: equipment.EngineRunning,
       }
     });
   }

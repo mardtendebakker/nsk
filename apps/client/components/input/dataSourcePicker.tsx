@@ -25,6 +25,7 @@ export default function DataSourcePicker(
     helperText,
     error,
     multiple,
+    fetchOnSearch,
   }: {
     disabled?: boolean,
     params?: { [key: string]: string | number },
@@ -41,7 +42,8 @@ export default function DataSourcePicker(
     searchKey?: string,
     helperText?: string,
     error?: boolean,
-    multiple?: boolean
+    multiple?: boolean,
+    fetchOnSearch?: boolean
   },
 ) {
   const { data, call } = useAxios<undefined | object[]>('get', path, { showErrorMessage: false });
@@ -106,6 +108,7 @@ export default function DataSourcePicker(
         onChange(selected);
       }}
       filterSelectedOptions
+      isOptionEqualToValue={(option, selectedValue) => option.id == selectedValue.id}
       renderInput={
                 (inputParams) => (
                   <TextField
@@ -120,9 +123,11 @@ export default function DataSourcePicker(
                       },
                     }}
                     onChange={(e) => {
-                      debouncedCall({
-                        params: { [searchKey]: e.target.value, ...params },
-                      });
+                      if (fetchOnSearch) {
+                        debouncedCall({
+                          params: { [searchKey]: e.target.value, ...params },
+                        });
+                      }
                     }}
                   />
                 )
@@ -146,4 +151,5 @@ DataSourcePicker.defaultProps = {
   helperText: undefined,
   error: false,
   multiple: false,
+  fetchOnSearch: true,
 };
