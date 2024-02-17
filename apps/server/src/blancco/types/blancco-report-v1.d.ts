@@ -1,4 +1,4 @@
-import { BlanccoCustomFiled } from "./blancco-custom-field.enum";
+import { BlanccoCustomFiledKeys } from "./blancco-custom-field-keys.enum";
 import { BlanccoUnknownField } from "./blancco-unknown-field";
 import { BlanccoBios } from "./hardware/blancco-bios";
 import { BlanccoDisk } from "./hardware/blancco-disk";
@@ -51,7 +51,7 @@ type BlanccoHardwareReport = BlanccoUnknownField & {
 };
 
 type BlanccoUserCustomField = BlanccoComponent & {
-  [K in BlanccoCustomFiled]?: string;
+  [K in BlanccoCustomFiledKeys]?: string;
 };
 
 export type BlanccoReportV1 = BlanccoUnknownField & {
@@ -62,12 +62,5 @@ export type BlanccoReportV1 = BlanccoUnknownField & {
   };
   user_data: BlanccoUnknownField & {
     fields: BlanccoUserCustomField[];
-  };
-};
-
-export type BlanccoReportsV1 = {
-  [key: string]: {
-    report?: BlanccoReportV1;
-    [key: string]: unknown;
   };
 };

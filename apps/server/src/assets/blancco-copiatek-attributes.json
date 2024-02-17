@@ -2,7 +2,7 @@
   {
     "attr_code": "system.0.manufacturer",
     "name": "BL Manufacturer",
-    "type": 0
+    "type": 1
   },
   {
     "attr_code": "system.0.serial",
@@ -17,27 +17,27 @@
   {
     "attr_code": "system.0.chassis_type",
     "name": "BL Chassis Type",
-    "type": 0
+    "type": 1
+  },
+  {
+    "attr_code": "processors.1.processor.0.model",
+    "name": "BL Cpu Model",
+    "type": 1
   },
   {
     "attr_code": "processors.0.total_cores",
     "name": "BL Total Cores",
-    "type": 0
-  },
-  {
-    "attr_code": "processors.0.total_cpus",
-    "name": "BL Total Cpus",
-    "type": 0
+    "type": 1
   },
   {
     "attr_code": "memory.0.total_memory",
     "name": "BL Total Memory",
-    "type": 0
+    "type": 1
   },
   {
     "attr_code": "memory.0.total_slots",
     "name": "BL Total Slots",
-    "type": 0
+    "type": 1
   },
   {
     "attr_code": "disks.1.disk.0.model",
