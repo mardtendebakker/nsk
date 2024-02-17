@@ -17,4 +17,5 @@ export class EquipmentResponseDto {
     Location: Location;
     DriverName?: string;
     Description?: string;
+    EngineRunning: boolean;
 }

@@ -1,6 +1,6 @@
 import { ApiPropertyOptional } from "@nestjs/swagger";
 import { FindManyDto as BaseFindManyDto } from "../../common/dto/find-many.dto";
-import { IsOptional } from "class-validator";
+import { IsOptional, IsString } from "class-validator";
 import { Transform } from "class-transformer";
 
 export class FindManyDto extends BaseFindManyDto {
@@ -13,4 +13,9 @@ export class FindManyDto extends BaseFindManyDto {
   @IsOptional()
   @Transform(({value}) => value ? new Date(value) : value)
   endsAt?: Date;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  licensePlate?: string;
 }

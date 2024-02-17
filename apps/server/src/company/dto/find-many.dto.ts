@@ -5,7 +5,7 @@ import { Transform } from "class-transformer";
 
 const booleanTransformer = ({value}) => {
   if(value !== undefined) {
-    return value === '1'
+    return value === 'true'
   }
 
   return value;
