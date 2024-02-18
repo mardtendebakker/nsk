@@ -16,25 +16,25 @@ export class ProductAttributeDto extends PartialType(OmitType(ProductAttributeEn
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
-  value_product_id: number | null;
+  value_product_id?: number | null;
 
   @ApiPropertyOptional()
   @Transform(formDataStringTransform)
   @IsString()
   @Type(() => String)
-  value: string;
+  value?: string;
 
   @ApiPropertyOptional()
   @Transform(formDataNumberTransform)
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
-  quantity: number | null;
+  quantity?: number | null;
 
   @ApiPropertyOptional()
   @Transform(formDataNumberTransform)
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
-  external_id: number | null;
+  external_id?: number | null;
 }

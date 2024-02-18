@@ -30,8 +30,9 @@ import { LocationLabelService } from "../location-label/location-label.service";
 import { BlanccoService } from "../blancco/blancco.service";
 import { BlanccoDefaultProductType } from "../blancco/types/blancco-defualt-product-type.enum";
 import { BlanccoReportV1 } from "../blancco/types/blancco-report-v1";
-import { BlanccoCustomFiled } from "../blancco/types/blancco-custom-field.enum";
-import * as BlanccoCopiatekAttributes from "../assets/blancco-copiatek-attributes.json";
+import { BlanccoCustomFiledKeys } from "../blancco/types/blancco-custom-field-keys.enum";
+import { AttributeIncludeOption } from "./types/attribute-include-option";
+import { BlanccoReportsV1 } from "../blancco/types/blancco-reports-v1";
 
 export class StockService {
   constructor(
@@ -341,22 +342,85 @@ export class StockService {
   }
 
   async importFromBlancco(orderId: number) {
-    const reports = await this.blanccoService.getReports(orderId);
+    let results: boolean[] = [];
+    let newCursor: string | null = null;
 
-    for (const uuid in reports) {
-      await this.updateAttributeWithBlanccoReport(uuid, reports[uuid].report);
-    }
+    do {
+      const { cursor, ...reports } = await this.blanccoService.getReports(orderId, newCursor);
+      const result = await this.handleBlanccoReoprts(orderId, reports);
+      results = results.concat(result);
 
-    return reports;
+      newCursor = cursor;
+    } while (newCursor);
+
+    return results;
   }
 
-  private async updateAttributeWithBlanccoReport(uuid: string, report: BlanccoReportV1) {
-    const productTypeName = report?.user_data?.fields?.[0]?.[BlanccoCustomFiled.PRODUCT_TYPE] || BlanccoDefaultProductType.NAME;
-    BlanccoCopiatekAttributes.forEach(attribute => {
-      const value = this.blanccoService.getValueFromReportByKey(report.blancco_data.blancco_hardware_report, attribute.attr_code);
-      // TODO: should be upsert to product_attribute
-      console.log("should be upsert to product_attribute", uuid, productTypeName, attribute, value);
-    });
+  async handleBlanccoReoprts(orderId: number, reports: BlanccoReportsV1): Promise<boolean[]> {
+    const results: boolean[] = [];
+
+    for (const uuid in reports) {
+      const result = await this.createProductAttributeByBlanccoReport(orderId, reports[uuid].report);
+      results.push(result);
+    }
+
+    return results;
+  }
+
+  private async createProductAttributeByBlanccoReport(orderId: number, report: BlanccoReportV1): Promise<boolean> {
+    const sku = this.blanccoService.getValueFromReportByKey(report, BlanccoCustomFiledKeys.SKU_NUMBER);
+    const productTypeName = this.blanccoService.getValueFromReportByKey(report, BlanccoCustomFiledKeys.PRODUCT_TYPE) || BlanccoDefaultProductType.NAME;
+
+    const productType = await this.repository.getProductTypeByName(productTypeName);
+    const attributes = await this.repository.getAttributesByProductTypeId(productType.id);
+
+    const product_attributes = await this.prepareProductAttributesByBlanccoReport(attributes, report);
+
+
+    const products = await this.repository.findBy({ where: { sku, product_order: { some: { order_id: orderId } } } });
+    for (const product of products) {
+      this.repository.deleteProductAttributes(product.id);
+      this.updateOne(product.id, {
+        type_id: productType.id,
+        product_attributes,
+      });
+    }
+
+    return true;
+  }
+
+  private async prepareProductAttributesByBlanccoReport(attributes: AttributeIncludeOption[], report: BlanccoReportV1): Promise<ProductAttributeDto[]> {
+    const productAttributes: ProductAttributeDto[] = [];
+    
+    for (const attribute of attributes) {
+      const reportValue = this.blanccoService.getValueFromReportByKey(report.blancco_data.blancco_hardware_report, attribute.attr_code);
+      if (reportValue) {
+        productAttributes.push(await this.preapareProductAttributeByStringValue(attribute, String(reportValue)));
+      }
+    }
+
+    return productAttributes;
+  }
+
+  private async preapareProductAttributeByStringValue(attribute: AttributeIncludeOption, reportValue: string): Promise<ProductAttributeDto> {
+    let value: string;
+  
+    switch(attribute.type) {
+      case AttributeType.TYPE_TEXT:
+        value = reportValue;
+        break;
+      case AttributeType.TYPE_SELECT:
+        value = String((await this.repository.getOptionByAttrIdAndName(attribute.id, reportValue)).id);
+        break;
+      default:
+        value = null;
+        break;
+    }
+
+    return {
+      attribute_id: attribute.id,
+      value,
+    };
   }
 
   private productAttributeProcess(productAttribute: ProductAttributeIncludeAttribute): ProductAttributeProcessed {
@@ -610,7 +674,7 @@ export class StockService {
     }
 
     await this.deleteAllAttributes(productId);
-    const allAttributes = await this.repository.getAttributesByTypeId(typeId);
+    const allAttributes = await this.repository.getAttributesByProductTypeId(typeId);
     const productAttributes: Prisma.product_attributeCreateManyInput[] = [];
     for (let i = 0; i < allAttributes.length; i++) {
       const attribute = allAttributes[i];

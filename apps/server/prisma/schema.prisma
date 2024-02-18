@@ -79,7 +79,7 @@ model aservice {
 model attribute {
   id                     Int                      @id @default(autoincrement())
   product_type_filter_id Int?
-  attr_code              String                   @db.VarChar(11)
+  attr_code              String                   @db.VarChar(255)
   name                   String                   @unique(map: "UNIQ_FA7AEFFB5E237E06") @db.VarChar(255)
   price                  Int?
   type                   Int?
@@ -102,6 +102,7 @@ model attribute_option {
   external_id  Int?
   attribute    attribute @relation(fields: [attribute_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_78672EEAB6E62EFA")
 
+  @@unique([attribute_id, name], map: "attribute_option_attr_id_name_key")
   @@index([attribute_id], map: "IDX_78672EEAB6E62EFA")
 }
 

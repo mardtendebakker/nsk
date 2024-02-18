@@ -1,3 +1,3 @@
 export enum BlanccoDefaultProductType {
-  NAME = 'BL_Computer',
+  NAME = 'BL Computer',
 }

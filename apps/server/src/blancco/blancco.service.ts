@@ -5,11 +5,13 @@ import { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { catchError, lastValueFrom } from 'rxjs';
 import * as AdmZip from 'adm-zip';
 import { PurchaseService } from '../purchase/purchase.service';
-import { BlanccoReportsV1, BlanccoHardwareReport } from './types/blancco-report-v1';
+import { BlanccoV1 } from './types/blancco-v1';
 import { BlanccoRepository } from './blancco.repository';
 import { BlanccoDefaultProductType } from './types/blancco-defualt-product-type.enum';
 import { Prisma } from '@prisma/client';
 import { BlanccoFormat } from './types/blancco-format.enum';
+import { BlanccoResponse } from './types/blancco-response';
+import { BlanccoReportsV1 } from './types/blancco-reports-v1';
 
 @Injectable()
 export class BlanccoService {
@@ -20,15 +22,20 @@ export class BlanccoService {
     private readonly repository: BlanccoRepository
   ) {}
 
-  async getReports(orderId: number): Promise<BlanccoReportsV1> {
+  async getReports(orderId: number, newCursor?: string): Promise<BlanccoV1> {
     const purchaseOrder = await this.purchaseService.findOne(orderId);
     if (!purchaseOrder || !purchaseOrder.order_nr) {
       throw new NotFoundException('Purchase order not found!');
     }
 
-    const rawReports = await this.downloadReports(purchaseOrder.order_nr);
+    const { zip, cursor } = await this.downloadReports(purchaseOrder.order_nr, newCursor);
 
-    return this.convertToObject(rawReports);
+    const reports = this.convertToObject(zip);
+
+    return {
+      cursor,
+      ...reports,
+    };
   }
 
   async getProductType(report, productTypeName?: string) {
@@ -71,10 +78,10 @@ export class BlanccoService {
   }
 
   getValueFromReportByKey(
-    report: BlanccoHardwareReport,
+    report: unknown,
     key: string
-  ): unknown | undefined {
-    return this.getValueFromReportByFlattenedKey(report, key);
+  ): string {
+    return <string>this.getValueFromReportByFlattenedKey(report, key);
   }
 
   private getValueFromReportByFlattenedKey(report: unknown, key: string) {
@@ -132,7 +139,7 @@ export class BlanccoService {
     return value;
   }
 
-  private async downloadReports(search: string): Promise<string> {
+  private async downloadReports(search: string, cursor?: string): Promise<BlanccoResponse> {
     const url = this.configService.get<string>('BLANCCO_API_URL');
 
     const requestConfig: AxiosRequestConfig = {
@@ -150,7 +157,8 @@ export class BlanccoService {
           },
         ],
       },
-      format: 'JSON',
+      format: BlanccoFormat.JSON,
+      cursor,
     };
     const response = await lastValueFrom(
       this.httpService.post(`${url}report/export`, body, requestConfig).pipe(
@@ -163,9 +171,12 @@ export class BlanccoService {
     return this.handleResponse(response);
   }
 
-  private handleResponse(response: AxiosResponse) {
+  private handleResponse(response: AxiosResponse): BlanccoResponse {
     if (response?.status === 200) {
-      return response.data;
+      return {
+        zip: response.data,
+        cursor: response.headers['x-blancco-cursor'],
+      };
     } else if (response?.status === 204) {
       throw new NotFoundException(
         `Blancco status: ${response.status}, message: ${response.statusText}`
