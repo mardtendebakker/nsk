@@ -140,6 +140,7 @@ const translation = {
   openRate: 'Taux d\'ouverture',
   clickRate: 'Taux de clic',
   unsubscribes: 'Désabonnements',
+  importFromBlancco: 'Importer de blancco',
   edit: 'Modifier',
   userForm: {
     username: {

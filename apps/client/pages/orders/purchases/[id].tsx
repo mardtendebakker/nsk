@@ -10,7 +10,7 @@ import {
 import Form from '../../../components/orders/form/purchase';
 import DashboardLayout from '../../../layouts/dashboard';
 import useAxios from '../../../hooks/useAxios';
-import { PURCHASE_ORDERS_FILES_PATH, PURCHASE_ORDERS_PATH } from '../../../utils/axios';
+import { PRODUCTS_BLANCCO_ORDERS_PATH, PURCHASE_ORDERS_FILES_PATH, PURCHASE_ORDERS_PATH } from '../../../utils/axios';
 import useForm from '../../../hooks/useForm';
 import useTranslation from '../../../hooks/useTranslation';
 import { initFormState, formRepresentationToBody } from './new';
@@ -29,6 +29,12 @@ function UpdatePurchaseOrder() {
   const { call, performing } = useAxios(
     'put',
     PURCHASE_ORDERS_PATH.replace(':id', id?.toString()),
+    { withProgressBar: true, showSuccessMessage: true },
+  );
+
+  const { call: callImportFromBlancco, performing: performingImportFromBlancco } = useAxios(
+    'patch',
+    PRODUCTS_BLANCCO_ORDERS_PATH.replace(':id', id?.toString()),
     { withProgressBar: true, showSuccessMessage: true },
   );
 
@@ -59,7 +65,7 @@ function UpdatePurchaseOrder() {
     }
   }, [id]);
 
-  const canSubmit = () => !performing && !performingFetchPurchaseOrder && !performingDeleteFilte && !performingPrint;
+  const canSubmit = () => !performing && !performingFetchPurchaseOrder && !performingDeleteFilte && !performingPrint && !performingImportFromBlancco;
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
@@ -69,6 +75,19 @@ function UpdatePurchaseOrder() {
     }
 
     call({ body: formRepresentationToBody(formRepresentation) })
+      .then(() => {
+        fetchPurchaseOrder();
+      });
+  };
+
+  const handleImportFromBlancco = (e: SyntheticEvent) => {
+    e.preventDefault();
+
+    if (!canSubmit()) {
+      return;
+    }
+
+    callImportFromBlancco()
       .then(() => {
         fetchPurchaseOrder();
       });
@@ -107,6 +126,7 @@ function UpdatePurchaseOrder() {
           <Action
             disabled={!canSubmit()}
             onSave={handleSubmit}
+            onImportFromBlancco={handleImportFromBlancco}
             setPerformingPrint={setPerformingPrint}
             id={id?.toString()}
             type="purchase"
@@ -142,6 +162,7 @@ function UpdatePurchaseOrder() {
             <Action
               disabled={!canSubmit()}
               onSave={handleSubmit}
+              onImportFromBlancco={handleImportFromBlancco}
               setPerformingPrint={setPerformingPrint}
               id={id?.toString()}
               type="purchase"

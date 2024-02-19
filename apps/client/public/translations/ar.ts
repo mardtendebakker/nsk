@@ -48,6 +48,7 @@ const translation = {
   phone: 'الهاتف',
   phone2: 'الجوال',
   kvkNr: 'رقم السجل التجاري',
+  importFromBlancco: 'استيراد من بلانكو',
   street: 'الشارع',
   street_extra: 'تفاصيل العنوان الإضافية',
   zipcode: 'الرمز البريدي',
