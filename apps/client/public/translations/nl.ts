@@ -54,6 +54,7 @@ const translation = {
   zipcode: 'Postcode',
   state: 'Provincie',
   createOrder: 'Maak een bestelling aan',
+  importFromBlancco: 'Import uit blancco',
   save: 'Opslaan',
   address: 'Adres',
   extraAddress: 'Adres toevoeging',

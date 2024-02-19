@@ -36,6 +36,7 @@ const translation = {
   purchaseOrders: 'سفارشات خرید',
   salesOrders: 'سفارشات فروش',
   logout: 'خروج',
+  importFromBlancco: 'واردات از بلانکو',
   suppliers: 'تامین کنندگان',
   supplier: 'تامین کننده',
   selectSupplier: 'انتخاب تامین کننده',

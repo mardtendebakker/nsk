@@ -1,5 +1,5 @@
 import { HttpService } from '@nestjs/axios';
-import { BadRequestException, HttpException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { catchError, lastValueFrom } from 'rxjs';
@@ -197,9 +197,10 @@ export class BlanccoService {
         cursor: response.headers['x-blancco-cursor'],
       };
     } else if (response?.status === 204) {
-      throw new NotFoundException(
-        `Blancco status: ${response.status}, message: ${response.statusText}`
-      );
+      throw new HttpException({
+        status: HttpStatus.NOT_FOUND,
+        message: `No Blancco report were found, Blancco message: ${response.statusText}`,
+      }, HttpStatus.NOT_FOUND);
     } else {
       throw new BadRequestException(
         `Blancco status: ${response.status}, message: ${response.statusText}`

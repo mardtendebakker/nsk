@@ -31,6 +31,7 @@ export const BULK_PRINT_REPAIRS_PATH = '/repairs/bulk/print';
 export const BULK_PRINT_PURCHASES_PATH = '/purchases/bulk/print';
 export const ORDERS_ANALYTICS_PATH = '/orders/analytics';
 export const CALENDAR_PICKUPS_PATH = '/calendar/pickups/:id';
+export const PRODUCTS_BLANCCO_ORDERS_PATH = '/products/blancco/:id';
 export const VEHICLES_TODAY_PICKUPS_PATH = '/vehicles/:licensePlate/today-pickups';
 export const CALENDAR_DELIVERIES_PATH = '/calendar/deliveries/:id';
 export const TASKS_PATH = '/tasks/:id';
