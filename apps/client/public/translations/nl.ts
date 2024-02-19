@@ -143,7 +143,7 @@ const translation = {
   unsubscribes: 'Uitschrijven',
   edit: 'Wijzig',
   blancco: {
-    importReportsSuccess: '%count% blancco reports imported.',
+    importReportsSuccess: '%count% blancco verslagen geïmporteerd.',
   },
   userForm: {
     username: {

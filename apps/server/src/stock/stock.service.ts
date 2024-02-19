@@ -10,7 +10,7 @@ import { FileDiscrimination } from "../file/types/file-discrimination.enum";
 import { CreateFileDto } from "../file/dto/create-file.dto";
 import { AttributeType } from "../attribute/enum/attribute-type.enum";
 import { CreateBodyStockDto } from "./dto/create-body-stock.dto";
-import { NotFoundException } from "@nestjs/common";
+import { HttpException, HttpStatus, NotFoundException } from "@nestjs/common";
 import { ProductAttributeIncludeAttribute } from "./types/product-attribute-include-attribute";
 import { ProductRelation } from "./types/product-relation";
 import { ProcessedStock } from "./dto/processed-stock.dto";
@@ -345,13 +345,23 @@ export class StockService {
     let results: boolean[] = [];
     let newCursor: string | null = null;
 
-    do {
-      const { cursor, ...reports } = await this.blanccoService.getReports(orderId, newCursor);
-      const result = await this.handleBlanccoReoprts(orderId, reports);
-      results = results.concat(result);
-
-      newCursor = cursor;
-    } while (newCursor);
+    try {
+      do {
+        const { cursor, ...reports } = await this.blanccoService.getReports(orderId, newCursor);
+        const result = await this.handleBlanccoReoprts(orderId, reports);
+        results = results.concat(result);
+  
+        newCursor = cursor;
+      } while (newCursor);
+    } catch (err) {
+      const httpStatus =
+      err instanceof HttpException
+        ? err.getStatus()
+        : HttpStatus.INTERNAL_SERVER_ERROR;
+      if (httpStatus !== HttpStatus.NOT_FOUND) {
+        throw err;
+      }
+    }
 
     return results.length;
   }
