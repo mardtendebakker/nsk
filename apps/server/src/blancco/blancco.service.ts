@@ -12,6 +12,7 @@ import { Prisma } from '@prisma/client';
 import { BlanccoFormat } from './types/blancco-format.enum';
 import { BlanccoResponse } from './types/blancco-response';
 import { BlanccoReportsV1 } from './types/blancco-reports-v1';
+import * as DefaultAttribute from './data/default-attributes.json';
 
 @Injectable()
 export class BlanccoService {
@@ -21,6 +22,24 @@ export class BlanccoService {
     private readonly configService: ConfigService,
     private readonly repository: BlanccoRepository
   ) {}
+
+  async init() {
+    const productType = await this.repository.getDefaultProductType();
+    await this.repository.deleteProductTypesAttributesByProductTypeId(productType.id);
+
+    const attributeIds: number[] = [];
+    for (const attributeData of DefaultAttribute) {
+      const attribute = await this.repository.createDefaultAttribute(attributeData);
+      attributeIds.push(attribute.id);
+    }
+
+    await this.repository.createProductTypesAttributes(attributeIds.map(attributeId => ({
+      attribute_id: attributeId,
+      product_type_id: productType.id,
+    })));
+
+    return `${attributeIds.length} blancco attribute has been created!`;
+  }
 
   async getReports(orderId: number, newCursor?: string): Promise<BlanccoV1> {
     const purchaseOrder = await this.purchaseService.findOne(orderId);
