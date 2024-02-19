@@ -22,7 +22,7 @@
   {
     "attr_code": "processors.1.processor.0.model",
     "name": "BL Cpu Model",
-    "type": 1
+    "type": 0
   },
   {
     "attr_code": "processors.0.total_cores",
