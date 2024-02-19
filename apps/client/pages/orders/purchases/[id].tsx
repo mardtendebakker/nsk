@@ -10,7 +10,9 @@ import {
 import Form from '../../../components/orders/form/purchase';
 import DashboardLayout from '../../../layouts/dashboard';
 import useAxios from '../../../hooks/useAxios';
-import { PRODUCTS_BLANCCO_ORDERS_PATH, PURCHASE_ORDERS_FILES_PATH, PURCHASE_ORDERS_PATH } from '../../../utils/axios';
+import {
+  AxiosResponse, PRODUCTS_BLANCCO_PATH, PURCHASE_ORDERS_FILES_PATH, PURCHASE_ORDERS_PATH,
+} from '../../../utils/axios';
 import useForm from '../../../hooks/useForm';
 import useTranslation from '../../../hooks/useTranslation';
 import { initFormState, formRepresentationToBody } from './new';
@@ -34,8 +36,17 @@ function UpdatePurchaseOrder() {
 
   const { call: callImportFromBlancco, performing: performingImportFromBlancco } = useAxios(
     'patch',
-    PRODUCTS_BLANCCO_ORDERS_PATH.replace(':id', id?.toString()),
-    { withProgressBar: true, showSuccessMessage: true },
+    PRODUCTS_BLANCCO_PATH.replace(':id', id?.toString()),
+    {
+      withProgressBar: true,
+      showSuccessMessage: true,
+      customSuccessMessage: (response: AxiosResponse) => {
+        const vars = new Map();
+        vars.set('count', response.data.count);
+
+        return trans('blancco.importReportsSuccess', { vars });
+      },
+    },
   );
 
   const { call: fetchPurchaseOrder, performing: performingFetchPurchaseOrder, data: purchaseOrder } = useAxios<undefined | Order>(

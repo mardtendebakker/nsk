@@ -141,6 +141,9 @@ const translation = {
   clickRate: 'نسبة النقر',
   unsubscribes: 'إلغاء الاشتراك',
   edit: 'تحرير',
+  blancco: {
+    importReportsSuccess: '%count% تقارير بلانكو مستوردة',
+  },
   userForm: {
     username: {
       label: 'اسم المستخدم',

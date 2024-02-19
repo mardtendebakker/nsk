@@ -142,6 +142,9 @@ const translation = {
   clickRate: 'Klik op Beoordeel',
   unsubscribes: 'Uitschrijven',
   edit: 'Wijzig',
+  blancco: {
+    importReportsSuccess: '%count% blancco verslagen geïmporteerd.',
+  },
   userForm: {
     username: {
       label: 'Gebruikersnaam',

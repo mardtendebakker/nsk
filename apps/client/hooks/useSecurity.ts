@@ -54,12 +54,12 @@ const useSecurity = (): {
   const { call: signUpCall } = useAxios(
     'post',
     SIGN_UP_PATH,
-    { withProgressBar: true, customSuccessMessage: trans('signUpSuccessMessage') },
+    { withProgressBar: true, customSuccessMessage: () => trans('signUpSuccessMessage') },
   );
   const { call: confirmAccountCall } = useAxios(
     'post',
     CONFIRM_ACCOUNT_PATH,
-    { withProgressBar: true, customSuccessMessage: trans('confirmAccountSuccessMessage') },
+    { withProgressBar: true, customSuccessMessage: () => trans('confirmAccountSuccessMessage') },
   );
   const { call: sendVerificationCodeCall } = useAxios(
     'post',
@@ -69,7 +69,7 @@ const useSecurity = (): {
   const { call: forgotPasswordCall } = useAxios(
     'post',
     FORGOT_PASSWORD_PATH,
-    { withProgressBar: true, customSuccessMessage: trans('forgotPasswordSuccessMessage') },
+    { withProgressBar: true, customSuccessMessage: () => trans('forgotPasswordSuccessMessage') },
   );
   const { call: changePasswordCall } = useAxios(
     'post',

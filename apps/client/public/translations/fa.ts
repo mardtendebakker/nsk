@@ -142,6 +142,9 @@ const translation = {
   clickRate: 'روی نرخ کلیک کنید',
   unsubscribes: 'غیر مشترک شدن',
   edit: 'ویرایش',
+  blancco: {
+    importReportsSuccess: '%count% گزارش بلانکو وارداتی',
+  },
   userForm: {
     username: {
       label: 'نام کاربری',
