@@ -156,7 +156,9 @@ export class StockController {
   @Patch('blancco/:orderId')
   @UseGuards(AuthorizationGuard(LOCAL_GROUPS))
   async importFromBlancco(@Param('orderId') orderId: number) {
-    return this.stockService.importFromBlancco(orderId);
+    const count = await this.stockService.importFromBlancco(orderId);
+
+    return { count }
   }
   
 }

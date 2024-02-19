@@ -142,6 +142,9 @@ const translation = {
   unsubscribes: 'Désabonnements',
   importFromBlancco: 'Importer de blancco',
   edit: 'Modifier',
+  blancco: {
+    importReportsSuccess: '%count% rapports blancco importés.',
+  },
   userForm: {
     username: {
       label: 'Nom d\'utilisateur',

@@ -341,7 +341,7 @@ export class StockService {
     return this.printService.printPriceCards(products);
   }
 
-  async importFromBlancco(orderId: number) {
+  async importFromBlancco(orderId: number): Promise<number> {
     let results: boolean[] = [];
     let newCursor: string | null = null;
 
@@ -353,7 +353,7 @@ export class StockService {
       newCursor = cursor;
     } while (newCursor);
 
-    return results;
+    return results.length;
   }
 
   async handleBlanccoReoprts(orderId: number, reports: BlanccoReportsV1): Promise<boolean[]> {
