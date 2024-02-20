@@ -54,7 +54,11 @@ const translation = {
   zipcode: 'Postcode',
   state: 'Provincie',
   createOrder: 'Maak een bestelling aan',
-  importFromBlancco: 'Import uit blancco',
+  blancco: {
+    name: 'Blancco',
+    import: 'Importeren',
+    importReportsSuccess: '%count% blancco rapport geïmporteerd.',
+  },
   save: 'Opslaan',
   address: 'Adres',
   extraAddress: 'Adres toevoeging',
@@ -142,9 +146,6 @@ const translation = {
   clickRate: 'Klik op Beoordeel',
   unsubscribes: 'Uitschrijven',
   edit: 'Wijzig',
-  blancco: {
-    importReportsSuccess: '%count% blancco verslagen geïmporteerd.',
-  },
   userForm: {
     username: {
       label: 'Gebruikersnaam',

@@ -36,7 +36,11 @@ const translation = {
   purchaseOrders: 'سفارشات خرید',
   salesOrders: 'سفارشات فروش',
   logout: 'خروج',
-  importFromBlancco: 'واردات از بلانکو',
+  blancco: {
+    name: 'بلانكو',
+    import: 'ورود',
+    importReportsSuccess: '%count% گزارش بلانکو وارد شد.',
+  },
   suppliers: 'تامین کنندگان',
   supplier: 'تامین کننده',
   selectSupplier: 'انتخاب تامین کننده',
@@ -142,9 +146,6 @@ const translation = {
   clickRate: 'روی نرخ کلیک کنید',
   unsubscribes: 'غیر مشترک شدن',
   edit: 'ویرایش',
-  blancco: {
-    importReportsSuccess: '%count% گزارش بلانکو وارداتی',
-  },
   userForm: {
     username: {
       label: 'نام کاربری',
