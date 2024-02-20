@@ -370,7 +370,13 @@ export class StockService {
     const results: boolean[] = [];
 
     for (const uuid in reports) {
-      const result = await this.createProductAttributeByBlanccoReport(orderId, reports[uuid].report);
+      let result = false;
+      try {
+        result = await this.createProductAttributeByBlanccoReport(orderId, reports[uuid].report);
+      } catch (err) {
+        console.log("handleBlanccoReoprts:", err);
+        continue;
+      }
       results.push(result);
     }
 
@@ -388,6 +394,9 @@ export class StockService {
 
 
     const products = await this.repository.findBy({ where: { sku, product_order: { some: { order_id: orderId } } } });
+    if (!products.length) {
+      throw new Error("No products found!");
+    }
     for (const product of products) {
       this.repository.deleteProductAttributes(product.id);
       this.updateOne(product.id, {
