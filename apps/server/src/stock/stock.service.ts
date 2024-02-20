@@ -392,10 +392,10 @@ export class StockService {
 
     const product_attributes = await this.prepareProductAttributesByBlanccoReport(attributes, report);
 
-
     const products = await this.repository.findBy({ where: { sku, product_order: { some: { order_id: orderId } } } });
     if (!products.length) {
-      throw new Error("No products found!");
+      console.log(`createProductAttributeByBlanccoReport, No products found! sku: ${sku}`);
+      return false;
     }
     for (const product of products) {
       this.repository.deleteProductAttributes(product.id);
