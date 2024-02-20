@@ -48,7 +48,11 @@ const translation = {
   phone: 'الهاتف',
   phone2: 'الجوال',
   kvkNr: 'رقم السجل التجاري',
-  importFromBlancco: 'استيراد من بلانكو',
+  blancco: {
+    name: 'بلانكو',
+    import: 'استيراد',
+    importReportsSuccess: '%count% تقارير بلانكو مستوردة',
+  },
   street: 'الشارع',
   street_extra: 'تفاصيل العنوان الإضافية',
   zipcode: 'الرمز البريدي',
@@ -141,9 +145,6 @@ const translation = {
   clickRate: 'نسبة النقر',
   unsubscribes: 'إلغاء الاشتراك',
   edit: 'تحرير',
-  blancco: {
-    importReportsSuccess: '%count% تقارير بلانكو مستوردة',
-  },
   userForm: {
     username: {
       label: 'اسم المستخدم',
