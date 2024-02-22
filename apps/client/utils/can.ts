@@ -1,10 +1,12 @@
 import _ from 'lodash';
-import { Group } from '../stores/security/types';
+import { Group, User } from '../stores/security';
 
-export default function can(userGroups: Group[], requiredGroups?: Group[]): boolean {
-  if (!Array.isArray(requiredGroups)) {
-    return true;
+export default function can({ user, requiredGroups } : { user: User, requiredGroups?: Group[] }): boolean {
+  let supportsGroups = true;
+
+  if (Array.isArray(requiredGroups)) {
+    supportsGroups = _.intersection(user.groups, [...requiredGroups, 'admin', 'super_admin']).length > 0;
   }
 
-  return _.intersection(userGroups, [...requiredGroups, 'admin', 'super_admin']).length > 0;
+  return supportsGroups;
 }

@@ -30,6 +30,9 @@ import { CompanyModule } from '../company/company.module';
 import { BlanccoModule } from '../blancco/blancco.module';
 import { VehicleModule } from '../vehicle/vehicle.module';
 import { FleetGoModule } from '../fleet-go/fleet-go.module';
+import { ModuleModule } from '../module/module.module';
+import { PaymentModule } from '../payment/payment.module';
+import { ModulePaymentModule } from '../module_payment/module_payment.module';
 
 @Module({
   imports: [
@@ -81,7 +84,10 @@ import { FleetGoModule } from '../fleet-go/fleet-go.module';
     CompanyModule,
     BlanccoModule,
     FleetGoModule,
-    VehicleModule
+    VehicleModule,
+    ModuleModule,
+    PaymentModule,
+    ModulePaymentModule
   ],
   controllers: [AppController],
   providers: [AppService],

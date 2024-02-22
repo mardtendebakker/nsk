@@ -1,16 +1,16 @@
 import {
   Table,
   TableBody,
-  TableCell,
   TableHead,
   TableRow,
   TablePagination,
 } from '@mui/material';
 import Check from '@mui/icons-material/Check';
-import Edit from '../../button/edit';
-import Delete from '../../button/delete';
 import useTranslation from '../../../hooks/useTranslation';
 import { ContactListItem } from '../../../utils/axios/models/contact';
+import TableCell from '../../tableCell';
+import EditResource from '../../button/editResource';
+import DeleteResource from '../../button/deleteResource';
 
 export default function List({
   contacts = [],
@@ -79,13 +79,13 @@ export default function List({
               key={contact.id}
             >
               <TableCell>
-                {contact.name || '--'}
+                {contact.name}
               </TableCell>
               <TableCell>
                 <b>{contact.company.name}</b>
               </TableCell>
               <TableCell>
-                {contact.email || '--'}
+                {contact.email}
               </TableCell>
               {!hideCompanyFields && (
               <>
@@ -101,9 +101,9 @@ export default function List({
               </>
               )}
               <TableCell align="right">
-                <Edit href={editContactRouteBuilder(contact)} disabled={disabled} />
+                <EditResource href={editContactRouteBuilder(contact)} disabled={disabled} requiredModule="customer_contact_action" />
                 {contact.ordersCount === 0
-                && (<Delete onClick={() => onDelete(contact.id)} disabled={disabled} tooltip />)}
+                && (<DeleteResource onClick={() => onDelete(contact.id)} disabled={disabled} requiredModule="customer_contact_action" />)}
               </TableCell>
             </TableRow>
           ))}

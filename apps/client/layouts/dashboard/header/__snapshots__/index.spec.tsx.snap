@@ -22,104 +22,90 @@ exports[`Header matches snapshot 1`] = `
       <ul
         class="MuiList-root MuiList-padding css-1e3wvh6-MuiList-root"
       >
-        <a
-          href="/"
-          style="text-decoration: none;"
+        <div
+          class="MuiBox-root css-1fojr6f"
         >
-          <div
-            class="MuiBox-root css-1fojr6f"
+          <a
+            href="/"
+            style="text-decoration: none;"
           >
             <p
               class="MuiTypography-root MuiTypography-body1 css-vkc4v8-MuiTypography-root"
             >
               dashboard
             </p>
-          </div>
-        </a>
-        <a
-          href="/stock/products"
-          style="text-decoration: none;"
+          </a>
+        </div>
+        <div
+          class="MuiBox-root css-1fojr6f"
         >
-          <div
-            class="MuiBox-root css-1fojr6f"
+          <a
+            href="/stock/products"
+            style="text-decoration: none;"
           >
             <p
               class="MuiTypography-root MuiTypography-body1 css-vkc4v8-MuiTypography-root"
             >
               stock
             </p>
-          </div>
-        </a>
-        <a
-          href="/orders/purchases"
-          style="text-decoration: none;"
+          </a>
+        </div>
+        <div
+          class="MuiBox-root css-1fojr6f"
         >
-          <div
-            class="MuiBox-root css-1fojr6f"
+          <a
+            href="/orders/purchases"
+            style="text-decoration: none;"
           >
             <p
               class="MuiTypography-root MuiTypography-body1 css-vkc4v8-MuiTypography-root"
             >
               orders
             </p>
-          </div>
-        </a>
-        <a
-          href="/contacts"
-          style="text-decoration: none;"
+          </a>
+        </div>
+        <div
+          class="MuiBox-root css-1fojr6f"
         >
-          <div
-            class="MuiBox-root css-1fojr6f"
+          <a
+            href="/contacts"
+            style="text-decoration: none;"
           >
             <p
               class="MuiTypography-root MuiTypography-body1 css-1we0tu4-MuiTypography-root"
             >
               contacts
             </p>
-          </div>
-        </a>
-        <a
-          href="/companies"
-          style="text-decoration: none;"
+          </a>
+        </div>
+        <div
+          class="MuiBox-root css-1fojr6f"
         >
-          <div
-            class="MuiBox-root css-1fojr6f"
+          <a
+            href="/companies"
+            style="text-decoration: none;"
           >
             <p
               class="MuiTypography-root MuiTypography-body1 css-vkc4v8-MuiTypography-root"
             >
               companies
             </p>
-          </div>
-        </a>
-        <a
-          href="/bulk-email"
-          style="text-decoration: none;"
+          </a>
+        </div>
+        <div
+          class="MuiBox-root css-1fojr6f"
         >
-          <div
-            class="MuiBox-root css-1fojr6f"
-          >
-            <p
-              class="MuiTypography-root MuiTypography-body1 css-vkc4v8-MuiTypography-root"
-            >
-              bulkEmail
-            </p>
-          </div>
-        </a>
-        <a
-          href="/logistics/pickups"
-          style="text-decoration: none;"
-        >
-          <div
-            class="MuiBox-root css-1fojr6f"
+          <a
+            href="/logistics/pickups"
+            style="text-decoration: none;"
           >
             <p
               class="MuiTypography-root MuiTypography-body1 css-vkc4v8-MuiTypography-root"
             >
               logistics
             </p>
-          </div>
-        </a>
+          </a>
+        </div>
       </ul>
       <div
         class="MuiBox-root css-i9gxme"
@@ -127,20 +113,6 @@ exports[`Header matches snapshot 1`] = `
       <div
         class="MuiBox-root css-70qvj9"
       >
-        <a
-          href="/my-tasks"
-          style="text-decoration: none;"
-        >
-          <div
-            class="MuiBox-root css-1fojr6f"
-          >
-            <p
-              class="MuiTypography-root MuiTypography-body1 css-vkc4v8-MuiTypography-root"
-            >
-              myTasks
-            </p>
-          </div>
-        </a>
         <div
           class="MuiBox-root css-1dwbrks"
         />

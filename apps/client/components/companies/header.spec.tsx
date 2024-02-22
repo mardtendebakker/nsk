@@ -12,7 +12,16 @@ jest.mock('next/router', () => ({
   useRouter: () => mockRouter,
 }));
 
+const mockUseSecurity = {
+  hasModule: jest.fn(() => true),
+};
+
+jest.mock('../../hooks/useSecurity', () => jest.fn(() => mockUseSecurity));
+
 describe('Header component', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
   it('matches snapshot', () => {
     const { asFragment } = render(<Header />);
     expect(asFragment()).toMatchSnapshot();
@@ -27,5 +36,13 @@ describe('Header component', () => {
     const { getByText } = render(<Header />);
     fireEvent.click(getByText('newCompany'));
     expect(mockRouter.push).toHaveBeenCalledWith('/companies/new');
+  });
+  it('don\'t push to new company page if module not active', () => {
+    mockUseSecurity.hasModule.mockReturnValue(false);
+
+    const { getByText } = render(<Header />);
+    fireEvent.click(getByText('newCompany'));
+    expect(mockRouter.push).not.toBeCalled();
+    expect(mockUseSecurity.hasModule).toBeCalledWith('customer_contact_action');
   });
 });

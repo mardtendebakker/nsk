@@ -3,9 +3,9 @@ import {
 } from '@mui/material';
 import PaginatedTable from '../../../../paginatedTable';
 import TableCell from '../../../../tableCell';
-import Edit from '../../../../button/edit';
 import { Task } from '../../../../../utils/axios/models/product';
 import useTranslation from '../../../../../hooks/useTranslation';
+import EditResource from '../../../../button/editResource';
 
 export default function List({
   tasks,
@@ -66,7 +66,7 @@ export default function List({
               {task.productTypes?.length || 0}
             </TableCell>
             <TableCell align="right">
-              <Edit onClick={() => onEdit(task.id)} disabled={disabled} />
+              <EditResource onClick={() => onEdit(task.id)} disabled={disabled} requiredModule="tasks" />
             </TableCell>
           </TableRow>
         ))}

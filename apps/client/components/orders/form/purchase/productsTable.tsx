@@ -183,7 +183,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
                       'price',
                       e.target.value,
                     )}
-                    disabled={!can(user?.groups || [], ['admin', 'super_admin', 'manager', 'logistics', 'local'])}
+                    disabled={!user || !can({ user, requiredGroups: ['admin', 'super_admin', 'manager', 'logistics', 'local'] })}
                   />
                 </TableCell>
                 <TableCell>
@@ -196,7 +196,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
                       'quantity',
                       e.target.value,
                     )}
-                    disabled={!can(user?.groups || [], ['admin', 'super_admin', 'manager', 'logistics', 'local'])}
+                    disabled={!user || !can({ user, requiredGroups: ['admin', 'super_admin', 'manager', 'logistics', 'local'] })}
                   />
                 </TableCell>
                 <TableCell align="right">

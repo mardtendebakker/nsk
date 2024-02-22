@@ -5,7 +5,6 @@ import {
   Typography,
   Table,
   TableRow,
-  TableCell,
   TableBody,
   Box,
 } from '@mui/material';
@@ -24,6 +23,7 @@ import { AFile } from '../../../../utils/axios/models/aFile';
 import Delete from '../../../button/delete';
 import useResponsive from '../../../../hooks/useResponsive';
 import DateTimePicker from '../../../input/dateTimePicker';
+import TableCell from '../../../tableCell';
 
 function PurchaseForm({
   formRepresentation,
@@ -167,19 +167,19 @@ function PurchaseForm({
                 <TableBody>
                   <TableRow>
                     <TableCell>{trans('proposedPickupDate')}</TableCell>
-                    <TableCell>{order?.pickup?.pickup_date || '--'}</TableCell>
+                    <TableCell>{order?.pickup?.pickup_date}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>{trans('description')}</TableCell>
-                    <TableCell>{order?.pickup?.description || '--'}</TableCell>
+                    <TableCell>{order?.pickup?.description}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>{trans('origin')}</TableCell>
-                    <TableCell>{order?.pickup?.origin || '--'}</TableCell>
+                    <TableCell>{order?.pickup?.origin}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>{trans('dataDestruction')}</TableCell>
-                    <TableCell>{DATA_DESTRUCTION[order?.pickup?.data_destruction] || '--'}</TableCell>
+                    <TableCell>{DATA_DESTRUCTION[order?.pickup?.data_destruction]}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>{trans('processingAgreement')}</TableCell>

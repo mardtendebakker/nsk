@@ -14,6 +14,7 @@ import { BulkPrintDTO } from "../print/dto/bulk-print.dto";
 import type { Response } from 'express';
 import { ALL_MAIN_GROUPS, CognitoGroups, LOCAL_GROUPS, MANAGER_GROUPS, PARTNERS_GROUPS } from "../common/types/cognito-groups.enum";
 import { StockBlancco } from "./stock.blancco";
+import { requiredModule } from "../common/guard/required-modules.guard";
 
 @ApiBearerAuth()
 @Authorization(ALL_MAIN_GROUPS)
@@ -159,6 +160,7 @@ export class StockController {
 
   @Patch('blancco/:orderId')
   @UseGuards(AuthorizationGuard(LOCAL_GROUPS))
+  @UseGuards(requiredModule('blancco'))
   async importFromBlancco(@Param('orderId') orderId: number) {
     const count = await this.stockBlancco.importFromBlancco(orderId);
 

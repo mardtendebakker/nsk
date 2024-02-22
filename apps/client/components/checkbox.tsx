@@ -5,7 +5,7 @@ export default function Checkbox({
 }: {
   checked: boolean,
   onCheck: (check:boolean) => void,
-  label: string,
+  label?: string,
   disabled?: boolean,
 }) {
   return (
@@ -13,11 +13,12 @@ export default function Checkbox({
       <BaseCheckbox
         disabled={disabled}
         checked={checked}
+        onClick={(e) => e.stopPropagation()}
         onChange={(_, value) => onCheck(value)}
       />
-      <Typography>{label}</Typography>
+      {label && <Typography>{label}</Typography>}
     </Box>
   );
 }
 
-Checkbox.defaultProps = { disabled: false };
+Checkbox.defaultProps = { disabled: false, label: undefined };

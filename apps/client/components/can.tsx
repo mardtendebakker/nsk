@@ -1,5 +1,5 @@
 import useSecurity from '../hooks/useSecurity';
-import { Group } from '../stores/security/types';
+import { Group } from '../stores/security';
 import can from '../utils/can';
 
 export default function Can({
@@ -9,7 +9,7 @@ export default function Can({
   const { state: { user } } = useSecurity();
 
   // eslint-disable-next-line react/jsx-no-useless-fragment
-  return can(user?.groups || [], requiredGroups) && <>{children}</>;
+  return user && can({ user, requiredGroups }) && <>{children}</>;
 }
 
 Can.defaultProps = {
