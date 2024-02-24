@@ -15,6 +15,7 @@ const initFormState = {
   search: {},
   productType: {},
   location: {},
+  locationLabel: {},
   productStatus: { },
 };
 
@@ -31,6 +32,7 @@ function refreshList({
     'search',
     'productType',
     'location',
+    'locationLabel',
     'productStatus',
   ].forEach((filter) => {
     if (formRepresentation[filter].value || formRepresentation[filter].value === 0) {
@@ -103,8 +105,9 @@ export default function AddProductsModal({
     rowsPerPage,
     formRepresentation.search.value,
     formRepresentation.productType.value?.toString(),
-    formRepresentation.productStatus.value?.toString(),
     formRepresentation.location.value?.toString(),
+    formRepresentation.locationLabel?.value?.toString(),
+    formRepresentation.productStatus.value?.toString(),
   ]);
 
   const selectableData = data?.filter(selectableProductCb) || [];

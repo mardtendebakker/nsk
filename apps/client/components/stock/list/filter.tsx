@@ -67,13 +67,12 @@ export default function Filter({
           <DataSourcePicker
             params={{ location_id: formRepresentation.location.value?.toString() }}
             path={AUTOCOMPLETE_LOCATION_LABELS_PATH}
-            searchKey="label"
             disabled={disabled || !formRepresentation.location.value?.toString()}
             fullWidth
             displayFieldset={false}
             placeholder={trans('locationLabel')}
             onChange={(selected: { id: number }) => setValue({ field: 'locationLabel', value: selected?.id })}
-            value={formRepresentation.locationLabel.value?.toString()}
+            value={formRepresentation.locationLabel?.value?.toString()}
           />
           <ListFilterDivider horizontal={!isDesktop} />
           <DataSourcePicker
