@@ -130,7 +130,7 @@ const translation = {
   createdAt: 'Datum opgave',
   createProduct: 'Product genereren',
   searchByCustomerNameOrEmail: 'Zoek op klantnaam of e-mail',
-  searchBySerialNumberOrName: 'Zoek op serienummer of naam',
+  searchBySerialNumberOrNameOrAttr: 'Zoek op serienummer of naam of eigenschap',
   contact: 'Contact',
   bulkEmail: 'Bulk email',
   invalidEmail: 'Ongeldig emailadres',

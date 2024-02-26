@@ -99,7 +99,28 @@ export class StockService {
         }],
       }),
       ...(search && {
-        OR: [{name: {contains: search}}, {sku: { contains: search}}]
+        OR: [
+          { name: { contains: search } },
+          { sku: { contains: search } },
+          {
+            product_attribute_product_attribute_product_idToproduct: {
+              some: {
+                value: { contains: search },
+                attribute: { type: AttributeType.TYPE_TEXT },
+              },
+            },
+          },
+          {
+            product_attribute_product_attribute_product_idToproduct: {
+              some: {
+                attribute: {
+                  type: AttributeType.TYPE_SELECT,
+                  attribute_option: { some: { name: { contains: search } } },
+                },
+              },
+            },
+          },
+        ],
       }),
     };
 
