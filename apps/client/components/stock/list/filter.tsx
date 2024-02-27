@@ -31,7 +31,7 @@ export default function Filter({
         onSearchChange={(value: string) => setValue({ field: 'search', value })}
         searchValue={formRepresentation.search.value?.toString() || ''}
         onReset={onReset}
-        searchLabel={trans('searchBySerialNumberOrName')}
+        searchLabel={trans('searchBySerialNumberOrNameOrAttr')}
       >
         <Box sx={{
           flex: 1,
