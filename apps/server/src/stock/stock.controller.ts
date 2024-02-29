@@ -13,11 +13,15 @@ import { CreateBodyStockDto } from "./dto/create-body-stock.dto";
 import { BulkPrintDTO } from "../print/dto/bulk-print.dto";
 import type { Response } from 'express';
 import { ALL_MAIN_GROUPS, CognitoGroups, LOCAL_GROUPS, MANAGER_GROUPS, PARTNERS_GROUPS } from "../common/types/cognito-groups.enum";
+import { StockBlancco } from "./stock.blancco";
 
 @ApiBearerAuth()
 @Authorization(ALL_MAIN_GROUPS)
 export class StockController {
-  constructor(protected readonly stockService: StockService) {}
+  constructor(
+    protected readonly stockService: StockService,
+    protected readonly stockBlancco: StockBlancco,
+  ) {}
 
   @Get('')
   @ApiResponse({type: FindProductsResponseDto})
@@ -156,7 +160,7 @@ export class StockController {
   @Patch('blancco/:orderId')
   @UseGuards(AuthorizationGuard(LOCAL_GROUPS))
   async importFromBlancco(@Param('orderId') orderId: number) {
-    const count = await this.stockService.importFromBlancco(orderId);
+    const count = await this.stockBlancco.importFromBlancco(orderId);
 
     return { count }
   }
