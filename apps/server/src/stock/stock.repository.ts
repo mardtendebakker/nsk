@@ -207,4 +207,10 @@ export class StockRepository {
       skipDuplicates: true,
     });
   }
+
+  findAttributeOptions(where: Prisma.attribute_optionWhereInput) {
+    return this.prisma.attribute_option.findMany({
+      where
+    })
+  }
 }

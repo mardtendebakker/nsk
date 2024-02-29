@@ -66,6 +66,20 @@ export class StockService {
       select,
       ...restQuery
     } = query;
+
+    const attributeOptionsWhere: Prisma.product_attributeWhereInput[] = [];
+    if (search) {
+      const attributeOptions = await this.repository.findAttributeOptions({
+        name: { contains: search },
+      });
+      attributeOptions.forEach(attributeOption => {
+        attributeOptionsWhere.push({
+          attribute_id: attributeOption.attribute_id,
+          value: String(attributeOption.id),
+        });
+      });
+    }
+
     const productwhere: Prisma.productWhereInput = {
       ...where,
       ...(Number.isFinite(entityStatus) && { entity_status: entityStatus }),
@@ -113,10 +127,7 @@ export class StockService {
           {
             product_attribute_product_attribute_product_idToproduct: {
               some: {
-                attribute: {
-                  type: AttributeType.TYPE_SELECT,
-                  attribute_option: { some: { name: { contains: search } } },
-                },
+                OR: attributeOptionsWhere,
               },
             },
           },
