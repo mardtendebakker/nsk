@@ -9,6 +9,7 @@ import { PrintService } from '../print/print.service';
 import { ArchivedModule } from './archived/archived.module';
 import { LocationLabelModule } from '../location-label/location-label.module';
 import { BlanccoModule } from '../blancco/blancco.module';
+import { AProductBlancco } from './aproduct.blancco';
 
 @Module({
   providers: [
@@ -18,7 +19,8 @@ import { BlanccoModule } from '../blancco/blancco.module';
       provide: 'ENTITY_STATUS',
       useValue: null,
     },
-    PrintService
+    PrintService,
+    AProductBlancco,
   ],
   controllers: [AproductController],
   imports: [

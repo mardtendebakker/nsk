@@ -1,6 +1,5 @@
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
-import { BlanccoDefaultProductType } from './types/blancco-defualt-product-type.enum';
 import { ConfigService } from '@nestjs/config';
 import { Injectable } from '@nestjs/common';
 
@@ -11,17 +10,12 @@ export class BlanccoRepository {
     private readonly configService: ConfigService,
   ) {}
 
-  getDefaultProductType() {
-    const name = BlanccoDefaultProductType.NAME;
+  findOrCreateProductType(data: Prisma.product_typeCreateInput) {
     return this.prisma.product_type.upsert({
       where: {
-        name
+        name: data.name
       },
-      create: {
-        name,
-        pindex: 50,
-        is_public: false,
-      },
+      create: data,
       update: {}
     });
   }
@@ -48,9 +42,5 @@ export class BlanccoRepository {
 
   findFirst(params: Prisma.product_typeFindFirstArgs) {
     return this.prisma.product_type.findFirst(params);
-  }
-
-  cteateDefaultProductType(params: Prisma.product_typeCreateArgs) {
-    return this.prisma.product_type.create(params);
   }
 }

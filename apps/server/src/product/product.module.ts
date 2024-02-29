@@ -9,6 +9,7 @@ import { PrintService } from '../print/print.service';
 import { EntityStatus } from '../common/types/entity-status.enum';
 import { LocationLabelModule } from '../location-label/location-label.module';
 import { BlanccoModule } from '../blancco/blancco.module';
+import { ProductBlancco } from './product.blancco';
 
 @Module({
   providers: [
@@ -23,6 +24,7 @@ import { BlanccoModule } from '../blancco/blancco.module';
       useValue: EntityStatus.Active,
     },
     PrintService,
+    ProductBlancco,
   ],
   controllers: [ProductController],
   imports: [

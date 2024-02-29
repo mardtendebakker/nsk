@@ -1,47 +1,51 @@
-[
-  {
-    "attr_code": "system.0.manufacturer",
-    "name": "BL Manufacturer",
-    "type": 1
-  },
-  {
-    "attr_code": "system.0.serial",
-    "name": "BL Serial",
-    "type": 0
-  },
-  {
-    "attr_code": "system.0.model",
-    "name": "BL Model",
-    "type": 0
-  },
-  {
-    "attr_code": "system.0.chassis_type",
-    "name": "BL Chassis Type",
-    "type": 1
-  },
-  {
-    "attr_code": "processors.1.processor.0.model",
-    "name": "BL Cpu Model",
-    "type": 0
-  },
-  {
-    "attr_code": "processors.0.total_cores",
-    "name": "BL Total Cores",
-    "type": 1
-  },
-  {
-    "attr_code": "memory.0.total_memory",
-    "name": "BL Total Memory",
-    "type": 1
-  },
-  {
-    "attr_code": "memory.0.total_slots",
-    "name": "BL Total Slots",
-    "type": 1
-  },
-  {
-    "attr_code": "disks.1.disk.0.model",
-    "name": "BL Disk Model",
-    "type": 0
-  }
-]
+{
+  "BL Default": [
+    {
+      "attr_code": "system.0.manufacturer",
+      "name": "BL Manufacturer",
+      "type": 1
+    },
+    {
+      "attr_code": "system.0.serial",
+      "name": "BL Serial",
+      "type": 0
+    },
+    {
+      "attr_code": "system.0.model",
+      "name": "BL Model",
+      "type": 0
+    },
+    {
+      "attr_code": "system.0.chassis_type",
+      "name": "BL Chassis Type",
+      "type": 1
+    },
+    {
+      "attr_code": "processors.1.processor.0.model",
+      "name": "BL Cpu Model",
+      "type": 0
+    },
+    {
+      "attr_code": "processors.0.total_cores",
+      "name": "BL Total Cores",
+      "type": 1
+    },
+    {
+      "attr_code": "memory.0.total_memory",
+      "name": "BL Total Memory",
+      "type": 1
+    },
+    {
+      "attr_code": "memory.0.total_slots",
+      "name": "BL Total Slots",
+      "type": 1
+    },
+    {
+      "attr_code": "disks.1.disk.0.model",
+      "name": "BL Disk Model",
+      "type": 0
+    }
+  ],
+  "BL Tablet": [],
+  "BL Smartphone": []
+}

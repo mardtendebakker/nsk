@@ -7,12 +7,11 @@ import * as AdmZip from 'adm-zip';
 import { PurchaseService } from '../purchase/purchase.service';
 import { BlanccoV1 } from './types/blancco-v1';
 import { BlanccoRepository } from './blancco.repository';
-import { BlanccoDefaultProductType } from './types/blancco-defualt-product-type.enum';
-import { Prisma } from '@prisma/client';
 import { BlanccoFormat } from './types/blancco-format.enum';
 import { BlanccoResponse } from './types/blancco-response';
 import { BlanccoReportsV1 } from './types/blancco-reports-v1';
 import * as DefaultAttribute from './data/default-attributes.json';
+import { BlanccoProductTypes } from './types/blancco-product-types.enum';
 
 @Injectable()
 export class BlanccoService {
@@ -24,21 +23,34 @@ export class BlanccoService {
   ) {}
 
   async init() {
-    const productType = await this.repository.getDefaultProductType();
-    await this.repository.deleteProductTypesAttributesByProductTypeId(productType.id);
+    const result: boolean[] = [];
+    
+    const productTypeNames = Object.values(BlanccoProductTypes);
+    for (let i = 0; i < productTypeNames.length; i++) {
+      const productTypeName = productTypeNames[i];
+      const productType = await this.repository.findOrCreateProductType({
+        name: productTypeName,
+        pindex: 50 + i,
+        is_public: false,
+      });
+      await this.repository.deleteProductTypesAttributesByProductTypeId(productType.id);
 
-    const attributeIds: number[] = [];
-    for (const attributeData of DefaultAttribute) {
-      const attribute = await this.repository.createDefaultAttribute(attributeData);
-      attributeIds.push(attribute.id);
+      const attributesData = DefaultAttribute?.[productTypeName] || DefaultAttribute['BL Default'];
+    
+      const attributeIds: number[] = [];
+      for (const attributeData of attributesData) {
+        const attribute = await this.repository.createDefaultAttribute(attributeData);
+        attributeIds.push(attribute.id);
+        result.push(true);
+      }
+
+      attributeIds.length && await this.repository.createProductTypesAttributes(attributeIds.map(attributeId => ({
+        attribute_id: attributeId,
+        product_type_id: productType.id,
+      })));
     }
 
-    await this.repository.createProductTypesAttributes(attributeIds.map(attributeId => ({
-      attribute_id: attributeId,
-      product_type_id: productType.id,
-    })));
-
-    return `${attributeIds.length} blancco attribute has been created!`;
+    return `${result.filter(res => res === true).length} blancco attribute has been created!`;
   }
 
   async getReports(orderId: number, newCursor?: string): Promise<BlanccoV1> {
@@ -55,45 +67,6 @@ export class BlanccoService {
       cursor,
       ...reports,
     };
-  }
-
-  async getProductType(report, productTypeName?: string) {
-    let productType = await this.repository.findFirst({
-      where: {
-        name: productTypeName || BlanccoDefaultProductType.NAME,
-      },
-    });
-
-    if (productType) {
-      return productType;
-    } else {
-      let productTypeAttributeCreate: Prisma.product_type_attributeCreateWithoutProduct_typeInput[];
-      for (const attrName in report) {
-        productTypeAttributeCreate.push({
-          attribute: {
-            connectOrCreate: {
-              where: {
-                name: attrName,
-              },
-              create: {
-                attr_code: attrName.replace(' ', '_'),
-                name: attrName,
-              },
-            },
-          },
-        });
-      }
-      productType = await this.repository.cteateDefaultProductType({
-        data: {
-          name: BlanccoDefaultProductType.NAME,
-          product_type_attribute: {
-            create: productTypeAttributeCreate,
-          },
-        },
-      });
-    }
-
-    return productType;
   }
 
   getValueFromReportByKey(

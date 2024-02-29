@@ -10,7 +10,7 @@ import { FileDiscrimination } from "../file/types/file-discrimination.enum";
 import { CreateFileDto } from "../file/dto/create-file.dto";
 import { AttributeType } from "../attribute/enum/attribute-type.enum";
 import { CreateBodyStockDto } from "./dto/create-body-stock.dto";
-import { HttpException, HttpStatus, NotFoundException } from "@nestjs/common";
+import { NotFoundException } from "@nestjs/common";
 import { ProductAttributeIncludeAttribute } from "./types/product-attribute-include-attribute";
 import { ProductRelation } from "./types/product-relation";
 import { ProcessedStock } from "./dto/processed-stock.dto";
@@ -28,11 +28,7 @@ import { ProductRelationAttributeOrderProcessed } from "./types/product-relation
 import { EntityStatus } from "../common/types/entity-status.enum";
 import { LocationLabelService } from "../location-label/location-label.service";
 import { BlanccoService } from "../blancco/blancco.service";
-import { BlanccoDefaultProductType } from "../blancco/types/blancco-defualt-product-type.enum";
-import { BlanccoReportV1 } from "../blancco/types/blancco-report-v1";
-import { BlanccoCustomFiledKeys } from "../blancco/types/blancco-custom-field-keys.enum";
 import { AttributeIncludeOption } from "./types/attribute-include-option";
-import { BlanccoReportsV1 } from "../blancco/types/blancco-reports-v1";
 
 export class StockService {
   constructor(
@@ -373,87 +369,7 @@ export class StockService {
     return this.printService.printPriceCards(products);
   }
 
-  async importFromBlancco(orderId: number): Promise<number> {
-    let results: boolean[] = [];
-    let newCursor: string | null = null;
-
-    try {
-      do {
-        const { cursor, ...reports } = await this.blanccoService.getReports(orderId, newCursor);
-        const result = await this.handleBlanccoReoprts(orderId, reports);
-        results = results.concat(result);
-  
-        newCursor = cursor;
-      } while (newCursor);
-    } catch (err) {
-      const httpStatus =
-      err instanceof HttpException
-        ? err.getStatus()
-        : HttpStatus.INTERNAL_SERVER_ERROR;
-      if (httpStatus !== HttpStatus.NOT_FOUND) {
-        throw err;
-      }
-    }
-
-    return results.length;
-  }
-
-  async handleBlanccoReoprts(orderId: number, reports: BlanccoReportsV1): Promise<boolean[]> {
-    const results: boolean[] = [];
-
-    for (const uuid in reports) {
-      let result = false;
-      try {
-        result = await this.createProductAttributeByBlanccoReport(orderId, reports[uuid].report);
-      } catch (err) {
-        console.log("handleBlanccoReoprts:", err);
-        continue;
-      }
-      results.push(result);
-    }
-
-    return results;
-  }
-
-  private async createProductAttributeByBlanccoReport(orderId: number, report: BlanccoReportV1): Promise<boolean> {
-    const sku = this.blanccoService.getValueFromReportByKey(report, BlanccoCustomFiledKeys.SKU_NUMBER);
-    const productTypeName = this.blanccoService.getValueFromReportByKey(report, BlanccoCustomFiledKeys.PRODUCT_TYPE) || BlanccoDefaultProductType.NAME;
-
-    const productType = await this.repository.getProductTypeByName(productTypeName);
-    const attributes = await this.repository.getAttributesByProductTypeId(productType.id);
-
-    const product_attributes = await this.prepareProductAttributesByBlanccoReport(attributes, report);
-
-    const products = await this.repository.findBy({ where: { sku, product_order: { some: { order_id: orderId } } } });
-    if (!products.length) {
-      console.log(`createProductAttributeByBlanccoReport, No products found! sku: ${sku}`);
-      return false;
-    }
-    for (const product of products) {
-      this.repository.deleteProductAttributes(product.id);
-      this.updateOne(product.id, {
-        type_id: productType.id,
-        product_attributes,
-      });
-    }
-
-    return true;
-  }
-
-  private async prepareProductAttributesByBlanccoReport(attributes: AttributeIncludeOption[], report: BlanccoReportV1): Promise<ProductAttributeDto[]> {
-    const productAttributes: ProductAttributeDto[] = [];
-    
-    for (const attribute of attributes) {
-      const reportValue = this.blanccoService.getValueFromReportByKey(report.blancco_data.blancco_hardware_report, attribute.attr_code);
-      if (reportValue) {
-        productAttributes.push(await this.preapareProductAttributeByStringValue(attribute, String(reportValue)));
-      }
-    }
-
-    return productAttributes;
-  }
-
-  private async preapareProductAttributeByStringValue(attribute: AttributeIncludeOption, reportValue: string): Promise<ProductAttributeDto> {
+  async preapareProductAttributeByStringValue(attribute: AttributeIncludeOption, reportValue: string): Promise<ProductAttributeDto> {
     let value: string;
   
     switch(attribute.type) {
