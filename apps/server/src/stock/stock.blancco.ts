@@ -63,6 +63,11 @@ export class StockBlancco {
     const sku = this.blanccoService.getValueFromReportByKey(report, BlanccoCustomFiledKeys.SKU_NUMBER);
     const productTypeName = this.getProductTypeName(report);
 
+    if (!productTypeName) {
+      console.log(`createProductAttributeByBlanccoReport, No productTypeName found! sku: ${sku}`);
+      return false;
+    }
+
     const productType = await this.repository.getProductTypeByName(productTypeName);
     const attributes = await this.repository.getAttributesByProductTypeId(productType.id);
 
@@ -87,20 +92,17 @@ export class StockBlancco {
   private getProductTypeName(report: BlanccoReportV1): string {
     let productTypeName = this.blanccoService.getValueFromReportByKey(report, BlanccoCustomFiledKeys.PRODUCT_TYPE);
 
+    // TODO: must move to database, admin should customize them
     if (!productTypeName) {
       const chassisType = this.blanccoService.getValueFromReportByKey(report, BlanccoHardwareKeys.CHASSIS_TYPE);
       if (['Desktop', 'Low Profile Desktop', 'Mini Tower'].includes(chassisType)) {
         productTypeName = BlanccoProductTypes.COMPUTER;
-      } else if (['Notebook', 'Convertible'].includes(chassisType)) {
+      } else if (['Laptop', 'Notebook', 'Convertible'].includes(chassisType)) {
         productTypeName = BlanccoProductTypes.LAPTOP;
-      } else if (['Tablet'].includes(chassisType)) {
-        productTypeName = BlanccoProductTypes.TABLET;
-      } else {
-        productTypeName = BlanccoProductTypes.DEFUALT;
       }
     }
 
-    return  productTypeName;
+    return productTypeName;
   }
 
   private async prepareProductAttributesByBlanccoReport(report: BlanccoReportV1, attributes: AttributeIncludeOption[]): Promise<ProductAttributeDto[]> {
@@ -109,7 +111,8 @@ export class StockBlancco {
     for (const attribute of attributes) {
       const reportValue = this.blanccoService.getValueFromReportByKey(report.blancco_data.blancco_hardware_report, attribute.attr_code);
       if (reportValue) {
-        productAttributes.push(await this.stockService.preapareProductAttributeByStringValue(attribute, String(reportValue)));
+        const formattedValue = this.blanccoService.formatNumberWithScale(reportValue);
+        productAttributes.push(await this.stockService.preapareProductAttributeByStringValue(attribute, formattedValue));
       }
     }
 

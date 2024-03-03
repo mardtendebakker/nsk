@@ -20,23 +20,19 @@ export class BlanccoRepository {
     });
   }
 
-  createDefaultAttribute(data: Prisma.attributeCreateInput) {
+  findOrCreateAttribute(data: Prisma.attributeCreateInput) {
     return this.prisma.attribute.upsert({
       where: { name: data.name },
       create: data,
-      update: {},
-    });
-  }
-  
-  deleteProductTypesAttributesByProductTypeId(product_type_id: number) {
-    return this.prisma.product_type_attribute.deleteMany({
-      where: { product_type_id }
+      update: { attr_code: data.attr_code },
     });
   }
 
-  createProductTypesAttributes(data: Prisma.product_type_attributeCreateManyInput[]) {
-    return this.prisma.product_type_attribute.createMany({
-      data
+  findOrCreateProductTypeAttribute(data: Prisma.product_type_attributeUncheckedCreateInput) {
+    return this.prisma.product_type_attribute.upsert({
+      where: { product_type_id_attribute_id: { ...data } },
+      create: data,
+      update: {},
     });
   }
 
