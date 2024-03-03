@@ -30,24 +30,25 @@ export class BlanccoService {
       const productTypeName = productTypeNames[i];
       const productType = await this.repository.findOrCreateProductType({
         name: productTypeName,
-        pindex: 50 + i,
+        pindex: 1 + i,
         is_public: false,
       });
-      await this.repository.deleteProductTypesAttributesByProductTypeId(productType.id);
 
-      const attributesData = DefaultAttribute?.[productTypeName] || DefaultAttribute['BL Default'];
+      const attributesData = DefaultAttribute?.[productTypeName] || DefaultAttribute['Default'];
     
       const attributeIds: number[] = [];
       for (const attributeData of attributesData) {
-        const attribute = await this.repository.createDefaultAttribute(attributeData);
+        const attribute = await this.repository.findOrCreateAttribute(attributeData);
         attributeIds.push(attribute.id);
         result.push(true);
       }
 
-      attributeIds.length && await this.repository.createProductTypesAttributes(attributeIds.map(attributeId => ({
-        attribute_id: attributeId,
-        product_type_id: productType.id,
-      })));
+      for (const attributeId of attributeIds) {
+        await this.repository.findOrCreateProductTypeAttribute({
+          attribute_id: attributeId,
+          product_type_id: productType.id,
+        });
+      }
     }
 
     return `${result.filter(res => res === true).length} blancco attribute has been created!`;
@@ -74,6 +75,26 @@ export class BlanccoService {
     key: string
   ): string {
     return <string>this.getValueFromReportByFlattenedKey(report, key);
+  }
+
+  formatNumberWithScale(input: unknown): string {
+    let num = Number(input);
+    if (isNaN(num)) {
+      return String(input);
+    }
+
+    const unitSuffixes = ["", "K", "M", "G", "T", "P", "E", "Z", "Y"];
+    let unitIndex = 0;
+
+    while (num >= 1000 && unitIndex < unitSuffixes.length - 1) {
+        num /= 1000;
+        unitIndex++;
+    }
+
+    const roundedNum = Math.floor(num);
+    const unit = unitSuffixes?.[unitIndex] ?? '';
+
+    return `${roundedNum}${unit}`;
   }
 
   private getValueFromReportByFlattenedKey(report: unknown, key: string) {
