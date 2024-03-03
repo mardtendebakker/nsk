@@ -20,7 +20,7 @@ export class FleetGoService {
   }
 
   async getEquipments(): Promise<EquipmentResponseDto[]> {
-    const result = await this.axios.get('Equipment/GetEquipments?groupId=&hasDeviceOnly=true');
+    const result = await this.axios.get('Equipment/GetEquipments?groupId=3378022238&hasDeviceOnly=true');
 
     return result.data;
   }
