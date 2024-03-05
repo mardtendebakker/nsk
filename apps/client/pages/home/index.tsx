@@ -52,10 +52,21 @@ export default function Home() {
             <Typography paragraph>
               Waarom zou u uw bedrijfsmodel en workflows veranderen om propriëtaire software te gebruiken?
               Pas Nexxus eenvoudig aan uw bedrijfsmodel en workflows aan. Het maakt niet uit wat voor bedrijf je hebt.
-              Bouw, detailhandel, makelaar, transport etc. Als u een of meer van de onderstaande zaken heeft.
+              Bouw, detailhandel, makelaar, transport etc. Als u een of meer van de onderstaande zaken heeft
             </Typography>
-
-            {/* Additional MUI Components */}
+            <Box sx={{ pl: 2, mb: 2 }}>
+              <Typography component="ul">
+                <Typography component="li">(digitale) goederen die in beweging zijn</Typography>
+                <Typography component="li">klanten</Typography>
+                <Typography component="li">leveranciers</Typography>
+                <Typography component="li">onbeperkte locaties</Typography>
+                <Typography component="li">vloot</Typography>
+                <Typography component="li">partners, wederverkopers of aangesloten bedrijven</Typography>
+              </Typography>
+              <Typography>
+                dan wilt u wellicht Nexxus gebruiken
+              </Typography>
+            </Box>
             <Grid container spacing={3}>
               <Grid item xs={12} md={6}>
                 <Paper elevation={3} sx={{ p: 2 }}>
