@@ -15,13 +15,13 @@ export default function Filter({
   formRepresentation,
   setValue,
   onReset,
-  eagerFocus,
+  autoFocus,
 }: {
   disabled: boolean,
   formRepresentation : FormRepresentation,
   setValue: SetValue,
   onReset: () => void,
-  eagerFocus?: boolean
+  autoFocus?: boolean
 }) {
   const { trans } = useTranslation();
   const isDesktop = useResponsive('up', 'sm');
@@ -34,7 +34,7 @@ export default function Filter({
         searchValue={formRepresentation.search.value?.toString() || ''}
         onReset={onReset}
         searchLabel={trans('searchBySerialNumberOrNameOrAttr')}
-        eagerFocus={eagerFocus}
+        autoFocus={autoFocus}
       >
         <Box sx={{
           flex: 1,
@@ -94,5 +94,5 @@ export default function Filter({
 }
 
 Filter.defaultProps = {
-  eagerFocus: false,
+  autoFocus: false,
 };

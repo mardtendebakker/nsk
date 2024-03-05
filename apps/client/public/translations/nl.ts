@@ -1,6 +1,7 @@
 const translation = {
   id: 'ID',
   signIn: 'Log in',
+  home: 'home',
   welcomeBackGreetings: 'Hallo, welkom terug',
   emailAddress: 'Emailadres',
   password: 'Wachtwoord',
