@@ -21,7 +21,7 @@ function Dashboard() {
   return (
     <DashboardLayout>
       <Head>
-        <title>{trans('customers')}</title>
+        <title>{trans('dashboard')}</title>
       </Head>
       <Typography variant="h3">
         {trans('hello')}

@@ -1,7 +1,9 @@
 import { Group, User } from '../stores/security/types';
 
 export const DASHBOARD = '/';
+export const HOME = '/home';
 export const SIGN_IN = '/sign-in';
+export const SIGN_UP = '/sign-up';
 export const BULK_EMAIL = '/bulk-email';
 export const BULK_EMAIL_NEW = '/bulk-email/new';
 export const CONTACTS_EDIT = '/contacts/[id]';

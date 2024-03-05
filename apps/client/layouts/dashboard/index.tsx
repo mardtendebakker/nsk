@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import useSecurity from '../../hooks/useSecurity';
 import Header from './header';
 import {
-  SIGN_IN, ACCOUNT_VERIFICATION, getRouteGroups, getDefaultPath,
+  ACCOUNT_VERIFICATION, getRouteGroups, getDefaultPath, HOME,
 } from '../../utils/routes';
 import { Group } from '../../stores/security/types';
 import can from '../../utils/can';
@@ -16,7 +16,7 @@ export default function DashboardLayout({ children }: { children: JSX.Element | 
 
   useEffect(() => {
     if (!user) {
-      router.push(SIGN_IN);
+      router.push(HOME);
     } else if (!user.emailVerified) {
       router.push(ACCOUNT_VERIFICATION);
     } else {
