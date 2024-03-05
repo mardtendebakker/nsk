@@ -16,6 +16,7 @@ export default function SearchAccordion({
   onSearchChange,
   onReset,
   disabledFilter,
+  eagerFocus,
 }: {
   children: JSX.Element,
   disabled?: boolean,
@@ -23,7 +24,8 @@ export default function SearchAccordion({
   searchLabel?: string,
   onSearchChange: (searchValue: string) => void,
   onReset: () => void,
-  disabledFilter?: boolean
+  disabledFilter?: boolean,
+  eagerFocus?: boolean
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [showFilter, setShowFilter] = useState(false);
@@ -31,7 +33,9 @@ export default function SearchAccordion({
   const { trans } = useTranslation();
 
   useEffect(() => {
-    inputRef.current?.focus();
+    if (searchValue || eagerFocus) {
+      inputRef.current?.focus();
+    }
   });
 
   return (
@@ -88,4 +92,5 @@ SearchAccordion.defaultProps = {
   searchLabel: undefined,
   disabled: false,
   disabledFilter: false,
+  eagerFocus: false,
 };

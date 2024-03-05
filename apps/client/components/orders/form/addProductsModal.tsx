@@ -128,6 +128,7 @@ export default function AddProductsModal({
               setValue(payload);
               setPage(1);
             }}
+            eagerFocus
           />
           <Box sx={{ m: '.5rem' }} />
           <Checkbox
