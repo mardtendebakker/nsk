@@ -74,19 +74,26 @@ export default function Home() {
                     Contactgegevens
                   </Typography>
                   <Typography>
-                    Handelsnaam: Mardten de Bakker
+                    Copiatek
                   </Typography>
                   <Typography>
-                    KVK-nummer: 84893184
+                    KVK 86255673
                   </Typography>
                   <Typography>
                     Bezoekadres: Laan van Ypenburg 132, 2497 GC Den Haag
                   </Typography>
                   <Typography>
-                    M: 0627394143
+                    Telefoon: 06-27394143
+                  </Typography>
+                  <Typography>
+                    BTW NL863911730B01
+                  </Typography>
+                  <Typography>
+                    BANK NL25RABO0190702478
                   </Typography>
                   <Typography>
                     Email:
+                    {' '}
                     <Link href="mailto:mardten.debakker@copiatek.nl" style={{ textDecoration: 'none', color: 'inherit' }} passHref>mardten.debakker@copiatek.nl</Link>
                   </Typography>
                 </Paper>
