@@ -131,11 +131,9 @@ export class StockService {
       }),
     };
 
-    const productOrderBy: Prisma.productOrderByWithRelationInput[] = orderBy || [
-      {
-        id: 'desc',
-      },
-    ];
+    const productOrderBy: Prisma.productOrderByWithRelationInput[] = [];
+    orderBy && productOrderBy.push(orderBy);
+    productOrderBy.push({ id: 'desc' });
 
     const result = await this.repository.findAll({
       ...restQuery,
