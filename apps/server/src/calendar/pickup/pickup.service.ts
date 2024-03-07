@@ -67,7 +67,7 @@ export class PickupService {
           },
           ...(query.licensePlate ? {
             fos_user: {
-              username: {
+              license_plate: {
                 equals: query.licensePlate
               }
             }

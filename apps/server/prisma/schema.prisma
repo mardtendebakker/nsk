@@ -120,6 +120,7 @@ model fos_user {
   roles                 String          @db.LongText
   firstname             String?         @db.VarChar(255)
   lastname              String?         @db.VarChar(255)
+  license_plate         String?         @db.VarChar(50)
   emailCanonical        String          @db.VarChar(255)
   partner_id            Int?
   pickup                pickup[]
