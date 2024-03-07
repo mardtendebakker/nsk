@@ -46,4 +46,7 @@ export class FosUserEntity implements fos_user {
 
   @ApiPropertyOptional()
   partner_id: number | null;
+
+  @ApiPropertyOptional()
+  license_plate: string | null;
 }
