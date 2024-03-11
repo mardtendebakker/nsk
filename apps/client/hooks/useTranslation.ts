@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { trans, setConfig } from 'itranslator';
 import { setDefaultOptions } from 'date-fns';
 import {
-  nl, enUS, de, fr, ar, faIR,
+  nl, enUS, de, fr, ar, faIR, pt,
 } from 'date-fns/locale';
 import Config from 'itranslator/lib/type/config';
 import { getDefaultLocale, setDefaultLocale } from '../utils/storage';
@@ -13,6 +13,7 @@ import deSource from '../public/translations/de';
 import frSource from '../public/translations/fr';
 import arSource from '../public/translations/ar';
 import faSource from '../public/translations/fa';
+import ptSource from '../public/translations/pt';
 
 export const LOCALE_UPDATED = 'LOCALE_UPDATED';
 export type Trans = (key: string, config?: Config | undefined) => string;
@@ -24,6 +25,7 @@ export const localeMapping = {
   ar: arSource,
   fr: frSource,
   fa: faSource,
+  pt: ptSource,
 };
 
 export const dateFnsMapping = {
@@ -33,6 +35,7 @@ export const dateFnsMapping = {
   fr,
   ar,
   fa: faIR,
+  pt,
 };
 
 class LocaleEmitter extends EventEmitter {
