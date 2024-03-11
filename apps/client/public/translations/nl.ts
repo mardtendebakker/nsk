@@ -52,6 +52,7 @@ const translation = {
   company_kvk_nr: 'Kvk Nummer',
   street: 'Straat',
   street_extra: 'Toevoeging',
+  extraStreet: 'Straat Toevoeging',
   zipcode: 'Postcode',
   state: 'Provincie',
   createOrder: 'Maak een bestelling aan',
