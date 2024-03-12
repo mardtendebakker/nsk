@@ -4,10 +4,10 @@ import { useRouter } from 'next/router';
 import useSecurity from '../../hooks/useSecurity';
 import Header from './header';
 import {
-  SIGN_IN, ACCOUNT_VERIFICATION, getRouteGroups, getDefaultPath,
+  ACCOUNT_VERIFICATION, getRouteGroups, getDefaultPath, HOME,
 } from '../../utils/routes';
-import { Group } from '../../stores/security/types';
 import can from '../../utils/can';
+import { Group } from '../../stores/security';
 
 export default function DashboardLayout({ children }: { children: JSX.Element | JSX.Element[] }) {
   const { state: { user }, refreshUserInfo } = useSecurity();
@@ -16,13 +16,13 @@ export default function DashboardLayout({ children }: { children: JSX.Element | 
 
   useEffect(() => {
     if (!user) {
-      router.push(SIGN_IN);
+      router.push(HOME);
     } else if (!user.emailVerified) {
       router.push(ACCOUNT_VERIFICATION);
     } else {
       const requiredGroups: undefined | Group[] = getRouteGroups(router.pathname);
 
-      if (requiredGroups && !can(user.groups, requiredGroups)) {
+      if (requiredGroups && !can({ user, requiredGroups })) {
         router.push(getDefaultPath(user));
       } else {
         setCanShowPage(true);

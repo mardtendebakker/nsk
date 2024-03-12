@@ -1,11 +1,12 @@
 import Head from 'next/head';
 import {
-  Box, Button, IconButton, Typography, Card, Divider, CardContent, Grid,
+  Box, IconButton, Typography, Card, Divider, CardContent, Grid,
 } from '@mui/material';
 import { useRouter } from 'next/router';
 import ArrowBack from '@mui/icons-material/ArrowBack';
-import Check from '@mui/icons-material/Check';
-import { SyntheticEvent, useEffect, useMemo } from 'react';
+import {
+  SyntheticEvent, useEffect, useMemo, useState,
+} from 'react';
 import Form from '../../../components/orders/form/repair';
 import DashboardLayout from '../../../layouts/dashboard';
 import useAxios from '../../../hooks/useAxios';
@@ -16,11 +17,13 @@ import { initFormState, formRepresentationToBody } from './new';
 import { ORDERS_REPAIRS, ORDERS_REPAIRS_NEW } from '../../../utils/routes';
 import ProductsTable from '../../../components/orders/form/repair/productsTable';
 import { Order } from '../../../utils/axios/models/order';
+import Action from '../../../components/orders/form/action';
 
 function UpdateRepairOrder() {
   const { trans } = useTranslation();
   const router = useRouter();
   const { id } = router.query;
+  const [performingPrint, setPerformingPrint] = useState(false);
 
   const { call, performing } = useAxios(
     'put',
@@ -47,7 +50,7 @@ function UpdateRepairOrder() {
     }
   }, [id]);
 
-  const canSubmit = () => !performing && !performingFetchRepairOrder;
+  const canSubmit = () => !performing && !performingFetchRepairOrder && !performingPrint;
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
@@ -85,16 +88,13 @@ function UpdateRepairOrder() {
             </IconButton>
             {trans('editRepair')}
           </Typography>
-          <Box>
-            <Button
-              size="small"
-              variant="contained"
-              onClick={handleSubmit}
-            >
-              <Check />
-              {trans('save')}
-            </Button>
-          </Box>
+          <Action
+            disabled={!canSubmit()}
+            onSave={handleSubmit}
+            setPerformingPrint={setPerformingPrint}
+            id={id?.toString()}
+            type="repair"
+          />
         </Box>
         <Card>
           <Form
@@ -121,6 +121,13 @@ function UpdateRepairOrder() {
                 {id && <ProductsTable orderId={id.toString()} refreshOrder={() => fetchRepairOrder()} />}
               </Grid>
             </Grid>
+            <Action
+              disabled={!canSubmit()}
+              onSave={handleSubmit}
+              setPerformingPrint={setPerformingPrint}
+              id={id?.toString()}
+              type="repair"
+            />
           </CardContent>
         </Card>
       </form>

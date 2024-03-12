@@ -1,10 +1,10 @@
 import { AutocompleteRepository } from './autocomplete.repository';
-import { AutocompleteDto } from './dto/autocomplete.dto';
+import { AutocompleteDto, LocationLabelsAutocompleteDto } from './dto/autocomplete.dto';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class AutocompleteService {
-  constructor(protected readonly repository: AutocompleteRepository) {}
+  constructor(protected readonly repository: AutocompleteRepository) { }
 
   async findProductTypes(autocompleteDto: AutocompleteDto) {
     return this.repository.findProductTypes(autocompleteDto);
@@ -56,6 +56,10 @@ export class AutocompleteService {
 
   async findLocations(autocompleteDto: AutocompleteDto) {
     return this.repository.findLocations(autocompleteDto);
+  }
+
+  async findLocationLabels(autocompleteDto: LocationLabelsAutocompleteDto) {
+    return this.repository.findLocationLabels(autocompleteDto);
   }
 
   async findProductStatuses(autocompleteDto: AutocompleteDto) {

@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { State } from '../stores/security/types';
 import securityStore, {
   SEND_VERIFICATION_CODE_REQUEST,
   SEND_VERIFICATION_CODE_REQUEST_FAILED,
@@ -21,6 +20,8 @@ import securityStore, {
   CHANGE_PASSWORD_REQUEST,
   CHANGE_PASSWORD_REQUEST_SUCCEEDED,
   CHANGE_PASSWORD_REQUEST_FAILED,
+  State,
+  ModuleName,
 } from '../stores/security';
 import axiosClient, {
   SIGN_IN_PATH,
@@ -46,6 +47,7 @@ const useSecurity = (): {
   confirmAccount: (object: { code: string }) => Promise<void>,
   sendVerificationCode: () => Promise<void>,
   signOut: () => void,
+  hasModule: (module: ModuleName) => boolean,
   refreshUserInfo: ()=> Promise<void>,
 } => {
   const [state, setState] = useState<State>(securityStore.state);
@@ -54,12 +56,12 @@ const useSecurity = (): {
   const { call: signUpCall } = useAxios(
     'post',
     SIGN_UP_PATH,
-    { withProgressBar: true, customSuccessMessage: trans('signUpSuccessMessage') },
+    { withProgressBar: true, customSuccessMessage: () => trans('signUpSuccessMessage') },
   );
   const { call: confirmAccountCall } = useAxios(
     'post',
     CONFIRM_ACCOUNT_PATH,
-    { withProgressBar: true, customSuccessMessage: trans('confirmAccountSuccessMessage') },
+    { withProgressBar: true, customSuccessMessage: () => trans('confirmAccountSuccessMessage') },
   );
   const { call: sendVerificationCodeCall } = useAxios(
     'post',
@@ -69,7 +71,7 @@ const useSecurity = (): {
   const { call: forgotPasswordCall } = useAxios(
     'post',
     FORGOT_PASSWORD_PATH,
-    { withProgressBar: true, customSuccessMessage: trans('forgotPasswordSuccessMessage') },
+    { withProgressBar: true, customSuccessMessage: () => trans('forgotPasswordSuccessMessage') },
   );
   const { call: changePasswordCall } = useAxios(
     'post',
@@ -135,7 +137,7 @@ const useSecurity = (): {
       try {
         await signUpCall({ body: { username, email, password } });
         securityStore.emit(SIGN_UP_REQUEST_SUCCEEDED, {
-          username, email, emailVerified: false, groups: [],
+          username, email, emailVerified: false, groups: [], modules: [],
         });
       } catch (e) {
         securityStore.emit(SIGN_UP_REQUEST_FAILED);
@@ -161,6 +163,7 @@ const useSecurity = (): {
           username: response.data.username,
           email: response.data.email,
           groups: response.data.groups,
+          modules: response.data.modules,
         },
       );
     },
@@ -174,6 +177,7 @@ const useSecurity = (): {
         throw e;
       }
     },
+    hasModule: (moduleName: ModuleName) => !!securityStore.state.user?.modules?.find((module) => module.active && module.name == moduleName),
   };
 };
 

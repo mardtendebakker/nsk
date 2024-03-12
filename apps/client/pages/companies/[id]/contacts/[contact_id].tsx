@@ -47,7 +47,7 @@ function EditContact() {
 
     call({
       body: { ...formRepresentationToBody(formRepresentation), company_id: undefined },
-      path: CONTACTS_PATH.replace(':id', id?.toString()),
+      path: CONTACTS_PATH.replace(':id', contact_id?.toString()),
     });
   };
 

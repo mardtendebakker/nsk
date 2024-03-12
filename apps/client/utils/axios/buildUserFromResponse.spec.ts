@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 import getUserFromResponse from './buildUserFromResponse';
-import { User } from '../../stores/security/types';
+import { User } from '../../stores/security';
 
 jest.mock('axios');
 

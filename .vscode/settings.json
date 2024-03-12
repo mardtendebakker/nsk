@@ -1,5 +1,11 @@
 {
     "files.eol": "\n",
     "files.insertFinalNewline": true,
-    "typescript.preferences.importModuleSpecifier": "relative"
+    "typescript.preferences.importModuleSpecifier": "relative",
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "javascript.format.enable": false,
+    "typescript.format.enable": false,
+    "[typescript]": {
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    }
 }

@@ -27,6 +27,8 @@ import { ProductRelationAttributeProcessed } from "./types/product-relation-attr
 import { ProductRelationAttributeOrderProcessed } from "./types/product-relation-attribute-order-processed";
 import { EntityStatus } from "../common/types/entity-status.enum";
 import { LocationLabelService } from "../location-label/location-label.service";
+import { BlanccoService } from "../blancco/blancco.service";
+import { AttributeIncludeOption } from "./types/attribute-include-option";
 
 export class StockService {
   constructor(
@@ -35,6 +37,7 @@ export class StockService {
     protected readonly locationLabelService: LocationLabelService,
     protected readonly fileService: FileService,
     protected readonly printService: PrintService,
+    protected readonly blanccoService: BlanccoService,
     protected readonly entityStatus: EntityStatus,
   ) {}
 
@@ -44,26 +47,55 @@ export class StockService {
   }
 
   async findAll(query: FindManyDto, email?: string) {
+    const {
+      where,
+      entityStatus,
+      orderId,
+      excludeByOrderId,
+      excludeByOrderDiscr,
+      productType,
+      location,
+      locationLabel,
+      productStatus,
+      search,
+      orderBy,
+      select,
+      ...restQuery
+    } = query;
+
+    const attributeOptionsWhere: Prisma.product_attributeWhereInput[] = [];
+    if (search) {
+      const attributeOptions = await this.repository.findAttributeOptions({
+        name: { contains: search },
+      });
+      attributeOptions.forEach(attributeOption => {
+        attributeOptionsWhere.push({
+          attribute_id: attributeOption.attribute_id,
+          value: String(attributeOption.id),
+        });
+      });
+    }
+
     const productwhere: Prisma.productWhereInput = {
-      ...query.where,
-      ...(Number.isFinite(query.entityStatus) && { entity_status: query.entityStatus }),
+      ...where,
+      ...(Number.isFinite(entityStatus) && { entity_status: entityStatus }),
       ...(Number.isFinite(this.entityStatus) && { entity_status: this.entityStatus }),
-      ...(query.orderId || query.excludeByOrderId || query.excludeByOrderDiscr || email) && {
+      ...(orderId || excludeByOrderId || excludeByOrderDiscr || email) && {
         product_order: {
-          ...(query.orderId || email) && {
+          ...(orderId || email) && {
             some: {
-              ...(query.orderId && { order_id: query.orderId }),
+              ...(orderId && { order_id: orderId }),
               ...this.getPartnerWhereInput(email),
             } 
           },
-          ...(query.excludeByOrderId && { none: { order_id: query.excludeByOrderId } }),
-          ...(query.excludeByOrderDiscr && { none: { aorder: { discr: query.excludeByOrderDiscr } } }),
+          ...(excludeByOrderId && { none: { order_id: excludeByOrderId } }),
+          ...(excludeByOrderDiscr && { none: { aorder: { discr: excludeByOrderDiscr } } }),
         },
       },
-      ...(query.productType && { type_id: query.productType }),
-      ...(query.location && { location_id: query.location }),
-      ...(query.location_label && { location_label_id: query.location_label }),
-      ...(query.productStatus && {product_status: { id: query.productStatus }} || {
+      ...(productType && { type_id: productType }),
+      ...(location && { location_id: location }),
+      ...(locationLabel && { location_label_id: locationLabel }),
+      ...(productStatus && {product_status: { id: productStatus }} || {
         OR: [{
           status_id: null,
         }, {
@@ -76,26 +108,42 @@ export class StockService {
           }
         }],
       }),
-      ...(query.search && {
-        OR: [{name: {contains: query.search}}, {sku: { contains: query.search}}]
+      ...(search && {
+        OR: [
+          { name: { contains: search } },
+          { sku: { contains: search } },
+          {
+            product_attribute_product_attribute_product_idToproduct: {
+              some: {
+                value: { contains: search },
+                attribute: { type: AttributeType.TYPE_TEXT },
+              },
+            },
+          },
+          {
+            product_attribute_product_attribute_product_idToproduct: {
+              some: {
+                OR: attributeOptionsWhere,
+              },
+            },
+          },
+        ],
       }),
-    }
+    };
 
-    const productOrderBy: Prisma.productOrderByWithRelationInput[] = query.orderBy || [
-      {
-        id: 'desc',
-      },
-    ];
+    const productOrderBy: Prisma.productOrderByWithRelationInput[] = [];
+    orderBy && productOrderBy.push(orderBy);
+    productOrderBy.push({ id: 'desc' });
 
     const result = await this.repository.findAll({
-      ...query,
-      select: this.processSelect(query.select),
+      ...restQuery,
+      select: this.processSelect(select),
       where: productwhere,
       orderBy: productOrderBy,
     });
 
     const data = result.data.map(product => {
-      return this.processStock(product, query.orderId);
+      return this.processStock(product, orderId);
     });
 
     return {
@@ -138,11 +186,9 @@ export class StockService {
 
     const {
       product_order,
-      product_attribute_product_attribute_product_idToproduct,
+      product_attribute_product_attribute_product_idToproduct: product_attributes,
       ...rest
     } = stock;
-
-    const product_attributes = product_attribute_product_attribute_product_idToproduct
 
     return {
       ...rest,
@@ -321,6 +367,27 @@ export class StockService {
     return this.printService.printPriceCards(products);
   }
 
+  async preapareProductAttributeByStringValue(attribute: AttributeIncludeOption, reportValue: string): Promise<ProductAttributeDto> {
+    let value: string;
+  
+    switch(attribute.type) {
+      case AttributeType.TYPE_TEXT:
+        value = reportValue;
+        break;
+      case AttributeType.TYPE_SELECT:
+        value = String((await this.repository.getOptionByAttrIdAndName(attribute.id, reportValue)).id);
+        break;
+      default:
+        value = null;
+        break;
+    }
+
+    return {
+      attribute_id: attribute.id,
+      value,
+    };
+  }
+
   private productAttributeProcess(productAttribute: ProductAttributeIncludeAttribute): ProductAttributeProcessed {
     const attribute: AttributeGetPayload = productAttribute.attribute;
     const productAttributeProcessed: ProductAttributeProcessed = { ...productAttribute, attribute };
@@ -489,6 +556,7 @@ export class StockService {
       name: true,
       price: true,
       entity_status: true,
+      description: true,
       location: {
         select: locationSelect,
       },
@@ -571,7 +639,7 @@ export class StockService {
     }
 
     await this.deleteAllAttributes(productId);
-    const allAttributes = await this.repository.getAttributesByTypeId(typeId);
+    const allAttributes = await this.repository.getAttributesByProductTypeId(typeId);
     const productAttributes: Prisma.product_attributeCreateManyInput[] = [];
     for (let i = 0; i < allAttributes.length; i++) {
       const attribute = allAttributes[i];

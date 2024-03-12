@@ -4,7 +4,6 @@ import {
   Grid,
   Typography,
 } from '@mui/material';
-import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import useTranslation from '../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../hooks/useForm';
 import TextField from '../../memoizedInput/textField';
@@ -13,6 +12,7 @@ import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
 import useResponsive from '../../../hooks/useResponsive';
 import { OrderType } from '../../../utils/axios/models/types';
 import { autocompleteOrderStatusesPathMapper } from '../../../utils/axios/helpers/typeMapper';
+import DatePicker from '../../input/datePicker';
 
 export default function BasicDetails({
   formRepresentation,
@@ -57,21 +57,17 @@ export default function BasicDetails({
             helperText={formRepresentation.orderNr.error}
           />
           <Box sx={{ m: '.25rem' }} />
-          <DesktopDatePicker
+          <DatePicker
+            disabled={disabled}
+            label={trans('orderDate')}
             onChange={(value) => setValue({ field: 'orderDate', value })}
             value={formRepresentation.orderDate.value || null}
-            inputFormat="yyyy/MM/dd"
-            label={trans('orderDate')}
             renderInput={(params) => (
               <BaseTextField
                 {...params}
                 helperText={formRepresentation.orderDate.error}
                 sx={{ flex: 1 }}
                 error={!!formRepresentation.orderDate.error}
-                inputProps={{
-                  ...params.inputProps,
-                  placeholder: trans('selectOrderDate'),
-                }}
               />
             )}
           />

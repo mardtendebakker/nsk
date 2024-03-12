@@ -7,6 +7,7 @@ import {
 } from '@mui/material';
 import { useEffect, useCallback, useState } from 'react';
 import Add from '@mui/icons-material/Add';
+import { useRouter } from 'next/router';
 import { ProductListItem, Service } from '../../../../utils/axios/models/product';
 import debounce from '../../../../utils/debounce';
 import useTranslation from '../../../../hooks/useTranslation';
@@ -19,24 +20,39 @@ import TableCell from '../../../tableCell';
 import AddProductsModal from '../addProductsModal';
 import Row from './row';
 import Can from '../../../can';
+import useForm, { FieldPayload } from '../../../../hooks/useForm';
+import { getQueryParam } from '../../../../utils/location';
+import initFormState from '../productsInitFormState';
+import Filter from '../../../stock/list/filter';
+import refreshList from '../productsRefreshList';
 
 export default function ProductsTable({ orderId, refreshOrder }:{ orderId: string, refreshOrder: () => void }) {
   const { trans } = useTranslation();
+  const router = useRouter();
   const [showProductsModal, setShowProductsModal] = useState(false);
   const [page, setPage] = useState<number>(1);
   const [rowsPerPage, setRowsPerPage] = useState<number>(5);
 
-  const { call: callPut } = useAxios('put', undefined);
-  const { call: callPutWithProgressBar } = useAxios('put', undefined, { withProgressBar: true });
-  const { call: postService } = useAxios('post', SALES_SERVICES_PATH.replace(':id', ''), { showSuccessMessage: true, withProgressBar: true });
-  const { call: callDelete } = useAxios('delete', undefined, { withProgressBar: true, showSuccessMessage: true });
-  const { data: { data = [], count = 0 } = {}, call } = useAxios<undefined | { data?: ProductListItem[], count?: number }>(
+  const { formRepresentation, setValue, setData } = useForm(initFormState({
+    search: getQueryParam('search'),
+    productType: getQueryParam('productType'),
+    location: getQueryParam('location'),
+    locationLabel: getQueryParam('locationLabel'),
+    productStatus: getQueryParam('productStatus'),
+    orderId,
+  }));
+
+  const { call: callPut, performing: performingPut } = useAxios('put', undefined);
+  const { call: callPutWithProgressBar, performing: performingPutWithProgressBar } = useAxios('put', undefined, { withProgressBar: true });
+  const { call: postService, performing: performingPost } = useAxios('post', SALES_SERVICES_PATH.replace(':id', ''), { showSuccessMessage: true, withProgressBar: true });
+  const { call: callDelete, performing: performingDelete } = useAxios('delete', undefined, { withProgressBar: true, showSuccessMessage: true });
+  const { data: { data = [], count = 0 } = {}, call, performing } = useAxios<undefined | { data?: ProductListItem[], count?: number }>(
     'get',
     APRODUCT_PATH.replace(':id', ''),
     {
       withProgressBar: true,
       defaultParams: {
-        orderBy: JSON.stringify({ created_at: 'asc' }),
+        orderBy: JSON.stringify({ order_updated_at: 'desc' }),
       },
     },
   );
@@ -102,15 +118,25 @@ export default function ProductsTable({ orderId, refreshOrder }:{ orderId: strin
     });
   };
 
+  const defaultRefreshList = () => refreshList({
+    page,
+    rowsPerPage,
+    formRepresentation,
+    router,
+    call,
+  });
+
   useEffect(() => {
-    call({
-      params: {
-        take: rowsPerPage,
-        skip: (page - 1) * rowsPerPage,
-        orderId,
-      },
-    }).catch(() => {});
-  }, [page, rowsPerPage, orderId]);
+    defaultRefreshList();
+  }, [
+    page,
+    rowsPerPage,
+    formRepresentation.search.value,
+    formRepresentation.productType.value?.toString(),
+    formRepresentation.productStatus.value?.toString(),
+    formRepresentation.location.value?.toString(),
+    formRepresentation.locationLabel.value?.toString(),
+  ]);
 
   const handleProductsAdded = (productIds: number[]) => {
     callPutWithProgressBar({
@@ -128,6 +154,13 @@ export default function ProductsTable({ orderId, refreshOrder }:{ orderId: strin
     });
   };
 
+  const handleReset = () => {
+    setData(initFormState({ orderId }));
+    setPage(1);
+  };
+
+  const disabled = (): boolean => performing || performingPut || performingPutWithProgressBar || performingPost || performingDelete;
+
   return (
     <>
       <Can requiredGroups={['admin', 'super_admin', 'manager', 'logistics', 'local']}>
@@ -138,6 +171,16 @@ export default function ProductsTable({ orderId, refreshOrder }:{ orderId: strin
           </Button>
         </Box>
       </Can>
+      <Filter
+        onReset={handleReset}
+        disabled={disabled()}
+        formRepresentation={formRepresentation}
+        setValue={(payload: FieldPayload) => {
+          setValue(payload);
+          setPage(1);
+        }}
+      />
+      <Box sx={{ m: '.5rem' }} />
       <PaginatedTable
         count={count}
         page={page}
@@ -155,6 +198,9 @@ export default function ProductsTable({ orderId, refreshOrder }:{ orderId: strin
             </TableCell>
             <TableCell>
               {trans('productType')}
+            </TableCell>
+            <TableCell>
+              {trans('location')}
             </TableCell>
             <TableCell>
               {trans('retailPrice')}

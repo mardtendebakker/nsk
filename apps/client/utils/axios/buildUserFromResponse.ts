@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import { User } from '../../stores/security/types';
+import { User } from '../../stores/security';
 
 export default (response: AxiosResponse): User => ({
   username: response.data.idToken.payload['cognito:username'],
@@ -8,4 +8,5 @@ export default (response: AxiosResponse): User => ({
   refreshToken: response.data.refreshToken.token,
   emailVerified: response.data.idToken.payload.email_verified,
   groups: response.data.idToken.payload['cognito:groups'] || [],
+  modules: [],
 });

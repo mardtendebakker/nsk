@@ -1,0 +1,59 @@
+{
+  "Default": [
+    {
+      "attr_code": "system.0.chassis_type",
+      "name": "PC Model",
+      "type": 1
+    },
+    {
+      "attr_code": "system.0.manufacturer",
+      "name": "Merk",
+      "type": 1
+    },
+    {
+      "attr_code": "processors.1.processor.0.model",
+      "name": "Processor model",
+      "type": 0
+    },
+    {
+      "attr_code": "processors.1.processor.0.vendor",
+      "name": "Processor Type",
+      "type": 1
+    },
+    {
+      "attr_code": "processors.1.processor.0.nominal_frequency",
+      "name": "Processor Snelheid",
+      "type": 1
+    },
+    {
+      "attr_code": "memory.0.total_memory",
+      "name": "Grootte Werkgeheugen",
+      "type": 1
+    },
+    {
+      "attr_code": "system.0.serial",
+      "name": "Serienummer",
+      "type": 0
+    },
+    {
+      "attr_code": "processors.0.total_cores",
+      "name": "Aantal Cores",
+      "type": 1
+    },
+    {
+      "attr_code": "disks.1.disk.0.interface_type",
+      "name": "Opslagtype",
+      "type": 1
+    },
+    {
+      "attr_code": "disks.1.disk.0.capacity",
+      "name": "Opslagcapaciteit",
+      "type": 1
+    },
+    {
+      "attr_code": "disks.1.disk.0.model",
+      "name": "Modelnummer",
+      "type": 0
+    }
+  ]
+}

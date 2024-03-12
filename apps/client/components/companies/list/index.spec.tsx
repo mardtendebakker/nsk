@@ -36,15 +36,15 @@ describe('List', () => {
   });
   it('makes first api call on mount', async () => {
     await waitFor(() => render(<List />));
-    expect(mockRouter.replace).toBeCalledWith('?rowsPerPage=10');
+    expect(mockRouter.replace).toBeCalledWith('?rowsPerPage=10', undefined, { scroll: false });
     expect(mockAxios.call).toBeCalledWith({ params: { skip: 0, take: 10 } });
   });
   it('handles search change properly', async () => {
     const { getByPlaceholderText } = render(<List />);
     fireEvent.change(getByPlaceholderText('search'), { target: { value: 'searchText' } });
 
-    await waitFor(() => expect(mockRouter.replace).toHaveBeenCalledWith('?rowsPerPage=10'));
-    await waitFor(() => expect(mockRouter.replace).toHaveBeenCalledWith('?rowsPerPage=10&search=searchText'));
+    await waitFor(() => expect(mockRouter.replace).toHaveBeenCalledWith('?rowsPerPage=10', undefined, { scroll: false }));
+    await waitFor(() => expect(mockRouter.replace).toHaveBeenCalledWith('?rowsPerPage=10&search=searchText', undefined, { scroll: false }));
     await waitFor(() => expect(mockAxios.call).toHaveBeenCalledWith({ params: { skip: 0, take: 10 } }));
     await waitFor(() => expect(mockAxios.call).toHaveBeenCalledWith({ params: { search: 'searchText', skip: 0, take: 10 } }));
   });
@@ -54,7 +54,7 @@ describe('List', () => {
 
     fireEvent.change(getByPlaceholderText('search'), { target: { value: 'searchText' } });
 
-    await waitFor(() => expect(mockRouter.replace).not.toHaveBeenCalledWith('?rowsPerPage=10&search=searchText'));
+    await waitFor(() => expect(mockRouter.replace).not.toHaveBeenCalledWith('?rowsPerPage=10&search=searchText', undefined, { scroll: false }));
     await waitFor(() => expect(mockAxios.call).not.toHaveBeenCalledWith({ params: { search: 'searchText', skip: 0, take: 10 } }));
   });
   it('handles edit properly', async () => {

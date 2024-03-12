@@ -5,7 +5,7 @@ const baseURL = process.env.NX_AXIOS_BASE_URL;
 
 export const client = axios.create({
   baseURL,
-  timeout: 120000,
+  timeout: 300000,
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',

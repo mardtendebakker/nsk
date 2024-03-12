@@ -1,17 +1,17 @@
 import {
   Table,
   TableBody,
-  TableCell,
   TableHead,
   TableRow,
   TablePagination,
 } from '@mui/material';
 import Check from '@mui/icons-material/Check';
-import Edit from '../../button/edit';
-import Delete from '../../button/delete';
 import useTranslation from '../../../hooks/useTranslation';
 import { COMPANIES_EDIT } from '../../../utils/routes';
 import { CompanyListItem } from '../../../utils/axios/models/company';
+import TableCell from '../../tableCell';
+import EditResource from '../../button/editResource';
+import DeleteResource from '../../button/deleteResource';
 
 export default function List({
   companies = [],
@@ -69,10 +69,10 @@ export default function List({
               key={company.id}
             >
               <TableCell>
-                {company.name || '--'}
+                {company.name}
               </TableCell>
               <TableCell>
-                {company.kvk_nr || '--'}
+                {company.kvk_nr}
               </TableCell>
               <TableCell>
                 {company.is_partner && <Check />}
@@ -84,8 +84,9 @@ export default function List({
                 {company.is_customer && <Check />}
               </TableCell>
               <TableCell align="right">
-                <Edit href={COMPANIES_EDIT.replace('[id]', company.id.toString())} disabled={disabled} />
-                {company.contactsCount == 0 && <Delete onClick={() => onDelete(company.id)} disabled={disabled} tooltip />}
+                <EditResource href={COMPANIES_EDIT.replace('[id]', company.id.toString())} disabled={disabled} requiredModule="customer_contact_action" />
+                {company.contactsCount === 0
+                && (<DeleteResource onClick={() => onDelete(company.id)} disabled={disabled} requiredModule="customer_contact_action" />)}
               </TableCell>
             </TableRow>
           ))}

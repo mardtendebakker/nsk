@@ -8,6 +8,8 @@ import { LocationModule } from '../../admin/location/location.module';
 import { PrismaModule } from '../../prisma/prisma.module';
 import { EntityStatus } from '../../common/types/entity-status.enum';
 import { LocationLabelModule } from '../../location-label/location-label.module';
+import { BlanccoModule } from '../../blancco/blancco.module';
+import { ArchivedBlancco } from './archived.blancco';
 
 @Module({
   providers: [
@@ -17,10 +19,17 @@ import { LocationLabelModule } from '../../location-label/location-label.module'
       provide: 'ENTITY_STATUS',
       useValue: EntityStatus.Archived,
     },
-    PrintService
+    PrintService,
+    ArchivedBlancco,
   ],
   controllers: [ArchivedController],
-  imports: [PrismaModule, LocationModule, LocationLabelModule, FileModule],
+  imports: [
+    PrismaModule,
+    LocationModule,
+    LocationLabelModule,
+    FileModule,
+    BlanccoModule,
+  ],
   exports: [ArchivedService],
 })
 export class ArchivedModule {}

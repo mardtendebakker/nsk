@@ -2,11 +2,11 @@ import {
   TableBody, TableHead, TableRow, Box,
 } from '@mui/material';
 import Check from '@mui/icons-material/Check';
-import Edit from '../../../../button/edit';
 import { ProductStatus } from '../../../../../utils/axios/models/product';
 import useTranslation from '../../../../../hooks/useTranslation';
 import PaginatedTable from '../../../../paginatedTable';
 import TableCell from '../../../../tableCell';
+import EditResource from '../../../../button/editResource';
 
 export default function List({
   productStatuses,
@@ -73,7 +73,7 @@ export default function List({
               {productStatus.is_stock && <Check />}
             </TableCell>
             <TableCell align="right">
-              <Edit onClick={() => onEdit(productStatus.id)} disabled={disabled} />
+              <EditResource onClick={() => onEdit(productStatus.id)} disabled={disabled} requiredModule="product_statuses" />
             </TableCell>
           </TableRow>
         ))}

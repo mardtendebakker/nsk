@@ -21,7 +21,7 @@ import Header from '../../components/contacts/header';
 import { ContactListItem } from '../../utils/axios/models/contact';
 import { Company } from '../../utils/axios/models/company';
 
-function EditContact() {
+function EditCompany() {
   const { trans } = useTranslation();
   const router = useRouter();
   const { id } = router.query;
@@ -126,4 +126,4 @@ function EditContact() {
   );
 }
 
-export default EditContact;
+export default EditCompany;

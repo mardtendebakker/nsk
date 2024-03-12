@@ -30,7 +30,7 @@ const useAxios = <Data>(
     withProgressBar? : boolean,
     showErrorMessage? : boolean,
     showSuccessMessage? : boolean,
-    customSuccessMessage?: string
+    customSuccessMessage?: (response: AxiosResponse) => string
     defaultParams?: object,
     customStatusesMessages?: { [key: number]: string }
   } = {},
@@ -73,7 +73,7 @@ const useAxios = <Data>(
 
   function handleSuccess(handledResponse: AxiosResponse) {
     enqueueSnackbar(
-      customSuccessMessage || trans(handledResponse.status.toString()),
+      customSuccessMessage ? customSuccessMessage(handledResponse) : trans(handledResponse.status.toString()),
       { variant: 'success' },
     );
   }

@@ -1,17 +1,18 @@
 import Head from 'next/head';
 import {
-  Box, Button, IconButton, Typography, Card, CardContent, Divider, Grid,
+  Box, IconButton, Typography, Card, CardContent, Divider, Grid,
 } from '@mui/material';
 import { useRouter } from 'next/router';
 import ArrowBack from '@mui/icons-material/ArrowBack';
-import Check from '@mui/icons-material/Check';
 import {
-  SyntheticEvent, useEffect, useMemo,
+  SyntheticEvent, useEffect, useMemo, useState,
 } from 'react';
 import Form from '../../../components/orders/form/purchase';
 import DashboardLayout from '../../../layouts/dashboard';
 import useAxios from '../../../hooks/useAxios';
-import { PURCHASE_ORDERS_FILES_PATH, PURCHASE_ORDERS_PATH } from '../../../utils/axios';
+import {
+  AxiosResponse, PRODUCTS_BLANCCO_PATH, PURCHASE_ORDERS_FILES_PATH, PURCHASE_ORDERS_PATH,
+} from '../../../utils/axios';
 import useForm from '../../../hooks/useForm';
 import useTranslation from '../../../hooks/useTranslation';
 import { initFormState, formRepresentationToBody } from './new';
@@ -19,16 +20,33 @@ import { ORDERS_PURCHASES, ORDERS_PURCHASES_NEW } from '../../../utils/routes';
 import ProductsTable from '../../../components/orders/form/purchase/productsTable';
 import { AFile } from '../../../utils/axios/models/aFile';
 import { Order } from '../../../utils/axios/models/order';
+import Action from '../../../components/orders/form/action';
 
 function UpdatePurchaseOrder() {
   const { trans } = useTranslation();
   const router = useRouter();
   const { id } = router.query;
+  const [performingPrint, setPerformingPrint] = useState(false);
 
   const { call, performing } = useAxios(
     'put',
     PURCHASE_ORDERS_PATH.replace(':id', id?.toString()),
     { withProgressBar: true, showSuccessMessage: true },
+  );
+
+  const { call: callImportFromBlancco, performing: performingImportFromBlancco } = useAxios(
+    'patch',
+    PRODUCTS_BLANCCO_PATH.replace(':id', id?.toString()),
+    {
+      withProgressBar: true,
+      showSuccessMessage: true,
+      customSuccessMessage: (response: AxiosResponse) => {
+        const vars = new Map();
+        vars.set('count', response.data.count);
+
+        return trans('blancco.importReportsSuccess', { vars });
+      },
+    },
   );
 
   const { call: fetchPurchaseOrder, performing: performingFetchPurchaseOrder, data: purchaseOrder } = useAxios<undefined | Order>(
@@ -58,7 +76,7 @@ function UpdatePurchaseOrder() {
     }
   }, [id]);
 
-  const canSubmit = () => !performing && !performingFetchPurchaseOrder && !performingDeleteFilte;
+  const canSubmit = () => !performing && !performingFetchPurchaseOrder && !performingDeleteFilte && !performingPrint && !performingImportFromBlancco;
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
@@ -68,6 +86,19 @@ function UpdatePurchaseOrder() {
     }
 
     call({ body: formRepresentationToBody(formRepresentation) })
+      .then(() => {
+        fetchPurchaseOrder();
+      });
+  };
+
+  const handleImportFromBlancco = (e: SyntheticEvent) => {
+    e.preventDefault();
+
+    if (!canSubmit()) {
+      return;
+    }
+
+    callImportFromBlancco()
       .then(() => {
         fetchPurchaseOrder();
       });
@@ -103,16 +134,14 @@ function UpdatePurchaseOrder() {
             </IconButton>
             {trans('editPurchase')}
           </Typography>
-          <Box>
-            <Button
-              size="small"
-              variant="contained"
-              onClick={handleSubmit}
-            >
-              <Check />
-              {trans('save')}
-            </Button>
-          </Box>
+          <Action
+            disabled={!canSubmit()}
+            onSave={handleSubmit}
+            onImportFromBlancco={handleImportFromBlancco}
+            setPerformingPrint={setPerformingPrint}
+            id={id?.toString()}
+            type="purchase"
+          />
         </Box>
         <Card>
           <Form
@@ -141,6 +170,14 @@ function UpdatePurchaseOrder() {
                 { id && <ProductsTable orderId={id.toString()} /> }
               </Grid>
             </Grid>
+            <Action
+              disabled={!canSubmit()}
+              onSave={handleSubmit}
+              onImportFromBlancco={handleImportFromBlancco}
+              setPerformingPrint={setPerformingPrint}
+              id={id?.toString()}
+              type="purchase"
+            />
           </CardContent>
         </Card>
       </form>

@@ -3,7 +3,9 @@ import BorderedBox from '../../borderedBox';
 import useTranslation from '../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../hooks/useForm';
 import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
-import { AUTOCOMPLETE_PRODUCT_TYPES_PATH, AUTOCOMPLETE_LOCATIONS_PATH, AUTOCOMPLETE_PRODUCT_STATUSES_PATH } from '../../../utils/axios';
+import {
+  AUTOCOMPLETE_PRODUCT_TYPES_PATH, AUTOCOMPLETE_LOCATIONS_PATH, AUTOCOMPLETE_PRODUCT_STATUSES_PATH, AUTOCOMPLETE_LOCATION_LABELS_PATH,
+} from '../../../utils/axios';
 import SearchAccordion from '../../searchAccordion';
 import useResponsive from '../../../hooks/useResponsive';
 import ListFilterDivider from '../../listFilterDivider';
@@ -13,11 +15,13 @@ export default function Filter({
   formRepresentation,
   setValue,
   onReset,
+  autoFocus,
 }: {
   disabled: boolean,
   formRepresentation : FormRepresentation,
   setValue: SetValue,
-  onReset: () => void
+  onReset: () => void,
+  autoFocus?: boolean
 }) {
   const { trans } = useTranslation();
   const isDesktop = useResponsive('up', 'sm');
@@ -29,7 +33,8 @@ export default function Filter({
         onSearchChange={(value: string) => setValue({ field: 'search', value })}
         searchValue={formRepresentation.search.value?.toString() || ''}
         onReset={onReset}
-        searchLabel={trans('searchBySerialNumberOrName')}
+        searchLabel={trans('searchBySerialNumberOrNameOrAttr')}
+        autoFocus={autoFocus}
       >
         <Box sx={{
           flex: 1,
@@ -55,8 +60,22 @@ export default function Filter({
             fullWidth
             displayFieldset={false}
             placeholder={trans('location')}
-            onChange={(selected: { id: number }) => setValue({ field: 'location', value: selected?.id })}
+            onChange={(selected: { id: number }) => {
+              setValue({ field: 'location', value: selected?.id });
+              setValue({ field: 'locationLabel', value: undefined });
+            }}
             value={formRepresentation.location.value?.toString()}
+          />
+          <ListFilterDivider horizontal={!isDesktop} />
+          <DataSourcePicker
+            params={{ location_id: formRepresentation.location.value?.toString() }}
+            path={AUTOCOMPLETE_LOCATION_LABELS_PATH}
+            disabled={disabled || !formRepresentation.location.value?.toString()}
+            fullWidth
+            displayFieldset={false}
+            placeholder={trans('locationLabel')}
+            onChange={(selected: { id: number }) => setValue({ field: 'locationLabel', value: selected?.id })}
+            value={formRepresentation.locationLabel?.value?.toString()}
           />
           <ListFilterDivider horizontal={!isDesktop} />
           <DataSourcePicker
@@ -73,3 +92,7 @@ export default function Filter({
     </BorderedBox>
   );
 }
+
+Filter.defaultProps = {
+  autoFocus: false,
+};

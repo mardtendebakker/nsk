@@ -23,12 +23,13 @@ import PatchLocationModal from './patchLocationModal';
 
 function initFormState(
   {
-    search, productType, location, productStatus,
+    search, productType, location, locationLabel, productStatus,
   }:
   {
     search?: string,
     productType?: string,
     location?: string,
+    locationLabel?: string,
     productStatus?: string,
   },
 ) {
@@ -41,6 +42,9 @@ function initFormState(
     },
     location: {
       value: location || undefined,
+    },
+    locationLabel: {
+      value: locationLabel || undefined,
     },
     productStatus: {
       value: productStatus || undefined,
@@ -69,6 +73,7 @@ function refreshList({
     'search',
     'productType',
     'location',
+    'locationLabel',
     'productStatus',
   ].forEach((filter) => {
     if (formRepresentation[filter].value || formRepresentation[filter].value === 0) {
@@ -109,6 +114,7 @@ export default function ListContainer({ type } : { type: 'product' | 'repair' | 
     search: getQueryParam('search'),
     productType: getQueryParam('productType'),
     location: getQueryParam('location'),
+    locationLabel: getQueryParam('locationLabel'),
     productStatus: getQueryParam('productStatus'),
   }));
 
@@ -166,6 +172,7 @@ export default function ListContainer({ type } : { type: 'product' | 'repair' | 
     formRepresentation.productType.value?.toString(),
     formRepresentation.productStatus.value?.toString(),
     formRepresentation.location.value?.toString(),
+    formRepresentation.locationLabel.value?.toString(),
   ]);
 
   const handleAllChecked = (checked: boolean) => {
@@ -306,7 +313,7 @@ export default function ListContainer({ type } : { type: 'product' | 'repair' | 
           }}
           rowsPerPage={rowsPerPage}
           onEdit={(id) => setEditProductId(id)}
-          onDelete={can(user?.groups || [], ['admin', 'super_admin', 'manager']) ? handleDelete : undefined}
+          onDelete={user && can({ user, requiredGroups: ['admin', 'super_admin', 'manager'] }) ? handleDelete : undefined}
         />
         {editProductId && (
         <EditModal

@@ -1,5 +1,4 @@
-import Add from '@mui/icons-material/Add';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import List from './list';
@@ -13,6 +12,7 @@ import debounce from '../../../../../utils/debounce';
 import TextField from '../../../../memoizedInput/textField';
 import { getQueryParam } from '../../../../../utils/location';
 import { OrderStatus } from '../../../../../utils/axios/models/order';
+import NewResource from '../../../../button/newResource';
 
 export default function ListContainer() {
   const { trans } = useTranslation();
@@ -81,15 +81,7 @@ export default function ListContainer() {
             defaultValue={search}
             placeholder={trans('orderStatusesList.search.placeholder')}
           />
-          <Button
-            size="small"
-            disabled={disabled()}
-            variant="contained"
-            onClick={() => setShowForm(true)}
-          >
-            <Add />
-            {trans('newOrderStatus')}
-          </Button>
+          <NewResource disabled={disabled()} label={trans('newOrderStatus')} onClick={() => setShowForm(true)} requiredModule="order_statuses" />
         </Box>
       </Box>
       <List

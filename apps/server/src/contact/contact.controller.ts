@@ -1,5 +1,5 @@
 import { Authorization, CognitoUser } from "@nestjs-cognito/auth";
-import { Body, Controller, Delete, ForbiddenException, Get, Param, Post, Put, Query } from "@nestjs/common";
+import { Body, Controller, Delete, ForbiddenException, Get, Param, Post, Put, Query, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { ContactService } from "./contact.service";
 import { FindContactsResponeDto } from "./dto/find-contact-response.dto";
@@ -8,6 +8,7 @@ import { ContactEntity } from "./entities/contact.entity";
 import { CreateContactDto } from "./dto/create-contact.dto";
 import { FindManyDto } from "./dto/find-many.dto";
 import { ALL_MAIN_GROUPS, CognitoGroups, LOCAL_GROUPS, PARTNERS_GROUPS } from "../common/types/cognito-groups.enum";
+import { requiredModule } from "../common/guard/required-modules.guard";
 
 @ApiBearerAuth()
 @Authorization(ALL_MAIN_GROUPS)
@@ -39,6 +40,7 @@ export class ContactController {
 
   @Get(':id')
   @ApiResponse({type: ContactEntity})
+  @UseGuards(requiredModule('customer_contact_action'))
   findOne(
     @Param('id') id: number,
     @CognitoUser(["groups", "email"])
@@ -61,6 +63,7 @@ export class ContactController {
 
   @Post('')
   @ApiResponse({type: ContactEntity})
+  @UseGuards(requiredModule('customer_contact_action'))
   create(
     @Body() body: CreateContactDto,
     @CognitoUser(["groups", "email"])
@@ -83,6 +86,7 @@ export class ContactController {
 
   @Put(':id')
   @ApiResponse({type: ContactEntity})
+  @UseGuards(requiredModule('customer_contact_action'))
   update(
     @Param('id') id: number,
     @Body() updateContactDto: UpdateContactDto,
@@ -105,6 +109,7 @@ export class ContactController {
   }
 
   @Delete(':id')
+  @UseGuards(requiredModule('customer_contact_action'))
   delete(
     @Param('id') id: number,
     @CognitoUser(["groups", "email"])

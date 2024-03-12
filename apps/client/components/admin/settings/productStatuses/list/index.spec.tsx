@@ -26,6 +26,12 @@ jest.mock('next/router', () => ({
 
 jest.mock('../../refreshList', () => jest.fn());
 
+const mockUseSecurity = {
+  hasModule: jest.fn(() => true),
+};
+
+jest.mock('../../../../../hooks/useSecurity', () => jest.fn(() => mockUseSecurity));
+
 describe('List', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -63,13 +69,32 @@ describe('List', () => {
     fireEvent.click(getByText('newProductStatus'));
     expect(queryByText('createProductStatus')).toBeNull();
   });
+  it('doesn\'t show create modal if module not active if module not active', async () => {
+    mockUseSecurity.hasModule.mockReturnValue(false);
+    jest.spyOn(mockAxios, 'performing', 'get').mockReturnValue(false);
+    const { getByText, queryByText } = render(<List />);
+    fireEvent.click(getByText('newProductStatus'));
+    expect(mockUseSecurity.hasModule).toBeCalledWith('product_statuses');
+    expect(queryByText('createProductStatus')).toBeNull();
+  });
+  it('doesn\'t show edit modal if button clicked if module not active', async () => {
+    mockUseSecurity.hasModule.mockReturnValue(false);
+    jest.spyOn(mockAxios, 'performing', 'get').mockReturnValue(false);
+    jest.spyOn(mockAxios, 'data', 'get').mockReturnValue({ data: [{ id: 1 }], count: 1 });
+    const { getByTestId, queryByText } = render(<List />);
+    fireEvent.click(getByTestId('edit-icon-button'));
+    expect(mockUseSecurity.hasModule).toBeCalledWith('product_statuses');
+    expect(queryByText('editProductStatus')).toBeNull();
+  });
   it('shows create modal if button clicked', async () => {
+    mockUseSecurity.hasModule.mockReturnValue(true);
     jest.spyOn(mockAxios, 'performing', 'get').mockReturnValue(false);
     const { getByText } = render(<List />);
     fireEvent.click(getByText('newProductStatus'));
     expect(getByText('createProductStatus')).not.toBeNull();
   });
   it('shows edit modal if button clicked', async () => {
+    mockUseSecurity.hasModule.mockReturnValue(true);
     jest.spyOn(mockAxios, 'performing', 'get').mockReturnValue(false);
     jest.spyOn(mockAxios, 'data', 'get').mockReturnValue({ data: [{ id: 1 }], count: 1 });
     const { getByTestId, getByText } = render(<List />);

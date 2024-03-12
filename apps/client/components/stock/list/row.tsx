@@ -72,10 +72,10 @@ export default function Row(
           ) : product.sku}
         </TableCell>
         <TableCell>
-          {product.name || '--'}
+          {product.name}
         </TableCell>
         <TableCell>
-          {product.location || '--'}
+          {product.location}
         </TableCell>
         {type == 'product' && (
         <TableCell>
@@ -89,18 +89,18 @@ export default function Row(
         )}
         {type == 'product' && (
         <TableCell>
-          {product.purch || '--'}
+          {product.purch}
         </TableCell>
         )}
         <TableCell>
-          {product.stock || '--'}
+          {product.stock}
         </TableCell>
         <TableCell>
-          {product.sale || '--'}
+          {product.sale}
         </TableCell>
         {type == 'product' && (
           <TableCell>
-            {product.sold || '--'}
+            {product.sold}
           </TableCell>
         )}
         <TableCell

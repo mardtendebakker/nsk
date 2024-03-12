@@ -5,7 +5,7 @@ import {
   Container, Typography, Box,
 } from '@mui/material';
 import useTranslation from '../../hooks/useTranslation';
-import { DASHBOARD } from '../../utils/routes';
+import { DASHBOARD, SIGN_IN, SIGN_UP } from '../../utils/routes';
 import useSecurity from '../../hooks/useSecurity';
 import SignInForm from '../../components/signIn/signInForm';
 import SignUpForm from '../../components/signIn/signUpForm';
@@ -13,13 +13,19 @@ import ForgotPasswordForm from '../../components/signIn/forgotPasswordForm';
 import { FormValues } from '../../components/signIn/types';
 import ChangePasswordForm from '../../components/signIn/changePasswordForm';
 
-export default function SignIn() {
+export default function SignIn({
+  formType,
+}: {
+  formType? : FormValues,
+}) {
   const { trans } = useTranslation();
   const { state: { user } } = useSecurity();
-  const [selectedForm, setSelectedForm] = useState<{ form: FormValues }>({ form: 'signIn' });
+  const [selectedForm, setSelectedForm] = useState<{ form: FormValues }>({ form: formType });
   const router = useRouter();
 
   const handleSelectForm = ({ form }: { form: FormValues }) => {
+    const path = form === 'signUp' ? SIGN_UP : SIGN_IN;
+    router.push(path);
     setSelectedForm({ form });
   };
 
@@ -89,3 +95,7 @@ export default function SignIn() {
     </>
   );
 }
+
+SignIn.defaultProps = {
+  formType: 'signIn',
+};

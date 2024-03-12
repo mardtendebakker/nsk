@@ -4,6 +4,7 @@ import { CreatePickupUncheckedWithoutAorderInputDto } from './dto/create-pickup-
 import { FindManyDto } from '../dto/find-many.dto';
 import { FindPickupsResponeDto } from './dto/find-all-pickup-response.dto';
 import { FindCalendarResponeDto } from '../dto/find-calendar-response.dto';
+import { set } from 'date-fns';
 
 @Injectable()
 export class PickupService {
@@ -50,49 +51,63 @@ export class PickupService {
               },
             },
           },
-          fos_user: true,
+          fos_user: {
+            select: {
+              id: true,
+              username: true,
+              firstname: true,
+              lastname: true
+            }
+          }
         },
         where: {
           real_pickup_date: {
             gte: query.startsAt,
             lte: query.endsAt,
           },
+          ...(query.licensePlate ? {
+            fos_user: {
+              license_plate: {
+                equals: query.licensePlate
+              }
+            }
+          }: undefined),
         },
         skip: query.skip,
         take: query.take,
       });
 
-    const pickupsDto: FindCalendarResponeDto[] = data.map(
-      ({
-        aorder: {
-          id,
-          order_nr,
-          order_status,
-          product_order,
-          contact_aorder_supplier_idTocontact: {
+          const pickupsDto: FindCalendarResponeDto[] = data.map(
+        ({
+          aorder: {
+            id,
+            order_nr,
+            order_status,
+            product_order,
+            contact_aorder_supplier_idTocontact: {
             company_contact_company_idTocompany: company_supplier,
             ...rest_supplier
           },
-        },
-        real_pickup_date,
-        fos_user,
-        ...prickupRest
-      }) => ({
-        ...prickupRest,
-        event_date: real_pickup_date,
-        event_title: product_order.map(({ product }) => product)?.[0]?.name,
-        order: { 
-          id,
-          order_nr,
-          order_status,
-          supplier: {
-            ...rest_supplier,
-            company_name: company_supplier.name,
           },
-        },
-        logistic: fos_user,
-      })
-    );
+          real_pickup_date,
+          fos_user,
+          ...prickupRest
+        }) => ({
+          ...prickupRest,
+          event_date: real_pickup_date,
+          event_title: product_order.map(({ product }) => product)?.[0]?.name,
+          order: { 
+            id,
+            order_nr,
+            order_status,
+            supplier: {
+              ...rest_supplier,
+              company_name: company_supplier.name,
+            },
+          },
+          logistic: fos_user,
+        })
+      );
 
     return {
       count,
@@ -100,6 +115,17 @@ export class PickupService {
     };
   }
 
+  async findTodayPickupsByLicensePlate(licensePlate: string):  Promise<FindCalendarResponeDto[]> {
+    const date = new Date();
+
+    const startsAt = set(date, {hours: 0, minutes: 0, seconds: 0});
+    const endsAt = set(date, {hours: 23, minutes: 59, seconds: 59});
+
+    const {data} = await this.findAll({skip: 0, take: 50, licensePlate, startsAt, endsAt});
+
+    return data;
+  }
+  
   async create(pickup: CreatePickupUncheckedWithoutAorderInputDto) {
     return this.repository.create({
       data: pickup,

@@ -3,7 +3,7 @@ import {
 } from '@mui/material';
 import Search from '@mui/icons-material/Search';
 import ChevronRight from '@mui/icons-material/ChevronRight';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import useTranslation from '../hooks/useTranslation';
 import MemoizedTextField from './memoizedInput/textField';
 import debounce from '../utils/debounce';
@@ -16,6 +16,7 @@ export default function SearchAccordion({
   onSearchChange,
   onReset,
   disabledFilter,
+  autoFocus,
 }: {
   children: JSX.Element,
   disabled?: boolean,
@@ -23,12 +24,19 @@ export default function SearchAccordion({
   searchLabel?: string,
   onSearchChange: (searchValue: string) => void,
   onReset: () => void,
-  disabledFilter?: boolean
+  disabledFilter?: boolean,
+  autoFocus?: boolean
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [showFilter, setShowFilter] = useState(false);
   const handleSearchChange = debounce(onSearchChange.bind(null));
   const { trans } = useTranslation();
+
+  useEffect(() => {
+    if (searchValue || autoFocus) {
+      inputRef.current?.focus();
+    }
+  });
 
   return (
     <Accordion expanded={showFilter}>
@@ -56,7 +64,7 @@ export default function SearchAccordion({
             color="error"
             onClick={() => {
               onReset();
-              if (inputRef?.current?.value) {
+              if (inputRef.current?.value) {
                 inputRef.current.value = '';
               }
             }}
@@ -84,4 +92,5 @@ SearchAccordion.defaultProps = {
   searchLabel: undefined,
   disabled: false,
   disabledFilter: false,
+  autoFocus: false,
 };

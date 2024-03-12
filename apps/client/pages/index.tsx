@@ -9,7 +9,7 @@ import IndicatorRow from '../components/dashboard/IndicatorRow';
 import LocationCapacity from '../components/dashboard/locationCapacity';
 import ResourceManagement from '../components/dashboard/resourceManagement';
 import DueToday from '../components/dashboard/dueToday';
-import UpcomingDeliveries from '../components/dashboard/upcomingDeliveries';
+import VehiclesTracking from '../components/dashboard/vehiclesTracking';
 import Analytics from '../components/dashboard/analytics';
 import { ORDERS_ANALYTICS_PATH } from '../utils/axios';
 import Can from '../components/can';
@@ -21,7 +21,7 @@ function Dashboard() {
   return (
     <DashboardLayout>
       <Head>
-        <title>{trans('customers')}</title>
+        <title>{trans('dashboard')}</title>
       </Head>
       <Typography variant="h3">
         {trans('hello')}
@@ -43,7 +43,7 @@ function Dashboard() {
             <DueToday />
           </Box>
           <Box sx={{ flex: '.2' }}>
-            <UpcomingDeliveries />
+            <VehiclesTracking />
           </Box>
         </Box>
       </Can>

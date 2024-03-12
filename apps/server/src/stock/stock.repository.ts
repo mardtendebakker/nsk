@@ -145,7 +145,40 @@ export class StockRepository {
     });
   }
 
+  getOptionByAttrIdAndName(attribute_id: number, name: string) {
+    return this.prisma.attribute_option.upsert({
+      where: {
+        attribute_id_name: {
+          attribute_id,
+          name,
+        },
+      },
+      create: {
+        attribute_id,
+        name,
+      },
+      update: {}
+    });
+  }
+
+  getProductTypeByName(name: string) {
+    return this.prisma.product_type.upsert({
+      where: {
+        name
+      },
+      create: {
+        name,
+        pindex: 50,
+        is_public: false,
+      },
+      update: {}
+    });
+  }
+
   getAttributesByProductTypeId(productTypeId: number) {
+    const include: Prisma.attributeInclude = {
+      attribute_option: true,
+    };
     const where: Prisma.attributeWhereInput = {
       product_type_attribute: {
         some: {
@@ -155,6 +188,7 @@ export class StockRepository {
     };
 
     return this.prisma.attribute.findMany({
+      include,
       where,
     });
   }
@@ -167,26 +201,16 @@ export class StockRepository {
     });
   }
 
-  async getAttributesByTypeId(typeId) {
-    const productTypeAttributes =
-      await this.prisma.product_type_attribute.findMany({
-        where: {
-          product_type_id: typeId,
-        },
-        include: {
-          attribute: true,
-        },
-      });
-
-    return productTypeAttributes.map(
-      (productTypeAttribute) => productTypeAttribute.attribute
-    );
-  }
-
   addProductAttributes(data: Prisma.product_attributeCreateManyInput[]) {
     return this.prisma.product_attribute.createMany({
       data,
       skipDuplicates: true,
     });
+  }
+
+  findAttributeOptions(where: Prisma.attribute_optionWhereInput) {
+    return this.prisma.attribute_option.findMany({
+      where
+    })
   }
 }

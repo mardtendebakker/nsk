@@ -1,7 +1,15 @@
 import { getUser, clear, signIn } from '../../utils/storage';
 import EventEmitter from '../../utils/eventEmitter';
-import { State, User } from './types';
 import { hideProgress } from '../../components/topLinearProgress';
+import { User } from './user';
+
+export * from './user';
+export * from './group';
+
+export interface State {
+  user?: User,
+  loading: boolean,
+}
 
 export const SIGN_IN_REQUEST = 'SIGN_IN_REQUEST';
 export const SIGN_OUT = 'SIGN_OUT';

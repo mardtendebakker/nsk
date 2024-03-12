@@ -1,7 +1,9 @@
-import { Group, User } from '../stores/security/types';
+import { Group, User } from '../stores/security';
 
 export const DASHBOARD = '/';
+export const HOME = '/home';
 export const SIGN_IN = '/sign-in';
+export const SIGN_UP = '/sign-up';
 export const BULK_EMAIL = '/bulk-email';
 export const BULK_EMAIL_NEW = '/bulk-email/new';
 export const CONTACTS_EDIT = '/contacts/[id]';
@@ -28,6 +30,9 @@ export const STOCKS_REPAIR_SERVICES = '/stock/repair-services';
 export const STOCKS_ARCHIVED = '/stock/archived';
 export const MY_TASKS = '/my-tasks';
 export const ADMIN_USERS = '/admin/users';
+export const ADMIN_MODULES = '/admin/modules';
+export const ADMIN_MODULES_PAYMENTS = '/admin/modules/payments';
+export const ADMIN_MODULES_CART = '/admin/modules/cart';
 export const ADMIN_SETTINGS = '/admin/settings';
 export const ADMIN_SETTINGS_LOCATIONS = '/admin/settings/locations';
 export const ADMIN_SETTINGS_PRODUCT_TYPES = '/admin/settings/product-types';

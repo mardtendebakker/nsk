@@ -113,8 +113,8 @@ export class AttributeService {
 
     return this.repository.create({data: {
       ...rest,
-        product_type_attribute: { create: productTypeCreate },
-      attribute_option: { connect: options }
+      product_type_attribute: { create: productTypeCreate },
+      attribute_option: { create: options }
     }});
   }
 }

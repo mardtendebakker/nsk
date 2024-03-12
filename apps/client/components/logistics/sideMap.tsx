@@ -15,11 +15,9 @@ import { LogisticServiceListItem } from '../../utils/axios/models/logistic';
 import useTranslation from '../../hooks/useTranslation';
 import { ORDERS_PURCHASES_EDIT, ORDERS_SALES_EDIT } from '../../utils/routes';
 import Select from '../memoizedInput/select';
-import { fetchWayForLogisticServices, Way, fetchPolylineInfo } from '../../utils/map';
-
-const API_KEY = process.env.MYPTV_API_KEY;
-const MAP_STYLE_URL = process.env.MYPTV_MAP_STYLE_URL;
-const MAP_TILE_URL = process.env.MYPTV_MAP_TILE_URL;
+import {
+  fetchWayForLogisticServices, fetchPolylineInfo, LogisticWay, getTransformRequest, initialMapStyle, initViewport, getMapStyle,
+} from '../../utils/map';
 
 function buildHomeWay() {
   return {
@@ -30,33 +28,6 @@ function buildHomeWay() {
     },
   };
 }
-
-const initViewport = {
-  longitude: 4.303100109100342,
-  latitude: 52.057559967041016,
-  zoom: 9,
-};
-
-const initialMapStyle = {
-  version: 8,
-  name: 'initial',
-  sources: {
-    ptv: {
-      type: 'vector',
-      tiles: [
-        MAP_TILE_URL,
-      ],
-    },
-  },
-  layers: [],
-};
-
-const getMapStyle = (url) => fetch(url)
-  .then((result) => result.json())
-  .then((mapStyle) => {
-    mapStyle.sources.ptv.tiles = [MAP_TILE_URL];
-    return mapStyle;
-  });
 
 export default function SideMap({
   type,
@@ -74,11 +45,11 @@ export default function SideMap({
   const [mapStyle, setMapStyle] = useState(initialMapStyle);
   const [viewport, setViewport] = useState(initViewport);
   const [geometry, setGeometry] = useState<GeoJSON.LineString>({ type: 'LineString', coordinates: [] });
-  const [ways, setWays] = useState<Way[]>([]);
+  const [ways, setWays] = useState<LogisticWay[]>([]);
   const [travelTime, setTravelTime] = useState<string | undefined>();
-  const [selectedWay, setSelectedWay] = useState<Way | undefined>();
+  const [selectedWay, setSelectedWay] = useState<LogisticWay | undefined>();
 
-  const handleSelectedWay = (way: Way) => {
+  const handleSelectedWay = (way: LogisticWay) => {
     setViewport((oldValue) => ({
       ...oldValue,
       latitude: way.position.latitude,
@@ -87,7 +58,7 @@ export default function SideMap({
     setSelectedWay(way);
   };
 
-  const getContactOfWay = (way: Way) => (type === 'delivery'
+  const getContactOfWay = (way: LogisticWay) => (type === 'delivery'
     ? way.logisticService.order.customer
     : way.logisticService.order.supplier);
 
@@ -120,7 +91,7 @@ export default function SideMap({
       coordinates,
     });
 
-    const wayToSelect = validWays.find((validWay: Way) => validWay?.logisticService?.id == logisticService.id);
+    const wayToSelect = validWays.find((validWay: LogisticWay) => validWay?.logisticService?.id == logisticService.id);
 
     if (wayToSelect) {
       handleSelectedWay(wayToSelect);
@@ -128,17 +99,9 @@ export default function SideMap({
   }
 
   useEffect(() => {
-    getMapStyle(MAP_STYLE_URL).then(setMapStyle);
+    getMapStyle().then(setMapStyle);
     setUp();
   }, []);
-
-  const getTransformRequest = (url, resourceType) => {
-    if (resourceType === 'Tile') {
-      return { url, headers: { ApiKey: API_KEY } };
-    }
-
-    return { url, headers: {} };
-  };
 
   const waysLength = ways.length;
 
@@ -237,10 +200,10 @@ export default function SideMap({
             label={trans(type == 'delivery' ? 'customer' : 'supplier')}
             placeholder={trans(type == 'delivery' ? 'selectCustomer' : 'selectSupplier')}
             value={selectedWay?.logisticService?.id || 'none'}
-            onChange={(e) => handleSelectedWay(ways.find((way: Way) => e.target.value == way?.logisticService?.id?.toString()))}
+            onChange={(e) => handleSelectedWay(ways.find((way: LogisticWay) => e.target.value == way?.logisticService?.id?.toString()))}
             options={ways
-              .filter((way: Way) => !!way.logisticService)
-              .map((way: Way) => ({
+              .filter((way: LogisticWay) => !!way.logisticService)
+              .map((way: LogisticWay) => ({
                 title: `${getContactOfWay(way).name} - ${getContactOfWay(way).company_name}`,
                 value: way.logisticService.id,
               }))}
@@ -254,7 +217,8 @@ export default function SideMap({
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <Avatar sx={{ mr: '1rem' }}>
                   <Typography variant="h5">
-                    {getContactOfWay(selectedWay).name.charAt(0)?.toUpperCase()}
+                    {getContactOfWay(selectedWay)?.name?.charAt(0)?.toUpperCase()
+                    || getContactOfWay(selectedWay)?.company_name?.charAt(0)?.toUpperCase()}
                   </Typography>
                 </Avatar>
                 <Box>

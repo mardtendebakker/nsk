@@ -39,6 +39,7 @@ export default function Row({
         <TableCell>{product.sku}</TableCell>
         <TableCell>{product.name}</TableCell>
         <TableCell>{product.type}</TableCell>
+        <TableCell>{product.location}</TableCell>
         <TableCell>
           {product.price}
         </TableCell>
@@ -55,7 +56,7 @@ export default function Row({
               'price',
               e.target.value,
             )}
-            disabled={!can(user?.groups || [], ['admin', 'super_admin', 'manager', 'logistics', 'local'])}
+            disabled={!user || !can({ user, requiredGroups: ['admin', 'super_admin', 'manager', 'logistics', 'local'] })}
           />
         </TableCell>
         <TableCell>
@@ -68,7 +69,7 @@ export default function Row({
               'quantity',
               e.target.value,
             )}
-            disabled={!can(user?.groups || [], ['admin', 'super_admin', 'manager', 'logistics', 'local'])}
+            disabled={!user || !can({ user, requiredGroups: ['admin', 'super_admin', 'manager', 'logistics', 'local'] })}
           />
         </TableCell>
         <TableCell align="right">
@@ -80,7 +81,7 @@ export default function Row({
       </TableRow>
       {product.services && (
         <TableRow>
-          <TableCell colSpan={8} sx={{ p: 0 }}>
+          <TableCell colSpan={9} sx={{ p: 0 }}>
             <Table sx={{ borderRadius: 0 }} size="small">
               <TableHead>
                 <TableRow>
@@ -103,7 +104,7 @@ export default function Row({
                           'description',
                           e.target.value,
                         )}
-                        disabled={!can(user?.groups || [], ['admin', 'super_admin', 'manager', 'logistics', 'local'])}
+                        disabled={!user || !can({ user, requiredGroups: ['admin', 'super_admin', 'manager', 'logistics', 'local'] })}
                       />
                     </TableCell>
                     <TableCell colSpan={2}>
@@ -115,7 +116,7 @@ export default function Row({
                           { title: trans('done'), value: '3' },
                           { title: trans('cancel'), value: '4' },
                         ]}
-                        onChange={(e) => can(user?.groups || [], ['admin', 'super_admin', 'manager', 'logistics', 'local'])
+                        onChange={(e) => user && can({ user, requiredGroups: ['admin', 'super_admin', 'manager', 'logistics', 'local'] })
                           && onServicePropertyChange(service, 'status', e.target.value)}
                         defaultValue={service.status.toString()}
                       />
@@ -130,7 +131,7 @@ export default function Row({
                           'price',
                           e.target.value,
                         )}
-                        disabled={!can(user?.groups || [], ['admin', 'super_admin', 'manager', 'logistics', 'local'])}
+                        disabled={!user || !can({ user, requiredGroups: ['admin', 'super_admin', 'manager', 'logistics', 'local'] })}
                       />
                     </TableCell>
                     <TableCell>
