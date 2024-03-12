@@ -35,6 +35,11 @@ const LOCALES = [
     label: 'فارسی',
     icon: '/assets/icons/ic_flag_fa.svg',
   },
+  {
+    value: 'pt',
+    label: 'Portugese',
+    icon: '/assets/icons/ic_flag_pt.svg',
+  },
 ];
 
 export default function LanguagePopover() {
