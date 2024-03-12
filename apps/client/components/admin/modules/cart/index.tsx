@@ -6,6 +6,7 @@ import ModuleLine from './moduleLine';
 import { price } from '../../../../utils/formatter';
 import useAxios from '../../../../hooks/useAxios';
 import { AxiosResponse, PAYMENTS_SETUP } from '../../../../utils/axios';
+import { ADMIN_MODULES_PAYMENTS } from '../../../../utils/routes';
 
 export default function Cart() {
   const { state: { modules }, totalAmount } = useCart();
@@ -17,7 +18,7 @@ export default function Cart() {
     call({
       body: {
         modules: modules.map(({ name }) => name),
-        redirectUrl: 'http://192.168.1.5:4200/admin/modules/payments?clearCart=1',
+        redirectUrl: `${window.location.origin + ADMIN_MODULES_PAYMENTS}?clearCart=1`,
       },
     }).then(({ data }: AxiosResponse) => {
       router.push(data);
