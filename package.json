@@ -13,6 +13,7 @@
     "@aws-sdk/client-ses": "^3.319.0",
     "@emotion/react": "11.11.1",
     "@emotion/styled": "11.11.0",
+    "@mollie/api-client": "^3.7.0",
     "@mui/icons-material": "^5.11.0",
     "@mui/lab": "^5.0.0-alpha.117",
     "@mui/material": "^5.11.6",

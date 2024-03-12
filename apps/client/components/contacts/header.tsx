@@ -1,8 +1,10 @@
-import Add from '@mui/icons-material/Add';
-import { Box, Button, Typography } from '@mui/material';
+import {
+  Box, Typography,
+} from '@mui/material';
 import { useRouter } from 'next/router';
 import useTranslation from '../../hooks/useTranslation';
 import { CONTACTS_NEW } from '../../utils/routes';
+import NewResource from '../button/newResource';
 
 export default function Header({ newContactRoute }:{ newContactRoute ?: string }) {
   const router = useRouter();
@@ -16,17 +18,7 @@ export default function Header({ newContactRoute }:{ newContactRoute ?: string }
       <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
         <Typography variant="h4" sx={{ mr: '.5rem', mb: '.5rem' }}>{trans('contacts')}</Typography>
       </Box>
-      <Button
-        sx={{ mb: '.5rem' }}
-        size="small"
-        variant="contained"
-        onClick={
-        () => router.push(newContactRoute)
-        }
-      >
-        <Add />
-        {trans('newContact')}
-      </Button>
+      <NewResource onClick={() => router.push(newContactRoute)} requiredModule="customer_contact_action" label={trans('newContact')} />
     </Box>
 
   );

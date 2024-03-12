@@ -1,5 +1,5 @@
 import {
-  Box, AppBar, Toolbar, List, Drawer, IconButton,
+  Box, AppBar, Toolbar, List, Drawer, IconButton, Tooltip,
 } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -14,11 +14,11 @@ import {
   ORDERS_SALES,
   STOCKS_PRODUCTS,
   STOCKS_REPAIR_SERVICES,
-  MY_TASKS,
+  // MY_TASKS,
   LOGISTICS_DELIVERY,
   LOGISTICS_PICKUP,
   CONTACTS,
-  BULK_EMAIL,
+  // BULK_EMAIL,
   ORDERS_REPAIRS,
   STOCKS_ARCHIVED,
   getRouteGroups,
@@ -29,28 +29,42 @@ import useResponsive from '../../../hooks/useResponsive';
 import NavSection from './navSection';
 import MenuItemText from '../../../components/menuTextItem';
 import Can from '../../../components/can';
+import useSecurity from '../../../hooks/useSecurity';
+import { MenuItemDescription } from '../../../components/navItem';
 
 function MenuItem(
   {
     item: {
-      title, path, active,
+      title, path, active, requiredModule,
     },
   }
-  : { item : { title: string, path: string, active: boolean } },
+  : { item: MenuItemDescription },
 ) {
+  const { trans } = useTranslation();
+
   return (
     <Can requiredGroups={getRouteGroups(path)}>
-      <Link
-        href={path}
-        passHref
-        style={{ textDecoration: 'none' }}
-      >
-        <Box sx={{ ml: '2rem' }}>
-          <MenuItemText active={active}>
-            {title}
-          </MenuItemText>
-        </Box>
-      </Link>
+      <Box sx={{ ml: '2rem' }}>
+        {requiredModule ? (
+          <Tooltip title={trans('inactiveModuleMessage', { vars: (new Map()).set('module', requiredModule) })}>
+            <span>
+              <MenuItemText active={active} color="grey">
+                {title}
+              </MenuItemText>
+            </span>
+          </Tooltip>
+        ) : (
+          <Link
+            href={path}
+            passHref
+            style={{ textDecoration: 'none' }}
+          >
+            <MenuItemText active={active}>
+              {title}
+            </MenuItemText>
+          </Link>
+        )}
+      </Box>
     </Can>
   );
 }
@@ -60,8 +74,9 @@ export default function Header() {
   const { trans } = useTranslation();
   const [open, setOpen] = useState(false);
   const isDesktop = useResponsive('up', 'md');
+  const { hasModule } = useSecurity();
 
-  const MENU_LIST = [
+  const MENU_LIST: MenuItemDescription[] = [
     {
       title: trans('dashboard'),
       path: DASHBOARD,
@@ -124,11 +139,11 @@ export default function Header() {
       path: COMPANIES,
       active: router.pathname.startsWith(COMPANIES),
     },
-    {
+    /* {
       title: trans('bulkEmail'),
       path: BULK_EMAIL,
       active: router.pathname.startsWith(BULK_EMAIL),
-    },
+    }, */
     {
       title: trans('logistics'),
       path: LOGISTICS_PICKUP,
@@ -146,6 +161,7 @@ export default function Header() {
           active: router.pathname.startsWith(LOGISTICS_DELIVERY),
         },
       ],
+      requiredModule: hasModule('logistics') ? undefined : 'logistics',
     },
   ];
 
@@ -178,7 +194,7 @@ export default function Header() {
             <Image src="/assets/logo.jpg" alt="logo" width={50} height={9} />
             <List sx={{ p: 1, display: 'flex' }}>
               {MENU_LIST.map((item) => (
-                <MenuItem key={item.title} item={item} />
+                <MenuItem key={item.path} item={item} />
               ))}
             </List>
           </>
@@ -190,12 +206,12 @@ export default function Header() {
             alignItems: 'center',
           }}
         >
-          <MenuItem item={{
+          {/* <MenuItem item={{
             title: trans('myTasks'),
             path: MY_TASKS,
             active: router.pathname === MY_TASKS,
           }}
-          />
+          /> */}
           <Box sx={{ mr: '2rem' }} />
           <LanguagePopover />
           <Box sx={(theme) => ({

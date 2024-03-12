@@ -6,8 +6,8 @@ import Header from './header';
 import {
   ACCOUNT_VERIFICATION, getRouteGroups, getDefaultPath, HOME,
 } from '../../utils/routes';
-import { Group } from '../../stores/security/types';
 import can from '../../utils/can';
+import { Group } from '../../stores/security';
 
 export default function DashboardLayout({ children }: { children: JSX.Element | JSX.Element[] }) {
   const { state: { user }, refreshUserInfo } = useSecurity();
@@ -22,7 +22,7 @@ export default function DashboardLayout({ children }: { children: JSX.Element | 
     } else {
       const requiredGroups: undefined | Group[] = getRouteGroups(router.pathname);
 
-      if (requiredGroups && !can(user.groups, requiredGroups)) {
+      if (requiredGroups && !can({ user, requiredGroups })) {
         router.push(getDefaultPath(user));
       } else {
         setCanShowPage(true);

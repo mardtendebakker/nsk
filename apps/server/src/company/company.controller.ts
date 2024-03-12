@@ -1,5 +1,5 @@
 import { Authorization, CognitoUser } from "@nestjs-cognito/auth";
-import { Body, Controller, Delete, ForbiddenException, Get, Param, Post, Put, Query } from "@nestjs/common";
+import { Body, Controller, Delete, ForbiddenException, Get, Param, Post, Put, Query, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { CompanyService } from "./company.service";
 import { FindCompaniesResponseDto } from "./dto/find-company-response.dto";
@@ -8,6 +8,7 @@ import { ALL_MAIN_GROUPS, CognitoGroups, LOCAL_GROUPS, PARTNERS_GROUPS } from ".
 import { CompanyEntity } from "./entities/company.entity";
 import { CreateCompanyDto } from "./dto/create-company.dto";
 import { UpdateCompanyDto } from "./dto/update-company.dto";
+import { requiredModule } from "../common/guard/required-modules.guard";
 
 @ApiBearerAuth()
 @Authorization(ALL_MAIN_GROUPS)
@@ -39,6 +40,7 @@ export class CompanyController {
 
   @Get(':id')
   @ApiResponse({type: CompanyEntity})
+  @UseGuards(requiredModule('customer_contact_action'))
   findOne(
     @Param('id') id: number,
     @CognitoUser(["groups", "email"])
@@ -61,6 +63,7 @@ export class CompanyController {
 
   @Post('')
   @ApiResponse({type: CompanyEntity})
+  @UseGuards(requiredModule('customer_contact_action'))
   create(
     @Body() body: CreateCompanyDto,
     @CognitoUser(["groups", "email"])
@@ -83,6 +86,7 @@ export class CompanyController {
 
   @Put(':id')
   @ApiResponse({type: CompanyEntity})
+  @UseGuards(requiredModule('customer_contact_action'))
   update(
     @Param('id') id: number,
     @Body() updateCompanyDto: UpdateCompanyDto,
@@ -105,6 +109,7 @@ export class CompanyController {
   }
 
   @Delete(':id')
+  @UseGuards(requiredModule('customer_contact_action'))
   delete(
     @Param('id') id: number,
     @CognitoUser(["groups", "email"])

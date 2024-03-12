@@ -3,9 +3,9 @@ import {
 } from '@mui/material';
 import PaginatedTable from '../../../../paginatedTable';
 import TableCell from '../../../../tableCell';
-import Edit from '../../../../button/edit';
 import { Attribute } from '../../../../../utils/axios/models/product';
 import useTranslation from '../../../../../hooks/useTranslation';
+import EditResource from '../../../../button/editResource';
 
 export default function List({
   attributes,
@@ -66,7 +66,7 @@ export default function List({
               {attribute.type}
             </TableCell>
             <TableCell align="right">
-              <Edit onClick={() => onEdit(attribute.id)} disabled={disabled} />
+              <EditResource onClick={() => onEdit(attribute.id)} disabled={disabled} requiredModule="attributes" />
             </TableCell>
           </TableRow>
         ))}

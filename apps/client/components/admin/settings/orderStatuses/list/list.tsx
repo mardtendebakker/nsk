@@ -2,12 +2,12 @@ import {
   TableBody, TableHead, TableRow, Box,
 } from '@mui/material';
 import Check from '@mui/icons-material/Check';
-import Edit from '../../../../button/edit';
 import { OrderStatus } from '../../../../../utils/axios/models/order';
 import useTranslation from '../../../../../hooks/useTranslation';
 import PaginatedTable from '../../../../paginatedTable';
 import TableCell from '../../../../tableCell';
-import Delete from '../../../../button/delete';
+import EditResource from '../../../../button/editResource';
+import DeleteResource from '../../../../button/deleteResource';
 
 export default function List({
   orderStatuses,
@@ -82,8 +82,8 @@ export default function List({
               {orderStatus.is_repair && <Check />}
             </TableCell>
             <TableCell align="right">
-              <Edit onClick={() => onEdit(orderStatus.id)} disabled={disabled} />
-              <Delete onClick={() => onDelete(orderStatus.id)} disabled={disabled} tooltip />
+              <EditResource onClick={() => onEdit(orderStatus.id)} disabled={disabled} requiredModule="order_statuses" />
+              <DeleteResource onClick={() => onDelete(orderStatus.id)} disabled={disabled} requiredModule="order_statuses" />
             </TableCell>
           </TableRow>
         ))}

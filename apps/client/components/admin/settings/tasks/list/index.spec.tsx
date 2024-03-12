@@ -26,6 +26,12 @@ jest.mock('next/router', () => ({
 
 jest.mock('../../refreshList', () => jest.fn());
 
+const mockUseSecurity = {
+  hasModule: jest.fn(() => true),
+};
+
+jest.mock('../../../../../hooks/useSecurity', () => jest.fn(() => mockUseSecurity));
+
 describe('List', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -75,5 +81,20 @@ describe('List', () => {
     const { getByTestId, getByText } = render(<List />);
     fireEvent.click(getByTestId('edit-icon-button'));
     expect(getByText('editTask')).not.toBeNull();
+  });
+  it('doesn\'t show create modal if button clicked if module not active', async () => {
+    mockUseSecurity.hasModule.mockReturnValue(false);
+    jest.spyOn(mockAxios, 'performing', 'get').mockReturnValue(false);
+    const { getByText, queryByText } = render(<List />);
+    fireEvent.click(getByText('newTask'));
+    expect(queryByText('createTask')).toBeNull();
+  });
+  it('doesn\'t show edit modal if button clicked if module not active', async () => {
+    mockUseSecurity.hasModule.mockReturnValue(false);
+    jest.spyOn(mockAxios, 'performing', 'get').mockReturnValue(false);
+    jest.spyOn(mockAxios, 'data', 'get').mockReturnValue({ data: [{ id: 1 }], count: 1 });
+    const { getByTestId, queryByText } = render(<List />);
+    fireEvent.click(getByTestId('edit-icon-button'));
+    expect(queryByText('editTask')).toBeNull();
   });
 });

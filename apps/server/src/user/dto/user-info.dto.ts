@@ -1,4 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { FindModuleResponseDto } from "../../module/dto/find-module-response.dto";
 
 export class UserInfoDto {
   constructor() {
@@ -31,4 +32,7 @@ export class UserInfoDto {
 
   @ApiProperty()
   iat: number;
+
+  @ApiProperty()
+  modules: FindModuleResponseDto[];
 }

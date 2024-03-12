@@ -3,7 +3,9 @@ import { Box, Button, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import useTranslation from '../../hooks/useTranslation';
-import { ADMIN_USERS, ADMIN_SETTINGS, ADMIN_SETTINGS_LOCATIONS } from '../../utils/routes';
+import {
+  ADMIN_USERS, ADMIN_SETTINGS, ADMIN_SETTINGS_LOCATIONS, ADMIN_MODULES,
+} from '../../utils/routes';
 import Create from './users/create';
 import useResponsive from '../../hooks/useResponsive';
 import HeaderItem from '../list/headerItem';
@@ -25,6 +27,11 @@ export default function Header() {
       active: router.pathname.includes(ADMIN_SETTINGS),
       text: trans('manageAppSettings'),
       href: ADMIN_SETTINGS_LOCATIONS,
+    },
+    {
+      active: router.pathname.includes(ADMIN_MODULES),
+      text: trans('manageModules'),
+      href: ADMIN_MODULES,
     },
   ];
 

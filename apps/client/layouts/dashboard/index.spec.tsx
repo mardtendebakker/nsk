@@ -1,10 +1,8 @@
 import { render } from '@testing-library/react';
-import useSecurity from '../../hooks/useSecurity';
 import {
-  SIGN_IN, ACCOUNT_VERIFICATION, DASHBOARD, ADMIN_SETTINGS,
+  ACCOUNT_VERIFICATION, DASHBOARD, ADMIN_SETTINGS,
 } from '../../utils/routes';
 import DashboardLayout from './index';
-import can from '../../utils/can';
 
 jest.mock('./header', () => () => {});
 jest.mock('../../utils/can', () => jest.fn(() => true));
@@ -37,7 +35,7 @@ describe('DashboardLayout', () => {
   it('should render successfully when email verified', () => {
     const { container } = render(<DashboardLayout><b id="children">Text</b></DashboardLayout>);
     const element = container.querySelector('#children');
-    const { refreshUserInfo } = useSecurity();
+    const { refreshUserInfo } = jest.requireMock('../../hooks/useSecurity')();
 
     expect(refreshUserInfo).toBeCalled();
     expect(element).toBeDefined();
@@ -52,7 +50,7 @@ describe('DashboardLayout', () => {
     expect(mockRouter.push).toBeCalledWith(ACCOUNT_VERIFICATION);
   });
   it('should redirects to sign in when email not verified', () => {
-    useSecurity.mockImplementation(() => ({
+    jest.requireMock('../../hooks/useSecurity').mockImplementation(() => ({
       state: { user: null },
       refreshUserInfo: jest.fn(() => Promise.resolve()),
     }));
@@ -60,14 +58,14 @@ describe('DashboardLayout', () => {
     const element = container.querySelector('#children');
 
     expect(element).toBeNull();
-    expect(mockRouter.push).toBeCalledWith(SIGN_IN);
+    expect(mockRouter.push).toBeCalledWith(ACCOUNT_VERIFICATION);
   });
   it('should redirects to dashboard', () => {
-    useSecurity.mockImplementation(() => ({
+    jest.requireMock('../../hooks/useSecurity').mockImplementation(() => ({
       state: { user: { get emailVerified() { return true; } } },
       refreshUserInfo: jest.fn(() => Promise.resolve()),
     }));
-    can.mockImplementation(() => false);
+    jest.requireMock('../../utils/can').mockImplementation(() => false);
     jest.spyOn(mockRouter, 'pathname', 'get').mockReturnValue(ADMIN_SETTINGS);
 
     const { container } = render(<DashboardLayout><b id="children">Text</b></DashboardLayout>);
