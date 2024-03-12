@@ -609,7 +609,8 @@ const translation = {
     422: "L'action ne peut pas être effectuée",
     500: 'Problème interne du serveur. Veuillez réessayer plus tard',
   },
-
+  totalCustomers: 'Client totaux',
+  totalSuppliers: 'total fournisseurs',
 };
 
 export default translation;
