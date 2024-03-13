@@ -41,9 +41,11 @@ export class TaskRepository {
     return this.prisma.task.create(params);
   }
 
-  delete(params: Prisma.taskDeleteArgs) {
+  delete(id: number) {
 
-    return this.prisma.task.delete(params);
+    return this.prisma.task.delete({
+      where: { id }
+    });
   }
 
   deleteAllProductTypes(id: number) {

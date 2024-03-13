@@ -2,9 +2,10 @@ import { Prisma } from '@prisma/client';
 import { FindManyDto } from './dto/find-many.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { TaskRepository } from './task.repository';
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { TaskFindOneGetPayload } from './types/task-find-one-get-payload';
 import { CreateTaskDto } from './dto/create-task.dto';
+
 
 @Injectable()
 export class TaskService {
@@ -97,5 +98,8 @@ export class TaskService {
         product_type_task: { create: productTypeCreate },
       },
     });
+  }
+  async delete(id: number){
+    return this.repository.delete(id);
   }
 }

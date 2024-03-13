@@ -1,5 +1,5 @@
 import { Authorization } from "@nestjs-cognito/auth";
-import { Body, Controller, Get, Param, Post, Put, Query, UseGuards } from "@nestjs/common";
+import { Body, Controller,Delete, Get, Param, Post, Put, Query, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { TaskService } from "./task.service";
 import { FindTaskResponseDto, FindTasksResponeDto } from "./dto/find-task-response.dto";
@@ -9,6 +9,7 @@ import { UpdateTaskDto } from "./dto/update-task.dto";
 import { CreateTaskDto } from "./dto/create-task.dto";
 import { LOCAL_GROUPS } from "../common/types/cognito-groups.enum";
 import { requiredModule } from "../common/guard/required-modules.guard";
+import { CognitoAccessToken } from "amazon-cognito-identity-js";
 
 @ApiBearerAuth()
 @Authorization(LOCAL_GROUPS)
@@ -42,4 +43,12 @@ export class TaskController {
   create(@Body() createTaskDto: CreateTaskDto) {
     return this.taskService.create(createTaskDto);
   }
+
+  @Delete(':id')
+  @UseGuards(requiredModule('tasks'))
+  delete(@Param('id') id: number){
+    return this.taskService.delete(id);
+  }
+   
+
 }
