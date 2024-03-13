@@ -9,7 +9,6 @@ import { UpdateTaskDto } from "./dto/update-task.dto";
 import { CreateTaskDto } from "./dto/create-task.dto";
 import { LOCAL_GROUPS } from "../common/types/cognito-groups.enum";
 import { requiredModule } from "../common/guard/required-modules.guard";
-import { CognitoAccessToken } from "amazon-cognito-identity-js";
 
 @ApiBearerAuth()
 @Authorization(LOCAL_GROUPS)
@@ -47,8 +46,5 @@ export class TaskController {
   @Delete(':id')
   @UseGuards(requiredModule('tasks'))
   delete(@Param('id') id: number){
-    return this.taskService.delete(id);
-  }
-   
-
-}
+  return this.taskService.delete(id); 
+  }}
