@@ -96,9 +96,9 @@ export class TaskService {
         ...rest,
         product_type_task: { create: productTypeCreate },
       },
-    }
-    );
+    });
   }
+  
   async delete(id: number){
     return this.repository.delete(id);
   }

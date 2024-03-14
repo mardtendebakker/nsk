@@ -47,4 +47,5 @@ export class TaskController {
   @UseGuards(requiredModule('tasks'))
   delete(@Param('id') id: number){
   return this.taskService.delete(id); 
-  }}
+  }
+}
