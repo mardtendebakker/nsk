@@ -1,5 +1,5 @@
 import { Authorization } from "@nestjs-cognito/auth";
-import { Body, Controller, Get, Param, Post, Put, Query, UseGuards } from "@nestjs/common";
+import { Body, Controller,Delete, Get, Param, Post, Put, Query, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { TaskService } from "./task.service";
 import { FindTaskResponseDto, FindTasksResponeDto } from "./dto/find-task-response.dto";
@@ -41,5 +41,11 @@ export class TaskController {
   @UseGuards(requiredModule('tasks'))
   create(@Body() createTaskDto: CreateTaskDto) {
     return this.taskService.create(createTaskDto);
+  }
+
+  @Delete(':id')
+  @UseGuards(requiredModule('tasks'))
+  delete(@Param('id') id: number){
+  return this.taskService.delete(id); 
   }
 }
