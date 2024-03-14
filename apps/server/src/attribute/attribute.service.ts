@@ -117,4 +117,8 @@ export class AttributeService {
       attribute_option: { create: options }
     }});
   }
+
+  async delete(id: number){
+    return this.repository.delete(id);
+  }
 }

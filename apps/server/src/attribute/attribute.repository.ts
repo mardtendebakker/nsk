@@ -41,9 +41,11 @@ export class AttributeRepository {
     return this.prisma.attribute.create(params);
   }
 
-  delete(params: Prisma.attributeDeleteArgs) {
-
-    return this.prisma.attribute.delete(params);
+  delete(id: number) {
+    
+    return this.prisma.attribute.delete({
+      where: { id }
+    });
   }
 
   deleteAllProductTypes(id: number) {
