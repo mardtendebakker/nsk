@@ -37,12 +37,23 @@ export class PaymentService {
       module_payments: true
     },
     where: {
-      method: { not : { equals: FREE_TRIAL } },
-      module_payments: {
-        some: {
-          module_name: {equals: query.moduleName},
+      OR: [
+        {
+          method: { not : { equals: FREE_TRIAL } },
+          module_payments: {
+            some: {
+              module_name: {equals: query.moduleName},
+            }
+          }
+        },{
+          method: { equals: null },
+          module_payments: {
+            some: {
+              module_name: {equals: query.moduleName},
+          }
+        },
         }
-      },
+      ]
     },
     orderBy: {
       created_at: 'desc'
