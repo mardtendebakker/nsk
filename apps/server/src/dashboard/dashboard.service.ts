@@ -20,9 +20,16 @@ export class DashboardService {
       }
     });
 
+    const totalOrders = await this.repository.orderCount({
+        where: {
+          is_purchase: true,
+        }
+      });
+
     return {
       totalCustomers,
-      totalSuppliers
+      totalSuppliers,
+      totalOrders
     };
   }
 }

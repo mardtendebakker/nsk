@@ -6,4 +6,7 @@ export class TotalCount {
   
   @ApiProperty()
   totalCustomers: number;
+
+  @ApiProperty()
+  totalOrders: number;
 }

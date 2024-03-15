@@ -13,7 +13,6 @@ import VehiclesTracking from '../components/dashboard/vehiclesTracking';
 import Analytics from '../components/dashboard/analytics';
 import { ORDERS_ANALYTICS_PATH } from '../utils/axios';
 import Can from '../components/can';
-import { DASHBOARD_TOTAL_COUNT } from '../utils/routes';
 
 function Dashboard() {
   const { state: { user } } = useSecurity();
