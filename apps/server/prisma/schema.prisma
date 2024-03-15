@@ -372,14 +372,15 @@ model company {
 }
 
 model payment {
-  id              Int      @id @default(autoincrement())
-  method          String?  @db.VarChar(20)
-  transaction_id  String   @db.VarChar(100)
-  subscription_id String?  @db.VarChar(100)
-  amount          Float    @db.Float
-  status          String   @db.VarChar(20)
-  created_at      DateTime @default(now()) @db.DateTime(0)
-  updated_at      DateTime @default(now()) @updatedAt @db.DateTime(0)
+  id              Int              @id @default(autoincrement())
+  method          String?          @db.VarChar(20)
+  transaction_id  String           @db.VarChar(100)
+  subscription_id String?          @db.VarChar(100)
+  amount          Float            @db.Float
+  status          String           @db.VarChar(20)
+  created_at      DateTime         @default(now()) @db.DateTime(0)
+  updated_at      DateTime         @default(now()) @updatedAt @db.DateTime(0)
+  module_payment  module_payment[]
 }
 
 model module_payment {
@@ -391,6 +392,8 @@ model module_payment {
   active_at   DateTime @db.DateTime(0)
   created_at  DateTime @default(now()) @db.DateTime(0)
   updated_at  DateTime @default(now()) @updatedAt @db.DateTime(0)
+  payment     payment? @relation(fields: [payment_id], references: [id], onDelete: Cascade, map: "fk_module_payment_payment")
 
+  @@index([payment_id], map: "fk_module_payment_payment_idx")
   @@index([payment_id], map: "idx_module_payment_payment")
 }
