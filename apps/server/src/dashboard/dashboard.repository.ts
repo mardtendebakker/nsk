@@ -16,9 +16,9 @@ export class DashboardRepository {
     return this.prisma.company.count({where});
   }
 
-  orderCount(params: Prisma.order_statusFindManyArgs) {
+  orderCount(params: Prisma.aorderFindManyArgs) {
     const { where } = params;
 
-    return this.prisma.order_status.count({where});
+    return this.prisma.aorder.count({where});
   }
 }
