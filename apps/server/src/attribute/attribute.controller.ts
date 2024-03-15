@@ -1,5 +1,5 @@
 import { Authorization } from "@nestjs-cognito/auth";
-import { Body, Controller, Get, Param, Post, Put, Query, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { AttributeService } from "./attribute.service";
 import { FindAttributeResponseDto, FindAttributesResponeDto } from "./dto/find-attribute-response.dto";
@@ -41,5 +41,11 @@ export class AttributeController {
   @UseGuards(requiredModule('attributes'))
   create(@Body() createAttributeDto: CreateAttributeDto) {
     return this.attributeService.create(createAttributeDto);
+  }
+
+  @Delete(':id')
+  @UseGuards(requiredModule('attributes'))
+  delete(@Param('id') id: number) {
+    return this.attributeService.delete(id);
   }
 }
