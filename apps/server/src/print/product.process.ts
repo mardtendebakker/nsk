@@ -25,7 +25,7 @@ export class ProductProcess extends PrintProcess {
       product_name: product.name,
       product_status: product?.status ?? 'Unknown',
       product_location: product?.location ?? 'Unknown',
-      product_tasks: product.tasks.map((task) => {
+      product_tasks: product.tasks.sort((a, b) => a.pindex > b.pindex ? 1 : -1).map((task) => {
         return {
           name: task?.name ?? '',
           description: task?.description ?? '',

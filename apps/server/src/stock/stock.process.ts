@@ -157,6 +157,7 @@ export class StockProcess {
       const processedTask: ProcessedTask = {
         name: productTypeTask['task'].name,
         description: productTypeTask['task'].description,
+        pindex: productTypeTask['task'].pindex,
         status: AServiceStatus.STATUS_TODO,
       };
       for (let i = 0; i < this.aservices.length; i++) {
