@@ -287,6 +287,7 @@ model task {
   id                Int                 @id @default(autoincrement())
   name              String              @db.VarChar(255)
   description       String?             @db.LongText
+  pindex            Int?
   aservice          aservice[]
   product_type_task product_type_task[]
 }
@@ -371,28 +372,28 @@ model company {
 }
 
 model payment {
-  id                                  Int             @id @default(autoincrement())
-  method                              String?         @db.VarChar(20)
-  transaction_id                      String          @db.VarChar(100)
-  subscription_id                     String?         @db.VarChar(100)
-  amount                              Float           @db.Float
-  status                              String          @db.VarChar(20)
-  module_payments                     module_payment[]
-  created_at                          DateTime        @default(now()) @db.DateTime(0)
-  updated_at                          DateTime        @updatedAt @db.DateTime(0)
+  id              Int              @id @default(autoincrement())
+  method          String?          @db.VarChar(20)
+  transaction_id  String           @db.VarChar(100)
+  subscription_id String?          @db.VarChar(100)
+  amount          Float            @db.Float
+  status          String           @db.VarChar(20)
+  created_at      DateTime         @default(now()) @db.DateTime(0)
+  updated_at      DateTime         @default(now()) @updatedAt @db.DateTime(0)
+  module_payment  module_payment[]
 }
 
 model module_payment {
-  id                                  Int             @id @default(autoincrement())
-  module_name                         String          @db.VarChar(100)
-  payment_id                          Int?
-  price                               Float           @db.Float
-  expires_at                          DateTime        @db.DateTime(0)
-  active_at                           DateTime        @db.DateTime(0)
-  created_at                          DateTime        @default(now()) @db.DateTime(0)
-  updated_at                          DateTime        @updatedAt @db.DateTime(0)
+  id          Int      @id @default(autoincrement())
+  module_name String   @db.VarChar(100)
+  payment_id  Int?
+  price       Float    @db.Float
+  expires_at  DateTime @db.DateTime(0)
+  active_at   DateTime @db.DateTime(0)
+  created_at  DateTime @default(now()) @db.DateTime(0)
+  updated_at  DateTime @default(now()) @updatedAt @db.DateTime(0)
+  payment     payment? @relation(fields: [payment_id], references: [id], onDelete: Cascade, map: "fk_module_payment_payment")
 
-  payment                  payment?  @relation(fields: [payment_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_module_payment_payment")
-
-  @@index([payment_id], map: "idx_module_payment_payment_id")
+  @@index([payment_id], map: "fk_module_payment_payment_idx")
+  @@index([payment_id], map: "idx_module_payment_payment")
 }

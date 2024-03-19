@@ -10,4 +10,7 @@ export class TaskEntity implements task {
 
   @ApiPropertyOptional()
   description: string | null;
+
+  @ApiPropertyOptional()
+  pindex: number | null;
 }

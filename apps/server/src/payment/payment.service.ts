@@ -34,15 +34,26 @@ export class PaymentService {
       status: true,
       created_at: true,
       updated_at: true,
-      module_payments: true
+      module_payment: true
     },
     where: {
-      method: { not : { equals: FREE_TRIAL } },
-      module_payments: {
-        some: {
-          module_name: {equals: query.moduleName},
+      OR: [
+        {
+          method: { not : { equals: FREE_TRIAL } },
+          module_payment: {
+            some: {
+              module_name: {equals: query.moduleName},
+            }
+          }
+        },{
+          method: { equals: null },
+          module_payment: {
+            some: {
+              module_name: {equals: query.moduleName},
+          }
+        },
         }
-      },
+      ]
     },
     orderBy: {
       created_at: 'desc'
@@ -61,7 +72,7 @@ export class PaymentService {
       status: payment.status as Status,
       createdAt: payment.created_at,
       updatedAt: payment.updated_at,
-      modules: payment.module_payments.map((modulePayment)=> ({
+      modules: payment.module_payment.map((modulePayment)=> ({
         id: modulePayment.id,
         name: modulePayment.module_name,
         price: modulePayment.price,
@@ -100,7 +111,7 @@ export class PaymentService {
         amount: parseFloat(formattedAmount),
         status: PENDING,
         transaction_id: mollieResponse.id,
-        module_payments: {
+        module_payment: {
           createMany : {
             data: body.modules.map((moduleName) => ({
               module_name: moduleName,
@@ -122,7 +133,7 @@ export class PaymentService {
     const { data } = await this.repository.findAll({
       where: {
         method: FREE_TRIAL,
-        module_payments: {
+        module_payment: {
           some: {
             module_name: moduleName
           }
@@ -140,7 +151,7 @@ export class PaymentService {
         status: PAID,
         method: FREE_TRIAL,
         transaction_id: '',
-        module_payments: {
+        module_payment: {
           create: {
             module_name: moduleName,
             price: 0,

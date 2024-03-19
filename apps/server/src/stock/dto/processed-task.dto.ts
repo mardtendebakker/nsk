@@ -9,5 +9,8 @@ export class ProcessedTask {
     description: string;
   
     @ApiProperty()
+    pindex: number;
+  
+    @ApiProperty()
     status: AServiceStatus;
   }

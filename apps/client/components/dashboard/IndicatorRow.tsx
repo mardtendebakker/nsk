@@ -8,7 +8,7 @@ import useAxios from '../../hooks/useAxios';
 import { DASHBOARD_TOTAL_COUNT } from '../../utils/routes';
 import { TotalCount } from '../../utils/axios/models/dashboard';
 
-function Indicator({ title, value }: { title: string, value: string }) {
+function Indicator({ title, value }: { title: string, value: number | string }) {
   return (
     <Box sx={{ mx: '.5rem' }}>
       <Typography variant="inherit" color="text.secondary">{title}</Typography>
