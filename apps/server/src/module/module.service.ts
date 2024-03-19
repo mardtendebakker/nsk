@@ -11,28 +11,28 @@ export interface Module {
 
 export const MODULES: Module[] = [{
   name: 'blancco',
-  price: 19.95
+  price: 1
 },{
   name: 'customer_contact_action',
-  price: 9.95
+  price: 1
 },{
   name: 'logistics',
-  price: 19.95
+  price: 1
 },{
   name: 'attributes',
-  price: 4.95
+  price: 1
 },{
   name: 'tasks',
-  price: 4.95
+  price: 1
 },{
   name: 'product_statuses',
-  price: 4.95
+  price: 1
 },{
   name: 'order_statuses',
-  price: 4.95
+  price: 1
 },{
   name: 'tracking',
-  price: 4.95
+  price: 1
 }];
  
 @Injectable()
@@ -52,7 +52,7 @@ export class ModuleService {
         activeAt: payment?.activeAt || null,
         expiresAt: payment?.expiresAt || null,
         active: dateNow > payment?.activeAt && dateNow < payment?.expiresAt,
-        freeTrialUsed: false
+        freeTrialUsed: !!payment
       })
     }
 
@@ -69,7 +69,7 @@ export class ModuleService {
     for (const module of modules) {
       const price = MODULES.find((element) => element.name == module)?.price || 0;
 
-      if(price <= 1) {
+      if(price < 1) {
         throw new Error('Invalid module name:'+ module);
       }
 

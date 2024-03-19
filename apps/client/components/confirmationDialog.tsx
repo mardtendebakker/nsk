@@ -4,6 +4,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Box, Button, IconButton } from '@mui/material';
 import Close from '@mui/icons-material/Close';
+import { useEffect } from 'react';
 import useTranslation from '../hooks/useTranslation';
 
 type Color = 'inherit' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning';
@@ -40,6 +41,18 @@ export default function ConfirmationDialog(
   },
 ) {
   const { trans } = useTranslation();
+
+  const handleEnter = (e) => {
+    if (e.code == 'Enter') {
+      onConfirm();
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleEnter);
+
+    return () => document.removeEventListener('keydown', handleEnter);
+  }, []);
 
   return (
     <Dialog
