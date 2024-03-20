@@ -44,7 +44,7 @@ export class PaymentRepository {
     return this.prisma.payment.updateMany(params);
   }
 
-  async updateToPaidStatus({ transactionId, method } : {transactionId: string, method: string}) {
+  async updateToPaidStatusByTransactionId({ transactionId, method } : {transactionId: string, method: string}) {
     await this.prisma.$transaction(async (tx) => {
       const dateNow = new Date();
 
@@ -55,6 +55,21 @@ export class PaymentRepository {
       await tx.module_payment.updateMany({
         data: { active_at: dateNow, expires_at: add(dateNow, { months: 1 }) },
         where: {payment : {transaction_id: {equals: transactionId}}}
+      });
+    });
+  }
+
+  async updateToPaidStatusBySubscriptionId({ subscriptionId, method } : {subscriptionId: string, method: string}) {
+    await this.prisma.$transaction(async (tx) => {
+      const dateNow = new Date();
+
+      await tx.payment.updateMany({
+        data: { status: PAID, method }, 
+        where: { subscription_id: { equals: subscriptionId } } 
+      });
+      await tx.module_payment.updateMany({
+        data: { active_at: dateNow, expires_at: add(dateNow, { months: 1 }) },
+        where: {payment : {subscription_id: {equals: subscriptionId}}}
       });
     });
   }
