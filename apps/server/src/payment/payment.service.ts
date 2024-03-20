@@ -167,7 +167,11 @@ export class PaymentService {
     const payment = await this.mollieClient.payments.get(transactionId);
 
     if (payment.status == PAID) {
-      await this.repository.updateToPaidStatus({ transactionId: payment.metadata?.transaction_id || transactionId, method: payment.method });
+      if(payment.subscriptionId) {
+        await this.repository.updateToPaidStatusBySubscriptionId({ subscriptionId: payment.subscriptionId, method: payment.method });
+      } else {
+        await this.repository.updateToPaidStatusByTransactionId({ transactionId, method: payment.method });
+      }
     }
     //TODO handle other known statuses
   }
@@ -188,11 +192,7 @@ export class PaymentService {
       startDate: format(add(payment.created_at, {months: 1},), 'yyyy-MM-dd'),
       interval: '1 months',
       description: 'Initial transaction ' + payment.transaction_id,
-      webhookUrl: this.configService.get<string>('MOLLIE_WEBHOOK'),
-      metadata: {
-        paymentId: payment.id,
-        initialTransaction: payment.transaction_id
-      }
+      webhookUrl: this.configService.get<string>('MOLLIE_WEBHOOK')
     });
 
     return this.repository.update({ data: {subscription_id: subscription.id}, where: { id } });
