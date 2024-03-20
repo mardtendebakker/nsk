@@ -31,10 +31,9 @@ export default function IndicatorRow() {
         [
           { title: 'Test Test 1', value: price(100) },
           { title: 'Test Test 2', value: price(100) },
-          { title: 'Test Test 3', value: price(100) },
-          { title: trans('totalSuppliers'), value: data?.totalSuppliers || 0 },
-          { title: trans('totalCustomers'), value: data?.totalCustomers || 0 },
-
+          { title: trans('totalOrders'), value: String(data?.totalOrders) || '0' },
+          { title: trans('totalSuppliers'), value: String(data?.totalSuppliers) || '0' },
+          { title: trans('totalCustomers'), value: String(data?.totalCustomers) || '0' },
         ]
           .map(({ title, value }) => <Indicator key={title} title={title} value={value} />)
         }

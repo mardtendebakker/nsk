@@ -15,4 +15,10 @@ export class DashboardRepository {
 
     return this.prisma.company.count({where});
   }
+
+  orderCount(params: Prisma.aorderFindManyArgs) {
+    const { where } = params;
+
+    return this.prisma.aorder.count({where});
+  }
 }
