@@ -103,7 +103,7 @@ const translation = {
   pricingDetails: 'تفاصيل التسعير',
   transportCost: 'تكلفة النقل',
   forgotPasswordSuccessMessage: 'تم إرسال بريد إلكتروني مع رمز التحقق.',
-  invalidLocationLabelFormat: 'يجب أن تكون تسمية الموقع بالتنسيق التالي: رف 1-2، قسم 1-24، صندوق 1-4. على سبيل المثال، قم بتدوينها كما يلي: %e.g.%',
+  invalidLocationLabelFormat: 'يجب أن تكون تسمية الموقع بالتنسيق التالي : %e.g.%',
   emailOrUsername: 'البريد الإلكتروني أو اسم المستخدم',
   orderDetails: 'تفاصيل الطلب',
   pricing: 'التسعير',

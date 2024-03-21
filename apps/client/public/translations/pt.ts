@@ -104,7 +104,7 @@ const translation = {
     pricingDetails: 'Detalhes do preço',
     transportCost: 'Valor do transporte',
     forgotPasswordSuccessMessage: 'Foi enviado um e-mail com um código de verificação.',
-    invalidLocationLabelFormat: 'Formato da etiqueta da localização:  Estante 1-2, Prateleira 1-24, Compartimento 1-4. Veja o seguinte exemplo: %e.g.%',
+    invalidLocationLabelFormat: 'Formato da etiqueta da localização: %e.g.%',
     emailOrUsername: 'E-mail ou nome do usuário',
     orderDetails: 'Detalhes do pedido',
     pricing: 'Preços',
