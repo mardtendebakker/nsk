@@ -7,6 +7,7 @@ import { AProductService } from '../aproduct.service';
 import { LocationService } from '../../admin/location/location.service';
 import { LocationLabelService } from '../../location-label/location-label.service';
 import { BlanccoService } from '../../blancco/blancco.service';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class ArchivedService extends AProductService {
@@ -17,9 +18,10 @@ export class ArchivedService extends AProductService {
     protected readonly fileService: FileService,
     protected readonly printService: PrintService,
     protected readonly blanccoService: BlanccoService,
+    protected readonly configService: ConfigService,
     @Inject('ENTITY_STATUS') protected readonly entityStatus: EntityStatus
   ) {
-    super(repository, locationService, locationLabelService, fileService, printService, blanccoService, entityStatus);
+    super(repository, locationService, locationLabelService, fileService, printService, blanccoService, configService, entityStatus);
   }
 
   async archive(ids: number[]) {

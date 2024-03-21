@@ -5,11 +5,11 @@ import { PrismaModule } from '../prisma/prisma.module';
 import { ProductRepository } from './product.repository';
 import { LocationModule } from '../admin/location/location.module';
 import { FileModule } from '../file/file.module';
-import { PrintService } from '../print/print.service';
 import { EntityStatus } from '../common/types/entity-status.enum';
 import { LocationLabelModule } from '../location-label/location-label.module';
 import { BlanccoModule } from '../blancco/blancco.module';
 import { ProductBlancco } from './product.blancco';
+import { PrintModule } from '../print/print.module';
 
 @Module({
   providers: [
@@ -23,7 +23,6 @@ import { ProductBlancco } from './product.blancco';
       provide: 'ENTITY_STATUS',
       useValue: EntityStatus.Active,
     },
-    PrintService,
     ProductBlancco,
   ],
   controllers: [ProductController],
@@ -33,6 +32,7 @@ import { ProductBlancco } from './product.blancco';
     LocationLabelModule,
     FileModule,
     BlanccoModule,
+    PrintModule,
   ],
   exports: [ProductService],
 })

@@ -29,6 +29,9 @@ import { EntityStatus } from "../common/types/entity-status.enum";
 import { LocationLabelService } from "../location-label/location-label.service";
 import { BlanccoService } from "../blancco/blancco.service";
 import { AttributeIncludeOption } from "./types/attribute-include-option";
+import { UserLabelPrint } from "../print/types/user-label-print";
+import { CompanyLabelPrint } from "../print/types/company-label-print";
+import { ConfigService } from "@nestjs/config";
 
 export class StockService {
   constructor(
@@ -38,6 +41,7 @@ export class StockService {
     protected readonly fileService: FileService,
     protected readonly printService: PrintService,
     protected readonly blanccoService: BlanccoService,
+    protected readonly configService: ConfigService,
     protected readonly entityStatus: EntityStatus,
   ) {}
 
@@ -365,6 +369,24 @@ export class StockService {
   async printPriceCards(ids: number[]) {
     const products = await this.findAllRelationAttributeProcessed({ where: { id: { in: ids } } });
     return this.printService.printPriceCards(products);
+  }
+
+  async printLabels({
+    ids,
+    user,
+  }: {
+    ids: number[],
+    user: UserLabelPrint,
+  }) {
+    const products = await this.findAllRelationAttributeProcessed({ where: { id: { in: ids } } });
+    const productLabelPrint: CompanyLabelPrint = {
+      company_name: this.configService.get('COMPANY_NAME'),
+      address: this.configService.get('COMPANY_ADDRESS'),
+      email: this.configService.get('COMPANY_EMAIL'),
+      phone: this.configService.get('COMPANY_PHONE')
+    };
+    const productsWithUser = products.map(product => ({...product, ...user, ...productLabelPrint}));
+    return this.printService.printLabels(productsWithUser);
   }
 
   async preapareProductAttributeByStringValue(attribute: AttributeIncludeOption, reportValue: string): Promise<ProductAttributeDto> {

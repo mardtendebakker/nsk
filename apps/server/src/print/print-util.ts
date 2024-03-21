@@ -1,7 +1,7 @@
 import * as bwipjs from 'bwip-js';
 
-export class PrintProcess {
-  protected cleanString(text = ''): string {
+export class PrintUtil {
+  static cleanString(text = ''): string {
     const utf8: Record<string, string> = {
       '[áàâãªä]': 'a',
       '[ÁÀÂÃÄ]': 'A',
@@ -38,8 +38,8 @@ export class PrintProcess {
     return cleanedText;
   }
 
-  async getBarcode(params: {
-    text: string,
+  static async getBarcode(params: {
+    text: string, 
     scale?: number,
     height?: number,
   } = { text: undefined, scale: 2, height: 10 }): Promise<string> {
@@ -63,6 +63,6 @@ export class PrintProcess {
           resolve(`data:image/png;base64,${base64String}`);
         }
       });
-    })
+    });
   }
 }

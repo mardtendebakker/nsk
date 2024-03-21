@@ -5,11 +5,11 @@ import { ToRepairRepository } from './to-repair.repository';
 import { ToRepairService } from './to-repair.service';
 import { ToRepairController } from './to-repair.controller';
 import { FileModule } from '../file/file.module';
-import { PrintService } from '../print/print.service';
 import { EntityStatus } from '../common/types/entity-status.enum';
 import { LocationLabelModule } from '../location-label/location-label.module';
 import { BlanccoModule } from '../blancco/blancco.module';
 import { ToRepairBlancco } from './to-repair.blancco';
+import { PrintModule } from '../print/print.module';
 
 @Module({
   providers: [
@@ -23,7 +23,6 @@ import { ToRepairBlancco } from './to-repair.blancco';
       provide: 'ENTITY_STATUS',
       useValue: EntityStatus.Active,
     },
-    PrintService,
     ToRepairBlancco,
   ],
   controllers: [ToRepairController],
@@ -33,6 +32,7 @@ import { ToRepairBlancco } from './to-repair.blancco';
     LocationLabelModule,
     FileModule,
     BlanccoModule,
+    PrintModule,
   ],
   exports: [ToRepairService],
 })
