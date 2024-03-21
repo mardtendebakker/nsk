@@ -27,14 +27,10 @@ export class LabelPrinter extends IProductPrinter {
             value: product.name,
           },
           {
-            name: "Serialnumber",
-            value: product.product_attributes.find(
+            name: "Serienummer",
+            value: product.product_attributes?.find(
               (pa) => pa.attribute.name === "Serienummer"
-            ).value,
-          },
-          {
-            name: "Test datum",
-            value: product.created_at.toISOString().split('T')[0],
+            )?.value,
           },
           {
             name: "Company",
@@ -51,6 +47,10 @@ export class LabelPrinter extends IProductPrinter {
           {
             name: "Telephone",
             value: product.phone,
+          },
+          {
+            name: "Test datum",
+            value: product.created_at?.toISOString()?.split('T')?.[0],
           },
           {
             name: "Test by",
