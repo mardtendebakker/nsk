@@ -13,6 +13,7 @@ export class AOrderPrinter extends IPrinter {
 
   constructor() {
     super(PrintTemplateName.ORDER);
+    this.currencyFormat = new Intl.NumberFormat('nl-NL', { style: 'currency', currency: 'EUR' });
   }
 
   async transform(data: AOrderProcessed[]) {

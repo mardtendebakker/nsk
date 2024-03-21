@@ -109,7 +109,7 @@ export default function Action({
                   {trans('printPriceCard')}
                 </MenuItem>
                 <MenuItem onClick={onPrintLabel} disabled={disabled}>
-                  {trans('printLebel')}
+                  {trans('printLabel')}
                 </MenuItem>
               </Stack>
             </Popover>
