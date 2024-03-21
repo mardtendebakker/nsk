@@ -3,12 +3,12 @@ import { RepairService } from './repair.service';
 import { RepairController } from './repair.controller';
 import { RepairRepository } from './repair.repository';
 import { PrismaModule } from '../prisma/prisma.module';
-import { PrintService } from '../print/print.service';
 import { FileModule } from '../file/file.module';
 import { OrderStatusModule } from '../admin/order-status/order-status.module';
 import { SaleModule } from '../sale/sale.module';
 import { AProductModule } from '../aproduct/aproduct.module';
 import { ContactModule } from '../contact/contact.module';
+import { PrintModule } from '../print/print.module';
 
 @Module({
   providers: [
@@ -18,7 +18,6 @@ import { ContactModule } from '../contact/contact.module';
       provide: 'IS_REPAIR',
       useValue: true,
     },
-    PrintService,
   ],
   controllers: [RepairController],
   imports: [
@@ -28,6 +27,7 @@ import { ContactModule } from '../contact/contact.module';
     ContactModule,
     AProductModule,
     OrderStatusModule,
+    PrintModule,
   ],
   exports: [RepairService],
 })

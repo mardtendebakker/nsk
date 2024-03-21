@@ -46,6 +46,7 @@ export const SPLIT_PRODUCT_STOCK_PART_PATH = '/split-product/:id/split-part-of-b
 export const APRODUCT_BULK_PRINT_BARCODES = '/aproduct/bulk/print/barcodes';
 export const APRODUCT_BULK_PRINT_CHECKLISTS = '/aproduct/bulk/print/checklists';
 export const APRODUCT_BULK_PRINT_PRICECARDS = '/aproduct/bulk/print/pricecards';
+export const APRODUCT_BULK_PRINT_LABELS = '/aproduct/bulk/print/labels';
 export const APRODUCTS_ARCHIVE_SET = '/aproducts/archive/set';
 export const APRODUCTS_ARCHIVE_UNSET = '/aproducts/archive/unset';
 export const AUTOCOMPLETE_PRODUCT_TYPES_PATH = '/autocomplete/product-types';

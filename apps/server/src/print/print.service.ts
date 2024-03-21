@@ -1,18 +1,24 @@
 import { Injectable } from '@nestjs/common';
-import puppeteer from 'puppeteer';
 import * as Handlebars from 'handlebars';
-import { readFileSync } from 'fs';
-import { join } from 'path';
 import { AOrderProcessed } from '../aorder/aorder.process';
-import { AOrderProcess } from './aorder.process';
-import { PrintProcess } from './print.process';
-import { ProductProcess } from './product.process';
 import { ProcessedStock } from '../stock/dto/processed-stock.dto';
 import { ProductRelationAttributeProcessed } from '../stock/types/product-relation-attribute-processed';
+import { AOrderPrinter } from './printer/aorder-printer';
+import { BarcodePrinter } from './printer/barcode-printer';
+import { ChecklistPrinter } from './printer/checklist-printer';
+import { PriceCardPrinter } from './printer/price-card-printer';
+import { LabelPrinter } from './printer/label-printer';
+import { ProductLabelPrint } from './types/product-label-print';
 
 @Injectable()
 export class PrintService {
-  constructor() {
+  constructor(
+    private readonly aOrderPrinter: AOrderPrinter,
+    private readonly barcodePrinter: BarcodePrinter,
+    private readonly checklistPrinter: ChecklistPrinter,
+    private readonly priceCardPrinter: PriceCardPrinter,
+    private readonly labelPrinter: LabelPrinter,
+  ) {
     Handlebars.registerHelper('ifCond', function (v1, operator, v2, options) {
       switch (operator) {
         case '==':
@@ -41,160 +47,55 @@ export class PrintService {
     });
   }
 
-  async printAOrders(orders: AOrderProcessed[]): Promise<Buffer> {
-    const templatePath = join(process.cwd(), 'apps/server/src/assets/templates/order.hbs');
-    const source = readFileSync(templatePath, 'utf8');
-    const template = Handlebars.compile(source);
-
-    const data = await Promise.all(orders.map(async order => {
-      const orderProcess = new AOrderProcess(order);
-      return orderProcess.run();
-    }));
-
-    const browser = await puppeteer.launch({
-      headless: true,
-      args: ['--no-sandbox'],
-    });
-    try {
-      const page = await browser.newPage();
-      const result = template(data);
-      await page.setContent(result);
-
-      const pdfStream = await page.pdf({format: 'A4', margin: {
-        top: 45,
-        bottom: 45,
-        left: 30,
-        right: 30,
-      }});
-
-      return pdfStream;
-    } finally {
-      if (browser) {
-        browser.close();
-      }
-    }
-  }
-
-  async printBarcodes(barcodes: string[]): Promise<Buffer> {
-    const templatePath = join(process.cwd(), 'apps/server/src/assets/templates/barcode.hbs');
-    const source = readFileSync(templatePath, 'utf8');
-    const template = Handlebars.compile(source);
-    const browser = await puppeteer.launch({
-      headless: true,
-      args: ['--no-sandbox'],
-    });
-    try {
-      const printProcess = new PrintProcess();
-      const htmls: string[] = [];
-      for (const barcode of barcodes) {
-        const data = {
-          barcode_value: barcode,
-          barcode_image: await printProcess.getBarcode({
-            text: barcode,
-            scale: 1.2,
-            height: 6,
-          }),
-        }
-        htmls.push(template(data));
-      }
-
-      const page = await browser.newPage();
-      await page.setContent(htmls.join('<br>'));
-
-      const customWidth = '54mm';
-      const customHeight = '25mm';
-      const pdfStream: Buffer = await page.pdf({
-        width: customWidth,
-        height: customHeight,
-        margin: {
-          top: 1,
-          bottom: 0,
-          left: 3,
-          right: 3,
-        },
-      });
-
-      return pdfStream;
-    } finally {
-      if (browser) {
-        browser.close();
-      }
-    }
-  }
-
-  async printChecklists(products: ProcessedStock[]): Promise<Buffer> {
-    const templatePath = join(process.cwd(), 'apps/server/src/assets/templates/checklist.hbs');
-    const source = readFileSync(templatePath, 'utf8');
-    const template = Handlebars.compile(source);
-    const productProcess = new ProductProcess();
-
-    const data = await Promise.all(products.map(async product => {
-      return productProcess.checklist(product);
-    }));
-
-    const browser = await puppeteer.launch({
-      headless: true,
-      args: ['--no-sandbox'],
-    });
-    
-    try {
-      const page = await browser.newPage();
-      const result = template(data);
-      await page.setContent(result);
-
-      const pdfStream: Buffer = await page.pdf({
+  async printAOrders(data: AOrderProcessed[]): Promise<Buffer> {
+    return this.aOrderPrinter.print({
+      data,
+      pdfOptions: {
         format: 'A4',
-        margin: {
-          top: 10,
-          bottom: 10,
-          left: 10,
-          right: 10,
-        },
-      });
-
-      return pdfStream;
-    } finally {
-      if (browser) {
-        browser.close();
-      }
-    }
+        margin: { top: 45, bottom: 45, left: 30, right: 30 },
+      },
+    });
   }
 
-  async printPriceCards(products: ProductRelationAttributeProcessed[]): Promise<Buffer> {
-    const templatePath = join(process.cwd(), 'apps/server/src/assets/templates/pricecard.hbs');
-    const source = readFileSync(templatePath, 'utf8');
-    const template = Handlebars.compile(source);
-    const productProcess = new ProductProcess();
-
-    const data = await Promise.all(products.map(async product => {
-      return productProcess.pricecard(product);
-    }));
-
-    const browser = await puppeteer.launch({
-      headless: true,
-      args: ['--no-sandbox'],
+  async printBarcodes(data: string[]): Promise<Buffer> {
+    return this.barcodePrinter.print({
+      data,
+      pdfOptions: {
+        width: '54mm',
+        height: '25mm',
+        margin: { top: 1, bottom: 0, left: 3, right: 3 },
+      },
     });
-    
-    try {
-      const page = await browser.newPage();
-      const result = template(data);
-      await page.setContent(result);
+  }
 
-      const pdfStream: Buffer = await page.pdf({
-        format: 'A6',
-        margin: {
-          top: 0,
-          bottom: 0,
-          left: 0,
-          right: 0,
-        },
-      });
-
-      return pdfStream;
-    } finally {
-      if (browser) {
-        browser.close();
+  async printChecklists(data: ProcessedStock[]): Promise<Buffer> {
+    return this.checklistPrinter.print({
+      data,
+      pdfOptions: {
+        format: 'A4',
+        margin: { top: 10, bottom: 10, left: 10, right: 10 },
       }
-    }
+    });
+  }
+
+  async printPriceCards(data: ProductRelationAttributeProcessed[]): Promise<Buffer> {
+    return this.priceCardPrinter.print({
+      data,
+      pdfOptions: {
+        format: 'A6',
+        
+        margin: { top: 0, bottom: 0, left: 0, right: 0 },
+      }
+    });
+  }
+
+  async printLabels(data: ProductLabelPrint[]): Promise<Buffer> {
+    return this.labelPrinter.print({
+      data,
+      pdfOptions: {
+        format: 'A6',
+        margin: { top: 0, bottom: 0, left: 0, right: 0 },
+      }
+    });
   }
 }

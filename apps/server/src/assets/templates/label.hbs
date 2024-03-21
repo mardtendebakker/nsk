@@ -25,7 +25,7 @@
     }
 
     div.attributes {
-      height: 69%;
+      height: 78%;
       width: 100%;
     }
 
@@ -65,31 +65,16 @@
 <body>
 {{#each this}}
   <div class="container pagebreak">
-    <div class="content title"><span>{{product.name}}</span></div>
+    <div class="content title">{{ product.name }}</div>
     <div class="content attributes">
       <table>
-        {{#each product_attributes}}
-          <tr>
-            <td class="{{#if even}}even{{/if}}">{{attribute.name}}</td>
-            <td class="{{#if even}}even{{/if}}"><b>
-              {{#ifCond attribute.type '==' 1}}
-                {{selectedOption.name}}
-              {{else}}
-                {{#ifCond attribute.type '==' 3}}
-                  {{#if valueProduct}}
-                    {{quantity}}x {{valueProduct.name}}
-                  {{/if}}
-                {{else}}
-                  {{value}}
-                {{/ifCond}}
-              {{/ifCond}}
-            </b></td>
-          </tr>
+        {{#each specifications}}
+        <tr>
+          <td class="{{#if even}}even{{/if}}">{{name}}</td>
+          <td class="{{#if even}}even{{/if}}"><b>{{value}}</b></td>
+        </tr>
         {{/each}}
       </table>
-    </div>
-    <div class="content price">
-      &euro; {{product.price}}
     </div>
     <div class="content">
       <img src="{{ product.barcode }}">

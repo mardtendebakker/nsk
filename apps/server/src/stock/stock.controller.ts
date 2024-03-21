@@ -158,6 +158,49 @@ export class StockController {
     return new StreamableFile(pdfStream);
   }
 
+  @Get('bulk/print/labels')
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Label pdf',
+    content: {
+      'application/octet-stream': {
+        schema: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  async printLabels(
+    @Query() bulkPrintDTO: BulkPrintDTO,
+    @Res({ passthrough: true }) res: Response,
+    @CognitoUser(["gender", "given_name", "family_name"])
+    {
+      gender,
+      given_name,
+      family_name,
+    }: {
+      gender: string;
+      given_name: string;
+      family_name: string;
+    }
+  ) {
+    const { ids } = bulkPrintDTO;
+    const pdfStream = await this.stockService.printLabels({
+      ids,
+      user: {
+        gender,
+        given_name,
+        family_name,
+      },
+    });
+    res.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': 'inline; filename="labels.pdf"',
+    });
+    return new StreamableFile(pdfStream);
+  }
+
   @Patch('blancco/:orderId')
   @UseGuards(AuthorizationGuard(LOCAL_GROUPS))
   @UseGuards(requiredModule('blancco'))
