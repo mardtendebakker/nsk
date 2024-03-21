@@ -104,7 +104,7 @@ const translation = {
   pricingDetails: 'جزئیات قیمت',
   transportCost: 'هزینه ترابری',
   forgotPasswordSuccessMessage: 'یک ایمیل با کد تایید ارسال شده است.',
-  invalidLocationLabelFormat: ':برچسب مکان به شرح زیر است: قفسه 1-2 کوپه1-24 پالت 1-4 به عنوان مثال به صورت زیر بنویسید %e.g.% ',
+  invalidLocationLabelFormat: 'برچسب مکان به شرح زیر است: %e.g.% ',
   emailOrUsername: 'ایمیل یا نام کاربری',
   orderDetails: 'جزئیات سفارش',
   pricing: 'قیمت گذاری',

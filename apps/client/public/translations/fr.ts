@@ -99,7 +99,7 @@ const translation = {
   pricingDetails: 'Détails des prix',
   transportCost: 'Frais de transport',
   forgotPasswordSuccessMessage: 'Un email a été envoyé avec un code de vérification.',
-  invalidLocationLabelFormat: 'L\'étiquette de l\'emplacement doit être au format suivant : Étagère 1-2, Compartiment 1-24, Case 1-4. Notez par exemple comme suit : %e.g.%',
+  invalidLocationLabelFormat: 'L\'étiquette de l\'emplacement doit être au format suivant: %e.g.%',
   emailOrUsername: 'Email ou nom d\'utilisateur',
   orderDetails: 'Détails de la commande',
   pricing: 'Tarification',
@@ -609,8 +609,7 @@ const translation = {
     422: "L'action ne peut pas être effectuée",
     500: 'Problème interne du serveur. Veuillez réessayer plus tard',
   },
-  totalCustomers: 'Client totaux',
-  totalSuppliers: 'total fournisseurs',
+
 };
 
 export default translation;
