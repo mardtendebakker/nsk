@@ -61,6 +61,10 @@ export default function DataSourcePicker(
   }
 
   useEffect(() => {
+    if (disabled) {
+      return;
+    }
+
     call({ params: { ...params, ids } }).then((response: AxiosResponse) => {
       if (response?.data) {
         const found = multiple
@@ -81,7 +85,7 @@ export default function DataSourcePicker(
         }
       }
     }).catch(() => {});
-  }, [value?.toString(), JSON.stringify(params)]);
+  }, [value?.toString(), JSON.stringify(params), disabled.toString()]);
 
   useEffect(() => {
     if (onCurrentValueChange) {
