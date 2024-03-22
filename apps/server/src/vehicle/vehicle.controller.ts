@@ -5,8 +5,11 @@ import { VehicleResponseDto } from './dto/vehicle-response.dto';
 import { PickupService } from '../calendar/pickup/pickup.service';
 import { FindCalendarResponeDto } from '../calendar/dto/find-calendar-response.dto';
 import { requiredModule } from '../common/guard/required-modules.guard';
+import { MANAGER_GROUPS } from '../common/types/cognito-groups.enum';
+import { Authorization } from '@nestjs-cognito/auth';
 
 @ApiBearerAuth()
+@Authorization(MANAGER_GROUPS)
 @ApiTags('vehicles')
 @Controller('vehicles')
 export class VehicleController {
