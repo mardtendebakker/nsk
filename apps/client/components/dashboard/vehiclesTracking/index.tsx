@@ -14,6 +14,7 @@ import RunningStatus from './runnningStatus';
 import { fetchWayForLogisticService } from '../../../utils/map';
 import useAxios from '../../../hooks/useAxios';
 import useSecurity from '../../../hooks/useSecurity';
+import can from '../../../utils/can';
 
 export default function VehiclesTracking() {
   const { trans } = useTranslation();
@@ -21,7 +22,7 @@ export default function VehiclesTracking() {
   const [pickup, setPickup] = useState<LogisticServiceListItem | undefined>();
   const [ways, setWays] = useState<Ways>({ vehicleWay: undefined, targetWay: undefined });
   const { call } = useAxios('get', VEHICLES_PATH);
-  const { hasModule } = useSecurity();
+  const { hasModule, state: { user } } = useSecurity();
 
   const buildVehicleWay = (value: Vehicle) => ({ address: '', position: { latitude: value.location.latitude, longitude: value.location.longitude } });
 
@@ -59,6 +60,10 @@ export default function VehiclesTracking() {
     }
   };
 
+  const hasTracking = hasModule('tracking');
+
+  const hasRequiredGroups = user && can({ user, requiredGroups: ['manager'] });
+
   useEffect(() => {
     const interval = setInterval(() => {
       if (vehicle) {
@@ -72,8 +77,6 @@ export default function VehiclesTracking() {
     return () => clearInterval(interval);
   }, [JSON.stringify(vehicle)]);
 
-  const hasTracking = hasModule('tracking');
-
   return (
     <Card>
       <CardContent>
@@ -86,7 +89,7 @@ export default function VehiclesTracking() {
         <Tooltip title={!hasTracking && trans('inactiveModuleMessage', { vars: (new Map()).set('module', 'tracking') })}>
           <span>
             <DataSourcePicker
-              disabled={!hasTracking}
+              disabled={!hasTracking || !hasRequiredGroups}
               sx={{ mb: '1rem' }}
               path={VEHICLES_PATH}
               label={trans('vehicle')}
