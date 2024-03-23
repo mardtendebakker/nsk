@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import axios, { AxiosError, AxiosInstance } from 'axios';
 import { EquipmentResponseDto } from './dto/equipment-response-dto';
+import { ModuleService } from '../module/module.service';
 
 @Injectable()
 export class FleetGoService {
@@ -11,9 +11,7 @@ export class FleetGoService {
   private subscribers: Array<(token: string) => void> = [];
   private loginUri = 'Session/Login';
 
-  constructor(
-    protected readonly configService: ConfigService
-  ) {
+  constructor(private moduleService: ModuleService) {
     this.axios = axios.create({ baseURL: 'https://api.fleetgo.com/api/' });
     this.axios.interceptors.request.use(this.tokenInterceptor.bind(this), (err) => Promise.reject(err));
     this.axios.interceptors.response.use((response) => response, this.refreshTokenInterceptor.bind(this));
@@ -26,11 +24,13 @@ export class FleetGoService {
   }
 
   private async getToken(): Promise<string> {
+    const config = await this.moduleService.getTrackingConfig();
+
     const response = await this.axios.post(this.loginUri, {
-      client_id: this.configService.get('FLEET_GO_CLIENT_ID'),
-      client_secret: this.configService.get('FLEET_GO_CLIENT_SECRET'),
-      username: this.configService.get('FLEET_GO_USERNAME'),
-      password: this.configService.get('FLEET_GO_PASSWORD'),
+      client_id: config.clientId,
+      client_secret: config.clientSecret,
+      username: config.username,
+      password: config.password,
       user_token_type: 1,
     });
 

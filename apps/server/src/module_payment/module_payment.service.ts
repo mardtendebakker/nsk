@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ModulePaymentRepository } from './module_payment.repository';
-import { Module, ModuleName } from '../module/module.service';
+import { ModuleName } from '../module/module.service';
 import { FindModulePaymentResponseDto } from './dto/find-module-payment-response.dto';
 
 export const PAID = 'paid';
@@ -13,12 +13,12 @@ export type Status = 'paid'|'pending'|'refunded';
 export class ModulePaymentService {
   constructor(private readonly repository: ModulePaymentRepository) {}
 
-  async findLastValidModulePaymentByModule(moduleName: Module): Promise<FindModulePaymentResponseDto|null> {
+  async findLastValidModulePaymentByModule(moduleName: string): Promise<FindModulePaymentResponseDto|null> {
    const model = await this.repository.findLastValidModulePaymentByModule(moduleName);
 
    return model ? {
     id: model.id,
-    moduleName: model.module_name as ModuleName,
+    moduleName: model.module.name as ModuleName,
     method: model.payment.method,
     transactionId: model.payment.transaction_id,
     price: model.price,

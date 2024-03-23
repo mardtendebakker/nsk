@@ -17,7 +17,7 @@ export default function Cart() {
   const handlePay = () => {
     call({
       body: {
-        modules: modules.map(({ name }) => name),
+        moduleIds: modules.map(({ id }) => id),
         redirectUrl: `${window.location.origin + ADMIN_MODULES_PAYMENTS}?clearCart=1`,
       },
     }).then(({ data }: AxiosResponse) => {

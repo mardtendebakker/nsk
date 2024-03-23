@@ -12,7 +12,7 @@ export function requiredModule(moduleName: ModuleName) {
     ): Promise<boolean>{
       const request = context.switchToHttp().getRequest();
 
-    const foundModule = await this.modulePaymentService.findLastValidModulePaymentByModule({ name: moduleName, price: 0 });
+    const foundModule = await this.modulePaymentService.findLastValidModulePaymentByModule(moduleName);
 
     if(foundModule) {
       return (request);

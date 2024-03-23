@@ -10,13 +10,16 @@ import Check from '@mui/icons-material/Check';
 import { format } from 'date-fns';
 import AddShoppingCart from '@mui/icons-material/AddShoppingCart';
 import PlayArrow from '@mui/icons-material/PlayArrow';
+import Settings from '@mui/icons-material/Settings';
 import { ModuleListItem } from '../../../../../utils/axios/models/module';
 import useTranslation from '../../../../../hooks/useTranslation';
 import TableCell from '../../../../tableCell';
 import { price } from '../../../../../utils/formatter';
 import useCart from '../../../../../hooks/useCart';
 
-export default function List({ modules = [], onFreeTrial }: { modules: ModuleListItem[], onFreeTrial: (module: ModuleListItem) => void }) {
+export default function List({
+  modules = [], disabled, onFreeTrial, onSettings,
+}: { modules: ModuleListItem[], disabled: boolean, onFreeTrial: (module: ModuleListItem) => void, onSettings: (module: ModuleListItem) => void }) {
   const { trans } = useTranslation();
   const { addModule, state: { modules: modulesCart } } = useCart();
 
@@ -47,6 +50,7 @@ export default function List({ modules = [], onFreeTrial }: { modules: ModuleLis
       <TableBody>
         {modules.map((module: ModuleListItem) => {
           const canAddToCart = !modulesCart.find(({ name }) => module.name == name) && !module.active;
+          const missingConfig = module.config && !!Object.values(module.config).find((config) => config.required && config.value === null);
 
           return (
             <TableRow
@@ -73,24 +77,41 @@ export default function List({ modules = [], onFreeTrial }: { modules: ModuleLis
               </TableCell>
               <TableCell>
                 <Tooltip title={trans('addToCart')}>
-                  <IconButton
-                    disabled={!canAddToCart}
-                    onClick={() => canAddToCart && addModule({
-                      name: module.name,
-                      price: module.price,
-                    })}
-                  >
-                    <AddShoppingCart />
-                  </IconButton>
+                  <span>
+                    <IconButton
+                      disabled={!canAddToCart || missingConfig || disabled}
+                      onClick={() => canAddToCart && !missingConfig && addModule({
+                        id: module.id,
+                        name: module.name,
+                        price: module.price,
+                      })}
+                    >
+                      <AddShoppingCart />
+                    </IconButton>
+                  </span>
                 </Tooltip>
                 <Tooltip title={trans('startFreeTrial')}>
-                  <IconButton
-                    disabled={!canAddToCart || module.freeTrialUsed}
-                    onClick={() => canAddToCart && !module.freeTrialUsed && onFreeTrial(module)}
-                  >
-                    <PlayArrow />
-                  </IconButton>
+                  <span>
+                    <IconButton
+                      disabled={!canAddToCart || module.freeTrialUsed || missingConfig || disabled}
+                      onClick={() => canAddToCart && !module.freeTrialUsed && !missingConfig && onFreeTrial(module)}
+                    >
+                      <PlayArrow />
+                    </IconButton>
+                  </span>
                 </Tooltip>
+                {module.config && (
+                <Tooltip title={trans('settings')}>
+                  <span>
+                    <IconButton
+                      disabled={disabled}
+                      onClick={() => onSettings(module)}
+                    >
+                      <Settings />
+                    </IconButton>
+                  </span>
+                </Tooltip>
+                )}
               </TableCell>
             </TableRow>
           );

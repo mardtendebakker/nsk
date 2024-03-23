@@ -1,6 +1,5 @@
 import { HttpService } from '@nestjs/axios';
 import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { catchError, lastValueFrom } from 'rxjs';
 import * as AdmZip from 'adm-zip';
@@ -12,13 +11,14 @@ import { BlanccoResponse } from './types/blancco-response';
 import { BlanccoReportsV1 } from './types/blancco-reports-v1';
 import * as DefaultAttribute from './data/default-attributes.json';
 import { BlanccoProductTypes } from './types/blancco-product-types.enum';
+import { ModuleService } from '../module/module.service';
 
 @Injectable()
 export class BlanccoService {
   constructor(
     private readonly purchaseService: PurchaseService,
     private readonly httpService: HttpService,
-    private readonly configService: ConfigService,
+    private readonly moduleService: ModuleService,
     private readonly repository: BlanccoRepository
   ) {}
 
@@ -153,11 +153,11 @@ export class BlanccoService {
   }
 
   private async downloadReports(search: string, cursor?: string): Promise<BlanccoResponse> {
-    const url = this.configService.get<string>('BLANCCO_API_URL');
+    const config = await this.moduleService.getBlanccoConfig();
 
     const requestConfig: AxiosRequestConfig = {
       headers: {
-        'X-BLANCCO-API-KEY': this.configService.get<string>('BLANCCO_API_KEY'),
+        'X-BLANCCO-API-KEY': config.apiKey,
       },
       responseType: 'arraybuffer',
     };
@@ -174,7 +174,7 @@ export class BlanccoService {
       cursor,
     };
     const response = await lastValueFrom(
-      this.httpService.post(`${url}report/export`, body, requestConfig).pipe(
+      this.httpService.post(`${config.apiUrl}report/export`, body, requestConfig).pipe(
         catchError((error: AxiosError) => {
           throw new HttpException(error.response.data, error.response.status);
         })
