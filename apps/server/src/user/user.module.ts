@@ -6,10 +6,11 @@ import { ModuleService } from '../module/module.service';
 import { ModulePaymentService } from '../module_payment/module_payment.service';
 import { ModulePaymentRepository } from '../module_payment/module_payment.repository';
 import { PrismaService } from '../prisma/prisma.service';
+import { ModuleRepository } from '../module/module.repository';
 
 @Module({
   imports: [AuthModule],
-  providers: [UserService, ModuleService, ModulePaymentService, ModulePaymentRepository, PrismaService],
+  providers: [UserService, ModuleService, ModuleRepository, ModulePaymentService, ModulePaymentRepository, PrismaService],
   controllers: [UserController],
 })
 export class UserModule {}

@@ -1,81 +1,118 @@
 import { Injectable } from '@nestjs/common';
+import { module } from '@prisma/client';
 import { FindModuleResponseDto } from './dto/find-module-response.dto';
 import { ModulePaymentService } from '../module_payment/module_payment.service';
-
-export type ModuleName = 'blancco' | 'customer_contact_action' | 'logistics' | 'attributes' | 'tasks' | 'product_statuses' | 'order_statuses' | 'tracking';
+import { ModuleRepository } from './module.repository';
+import { ModuleName } from './moduleName.type';
 
 export interface Module {
+  id: number;
   name: ModuleName;
   price: number;
 }
 
-export const MODULES: Module[] = [{
-  name: 'blancco',
-  price: 1,
-}, {
-  name: 'customer_contact_action',
-  price: 1,
-}, {
-  name: 'logistics',
-  price: 1,
-}, {
-  name: 'attributes',
-  price: 1,
-}, {
-  name: 'tasks',
-  price: 1,
-}, {
-  name: 'product_statuses',
-  price: 1,
-}, {
-  name: 'order_statuses',
-  price: 1,
-}, {
-  name: 'tracking',
-  price: 1,
-}];
+interface TrackingConfig {
+  clientId: string;
+  clientSecret: string;
+  username: string;
+  password: string;
+}
+
+interface BlanccoConfig {
+  apiUrl: string;
+  apiKey: string;
+}
 
 @Injectable()
 export class ModuleService {
-  constructor(private readonly modulePaymentService: ModulePaymentService) {}
+  constructor(
+    private modulePaymentService: ModulePaymentService,
+    private repository: ModuleRepository,
+  ) {}
 
   async findAll(): Promise<FindModuleResponseDto[]> {
     const result: FindModuleResponseDto[] = [];
     const dateNow = new Date();
+    const modules = await this.repository.findAll();
 
-    for (const m of MODULES) {
-      const payment = await this.modulePaymentService.findLastValidModulePaymentByModule(m);
+    for (const m of modules.data) {
+      const payment = await this.modulePaymentService.findLastValidModulePaymentByModule(m.name);
 
       result.push({
-        name: m.name,
-        price: payment?.price || m.price,
+        id: m.id,
+        name: m.name as ModuleName,
+        price: m.price,
         activeAt: payment?.activeAt || null,
         expiresAt: payment?.expiresAt || null,
         active: dateNow > payment?.activeAt && dateNow < payment?.expiresAt,
         freeTrialUsed: !!payment,
+        config: this.buildConfig(m),
       });
     }
 
     return result;
   }
 
-  findOneByName(modulleName: ModuleName): Module | null {
-    return MODULES.find(({ name }) => name == modulleName);
+  async setConfig(id: number, config: object) {
+    await this.repository.update({
+      where: { id },
+      data: { config: JSON.stringify(config) },
+    });
   }
 
-  calculateTotalAmount(modules: string[]): number {
-    let amount = 0;
+  async getTrackingConfig(): Promise<TrackingConfig> {
+    const result = await this.repository.findOne({ where: { name: 'tracking' } });
 
-    for (const module of modules) {
-      const price = MODULES.find((element) => element.name == module)?.price || 0;
+    return JSON.parse(result.config);
+  }
 
-      if (price < 1) {
-        throw new Error(`Invalid module name:${module}`);
-      }
+  async getBlanccoConfig(): Promise<BlanccoConfig> {
+    const result = await this.repository.findOne({ where: { name: 'blancco' } });
 
-      amount += price;
+    return JSON.parse(result.config);
+  }
+
+  buildConfig(param: module) {
+    const config = param.config ? JSON.parse(param.config) : {};
+
+    switch (param.name as ModuleName) {
+      case 'blancco':
+        return {
+          apiUrl: {
+            value: config.apiUrl || null,
+            required: true,
+          },
+          apiKey: {
+            value: config.apiKey || null,
+            sensitive: true,
+            required: true,
+          },
+        };
+      case 'tracking':
+        return {
+          clientId: {
+            value: config.clientId || null,
+            sensitive: true,
+            required: true,
+          },
+          clientSecret: {
+            value: config.clientSecret || null,
+            sensitive: true,
+            required: true,
+          },
+          username: {
+            value: config.username || null,
+            sensitive: true,
+            required: true,
+          },
+          password: {
+            value: config.password || null,
+            sensitive: true,
+            required: true,
+          },
+        };
+      default:
+        return undefined;
     }
-
-    return amount;
   }
 }

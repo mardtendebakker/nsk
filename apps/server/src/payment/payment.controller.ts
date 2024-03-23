@@ -8,7 +8,6 @@ import { FindPaymentResponseDto } from './dto/find-payment-response.dto';
 import { FindManyDto } from './dto/find-many.dto';
 import { MollieWebhookDto } from './dto/mollie-webhook.dto';
 import { SetupDto } from './dto/setup.dto';
-import { ModuleName } from '../module/module.service';
 
 @ApiBearerAuth()
 @ApiTags('payments')
@@ -59,8 +58,8 @@ export class PaymentController {
     return '';
   }
 
-  @Patch('/free-trial/:moduleName')
-  freeTrial(@Param('moduleName') moduleName: ModuleName) {
-    return this.paymentService.freeTrial(moduleName);
+  @Patch('/modules/:id/free-trial')
+  freeTrial(@Param('id') id: number) {
+    return this.paymentService.freeTrial(id);
   }
 }

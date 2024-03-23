@@ -322,7 +322,7 @@ export default function ListContainer({ type } : { type: 'product' | 'repair' | 
           }}
           rowsPerPage={rowsPerPage}
           onEdit={(id) => setEditProductId(id)}
-          onDelete={user && can({ user, requiredGroups: ['admin', 'super_admin', 'manager'] }) ? handleDelete : undefined}
+          onDelete={user && can({ user, requiredGroups: ['manager'] }) ? handleDelete : undefined}
         />
         {editProductId && (
         <EditModal

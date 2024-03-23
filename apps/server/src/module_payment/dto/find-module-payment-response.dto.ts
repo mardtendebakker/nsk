@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ModuleName } from '../../module/module.service';
-import { Status } from '../module_payment.service';
+import { ModuleName } from '../../module/moduleName.type';
+import { Status } from '../status.type';
 
 export class FindModulePaymentResponseDto {
   @ApiProperty()

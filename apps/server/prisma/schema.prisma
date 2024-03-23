@@ -371,6 +371,7 @@ model company {
   @@index([partner_id])
 }
 
+
 model payment {
   id              Int              @id @default(autoincrement())
   method          String?          @db.VarChar(20)
@@ -384,16 +385,29 @@ model payment {
 }
 
 model module_payment {
-  id          Int      @id @default(autoincrement())
-  module_name String   @db.VarChar(100)
-  payment_id  Int?
-  price       Float    @db.Float
-  expires_at  DateTime @db.DateTime(0)
-  active_at   DateTime @db.DateTime(0)
-  created_at  DateTime @default(now()) @db.DateTime(0)
-  updated_at  DateTime @default(now()) @updatedAt @db.DateTime(0)
-  payment     payment? @relation(fields: [payment_id], references: [id], onDelete: Cascade, map: "fk_module_payment_payment")
+  id         Int      @id @default(autoincrement())
+  module_id  Int?
+  payment_id Int?
+  price      Float    @db.Float
+  expires_at DateTime @db.DateTime(0)
+  active_at  DateTime @db.DateTime(0)
+  created_at DateTime @default(now()) @db.DateTime(0)
+  updated_at DateTime @default(now()) @updatedAt @db.DateTime(0)
+  payment    payment? @relation(fields: [payment_id], references: [id], onDelete: Cascade, map: "fk_module_payment_payment")
+  module     module?  @relation(fields: [module_id], references: [id])
 
+  @@index([module_id], map: "fk_module_payment_module_idx")
+  @@index([module_id], map: "idx_module_payment_module")
   @@index([payment_id], map: "fk_module_payment_payment_idx")
   @@index([payment_id], map: "idx_module_payment_payment")
+}
+
+model module {
+  id                             Int                             @id @default(autoincrement())
+  name                           String                          @unique(map: "uniq_module_name") @db.VarChar(100)
+  price                          Float                           @db.Float
+  created_at                     DateTime                        @default(now()) @db.DateTime(0)
+  updated_at                     DateTime                        @default(now()) @updatedAt @db.DateTime(0)
+  module_payment                 module_payment[]
+  config                         String?                         @db.LongText
 }

@@ -22,6 +22,8 @@ const translation = {
   editCustomer: 'ویرایش مشتری',
   pictures: 'تصاویر',
   editOrder: 'ویرایش سفارش',
+  clientSecret: 'کلید مخفی مشتری',
+  clientId: 'شناسه مشتری',
   processingAgreement: 'توافق نامه رویه',
   availability: 'در دسترس بودن',
   selectAll: 'انتخاب همه',

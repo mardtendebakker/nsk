@@ -27,6 +27,11 @@
   ],
   "rules": {
     "import/prefer-default-export": 0,
-    "class-methods-use-this": "off"
+    "class-methods-use-this": "off",
+    "no-await-in-loop": "warn",
+    "no-plusplus": "off",
+    "no-restricted-syntax": "off",
+    "max-len": "off",
+    "eqeqeq": "off"
   }
 }

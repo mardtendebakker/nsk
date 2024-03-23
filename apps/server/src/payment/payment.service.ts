@@ -6,7 +6,7 @@ import { PaymentRepository } from './payment.repository';
 import { FindManyDto } from './dto/find-many.dto';
 import { FindManyPaymentResponseDto } from './dto/find-many-payment-response.dto';
 import { SetupDto } from './dto/setup.dto';
-import { ModuleName, ModuleService } from '../module/module.service';
+import { ModuleService } from '../module/module.service';
 import { PAID, PENDING, Status } from './status';
 
 const FREE_TRIAL = 'free_trial';
@@ -34,7 +34,15 @@ export class PaymentService {
         status: true,
         created_at: true,
         updated_at: true,
-        module_payment: true,
+        module_payment: {
+          select: {
+            id: true,
+            price: true,
+            active_at: true,
+            expires_at: true,
+            module: true,
+          },
+        },
       },
       where: {
         OR: [
@@ -42,14 +50,18 @@ export class PaymentService {
             method: { not: { equals: FREE_TRIAL } },
             module_payment: {
               some: {
-                module_name: { equals: query.moduleName },
+                module: {
+                  name: { equals: query.moduleName },
+                },
               },
             },
           }, {
             method: { equals: null },
             module_payment: {
               some: {
-                module_name: { equals: query.moduleName },
+                module: {
+                  name: { equals: query.moduleName },
+                },
               },
             },
           },
@@ -74,7 +86,8 @@ export class PaymentService {
         updatedAt: payment.updated_at,
         modules: payment.module_payment.map((modulePayment) => ({
           id: modulePayment.id,
-          name: modulePayment.module_name,
+          // @ts-ignore
+          name: modulePayment.module.name,
           price: modulePayment.price,
           activeAt: modulePayment.active_at,
           expiresAt: modulePayment.expires_at,
@@ -85,7 +98,9 @@ export class PaymentService {
   }
 
   async setup(body: SetupDto) {
-    const amount = this.moduleService.calculateTotalAmount(body.modules);
+    const modules = (await this.moduleService.findAll()).filter((module) => body.moduleIds.find((e) => e === module.id));
+
+    const amount = modules.reduce((a, b) => a + b.price, 0);
 
     if (amount < 1) {
       throw new Error('Invalid payment');
@@ -100,7 +115,7 @@ export class PaymentService {
         value: formattedAmount,
       },
       sequenceType: 'first',
-      description: body.modules.toString(),
+      description: modules.map(({ name }) => name).toString(),
       redirectUrl: body.redirectUrl,
       customerId: this.configService.get<string>('MOLLIE_CUSTOMER_ID'),
       webhookUrl: this.configService.get<string>('MOLLIE_WEBHOOK'),
@@ -113,9 +128,9 @@ export class PaymentService {
         transaction_id: mollieResponse.id,
         module_payment: {
           createMany: {
-            data: body.modules.map((moduleName) => ({
-              module_name: moduleName,
-              price: this.moduleService.findOneByName(moduleName).price,
+            data: body.moduleIds.map((moduleId) => ({
+              module_id: moduleId,
+              price: modules.find((module) => moduleId === module.id).price,
               active_at: dateNow,
               expires_at: add(dateNow, { months: 1, days: 1 }),
             })),
@@ -127,7 +142,7 @@ export class PaymentService {
     return mollieResponse;
   }
 
-  async freeTrial(moduleName: ModuleName) {
+  async freeTrial(moduleId: number) {
     const dateNow = new Date();
 
     const { data } = await this.repository.findAll({
@@ -135,14 +150,16 @@ export class PaymentService {
         method: FREE_TRIAL,
         module_payment: {
           some: {
-            module_name: moduleName,
+            module: {
+              id: moduleId,
+            },
           },
         },
       },
     });
 
     if (data.length > 0) {
-      throw new ConflictException(`Trial aleady requested for the module: ${moduleName}`);
+      throw new ConflictException('Trial aleady requested for this module.');
     }
 
     await this.repository.create({
@@ -153,7 +170,7 @@ export class PaymentService {
         transaction_id: '',
         module_payment: {
           create: {
-            module_name: moduleName,
+            module_id: moduleId,
             price: 0,
             active_at: dateNow,
             expires_at: add(dateNow, { days: 14 }),
