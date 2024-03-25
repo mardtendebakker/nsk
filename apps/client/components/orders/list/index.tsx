@@ -9,11 +9,14 @@ import useAxios from '../../../hooks/useAxios';
 import {
   PURCHASE_ORDERS_PATH,
   SALES_ORDERS_PATH,
-  BULK_PRINT_PURCHASES_PATH,
-  BULK_PRINT_SALES_PATH,
-  BULK_PRINT_REPAIRS_PATH,
+  BULK_PRINT_NORMAL_PURCHASES_PATH,
+  BULK_PRINT_NORMAL_SALES_PATH,
+  BULK_PRINT_NORMAL_REPAIRS_PATH,
   AxiosResponse,
   REPAIR_ORDERS_PATH,
+  BULK_PRINT_PACKAGE_PURCHASES_PATH,
+  BULK_PRINT_PACKAGE_SALES_PATH,
+  BULK_PRINT_PACKAGE_REPAIRS_PATH,
 } from '../../../utils/axios';
 import Filter from './filter';
 import Action from './action';
@@ -112,10 +115,16 @@ const AJAX_PATHS = {
   repair: REPAIR_ORDERS_PATH,
 };
 
-const AJAX_BULK_PRINT_PATHS = {
-  purchase: BULK_PRINT_PURCHASES_PATH,
-  sales: BULK_PRINT_SALES_PATH,
-  repair: BULK_PRINT_REPAIRS_PATH,
+const AJAX_BULK_PRINT_NORMAL_PATHS = {
+  purchase: BULK_PRINT_NORMAL_PURCHASES_PATH,
+  sales: BULK_PRINT_NORMAL_SALES_PATH,
+  repair: BULK_PRINT_NORMAL_REPAIRS_PATH,
+};
+
+const AJAX_BULK_PRINT_PACKAGE_PATHS = {
+  purchase: BULK_PRINT_PACKAGE_PURCHASES_PATH,
+  sales: BULK_PRINT_PACKAGE_SALES_PATH,
+  repair: BULK_PRINT_PACKAGE_REPAIRS_PATH,
 };
 
 export default function ListContainer({ type }: { type: OrderType }) {
@@ -129,7 +138,8 @@ export default function ListContainer({ type }: { type: OrderType }) {
 
   const ajaxPath = AJAX_PATHS[type] || PURCHASE_ORDERS_PATH;
 
-  const ajaxBulkPrintPath = AJAX_BULK_PRINT_PATHS[type] || BULK_PRINT_PURCHASES_PATH;
+  const ajaxBulkPrintNormalPath = AJAX_BULK_PRINT_NORMAL_PATHS[type] || BULK_PRINT_NORMAL_PURCHASES_PATH;
+  const ajaxBulkPrintPackagePath = AJAX_BULK_PRINT_PACKAGE_PATHS[type] || BULK_PRINT_PACKAGE_PURCHASES_PATH;
 
   const { formRepresentation, setValue, setData } = useForm(initFormState({
     search: getQueryParam('search'),
@@ -157,9 +167,15 @@ export default function ListContainer({ type }: { type: OrderType }) {
     },
   );
 
-  const { call: callPrint, performing: performingPrint } = useAxios(
+  const { call: callPrintNormal, performing: performingPrintNormal } = useAxios(
     'get',
-    ajaxBulkPrintPath,
+    ajaxBulkPrintNormalPath,
+    { withProgressBar: true },
+  );
+
+  const { call: callPrintPackage, performing: performingPrintPackage } = useAxios(
+    'get',
+    ajaxBulkPrintPackagePath,
     { withProgressBar: true },
   );
 
@@ -208,7 +224,7 @@ export default function ListContainer({ type }: { type: OrderType }) {
     }
   };
 
-  const disabled = (): boolean => performing || performingDelete || performingPatch || performingPrint;
+  const disabled = (): boolean => performing || performingDelete || performingPatch || performingPrintNormal || performingPrintPackage;
 
   const handleDelete = (id: number) => {
     callDelete({ path: ajaxPath.replace(':id', id.toString()) })
@@ -232,8 +248,15 @@ export default function ListContainer({ type }: { type: OrderType }) {
     setData(initFormState({}));
   };
 
-  const handlePrint = () => {
-    callPrint({ params: { ids: checkedOrderIds }, responseType: 'blob' })
+  const handlePrintNormal = () => {
+    callPrintNormal({ params: { ids: checkedOrderIds }, responseType: 'blob' })
+      .then((response: AxiosResponse) => {
+        openBlob(response.data);
+      });
+  };
+
+  const handlePrintPackage = () => {
+    callPrintPackage({ params: { ids: checkedOrderIds }, responseType: 'blob' })
       .then((response: AxiosResponse) => {
         openBlob(response.data);
       });
@@ -258,7 +281,8 @@ export default function ListContainer({ type }: { type: OrderType }) {
         checkedOrdersCount={checkedOrderIds.length}
         onAllCheck={handleAllChecked}
         onChangeStatus={() => setShowChangeStatusModal(true)}
-        onPrint={handlePrint}
+        onPrintNormal={handlePrintNormal}
+        onPrintPackage={handlePrintPackage}
       />
       <Box sx={{ m: '.5rem' }} />
       <List
