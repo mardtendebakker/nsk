@@ -107,7 +107,7 @@ export class AOrderController {
     return this.aorderService.deleteFiles(id, fileIds);
   }
 
-  @Get('bulk/print')
+  @Get('bulk/print/normal')
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Orders pdf',
@@ -139,6 +139,50 @@ export class AOrderController {
       pdfStream = await this.aorderService.printAOrders(ids);
     } else if (groups.some(group=> PARTNERS_GROUPS.includes(group))) {
       pdfStream = await this.aorderService.printAOrders(ids, email);
+    } else {
+      throw new ForbiddenException("Insufficient permissions to access this api!");
+    }
+
+    res.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': 'inline; filename="orders.pdf"',
+    });
+
+    return new StreamableFile(pdfStream);
+  }
+
+  @Get('bulk/print/package')
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Orders pdf',
+    content: {
+      'application/octet-stream': {
+        schema: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  async printPackage(
+    @Query() bulkPrintDTO: BulkPrintDTO,
+    @Res({ passthrough: true }) res: Response,
+    @CognitoUser(["groups", "email"])
+    {
+      groups,
+      email,
+    }: {
+      groups: CognitoGroups[];
+      email: string;
+    }
+  ) {
+    const { ids } = bulkPrintDTO;
+    
+    let pdfStream: Buffer;
+    if (groups.some(group=> LOCAL_GROUPS.includes(group))) {
+      pdfStream = await this.aorderService.printPackage(ids);
+    } else if (groups.some(group=> PARTNERS_GROUPS.includes(group))) {
+      pdfStream = await this.aorderService.printPackage(ids, email);
     } else {
       throw new ForbiddenException("Insufficient permissions to access this api!");
     }

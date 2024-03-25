@@ -1,18 +1,18 @@
-
 import { AOrderProcessed } from "../../aorder/aorder.process";
 import { DeliveryType } from "../../aorder/types/delivery-type.enum";
 import { DataDestruction } from "../../aorder/types/data-destruction.enum";
 import { format } from 'date-fns';
-import { IPrinter } from "../iprinter/iprinter";
 import { PrintUtil } from "../print-util";
 import { PrintTemplateName } from "../types/print-types.enum";
 import { Injectable } from "@nestjs/common";
+import { IOrderPrinter } from "../iprinter/iorder-printer";
+
 @Injectable()
-export class AOrderPrinter extends IPrinter {
+export class PackagePrinter extends IOrderPrinter {
   private currencyFormat: Intl.NumberFormat;
 
   constructor() {
-    super(PrintTemplateName.ORDER);
+    super(PrintTemplateName.PACKAGE);
     this.currencyFormat = new Intl.NumberFormat('nl-NL', { style: 'currency', currency: 'EUR' });
   }
 
@@ -73,7 +73,7 @@ export class AOrderPrinter extends IPrinter {
           ...aorder.product_order,
           ...(aorder.product_order.map(product_order => ({
             ...product_order,
-            price: product_order.price ? this.currencyFormat.format(product_order.price) : '€ 0.00',
+            Test: 'Ok',
           })))
         },
       }

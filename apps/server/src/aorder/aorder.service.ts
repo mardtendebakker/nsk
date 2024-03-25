@@ -218,6 +218,11 @@ export class AOrderService {
     return this.printService.printAOrders(aorders);
   }
 
+  async printPackage(ids: number[], email?: string): Promise<Buffer> {
+    const aorders = await this.findByIds(ids, email);
+    return this.printService.printPackage(aorders);
+  }
+
   protected async processCreateOrUpdateOrderInput(orderDto: CommonAOrderDto): Promise<CommonAOrderInput> {
     const {
       status_id,
