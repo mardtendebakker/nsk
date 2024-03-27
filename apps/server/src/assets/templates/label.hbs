@@ -4,7 +4,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta http-equiv="Window-target" content="_blank">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Nexxus price tag</title>
+  <title>Nexxus label tag</title>
   <style>
     html {
       -webkit-print-color-adjust: exact;
@@ -14,43 +14,46 @@
       font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
       font-size: 9pt;
     }
-
     div {
       text-align: center;
       width: 100%;
     }
-
     div.content {
       padding: 4px;
     }
-
     div.attributes {
-      height: 78%;
+      height: 85%;
       width: 100%;
     }
-
     div.title {
-      height: 20px;
+      height: 15px;
       background-color: #000;
       color: #fff;
       text-transform: uppercase;
-      font-size: 14pt;
+      font-size: 11pt;
     }
-
     table {
       width: 100%;
-      margin-bottom: 10px;
       max-height: 100%;
     }
-
     td {
-      padding: 4px;
+      padding: 1px;
+      font-size: 9.5pt;
     }
-
     td.even {
       background-color: #eef;
     }
-    
+    .barcode {
+      margin-left: -3px;
+      padding-bottom: 0;
+      margin-bottom: 0;
+    }
+    .sku {
+      margin-top: 0;
+      padding-top: 0;
+      font-size: 9pt;
+      line-height: 0;
+    }
     .pagebreak {
       page-break-before: always;
     }
@@ -59,7 +62,6 @@
 <body>
 {{#each this}}
   <div class="container pagebreak">
-    <div class="content title">{{ product.name }}</div>
     <div class="content attributes">
       <table>
         {{#each specifications}}
@@ -70,10 +72,10 @@
         {{/each}}
       </table>
     </div>
-    <div class="content">
+    <div class="content barcode">
       <img src="{{ product.barcode }}">
     </div>
-    <div class="content">
+    <div class="content sku">
       <b>*&nbsp;{{ product.sku }}&nbsp;*</b>
     </div>
   </div>

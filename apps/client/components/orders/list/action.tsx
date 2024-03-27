@@ -14,16 +14,17 @@ export default function Action({
   checkedOrdersCount,
   onAllCheck,
   onChangeStatus,
-  onPrintNormal,
-  onPrintPackage,
+  onPrints,
 }:{
   disabled: boolean,
   allChecked: boolean,
   checkedOrdersCount: number,
   onAllCheck: (checked: boolean) => void,
   onChangeStatus: () => void,
-  onPrintNormal: () => void,
-  onPrintPackage: () => void,
+  onPrints: {
+    onClick: () => void,
+    transKey: 'normal' | 'export',
+  }[],
 }) {
   const { trans } = useTranslation();
   const [showPrintActions, setShowPrintActions] = useState(null);
@@ -75,12 +76,11 @@ export default function Action({
               }}
             >
               <Stack>
-                <MenuItem onClick={onPrintNormal} disabled={disabled}>
-                  {trans('normal')}
-                </MenuItem>
-                <MenuItem onClick={onPrintPackage} disabled={disabled}>
-                  {trans('package')}
-                </MenuItem>
+                {onPrints?.map((onPrint) => (
+                  <MenuItem onClick={onPrint.onClick} disabled={disabled}>
+                    {trans(onPrint.transKey)}
+                  </MenuItem>
+                ))}
               </Stack>
             </Popover>
           </>

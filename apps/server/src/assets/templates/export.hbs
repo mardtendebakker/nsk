@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sales orders</title>
+  <style>
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+    }
+    
+    body {
+      font-size: 12px;
+      font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      color: #212529;
+    }
+
+    .container {
+      width: 100%;
+      padding-right: 15px;
+      padding-left: 15px;
+      margin-right: auto;
+      margin-left: auto;
+    }
+
+    .row {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      margin-top: 5px;
+      justify-content: space-between;
+    }
+
+    .col {}
+    .col-6 {
+      width: 48%;
+    }
+    .col-12 {
+      width: 100%;
+    }
+
+    @media screen and (max-width: 1000px) {
+      * {
+        font-size: 1em;
+      }
+    }
+
+    @media screen and (max-width: 630px) {
+      .row div {
+        padding: 1.5%;  
+      }    
+    } 
+
+    @media screen and (max-width: 500px) {
+      * {
+        font-size: 0.9em;
+      }
+    }
+
+    .panel-default {
+      border-color: #ecf0f1;
+    }
+    .panel {
+      margin-bottom: 21px;
+      border-radius: 4px;
+      -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    }
+    .panel-heading {
+      font-weight: bold;
+      padding: 10px 15px;
+      color: #2c3e50;
+      background-color: #ecf0f1;
+      border-bottom: 2px solid #000405;
+    }
+    .panel-body {
+      padding: 15px 15px 5px 15px;
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    .table-checklist td, .table-checklist th {
+      padding: 5px;
+    }
+
+    .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      line-height: 1.2;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+    }
+    h2 {
+      font-size: 2rem;
+    }
+    h3 {
+      font-size: 1.75rem;
+    }
+    h4 {
+      font-size: 1.5rem;
+    }
+    h5 {
+      font-size: 1.25rem;
+    }
+    h6 {
+      font-size: 1rem;
+    }
+
+    .table {
+      width: 100%;
+      max-width: 100%;
+      padding-bottom: .2rem;
+      background-color: transparent;
+    }
+    .table thead tr th {
+      text-align: left;
+    }
+
+    thead { display: table-header-group; }
+    tfoot { display: table-row-group; }
+    tr { page-break-inside: avoid; }
+    
+    .pagebreak {
+      page-break-before: always;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container pagebreak">
+    <h2>Export declaration</h2>
+    <div class="row">
+      <div class="col col-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <span></span>Person who arranges the transport
+          </div>
+          <div class="panel-body">
+            <table class="table">
+              <tr><td>Name: </td></tr>
+              <tr><td>Addres: </td></tr>
+              <tr><td>Contact person: </td></tr>
+              <tr><td>Tel: </td></tr>
+              <tr><td>E-mail: </td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="col col-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <span></span>Company who performed the test
+          </div>
+          <div class="panel-body">
+            <table class="table">
+              <tr><td>Name: </td></tr>
+              <tr><td>Addres: </td></tr>
+              <tr><td>Contact person: </td></tr>
+              <tr><td>Tel: </td></tr>
+              <tr><td>E-mail: </td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <span></span> Declaration
+        </div>
+        <div class="panel-body">
+          <table class="table">
+            <tr><td>
+              I, the person who conducted the evaluation and testing of all below listed equipment, declare that the
+              results of evaluation and testing are complete and correct (Annex 6, Article 1 under b).
+            </td></tr>
+          </table>
+          <table class="table">
+            <tr>
+              <td>Name:</td>
+              <td>Date:</td>
+              <td>Signature:</td>
+            </tr>
+          </table>
+          <table class="table"><tr><td>&nbsp;</td></tr></table>
+          <table class="table"><tr><td>&nbsp;</td></tr></table>
+          <table class="table"><tr><td>&nbsp;</td></tr></table>
+          <table class="table">
+            <tr><td>
+              I, the person who arranges the transport of the equipment listed below, hereby declare that prior to export
+              the used equipment listed below was tested and is fully functional.(1) I confirm that this equipment is not
+              defined as or considered to be waste in any of the countries involved in the transport and is destined for
+              direct reuse(2) and not for recovery or disposal operations (Annex 6, Article 1 under c).
+            </td></tr>
+          </table>
+          <table class="table">
+            <tr>
+              <td>Name:</td>
+              <td>Date:</td>
+              <td>Signature:</td>
+            </tr>
+          </table>
+          <table class="table"><tr><td>&nbsp;</td></tr></table>
+          <table class="table"><tr><td>&nbsp;</td></tr></table>
+          <table class="table"><tr><td>&nbsp;</td></tr></table>
+        </div>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <span></span>Products
+      </div>
+      <div class="panel-body">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>SKU</th>
+              <th>Name</th>
+              <th>Merk</th>
+              <th>Type</th>
+              <th>Year</th>
+              <th width="5%">Qty</th>
+              <th width="10%">Date of Test</th>
+              <th width="15%">Kind of Test Performed</th>
+              <th width="10%">Result of Test</th>
+            </tr>
+            <tr></tr>
+          </thead>
+          <tbody>
+          {{#each this}}
+            {{#each product_order}}
+            <tr>
+              <td>{{ product.sku }}</td>
+              <td>{{ product.name }}</td>
+              <td>Merk</td>
+              <td>{{ product.product_type.name }}</td>
+              <td>Year</td>
+              <td>{{ quantity }}</td>
+              <td>25/03/2024</td>
+              <td>Power up</td>
+              <td>OK</td>
+            </tr>
+            {{/each}}
+          {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

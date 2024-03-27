@@ -9,7 +9,7 @@ import { ChecklistPrinter } from './printer/checklist-printer';
 import { PriceCardPrinter } from './printer/price-card-printer';
 import { LabelPrinter } from './printer/label-printer';
 import { ProductLabelPrint } from './types/product-label-print';
-import { PackagePrinter } from './printer/package-printer';
+import { ExportPrinter } from './printer/export-printer';
 
 @Injectable()
 export class PrintService {
@@ -19,7 +19,7 @@ export class PrintService {
     private readonly checklistPrinter: ChecklistPrinter,
     private readonly priceCardPrinter: PriceCardPrinter,
     private readonly labelPrinter: LabelPrinter,
-    private readonly packagePrinter: PackagePrinter,
+    private readonly exportPrinter: ExportPrinter,
   ) {
     Handlebars.registerHelper('ifCond', function (v1, operator, v2, options) {
       switch (operator) {
@@ -59,8 +59,8 @@ export class PrintService {
     });
   }
 
-  async printPackage(data: AOrderProcessed[]): Promise<Buffer> {
-    return this.packagePrinter.print({
+  async printExport(data: AOrderProcessed[]): Promise<Buffer> {
+    return this.exportPrinter.print({
       data,
       pdfOptions: {
         format: 'A4',
@@ -105,7 +105,8 @@ export class PrintService {
     return this.labelPrinter.print({
       data,
       pdfOptions: {
-        format: 'A6',
+        width: '40mm',
+        height: '60mm',
         margin: { top: 0, bottom: 0, left: 0, right: 0 },
       }
     });

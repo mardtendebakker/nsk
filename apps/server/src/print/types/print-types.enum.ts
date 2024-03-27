@@ -4,5 +4,5 @@ export enum PrintTemplateName {
   PRICECARD = 'pricecard',
   LABEL = 'label',
   NORMAL = 'normal',
-  PACKAGE = 'declaration-export',
+  EXPORT = 'export',
 }

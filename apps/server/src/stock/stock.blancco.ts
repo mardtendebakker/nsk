@@ -1,20 +1,20 @@
-import { HttpException, HttpStatus } from "@nestjs/common";
-import { BlanccoService } from "../blancco/blancco.service";
-import { BlanccoReportsV1 } from "../blancco/types/blancco-reports-v1";
-import { StockRepository } from "./stock.repository";
-import { ProductAttributeDto } from "./dto/product-attribute.dto";
-import { AttributeIncludeOption } from "./types/attribute-include-option";
-import { BlanccoReportV1 } from "../blancco/types/blancco-report-v1";
-import { BlanccoCustomFiledKeys } from "../blancco/types/blancco-custom-field-keys.enum";
-import { BlanccoProductTypes } from "../blancco/types/blancco-product-types.enum";
-import { StockService } from "./stock.service";
-import { BlanccoHardwareKeys } from "../blancco/types/blancco-hardware-keys.enum";
+import { HttpException, HttpStatus } from '@nestjs/common';
+import { BlanccoService } from '../blancco/blancco.service';
+import { BlanccoReportsV1 } from '../blancco/types/blancco-reports-v1';
+import { StockRepository } from './stock.repository';
+import { ProductAttributeDto } from './dto/product-attribute.dto';
+import { AttributeIncludeOption } from './types/attribute-include-option';
+import { BlanccoReportV1 } from '../blancco/types/blancco-report-v1';
+import { BlanccoCustomFiledKeys } from '../blancco/types/blancco-custom-field-keys.enum';
+import { BlanccoProductTypes } from '../blancco/types/blancco-product-types.enum';
+import { StockService } from './stock.service';
+import { BlanccoHardwareKeys } from '../blancco/types/blancco-hardware-keys.enum';
 
 export class StockBlancco {
   constructor(
     protected readonly repository: StockRepository,
     protected readonly stockService: StockService,
-    protected readonly blanccoService: BlanccoService
+    protected readonly blanccoService: BlanccoService,
   ) {}
 
   async importFromBlancco(orderId: number): Promise<number> {
@@ -26,7 +26,7 @@ export class StockBlancco {
         const { cursor, ...reports } = await this.blanccoService.getReports(orderId, newCursor);
         const result = await this.handleBlanccoReoprts(orderId, reports);
         results = results.concat(result);
-  
+
         newCursor = cursor;
       } while (newCursor);
     } catch (err) {
@@ -42,7 +42,10 @@ export class StockBlancco {
     return results.length;
   }
 
-  private async handleBlanccoReoprts(orderId: number, reports: BlanccoReportsV1): Promise<boolean[]> {
+  private async handleBlanccoReoprts(
+    orderId: number,
+    reports: BlanccoReportsV1,
+  ): Promise<boolean[]> {
     const results: boolean[] = [];
 
     for (const uuid in reports) {
@@ -90,11 +93,13 @@ export class StockBlancco {
   }
 
   private getProductTypeName(report: BlanccoReportV1): string {
-    let productTypeName = this.blanccoService.getValueFromReportByKey(report, BlanccoCustomFiledKeys.PRODUCT_TYPE);
+    let productTypeName = this.blanccoService
+      .getValueFromReportByKey(report, BlanccoCustomFiledKeys.PRODUCT_TYPE);
 
     // TODO: must move to database, admin should customize them
     if (!productTypeName) {
-      const chassisType = this.blanccoService.getValueFromReportByKey(report, BlanccoHardwareKeys.CHASSIS_TYPE);
+      const chassisType = this.blanccoService
+        .getValueFromReportByKey(report, BlanccoHardwareKeys.CHASSIS_TYPE);
       if (['Desktop', 'Low Profile Desktop', 'Mini Tower'].includes(chassisType)) {
         productTypeName = BlanccoProductTypes.COMPUTER;
       } else if (['Laptop', 'Notebook', 'Convertible'].includes(chassisType)) {
@@ -105,9 +110,12 @@ export class StockBlancco {
     return productTypeName;
   }
 
-  private async prepareProductAttributesByBlanccoReport(report: BlanccoReportV1, attributes: AttributeIncludeOption[]): Promise<ProductAttributeDto[]> {
+  private async prepareProductAttributesByBlanccoReport(
+    report: BlanccoReportV1,
+    attributes: AttributeIncludeOption[],
+  ): Promise<ProductAttributeDto[]> {
     const productAttributes: ProductAttributeDto[] = [];
-    
+
     for (const attribute of attributes) {
       const reportValue = this.blanccoService.getValueFromReportByKey(report.blancco_data.blancco_hardware_report, attribute.attr_code);
       if (reportValue) {

@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { StockService } from '../stock/stock.service';
 import { LocationService } from '../admin/location/location.service';
 import { FileService } from '../file/file.service';
@@ -7,7 +8,6 @@ import { PrintService } from '../print/print.service';
 import { EntityStatus } from '../common/types/entity-status.enum';
 import { LocationLabelService } from '../location-label/location-label.service';
 import { BlanccoService } from '../blancco/blancco.service';
-import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AProductService extends StockService {
@@ -21,6 +21,15 @@ export class AProductService extends StockService {
     protected readonly configService: ConfigService,
     @Inject('ENTITY_STATUS') protected readonly entityStatus: EntityStatus,
   ) {
-    super(repository, locationService, locationLabelService, fileService, printService, blanccoService, configService, entityStatus);
+    super(
+      repository,
+      locationService,
+      locationLabelService,
+      fileService,
+      printService,
+      blanccoService,
+      configService,
+      entityStatus,
+    );
   }
 }

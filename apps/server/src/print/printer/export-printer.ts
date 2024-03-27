@@ -6,11 +6,11 @@ import { PrintTemplateName } from '../types/print-types.enum';
 import { IOrderPrinter } from '../iprinter/iorder-printer';
 
 @Injectable()
-export class NormalPrinter extends IOrderPrinter {
+export class ExportPrinter extends IOrderPrinter {
   private currencyFormat: Intl.NumberFormat;
 
   constructor() {
-    super(PrintTemplateName.NORMAL);
+    super(PrintTemplateName.EXPORT);
     this.currencyFormat = new Intl.NumberFormat('nl-NL', { style: 'currency', currency: 'EUR' });
   }
 
@@ -61,7 +61,6 @@ export class NormalPrinter extends IOrderPrinter {
         ...aorder.product_order,
         ...(aorder.product_order.map((productOrder) => ({
           ...productOrder,
-          price: productOrder.price ? this.currencyFormat.format(productOrder.price) : '€ 0.00',
         }))),
       },
     })));

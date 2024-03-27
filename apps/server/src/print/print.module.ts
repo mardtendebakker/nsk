@@ -5,7 +5,7 @@ import { BarcodePrinter } from './printer/barcode-printer';
 import { ChecklistPrinter } from './printer/checklist-printer';
 import { LabelPrinter } from './printer/label-printer';
 import { PriceCardPrinter } from './printer/price-card-printer';
-import { PackagePrinter } from './printer/package-printer';
+import { ExportPrinter } from './printer/export-printer';
 
 @Module({
   providers: [
@@ -15,7 +15,7 @@ import { PackagePrinter } from './printer/package-printer';
     ChecklistPrinter,
     LabelPrinter,
     PriceCardPrinter,
-    PackagePrinter,
+    ExportPrinter,
   ],
   exports: [PrintService]
 })

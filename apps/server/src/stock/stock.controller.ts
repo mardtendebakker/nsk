@@ -1,20 +1,38 @@
-import { Authorization, AuthorizationGuard, CognitoUser } from "@nestjs-cognito/auth";
-import { Body, Delete, ForbiddenException, Get, HttpStatus, Param, Patch, Post, Put, Query, Res, StreamableFile, UploadedFiles, UseGuards, UseInterceptors } from "@nestjs/common";
-import { ApiBearerAuth, ApiResponse } from "@nestjs/swagger";
-import { FindOneProductResponeDto } from "./dto/find-one-product-response.dto";
-import { FindProductsResponseDto } from "./dto/find-product-respone.dto";
-import { StockService } from "./stock.service";
-import { UpdateBodyStockDto } from "./dto/update-body-stock.dto";
-import { UpdateManyResponseProductDto } from "./dto/update-many-product-response.dts";
-import { UpdateManyProductDto } from "./dto/update-many-product.dto";
-import { FindManyDto } from "./dto/find-many.dto";
-import { AnyFilesInterceptor } from "@nestjs/platform-express";
-import { CreateBodyStockDto } from "./dto/create-body-stock.dto";
-import { BulkPrintDTO } from "../print/dto/bulk-print.dto";
+import { Authorization, AuthorizationGuard, CognitoUser } from '@nestjs-cognito/auth';
+import {
+  Body,
+  Delete,
+  ForbiddenException,
+  Get,
+  HttpStatus,
+  Param,
+  Patch,
+  Post,
+  Put,
+  Query,
+  Res,
+  StreamableFile,
+  UploadedFiles,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
+import { ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
+import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import type { Response } from 'express';
-import { ALL_MAIN_GROUPS, CognitoGroups, LOCAL_GROUPS, MANAGER_GROUPS, PARTNERS_GROUPS } from "../common/types/cognito-groups.enum";
-import { StockBlancco } from "./stock.blancco";
-import { requiredModule } from "../common/guard/required-modules.guard";
+import { FindOneProductResponeDto } from './dto/find-one-product-response.dto';
+import { FindProductsResponseDto } from './dto/find-product-respone.dto';
+import { StockService } from './stock.service';
+import { UpdateBodyStockDto } from './dto/update-body-stock.dto';
+import { UpdateManyResponseProductDto } from './dto/update-many-product-response.dts';
+import { UpdateManyProductDto } from './dto/update-many-product.dto';
+import { FindManyDto } from './dto/find-many.dto';
+import { CreateBodyStockDto } from './dto/create-body-stock.dto';
+import { BulkPrintDTO } from '../print/dto/bulk-print.dto';
+import {
+  ALL_MAIN_GROUPS, CognitoGroups, LOCAL_GROUPS, MANAGER_GROUPS, PARTNERS_GROUPS,
+} from '../common/types/cognito-groups.enum';
+import { StockBlancco } from './stock.blancco';
+import { requiredModule } from '../common/guard/required-modules.guard';
 
 @ApiBearerAuth()
 @Authorization(ALL_MAIN_GROUPS)
@@ -25,30 +43,29 @@ export class StockController {
   ) {}
 
   @Get('')
-  @ApiResponse({type: FindProductsResponseDto})
+  @ApiResponse({ type: FindProductsResponseDto })
   findAll(
-    @Query() query: FindManyDto,
-    @CognitoUser(["groups", "email"])
+  @Query() query: FindManyDto,
+    @CognitoUser(['groups', 'email'])
     {
       groups,
       email,
     }: {
       groups: CognitoGroups[];
       email: string;
-    }
+    },
   ) {
-    if (groups.some(group=> LOCAL_GROUPS.includes(group))) {
+    if (groups.some((group) => LOCAL_GROUPS.includes(group))) {
       return this.stockService.findAll(query);
-    } else if (groups.some(group=> PARTNERS_GROUPS.includes(group))) {
+    } if (groups.some((group) => PARTNERS_GROUPS.includes(group))) {
       return this.stockService.findAll(query, email);
-    } else {
-      throw new ForbiddenException("Insufficient permissions to access this api!");
     }
+    throw new ForbiddenException('Insufficient permissions to access this api!');
   }
 
   @Get(':id')
   @UseGuards(AuthorizationGuard(LOCAL_GROUPS))
-  @ApiResponse({type: FindOneProductResponeDto})
+  @ApiResponse({ type: FindOneProductResponeDto })
   findOne(@Param('id') id: number) {
     return this.stockService.findOneCustomSelect(id);
   }
@@ -56,9 +73,9 @@ export class StockController {
   @Post('')
   @UseGuards(AuthorizationGuard(LOCAL_GROUPS))
   @UseInterceptors(AnyFilesInterceptor())
-  @ApiResponse({type: FindOneProductResponeDto})
+  @ApiResponse({ type: FindOneProductResponeDto })
   create(
-    @Body() body: CreateBodyStockDto,
+  @Body() body: CreateBodyStockDto,
     @UploadedFiles() files: Express.Multer.File[],
   ) {
     return this.stockService.create(body, files);
@@ -67,9 +84,9 @@ export class StockController {
   @Put(':id')
   @UseGuards(AuthorizationGuard(LOCAL_GROUPS))
   @UseInterceptors(AnyFilesInterceptor())
-  @ApiResponse({type: FindOneProductResponeDto})
+  @ApiResponse({ type: FindOneProductResponeDto })
   updateOne(
-    @Param('id') id: number,
+  @Param('id') id: number,
     @Body() body: UpdateBodyStockDto,
     @UploadedFiles() files: Express.Multer.File[],
   ) {
@@ -78,7 +95,7 @@ export class StockController {
 
   @Patch('')
   @UseGuards(AuthorizationGuard(LOCAL_GROUPS))
-  @ApiResponse({type: UpdateManyResponseProductDto})
+  @ApiResponse({ type: UpdateManyResponseProductDto })
   updateMany(@Body() updateManyProductDto: UpdateManyProductDto) {
     return this.stockService.updateManyLocation(updateManyProductDto);
   }
@@ -172,9 +189,9 @@ export class StockController {
     },
   })
   async printLabels(
-    @Query() bulkPrintDTO: BulkPrintDTO,
+  @Query() bulkPrintDTO: BulkPrintDTO,
     @Res({ passthrough: true }) res: Response,
-    @CognitoUser(["gender", "given_name", "family_name"])
+    @CognitoUser(['gender', 'given_name', 'family_name'])
     {
       gender,
       given_name,
@@ -183,7 +200,7 @@ export class StockController {
       gender: string;
       given_name: string;
       family_name: string;
-    }
+    },
   ) {
     const { ids } = bulkPrintDTO;
     const pdfStream = await this.stockService.printLabels({
@@ -207,7 +224,6 @@ export class StockController {
   async importFromBlancco(@Param('orderId') orderId: number) {
     const count = await this.stockBlancco.importFromBlancco(orderId);
 
-    return { count }
+    return { count };
   }
-  
 }

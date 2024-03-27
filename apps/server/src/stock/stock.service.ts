@@ -1,37 +1,38 @@
-import { Prisma, attribute } from "@prisma/client";
-import { LocationService } from "../admin/location/location.service";
-import { StockRepository } from "./stock.repository";
-import { StockProcess } from "./stock.process";
-import { UpdateManyProductDto } from "./dto/update-many-product.dto";
-import { FindManyDto } from "./dto/find-many.dto";
-import { UpdateBodyStockDto } from "./dto/update-body-stock.dto";
-import { FileService } from "../file/file.service";
-import { FileDiscrimination } from "../file/types/file-discrimination.enum";
-import { CreateFileDto } from "../file/dto/create-file.dto";
-import { AttributeType } from "../attribute/enum/attribute-type.enum";
-import { CreateBodyStockDto } from "./dto/create-body-stock.dto";
-import { NotFoundException } from "@nestjs/common";
-import { ProductAttributeIncludeAttribute } from "./types/product-attribute-include-attribute";
-import { ProductRelation } from "./types/product-relation";
-import { ProcessedStock } from "./dto/processed-stock.dto";
-import { ProductAttributeDto } from "./dto/product-attribute.dto";
-import { FILE_VALUE_DELIMITER } from "./types/file-value-delimiter.const";
-import { ProductAttributeFile } from "./types/product-attribute-file";
-import { PutObjectWithoutKeyInput } from "../file/dto/put-object-without-key-input.dto";
-import { PrintService } from "../print/print.service";
-import { ProductOrderRelation } from "./types/product-order-relation";
-import { ProductOrderDto } from "./dto/find-one-product-response.dto";
-import { AttributeGetPayload } from "../attribute/types/attribute-get-payload";
-import { ProductAttributeProcessed } from "./types/product-attribute-processed";
-import { ProductRelationAttributeProcessed } from "./types/product-relation-attribute-processed";
-import { ProductRelationAttributeOrderProcessed } from "./types/product-relation-attribute-order-processed";
-import { EntityStatus } from "../common/types/entity-status.enum";
-import { LocationLabelService } from "../location-label/location-label.service";
-import { BlanccoService } from "../blancco/blancco.service";
-import { AttributeIncludeOption } from "./types/attribute-include-option";
-import { UserLabelPrint } from "../print/types/user-label-print";
-import { CompanyLabelPrint } from "../print/types/company-label-print";
-import { ConfigService } from "@nestjs/config";
+import { Prisma, attribute as AttributeEntity, afile as AFileEntity } from '@prisma/client';
+import { NotFoundException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { LocationService } from '../admin/location/location.service';
+import { StockRepository } from './stock.repository';
+import { StockProcess } from './stock.process';
+import { UpdateManyProductDto } from './dto/update-many-product.dto';
+import { FindManyDto } from './dto/find-many.dto';
+import { UpdateBodyStockDto } from './dto/update-body-stock.dto';
+import { FileService } from '../file/file.service';
+import { FileDiscrimination } from '../file/types/file-discrimination.enum';
+import { CreateFileDto } from '../file/dto/create-file.dto';
+import { AttributeType } from '../attribute/enum/attribute-type.enum';
+import { CreateBodyStockDto } from './dto/create-body-stock.dto';
+import { ProductAttributeIncludeAttribute } from './types/product-attribute-include-attribute';
+import { ProductRelation } from './types/product-relation';
+import { ProcessedStock } from './dto/processed-stock.dto';
+import { ProductAttributeDto } from './dto/product-attribute.dto';
+import { FILE_VALUE_DELIMITER } from './types/file-value-delimiter.const';
+import { ProductAttributeFile } from './types/product-attribute-file';
+import { PutObjectWithoutKeyInput } from '../file/dto/put-object-without-key-input.dto';
+import { PrintService } from '../print/print.service';
+import { ProductOrderRelation } from './types/product-order-relation';
+import { ProductOrderDto } from './dto/find-one-product-response.dto';
+import { ProductAttributeProcessed } from './types/product-attribute-processed';
+import { ProductRelationAttributeProcessed } from './types/product-relation-attribute-processed';
+import { ProductRelationAttributeOrderProcessed } from './types/product-relation-attribute-order-processed';
+import { EntityStatus } from '../common/types/entity-status.enum';
+import { LocationLabelService } from '../location-label/location-label.service';
+import { BlanccoService } from '../blancco/blancco.service';
+import { AttributeIncludeOption } from './types/attribute-include-option';
+import { UserLabelPrint } from '../print/types/user-label-print';
+import { CompanyLabelPrint } from '../print/types/company-label-print';
+import { ProductAttributeUpdateMany } from './types/update-atrribute';
+import { AttributeGetPayload } from '../attribute/types/attribute-get-payload';
 
 export class StockService {
   constructor(
@@ -72,7 +73,7 @@ export class StockService {
       const attributeOptions = await this.repository.findAttributeOptions({
         name: { contains: search },
       });
-      attributeOptions.forEach(attributeOption => {
+      attributeOptions.forEach((attributeOption) => {
         attributeOptionsWhere.push({
           attribute_id: attributeOption.attribute_id,
           value: String(attributeOption.id),
@@ -90,7 +91,7 @@ export class StockService {
             some: {
               ...(orderId && { order_id: orderId }),
               ...this.getPartnerWhereInput(email),
-            } 
+            },
           },
           ...(excludeByOrderId && { none: { order_id: excludeByOrderId } }),
           ...(excludeByOrderDiscr && { none: { aorder: { discr: excludeByOrderDiscr } } }),
@@ -99,17 +100,18 @@ export class StockService {
       ...(productType && { type_id: productType }),
       ...(location && { location_id: location }),
       ...(locationLabel && { location_label_id: locationLabel }),
-      ...(productStatus && {product_status: { id: productStatus }} || {
+      ...(productStatus && { product_status: { id: productStatus } }),
+      ...(!productStatus && {
         OR: [{
           status_id: null,
         }, {
           product_status: {
             OR: [{
-              is_stock: null
+              is_stock: null,
             }, {
-              is_stock: true
-            }]
-          }
+              is_stock: true,
+            }],
+          },
         }],
       }),
       ...(search && {
@@ -136,7 +138,9 @@ export class StockService {
     };
 
     const productOrderBy: Prisma.productOrderByWithRelationInput[] = [];
-    orderBy && productOrderBy.push(orderBy);
+    if (orderBy) {
+      productOrderBy.push(orderBy);
+    }
     productOrderBy.push({ id: 'desc' });
 
     const result = await this.repository.findAll({
@@ -146,13 +150,12 @@ export class StockService {
       orderBy: productOrderBy,
     });
 
-    const data = result.data.map(product => {
-      return this.processStock(product, orderId);
-    });
+    const data = result.data.map((product) => this.processStock(product, orderId));
 
     return {
       count: result.count,
-      data: data//.filter(d => d.stock != 0) // TODO: the out of stock products should be removed by cron job not here by filtering
+      // TODO: the out of stock products should be removed by cron job not here by filtering
+      data, // .filter(d => d.stock != 0)
     };
   }
 
@@ -162,8 +165,9 @@ export class StockService {
       select: this.processSelect(),
     });
   }
-  
-  async findAllRelationAttributeProcessed(query: FindManyDto): Promise<ProductRelationAttributeProcessed[]> {
+
+  async findAllRelationAttributeProcessed(query: FindManyDto):
+  Promise<ProductRelationAttributeProcessed[]> {
     const { data } = await this.repository.findAll({
       ...query,
       select: this.processSelect(query.select),
@@ -178,7 +182,7 @@ export class StockService {
         product_attributes: (
           product_attribute_product_attribute_product_idToproduct
         ).map(this.productAttributeProcess),
-      })
+      }),
     );
   }
 
@@ -189,60 +193,60 @@ export class StockService {
     }
 
     const {
-      product_order,
-      product_attribute_product_attribute_product_idToproduct: product_attributes,
+      product_order: productOrders,
+      product_attribute_product_attribute_product_idToproduct: productAttributes,
       ...rest
     } = stock;
 
     return {
       ...rest,
-      product_orders: product_order.map(this.productOrderProcess),
-      product_attributes: product_attributes.map(this.productAttributeProcess),
+      product_orders: productOrders.map(this.productOrderProcess),
+      product_attributes: productAttributes.map(this.productAttributeProcess),
     };
   }
 
   async create(body: CreateBodyStockDto, files?: ProductAttributeFile[]) {
     const {
-      product_attributes,
-      product_orders,
-      location_label,
+      product_attributes: productAttributes,
+      product_orders: productOrders,
+      location_label: locationLabelBody,
       ...rest
     } = body;
 
-    let location_label_id: number = null;
+    let locationLabelId: number = null;
 
-    if (location_label) {
+    if (locationLabelBody) {
       const locationLabel = await this.locationLabelService.findByLabelOrCreate({
         location_id: rest.location_id,
-        label: location_label,
+        label: locationLabelBody,
       });
 
-      location_label_id = locationLabel.id;
+      locationLabelId = locationLabel.id;
     }
-    
+
     const createInput: Prisma.productUncheckedCreateInput = {
-      location_label_id,
+      location_label_id: locationLabelId,
       ...rest,
       ...(!rest.sku && { sku: Math.floor(Date.now() / 1000).toString() }),
-      ...(product_orders?.length > 0 && {
+      ...(productOrders?.length > 0 && {
         product_order: {
-          connectOrCreate: product_orders.map(product_order => ({
+          connectOrCreate: productOrders.map((productOrder) => ({
             where: {
-              id: product_order.order_id
+              id: productOrder.order_id,
             },
-            create: { ...product_order }
+            create: { ...productOrder },
           })),
         },
-      })
+      }),
     };
 
     const stock = await this.repository.create(createInput);
 
-    if (product_attributes?.length) {
+    if (productAttributes?.length) {
       return this.updateOne(
         stock.id,
-        { type_id: body.type_id, product_attributes },
-        files
+        { type_id: body.type_id, product_attributes: productAttributes },
+        files,
       );
     }
 
@@ -251,27 +255,32 @@ export class StockService {
 
   async updateOne(id: number, body: UpdateBodyStockDto, files?: ProductAttributeFile[]) {
     if (!Number.isFinite(id)) {
-      throw new Error("product id is required");
+      throw new Error('product id is required');
     }
 
     const stock = await this.findOneCustomSelect(id);
 
-    const { product_attributes, product_orders, location_label, ...restBody } = body;
-    if (product_attributes && !Number.isFinite(body.type_id)) {
-      throw new Error("missing type_id in body for updating product_attributes");
+    const {
+      product_attributes: productAttributes,
+      product_orders: productOrders,
+      location_label: locationLabelBody,
+      ...restBody
+    } = body;
+    if (productAttributes && !Number.isFinite(body.type_id)) {
+      throw new Error('missing type_id in body for updating product_attributes');
     }
 
-    let location_label_id: number = null;
+    let locationLabelId: number = null;
 
-    if (location_label) {
+    if (locationLabelBody) {
       const locationLabel = await this.locationLabelService.findByLabelOrCreate({
         location_id: body.location_id || stock.location.id,
-        label: location_label,
+        label: locationLabelBody,
       });
 
-      location_label_id = locationLabel.id;
+      locationLabelId = locationLabel.id;
     }
-    
+
     const typeHasChanged = Number.isFinite(body.type_id) && body.type_id !== stock.product_type?.id;
 
     // check if the product type has changed
@@ -284,28 +293,28 @@ export class StockService {
     const productAttributeUpdate = await this.processProductAttributeUpdate(
       id,
       body.type_id,
-      product_attributes,
       typeHasChanged,
       files,
+      productAttributes,
     );
-    
+
     return this.repository.updateOne({
       id,
       data: {
-        location_label_id,
+        location_label_id: locationLabelId,
         ...restBody,
-        ...(product_orders?.length && {
+        ...(productOrders?.length && {
           product_order: {
-            update: product_orders.map(product_order => ({
+            update: productOrders.map((productOrder) => ({
               where: {
-                id: product_order.id
+                id: productOrder.id,
               },
-              data: { ...product_order },
+              data: { ...productOrder },
             })),
           },
         }),
         ...(productAttributeUpdate && {
-          product_attribute_product_attribute_product_idToproduct: productAttributeUpdate
+          product_attribute_product_attribute_product_idToproduct: productAttributeUpdate,
         }),
       },
     });
@@ -326,26 +335,37 @@ export class StockService {
   }
 
   async updateManyLocation(updateManyProductDto: UpdateManyProductDto) {
-    const { ids, product: { location_id, location_label } } = updateManyProductDto;
+    const {
+      ids, product: {
+        location_id: locationId, location_label: locationLabelBody,
+      },
+    } = updateManyProductDto;
 
-    if(!location_id) {
-      return;
+    if (!locationId) {
+      return false;
     }
 
-    let location_label_id = undefined;
+    let locationLabelId: number;
 
-    if (location_label) {
-      const locationLabel = await this.locationLabelService.findByLabelOrCreate({ location_id, label: location_label });
+    if (locationLabelBody) {
+      const locationLabel = await this.locationLabelService
+        .findByLabelOrCreate({ location_id: locationId, label: locationLabelBody });
 
-      location_label_id = locationLabel.id;
+      locationLabelId = locationLabel.id;
     }
 
-    return this.updateMany(ids, {location_id, location_label_id});
+    return this.updateMany(
+      ids,
+      {
+        location_id: locationId,
+        location_label_id: locationLabelId,
+      },
+    );
   }
 
   async getAllPublicTypes() {
     return this.repository.getAllTypes({
-      is_public: true
+      is_public: true,
     });
   }
 
@@ -356,8 +376,8 @@ export class StockService {
         sku: true,
       },
     });
-  
-    const skusToPrint = products.map(product => product.sku);
+
+    const skusToPrint = products.map((product) => product.sku);
     return this.printService.printBarcodes(skusToPrint);
   }
 
@@ -383,21 +403,26 @@ export class StockService {
       company_name: this.configService.get('COMPANY_NAME'),
       address: this.configService.get('COMPANY_ADDRESS'),
       email: this.configService.get('COMPANY_EMAIL'),
-      phone: this.configService.get('COMPANY_PHONE')
     };
-    const productsWithUser = products.map(product => ({...product, ...user, ...productLabelPrint}));
+    const productsWithUser = products
+      .map((product) => ({ ...product, ...user, ...productLabelPrint }));
+
     return this.printService.printLabels(productsWithUser);
   }
 
-  async preapareProductAttributeByStringValue(attribute: AttributeIncludeOption, reportValue: string): Promise<ProductAttributeDto> {
+  async preapareProductAttributeByStringValue(
+    attribute: AttributeIncludeOption,
+    reportValue: string,
+  ): Promise<ProductAttributeDto> {
     let value: string;
-  
-    switch(attribute.type) {
+
+    switch (attribute.type) {
       case AttributeType.TYPE_TEXT:
         value = reportValue;
         break;
       case AttributeType.TYPE_SELECT:
-        value = String((await this.repository.getOptionByAttrIdAndName(attribute.id, reportValue)).id);
+        value = String((await this.repository
+          .getOptionByAttrIdAndName(attribute.id, reportValue)).id);
         break;
       default:
         value = null;
@@ -410,15 +435,18 @@ export class StockService {
     };
   }
 
-  private productAttributeProcess(productAttribute: ProductAttributeIncludeAttribute): ProductAttributeProcessed {
-    const attribute: AttributeGetPayload = productAttribute.attribute;
+  private productAttributeProcess(
+    productAttribute: ProductAttributeIncludeAttribute,
+  ): ProductAttributeProcessed {
+    const { attribute } : { attribute?: AttributeGetPayload } = productAttribute;
     const productAttributeProcessed: ProductAttributeProcessed = { ...productAttribute, attribute };
-    
+
     if (attribute.type === AttributeType.TYPE_TEXT) {
       productAttributeProcessed.totalStandardPrice = productAttribute.value ? attribute.price : 0;
     }
     if (attribute.type === AttributeType.TYPE_SELECT) {
-      const selectedOption=  attribute.attribute_option?.find(option => option.id === Number(productAttribute.value));
+      const selectedOption = attribute.attribute_option
+        ?.find((option) => option.id === Number(productAttribute.value));
       productAttributeProcessed.selectedOption = selectedOption;
       productAttributeProcessed.totalStandardPrice = selectedOption?.price ?? 0;
     }
@@ -442,11 +470,11 @@ export class StockService {
         order_date: order.order_date,
         discr: order.discr,
         contact:
-          order?.contact_aorder_customer_idTocontact?.name ||
-          order?.contact_aorder_supplier_idTocontact?.name,
-        company: 
-          order?.contact_aorder_customer_idTocontact?.company_contact_company_idTocompany?.name ||
-          order?.contact_aorder_supplier_idTocontact?.company_contact_company_idTocompany?.name,
+          order?.contact_aorder_customer_idTocontact?.name
+          || order?.contact_aorder_supplier_idTocontact?.name,
+        company:
+          order?.contact_aorder_customer_idTocontact?.company_contact_company_idTocompany?.name
+          || order?.contact_aorder_supplier_idTocontact?.company_contact_company_idTocompany?.name,
         status: order?.order_status?.name,
       },
     };
@@ -456,7 +484,7 @@ export class StockService {
     const locationSelect: Prisma.locationSelect = {
       id: true,
       name: true,
-      location_template: true
+      location_template: true,
     };
 
     const locationLabelSelect: Prisma.location_labelSelect = {
@@ -470,7 +498,7 @@ export class StockService {
       product_type_task: {
         select: {
           task: true,
-        }
+        },
       },
     };
 
@@ -536,7 +564,7 @@ export class StockService {
       },
       aservice: {
         select: serviceSelect,
-      }
+      },
     };
 
     const attributeSelect: Prisma.attributeSelect = {
@@ -598,41 +626,37 @@ export class StockService {
         select: productAttributeSelect,
       },
       afile: {
-        select: afileSelect
+        select: afileSelect,
       },
       created_at: true,
-      updated_at: true
+      updated_at: true,
     };
   }
 
   private addAttributeRelationToProductAttributes(
     productId: number,
-    attributes: attribute[],
+    attributes: AttributeEntity[],
     productAttributes: ProductAttributeDto[],
     inclusive = false,
   ): ProductAttributeIncludeAttribute[] {
+    const newProductAttributesIncludeAttribute: ProductAttributeIncludeAttribute[] = [];
 
-    const newProductAttributesIncludeAttribute:
-      ProductAttributeIncludeAttribute[] = [];
-
-    for (let i = 0; i < attributes.length; i++) {
+    for (let i = 0; i < attributes.length; i += 1) {
       const attribute = attributes[i];
       let attributeFound = false;
 
-      for (let j = 0; j < productAttributes.length; j++) {
+      for (let j = 0; j < productAttributes.length; j += 1) {
         const productAttribute = productAttributes[j];
 
         if (attribute.id === productAttribute.attribute_id) {
-
           newProductAttributesIncludeAttribute.push({
             product_id: productId,
             ...productAttribute,
-            attribute: attribute,
+            attribute,
           });
 
           attributeFound = true;
           break;
-
         }
       }
 
@@ -644,7 +668,7 @@ export class StockService {
           value: '',
           external_id: null,
           value_product_id: null,
-          attribute: attribute,
+          attribute,
         });
       }
     }
@@ -654,7 +678,7 @@ export class StockService {
 
   private async generateAllAttributes(productId: number, typeId: number) {
     if (!Number.isFinite(productId)) {
-      throw new Error("productId must be provided");
+      throw new Error('productId must be provided');
     }
     if (!Number.isFinite(typeId)) {
       return null;
@@ -663,13 +687,13 @@ export class StockService {
     await this.deleteAllAttributes(productId);
     const allAttributes = await this.repository.getAttributesByProductTypeId(typeId);
     const productAttributes: Prisma.product_attributeCreateManyInput[] = [];
-    for (let i = 0; i < allAttributes.length; i++) {
+    for (let i = 0; i < allAttributes.length; i += 1) {
       const attribute = allAttributes[i];
 
       const productAttribute: Prisma.product_attributeCreateManyInput = {
         product_id: productId,
         attribute_id: attribute.id,
-        value: ''
+        value: '',
       };
 
       productAttributes.push(productAttribute);
@@ -679,17 +703,19 @@ export class StockService {
   }
 
   private async deleteAllAttributes(productId: number) {
-    const productAttributes = await this.repository.findProductAttributesIncludeAttribute(productId);
+    const productAttributes = await this.repository
+      .findProductAttributesIncludeAttribute(productId);
 
     const result = await this.repository.deleteProductAttributes(productId);
 
-    for (let i = 0; i < productAttributes.length; i++) {
+    for (let i = 0; i < productAttributes.length; i += 1) {
       const productAttribute = productAttributes[i];
 
       if (productAttribute.attribute.type === AttributeType.TYPE_FILE
         && productAttribute.value) {
         productAttribute.value = productAttribute.value || '';
-        const fileIds = productAttribute.value.split(FILE_VALUE_DELIMITER).filter(Boolean).map(Number);
+        const fileIds = productAttribute.value
+          .split(FILE_VALUE_DELIMITER).filter(Boolean).map(Number);
         this.fileService.deleteMany(fileIds);
       }
     }
@@ -701,9 +727,9 @@ export class StockService {
     if (!Number.isFinite(productId)) {
       throw new Error('productId must be provided');
     }
-    const fileIdsUploaded: number[] = [];
+    const filesUploadedP: Promise<AFileEntity>[] = [];
 
-    for (let i = 0; i < files.length; i++) {
+    for (let i = 0; i < files.length; i += 1) {
       const file = files[i];
 
       const createFileDto: CreateFileDto = {
@@ -711,52 +737,53 @@ export class StockService {
         product_id: productId,
       };
 
-      const afile = await this.fileService.create(createFileDto, {
-        ...file,
-      });
-      fileIdsUploaded.push(afile.id);
+      filesUploadedP.push(
+        this.fileService.create(createFileDto, {
+          ...file,
+        }),
+      );
     }
 
-    return fileIdsUploaded;
+    const filesUploaded = await Promise.all(filesUploadedP);
+
+    return filesUploaded.map((fileUploaded) => fileUploaded.id);
   }
 
   private async processProductAttributeUpdate(
     productId: number,
     productTypeId: number,
-    product_attributes: ProductAttributeDto[] = [],
     typeHasChanged: boolean,
     files: ProductAttributeFile[] = [],
-  ): Promise<Prisma.product_attributeUpdateManyWithoutProduct_product_attribute_product_idToproductNestedInput> {
+    productAttributes: ProductAttributeDto[] = [],
+  ): Promise<ProductAttributeUpdateMany> {
     if (!Number.isFinite(productId)) {
-      throw new Error("productId must be provided");
+      throw new Error('productId must be provided');
     }
     if (!Number.isFinite(productTypeId)) {
       return null;
     }
-    if (product_attributes.length === 0 && files.length === 0) {
+    if (productAttributes.length === 0 && files.length === 0) {
       return null;
     }
 
     // add attribute to body.product_attributes
     // to be able to check the attribute.type
-    const attributes =
-      await this.repository.getAttributesByProductTypeId(productTypeId);
+    const attributes = await this.repository.getAttributesByProductTypeId(productTypeId);
 
-    const newProductAttributesIncludeAttribute =
-      this.addAttributeRelationToProductAttributes(
-        productId,
-        attributes,
-        product_attributes,
-      );
-      
-    const oldProductAttributesIncludeAttribute =
-      await this.repository.findProductAttributesIncludeAttribute(productId);
+    const newProductAttributesIncludeAttribute = this.addAttributeRelationToProductAttributes(
+      productId,
+      attributes,
+      productAttributes,
+    );
+
+    const oldProductAttributesIncludeAttribute = await this.repository
+      .findProductAttributesIncludeAttribute(productId);
 
     const oldFileProductAttributes = oldProductAttributesIncludeAttribute
-      .filter(product_attribute => product_attribute?.attribute?.type
+      .filter((productAttribute) => productAttribute?.attribute?.type
         === AttributeType.TYPE_FILE);
     const newFileProductAttributes = newProductAttributesIncludeAttribute
-      .filter(product_attribute => product_attribute?.attribute?.type
+      .filter((productAttribute) => productAttribute?.attribute?.type
         === AttributeType.TYPE_FILE);
 
     // the file ids that user just removed them
@@ -764,24 +791,26 @@ export class StockService {
     // the file ids that should be kept
     const fileIdsKepts: Record<string, number[]> = {};
 
-    for (let i = 0; i < oldFileProductAttributes.length; i++) {
+    for (let i = 0; i < oldFileProductAttributes.length; i += 1) {
       const oldFileProductAttribute = oldFileProductAttributes[i];
       oldFileProductAttribute.value = oldFileProductAttribute.value || '';
       let productAttributeFound = false;
 
-      for (let j = 0; j < newFileProductAttributes.length; j++) {
+      for (let j = 0; j < newFileProductAttributes.length; j += 1) {
         const newFileProductAttribute = newFileProductAttributes[j];
 
         if (oldFileProductAttribute.attribute_id === newFileProductAttribute.attribute_id) {
           // the file ids that must be deleted
-          fileIdsDeleteds[oldFileProductAttribute.attribute_id] =
-            oldFileProductAttribute.value.split(FILE_VALUE_DELIMITER).filter(Boolean).map(Number).filter(
-              (fileId) => !newFileProductAttribute?.value?.split(FILE_VALUE_DELIMITER).filter(Boolean).map(Number).includes(fileId)
+          fileIdsDeleteds[oldFileProductAttribute.attribute_id] = oldFileProductAttribute.value
+            .split(FILE_VALUE_DELIMITER).filter(Boolean).map(Number).filter(
+              (fileId) => !newFileProductAttribute?.value?.split(FILE_VALUE_DELIMITER)
+                .filter(Boolean).map(Number).includes(fileId),
             );
           // the file ids that must be kept
-          fileIdsKepts[oldFileProductAttribute.attribute_id] =
-            oldFileProductAttribute.value.split(FILE_VALUE_DELIMITER).filter(Boolean).map(Number).filter(
-              (fileId) => newFileProductAttribute?.value?.split(FILE_VALUE_DELIMITER).filter(Boolean).map(Number).includes(fileId)
+          fileIdsKepts[oldFileProductAttribute.attribute_id] = oldFileProductAttribute.value
+            .split(FILE_VALUE_DELIMITER).filter(Boolean).map(Number).filter(
+              (fileId) => newFileProductAttribute?.value
+                ?.split(FILE_VALUE_DELIMITER).filter(Boolean).map(Number).includes(fileId),
             );
           productAttributeFound = true;
           break;
@@ -790,90 +819,84 @@ export class StockService {
 
       if (!productAttributeFound) {
         // should be kept beacause the product_attribute was not provided
-        fileIdsKepts[oldFileProductAttribute.attribute_id] =
-          oldFileProductAttribute.value.split(FILE_VALUE_DELIMITER).filter(Boolean).map(Number);
+        fileIdsKepts[oldFileProductAttribute.attribute_id] = oldFileProductAttribute.value
+          .split(FILE_VALUE_DELIMITER).filter(Boolean).map(Number);
       }
     }
 
     // check if the product attributes have not already been deleted
     if (!typeHasChanged) {
       // then delete those files
-      for (const fileIdsDeleted of Object.values(fileIdsDeleteds)) {
+      Object.values(fileIdsDeleteds).forEach((fileIdsDeleted) => {
         if (fileIdsDeleted?.length) {
           this.fileService.deleteMany(fileIdsDeleted);
         }
-      }
+      });
     }
 
     // group files by attribute id
-    const filesGroupByAttributeId: Record<string, ProductAttributeFile[]> = files.reduce((acc, obj) => {
+    const filesGroupByAttributeId:
+    Record<string, ProductAttributeFile[]> = files.reduce((acc, obj) => {
       const { fieldname } = obj;
 
       if (!acc[fieldname]) {
         acc[fieldname] = [];
       }
-      
+
       acc[fieldname].push(obj);
       return acc;
     }, {}) || {};
 
     const uploadedIdsGroupByAttributeId: Record<string, number[]> = {};
-    for (const [fileAttributeId, files] of Object.entries(filesGroupByAttributeId)) {
-      // upload all new files
+    Object.entries(filesGroupByAttributeId).forEach(async ([fileAttributeId, uploadedFiles]) => {
+      // Upload all new files
       const fileIdsUploaded = await this.uploadFiles(
         productId,
-        files.map((file) => ({
+        uploadedFiles.map((file) => ({
           Body: file.buffer,
           ContentType: file.mimetype,
-        }))
+        })),
       );
-      // keep all file ids
+      // Keep all file ids
       uploadedIdsGroupByAttributeId[fileAttributeId] = fileIdsUploaded;
-    }
+    });
 
     // get all productAttributes
-    const productAttributesIncludeAttributeInclusive =
-      this.addAttributeRelationToProductAttributes(
-        productId,
-        attributes,
-        product_attributes,
-        true
-      );
-    
+    let productAttributeInclusive = this.addAttributeRelationToProductAttributes(
+      productId,
+      attributes,
+      productAttributes,
+      true,
+    );
+
     // store the all file ids to the product_attribute.value in comma-separated format
-    for (let i = 0; i < productAttributesIncludeAttributeInclusive.length; i++) {
+    for (let i = 0; i < productAttributeInclusive.length; i += 1) {
+      if (productAttributeInclusive[i].attribute.type === AttributeType.TYPE_FILE) {
+        productAttributeInclusive[i].value = '';
 
-      if (productAttributesIncludeAttributeInclusive[i].attribute.type === AttributeType.TYPE_FILE) {
-        productAttributesIncludeAttributeInclusive[i].value = '';
+        // Update product attribute values based on fileIdsKepts
+        // eslint-disable-next-line @typescript-eslint/no-loop-func
+        Object.entries(fileIdsKepts).forEach(([fileAttributeId, fileIds]) => {
+          productAttributeInclusive = this
+            .updateFileAttributes(Number(fileAttributeId), fileIds, productAttributeInclusive);
+        });
 
-        for (const [fileAttributeId, fileIds] of Object.entries(fileIdsKepts)) {
-          if (productAttributesIncludeAttributeInclusive[i].attribute_id === Number(fileAttributeId)) {
-            productAttributesIncludeAttributeInclusive[i].value =
-              [...productAttributesIncludeAttributeInclusive[i].value.split(FILE_VALUE_DELIMITER)
-                .filter(Boolean).map(Number), ...fileIds].filter(Boolean).join(FILE_VALUE_DELIMITER);
-            break;
-          }
-        }
-
-        for (const [fileAttributeId, fileIds] of Object.entries(uploadedIdsGroupByAttributeId)) {
-          if (productAttributesIncludeAttributeInclusive[i].attribute_id === Number(fileAttributeId)) {
-            productAttributesIncludeAttributeInclusive[i].value =
-              [...productAttributesIncludeAttributeInclusive[i].value.split(FILE_VALUE_DELIMITER)
-                .filter(Boolean).map(Number), ...fileIds].filter(Boolean).join(FILE_VALUE_DELIMITER);
-            break;
-          }
-        }
+        // Update product attribute values based on uploadedIdsGroupByAttributeId
+        // eslint-disable-next-line @typescript-eslint/no-loop-func
+        Object.entries(uploadedIdsGroupByAttributeId).forEach(([fileAttributeId, fileIds]) => {
+          productAttributeInclusive = this
+            .updateFileAttributes(Number(fileAttributeId), fileIds, productAttributeInclusive);
+        });
       }
-
     }
 
-    const productAttributeUpdate: Prisma.product_attributeUpdateManyWithoutProduct_product_attribute_product_idToproductNestedInput = {
-      upsert: productAttributesIncludeAttributeInclusive.map(
-        newProductAttributeIncludeAttribute => ({
+    const productAttributeUpdate: ProductAttributeUpdateMany = {
+      upsert: productAttributeInclusive.map(
+        (newProductAttributeIncludeAttribute) => ({
           where: {
             product_id_attribute_id: {
               attribute_id: newProductAttributeIncludeAttribute.attribute_id,
-              product_id: newProductAttributeIncludeAttribute.product_id
+              product_id: newProductAttributeIncludeAttribute.product_id,
             },
           },
           update: {
@@ -883,20 +906,44 @@ export class StockService {
             attribute_id: newProductAttributeIncludeAttribute.attribute_id,
             value: newProductAttributeIncludeAttribute.value,
           },
-        })),
+        }),
+      ),
     };
-    
+
     return productAttributeUpdate;
+  }
+
+  private updateFileAttributes<T extends ProductAttributeIncludeAttribute>(
+    attributeId: number,
+    fileIds: number[],
+    productAttributeInclusive: T[],
+  ): T[] {
+    const updatedAttributes = productAttributeInclusive.map((attr) => {
+      if (attr.attribute_id === attributeId) {
+        const values = attr.value.split(FILE_VALUE_DELIMITER)
+          .filter(Boolean)
+          .map(Number);
+        const updatedValue = [...values, ...fileIds]
+          .filter(Boolean)
+          .join(FILE_VALUE_DELIMITER);
+        return { ...attr, value: updatedValue };
+      }
+      return attr;
+    });
+
+    return updatedAttributes;
   }
 
   private getPartnerWhereInput(email?: string): Prisma.product_orderWhereInput {
     return {
-      ...(email && { aorder: {
-        OR: [
-          { contact_aorder_customer_idTocontact: this.getContactWhereInput(email) },
-          { contact_aorder_supplier_idTocontact: this.getContactWhereInput(email) },
-        ]
-      }}),
+      ...(email && {
+        aorder: {
+          OR: [
+            { contact_aorder_customer_idTocontact: this.getContactWhereInput(email) },
+            { contact_aorder_supplier_idTocontact: this.getContactWhereInput(email) },
+          ],
+        },
+      }),
     };
   }
 
@@ -905,7 +952,11 @@ export class StockService {
       ...(email && {
         OR: [
           { email },
-          { company_contact_company_idTocompany: { company: { companyContacts: { some: { email } } } } },
+          {
+            company_contact_company_idTocompany: {
+              company: { companyContacts: { some: { email } } },
+            },
+          },
         ],
       }),
     };

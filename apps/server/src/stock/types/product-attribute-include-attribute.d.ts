@@ -1,3 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma } from '@prisma/client';
 
-export type ProductAttributeIncludeAttribute = Partial<Prisma.product_attributeGetPayload<Record<'include', Prisma.product_attributeInclude>>>;
+export type ProductAttributeIncludeAttribute =
+Partial<Prisma.product_attributeGetPayload<Record<'include', Prisma.product_attributeInclude>>>;
