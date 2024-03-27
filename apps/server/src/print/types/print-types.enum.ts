@@ -3,5 +3,6 @@ export enum PrintTemplateName {
   CHECKLIST = 'checklist',
   PRICECARD = 'pricecard',
   LABEL = 'label',
-  ORDER = 'order',
+  NORMAL = 'normal',
+  EXPORT = 'export',
 }

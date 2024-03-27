@@ -25,37 +25,37 @@ export class PrintUtil {
       '\'': ' ',
       '"': ' ',
     };
-  
+
     const patternArray = Object.keys(utf8);
     const replacementArray = Object.values(utf8);
-  
+
     let cleanedText = text;
-    for (let i = 0; i < patternArray.length; i++) {
+    for (let i = 0; i < patternArray.length; i += 1) {
       const pattern = new RegExp(patternArray[i], 'gu');
       cleanedText = cleanedText.replace(pattern, replacementArray[i]);
     }
-  
+
     return cleanedText;
   }
 
   static async getBarcode(params: {
-    text: string, 
+    text: string,
     scale?: number,
     height?: number,
   } = { text: undefined, scale: 2, height: 10 }): Promise<string> {
     const {
       text,
       scale = 2,
-      height = 10
+      height = 10,
     } = params;
-    
+
     return new Promise((resolve, reject) => {
       bwipjs.toBuffer({
-        bcid:        'code39',
-        text:        this.cleanString(text).toUpperCase(),
-        scale:       scale,
-        height:      height,
-      }, function (err, png) {
+        bcid: 'code39',
+        text: this.cleanString(text).toUpperCase(),
+        scale,
+        height,
+      }, (err, png) => {
         if (err) {
           reject(err);
         } else {

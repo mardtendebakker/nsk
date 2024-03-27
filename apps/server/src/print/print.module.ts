@@ -1,19 +1,21 @@
 import { Module } from '@nestjs/common';
 import { PrintService } from './print.service';
-import { AOrderPrinter } from './printer/aorder-printer';
+import { NormalPrinter } from './printer/normal-printer';
 import { BarcodePrinter } from './printer/barcode-printer';
 import { ChecklistPrinter } from './printer/checklist-printer';
 import { LabelPrinter } from './printer/label-printer';
 import { PriceCardPrinter } from './printer/price-card-printer';
+import { ExportPrinter } from './printer/export-printer';
 
 @Module({
   providers: [
     PrintService,
-    AOrderPrinter,
+    NormalPrinter,
     BarcodePrinter,
     ChecklistPrinter,
     LabelPrinter,
     PriceCardPrinter,
+    ExportPrinter,
   ],
   exports: [PrintService]
 })
