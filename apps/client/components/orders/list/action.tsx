@@ -7,6 +7,7 @@ import { useState } from 'react';
 import useTranslation from '../../../hooks/useTranslation';
 import Checkbox from '../../checkbox';
 import Can from '../../can';
+import { OrderPrint } from '../../../utils/axios/models/types';
 
 export default function Action({
   disabled,
@@ -21,10 +22,7 @@ export default function Action({
   checkedOrdersCount: number,
   onAllCheck: (checked: boolean) => void,
   onChangeStatus: () => void,
-  onPrints: {
-    onClick: () => void,
-    transKey: 'normal' | 'export',
-  }[],
+  onPrints: OrderPrint[],
 }) {
   const { trans } = useTranslation();
   const [showPrintActions, setShowPrintActions] = useState(null);
