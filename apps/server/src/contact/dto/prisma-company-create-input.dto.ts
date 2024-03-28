@@ -1,39 +1,39 @@
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { Prisma } from "@prisma/client";
-import { Type } from "class-transformer";
-import { IsBoolean, IsInt, IsOptional } from "class-validator";
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Prisma } from '@prisma/client';
+import { Type } from 'class-transformer';
+import { IsBoolean, IsInt, IsOptional } from 'class-validator';
 
 export class PrismaCompanyCreateInputDto implements Prisma.companyUncheckedCreateInput {
-    @ApiPropertyOptional()
-    @IsOptional()
-    @IsInt()
-    @Type(() => Number)
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsInt()
+  @Type(() => Number)
     id?: number;
 
-    @ApiProperty()
+  @ApiProperty()
     name: string;
 
-    @ApiPropertyOptional()
-    @IsOptional()
-    @IsInt()
-    @Type(() => Number)
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsInt()
+  @Type(() => Number)
     kvk_nr?: number;
 
-    @ApiProperty()
-    @IsBoolean()
+  @ApiProperty()
+  @IsBoolean()
     is_partner: boolean;
-  
-    @ApiProperty()
-    @IsBoolean()
+
+  @ApiProperty()
+  @IsBoolean()
     is_customer: boolean;
-  
-    @ApiProperty()
-    @IsBoolean()
+
+  @ApiProperty()
+  @IsBoolean()
     is_supplier: boolean;
 
-    @ApiPropertyOptional()
-    @IsOptional()
-    @IsInt()
-    @Type(() => Number)
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsInt()
+  @Type(() => Number)
     partner_id?: number;
 }

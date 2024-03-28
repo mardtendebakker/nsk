@@ -1,9 +1,9 @@
 import { format } from 'date-fns';
 import { Injectable } from '@nestjs/common';
-import { AOrderProcessed } from '../../aorder/aorder.process';
 import { PrintUtil } from '../print-util';
 import { PrintTemplateName } from '../types/print-types.enum';
 import { IOrderPrinter } from '../iprinter/iorder-printer';
+import { AOrderProcessed } from '../../aorder/types/aorder-processed';
 
 @Injectable()
 export class ExportPrinter extends IOrderPrinter {
@@ -33,9 +33,9 @@ export class ExportPrinter extends IOrderPrinter {
           description: aorder.pickup.description ?? 'None',
           data_destruction: this.getDataDestructionLabel(aorder.pickup.data_destruction),
           agreement: {
-            original_client_filename: aorder.pickup?.['afile']?.original_client_filename ?? 'None',
+            original_client_filename: aorder.pickup?.afile?.original_client_filename ?? 'None',
           },
-          images: aorder.pickup?.['afile']?.length > 0 ? 'Yes' : 'No',
+          images: aorder.pickup?.afile?.length > 0 ? 'Yes' : 'No',
         },
       }),
       order_status: {

@@ -9,7 +9,7 @@ export class DashboardController {
   constructor(protected readonly dashboardService: DashboardService) {}
 
   @Get('total/count')
-  @ApiResponse({type: TotalCount })
+  @ApiResponse({ type: TotalCount })
   totalCount() {
     return this.dashboardService.totalCount();
   }

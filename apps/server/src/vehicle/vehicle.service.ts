@@ -9,21 +9,19 @@ export class VehicleService {
   async findAll(): Promise<VehicleResponseDto[]> {
     const equipments = await this.fleetGoService.getEquipments();
 
-    return equipments.map(equipment => {
-      return {
-        id: equipment.Id,
-        number: equipment.EquipmentHeader.VehicleNumber,
-        location: {
-          latitude: equipment.Location.Latitude,
-          longitude: equipment.Location.Longitude,
-        },
-        licensePlate: equipment.EquipmentHeader.SerialNumber,
-        make: equipment.EquipmentHeader.Make,
-        model: equipment.EquipmentHeader.Model,
-        driverName: equipment.DriverName,
-        description: equipment.Description,
-        running: equipment.EngineRunning,
-      }
-    });
+    return equipments.map((equipment) => ({
+      id: equipment.Id,
+      number: equipment.EquipmentHeader.VehicleNumber,
+      location: {
+        latitude: equipment.Location.Latitude,
+        longitude: equipment.Location.Longitude,
+      },
+      licensePlate: equipment.EquipmentHeader.SerialNumber,
+      make: equipment.EquipmentHeader.Make,
+      model: equipment.EquipmentHeader.Model,
+      driverName: equipment.DriverName,
+      description: equipment.Description,
+      running: equipment.EngineRunning,
+    }));
   }
 }

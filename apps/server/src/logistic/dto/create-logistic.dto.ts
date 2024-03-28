@@ -1,53 +1,53 @@
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { Prisma } from "@prisma/client";
-import { Type } from "class-transformer";
-import { IsBoolean } from "class-validator";
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Prisma } from '@prisma/client';
+import { Type } from 'class-transformer';
+import { IsBoolean } from 'class-validator';
 
 export class CreateLogisticInputDto implements Prisma.fos_userCreateInput {
   @ApiProperty()
-  username: string;
+    username: string;
 
   @ApiProperty()
-  username_canonical: string;
-  
+    username_canonical: string;
+
   @ApiProperty()
-  email: string;
-  
+    email: string;
+
   @ApiProperty()
   @IsBoolean()
   @Type(() => Boolean)
-  enabled: boolean;
+    enabled: boolean;
 
   @ApiPropertyOptional()
-  salt?: string;
+    salt?: string;
 
   @ApiProperty()
-  password: string;
+    password: string;
 
   @ApiPropertyOptional()
-  last_login?: string | Date;
+    last_login?: string | Date;
 
   @ApiPropertyOptional()
-  confirmation_token?: string;
+    confirmation_token?: string;
 
   @ApiPropertyOptional()
-  password_requested_at?: string | Date;
+    password_requested_at?: string | Date;
 
   @ApiProperty()
-  roles: string;
+    roles: string;
 
   @ApiPropertyOptional()
-  firstname?: string;
+    firstname?: string;
 
   @ApiPropertyOptional()
-  lastname?: string;
+    lastname?: string;
 
   @ApiProperty()
-  emailCanonical: string;
+    emailCanonical: string;
 
   @ApiPropertyOptional()
-  pickup?: Prisma.pickupCreateNestedManyWithoutFos_userInput;
+    pickup?: Prisma.pickupCreateNestedManyWithoutFos_userInput;
 
   @ApiPropertyOptional()
-  user_location?: Prisma.user_locationCreateNestedManyWithoutFos_userInput;
+    user_location?: Prisma.user_locationCreateNestedManyWithoutFos_userInput;
 }

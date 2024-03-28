@@ -1,12 +1,15 @@
-import { CreateTemplateCommand, DeleteTemplateCommand, SESClient, SendBulkTemplatedEmailCommand, SendBulkTemplatedEmailCommandInput, SendEmailCommand, SendEmailCommandInput, Template } from "@aws-sdk/client-ses";
-import { Injectable } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
+import {
+  CreateTemplateCommand, DeleteTemplateCommand, SESClient, SendBulkTemplatedEmailCommand, SendBulkTemplatedEmailCommandInput, SendEmailCommand, SendEmailCommandInput, Template,
+} from '@aws-sdk/client-ses';
+import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class EmailSES {
   private readonly client: SESClient;
-  constructor( private readonly configService: ConfigService ) {
-    this.client = new SESClient({ region: this.configService.get('MAIN_REGION')});
+
+  constructor(private readonly configService: ConfigService) {
+    this.client = new SESClient({ region: this.configService.get('MAIN_REGION') });
   }
 
   send(sendEmailCommandInput: SendEmailCommandInput) {
@@ -17,7 +20,7 @@ export class EmailSES {
 
   createTemplate(template: Template) {
     const command = new CreateTemplateCommand({
-      Template: template
+      Template: template,
     });
 
     return this.client.send(command);
@@ -25,7 +28,7 @@ export class EmailSES {
 
   deleteTemplate(templateName: string) {
     const command = new DeleteTemplateCommand({
-      TemplateName: templateName
+      TemplateName: templateName,
     });
 
     return this.client.send(command);

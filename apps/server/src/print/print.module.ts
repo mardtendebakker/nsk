@@ -17,6 +17,6 @@ import { ExportPrinter } from './printer/export-printer';
     PriceCardPrinter,
     ExportPrinter,
   ],
-  exports: [PrintService]
+  exports: [PrintService],
 })
 export class PrintModule {}

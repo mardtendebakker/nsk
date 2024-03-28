@@ -1,10 +1,10 @@
 import { Prisma } from '@prisma/client';
-import { ContactSelect } from '../../contact/types/contact-select';
+import { ContactRelation } from '../../contact/types/contact-relation';
 
 type AOrderSelect = Prisma.aorderGetPayload<Record<'select', Prisma.aorderSelect>>;
-type ContactWithoutAOrder = Omit<
-ContactSelect,
-'supplierOrders',
+type ContactWithoutAOrder = Omit <
+ContactRelation,
+'supplierOrders' |
 'customerOrders'
 >;
 export type AOrderPayload = Omit <

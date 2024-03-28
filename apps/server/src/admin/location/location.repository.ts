@@ -1,25 +1,25 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import { PrismaService } from '../../prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
+import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
 export class LocationRepository {
   constructor(
     private readonly prisma: PrismaService,
-    protected readonly configService: ConfigService
+    protected readonly configService: ConfigService,
   ) {}
 
   getAll() {
     return this.prisma.location.findMany();
   }
-  
+
   create(data: Prisma.locationCreateInput) {
     return this.prisma.location.create({
-      data
+      data,
     });
   }
-  
+
   findOne(params: Prisma.locationFindUniqueArgs) {
     const { where, select, include } = params;
     if (include) {
@@ -27,7 +27,7 @@ export class LocationRepository {
     }
     return this.prisma.location.findUnique({ where, select });
   }
-  
+
   update(params: {
     where: Prisma.locationWhereUniqueInput;
     data: Prisma.locationUpdateInput;
@@ -38,17 +38,21 @@ export class LocationRepository {
       where,
     });
   }
-  
+
   async findAll(params: Prisma.locationFindManyArgs) {
-    const { skip, cursor, where, select, orderBy } = params;
+    const {
+      skip, cursor, where, select, orderBy,
+    } = params;
     const maxQueryLimit = this.configService.get<number>('MAX_NONE_RELATION_QUERY_LIMIT');
-    const take = Number.isFinite(params.take) && params.take <  maxQueryLimit ? params.take : maxQueryLimit;
+    const take = Number.isFinite(params.take) && params.take < maxQueryLimit ? params.take : maxQueryLimit;
 
     const submission = await this.prisma.$transaction([
-      this.prisma.location.count({where}),
-      this.prisma.location.findMany({ skip, take, cursor, where, select, orderBy })
+      this.prisma.location.count({ where }),
+      this.prisma.location.findMany({
+        skip, take, cursor, where, select, orderBy,
+      }),
     ]);
-  
+
     return {
       count: submission[0] ?? 0,
       data: submission[1],

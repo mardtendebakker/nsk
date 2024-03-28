@@ -10,9 +10,9 @@ import { AOrderProcess } from './aorder.process';
 import { PrintService } from '../print/print.service';
 import { FileService } from '../file/file.service';
 import { AOrderProductProcess } from './aorder-product.process';
-import { AOrderPayload } from './types/aorder-payload';
 import { ContactService } from '../contact/contact.service';
 import { AOrderPayloadRelation } from './types/aorder-payload-relation';
+import { AOrderFindManyReturnType } from './types/aorder-find-many-return-type';
 
 type CommonAOrderDto = Partial<Omit<CreateAOrderDto, 'pickup' | 'repair'>>;
 type CommonAOrderInput = Partial<Omit<Prisma.aorderCreateInput, 'pickup' | 'repair'>>;
@@ -83,7 +83,7 @@ export class AOrderService {
       orderBy: Object.keys(query?.orderBy || {})?.length ? query.orderBy : { id: 'desc' },
     };
 
-    const result = await this.repository.findAll(params);
+    const result = <AOrderFindManyReturnType> <unknown> await this.repository.findAll(params);
 
     return {
       count: result.count,
@@ -101,7 +101,8 @@ export class AOrderService {
       },
     };
 
-    const order = <AOrderPayload> await this.repository.findOne(this.commonIncludePart(params));
+    const order = <AOrderPayloadRelation> await this.repository
+      .findOne(this.commonIncludePart(params));
 
     if (!order || (this.type && order?.discr !== this.type)) {
       throw new NotFoundException(`Order with ID ${id} not found`);
@@ -128,7 +129,8 @@ export class AOrderService {
       },
     };
 
-    const order = <AOrderPayload> await this.repository.create(this.commonIncludePart(params));
+    const order = <AOrderPayloadRelation> await this.repository
+      .create(this.commonIncludePart(params));
 
     if (commonDto.order_nr === undefined) {
       const { id, order_date: orderDate } = order;
@@ -164,7 +166,8 @@ export class AOrderService {
       where: { id },
     };
 
-    const order = <AOrderPayload> await this.repository.update(this.commonIncludePart(params));
+    const order = <AOrderPayloadRelation> await this.repository
+      .update(this.commonIncludePart(params));
 
     return new AOrderProcess(order).run();
   }
@@ -179,7 +182,7 @@ export class AOrderService {
   }
 
   async deleteOne(id: number) {
-    const order = <AOrderPayloadRelation> await this.findOne(id);
+    const order = await this.findOne(id);
     if (order.discr === AOrderDiscrimination.PURCHASE) {
       if (order?.pickup?.afile?.length) {
         await this.fileService.deleteMany(
@@ -204,7 +207,15 @@ export class AOrderService {
     return this.fileService.deleteMany(fileIds);
   }
 
-  async findByIds(ids: number[], product?: boolean, email?: string) {
+  async findByIds({
+    ids,
+    product,
+    email,
+  }: {
+    ids: number[],
+    product: boolean,
+    email?: string,
+  }) {
     const params: Prisma.aorderFindManyArgs = {
       where: {
         id: { in: ids },
@@ -215,19 +226,28 @@ export class AOrderService {
       },
     };
 
-    const result = <AOrderPayload[]> await this.repository
+    const result = <AOrderPayloadRelation[]> await this.repository
       .findBy(product ? this.productIncludePart(params) : this.commonIncludePart(params));
 
     return result.map((order) => new AOrderProcess(order).run());
   }
 
   async printAOrders(ids: number[], email?: string): Promise<Buffer> {
-    const aorders = await this.findByIds(ids, false, email);
+    const aorders = await this.findByIds({
+      ids,
+      product: false,
+      email,
+    });
+
     return this.printService.printAOrders(aorders);
   }
 
   async printExport(ids: number[], email?: string): Promise<Buffer> {
-    const aorders = await this.findByIds(ids, true, email);
+    const aorders = await this.findByIds({
+      ids,
+      product: true,
+      email,
+    });
     return this.printService.printExport(aorders);
   }
 

@@ -1,4 +1,4 @@
-import { BlanccoUnknownField } from "../blancco-unknown-field";
+import { BlanccoUnknownField } from '../blancco-unknown-field';
 
 export type BlanccoNetworkInterface = BlanccoUnknownField & {
   id?: number;

@@ -1,40 +1,43 @@
 import { Prisma } from '@prisma/client';
-import { PrismaService } from '../prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
+import { PrismaService } from '../prisma/prisma.service';
 
 export class StockRepository {
   constructor(
     protected readonly prisma: PrismaService,
     protected readonly configService: ConfigService,
-    protected readonly isRepair?: boolean
+    protected readonly isRepair?: boolean,
   ) {}
 
   async findAll(params: Prisma.productFindManyArgs) {
-    const { skip, cursor, select, orderBy } = params;
+    const {
+      skip, cursor, select, orderBy,
+    } = params;
     const maxQueryLimit = this.configService.get<number>('MAX_RELATION_QUERY_LIMIT');
-    const take = Number.isFinite(params.take) && params.take <  maxQueryLimit ? params.take : maxQueryLimit;
-    const { product_order, ...restWhere } = params.where;
-    
+    const take = Number.isFinite(params.take)
+    && params.take < maxQueryLimit ? params.take : maxQueryLimit;
+    const { product_order: productOrder, ...restWhere } = params.where;
+
     const where: Prisma.productWhereInput = {
       ...restWhere,
     };
-  
+
     if (this.isRepair === true) {
       where.product_order = {
-        some: { aorder: {}, ...product_order?.some },
-        every: { aorder: { repair: { isNot: null } }, ...product_order?.every },
-        ...(product_order?.none && { none: { ...product_order?.none } }),
+        some: { aorder: {}, ...productOrder?.some },
+        every: { aorder: { repair: { isNot: null } }, ...productOrder?.every },
+        ...(productOrder?.none && { none: { ...productOrder?.none } }),
       };
     } else if (this.isRepair === false) {
       where.product_order = {
-        every: { aorder: { repair: { is: null } }, ...product_order?.every },
-        ...(product_order?.some && { some: { ...product_order?.some } }),
-        ...(product_order?.none && { none: { ...product_order?.none } }),
+        every: { aorder: { repair: { is: null } }, ...productOrder?.every },
+        ...(productOrder?.some && { some: { ...productOrder?.some } }),
+        ...(productOrder?.none && { none: { ...productOrder?.none } }),
       };
-    } else if (product_order) {
-      where.product_order = { ...product_order };
+    } else if (productOrder) {
+      where.product_order = { ...productOrder };
     }
-  
+
     const [count, data] = await this.prisma.$transaction([
       this.prisma.product.count({ where }),
       this.prisma.product.findMany({
@@ -46,7 +49,7 @@ export class StockRepository {
         orderBy,
       }),
     ]);
-  
+
     return {
       count: count ?? 0,
       data,
@@ -55,7 +58,7 @@ export class StockRepository {
 
   findBy(params: Prisma.productFindManyArgs) {
     const { where, select, orderBy } = params;
-    return this.prisma.product.findMany({ where, select, orderBy })
+    return this.prisma.product.findMany({ where, select, orderBy });
   }
 
   create(createData: Prisma.productUncheckedCreateInput) {
@@ -157,21 +160,21 @@ export class StockRepository {
         attribute_id,
         name,
       },
-      update: {}
+      update: {},
     });
   }
 
   getProductTypeByName(name: string) {
     return this.prisma.product_type.upsert({
       where: {
-        name
+        name,
       },
       create: {
         name,
         pindex: 50,
         is_public: false,
       },
-      update: {}
+      update: {},
     });
   }
 
@@ -210,7 +213,7 @@ export class StockRepository {
 
   findAttributeOptions(where: Prisma.attribute_optionWhereInput) {
     return this.prisma.attribute_option.findMany({
-      where
-    })
+      where,
+    });
   }
 }

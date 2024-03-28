@@ -14,6 +14,6 @@ import { ProductTypeModule } from './product-type/product-type.module';
     ProductTypeModule,
     LocationModule,
     LocationTemplateModule,
-  ]
+  ],
 })
 export class AdminModule {}

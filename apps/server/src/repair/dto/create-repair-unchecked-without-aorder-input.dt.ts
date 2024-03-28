@@ -2,11 +2,10 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Prisma } from '@prisma/client';
 
 export class CreateRepairUncheckedWithoutAOrderInputDto
-  implements Prisma.repairUncheckedCreateWithoutAorderInput
-{
+implements Prisma.repairUncheckedCreateWithoutAorderInput {
   @ApiPropertyOptional()
-  description?: string | null;
+    description?: string | null;
 
   @ApiPropertyOptional()
-  damage?: string | null;
+    damage?: string | null;
 }

@@ -1,49 +1,48 @@
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { Status } from "../status";
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Status } from '../status';
 
 class Module {
   @ApiProperty()
-  id: number;
+    id: number;
 
   @ApiProperty()
-  name: string;
-  
+    name: string;
+
   @ApiProperty()
-  price: number;
-  
+    price: number;
+
   @ApiProperty()
-  activeAt: Date;
-  
+    activeAt: Date;
+
   @ApiProperty()
-  expiresAt: Date;
+    expiresAt: Date;
 }
 
 export class FindPaymentResponseDto {
-    @ApiProperty()
+  @ApiProperty()
     id: number;
 
-    @ApiPropertyOptional()
+  @ApiPropertyOptional()
     method: string;
-    
-    @ApiProperty()
+
+  @ApiProperty()
     transactionId: string;
-    
-    @ApiProperty()
+
+  @ApiProperty()
     subscriptionId: string;
-    
-    @ApiProperty()
+
+  @ApiProperty()
     status: Status;
-    
-    @ApiProperty()
+
+  @ApiProperty()
     amount: number;
-    
-    @ApiProperty()
+
+  @ApiProperty()
     createdAt: Date;
-    
-    @ApiProperty()
+
+  @ApiProperty()
     updatedAt: Date;
 
-    @ApiProperty()
+  @ApiProperty()
     modules: Module[];
-  }
-  
+}

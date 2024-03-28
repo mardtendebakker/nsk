@@ -21,15 +21,15 @@ export class ModulePaymentRepository {
       },
       where: {
         active_at: { lte: dateNow },
-        module_name: {equals: moduleName.name},
+        module_name: { equals: moduleName.name },
         payment: {
           status: 'paid',
-        }
+        },
       },
       orderBy: {
-        active_at: 'desc'
+        active_at: 'desc',
       },
-      take: 1
+      take: 1,
     }))[0];
   }
 }

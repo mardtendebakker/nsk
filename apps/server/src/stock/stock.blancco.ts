@@ -30,8 +30,7 @@ export class StockBlancco {
         newCursor = cursor;
       } while (newCursor);
     } catch (err) {
-      const httpStatus =
-      err instanceof HttpException
+      const httpStatus = err instanceof HttpException
         ? err.getStatus()
         : HttpStatus.INTERNAL_SERVER_ERROR;
       if (httpStatus !== HttpStatus.NOT_FOUND) {
@@ -53,7 +52,7 @@ export class StockBlancco {
       try {
         result = await this.createProductAttributeByBlanccoReport(orderId, reports[uuid].report);
       } catch (err) {
-        console.log("handleBlanccoReoprts:", err);
+        console.log('handleBlanccoReoprts:', err);
         continue;
       }
       results.push(result);

@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { RepairRepository } from './repair.repository';
 import { PrintService } from '../print/print.service';
 import { FileService } from '../file/file.service';
 import { CreateOrderStatusDto } from '../admin/order-status/dto/create-order-status.dto';
 import { OrderStatusService } from '../admin/order-status/order-status.service';
 import { CreateAOrderDto } from '../aorder/dto/create-aorder.dto';
-import { Prisma } from '@prisma/client';
 import { SaleService } from '../sale/sale.service';
 import { AProductService } from '../aproduct/aproduct.service';
 import { REPAIR_PRODUCT_LOCATION_ID, REPAIR_PRODUCT_NAME } from '../to-repair/enum/repair-product.const';
@@ -43,7 +43,7 @@ export class RepairService extends SaleService {
       product_order: {
         create: {
           product: {
-            create: this.getToRepairCreateInput()
+            create: this.getToRepairCreateInput(),
           },
           quantity: 1,
           aservice: {

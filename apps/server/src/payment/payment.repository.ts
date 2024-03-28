@@ -1,26 +1,30 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
 import { Prisma } from '@prisma/client';
-import { PAID } from './status';
 import { add } from 'date-fns';
+import { PAID } from './status';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class PaymentRepository {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
   ) {}
 
   async findAll(params: Prisma.paymentFindManyArgs) {
-    const { where, skip, cursor, select, orderBy } = params;
+    const {
+      where, skip, cursor, select, orderBy,
+    } = params;
 
     const maxQueryLimit = this.configService.get<number>('MAX_NONE_RELATION_QUERY_LIMIT');
-    const take = Number.isFinite(params.take) && params.take <  maxQueryLimit ? params.take : maxQueryLimit;
+    const take = Number.isFinite(params.take) && params.take < maxQueryLimit ? params.take : maxQueryLimit;
 
     const submission = await this.prisma.$transaction([
-      this.prisma.payment.count({where}),
-      this.prisma.payment.findMany({ skip, take, cursor, where, select, orderBy })
+      this.prisma.payment.count({ where }),
+      this.prisma.payment.findMany({
+        skip, take, cursor, where, select, orderBy,
+      }),
     ]);
 
     return {
@@ -30,7 +34,7 @@ export class PaymentRepository {
   }
 
   findOne(id: number) {
-    return this.prisma.payment.findFirst({ where: {id} });
+    return this.prisma.payment.findFirst({ where: { id } });
   }
 
   create(params: Prisma.paymentCreateArgs) {
@@ -44,32 +48,32 @@ export class PaymentRepository {
     return this.prisma.payment.updateMany(params);
   }
 
-  async updateToPaidStatusByTransactionId({ transactionId, method } : {transactionId: string, method: string}) {
+  async updateToPaidStatusByTransactionId({ transactionId, method } : { transactionId: string, method: string }) {
     await this.prisma.$transaction(async (tx) => {
       const dateNow = new Date();
 
       await tx.payment.updateMany({
-        data: { status: PAID, method }, 
-        where: { transaction_id: { equals: transactionId } } 
+        data: { status: PAID, method },
+        where: { transaction_id: { equals: transactionId } },
       });
       await tx.module_payment.updateMany({
         data: { active_at: dateNow, expires_at: add(dateNow, { months: 1 }) },
-        where: {payment : {transaction_id: {equals: transactionId}}}
+        where: { payment: { transaction_id: { equals: transactionId } } },
       });
     });
   }
 
-  async updateToPaidStatusBySubscriptionId({ subscriptionId, method } : {subscriptionId: string, method: string}) {
+  async updateToPaidStatusBySubscriptionId({ subscriptionId, method } : { subscriptionId: string, method: string }) {
     await this.prisma.$transaction(async (tx) => {
       const dateNow = new Date();
 
       await tx.payment.updateMany({
-        data: { status: PAID, method }, 
-        where: { subscription_id: { equals: subscriptionId } } 
+        data: { status: PAID, method },
+        where: { subscription_id: { equals: subscriptionId } },
       });
       await tx.module_payment.updateMany({
         data: { active_at: dateNow, expires_at: add(dateNow, { months: 1 }) },
-        where: {payment : {subscription_id: {equals: subscriptionId}}}
+        where: { payment: { subscription_id: { equals: subscriptionId } } },
       });
     });
   }

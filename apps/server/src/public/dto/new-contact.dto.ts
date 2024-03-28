@@ -18,55 +18,55 @@ export class NewContactDto extends PickType(CreateContactDto, [
   @IsOptional()
   @IsString()
   @Type(() => String)
-  name?: string;
+    name?: string;
 
   @ApiProperty()
   @Transform(formDataStringTransform)
   @IsString()
   @Type(() => String)
-  company_name: string;
+    company_name: string;
 
   @ApiProperty()
   @Transform(formDataStringTransform)
   @IsString()
   @Type(() => String)
-  email: string;
+    email: string;
 
   @ApiProperty()
   @Transform(formDataStringTransform)
   @IsString()
   @Type(() => String)
-  phone: string;
+    phone: string;
 
   @ApiProperty()
   @Transform(formDataStringTransform)
   @IsString()
   @Type(() => String)
-  street: string;
+    street: string;
 
   @ApiProperty()
   @Transform(formDataStringTransform)
   @Transform((zip) => zip.value.toUpperCase().replace(' ', ''))
   @IsString()
   @Type(() => String)
-  zip: string;
+    zip: string;
 
   @ApiPropertyOptional()
   @Transform(formDataStringTransform)
   @IsOptional()
   @IsString()
   @Type(() => String)
-  city?: string;
+    city?: string;
 
   @ApiProperty()
   @IsBoolean()
-  company_is_partner: boolean;
+    company_is_partner: boolean;
 
   @ApiProperty()
   @IsBoolean()
-  company_is_customer: boolean;
+    company_is_customer: boolean;
 
   @ApiProperty()
   @IsBoolean()
-  company_is_supplier: boolean;
+    company_is_supplier: boolean;
 }

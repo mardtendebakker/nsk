@@ -1,23 +1,20 @@
-import { ProductOrderRelation } from "../stock/types/product-order-relation";
-import { ProductOrderDto } from "./dto/find-aorder-response.dto";
-import { AOrderProcessed } from "./aorder.process";
-export type AOrderProductProcessed = Omit<
- AOrderProcessed,
-  'product_order'
-> & {product_orders: ProductOrderDto[]};
+import { ProductOrderRelationProduct } from '../stock/types/product-order-relation-product';
+import { ProductOrderDto } from './dto/find-aorder-response.dto';
+import { AOrderProcessed } from './types/aorder-processed';
+import { AOrderProductProcessed } from './types/aorder-product-processed';
 
 export class AOrderProductProcess {
   private product_orders: ProductOrderDto[];
 
-  constructor( private readonly aorder: AOrderProcessed ) {}
+  constructor(private readonly aorder: AOrderProcessed) {}
 
   public run(): AOrderProductProcessed {
     const {
-      product_order,
+      product_order: productOrder,
       ...rest
     } = this.aorder;
 
-    this.product_orders = product_order.map(this.productOrderProcess);
+    this.product_orders = productOrder.map(this.productOrderProcess);
 
     return {
       ...rest,
@@ -25,7 +22,7 @@ export class AOrderProductProcess {
     };
   }
 
-  private productOrderProcess(productOrder: ProductOrderRelation): ProductOrderDto {
+  private productOrderProcess(productOrder: ProductOrderRelationProduct): ProductOrderDto {
     const product = productOrder?.product;
     return {
       quantity: productOrder?.quantity ?? 1,

@@ -11,6 +11,6 @@ import { PrintModule } from '../print/print.module';
   providers: [PurchaseService, PurchaseRepository],
   controllers: [PurchaseController],
   imports: [PrismaModule, FileModule, ContactModule, PrintModule],
-  exports: [PurchaseService]
+  exports: [PurchaseService],
 })
 export class PurchaseModule {}

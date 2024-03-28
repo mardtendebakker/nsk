@@ -6,6 +6,7 @@ import { FindLogisticResponeDto, FindLogisticsResponeDto } from './dto/find-logi
 @Injectable()
 export class LogisticService {
   constructor(private readonly repository: LogisticRepository) {}
+
   async findAll(query: FindManyDto): Promise<FindLogisticsResponeDto> {
     const { count, data } = await this.repository.findAll(query);
     const result: FindLogisticsResponeDto = {

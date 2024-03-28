@@ -1,4 +1,4 @@
 export enum GroupBy {
   DAYS = 'days',
-  MONTHS = 'months'
+  MONTHS = 'months',
 }

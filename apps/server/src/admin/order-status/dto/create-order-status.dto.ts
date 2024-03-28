@@ -1,6 +1,6 @@
-import { OmitType } from "@nestjs/swagger";
-import { PrismaOrderStatusCreateInputDto } from "./prisma-order-status-create-input.dto";
+import { OmitType } from '@nestjs/swagger';
+import { PrismaOrderStatusCreateInputDto } from './prisma-order-status-create-input.dto';
 
 export class CreateOrderStatusDto extends OmitType(PrismaOrderStatusCreateInputDto, [
-  'aorder'
+  'aorder',
 ] as const) {}

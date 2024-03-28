@@ -8,6 +8,6 @@ import { OrderStatusController } from './order-status.controller';
   providers: [OrderStatusService, OrderStatusRepository],
   controllers: [OrderStatusController],
   imports: [PrismaModule],
-  exports: [OrderStatusService]
+  exports: [OrderStatusService],
 })
 export class OrderStatusModule {}

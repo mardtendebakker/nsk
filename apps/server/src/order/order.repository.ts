@@ -1,19 +1,18 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
+import { Sql } from '@prisma/client/runtime/library';
+import { ConfigService } from '@nestjs/config';
 import { AOrderRepository } from '../aorder/aorder.repository';
 import { PrismaService } from '../prisma/prisma.service';
 import { GroupBy } from './types/group-by.enum';
-import { AnalyticsResultDto } from './dto/analytics-result.dto';
-import { Prisma } from '@prisma/client';
-import { Sql } from '@prisma/client/runtime/library';
-import { GroupByDateResult } from './dto/analytics-result.dto';
+import { AnalyticsResultDto, GroupByDateResult } from './dto/analytics-result.dto';
 import { AOrderDiscrimination } from '../aorder/types/aorder-discrimination.enum';
-import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class OrderRepository extends AOrderRepository {
   constructor(
     protected readonly prisma: PrismaService,
-    protected readonly configService: ConfigService
+    protected readonly configService: ConfigService,
   ) {
     super(prisma, configService);
   }
@@ -22,8 +21,9 @@ export class OrderRepository extends AOrderRepository {
     const REPAIR_STATUS_ID = 45;
     const LAST_THIRTY_DAYS = '30';
     const LAST_TWELVE_MONTH = '12';
-    
-    let repairQuery, saleQuery, purchaseQuery: Sql;
+
+    let repairQuery; let saleQuery; let
+      purchaseQuery: Sql;
     saleQuery = Prisma.sql`
       SELECT YEAR(o.order_date) year, MONTH(o.order_date) month, count(1) count
       FROM nexxus_application.aorder o

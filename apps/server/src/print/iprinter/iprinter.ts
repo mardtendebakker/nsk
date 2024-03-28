@@ -1,8 +1,8 @@
-import { ITransformable } from '../../common/abstract/itransform';
 import { join } from 'path';
 import { readFileSync } from 'fs';
-import puppeteer, { PDFOptions } from "puppeteer";
+import puppeteer, { PDFOptions } from 'puppeteer';
 import * as Handlebars from 'handlebars';
+import { ITransformable } from '../../common/abstract/itransform';
 import { PrintTemplateName } from '../types/print-types.enum';
 import { PrintableData } from '../types/printable';
 
@@ -15,7 +15,7 @@ export abstract class IPrinter extends ITransformable {
 
   async print({
     data,
-    pdfOptions
+    pdfOptions,
   }: {
     data: PrintableData,
     pdfOptions: PDFOptions
@@ -30,7 +30,7 @@ export abstract class IPrinter extends ITransformable {
       headless: true,
       args: ['--no-sandbox'],
     });
-    
+
     try {
       const page = await browser.newPage();
       const result = template(transformed);

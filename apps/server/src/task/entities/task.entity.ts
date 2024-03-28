@@ -1,16 +1,16 @@
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { task } from "@prisma/client";
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { task } from '@prisma/client';
 
 export class TaskEntity implements task {
   @ApiProperty()
-  id: number;
+    id: number;
 
   @ApiProperty()
-  name: string;
+    name: string;
 
   @ApiPropertyOptional()
-  description: string | null;
+    description: string | null;
 
   @ApiPropertyOptional()
-  pindex: number | null;
+    pindex: number | null;
 }

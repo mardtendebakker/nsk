@@ -1,11 +1,13 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
+import {
+  IsOptional, IsString, IsNumber, IsEnum, IsInt,
+} from 'class-validator';
 import { ProductAttributeDto } from './product-attribute.dto';
 import {
   formDataNumberTransform,
   formDataStringTransform,
 } from '../../common/transforms/form-date.transform';
-import { IsOptional, IsString, IsNumber, IsEnum, IsInt } from 'class-validator';
 import { ProductOrderCreateDto } from './product-order-create.dto';
 import { EntityStatus } from '../../common/types/entity-status.enum';
 
@@ -14,59 +16,59 @@ export class CreateBodyStockDto {
   @Transform(formDataStringTransform)
   @IsOptional()
   @IsString()
-  sku?: string;
+    sku?: string;
 
   @ApiProperty()
   @Transform(formDataStringTransform)
   @IsOptional()
   @IsString()
-  name: string;
+    name: string;
 
   @ApiPropertyOptional()
   @Transform(formDataStringTransform)
   @IsOptional()
   @IsString()
-  description?: string;
+    description?: string;
 
   @ApiPropertyOptional()
   @Transform(formDataNumberTransform)
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
-  price?: number | null;
+    price?: number | null;
 
   @ApiPropertyOptional()
   @Transform(formDataNumberTransform)
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  external_id?: number;
+    external_id?: number;
 
   @ApiPropertyOptional()
   @Transform(formDataNumberTransform)
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  type_id?: number;
+    type_id?: number;
 
   @ApiPropertyOptional()
   @Transform(formDataNumberTransform)
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  status_id?: number;
+    status_id?: number;
 
   @ApiProperty()
   @Transform(formDataNumberTransform)
   @IsInt()
   @Type(() => Number)
-  location_id: number;
+    location_id: number;
 
   @ApiPropertyOptional()
   @Transform(formDataStringTransform)
   @IsOptional()
   @IsString()
-  location_label?: string;
+    location_label?: string;
 
   @ApiPropertyOptional({
     enum: EntityStatus,
@@ -76,13 +78,13 @@ export class CreateBodyStockDto {
   @IsOptional()
   @IsEnum(EntityStatus)
   @Type(() => Number)
-  entity_status?: EntityStatus;
+    entity_status?: EntityStatus;
 
   @ApiPropertyOptional()
   @Type(() => ProductAttributeDto)
-  product_attributes?: ProductAttributeDto[];
+    product_attributes?: ProductAttributeDto[];
 
   @ApiPropertyOptional()
   @Type(() => ProductOrderCreateDto)
-  product_orders?: ProductOrderCreateDto[];
+    product_orders?: ProductOrderCreateDto[];
 }

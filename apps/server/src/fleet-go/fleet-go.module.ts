@@ -3,7 +3,7 @@ import { FleetGoService } from './fleet-go.service';
 
 @Module({
   providers: [FleetGoService],
-  exports: [FleetGoService]
+  exports: [FleetGoService],
 })
 
 export class FleetGoModule { }

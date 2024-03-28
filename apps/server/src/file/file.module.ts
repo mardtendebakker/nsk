@@ -7,6 +7,6 @@ import { FileS3 } from './file.s3';
 @Module({
   providers: [FileService, FileRepository, FileS3],
   imports: [PrismaModule],
-  exports: [FileService]
+  exports: [FileService],
 })
 export class FileModule {}

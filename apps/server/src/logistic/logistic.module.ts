@@ -7,6 +7,6 @@ import { LogisticRepository } from './logistic.repository';
 @Module({
   providers: [LogisticService, LogisticRepository],
   controllers: [LogisticController],
-  imports: [PrismaModule]
+  imports: [PrismaModule],
 })
 export class LogisticModule {}

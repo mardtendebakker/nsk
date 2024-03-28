@@ -6,13 +6,17 @@ import { EquipmentResponseDto } from './dto/equipment-response-dto';
 @Injectable()
 export class FleetGoService {
   private token?: string;
+
   private axios: AxiosInstance;
+
   private refreshRequested: boolean = false;
+
   private subscribers: Array<(token: string) => void> = [];
+
   private loginUri = 'Session/Login';
 
   constructor(
-    protected readonly configService: ConfigService
+    protected readonly configService: ConfigService,
   ) {
     this.axios = axios.create({ baseURL: 'https://api.fleetgo.com/api/' });
     this.axios.interceptors.request.use(this.tokenInterceptor.bind(this), (err) => Promise.reject(err));

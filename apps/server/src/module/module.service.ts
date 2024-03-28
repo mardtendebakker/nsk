@@ -11,30 +11,30 @@ export interface Module {
 
 export const MODULES: Module[] = [{
   name: 'blancco',
-  price: 1
-},{
+  price: 1,
+}, {
   name: 'customer_contact_action',
-  price: 1
-},{
+  price: 1,
+}, {
   name: 'logistics',
-  price: 1
-},{
+  price: 1,
+}, {
   name: 'attributes',
-  price: 1
-},{
+  price: 1,
+}, {
   name: 'tasks',
-  price: 1
-},{
+  price: 1,
+}, {
   name: 'product_statuses',
-  price: 1
-},{
+  price: 1,
+}, {
   name: 'order_statuses',
-  price: 1
-},{
+  price: 1,
+}, {
   name: 'tracking',
-  price: 1
+  price: 1,
 }];
- 
+
 @Injectable()
 export class ModuleService {
   constructor(private readonly modulePaymentService: ModulePaymentService) {}
@@ -52,15 +52,15 @@ export class ModuleService {
         activeAt: payment?.activeAt || null,
         expiresAt: payment?.expiresAt || null,
         active: dateNow > payment?.activeAt && dateNow < payment?.expiresAt,
-        freeTrialUsed: !!payment
-      })
+        freeTrialUsed: !!payment,
+      });
     }
 
     return result;
   }
 
-  findOneByName(modulleName: ModuleName): Module|null {
-    return MODULES.find(({name}) => name == modulleName);
+  findOneByName(modulleName: ModuleName): Module | null {
+    return MODULES.find(({ name }) => name == modulleName);
   }
 
   calculateTotalAmount(modules: string[]): number {
@@ -69,8 +69,8 @@ export class ModuleService {
     for (const module of modules) {
       const price = MODULES.find((element) => element.name == module)?.price || 0;
 
-      if(price < 1) {
-        throw new Error('Invalid module name:'+ module);
+      if (price < 1) {
+        throw new Error(`Invalid module name:${module}`);
       }
 
       amount += price;

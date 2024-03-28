@@ -1,19 +1,19 @@
-import { ApiPropertyOptional, ApiProperty } from "@nestjs/swagger";
-import { IsNumber } from "class-validator";
+import { ApiPropertyOptional, ApiProperty } from '@nestjs/swagger';
+import { IsNumber } from 'class-validator';
 
 export class Product {
-    @ApiPropertyOptional()
+  @ApiPropertyOptional()
     location_id?: number;
 
-    @ApiPropertyOptional()
+  @ApiPropertyOptional()
     location_label?: string;
 }
 
 export class UpdateManyProductDto {
-    @ApiProperty()
-    @IsNumber({}, {each: true})
+  @ApiProperty()
+  @IsNumber({}, { each: true })
     ids: number[];
 
-    @ApiProperty()
+  @ApiProperty()
     product: Product;
 }

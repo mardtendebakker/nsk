@@ -16,7 +16,7 @@ export class NskNotFoundExceptionFilter implements ExceptionFilter {
     const status = exception.getStatus();
 
     if (request.url.startsWith('/nsk')) {
-        return response
+      return response
         .status(HttpStatus.TEMPORARY_REDIRECT)
         .redirect('https://nexxus.eco');
     }

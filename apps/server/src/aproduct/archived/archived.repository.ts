@@ -7,7 +7,7 @@ import { AProductRepository } from '../aproduct.repository';
 export class ArchivedRepository extends AProductRepository {
   constructor(
     protected readonly prisma: PrismaService,
-    protected readonly  configService: ConfigService
+    protected readonly configService: ConfigService,
   ) {
     super(prisma, configService);
   }

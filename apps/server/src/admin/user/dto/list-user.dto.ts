@@ -1,20 +1,20 @@
-import { ApiPropertyOptional } from "@nestjs/swagger";
-import { Type } from "class-transformer";
-import { IsInt, IsOptional } from "class-validator";
+import { ApiPropertyOptional } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+import { IsInt, IsOptional } from 'class-validator';
 
 export class ListUserDto {
   @ApiPropertyOptional()
-  filter?: string;
+    filter?: string;
 
   @ApiPropertyOptional()
-  attributes?: string[];
-  
+    attributes?: string[];
+
   @ApiPropertyOptional()
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  limit?: number;
-  
+    limit?: number;
+
   @ApiPropertyOptional()
-  pageToken?: string;
+    pageToken?: string;
 }

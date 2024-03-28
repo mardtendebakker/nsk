@@ -1,12 +1,13 @@
+import { BadRequestException, ForbiddenException, Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { ContactRepository } from './contact.repository';
 import { UpdateContactDto } from './dto/update-contact.dto';
-import { BadRequestException, ForbiddenException, Injectable } from '@nestjs/common';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { FindManyDto } from './dto/find-many.dto';
 import { ContactEntity } from './entities/contact.entity';
-import { Prisma } from '@prisma/client';
-import { ContactSelect } from './types/contact-select';
+import { ContactRelation } from './types/contact-relation';
 import { CompanyService } from '../company/company.service';
+
 @Injectable()
 export class ContactService {
   constructor(
@@ -15,21 +16,30 @@ export class ContactService {
   ) {}
 
   async findAll(query: FindManyDto, email?: string) {
-    const { search, company, is_customer, is_partner, is_supplier } = query;
+    const {
+      search,
+      company,
+      is_customer: isCustomer,
+      is_partner: isPartner,
+      is_supplier: isSupplier,
+    } = query;
     const where: Prisma.contactWhereInput = {
       ...query.where,
       ...this.getPartnerWhereInput(email),
-      ...{ company_contact_company_idTocompany: {
-         name: { contains: company },
-         is_customer,
-         is_partner,
-         is_supplier
-        }
+      ...{
+        company_contact_company_idTocompany: {
+          name: { contains: company },
+          is_customer: isCustomer,
+          is_partner: isPartner,
+          is_supplier: isSupplier,
+        },
       },
-      ...(search && { OR: [
-        { name: { contains: search } },
-        { email: { contains: search } },
-      ] })
+      ...(search && {
+        OR: [
+          { name: { contains: search } },
+          { email: { contains: search } },
+        ],
+      }),
     };
 
     const { count, data } = await this.repository.findAll({
@@ -43,7 +53,7 @@ export class ContactService {
           select: {
             customerOrders: true,
             supplierOrders: true,
-          }
+          },
         },
         company_contact_company_idTocompany: true,
       },
@@ -51,86 +61,90 @@ export class ContactService {
       orderBy: Object.keys(query?.orderBy || {})?.length ? query.orderBy : { id: 'desc' },
     });
 
-    //TODO refacto response DTO
+    // TODO refacto response DTO
     return {
       count,
       data: data.map(({ _count, company_contact_company_idTocompany, ...rest }) => ({
         ...rest,
         company: company_contact_company_idTocompany,
-        ordersCount: _count.customerOrders + _count.supplierOrders
-      }))
-    }
+        ordersCount: _count.customerOrders + _count.supplierOrders,
+      })),
+    };
   }
 
   async findOne(id: number, email?: string) {
-    const { company_contact_company_idTocompany, ...rest } = <ContactSelect>await this.repository.findOne({
+    const {
+      company_contact_company_idTocompany: companyContactCompanyIdTocompany,
+      ...rest
+    } = <ContactRelation> await this.repository.findOne({
       where: {
         id,
         ...this.getPartnerWhereInput(email),
       },
       include: {
         company_contact_company_idTocompany: true,
-      }
+      },
     });
 
     return {
       ...rest,
-      company_name: company_contact_company_idTocompany?.name,
-      company_kvk_nr: company_contact_company_idTocompany?.kvk_nr,
-    }
+      company_name: companyContactCompanyIdTocompany?.name,
+      company_kvk_nr: companyContactCompanyIdTocompany?.kvk_nr,
+    };
   }
 
   async create(createDto: CreateContactDto, email?: string) {
     const {
-      company_id,
-      company_name,
-      company_kvk_nr,
-      company_is_partner,
-      company_is_customer,
-      company_is_supplier,
-      company_partner_id,
+      company_id: companyId,
+      company_name: companyName,
+      company_kvk_nr: companyKvkNr,
+      company_is_partner: companyIsPartner,
+      company_is_customer: companyIsCustomer,
+      company_is_supplier: companyIsSupplier,
+      company_partner_id: companyPartnerId,
       ...restContactDto
     } = createDto;
 
-    if (!company_id && !company_name) {
+    if (!companyId && !companyName) {
       throw new BadRequestException('Either company_id or company name is required');
     }
 
-    if (restContactDto.is_main == undefined && !isFinite(company_id)) { // check if it is the first contact of a new company
+    if (restContactDto.is_main === undefined
+      && !Number.isFinite(companyId)) { // check if it is the first contact of a new company
       restContactDto.is_main = true;
     }
 
     let customConnectOrCreate: Prisma.companyCreateNestedOneWithoutCompanyContactsInput;
 
-    if (company_id) {
+    if (companyId) {
       customConnectOrCreate = {
-        connect: { id: company_id },
-      }
+        connect: { id: companyId },
+      };
     } else {
       customConnectOrCreate = {
         connectOrCreate: {
           where: {
-            name: company_name,
+            name: companyName,
           },
           create: {
-            name: company_name,
-            kvk_nr: company_kvk_nr,
-            is_partner: company_is_partner,
-            is_customer: company_is_customer,
-            is_supplier: company_is_supplier,
-            ...(company_partner_id && { partner_id: company_partner_id }),
-            ...(email && { partner_id: (await this.findPartnerByEmail(email))?.id}),
+            name: companyName,
+            kvk_nr: companyKvkNr,
+            is_partner: companyIsPartner,
+            is_customer: companyIsCustomer,
+            is_supplier: companyIsSupplier,
+            ...(companyPartnerId && { partner_id: companyPartnerId }),
+            ...(email && { partner_id: (await this.findPartnerByEmail(email))?.id }),
           },
         },
       };
     }
-    
+
     return this.repository.create({
       ...restContactDto,
       company_contact_company_idTocompany: customConnectOrCreate,
     });
   }
-  
+
   async findPartnerByEmail(email: string) {
     return this.companyService.findPartnerByEmail(email);
   }
@@ -146,27 +160,33 @@ export class ContactService {
 
   async update(id: number, updateDto: UpdateContactDto, email?: string) {
     const {
-      company_name,
-      company_kvk_nr,
-      company_is_partner = false,
-      company_is_customer = false,
-      company_is_supplier = false,
-      company_partner_id,
+      company_name: companyName,
+      company_kvk_nr: companyKvkNr,
+      company_is_partner: companyIsPartner = false,
+      company_is_customer: companyIsCustomer = false,
+      company_is_supplier: companyIsSupplier = false,
+      company_partner_id: companyPartnerId,
     } = updateDto;
 
     try {
       return await this.repository.update({
         data: {
           ...updateDto,
-          ...((company_name || company_kvk_nr || company_is_partner || company_is_customer || company_is_supplier || company_partner_id)) && {
+          ...((companyName
+            || companyKvkNr
+            || companyIsPartner
+            || companyIsCustomer
+            || companyIsSupplier
+            || companyPartnerId
+          )) && {
             company_contact_company_idTocompany: {
               update: {
-                ...(company_name && { name: company_name }),
-                ...(company_kvk_nr && { kvk_nr: company_kvk_nr }),
-                ...(company_is_partner && { is_partner: company_is_partner }),
-                ...(company_is_customer && { is_customer: company_is_customer }),
-                ...(company_is_supplier && { is_supplier: company_is_supplier }),
-                ...(company_partner_id && { partner_id: company_partner_id }),
+                ...(companyName && { name: companyName }),
+                ...(companyKvkNr && { kvk_nr: companyKvkNr }),
+                ...(companyIsPartner && { is_partner: companyIsPartner }),
+                ...(companyIsCustomer && { is_customer: companyIsCustomer }),
+                ...(companyIsSupplier && { is_supplier: companyIsSupplier }),
+                ...(companyPartnerId && { partner_id: companyPartnerId }),
               },
             },
           },
@@ -178,7 +198,7 @@ export class ContactService {
       });
     } catch (err) {
       if (err.code === 'P2025') {
-        throw new ForbiddenException("Insufficient permissions to access this api!");
+        throw new ForbiddenException('Insufficient permissions to access this api!');
       } else {
         throw err;
       }
@@ -192,19 +212,22 @@ export class ContactService {
     if (zip) {
       contact = await this.repository.findFirst({
         where: {
-          ...(createDto.company_is_partner && { company_contact_company_idTocompany: { is_partner: true } }),
-          ...(createDto.company_is_customer && { company_contact_company_idTocompany: { is_customer: true } }),
-          ...(createDto.company_is_supplier && { company_contact_company_idTocompany: { is_supplier: true } }),
+          ...(createDto.company_is_partner
+            && { company_contact_company_idTocompany: { is_partner: true } }),
+          ...(createDto.company_is_customer
+            && { company_contact_company_idTocompany: { is_customer: true } }),
+          ...(createDto.company_is_supplier
+            && { company_contact_company_idTocompany: { is_supplier: true } }),
           AND: [
-            { zip: zip },
+            { zip },
             {
               OR: [
                 { ...(createDto.email?.length > 5 && { email: createDto.email }) },
-                { ...(createDto.phone?.length > 5 && { phone: { contains: createDto.phone.replace("-", "") } }) },
-              ]
+                { ...(createDto.phone?.length > 5 && { phone: { contains: createDto.phone.replace('-', '') } }) },
+              ],
             },
           ],
-        }
+        },
       });
     }
 
@@ -220,7 +243,11 @@ export class ContactService {
       ...(email && {
         OR: [
           { email },
-          { company_contact_company_idTocompany: { company: { companyContacts: { some: { email } } } } },
+          {
+            company_contact_company_idTocompany: {
+              company: { companyContacts: { some: { email } } },
+            },
+          },
         ],
       }),
     };

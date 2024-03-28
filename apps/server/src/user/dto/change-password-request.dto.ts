@@ -1,12 +1,12 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsString } from "class-validator";
+import { ApiProperty } from '@nestjs/swagger';
+import { IsString } from 'class-validator';
 
 export class ChanngePasswordRequestDto {
   @ApiProperty()
   @IsString()
-  oldPassword: string;
+    oldPassword: string;
 
   @ApiProperty()
   @IsString()
-  newPassword: string;
+    newPassword: string;
 }

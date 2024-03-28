@@ -1,12 +1,12 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { createMollieClient } from '@mollie/api-client';
+import { ConfigService } from '@nestjs/config';
+import { add, format } from 'date-fns';
 import { PaymentRepository } from './payment.repository';
 import { FindManyDto } from './dto/find-many.dto';
 import { FindManyPaymentResponseDto } from './dto/find-many-payment-response.dto';
-import { createMollieClient } from '@mollie/api-client';
-import { ConfigService } from '@nestjs/config';
 import { SetupDto } from './dto/setup.dto';
 import { ModuleName, ModuleService } from '../module/module.service';
-import { add, format } from 'date-fns';
 import { PAID, PENDING, Status } from './status';
 
 const FREE_TRIAL = 'free_trial';
@@ -18,76 +18,76 @@ export class PaymentService {
   constructor(
     private readonly repository: PaymentRepository,
     private readonly moduleService: ModuleService,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
   ) {
     this.mollieClient = createMollieClient({ apiKey: this.configService.get<string>('MOLLIE_API_KEY') });
   }
 
   async findAll(query: FindManyDto): Promise<FindManyPaymentResponseDto> {
-   const {count, data} = await this.repository.findAll({
-    select: {
-      id: true,
-      method: true,
-      amount: true,
-      transaction_id: true,
-      subscription_id: true,
-      status: true,
-      created_at: true,
-      updated_at: true,
-      module_payment: true
-    },
-    where: {
-      OR: [
-        {
-          method: { not : { equals: FREE_TRIAL } },
-          module_payment: {
-            some: {
-              module_name: {equals: query.moduleName},
-            }
-          }
-        },{
-          method: { equals: null },
-          module_payment: {
-            some: {
-              module_name: {equals: query.moduleName},
-          }
-        },
-        }
-      ]
-    },
-    orderBy: {
-      created_at: 'desc'
-    },
-    take: query.take,
-    skip: query.skip,
-  });
+    const { count, data } = await this.repository.findAll({
+      select: {
+        id: true,
+        method: true,
+        amount: true,
+        transaction_id: true,
+        subscription_id: true,
+        status: true,
+        created_at: true,
+        updated_at: true,
+        module_payment: true,
+      },
+      where: {
+        OR: [
+          {
+            method: { not: { equals: FREE_TRIAL } },
+            module_payment: {
+              some: {
+                module_name: { equals: query.moduleName },
+              },
+            },
+          }, {
+            method: { equals: null },
+            module_payment: {
+              some: {
+                module_name: { equals: query.moduleName },
+              },
+            },
+          },
+        ],
+      },
+      orderBy: {
+        created_at: 'desc',
+      },
+      take: query.take,
+      skip: query.skip,
+    });
 
-   return {
-    data: data.map((payment) => ({
-      id: payment.id,
-      method: payment.method,
-      transactionId: payment.transaction_id,
-      subscriptionId: payment.subscription_id,
-      amount: payment.amount,
-      status: payment.status as Status,
-      createdAt: payment.created_at,
-      updatedAt: payment.updated_at,
-      modules: payment.module_payment.map((modulePayment)=> ({
-        id: modulePayment.id,
-        name: modulePayment.module_name,
-        price: modulePayment.price,
-        activeAt: modulePayment.active_at,
-        expiresAt: modulePayment.expires_at,
+    return {
+      data: data.map((payment) => ({
+        id: payment.id,
+        method: payment.method,
+        transactionId: payment.transaction_id,
+        subscriptionId: payment.subscription_id,
+        amount: payment.amount,
+        status: payment.status as Status,
+        createdAt: payment.created_at,
+        updatedAt: payment.updated_at,
+        modules: payment.module_payment.map((modulePayment) => ({
+          id: modulePayment.id,
+          name: modulePayment.module_name,
+          price: modulePayment.price,
+          activeAt: modulePayment.active_at,
+          expiresAt: modulePayment.expires_at,
+        })),
       })),
-     })),
-    count,
-   }
+      count,
+    };
   }
 
   async setup(body: SetupDto) {
     const amount = this.moduleService.calculateTotalAmount(body.modules);
 
-    if(amount < 1) {
+    if (amount < 1) {
       throw new Error('Invalid payment');
     }
 
@@ -97,7 +97,7 @@ export class PaymentService {
     const mollieResponse = await this.mollieClient.payments.create({
       amount: {
         currency: 'EUR',
-        value: formattedAmount
+        value: formattedAmount,
       },
       sequenceType: 'first',
       description: body.modules.toString(),
@@ -112,22 +112,22 @@ export class PaymentService {
         status: PENDING,
         transaction_id: mollieResponse.id,
         module_payment: {
-          createMany : {
+          createMany: {
             data: body.modules.map((moduleName) => ({
               module_name: moduleName,
               price: this.moduleService.findOneByName(moduleName).price,
               active_at: dateNow,
-              expires_at: add(dateNow, {months: 1, days: 1}),
-            }))
-          }
-        }
-      }
-    })
+              expires_at: add(dateNow, { months: 1, days: 1 }),
+            })),
+          },
+        },
+      },
+    });
 
     return mollieResponse;
   }
 
-  async freeTrial(moduleName: ModuleName){
+  async freeTrial(moduleName: ModuleName) {
     const dateNow = new Date();
 
     const { data } = await this.repository.findAll({
@@ -135,14 +135,14 @@ export class PaymentService {
         method: FREE_TRIAL,
         module_payment: {
           some: {
-            module_name: moduleName
-          }
-        }
-      }
+            module_name: moduleName,
+          },
+        },
+      },
     });
 
-    if(data.length > 0) {
-      throw new ConflictException('Trial aleady requested for the module: '+ moduleName);
+    if (data.length > 0) {
+      throw new ConflictException(`Trial aleady requested for the module: ${moduleName}`);
     }
 
     await this.repository.create({
@@ -157,29 +157,29 @@ export class PaymentService {
             price: 0,
             active_at: dateNow,
             expires_at: add(dateNow, { days: 14 }),
-          }
-        }
-      }
-    })
+          },
+        },
+      },
+    });
   }
 
-  async updateMollieTransaction(transactionId: string){
+  async updateMollieTransaction(transactionId: string) {
     const payment = await this.mollieClient.payments.get(transactionId);
 
     if (payment.status == PAID) {
-      if(payment.subscriptionId) {
+      if (payment.subscriptionId) {
         await this.repository.updateToPaidStatusBySubscriptionId({ subscriptionId: payment.subscriptionId, method: payment.method });
       } else {
         await this.repository.updateToPaidStatusByTransactionId({ transactionId, method: payment.method });
       }
     }
-    //TODO handle other known statuses
+    // TODO handle other known statuses
   }
 
   async createMollieSubscription(id: number) {
     const payment = await this.repository.findOne(id);
 
-    if(!payment) {
+    if (!payment) {
       throw new NotFoundException('Payment not found');
     }
 
@@ -187,28 +187,28 @@ export class PaymentService {
       customerId: this.configService.get<string>('MOLLIE_CUSTOMER_ID'),
       amount: {
         currency: 'EUR',
-        value: payment.amount.toFixed(2)
+        value: payment.amount.toFixed(2),
       },
-      startDate: format(add(payment.created_at, {months: 1},), 'yyyy-MM-dd'),
+      startDate: format(add(payment.created_at, { months: 1 }), 'yyyy-MM-dd'),
       interval: '1 months',
-      description: 'Initial transaction ' + payment.transaction_id,
-      webhookUrl: this.configService.get<string>('MOLLIE_WEBHOOK')
+      description: `Initial transaction ${payment.transaction_id}`,
+      webhookUrl: this.configService.get<string>('MOLLIE_WEBHOOK'),
     });
 
-    return this.repository.update({ data: {subscription_id: subscription.id}, where: { id } });
+    return this.repository.update({ data: { subscription_id: subscription.id }, where: { id } });
   }
 
-  async deleteMollieSubscription(id: number){
+  async deleteMollieSubscription(id: number) {
     const payment = await this.repository.findOne(id);
 
-    if(!payment) {
+    if (!payment) {
       throw new NotFoundException('Payment not found');
     }
 
     await this.mollieClient.customerSubscriptions.cancel(payment.subscription_id, {
-      customerId: this.configService.get<string>('MOLLIE_CUSTOMER_ID')
+      customerId: this.configService.get<string>('MOLLIE_CUSTOMER_ID'),
     });
 
-    return this.repository.update({ data: {subscription_id: null}, where: { id } });
+    return this.repository.update({ data: { subscription_id: null }, where: { id } });
   }
 }

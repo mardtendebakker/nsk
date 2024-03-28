@@ -1,10 +1,10 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { FindPaymentResponseDto } from "./find-payment-response.dto";
+import { ApiProperty } from '@nestjs/swagger';
+import { FindPaymentResponseDto } from './find-payment-response.dto';
 
 export class FindManyPaymentResponseDto {
   @ApiProperty()
-  count: number;
-  
+    count: number;
+
   @ApiProperty()
-  data: FindPaymentResponseDto[]
+    data: FindPaymentResponseDto[];
 }

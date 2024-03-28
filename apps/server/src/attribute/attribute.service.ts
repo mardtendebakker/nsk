@@ -1,8 +1,8 @@
 import { Prisma } from '@prisma/client';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { FindManyDto } from './dto/find-many.dto';
 import { UpdateAttributeDto } from './dto/update-attribute.dto';
 import { AttributeRepository } from './attribute.repository';
-import { ConflictException, Injectable } from '@nestjs/common';
 import { AttributeGetPayload } from './types/attribute-get-payload';
 import { CreateAttributeDto } from './dto/create-attribute.dto';
 
@@ -20,43 +20,43 @@ export class AttributeService {
       is_public: true,
       product_type_attribute: {
         select: {
-          product_type_id: true
-        }
+          product_type_id: true,
+        },
       },
       attribute_option: {
         select: {
           id: true,
           name: true,
           price: true,
-        }
-      }
+        },
+      },
     };
   }
 
   async findAll(query: FindManyDto) {
     const where: Prisma.attributeWhereInput = {};
 
-    if(query.search) {
+    if (query.search) {
       where.OR = [
-        { name: { contains: query.search }},
-        { attr_code: { contains: query.search }},
+        { name: { contains: query.search } },
+        { attr_code: { contains: query.search } },
       ];
     }
 
     const { count, data } = await this.repository.findAll({
       ...query,
       select: this.select,
-      where
+      where,
     });
 
     return {
       count,
-      data: data.map(attribute => ({
-        ...Object.assign({}, attribute, { product_type_attribute: undefined, attribute_option: undefined }), // removing extra fileds
+      data: data.map((attribute) => ({
+        ...({ ...attribute, product_type_attribute: undefined, attribute_option: undefined }), // removing extra fileds
         productTypes: attribute.product_type_attribute.map((productTypeAttribute) => ({ id: productTypeAttribute.product_type_id })),
         options: attribute.attribute_option,
-      }))
-    }
+      })),
+    };
   }
 
   async findOne(id: number) {
@@ -68,10 +68,10 @@ export class AttributeService {
     const attribute: AttributeGetPayload = await this.repository.findOne(params);
 
     return {
-      ...Object.assign({}, attribute, { product_type_attribute: undefined, attribute_option: undefined }), // removing extra fileds
+      ...({ ...attribute, product_type_attribute: undefined, attribute_option: undefined }), // removing extra fileds
       productTypes: attribute.product_type_attribute.map((productTypeAttribute) => ({ id: productTypeAttribute.product_type_id })),
       options: attribute.attribute_option,
-    }
+    };
   }
 
   async update(id: number, updateAttributeDto: UpdateAttributeDto) {
@@ -81,8 +81,7 @@ export class AttributeService {
       ...rest
     } = updateAttributeDto;
 
-    const productTypeCreate: Prisma.product_type_attributeUncheckedCreateWithoutAttributeInput[] =
-      productTypes.map(productTypeId => ({ product_type_id: productTypeId }));
+    const productTypeCreate: Prisma.product_type_attributeUncheckedCreateWithoutAttributeInput[] = productTypes.map((productTypeId) => ({ product_type_id: productTypeId }));
 
     await this.repository.deleteAllProductTypes(id);
     await this.repository.deleteAllOptions(id);
@@ -92,7 +91,7 @@ export class AttributeService {
       data: {
         ...rest,
         product_type_attribute: { create: productTypeCreate },
-        attribute_option: { create: options }
+        attribute_option: { create: options },
       },
     });
   }
@@ -104,21 +103,22 @@ export class AttributeService {
       ...rest
     } = createAttributeDto;
 
-    const productTypeCreate: Prisma.product_type_attributeUncheckedCreateWithoutAttributeInput[] =
-      productTypes.map(productTypeId => ({ product_type_id: productTypeId }));
+    const productTypeCreate: Prisma.product_type_attributeUncheckedCreateWithoutAttributeInput[] = productTypes.map((productTypeId) => ({ product_type_id: productTypeId }));
 
-    if(await this.repository.findOne({where: {name: rest.name}}))  {
+    if (await this.repository.findOne({ where: { name: rest.name } })) {
       throw new ConflictException('Name already exist');
     }
 
-    return this.repository.create({data: {
-      ...rest,
-      product_type_attribute: { create: productTypeCreate },
-      attribute_option: { create: options }
-    }});
+    return this.repository.create({
+      data: {
+        ...rest,
+        product_type_attribute: { create: productTypeCreate },
+        attribute_option: { create: options },
+      },
+    });
   }
 
-  async delete(id: number){
+  async delete(id: number) {
     return this.repository.delete(id);
   }
 }

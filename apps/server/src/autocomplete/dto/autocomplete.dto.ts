@@ -1,16 +1,16 @@
-import { ApiPropertyOptional } from "@nestjs/swagger";
-import { IsInt, IsString, ValidateIf } from "class-validator";
-import { Transform, Type } from "class-transformer";
+import { ApiPropertyOptional } from '@nestjs/swagger';
+import { IsInt, IsString, ValidateIf } from 'class-validator';
+import { Transform, Type } from 'class-transformer';
 
 export class AutocompleteDto {
   @ApiPropertyOptional()
   @IsString()
   @ValidateIf((_, value) => value !== undefined)
-  search?: string;
+    search?: string;
 
   @ApiPropertyOptional()
-  @Transform(({ value }) => Array.isArray(value) ? value.map((id: string) => parseInt(id)) : parseInt(value))
-  ids?: number[];
+  @Transform(({ value }) => (Array.isArray(value) ? value.map((id: string) => parseInt(id)) : parseInt(value)))
+    ids?: number[];
 }
 
 export class LocationLabelsAutocompleteDto extends AutocompleteDto {
@@ -18,5 +18,5 @@ export class LocationLabelsAutocompleteDto extends AutocompleteDto {
   @IsInt()
   @Type(() => Number)
   @ValidateIf((_, value) => value !== undefined)
-  location_id?: number;
+    location_id?: number;
 }

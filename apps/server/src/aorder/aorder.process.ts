@@ -1,99 +1,82 @@
-import { AOrderDiscrimination } from "./types/aorder-discrimination.enum";
-import { AServiceStatus } from "../aservice/enum/aservice-status.enum";
-import { AOrderPayload } from "./types/aorder-payload";
-import { ContactSelect } from "../contact/types/contact-select";
-import { company } from "@prisma/client";
-
-type TotalPerProductReturn = Record<string, number>;
-type AaOrderCompany = {
-  company_id: number,
-  company_name: string,
-};
-type ContactProcessed = Omit<
-  ContactSelect,
-  'company_contact_company_idTocompany' |
-  'contact'
-> & AaOrderCompany & {
-  contact: ContactProcessed
-}
-export type AOrderProcessed = Omit<
-  AOrderPayload,
-  'contact_aorder_supplier_idTocontact' | 
-  'contact_aorder_customer_idTocontact'
-> & {
-  totalPrice: number,
-  totalPerProductType: TotalPerProductReturn,
-  contact_aorder_supplier_idTocontact?: ContactProcessed,
-  contact_aorder_customer_idTocontact?: ContactProcessed,
-};
+import { AOrderDiscrimination } from './types/aorder-discrimination.enum';
+import { AServiceStatus } from '../aservice/enum/aservice-status.enum';
+import { AOrderPayloadRelation } from './types/aorder-payload-relation';
+import { CompanyRelation } from '../company/types/company-relation';
+import { AOrderProcessed, TotalPerProductReturn } from './types/aorder-processed';
+import { AaOrderCompany, ContactProcessed } from './types/contact-processed';
 
 export class AOrderProcess {
   private totalPrice: number;
+
   private totalPerProductType: TotalPerProductReturn;
 
-  constructor( private readonly aorder: AOrderPayload ) {}
+  constructor(private readonly aorder: AOrderPayloadRelation) {}
 
   public run(): AOrderProcessed {
     const {
-      contact_aorder_customer_idTocontact,
-      contact_aorder_supplier_idTocontact,
+      contact_aorder_customer_idTocontact: contactAOrderCustomerIdTocontact,
+      contact_aorder_supplier_idTocontact: contactAOrderSupplierIdTocontact,
       ...restAOrder
     } = this.aorder;
     const {
-      company_contact_company_idTocompany: company_customer,
-      ...rest_customer
-    } = contact_aorder_customer_idTocontact || {};
+      company_contact_company_idTocompany: companyCustomer,
+      ...restCustomer
+    } = contactAOrderCustomerIdTocontact || {};
     const {
-      company: partner_company_customer,
-      ...rest_company_customer
-    } = company_customer || {};
+      company: partnerCompanyCustomer,
+      ...restCompanyCustomer
+    } = companyCustomer || {};
     const {
-      companyContacts: partner_contacts_customer,
-      ...rest_partner_company_customer
-    } = partner_company_customer || {};
-    const partner_main_contact_customer = partner_contacts_customer?.find(c => c.is_main);
+      companyContacts: partnerContactsCustomer,
+      ...restPartnerCompanyCustomer
+    } = partnerCompanyCustomer || {};
+    const partnerMainContactCustomer = partnerContactsCustomer?.find((c) => c.is_main);
 
     const {
-      company_contact_company_idTocompany: company_supplier,
-      ...rest_supplier
-    } = contact_aorder_supplier_idTocontact || {};
+      company_contact_company_idTocompany: companySupplier,
+      ...restSupplier
+    } = contactAOrderSupplierIdTocontact || {};
     const {
-      company: partner_company_supplier,
-      ...rest_company_supplier
-    } = company_supplier || {};
+      company: partnerCompanySupplier,
+      ...restCompanySupplier
+    } = companySupplier || {};
     const {
-      companyContacts: partner_contacts_supplier,
-      ...rest_partner_company_supplier
-    } = partner_company_supplier || {};
-    const partner_main_contact_supplier = partner_contacts_supplier?.find(c => c.is_main);
+      companyContacts: partnerContactsSupplier,
+      ...restPartnerCompanySupplier
+    } = partnerCompanySupplier || {};
+    const partnerMainContactSupplier = partnerContactsSupplier?.find((c) => c.is_main);
     this.totalPrice = this.calculateTotalPrice();
     this.totalPerProductType = this.calculateTotalPerProductType();
 
-    return {
-      ...restAOrder,
-      ...(company_customer && {
-        contact_aorder_customer_idTocontact: {
-          ...rest_customer,
-          ...this.companyFieldsMapper(rest_company_customer),
-          ...(partner_company_customer && {
-            contact: {
-              ...partner_main_contact_customer,
-              ...this.companyFieldsMapper(rest_partner_company_customer),
-            },
-          }),
+    const customerProcessed: ContactProcessed = {
+      ...restCustomer,
+      ...this.companyFieldsMapper(restCompanyCustomer[0]),
+      ...(partnerCompanyCustomer && {
+        contact: {
+          ...partnerMainContactCustomer,
+          ...this.companyFieldsMapper(restPartnerCompanyCustomer[0]),
         },
       }),
-      ...(company_supplier && {
-        contact_aorder_supplier_idTocontact: {
-          ...rest_supplier,
-          ...this.companyFieldsMapper(rest_company_supplier),
-          ...(partner_company_supplier && {
-            contact: {
-              ...partner_main_contact_supplier,
-              ...this.companyFieldsMapper(rest_partner_company_supplier),
-            },
-          }),
+    };
+
+    const supplierProcessed: ContactProcessed = {
+      ...restSupplier,
+      ...this.companyFieldsMapper(restCompanySupplier[0]),
+      ...(partnerCompanySupplier && {
+        contact: {
+          ...partnerMainContactSupplier,
+          ...this.companyFieldsMapper(restPartnerCompanySupplier[0]),
         },
+      }),
+    };
+
+    return {
+      ...restAOrder,
+      ...(companyCustomer && {
+        contact_aorder_customer_idTocontact: customerProcessed,
+      }),
+      ...(companySupplier && {
+        contact_aorder_supplier_idTocontact: supplierProcessed,
       }),
       totalPrice: this.totalPrice,
       totalPerProductType: this.totalPerProductType,
@@ -107,14 +90,15 @@ export class AOrderProcess {
       return price;
     }
 
-    for (let i = 0; i < this.aorder?.product_order?.length; i++) {
+    for (let i = 0; i < this.aorder?.product_order?.length; i += 1) {
       const pOrder = this.aorder?.product_order?.[i];
       price += (pOrder?.price ?? 0) * (pOrder?.quantity || 1);
 
-      for (let j = 0; j < pOrder?.['aservice']?.length; j++) {
-        const service = pOrder?.['aservice']?.[j];
+      for (let j = 0; j < pOrder?.aservice?.length; j += 1) {
+        const service = pOrder?.aservice?.[j];
 
-        if (this.aorder.discr === AOrderDiscrimination.SALE && service.status !== AServiceStatus.STATUS_CANCEL) {
+        if (this.aorder.discr === AOrderDiscrimination.SALE
+          && service.status !== AServiceStatus.STATUS_CANCEL) {
           price += service.price ?? 0;
         }
       }
@@ -136,21 +120,21 @@ export class AOrderProcess {
 
     const productOrders = this.aorder?.product_order || [];
 
-    for (const pOrder of productOrders) {
-      const productType = pOrder?.['product']?.product_type?.name || '(unknown)';
+    productOrders.forEach((pOrder) => {
+      const productType = pOrder?.product?.product_type?.name || '(unknown)';
       const quantity = pOrder?.quantity || 1;
-  
+
       if (!(productType in result)) {
         result[productType] = 0;
       }
-  
+
       result[productType] += quantity;
-    }
+    });
 
     return result;
   }
 
-  private companyFieldsMapper(company: company): AaOrderCompany {
+  private companyFieldsMapper(company: Omit<CompanyRelation, 'company'>): AaOrderCompany {
     return {
       ...(company && {
         company_id: company.id,

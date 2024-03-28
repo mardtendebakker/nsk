@@ -1,16 +1,16 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { repair } from "@prisma/client";
+import { ApiProperty } from '@nestjs/swagger';
+import { repair } from '@prisma/client';
 
 export class RepairEntity implements repair {
-    @ApiProperty()
+  @ApiProperty()
     id: number;
-    
-    @ApiProperty()
+
+  @ApiProperty()
     order_id: number | null;
 
-    @ApiProperty()
+  @ApiProperty()
     description: string | null;
 
-    @ApiProperty()
+  @ApiProperty()
     damage: string | null;
 }
