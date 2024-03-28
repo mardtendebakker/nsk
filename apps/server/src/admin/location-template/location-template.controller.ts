@@ -1,5 +1,7 @@
 import { Authorization } from '@nestjs-cognito/auth';
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
+import {
+  Body, Controller, Delete, Get, Param, Post, Put, Query,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LocationTemplateService } from './location-template.service';
 import { FindLocationTemplatesResponeDto } from './dto/find-location-template-response.dto';
@@ -17,29 +19,29 @@ export class LocationTemplateController {
   constructor(protected readonly location_templateService: LocationTemplateService) {}
 
   @Get('')
-  @ApiResponse({type: FindLocationTemplatesResponeDto})
+  @ApiResponse({ type: FindLocationTemplatesResponeDto })
   findAll(@Query() query: FindManyDto) {
     return this.location_templateService.findAll(query);
   }
 
   @Get(':id')
-  @ApiResponse({type: LocationTemplateEntity})
+  @ApiResponse({ type: LocationTemplateEntity })
   findOne(@Param('id') id: number) {
     return this.location_templateService.findOne(id);
   }
 
   @Post('')
-  @ApiResponse({type: LocationTemplateEntity})
+  @ApiResponse({ type: LocationTemplateEntity })
   create(@Body() createLocationTemplateDto: CreateLocationTemplateDto) {
     return this.location_templateService.create(createLocationTemplateDto);
   }
 
   @Put(':id')
-  @ApiResponse({type: LocationTemplateEntity})
+  @ApiResponse({ type: LocationTemplateEntity })
   update(@Param('id') id: number, @Body() updateLocationTemplateDto: UpdateLocationTemplateDto) {
     return this.location_templateService.update(id, updateLocationTemplateDto);
   }
-  
+
   @Delete(':id')
   delete(@Param('id') id: number) {
     return this.location_templateService.delete(id);

@@ -1,19 +1,19 @@
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { Type } from "class-transformer";
-import { IsOptional, IsString } from "class-validator";
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+import { IsOptional, IsString } from 'class-validator';
 
 export class CreateLocationDto {
   @ApiProperty()
   @IsString()
   @Type(() => String)
-  name: string;
+    name: string;
 
   @ApiPropertyOptional()
   @IsString()
   @IsOptional()
-  zipcodes?: string;
+    zipcodes?: string;
 
   @ApiPropertyOptional()
   @IsOptional()
-  location_template?: string[];
+    location_template?: string[];
 }

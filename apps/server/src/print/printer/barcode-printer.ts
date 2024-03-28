@@ -1,7 +1,8 @@
-import { PrintUtil } from "../print-util";
-import { IPrinter } from "../iprinter/iprinter";
-import { PrintTemplateName } from "../types/print-types.enum";
-import { Injectable } from "@nestjs/common";
+import { Injectable } from '@nestjs/common';
+import { PrintUtil } from '../print-util';
+import { IPrinter } from '../iprinter/iprinter';
+import { PrintTemplateName } from '../types/print-types.enum';
+
 @Injectable()
 export class BarcodePrinter extends IPrinter {
   constructor() {
@@ -9,15 +10,13 @@ export class BarcodePrinter extends IPrinter {
   }
 
   transform(data: string[]) {
-    return Promise.all(data.map(async barcode => {
-      return {
-        barcode_value: barcode,
-        barcode_image: await PrintUtil.getBarcode({
-          text: barcode,
-          scale: 1.2,
-          height: 6,
-        }),
-      };
-    }));
+    return Promise.all(data.map(async (barcode) => ({
+      barcode_value: barcode,
+      barcode_image: await PrintUtil.getBarcode({
+        text: barcode,
+        scale: 1.2,
+        height: 6,
+      }),
+    })));
   }
 }

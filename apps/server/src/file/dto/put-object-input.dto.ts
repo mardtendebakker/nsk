@@ -1,113 +1,113 @@
-import { PutObjectCommandInput } from "@aws-sdk/client-s3";
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { Readable } from "stream";
+import { PutObjectCommandInput } from '@aws-sdk/client-s3';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Readable } from 'stream';
 
 export class PutObjectInput implements Partial<PutObjectCommandInput> {
-    @ApiProperty()
+  @ApiProperty()
     Body: string | Uint8Array | Buffer | Readable | ReadableStream<any> | Blob;
 
-    @ApiPropertyOptional()
+  @ApiPropertyOptional()
     Key: string;
 
-    @ApiPropertyOptional()
+  @ApiPropertyOptional()
     ACL?: string;
 
-    @ApiPropertyOptional()
+  @ApiPropertyOptional()
     CacheControl?: string;
 
-    @ApiPropertyOptional()
+  @ApiPropertyOptional()
     ContentDisposition?: string;
 
-    @ApiPropertyOptional()
+  @ApiPropertyOptional()
     ContentEncoding?: string;
-    
-    @ApiPropertyOptional()
+
+  @ApiPropertyOptional()
     ContentLanguage?: string;
-    
-    @ApiPropertyOptional()
+
+  @ApiPropertyOptional()
     ContentLength?: number;
-    
-    @ApiPropertyOptional()
+
+  @ApiPropertyOptional()
     ContentMD5?: string;
-    
-    @ApiPropertyOptional()
+
+  @ApiPropertyOptional()
     ContentType?: string;
-    
-    @ApiPropertyOptional()
+
+  @ApiPropertyOptional()
     ChecksumAlgorithm?: string;
-    
-    @ApiPropertyOptional()
+
+  @ApiPropertyOptional()
     ChecksumCRC32?: string;
-    
-    @ApiPropertyOptional()
+
+  @ApiPropertyOptional()
     ChecksumCRC32C?: string;
-    
-    @ApiPropertyOptional()
+
+  @ApiPropertyOptional()
     ChecksumSHA1?: string;
-    
-    @ApiPropertyOptional()
+
+  @ApiPropertyOptional()
     ChecksumSHA256?: string;
-    
-    @ApiPropertyOptional()
+
+  @ApiPropertyOptional()
     Expires?: Date;
-    
-    @ApiPropertyOptional()
+
+  @ApiPropertyOptional()
     GrantFullControl?: string;
-    
-    @ApiPropertyOptional()
+
+  @ApiPropertyOptional()
     GrantRead?: string;
-    
-    @ApiPropertyOptional()
+
+  @ApiPropertyOptional()
     GrantReadACP?: string;
-    
-    @ApiPropertyOptional()
+
+  @ApiPropertyOptional()
     GrantWriteACP?: string;
 
-    @ApiPropertyOptional()
+  @ApiPropertyOptional()
     Metadata?: Record<string, string>;
 
-    @ApiPropertyOptional()
+  @ApiPropertyOptional()
     ServerSideEncryption?: string;
 
-    @ApiPropertyOptional()
+  @ApiPropertyOptional()
     StorageClass?: string;
 
-    @ApiPropertyOptional()
+  @ApiPropertyOptional()
     WebsiteRedirectLocation?: string;
 
-    @ApiPropertyOptional()
+  @ApiPropertyOptional()
     SSECustomerAlgorithm?: string;
 
-    @ApiPropertyOptional()
+  @ApiPropertyOptional()
     SSECustomerKey?: string;
 
-    @ApiPropertyOptional()
+  @ApiPropertyOptional()
     SSECustomerKeyMD5?: string;
 
-    @ApiPropertyOptional()
+  @ApiPropertyOptional()
     SSEKMSKeyId?: string;
 
-    @ApiPropertyOptional()
+  @ApiPropertyOptional()
     SSEKMSEncryptionContext?: string;
 
-    @ApiPropertyOptional()
+  @ApiPropertyOptional()
     BucketKeyEnabled?: boolean;
 
-    @ApiPropertyOptional()
+  @ApiPropertyOptional()
     RequestPayer?: string;
 
-    @ApiPropertyOptional()
+  @ApiPropertyOptional()
     Tagging?: string;
 
-    @ApiPropertyOptional()
+  @ApiPropertyOptional()
     ObjectLockMode?: string;
 
-    @ApiPropertyOptional()
+  @ApiPropertyOptional()
     ObjectLockRetainUntilDate?: Date;
 
-    @ApiPropertyOptional()
+  @ApiPropertyOptional()
     ObjectLockLegalHoldStatus?: string;
 
-    @ApiPropertyOptional()
+  @ApiPropertyOptional()
     ExpectedBucketOwner?: string;
 }

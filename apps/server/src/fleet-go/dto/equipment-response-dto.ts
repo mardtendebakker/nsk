@@ -1,21 +1,31 @@
 class EquipmentHeader {
-    Make: string;
-    Model: string;
-    SerialNumber: string;
-    EquipmentID: string;
-    VehicleNumber: number;
+  Make: string;
+
+  Model: string;
+
+  SerialNumber: string;
+
+  EquipmentID: string;
+
+  VehicleNumber: number;
 }
 
 class Location {
-    Latitude: number;
-    Longitude: number;
+  Latitude: number;
+
+  Longitude: number;
 }
 
 export class EquipmentResponseDto {
-    Id: number;
-    EquipmentHeader: EquipmentHeader;
-    Location: Location;
-    DriverName?: string;
-    Description?: string;
-    EngineRunning: boolean;
+  Id: number;
+
+  EquipmentHeader: EquipmentHeader;
+
+  Location: Location;
+
+  DriverName?: string;
+
+  Description?: string;
+
+  EngineRunning: boolean;
 }

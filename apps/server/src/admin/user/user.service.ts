@@ -8,7 +8,7 @@ import {
   ListUsersCommandInput,
   AdminAddUserToGroupCommandInput,
   AdminRemoveUserFromGroupCommandInput,
-  AdminListGroupsForUserCommandInput
+  AdminListGroupsForUserCommandInput,
 } from '@aws-sdk/client-cognito-identity-provider';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -23,6 +23,7 @@ import { UpdateUserGroupDto } from './dto/update-user-group.dto';
 @Injectable()
 export class AdminUserService {
   private userPoolId: string;
+
   private cognitoClient: CognitoIdentityProvider;
 
   constructor(
@@ -42,7 +43,7 @@ export class AdminUserService {
       data: userList.Users,
       count: userPoolDetail.UserPool.EstimatedNumberOfUsers,
       pageToken: userList.PaginationToken,
-    }
+    };
   }
 
   getUser(adminGetUserDto: AdminUsernameDto) {
@@ -51,7 +52,7 @@ export class AdminUserService {
       Username: adminGetUserDto.username,
     };
 
-    return this.cognitoClient.adminGetUser(adminCreateUserCommandInput)
+    return this.cognitoClient.adminGetUser(adminCreateUserCommandInput);
   }
 
   createUser(adminCreateUserDto: AdminCreateUserDto) {
@@ -60,7 +61,7 @@ export class AdminUserService {
       Username: adminCreateUserDto.username,
       UserAttributes: [{
         Name: 'email',
-        Value: adminCreateUserDto.email
+        Value: adminCreateUserDto.email,
       }],
     };
 
@@ -73,7 +74,7 @@ export class AdminUserService {
       Username: adminSetUserPasswordDto.username,
       Password: adminSetUserPasswordDto.password,
       Permanent: adminSetUserPasswordDto.permanent,
-    }
+    };
 
     return this.cognitoClient.adminSetUserPassword(adminSetUserPasswordCommandInput);
   }
@@ -84,9 +85,9 @@ export class AdminUserService {
       Username: adminUsernameDto.username,
       UserAttributes: [{
         Name: 'email_verified',
-        Value: 'True'
+        Value: 'True',
       }],
-    }
+    };
 
     return this.cognitoClient.adminUpdateUserAttributes(adminUpdateUserAttributesCommandInput);
   }
@@ -97,7 +98,7 @@ export class AdminUserService {
       Filter: listUserDto.filter,
       AttributesToGet: listUserDto.attributes,
       Limit: listUserDto.limit,
-      PaginationToken: listUserDto.pageToken
+      PaginationToken: listUserDto.pageToken,
     };
 
     return this.cognitoClient.listUsers(listUsersCommandInput);
@@ -114,13 +115,12 @@ export class AdminUserService {
   describeUserPool() {
     const describeUserPoolCommandInput: DescribeUserPoolCommandInput = {
       UserPoolId: this.userPoolId,
-    }
+    };
 
     return this.cognitoClient.describeUserPool(describeUserPoolCommandInput);
   }
 
   async manageUserGroup(username: string, updateUserGroupDto: UpdateUserGroupDto[]): Promise<UpdateUserGroupDto[]> {
-
     for (let i = 0; i < updateUserGroupDto?.length; i++) {
       if (updateUserGroupDto[i].assign === true) {
         await this.addUserToGroup(username, updateUserGroupDto[i].group);
@@ -136,13 +136,13 @@ export class AdminUserService {
     const adminRemoveUserFromGroupCommandInput: AdminListGroupsForUserCommandInput = {
       UserPoolId: this.userPoolId,
       Username: username,
-      Limit: 60
+      Limit: 60,
     };
 
     const listGroupsOutput = await this.cognitoClient.adminListGroupsForUser(adminRemoveUserFromGroupCommandInput);
 
     const allGroups = Object.values(CognitoGroups);
-    const userGroups = listGroupsOutput.Groups.map(group => group.GroupName);
+    const userGroups = listGroupsOutput.Groups.map((group) => group.GroupName);
     const result: UpdateUserGroupDto[] = [];
 
     for (let i = 0; i < allGroups.length; i++) {
@@ -157,7 +157,7 @@ export class AdminUserService {
 
       result.push({
         group: allGroups[i],
-        assign: found
+        assign: found,
       });
     }
 

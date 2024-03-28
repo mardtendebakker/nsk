@@ -1,22 +1,22 @@
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { product_order } from "@prisma/client";
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { product_order } from '@prisma/client';
 
 export class ProductOrderEntity implements product_order {
   @ApiProperty()
-  id: number;
+    id: number;
 
   @ApiProperty()
-  product_id: number;
-  
+    product_id: number;
+
   @ApiProperty()
-  order_id: number;
-  
+    order_id: number;
+
   @ApiPropertyOptional()
-  quantity: number | null;
-  
+    quantity: number | null;
+
   @ApiPropertyOptional()
-  price: number | null;
-  
+    price: number | null;
+
   @ApiPropertyOptional()
-  external_id: number | null;
+    external_id: number | null;
 }

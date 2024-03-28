@@ -1,7 +1,7 @@
 import { Controller } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { StockController } from '../stock/stock.controller';
 import { AProductService } from './aproduct.service';
-import { ApiTags } from '@nestjs/swagger';
 import { AProductBlancco } from './aproduct.blancco';
 
 @ApiTags('aproduct')

@@ -2,13 +2,14 @@ import {
   Injectable,
   UnprocessableEntityException,
 } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
+import * as xlsx from 'xlsx';
 import { AOrderDiscrimination } from '../aorder/types/aorder-discrimination.enum';
 import { AOrderService } from '../aorder/aorder.service';
 import { SaleRepository } from './sale.repository';
 import { PrintService } from '../print/print.service';
 import { FileService } from '../file/file.service';
 import { AProductService } from '../aproduct/aproduct.service';
-import { Prisma } from '@prisma/client';
 import { CreateAServiceDto } from '../aservice/dto/create-aservice.dto';
 import { AServiceDiscrimination } from '../aservice/enum/aservice-discrimination.enum';
 import { AServiceStatus } from '../aservice/enum/aservice-status.enum';
@@ -17,10 +18,9 @@ import { CreateAOrderDto } from '../aorder/dto/create-aorder.dto';
 import { OrderStatusService } from '../admin/order-status/order-status.service';
 import { CreateOrderStatusDto } from '../admin/order-status/dto/create-order-status.dto';
 import { CreateContactDto } from '../contact/dto/create-contact.dto';
-import { AOrderProcessed } from '../aorder/aorder.process';
 import { IExcelColumn } from './types/excel-column';
-import * as xlsx from 'xlsx';
 import { ContactService } from '../contact/contact.service';
+import { AOrderProcessed } from '../aorder/types/aorder-processed';
 
 @Injectable()
 export class SaleService extends AOrderService {
@@ -41,23 +41,24 @@ export class SaleService extends AOrderService {
       excludeByOrderId: id,
     });
 
-    if (!this.areProductIdsEqual(productIds, products.data.map(p => p.id))) {
+    if (!this.areProductIdsEqual(productIds, products.data.map((p) => p.id))) {
       throw new UnprocessableEntityException(
-        'One or more products already exist in this order'
+        'One or more products already exist in this order',
       );
     }
 
-    if (products.data.some(p => p.sale <= 0)) {
+    if (products.data.some((p) => p.sale <= 0)) {
       throw new UnprocessableEntityException(
-        'One or more products are not saleable'
+        'One or more products are not saleable',
       );
     }
 
-    const productOrderData: Prisma.product_orderCreateManyAorderInput[] = products.data.map((product) => ({
-      product_id: product.id,
-      price: product.price,
-      quantity: 1,
-    }));
+    const productOrderData: Prisma.product_orderCreateManyAorderInput[] = products.data
+      .map((product) => ({
+        product_id: product.id,
+        price: product.price,
+        quantity: 1,
+      }));
 
     const addProductsToOrderParams: Prisma.aorderUpdateArgs = {
       where: { id },
@@ -70,11 +71,9 @@ export class SaleService extends AOrderService {
       },
     };
 
-    this.aProductService.updateMany(
-      productIds, {
-        order_updated_at: new Date(),
-      }
-    );
+    this.aProductService.updateMany(productIds, {
+      order_updated_at: new Date(),
+    });
 
     return this.repository.update(this.commonIncludePart(addProductsToOrderParams));
   }
@@ -96,26 +95,30 @@ export class SaleService extends AOrderService {
     return this.repository.update(this.commonIncludePart(deleteProductsFromOrderParams));
   }
 
-  async import(importDto: ImportDto, file: Express.Multer.File, email?: string): Promise<AOrderProcessed[]> {
+  async import(
+    importDto: ImportDto,
+    file: Express.Multer.File,
+    email?: string,
+  ): Promise<AOrderProcessed[]> {
     if (!file) {
       throw new UnprocessableEntityException('file is invalid');
     }
-    
-    let partner_id: number;
+
+    let partnerId: number;
     if (email) {
-      partner_id = (await this.contactService.findPartnerByEmail(email))?.id;
+      partnerId = (await this.contactService.findPartnerByEmail(email))?.id;
     } else {
-      partner_id = importDto.partner_id;
+      partnerId = importDto.partner_id;
     }
-  
+
     const workbook = xlsx.read(file.buffer, { type: 'buffer' });
     const sheetName = workbook.SheetNames[0];
     const sheet = workbook.Sheets[sheetName];
     const rows = <IExcelColumn[]>xlsx.utils.sheet_to_json(sheet, { rawNumbers: false });
-  
-    const sales: AOrderProcessed[] = [];
-  
-    for (const row of rows) {
+
+    const salesP: Promise<AOrderProcessed>[] = [];
+
+    rows.forEach(async (row) => {
       const {
         Referentie,
         Bedrijfsnaam,
@@ -136,63 +139,68 @@ export class SaleService extends AOrderService {
         Deurcode,
         'Aflever referentie': AfleverReferentie,
       } = row;
-  
-      if (!Bedrijfsnaam && !Voornaam && !Achternaam) continue;
-  
+
+      if (Bedrijfsnaam || Voornaam || Achternaam) {
       // Leergeld puts partner name in field Bedrijfsnaam :-(
-      const company_name = Bedrijfsnaam && !Bedrijfsnaam.includes('Leergeld')
-        ? Bedrijfsnaam
-        : `${Voornaam} ${Achternaam}`.trim();
-  
-      const customerData: CreateContactDto = {
-        name: `${Voornaam} ${Achternaam}`.trim(),
-        company_name,
-        street: `${Straatnaam} ${Huisnummer} ${HuisnummerToevoeging}`.trim(),
-        zip: Postcode,
-        city: Plaatsnaam,
-        country: Landcode,
-        email: Email,
-        phone: Telefoon,
-        phone2: MobielNummer,
-        company_is_customer: true,
-        company_is_partner: false,
-        company_is_supplier: false,
-        ...(partner_id && { company_partner_id: partner_id }),
-      };
-  
-      const customer = await this.contactService.checkExists(customerData);
-      const orderStatus = await this.findOrderStatusByNameOrCreate('Products to assign', false, true, false);
-      const remarks = `Referentie: ${Referentie || ''}\r\n` +
-                      `Gebouw: ${Gebouw || ''}\r\n` +
-                      `Verdieping: ${Verdieping || ''}\r\n` +
-                      `Afdeling: ${Afdeling || ''}\r\n` +
-                      `Deurcode: ${Deurcode || ''}\r\n` +
-                      `Aflever referentie: ${AfleverReferentie || ''}`;
-  
-      const saleData: CreateAOrderDto = {
-        customer_id: customer.id,
-        is_gift: false,
-        status_id: orderStatus.id,
-        remarks,
-      };
-  
-      sales.push(await super.create(saleData));
-    }
-  
-    return sales;
+        const companyName = Bedrijfsnaam && !Bedrijfsnaam.includes('Leergeld')
+          ? Bedrijfsnaam
+          : `${Voornaam} ${Achternaam}`.trim();
+
+        const customerData: CreateContactDto = {
+          name: `${Voornaam} ${Achternaam}`.trim(),
+          company_name: companyName,
+          street: `${Straatnaam} ${Huisnummer} ${HuisnummerToevoeging}`.trim(),
+          zip: Postcode,
+          city: Plaatsnaam,
+          country: Landcode,
+          email: Email,
+          phone: Telefoon,
+          phone2: MobielNummer,
+          company_is_customer: true,
+          company_is_partner: false,
+          company_is_supplier: false,
+          ...(partnerId && { company_partner_id: partnerId }),
+        };
+
+        const customer = await this.contactService.checkExists(customerData);
+        const orderStatus = await this.findOrderStatusByNameOrCreate('Products to assign', false, true, false);
+        const remarks = `Referentie: ${Referentie || ''}\r\n`
+                      + `Gebouw: ${Gebouw || ''}\r\n`
+                      + `Verdieping: ${Verdieping || ''}\r\n`
+                      + `Afdeling: ${Afdeling || ''}\r\n`
+                      + `Deurcode: ${Deurcode || ''}\r\n`
+                      + `Aflever referentie: ${AfleverReferentie || ''}`;
+
+        const saleData: CreateAOrderDto = {
+          customer_id: customer.id,
+          is_gift: false,
+          status_id: orderStatus.id,
+          remarks,
+        };
+
+        salesP.push(super.create(saleData));
+      }
+    });
+
+    return Promise.all(salesP);
   }
 
   protected getCreateSalesServiceInput(description: string): CreateAServiceDto {
     const toDoServie: CreateAServiceDto = {
       discr: AServiceDiscrimination.SalesService,
       status: AServiceStatus.STATUS_TODO,
-      description: description,
+      description,
     };
 
     return toDoServie;
   }
 
-  protected findOrderStatusByNameOrCreate(name: string, isPurchase: boolean, isSale: boolean, isRepair: boolean) {
+  protected findOrderStatusByNameOrCreate(
+    name: string,
+    isPurchase: boolean,
+    isSale: boolean,
+    isRepair: boolean,
+  ) {
     const createOrderStatusDto: CreateOrderStatusDto = {
       name,
       is_purchase: isPurchase,
@@ -207,6 +215,6 @@ export class SaleService extends AOrderService {
     if (poductIds1.length !== poductIds2.length) {
       return false;
     }
-    return poductIds1.every(item => poductIds2.includes(item));
+    return poductIds1.every((item) => poductIds2.includes(item));
   }
 }

@@ -1,10 +1,14 @@
-import { Controller, ForbiddenException, Get, Query, UseGuards } from '@nestjs/common';
+import {
+  Controller, ForbiddenException, Get, Query, UseGuards,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Authorization, AuthorizationGuard, CognitoUser } from '@nestjs-cognito/auth';
 import { AutocompleteService } from './autocomplete.service';
 import { AutocompleteDto, LocationLabelsAutocompleteDto } from './dto/autocomplete.dto';
 import { AutocompleteResponseDto, LocationAutocompleteResponseDto } from './dto/autocomplete-response.dto';
-import { Authorization, AuthorizationGuard, CognitoUser } from '@nestjs-cognito/auth';
-import { ALL_MAIN_GROUPS, CognitoGroups, LOCAL_GROUPS, PARTNERS_GROUPS } from '../common/types/cognito-groups.enum';
+import {
+  ALL_MAIN_GROUPS, CognitoGroups, LOCAL_GROUPS, PARTNERS_GROUPS,
+} from '../common/types/cognito-groups.enum';
 
 @ApiBearerAuth()
 @Authorization(ALL_MAIN_GROUPS)
@@ -34,23 +38,22 @@ export class AutocompleteController {
   @Get('/contacts')
   @ApiResponse({ type: AutocompleteResponseDto, isArray: true })
   contacts(
-    @Query() query: AutocompleteDto,
-    @CognitoUser(["groups", "email"])
+  @Query() query: AutocompleteDto,
+    @CognitoUser(['groups', 'email'])
     {
       groups,
       email,
     }: {
       groups: CognitoGroups[];
       email: string;
-    }
+    },
   ) {
-    if (groups.some(group => LOCAL_GROUPS.includes(group))) {
+    if (groups.some((group) => LOCAL_GROUPS.includes(group))) {
       return this.autocompleteService.findContacts(query);
-    } else if (groups.some(group => PARTNERS_GROUPS.includes(group))) {
+    } if (groups.some((group) => PARTNERS_GROUPS.includes(group))) {
       return this.autocompleteService.findContacts(query, email);
-    } else {
-      throw new ForbiddenException("Insufficient permissions to access this api!");
     }
+    throw new ForbiddenException('Insufficient permissions to access this api!');
   }
 
   @Get('/partners')
@@ -63,23 +66,22 @@ export class AutocompleteController {
   @Get('/companies')
   @ApiResponse({ type: AutocompleteResponseDto, isArray: true })
   companies(
-    @Query() query: AutocompleteDto,
-    @CognitoUser(["groups", "email"])
+  @Query() query: AutocompleteDto,
+    @CognitoUser(['groups', 'email'])
     {
       groups,
       email,
     }: {
       groups: CognitoGroups[];
       email: string;
-    }
+    },
   ) {
-    if (groups.some(group => LOCAL_GROUPS.includes(group))) {
+    if (groups.some((group) => LOCAL_GROUPS.includes(group))) {
       return this.autocompleteService.findCompanies(query);
-    } else if (groups.some(group => PARTNERS_GROUPS.includes(group))) {
+    } if (groups.some((group) => PARTNERS_GROUPS.includes(group))) {
       return this.autocompleteService.findCompanies(query, email);
-    } else {
-      throw new ForbiddenException("Insufficient permissions to access this api!");
     }
+    throw new ForbiddenException('Insufficient permissions to access this api!');
   }
 
   @Get('/purchase-statuses')

@@ -19,4 +19,4 @@ export function times(n, block) {
 
 export function increment(value) {
   return parseInt(value) + 1;
-};
+}

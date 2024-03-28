@@ -1,7 +1,7 @@
-import { ApiPropertyOptional } from "@nestjs/swagger";
-import { IsEnum, ValidateIf } from "class-validator";
-import { Type } from "class-transformer";
-import { GroupBy } from "../types/group-by.enum";
+import { ApiPropertyOptional } from '@nestjs/swagger';
+import { IsEnum, ValidateIf } from 'class-validator';
+import { Type } from 'class-transformer';
+import { GroupBy } from '../types/group-by.enum';
 
 export class AnalyticsDto {
   @ApiPropertyOptional({
@@ -11,5 +11,5 @@ export class AnalyticsDto {
   @IsEnum(GroupBy)
   @Type(() => String)
   @ValidateIf((_, value) => value !== undefined)
-  groupby?: GroupBy;
+    groupby?: GroupBy;
 }

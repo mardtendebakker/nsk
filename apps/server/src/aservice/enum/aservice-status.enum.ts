@@ -3,5 +3,5 @@ export enum AServiceStatus {
   STATUS_HOLD,
   STATUS_BUSY,
   STATUS_DONE,
-  STATUS_CANCEL
+  STATUS_CANCEL,
 }

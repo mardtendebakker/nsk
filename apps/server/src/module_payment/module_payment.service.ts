@@ -7,24 +7,24 @@ export const PAID = 'paid';
 export const PENDING = 'pending';
 export const REFUNDED = 'refunded';
 
-export type Status = 'paid'|'pending'|'refunded';
+export type Status = 'paid' | 'pending' | 'refunded';
 
 @Injectable()
 export class ModulePaymentService {
   constructor(private readonly repository: ModulePaymentRepository) {}
 
-  async findLastValidModulePaymentByModule(moduleName: Module): Promise<FindModulePaymentResponseDto|null> {
-   const model = await this.repository.findLastValidModulePaymentByModule(moduleName);
+  async findLastValidModulePaymentByModule(moduleName: Module): Promise<FindModulePaymentResponseDto | null> {
+    const model = await this.repository.findLastValidModulePaymentByModule(moduleName);
 
-   return model ? {
-    id: model.id,
-    moduleName: model.module_name as ModuleName,
-    method: model.payment.method,
-    transactionId: model.payment.transaction_id,
-    price: model.price,
-    status: model.payment.status as Status,
-    activeAt: model.active_at,
-    expiresAt: model.expires_at,
-   } : null;
+    return model ? {
+      id: model.id,
+      moduleName: model.module_name as ModuleName,
+      method: model.payment.method,
+      transactionId: model.payment.transaction_id,
+      price: model.price,
+      status: model.payment.status as Status,
+      activeAt: model.active_at,
+      expiresAt: model.expires_at,
+    } : null;
   }
 }

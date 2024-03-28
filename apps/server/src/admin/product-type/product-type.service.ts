@@ -1,8 +1,8 @@
 import { Prisma } from '@prisma/client';
+import { Injectable } from '@nestjs/common';
 import { FindManyDto } from './dto/find-many.dto';
 import { UpdateProductTypeDto } from './dto/update-product-type.dto';
 import { ProductTypeRepository } from './product-type.repository';
-import { Injectable } from '@nestjs/common';
 import { ProductTypeProcess } from './product-type-process';
 import { ProductTypeRelation } from './types/product-type-relation';
 import { CreateProductTypeDto } from './dto/create-product-type.dto';
@@ -41,7 +41,7 @@ export class ProductTypeService {
       where: { id },
     };
 
-    const productType = await this.repository.findOne(params);
+    const productType = <ProductTypeRelation> await this.repository.findOne(params);
 
     return this.processProductType(productType);
   }
@@ -57,9 +57,9 @@ export class ProductTypeService {
             product_type_id: id,
           },
           createMany: {
-            data: attributes.map(attributeId => ({
+            data: attributes.map((attributeId) => ({
               attribute_id: attributeId,
-            }))
+            })),
           },
         },
         product_type_task: {
@@ -67,9 +67,9 @@ export class ProductTypeService {
             product_type_id: id,
           },
           createMany: {
-            data: tasks.map(taskId => ({
+            data: tasks.map((taskId) => ({
               task_id: taskId,
-            }))
+            })),
           },
         },
       },
@@ -82,17 +82,17 @@ export class ProductTypeService {
       data: {
         ...rest,
         product_type_attribute: {
-          create: attributes.map(attributeId => ({ attribute_id: attributeId })),
+          create: attributes.map((attributeId) => ({ attribute_id: attributeId })),
         },
         product_type_task: {
-          create:  tasks.map(taskId => ({ task_id: taskId })),
+          create: tasks.map((taskId) => ({ task_id: taskId })),
         },
       },
     });
   }
 
   private processSelect(
-    select: Prisma.product_typeSelect = {}
+    select: Prisma.product_typeSelect = {},
   ): Prisma.product_typeSelect {
     return {
       ...select,
@@ -122,10 +122,10 @@ export class ProductTypeService {
             select: {
               id: true,
               name: true,
-            }
-          }
-        }
-      }
+            },
+          },
+        },
+      },
     };
   }
 

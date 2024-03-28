@@ -1,5 +1,4 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { FindManyDto as BaseFindManyDto } from '../../common/dto/find-many.dto';
 import {
   IsEnum,
   IsInt,
@@ -7,6 +6,7 @@ import {
   IsString,
 } from 'class-validator';
 import { Type } from 'class-transformer';
+import { FindManyDto as BaseFindManyDto } from '../../common/dto/find-many.dto';
 import { AOrderDiscrimination } from '../../aorder/types/aorder-discrimination.enum';
 import { EntityStatus } from '../../common/types/entity-status.enum';
 
@@ -14,43 +14,43 @@ export class FindManyDto extends BaseFindManyDto {
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
-  search?: string;
+    search?: string;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  productType?: number;
+    productType?: number;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  productStatus?: number;
+    productStatus?: number;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  location?: number;
+    location?: number;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  locationLabel?: number;
+    locationLabel?: number;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  orderId?: number;
+    orderId?: number;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  excludeByOrderId?: number;
+    excludeByOrderId?: number;
 
   @ApiPropertyOptional({
     enum: AOrderDiscrimination,
@@ -59,7 +59,7 @@ export class FindManyDto extends BaseFindManyDto {
   @IsOptional()
   @IsEnum(AOrderDiscrimination)
   @Type(() => String)
-  excludeByOrderDiscr?: AOrderDiscrimination;
+    excludeByOrderDiscr?: AOrderDiscrimination;
 
   @ApiPropertyOptional({
     enum: EntityStatus,
@@ -68,5 +68,5 @@ export class FindManyDto extends BaseFindManyDto {
   @IsOptional()
   @IsEnum(EntityStatus)
   @Type(() => Number)
-  entityStatus?: EntityStatus;
+    entityStatus?: EntityStatus;
 }

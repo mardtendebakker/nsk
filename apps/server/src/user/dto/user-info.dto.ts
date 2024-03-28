@@ -1,5 +1,5 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { FindModuleResponseDto } from "../../module/dto/find-module-response.dto";
+import { ApiProperty } from '@nestjs/swagger';
+import { FindModuleResponseDto } from '../../module/dto/find-module-response.dto';
 
 export class UserInfoDto {
   constructor() {
@@ -11,28 +11,28 @@ export class UserInfoDto {
     this.exp = 0;
     this.iat = 0;
   }
-  
-  @ApiProperty()
-  username: string;
 
   @ApiProperty()
-  email: string;
+    username: string;
 
   @ApiProperty()
-  groups: string[];
+    email: string;
 
   @ApiProperty()
-  email_verified: boolean;
+    groups: string[];
 
   @ApiProperty()
-  auth_time: number;
+    email_verified: boolean;
 
   @ApiProperty()
-  exp: number;
+    auth_time: number;
 
   @ApiProperty()
-  iat: number;
+    exp: number;
 
   @ApiProperty()
-  modules: FindModuleResponseDto[];
+    iat: number;
+
+  @ApiProperty()
+    modules: FindModuleResponseDto[];
 }

@@ -1,35 +1,35 @@
-import { ApiProperty, OmitType } from "@nestjs/swagger";
-import { IFindManyRespone } from "../../common/interface/find-many-respone";
-import { AttributeEntity } from "../entities/attribute.entity";
+import { ApiProperty, OmitType } from '@nestjs/swagger';
+import { IFindManyRespone } from '../../common/interface/find-many-respone';
+import { AttributeEntity } from '../entities/attribute.entity';
 
 class AttributeOption {
   @ApiProperty()
-  id: number;
+    id: number;
 
   @ApiProperty()
-  name: string;
+    name: string;
 
   @ApiProperty()
-  price?: number;
+    price?: number;
 }
 
 class productType {
   @ApiProperty()
-  id: number;
-};
+    id: number;
+}
 
 export class FindAttributeResponseDto extends OmitType(AttributeEntity, ['external_id', 'has_quantity'] as const) {
   @ApiProperty()
-  productTypes: productType[];
+    productTypes: productType[];
 
   @ApiProperty()
-  options: AttributeOption[];
+    options: AttributeOption[];
 }
 
 export class FindAttributesResponeDto implements IFindManyRespone<FindAttributeResponseDto> {
   @ApiProperty()
-  count: number;
-  
+    count: number;
+
   @ApiProperty()
-  data: FindAttributeResponseDto[]
+    data: FindAttributeResponseDto[];
 }

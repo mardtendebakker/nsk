@@ -19,6 +19,6 @@ import { CompanyModule } from '../company/company.module';
     PrismaModule,
     CompanyModule,
   ],
-  exports: [ContactService]
+  exports: [ContactService],
 })
 export class ContactModule {}

@@ -1,15 +1,15 @@
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { LocationTemplateRepository } from './location-template.repository';
 import { FindManyDto } from './dto/find-many.dto';
 import { CreateLocationTemplateDto } from './dto/create-location-template.dto';
-import { Prisma } from '@prisma/client';
 import { UpdateLocationTemplateDto } from './dto/update-location-template.dto';
 import { CreateLocationLabelDto } from '../../location-label/dto/create-location-label.dto';
 
 @Injectable()
 export class LocationTemplateService {
   constructor(protected readonly repository: LocationTemplateRepository) {}
-  
+
   async findAll(query: FindManyDto) {
     const { location, search } = query;
     return this.repository.findAll({
@@ -25,7 +25,7 @@ export class LocationTemplateService {
 
   async findOne(id: number) {
     const params: Prisma.location_templateFindUniqueArgs = {
-      where: { id }
+      where: { id },
     };
 
     return this.repository.findOne(params);
@@ -40,12 +40,12 @@ export class LocationTemplateService {
   async update(id: number, updateLocationTemplateDto: UpdateLocationTemplateDto) {
     return this.repository.update({
       where: { id },
-      data: { ...updateLocationTemplateDto }
+      data: { ...updateLocationTemplateDto },
     });
   }
 
   async delete(id: number) {
-    return await this.repository.delete({
+    return this.repository.delete({
       where: { id },
     });
   }
@@ -55,16 +55,16 @@ export class LocationTemplateService {
       location: createLocationLabelDto.location_id,
     });
 
-    if(locationTemplates.data.length == 0) {
+    if (locationTemplates.data.length == 0) {
       return true;
     }
 
-    for(const locationTemplate of locationTemplates.data) {
+    for (const locationTemplate of locationTemplates.data) {
       if (new RegExp(locationTemplate.template).test(createLocationLabelDto.label)) {
         return true;
       }
     }
 
-    throw new UnprocessableEntityException("Invalid label: " + createLocationLabelDto.label);
+    throw new UnprocessableEntityException(`Invalid label: ${createLocationLabelDto.label}`);
   }
 }

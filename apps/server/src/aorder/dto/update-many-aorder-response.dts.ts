@@ -1,6 +1,6 @@
-import { ApiResponseProperty } from "@nestjs/swagger";
+import { ApiResponseProperty } from '@nestjs/swagger';
 
 export class UpdateManyResponseAOrderDto {
-    @ApiResponseProperty()
+  @ApiResponseProperty()
     count: number;
 }

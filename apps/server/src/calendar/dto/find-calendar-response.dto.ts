@@ -5,34 +5,34 @@ import { ContactEntity } from '../../contact/entities/contact.entity';
 
 class CalendarOrder {
   @ApiProperty()
-  id: number;
+    id: number;
 
   @ApiProperty()
-  order_nr: string;
+    order_nr: string;
 
   @ApiProperty()
-  order_status: OrderStatusEntity;
+    order_status: OrderStatusEntity;
 
   @ApiProperty()
-  supplier?: ContactEntity;
+    supplier?: ContactEntity;
 
   @ApiProperty()
-  customer?: ContactEntity;
+    customer?: ContactEntity;
 }
 
 export class FindCalendarResponeDto {
   @ApiProperty()
-  id: number;
-  
-  @ApiProperty()
-  event_date: Date;
-  
-  @ApiProperty()
-  event_title: string;
+    id: number;
 
   @ApiProperty()
-  order: CalendarOrder;
-  
+    event_date: Date;
+
+  @ApiProperty()
+    event_title: string;
+
+  @ApiProperty()
+    order: CalendarOrder;
+
   @ApiPropertyOptional()
-  logistic?: FindLogisticResponeDto | null;
+    logistic?: FindLogisticResponeDto | null;
 }

@@ -1,7 +1,7 @@
 import { ConflictException, Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { CompanyRepository } from './company.repository';
 import { FindManyDto } from './dto/find-many.dto';
-import { Prisma } from '@prisma/client';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 import { ContactRepository } from '../contact/contact.repository';
@@ -10,17 +10,19 @@ import { ContactRepository } from '../contact/contact.repository';
 export class CompanyService {
   constructor(
     protected readonly repository: CompanyRepository,
-    protected readonly contactRepository: ContactRepository
+    protected readonly contactRepository: ContactRepository,
   ) {}
 
   async findAll(query: FindManyDto, email?: string) {
-    const { search, is_customer, is_partner, is_supplier } = query;
+    const {
+      search, is_customer, is_partner, is_supplier,
+    } = query;
     const where: Prisma.companyWhereInput = {
       ...this.getPartnerWhereInput(email),
       name: { contains: search || '' },
       is_customer,
       is_partner,
-      is_supplier
+      is_supplier,
     };
 
     const { count, data } = await this.repository.findAll({
@@ -33,7 +35,7 @@ export class CompanyService {
         is_partner: true,
         is_supplier: true,
         _count: {
-          select: { companyContacts: true }
+          select: { companyContacts: true },
         },
       },
       where,
@@ -42,11 +44,11 @@ export class CompanyService {
 
     return {
       count,
-      data: data.map(({_count, ...rest}) => ({
+      data: data.map(({ _count, ...rest }) => ({
         ...rest,
-        contactsCount: _count.companyContacts
-      }))
-    }
+        contactsCount: _count.companyContacts,
+      })),
+    };
   }
 
   findOne(id: number, email?: string) {
@@ -54,37 +56,37 @@ export class CompanyService {
       where: {
         id,
         ...this.getPartnerWhereInput(email),
-      } 
+      },
     });
   }
 
   async create(createDto: CreateCompanyDto, email?: string) {
-    if(await this.repository.findOne({where: { name:createDto.name }}))  {
+    if (await this.repository.findOne({ where: { name: createDto.name } })) {
       throw new ConflictException('Name already exist');
     }
 
     return this.repository.create({
       ...createDto,
-      ...(email && { partner_id: (await this.findPartnerByEmail(email))?.id}),
+      ...(email && { partner_id: (await this.findPartnerByEmail(email))?.id }),
     });
   }
 
   async update(id: number, updateDto: UpdateCompanyDto, email?: string) {
-    if(await this.repository.findOne({where: { name:updateDto.name, NOT : {id} }})) {
+    if (await this.repository.findOne({ where: { name: updateDto.name, NOT: { id } } })) {
       throw new ConflictException('Name already exist');
     }
 
     return this.repository.update({
-      where:{
+      where: {
         id,
         ...this.getPartnerWhereInput(email),
       },
-      data: updateDto
+      data: updateDto,
     });
   }
 
   async delete(id: number, email?: string) {
-    if((await this.contactRepository.count({ where : { company_id:id} })) > 0){
+    if ((await this.contactRepository.count({ where: { company_id: id } })) > 0) {
       throw new ConflictException('All of this company\'s contacts should be deleted first.');
     }
 
@@ -100,7 +102,7 @@ export class CompanyService {
     return this.repository.findFirst({
       where: {
         companyContacts: {
-          some: { email, is_main: true }
+          some: { email, is_main: true },
         },
       },
     });

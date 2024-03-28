@@ -1,12 +1,12 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty } from '@nestjs/swagger';
 
 export class TotalCount {
   @ApiProperty()
-  totalSuppliers: number;
-  
-  @ApiProperty()
-  totalCustomers: number;
+    totalSuppliers: number;
 
   @ApiProperty()
-  totalOrders: number;
+    totalCustomers: number;
+
+  @ApiProperty()
+    totalOrders: number;
 }

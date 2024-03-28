@@ -1,7 +1,7 @@
-import { ApiPropertyOptional, OmitType } from "@nestjs/swagger";
-import { PrismaAOrderCreateInputDto } from "./prisma-aorder-create-input.dto";
-import { Type } from "class-transformer";
-import { CreateContactAOrderDto } from "./create-contact-aorder.dto";
+import { ApiPropertyOptional, OmitType } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+import { PrismaAOrderCreateInputDto } from './prisma-aorder-create-input.dto';
+import { CreateContactAOrderDto } from './create-contact-aorder.dto';
 
 export class CreateAOrderDto extends OmitType(PrismaAOrderCreateInputDto, [
   'discr',
@@ -11,9 +11,9 @@ export class CreateAOrderDto extends OmitType(PrismaAOrderCreateInputDto, [
 ] as const) {
   @ApiPropertyOptional()
   @Type(() => CreateContactAOrderDto)
-  customer?: CreateContactAOrderDto;
+    customer?: CreateContactAOrderDto;
 
   @ApiPropertyOptional()
   @Type(() => CreateContactAOrderDto)
-  supplier?: CreateContactAOrderDto;
+    supplier?: CreateContactAOrderDto;
 }

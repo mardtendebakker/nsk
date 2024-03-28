@@ -1,23 +1,22 @@
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { ModuleName } from "../module.service";
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ModuleName } from '../module.service';
 
 export class FindModuleResponseDto {
-    @ApiProperty()
+  @ApiProperty()
     name: ModuleName;
-    
-    @ApiProperty()
+
+  @ApiProperty()
     price: number;
 
-    @ApiPropertyOptional()
+  @ApiPropertyOptional()
     activeAt: Date;
 
-    @ApiPropertyOptional()
+  @ApiPropertyOptional()
     expiresAt: Date;
 
-    @ApiProperty()
+  @ApiProperty()
     active: boolean;
 
-    @ApiProperty()
+  @ApiProperty()
     freeTrialUsed: boolean;
-  }
-  
+}

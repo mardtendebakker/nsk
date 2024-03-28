@@ -1,29 +1,29 @@
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class GroupByDateResult {
   @ApiProperty()
-  year: number;
+    year: number;
 
   @ApiProperty()
-  month: number;
-  
+    month: number;
+
   @ApiPropertyOptional()
-  day?: number;
+    day?: number;
 
   @ApiProperty()
-  color: string;
-  
+    color: string;
+
   @ApiProperty()
-  count: number;
+    count: number;
 }
 
 export class AnalyticsResultDto {
   @ApiProperty()
-  sale: GroupByDateResult[];
+    sale: GroupByDateResult[];
 
   @ApiProperty()
-  purchase: GroupByDateResult[];
+    purchase: GroupByDateResult[];
 
   @ApiProperty()
-  repair: GroupByDateResult[];
+    repair: GroupByDateResult[];
 }

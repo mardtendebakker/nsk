@@ -1,6 +1,6 @@
 import { Controller } from '@nestjs/common';
-import { RepairService } from './repair.service';
 import { ApiTags } from '@nestjs/swagger';
+import { RepairService } from './repair.service';
 import { SaleController } from '../sale/sale.controller';
 
 @ApiTags('repairs')

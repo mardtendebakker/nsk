@@ -1,11 +1,11 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IFindManyRespone } from "../../../common/interface/find-many-respone";
-import { FindCalendarResponeDto } from "../../dto/find-calendar-response.dto";
+import { ApiProperty } from '@nestjs/swagger';
+import { IFindManyRespone } from '../../../common/interface/find-many-respone';
+import { FindCalendarResponeDto } from '../../dto/find-calendar-response.dto';
 
 export class FindPickupsResponeDto implements IFindManyRespone<FindCalendarResponeDto> {
   @ApiProperty()
-  count: number;
-  
+    count: number;
+
   @ApiProperty()
-  data: FindCalendarResponeDto[];
+    data: FindCalendarResponeDto[];
 }

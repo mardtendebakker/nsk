@@ -1,16 +1,16 @@
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { AppModule } from './app/app.module';
 import { join } from 'path';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import * as hbs from 'hbs';
 import {
   concat,
   times,
   lookup,
   increment,
 } from './common/handlebars/handlebars.helpers';
-import { NestExpressApplication } from '@nestjs/platform-express';
-import * as hbs from 'hbs';
+import { AppModule } from './app/app.module';
 import { NskNotFoundExceptionFilter } from './common/filters/nsk-not-found-exception.filter';
 
 async function bootstrap() {
@@ -43,7 +43,7 @@ async function bootstrap() {
   const port = process.env.PORT || 3333;
   const swaggerConfig = new DocumentBuilder()
     .addBearerAuth({
-      description: `Please enter your JWT id token`,
+      description: 'Please enter your JWT id token',
       bearerFormat: 'JWT',
       scheme: 'bearer',
       type: 'http',
@@ -56,7 +56,7 @@ async function bootstrap() {
   SwaggerModule.setup('openApi', app, document);
   await app.listen(port);
   Logger.log(
-    `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`
+    `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`,
   );
 }
 

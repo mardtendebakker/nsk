@@ -9,6 +9,6 @@ import { PickupModule } from '../calendar/pickup/pickup.module';
 @Module({
   providers: [VehicleService, FleetGoService],
   controllers: [VehicleController],
-  imports: [PrismaModule, FleetGoModule, PickupModule]
+  imports: [PrismaModule, FleetGoModule, PickupModule],
 })
 export class VehicleModule { }

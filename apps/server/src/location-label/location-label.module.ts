@@ -7,6 +7,6 @@ import { LocationTemplateModule } from '../admin/location-template/location-temp
 @Module({
   providers: [LocationLabelService, LocationLabelRepository],
   imports: [PrismaModule, LocationTemplateModule],
-  exports: [LocationLabelService]
+  exports: [LocationLabelService],
 })
 export class LocationLabelModule {}

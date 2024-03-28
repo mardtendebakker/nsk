@@ -1,5 +1,5 @@
 export enum BlanccoFormat {
-  XML = "XML",
-  JSON = "JSON",
-  PDF = "PDF",
+  XML = 'XML',
+  JSON = 'JSON',
+  PDF = 'PDF',
 }

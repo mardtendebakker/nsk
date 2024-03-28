@@ -1,6 +1,6 @@
+import { Injectable } from '@nestjs/common';
 import { AutocompleteRepository } from './autocomplete.repository';
 import { AutocompleteDto, LocationLabelsAutocompleteDto } from './dto/autocomplete.dto';
-import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class AutocompleteService {

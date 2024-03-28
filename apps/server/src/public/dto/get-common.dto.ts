@@ -1,11 +1,11 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsString } from "class-validator";
+import { ApiProperty } from '@nestjs/swagger';
+import { IsString } from 'class-validator';
 
 export class GetCommonDto {
   @ApiProperty()
   @IsString()
-  recaptchaKey: string;
+    recaptchaKey: string;
 
   @ApiProperty()
-  orderStatusName?: string;
+    orderStatusName?: string;
 }

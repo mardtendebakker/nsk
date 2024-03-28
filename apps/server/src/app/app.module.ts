@@ -87,7 +87,7 @@ import { ModulePaymentModule } from '../module_payment/module_payment.module';
     VehicleModule,
     ModuleModule,
     PaymentModule,
-    ModulePaymentModule
+    ModulePaymentModule,
   ],
   controllers: [AppController],
   providers: [AppService],

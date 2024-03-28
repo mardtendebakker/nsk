@@ -1,4 +1,11 @@
-import { BadRequestException, HttpException, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException, HttpException, Injectable, UnauthorizedException,
+} from '@nestjs/common';
+import { HttpService } from '@nestjs/axios';
+import { catchError, lastValueFrom } from 'rxjs';
+import { ConfigService } from '@nestjs/config';
+import { AxiosError, AxiosRequestConfig } from 'axios';
+import { afile } from '@prisma/client';
 import { PurchaseService } from '../purchase/purchase.service';
 import { PostPickupDto, PickupFormDto } from './dto/post-pickup.dto';
 import { OrderStatusService } from '../admin/order-status/order-status.service';
@@ -9,19 +16,15 @@ import { FileDiscrimination } from '../file/types/file-discrimination.enum';
 import { CreateAOrderDto } from '../aorder/dto/create-aorder.dto';
 import { CreatePickupUncheckedWithoutAorderInputDto } from '../calendar/pickup/dto/create-pickup-unchecked-without-aorder-input.dto';
 import { ProductService } from '../product/product.service';
-import { HttpService } from '@nestjs/axios';
-import { catchError, lastValueFrom } from 'rxjs';
-import { ConfigService } from '@nestjs/config';
-import { AxiosError, AxiosRequestConfig } from 'axios';
 import { DataDestruction } from '../calendar/pickup/types/destruction.enum';
 import { DataDestructionChoice } from './types/data-destruction-choise';
-import { afile } from '@prisma/client';
 import { CreateBodyStockDto } from '../stock/dto/create-body-stock.dto';
-import { ProductRelation } from '../stock/types/product-relation';
+import { PartialProductRelation } from '../stock/types/product-relation';
 import { PostOrderDto } from './dto/post-order.dto';
 import { SaleService } from '../sale/sale.service';
 import { PostImportDto } from './dto/post-import.dto';
 import { ContactService } from '../contact/contact.service';
+
 @Injectable()
 export class PublicService {
   constructor(
@@ -36,7 +39,6 @@ export class PublicService {
   ) {}
 
   async getAllProductTypes() {
-
     return this.productService.getAllPublicTypes();
   }
 
@@ -56,7 +58,7 @@ export class PublicService {
         countAddresses: {
           label: 'Aantal ophaaladressen',
           required: true,
-          value: 0
+          value: 0,
         },
         fileInput: {
           imagesInput: {
@@ -70,12 +72,11 @@ export class PublicService {
             multiple: false,
           },
         },
-      }
+      },
     };
   }
 
   async postPickup(params: PostPickupDto, files?: Express.Multer.File[]): Promise<void> {
-
     const { pickup_form } = params;
 
     await this.captchaVerify(params['g-recaptcha-response']);
@@ -96,17 +97,17 @@ export class PublicService {
       supplier_id: supplier.id,
       pickup: pickupData,
       is_gift: true,
-      status_id: orderStatus.id
+      status_id: orderStatus.id,
     };
 
     const purchase = await this.purchaseService.create(purchaseData);
-    
+
     if (files?.length) {
       await this.uploadFiles(purchase.pickup.id, files);
     }
 
     await this.createProductsForPickup(pickup_form, purchase.id);
-    
+
     // TODO: sendStatusMail
   }
 
@@ -128,7 +129,7 @@ export class PublicService {
 
     const orderStatus = await this.findOrderStatusByNameOrCreate(public_order_form.orderStatusName, false, true, false);
 
-    let remarks = "";
+    let remarks = '';
 
     for (const product of public_order_form.products) {
       if (product.quantity > 0) {
@@ -137,14 +138,14 @@ export class PublicService {
     }
 
     if (remarks.length < 4) {
-      remarks = "No quantities entered...";
+      remarks = 'No quantities entered...';
     }
 
     const saleData: CreateAOrderDto = {
       customer_id: customer.id,
       is_gift: false,
       status_id: orderStatus.id,
-      remarks: remarks,
+      remarks,
     };
 
     const sale = await this.saleService.create(saleData);
@@ -199,13 +200,13 @@ export class PublicService {
   private async uploadFiles(pickupId: number, files: Express.Multer.File[]): Promise<afile[]> {
     const afiles: afile[] = [];
     // group files by attribute id
-    const filesGroupByFileDiscr: { [key in FileDiscrimination]?: Express.Multer.File[]} = files.reduce((acc, obj) => {
+    const filesGroupByFileDiscr: { [key in FileDiscrimination]?: Express.Multer.File[] } = files.reduce((acc, obj) => {
       const { fieldname } = obj;
 
       if (!acc[fieldname]) {
         acc[fieldname] = [];
       }
-      
+
       acc[fieldname].push(obj);
       return acc;
     }, {});
@@ -220,7 +221,7 @@ export class PublicService {
         const file = files[i];
         const afile = await this.fileService.create(createFileDto, {
           Body: file.buffer,
-          ContentType: file.mimetype
+          ContentType: file.mimetype,
         });
         afiles.push(afile);
       }
@@ -240,12 +241,12 @@ export class PublicService {
     return this.orderStatusService.findByNameOrCreate(createOrderStatusDto);
   }
 
-  private async createProductsForPickup(params: PickupFormDto, order_id: number): Promise<ProductRelation[]> {
+  private async createProductsForPickup(params: PickupFormDto, order_id: number): Promise<PartialProductRelation[]> {
     let count = 0;
-    let countAddresses = params.countAddresses;
+    let { countAddresses } = params;
     const { locationId, quantityAddresses } = params;
     if (!countAddresses) countAddresses = 1;
-    const products: ProductRelation[] = [];
+    const products: PartialProductRelation[] = [];
 
     for (let i = 0; i < quantityAddresses.length; i++) {
       const quantityProductTypes = quantityAddresses[i];
@@ -253,17 +254,17 @@ export class PublicService {
         const quantity = Number(quantityProductTypes[key]);
 
         if (quantity > 0) {
-          let address = params.addresses[i].address + ', ' +
+          let address = `${params.addresses[i].address}, ${
             `${params.addresses[i].address_zip} 
-            ${params.addresses[i].address_city}`.trim();
+            ${params.addresses[i].address_city}`.trim()}`;
 
           if (address === ', ' && i === 0) {
-            address = params.supplier.street + ', ' +
-              `${params.supplier.zip} ${params.supplier.city}`.trim();
+            address = `${params.supplier.street}, ${
+              `${params.supplier.zip} ${params.supplier.city}`.trim()}`;
           } else if (address === ', ') {
             address = `Address ${i + 1}`;
           } else {
-            address = 'Pickup address: ' + address;
+            address = `Pickup address: ${address}`;
           }
 
           const productDto: CreateBodyStockDto = {
@@ -274,9 +275,9 @@ export class PublicService {
             type_id: Number(key.split('type_id_')[1]),
             product_orders: [
               {
-                order_id: order_id,
-                quantity: quantity,
-              }
+                order_id,
+                quantity,
+              },
             ],
           };
 
@@ -298,7 +299,7 @@ export class PublicService {
     const requestConfig: AxiosRequestConfig = {
       params: {
         secret: this.configService.get<string>('RECAPTCHA_SECRET'),
-        response: recaptcha
+        response: recaptcha,
       },
     };
     const { data } = await lastValueFrom(
@@ -311,8 +312,7 @@ export class PublicService {
 
     if (data?.success) {
       return true;
-    } else {
-      throw new BadRequestException(`recaptcha failed: ${data['error-codes']}`);
     }
+    throw new BadRequestException(`recaptcha failed: ${data['error-codes']}`);
   }
 }

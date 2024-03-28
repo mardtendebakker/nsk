@@ -13,10 +13,10 @@ export class PrintUtil {
       '[ÓÒÔÕÖ]': 'O',
       '[úùûü]': 'u',
       '[ÚÙÛÜ]': 'U',
-      'ç': 'c',
-      'Ç': 'C',
-      'ñ': 'n',
-      'Ñ': 'N',
+      ç: 'c',
+      Ç: 'C',
+      ñ: 'n',
+      Ñ: 'N',
       '–': '-', // UTF-8 hyphen to "normal" hyphen
       '[’‘‹›‚]': ' ', // Literally a single quote
       '[“”«»„]': ' ', // Double quote

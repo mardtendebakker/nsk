@@ -7,6 +7,6 @@ import { ModulePaymentRepository } from './module_payment.repository';
 @Module({
   providers: [ModulePaymentService, ModulePaymentRepository],
   exports: [ModulePaymentService],
-  imports: [PrismaModule]
+  imports: [PrismaModule],
 })
 export class ModulePaymentModule {}

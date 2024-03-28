@@ -7,17 +7,17 @@ export class SplitDto {
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  quantity?: number;
+    quantity?: number;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  status?: number;
-  
+    status?: number;
+
   @ApiPropertyOptional()
   @IsOptional()
   @IsBoolean()
   @Type(() => Boolean)
-  newSku?: boolean;
+    newSku?: boolean;
 }

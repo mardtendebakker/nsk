@@ -7,7 +7,7 @@ import { LocationTemplateService } from '../admin/location-template/location-tem
 export class LocationLabelService {
   constructor(
     private readonly repository: LocationLabelRepository,
-    private readonly locationTemplateService: LocationTemplateService
+    private readonly locationTemplateService: LocationTemplateService,
   ) {}
 
   async create(createLocationLabelDto: CreateLocationLabelDto) {
@@ -20,7 +20,7 @@ export class LocationLabelService {
 
   async findByLabelOrCreate(createLocationLabelDto: CreateLocationLabelDto) {
     let locationLabel = await this.repository.findFirst({
-      where: { label: createLocationLabelDto.label }
+      where: { label: createLocationLabelDto.label },
     });
 
     if (!locationLabel) {

@@ -12,7 +12,7 @@ import { FileDiscrimination } from '../file/types/file-discrimination.enum';
 import { CreateFileDto } from '../file/dto/create-file.dto';
 import { AttributeType } from '../attribute/enum/attribute-type.enum';
 import { CreateBodyStockDto } from './dto/create-body-stock.dto';
-import { ProductAttributeIncludeAttribute } from './types/product-attribute-include-attribute';
+import { PartialProductAttributeIncludeAttribute } from './types/product-attribute-include-attribute';
 import { ProductRelation } from './types/product-relation';
 import { ProcessedStock } from './dto/processed-stock.dto';
 import { ProductAttributeDto } from './dto/product-attribute.dto';
@@ -150,7 +150,7 @@ export class StockService {
       orderBy: productOrderBy,
     });
 
-    const data = result.data.map((product) => this.processStock(product, orderId));
+    const data = result.data.map((product) => this.processStock(<ProductRelation>product, orderId));
 
     return {
       count: result.count,
@@ -159,8 +159,8 @@ export class StockService {
     };
   }
 
-  async findOneRelation(id: number) {
-    return this.repository.findOneSelect({
+  async findOneRelation(id: number): Promise<ProductRelation> {
+    return <Promise<ProductRelation>> <unknown> this.repository.findOneSelect({
       id,
       select: this.processSelect(),
     });
@@ -436,7 +436,7 @@ export class StockService {
   }
 
   private productAttributeProcess(
-    productAttribute: ProductAttributeIncludeAttribute,
+    productAttribute: PartialProductAttributeIncludeAttribute,
   ): ProductAttributeProcessed {
     const { attribute } : { attribute?: AttributeGetPayload } = productAttribute;
     const productAttributeProcessed: ProductAttributeProcessed = { ...productAttribute, attribute };
@@ -638,8 +638,8 @@ export class StockService {
     attributes: AttributeEntity[],
     productAttributes: ProductAttributeDto[],
     inclusive = false,
-  ): ProductAttributeIncludeAttribute[] {
-    const newProductAttributesIncludeAttribute: ProductAttributeIncludeAttribute[] = [];
+  ): PartialProductAttributeIncludeAttribute[] {
+    const newProductAttributesIncludeAttribute: PartialProductAttributeIncludeAttribute[] = [];
 
     for (let i = 0; i < attributes.length; i += 1) {
       const attribute = attributes[i];
@@ -913,7 +913,7 @@ export class StockService {
     return productAttributeUpdate;
   }
 
-  private updateFileAttributes<T extends ProductAttributeIncludeAttribute>(
+  private updateFileAttributes<T extends PartialProductAttributeIncludeAttribute>(
     attributeId: number,
     fileIds: number[],
     productAttributeInclusive: T[],

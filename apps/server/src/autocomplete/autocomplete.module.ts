@@ -7,7 +7,7 @@ import { PrismaModule } from '../prisma/prisma.module';
 @Module({
   providers: [AutocompleteService, AutocompleteRepository],
   controllers: [AutocompleteController],
-  imports: [PrismaModule]
+  imports: [PrismaModule],
 })
 
 export class AutocompleteModule {}

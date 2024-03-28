@@ -10,7 +10,7 @@ export class ModuleController {
   constructor(protected readonly moduleService: ModuleService) {}
 
   @Get('')
-  @ApiResponse({type: FindModuleResponseDto, isArray: true})
+  @ApiResponse({ type: FindModuleResponseDto, isArray: true })
   findAll() {
     return this.moduleService.findAll();
   }

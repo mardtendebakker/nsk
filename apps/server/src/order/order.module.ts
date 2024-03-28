@@ -10,6 +10,6 @@ import { PrintModule } from '../print/print.module';
 @Module({
   providers: [OrderService, OrderRepository],
   controllers: [OrderController],
-  imports: [PrismaModule,  FileModule, ContactModule, PrintModule]
+  imports: [PrismaModule, FileModule, ContactModule, PrintModule],
 })
 export class OrderModule {}

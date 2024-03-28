@@ -27,8 +27,8 @@ export class UserService {
     };
 
     const userAuthenticationRequestDto: UserAuthenticationRequestDto = {
-      emailOrUsername: emailOrUsername,
-      password: oldPassword
+      emailOrUsername,
+      password: oldPassword,
     };
 
     const cognitoUSerSession = await this.authService.authenticateUser(userAuthenticationRequestDto);
@@ -36,18 +36,16 @@ export class UserService {
     const user = new CognitoUser(userData);
     user.setSignInUserSession(cognitoUSerSession);
 
-    return new Promise((resolve, reject) => {
-      return user.changePassword(
-        oldPassword,
-        newPassword,
-        (err, result) => {
-          if (err) {
-            reject(new BadRequestException(err.message));
-          } else {
-            resolve(result);
-          }
+    return new Promise((resolve, reject) => user.changePassword(
+      oldPassword,
+      newPassword,
+      (err, result) => {
+        if (err) {
+          reject(new BadRequestException(err.message));
+        } else {
+          resolve(result);
         }
-      );
-    });
+      },
+    ));
   }
 }
