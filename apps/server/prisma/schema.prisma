@@ -371,7 +371,6 @@ model company {
   @@index([partner_id])
 }
 
-
 model payment {
   id              Int              @id @default(autoincrement())
   method          String?          @db.VarChar(20)
@@ -403,11 +402,11 @@ model module_payment {
 }
 
 model module {
-  id                             Int                             @id @default(autoincrement())
-  name                           String                          @unique(map: "uniq_module_name") @db.VarChar(100)
-  price                          Float                           @db.Float
-  created_at                     DateTime                        @default(now()) @db.DateTime(0)
-  updated_at                     DateTime                        @default(now()) @updatedAt @db.DateTime(0)
-  module_payment                 module_payment[]
-  config                         String?                         @db.LongText
+  id             Int              @id @default(autoincrement())
+  name           String           @unique(map: "uniq_module_name") @db.VarChar(100)
+  price          Float            @db.Float
+  created_at     DateTime         @default(now()) @db.DateTime(0)
+  updated_at     DateTime         @default(now()) @updatedAt @db.DateTime(0)
+  config         String?          @db.LongText
+  module_payment module_payment[]
 }
