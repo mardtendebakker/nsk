@@ -14,14 +14,14 @@ CREATE TABLE `module` (
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-INSERT INTO `module` (id, name) VALUES (1, 'blancco');
-INSERT INTO `module` (id, name) VALUES (2, 'customer_contact_action');
-INSERT INTO `module` (id, name) VALUES (3, 'logistics');
-INSERT INTO `module` (id, name) VALUES (4, 'attributes');
-INSERT INTO `module` (id, name) VALUES (5, 'tasks');
-INSERT INTO `module` (id, name) VALUES (6, 'product_statuses');
-INSERT INTO `module` (id, name) VALUES (7, 'order_statuses');
-INSERT INTO `module` (id, name) VALUES (8, 'tracking');
+INSERT INTO `module` (id, name, price) VALUES (1, 'blancco', 1995);
+INSERT INTO `module` (id, name, price) VALUES (2, 'customer_contact_action', 995);
+INSERT INTO `module` (id, name, price) VALUES (3, 'logistics', 1995);
+INSERT INTO `module` (id, name, price) VALUES (4, 'attributes', 495);
+INSERT INTO `module` (id, name, price) VALUES (5, 'tasks', 495);
+INSERT INTO `module` (id, name, price) VALUES (6, 'product_statuses', 495);
+INSERT INTO `module` (id, name, price) VALUES (7, 'order_statuses', 495);
+INSERT INTO `module` (id, name, price) VALUES (8, 'tracking', 495);
 
 -- CreateIndex
 CREATE INDEX `fk_module_payment_module_idx` ON `module_payment`(`module_id`);
