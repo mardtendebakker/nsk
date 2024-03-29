@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Param, Put } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ModuleService } from './module.service';
 import { FindModuleResponseDto } from './dto/find-module-response.dto';
@@ -13,5 +13,11 @@ export class ModuleController {
   @ApiResponse({ type: FindModuleResponseDto, isArray: true })
   findAll() {
     return this.moduleService.findAll();
+  }
+
+  @Put('/:id/configs')
+  @ApiResponse({type: FindModuleResponseDto})
+  patchConfig(@Param('id') id: number, @Body() body: object) {
+    return this.moduleService.setConfig(id, body);
   }
 }
