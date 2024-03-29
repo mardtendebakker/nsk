@@ -5,6 +5,9 @@ import { CompanyRelation } from '../company/types/company-relation';
 import { AOrderProcessed, TotalPerProductReturn } from './types/aorder-processed';
 import { AaOrderCompany, ContactProcessed } from './types/contact-processed';
 
+type CompanyWithoutCompany = Omit<CompanyRelation, 'company'>;
+type CompanyWithoutCompanyContacts = Omit<CompanyRelation, 'companyContacts'>;
+
 export class AOrderProcess {
   private totalPrice: number;
 
@@ -50,22 +53,30 @@ export class AOrderProcess {
 
     const customerProcessed: ContactProcessed = {
       ...restCustomer,
-      ...this.companyFieldsMapper(restCompanyCustomer[0]),
+      ...(restCompanyCustomer
+        && this.companyFieldsMapper(<CompanyWithoutCompany>restCompanyCustomer)
+      ),
       ...(partnerCompanyCustomer && {
         contact: {
           ...partnerMainContactCustomer,
-          ...this.companyFieldsMapper(restPartnerCompanyCustomer[0]),
+          ...(restPartnerCompanyCustomer
+            && this.companyFieldsMapper(<CompanyWithoutCompanyContacts>restPartnerCompanyCustomer)
+          ),
         },
       }),
     };
 
     const supplierProcessed: ContactProcessed = {
       ...restSupplier,
-      ...this.companyFieldsMapper(restCompanySupplier[0]),
+      ...(restCompanySupplier
+        && this.companyFieldsMapper(<CompanyWithoutCompany>restCompanySupplier)
+      ),
       ...(partnerCompanySupplier && {
         contact: {
           ...partnerMainContactSupplier,
-          ...this.companyFieldsMapper(restPartnerCompanySupplier[0]),
+          ...(restPartnerCompanySupplier
+            && this.companyFieldsMapper(<CompanyWithoutCompanyContacts>restPartnerCompanySupplier)
+          ),
         },
       }),
     };
@@ -134,12 +145,12 @@ export class AOrderProcess {
     return result;
   }
 
-  private companyFieldsMapper(company: Omit<CompanyRelation, 'company'>): AaOrderCompany {
+  private companyFieldsMapper(
+    company: CompanyWithoutCompany | CompanyWithoutCompanyContacts,
+  ): AaOrderCompany {
     return {
-      ...(company && {
-        company_id: company.id,
-        company_name: company.name,
-      }),
+      company_id: company.id,
+      company_name: company.name,
     };
   }
 }
