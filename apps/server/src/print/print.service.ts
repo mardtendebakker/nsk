@@ -21,14 +21,14 @@ export class PrintService {
     private readonly labelPrinter: LabelPrinter,
     private readonly exportPrinter: ExportPrinter,
   ) {
-    Handlebars.registerHelper('ifCond', (v1, operator, v2, options) => {
+    Handlebars.registerHelper('ifCond', function (v1, operator, v2, options) {
       switch (operator) {
         case '==':
-          return (v1 === v2) ? options.fn(this) : options.inverse(this);
+          return (v1 == v2) ? options.fn(this) : options.inverse(this);
         case '===':
           return (v1 === v2) ? options.fn(this) : options.inverse(this);
         case '!=':
-          return (v1 !== v2) ? options.fn(this) : options.inverse(this);
+          return (v1 != v2) ? options.fn(this) : options.inverse(this);
         case '!==':
           return (v1 !== v2) ? options.fn(this) : options.inverse(this);
         case '<':
