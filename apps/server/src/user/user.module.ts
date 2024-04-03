@@ -3,8 +3,8 @@ import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { AuthModule } from '../auth/auth.module';
 import { ModuleService } from '../module/module.service';
-import { ModulePaymentService } from '../module_payment/module_payment.service';
-import { ModulePaymentRepository } from '../module_payment/module_payment.repository';
+import { ModulePaymentService } from '../module-payment/module-payment.service';
+import { ModulePaymentRepository } from '../module-payment/module-payment.repository';
 import { PrismaService } from '../prisma/prisma.service';
 import { ModuleRepository } from '../module/module.repository';
 

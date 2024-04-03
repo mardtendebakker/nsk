@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ModulePaymentRepository } from './module_payment.repository';
+import { ModulePaymentRepository } from './module-payment.repository';
 import { FindModulePaymentResponseDto } from './dto/find-module-payment-response.dto';
 import { ModuleName } from '../module/moduleName.type';
 import { Status } from './status.type';
