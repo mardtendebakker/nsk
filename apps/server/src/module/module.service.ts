@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { module } from '@prisma/client';
 import { FindModuleResponseDto } from './dto/find-module-response.dto';
-import { ModulePaymentService } from '../module_payment/module_payment.service';
+import { ModulePaymentService } from '../module-payment/module-payment.service';
 import { ModuleRepository } from './module.repository';
 import { ModuleName } from './moduleName.type';
 

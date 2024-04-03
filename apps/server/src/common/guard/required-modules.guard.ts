@@ -1,7 +1,7 @@
 import {
   Injectable, CanActivate, ExecutionContext, ForbiddenException,
 } from '@nestjs/common';
-import { ModulePaymentService } from '../../module_payment/module_payment.service';
+import { ModulePaymentService } from '../../module-payment/module-payment.service';
 import { ModuleName } from '../../module/moduleName.type';
 
 export function requiredModule(moduleName: ModuleName) {

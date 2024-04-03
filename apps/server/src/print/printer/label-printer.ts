@@ -35,12 +35,12 @@ export class LabelPrinter extends IProductPrinter {
           )?.value,
         },
         {
-          name: 'Bedrijfsnaam',
-          value: product.company_name,
-        },
-        {
           name: 'Productiejaar',
           value: '',
+        },
+        {
+          name: 'Bedrijfsnaam',
+          value: product.company_name,
         },
         {
           name: 'Adres',
