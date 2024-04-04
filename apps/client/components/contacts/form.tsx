@@ -59,6 +59,7 @@ function Form({
               disabled={disabled || !!formRepresentation.id.value}
               error={Boolean(formRepresentation.company_id.error)}
               helperText={formRepresentation.company_id.error}
+              fetchWhileDisabled
             />
             <Box sx={{ m: '.25rem' }} />
             {company && (
