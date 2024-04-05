@@ -26,6 +26,7 @@ export default function DataSourcePicker(
     error,
     multiple,
     fetchOnSearch,
+    fetchWhileDisabled,
   }: {
     disabled?: boolean,
     params?: { [key: string]: string | number },
@@ -43,7 +44,8 @@ export default function DataSourcePicker(
     helperText?: string,
     error?: boolean,
     multiple?: boolean,
-    fetchOnSearch?: boolean
+    fetchOnSearch?: boolean,
+    fetchWhileDisabled?: boolean
   },
 ) {
   const { data, call } = useAxios<undefined | object[]>('get', path, { showErrorMessage: false });
@@ -61,7 +63,7 @@ export default function DataSourcePicker(
   }
 
   useEffect(() => {
-    if (disabled) {
+    if (disabled && !fetchWhileDisabled) {
       return;
     }
 
@@ -156,4 +158,5 @@ DataSourcePicker.defaultProps = {
   error: false,
   multiple: false,
   fetchOnSearch: true,
+  fetchWhileDisabled: false,
 };
