@@ -20,6 +20,7 @@ import Header from '../header';
 import can from '../../../utils/can';
 import useSecurity from '../../../hooks/useSecurity';
 import PatchLocationModal from './patchLocationModal';
+import PatchProductTypeModal from './patchProductTypeModal';
 
 function initFormState(
   {
@@ -102,6 +103,7 @@ export default function ListContainer({ type } : { type: 'product' | 'repair' | 
   const { state: { user } } = useSecurity();
   const router = useRouter();
   const [showChangeLocationModal, setShowChangeLocationModal] = useState(false);
+  const [showChangeProductTypeModal, setShowChangeProductTypeModal] = useState(false);
   const [page, setPage] = useState<number>(parseInt(getQueryParam('page', '1'), 10));
   const [rowsPerPage, setRowsPerPage] = useState<number>(parseInt(getQueryParam('rowsPerPage', '10'), 10));
   const [editProductId, setEditProductId] = useState<number | undefined>();
@@ -139,7 +141,7 @@ export default function ListContainer({ type } : { type: 'product' | 'repair' | 
       showSuccessMessage: true,
     },
   );
-  const { call: callPatchLocation, performing: performingPatchLocation } = useAxios(
+  const { call: callPatch, performing: performingPatch } = useAxios(
     'patch',
     ajaxPath.replace(':id', ''),
     {
@@ -197,7 +199,7 @@ export default function ListContainer({ type } : { type: 'product' | 'repair' | 
       .then(() => defaultRefreshList());
   };
 
-  const disabled = (): boolean => performing || performingDelete || performingPatchLocation || performingBulkPatchArchive || performingBulkPatchUnarchive || performingSplit || performingBulkPrintBarcodes || performingBulkPrintChecklists || performingBulkPrintPriceCards || performingBulkPrintLabels;
+  const disabled = (): boolean => performing || performingDelete || performingPatch || performingBulkPatchArchive || performingBulkPatchUnarchive || performingSplit || performingBulkPrintBarcodes || performingBulkPrintChecklists || performingBulkPrintPriceCards || performingBulkPrintLabels;
 
   const handlePatchArchive = () => {
     bulkPatchArchive({ body: checkedProductIds })
@@ -215,14 +217,20 @@ export default function ListContainer({ type } : { type: 'product' | 'repair' | 
       });
   };
 
-  const handlePatchLocation = (product) => {
-    callPatchLocation({ body: { ids: checkedProductIds, product } })
+  const handleSubmitEditProduct = () => {
+    setEditProductId(undefined);
+    defaultRefreshList();
+  };
+
+  const handlePatch = (product) => {
+    callPatch({ body: { ids: checkedProductIds, product } })
       .then(() => {
         setCheckedProductIds([]);
         defaultRefreshList();
       })
       .finally(() => {
         setShowChangeLocationModal(false);
+        setShowChangeProductTypeModal(false);
       });
   };
 
@@ -300,6 +308,7 @@ export default function ListContainer({ type } : { type: 'product' | 'repair' | 
           onArchive={handlePatchArchive}
           onUnarchive={handlePatchUnarchive}
           onChangeLocation={() => setShowChangeLocationModal(true)}
+          onChangeProductType={() => setShowChangeProductTypeModal(true)}
           onPrint={handlePrintBarcodes}
           onPrintChecklist={handlePrintChecklists}
           onPrintPriceCard={handlePrintPriceCards}
@@ -327,7 +336,7 @@ export default function ListContainer({ type } : { type: 'product' | 'repair' | 
         {editProductId && (
         <EditModal
           onClose={() => setEditProductId(undefined)}
-          onSubmit={() => setEditProductId(undefined)}
+          onSubmit={handleSubmitEditProduct}
           id={editProductId.toString()}
           type={type}
         />
@@ -335,7 +344,13 @@ export default function ListContainer({ type } : { type: 'product' | 'repair' | 
         {showChangeLocationModal && (
         <PatchLocationModal
           onClose={() => setShowChangeLocationModal(false)}
-          onSubmit={handlePatchLocation}
+          onSubmit={handlePatch}
+        />
+        )}
+        {showChangeProductTypeModal && (
+        <PatchProductTypeModal
+          onClose={() => setShowChangeProductTypeModal(false)}
+          onSubmit={handlePatch}
         />
         )}
         {splitProduct && (

@@ -135,6 +135,21 @@ export class StockRepository {
     });
   }
 
+  async updateManyProductTypeId({ ids, productTypeId }: { ids: number[], productTypeId: number }) {
+    await this.prisma.$transaction(async (tx) => {
+      await tx.product_attribute.deleteMany({
+        where: {
+          product_id: { in: ids },
+        },
+      });
+
+      await tx.product.updateMany({
+        where: { id: { in: ids } },
+        data: { type_id: productTypeId },
+      });
+    });
+  }
+
   findProductAttributesIncludeAttribute(id: number) {
     const include: Prisma.product_attributeInclude = {
       attribute: true,

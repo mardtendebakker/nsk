@@ -94,10 +94,10 @@ export class StockController {
   }
 
   @Patch('')
-  @UseGuards(AuthorizationGuard(LOCAL_GROUPS))
+  @UseGuards(AuthorizationGuard(MANAGER_GROUPS))
   @ApiResponse({ type: UpdateManyResponseProductDto })
   updateMany(@Body() updateManyProductDto: UpdateManyProductDto) {
-    return this.stockService.updateManyLocation(updateManyProductDto);
+    return this.stockService.updateMany(updateManyProductDto);
   }
 
   @Delete(':id')
