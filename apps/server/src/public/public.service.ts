@@ -164,6 +164,21 @@ export class PublicService {
     }, file);
   }
 
+  getPostPickupSuccessMessage(): string {
+    return `Hartelijk dank voor uw online aanmelding. Als u dit bericht ziet, is uw bericht in ons systeem geland.
+    Uw informatie is ontvangen en wordt zo snel mogelijk verwerkt. U krijgt een automatische email ter bevestiging.
+    De logistieke afdeling neemt contact met u op zodra er een planning bekend is.
+    
+    Heeft u vragen of is er spoed geboden? Belt u ons dan meteen via 070 2136312.
+    U mag ook mailen naar logistiek@copiatek.nl Zet u voor de zekerheid dit emailadres in uw Whitelist.`;
+  }
+
+  getPostOrderSuccessMessage(): string {
+    return `Hartelijk dank voor uw interesse in onze producten. 
+    Heeft u vragen of is er spoed geboden? Belt u ons dan meteen via 070 2136312.
+    Wij nemen contact met u op over uw bestelling.`;
+  }
+
   private getContactForm() {
     return {
       name: {

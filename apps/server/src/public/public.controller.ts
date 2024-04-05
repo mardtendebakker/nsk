@@ -50,7 +50,7 @@ export class PublicController {
     if (body.pickup_form.confirmPage) {
       res.send(body.pickup_form.confirmPage);
     } else {
-      res.send('Pickup added successfully');
+      res.send(this.publicService.getPostPickupSuccessMessage());
     }
   }
 
@@ -81,7 +81,7 @@ export class PublicController {
     if (body.public_order_form.confirmPage) {
       res.send(body.public_order_form.confirmPage);
     } else {
-      res.send('Order added successfully');
+      res.send(this.publicService.getPostOrderSuccessMessage());
     }
   }
 
