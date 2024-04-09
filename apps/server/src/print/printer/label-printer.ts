@@ -15,9 +15,12 @@ export class LabelPrinter extends IProductPrinter {
       product: {
         barcode: await PrintUtil.getBarcode({ text: product.sku, scale: 1, height: 6 }),
         sku: product.sku,
-        name: product.name,
       },
       specifications: [
+        {
+          name: 'Name',
+          value: product.name,
+        },
         {
           name: 'Type',
           value: product.product_type.name,

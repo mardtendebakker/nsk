@@ -1,4 +1,4 @@
-import { Prisma, attribute as AttributeEntity, afile as AFileEntity } from '@prisma/client';
+import { Prisma, afile as AFileEntity } from '@prisma/client';
 import { NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { LocationService } from '../admin/location/location.service';
@@ -635,7 +635,7 @@ export class StockService {
 
   private addAttributeRelationToProductAttributes(
     productId: number,
-    attributes: AttributeEntity[],
+    attributes: AttributeIncludeOption[],
     productAttributes: ProductAttributeDto[],
     inclusive = false,
   ): PartialProductAttributeIncludeAttribute[] {
