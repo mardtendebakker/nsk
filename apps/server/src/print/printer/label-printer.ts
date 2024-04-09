@@ -60,7 +60,7 @@ export class LabelPrinter extends IProductPrinter {
         },
         {
           name: 'Testtype',
-          value: '100% werkend',
+          value: 'Functionaliteit',
         },
         {
           name: 'Uitslag test',
