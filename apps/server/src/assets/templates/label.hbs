@@ -23,7 +23,7 @@
     }
     div.attributes {
       margin-left: -2px;
-      height: 80%;
+      height: 198px;
     }
     table {
       width: 100%;
@@ -36,6 +36,9 @@
     td.even {
       background-color: #eef;
     }
+    .footer {
+      height: 28px;
+    }
     .barcode {
       margin-left: -3px;
       padding-bottom: 0;
@@ -43,6 +46,7 @@
     }
     .barcode img {
       width: 90%;
+      height: 14px;
     }
     .sku {
       margin-top: 0;
@@ -68,11 +72,13 @@
         {{/each}}
       </table>
     </div>
-    <div class="content barcode">
-      <img src="{{ product.barcode }}">
-    </div>
-    <div class="content sku">
-      <b>*&nbsp;{{ product.sku }}&nbsp;*</b>
+    <div class="footer">
+      <div class="content barcode">
+        <img src="{{ product.barcode }}">
+      </div>
+      <div class="content sku">
+        <b>*&nbsp;{{ product.sku }}&nbsp;*</b>
+      </div>
     </div>
   </div>
 {{/each}}
