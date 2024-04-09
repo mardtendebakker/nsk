@@ -390,6 +390,7 @@ export class AOrderService {
                   },
                 },
               },
+              product_type: true,
             },
           },
         },
