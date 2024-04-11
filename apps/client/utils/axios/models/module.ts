@@ -4,7 +4,12 @@ export interface ModuleListItem {
   active: boolean;
   price: number;
   freeTrialUsed: boolean;
-  config: { [key: string]: { value: string, sensitive?: boolean, required?: boolean } };
+  config: { [key: string]: {
+    value?: string | string[],
+    required?: boolean,
+    type: 'string' | 'hour' | 'multiSelect' | 'password',
+    options?: string[]
+  } };
   activeAt?: string;
   expiresAt?: string;
 }

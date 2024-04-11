@@ -33,6 +33,7 @@ import { FleetGoModule } from '../fleet-go/fleet-go.module';
 import { ModuleModule } from '../module/module.module';
 import { PaymentModule } from '../payment/payment.module';
 import { ModulePaymentModule } from '../module-payment/module-payment.module';
+import { ConfigModule as MyConfigModule } from '../config/config.module';
 
 @Module({
   imports: [
@@ -88,6 +89,7 @@ import { ModulePaymentModule } from '../module-payment/module-payment.module';
     ModuleModule,
     PaymentModule,
     ModulePaymentModule,
+    MyConfigModule,
   ],
   controllers: [AppController],
   providers: [AppService],
