@@ -9,11 +9,12 @@ import useAxios from '../../../hooks/useAxios';
 import {
   PURCHASE_ORDERS_PATH,
   SALES_ORDERS_PATH,
-  BULK_PRINT_PURCHASES_PATH,
-  BULK_PRINT_SALES_PATH,
-  BULK_PRINT_REPAIRS_PATH,
+  BULK_PRINT_NORMAL_PURCHASES_PATH,
+  BULK_PRINT_NORMAL_SALES_PATH,
+  BULK_PRINT_NORMAL_REPAIRS_PATH,
   AxiosResponse,
   REPAIR_ORDERS_PATH,
+  BULK_PRINT_EXPORT_SALES_PATH,
 } from '../../../utils/axios';
 import Filter from './filter';
 import Action from './action';
@@ -23,7 +24,7 @@ import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
 import pushURLParams from '../../../utils/pushURLParams';
 import { OrderListItem } from '../../../utils/axios/models/order';
 import { getQueryParam } from '../../../utils/location';
-import { OrderType } from '../../../utils/axios/models/types';
+import { OrderPrint, OrderType } from '../../../utils/axios/models/types';
 import { autocompleteOrderStatusesPathMapper } from '../../../utils/axios/helpers/typeMapper';
 
 function initFormState(
@@ -112,10 +113,14 @@ const AJAX_PATHS = {
   repair: REPAIR_ORDERS_PATH,
 };
 
-const AJAX_BULK_PRINT_PATHS = {
-  purchase: BULK_PRINT_PURCHASES_PATH,
-  sales: BULK_PRINT_SALES_PATH,
-  repair: BULK_PRINT_REPAIRS_PATH,
+const AJAX_BULK_PRINT_NORMAL_PATHS = {
+  purchase: BULK_PRINT_NORMAL_PURCHASES_PATH,
+  sales: BULK_PRINT_NORMAL_SALES_PATH,
+  repair: BULK_PRINT_NORMAL_REPAIRS_PATH,
+};
+
+const AJAX_BULK_PRINT_EXPORT_PATHS = {
+  sales: BULK_PRINT_EXPORT_SALES_PATH,
 };
 
 export default function ListContainer({ type }: { type: OrderType }) {
@@ -129,7 +134,8 @@ export default function ListContainer({ type }: { type: OrderType }) {
 
   const ajaxPath = AJAX_PATHS[type] || PURCHASE_ORDERS_PATH;
 
-  const ajaxBulkPrintPath = AJAX_BULK_PRINT_PATHS[type] || BULK_PRINT_PURCHASES_PATH;
+  const ajaxBulkPrintNormalPath = AJAX_BULK_PRINT_NORMAL_PATHS[type] || BULK_PRINT_NORMAL_PURCHASES_PATH;
+  const ajaxBulkPrintExportPath = AJAX_BULK_PRINT_EXPORT_PATHS[type] || BULK_PRINT_EXPORT_SALES_PATH;
 
   const { formRepresentation, setValue, setData } = useForm(initFormState({
     search: getQueryParam('search'),
@@ -157,9 +163,15 @@ export default function ListContainer({ type }: { type: OrderType }) {
     },
   );
 
-  const { call: callPrint, performing: performingPrint } = useAxios(
+  const { call: callPrintNormal, performing: performingPrintNormal } = useAxios(
     'get',
-    ajaxBulkPrintPath,
+    ajaxBulkPrintNormalPath,
+    { withProgressBar: true },
+  );
+
+  const { call: callPrintExport, performing: performingPrintExport } = useAxios(
+    'get',
+    ajaxBulkPrintExportPath,
     { withProgressBar: true },
   );
 
@@ -208,7 +220,7 @@ export default function ListContainer({ type }: { type: OrderType }) {
     }
   };
 
-  const disabled = (): boolean => performing || performingDelete || performingPatch || performingPrint;
+  const disabled = (): boolean => performing || performingDelete || performingPatch || performingPrintNormal || performingPrintExport;
 
   const handleDelete = (id: number) => {
     callDelete({ path: ajaxPath.replace(':id', id.toString()) })
@@ -232,12 +244,27 @@ export default function ListContainer({ type }: { type: OrderType }) {
     setData(initFormState({}));
   };
 
-  const handlePrint = () => {
-    callPrint({ params: { ids: checkedOrderIds }, responseType: 'blob' })
-      .then((response: AxiosResponse) => {
-        openBlob(response.data);
-      });
-  };
+  const onPrints: OrderPrint[] = [{
+    onClick: () => {
+      callPrintNormal({ params: { ids: checkedOrderIds }, responseType: 'blob' })
+        .then((response: AxiosResponse) => {
+          openBlob(response.data);
+        });
+    },
+    transKey: 'normal',
+  }];
+
+  if (type === 'sales') {
+    onPrints.push({
+      onClick: () => {
+        callPrintExport({ params: { ids: checkedOrderIds }, responseType: 'blob' })
+          .then((response: AxiosResponse) => {
+            openBlob(response.data);
+          });
+      },
+      transKey: 'export',
+    });
+  }
 
   return (
     <Card sx={{ overflowX: 'auto', p: '1.5rem' }}>
@@ -258,7 +285,7 @@ export default function ListContainer({ type }: { type: OrderType }) {
         checkedOrdersCount={checkedOrderIds.length}
         onAllCheck={handleAllChecked}
         onChangeStatus={() => setShowChangeStatusModal(true)}
-        onPrint={handlePrint}
+        onPrints={onPrints}
       />
       <Box sx={{ m: '.5rem' }} />
       <List

@@ -7,6 +7,6 @@ import { ProductStatusController } from './product-status.controller';
 @Module({
   providers: [ProductStatusService, ProductStatusRepository],
   controllers: [ProductStatusController],
-  imports: [PrismaModule]
+  imports: [PrismaModule],
 })
 export class ProductStatusModule {}

@@ -54,7 +54,7 @@ function Form({ formRepresentation, disabled, setValue }: {
           value={formRepresentation.companyKvkNr.value || ''}
           disabled={disabled}
         />
-        <Can requiredGroups={['admin', 'super_admin', 'manager', 'logistics', 'local']}>
+        <Can requiredGroups={['manager', 'logistics', 'local']}>
           <Box sx={{ m: '.25rem' }} />
           <Box sx={{ flex: 0.33, display: 'flex' }}>
             <Checkbox
@@ -70,7 +70,7 @@ function Form({ formRepresentation, disabled, setValue }: {
         xs={12}
         sx={{ display: 'flex', flex: 1, flexDirection: isDesktop ? 'row' : 'column' }}
       >
-        <Can requiredGroups={['admin', 'super_admin', 'manager', 'logistics', 'local']}>
+        <Can requiredGroups={['manager', 'logistics', 'local']}>
           {!formRepresentation.companyIsPartner.value && (
             <DataSourcePicker
               sx={{ flex: 0.33 }}

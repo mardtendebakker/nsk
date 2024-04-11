@@ -1,8 +1,10 @@
-import { Body, Controller, Get, Headers, Post, Query, Render, Res, UnauthorizedException, UploadedFile, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import {
+  Body, Controller, Get, Headers, Post, Query, Render, Res, UnauthorizedException, UploadedFile, UploadedFiles, UseInterceptors,
+} from '@nestjs/common';
 import { Response } from 'express';
-import { PublicService } from './public.service';
 import { ApiTags } from '@nestjs/swagger';
 import { AnyFilesInterceptor, FileInterceptor } from '@nestjs/platform-express';
+import { PublicService } from './public.service';
 import { GetPickupDto } from './dto/get-pickup.dto';
 import { PostPickupDto } from './dto/post-pickup.dto';
 import { PostOrderDto } from './dto/post-order.dto';
@@ -27,7 +29,7 @@ export class PublicController {
     const allProductTypes = await this.publicService.getAllProductTypes();
     const dataDestructionChoices = this.publicService.getDataDestructionChoices();
     const form = this.publicService.getPickupForm();
-    
+
     return {
       ...query,
       allProductTypes,
@@ -39,7 +41,7 @@ export class PublicController {
   @Post('pickup')
   @UseInterceptors(AnyFilesInterceptor())
   async postPickup(
-    @Body() body: PostPickupDto,
+  @Body() body: PostPickupDto,
     @UploadedFiles() files: Express.Multer.File[],
     @Res() res: Response,
   ) {
@@ -48,7 +50,7 @@ export class PublicController {
     if (body.pickup_form.confirmPage) {
       res.send(body.pickup_form.confirmPage);
     } else {
-      res.send('Pickup added successfully');
+      res.send(this.publicService.getPostPickupSuccessMessage());
     }
   }
 
@@ -62,7 +64,7 @@ export class PublicController {
   @Render('order')
   async getOrder(@Query() query: GetOrderDto) {
     const form = this.publicService.getOrderForm();
-    
+
     return {
       ...query,
       form,
@@ -71,7 +73,7 @@ export class PublicController {
 
   @Post('order')
   async postOrder(
-    @Body() body: PostOrderDto,
+  @Body() body: PostOrderDto,
     @Res() res: Response,
   ) {
     await this.publicService.postOrder(body);
@@ -79,7 +81,7 @@ export class PublicController {
     if (body.public_order_form.confirmPage) {
       res.send(body.public_order_form.confirmPage);
     } else {
-      res.send('Order added successfully');
+      res.send(this.publicService.getPostOrderSuccessMessage());
     }
   }
 
@@ -93,24 +95,24 @@ export class PublicController {
   @Render('import')
   async getImport(@Query() query: GetImportDto) {
     return {
-      ...query
+      ...query,
     };
   }
 
   @Post('import')
   @UseInterceptors(FileInterceptor('file'))
   async importSales(
-    @Body() body: PostImportDto,
+  @Body() body: PostImportDto,
     @UploadedFile() file: Express.Multer.File,
     @Res() res: Response,
     @Headers('authorization') authorization,
   ) {
     try {
       if (!authorization) {
-        throw new UnauthorizedException('Please enter username and password!')
+        throw new UnauthorizedException('Please enter username and password!');
       }
 
-      await this.publicService.importSales(authorization.replace('Basic ',''), body, file);
+      await this.publicService.importSales(authorization.replace('Basic ', ''), body, file);
       res.send('Import sales completed successfully');
     } catch (e) {
       if (e instanceof UnauthorizedException) {
@@ -119,8 +121,8 @@ export class PublicController {
           'Basic realm="Access to site", charset="UTF-8"',
         );
         res.status(401).send('UnauthorizedAccess');
-      } 
-      
+      }
+
       throw e;
     }
   }

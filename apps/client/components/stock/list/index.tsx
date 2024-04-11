@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import _ from 'lodash';
 import {
-  STOCK_PRODUCTS_PATH, STOCK_REPAIRS_PATH, SPLIT_PRODUCT_INDIVIDUALIZE_PATH, SPLIT_PRODUCT_STOCK_PART_PATH, APRODUCT_BULK_PRINT_BARCODES, AxiosResponse, APRODUCT_BULK_PRINT_CHECKLISTS, APRODUCT_BULK_PRINT_PRICECARDS, STOCK_ARCHIVED_PATH, APRODUCTS_ARCHIVE_SET, APRODUCTS_ARCHIVE_UNSET,
+  STOCK_PRODUCTS_PATH, STOCK_REPAIRS_PATH, SPLIT_PRODUCT_INDIVIDUALIZE_PATH, SPLIT_PRODUCT_STOCK_PART_PATH, APRODUCT_BULK_PRINT_BARCODES, AxiosResponse, APRODUCT_BULK_PRINT_CHECKLISTS, APRODUCT_BULK_PRINT_PRICECARDS, STOCK_ARCHIVED_PATH, APRODUCTS_ARCHIVE_SET, APRODUCTS_ARCHIVE_UNSET, APRODUCT_BULK_PRINT_LABELS,
 } from '../../../utils/axios';
 import List from './list';
 import useAxios from '../../../hooks/useAxios';
@@ -128,6 +128,7 @@ export default function ListContainer({ type } : { type: 'product' | 'repair' | 
   const { call: bulkPrint, performing: performingBulkPrintBarcodes } = useAxios('get', APRODUCT_BULK_PRINT_BARCODES);
   const { call: bulkPrintChecklist, performing: performingBulkPrintChecklists } = useAxios('get', APRODUCT_BULK_PRINT_CHECKLISTS);
   const { call: bulkPrintPriceCard, performing: performingBulkPrintPriceCards } = useAxios('get', APRODUCT_BULK_PRINT_PRICECARDS);
+  const { call: bulkPrintLabel, performing: performingBulkPrintLabels } = useAxios('get', APRODUCT_BULK_PRINT_LABELS);
   const { call: bulkPatchArchive, performing: performingBulkPatchArchive } = useAxios('patch', APRODUCTS_ARCHIVE_SET);
   const { call: bulkPatchUnarchive, performing: performingBulkPatchUnarchive } = useAxios('patch', APRODUCTS_ARCHIVE_UNSET);
   const { call: callDelete, performing: performingDelete } = useAxios(
@@ -196,7 +197,7 @@ export default function ListContainer({ type } : { type: 'product' | 'repair' | 
       .then(() => defaultRefreshList());
   };
 
-  const disabled = (): boolean => performing || performingDelete || performingPatchLocation || performingBulkPatchArchive || performingBulkPatchUnarchive || performingSplit || performingBulkPrintBarcodes || performingBulkPrintChecklists || performingBulkPrintPriceCards;
+  const disabled = (): boolean => performing || performingDelete || performingPatchLocation || performingBulkPatchArchive || performingBulkPatchUnarchive || performingSplit || performingBulkPrintBarcodes || performingBulkPrintChecklists || performingBulkPrintPriceCards || performingBulkPrintLabels;
 
   const handlePatchArchive = () => {
     bulkPatchArchive({ body: checkedProductIds })
@@ -241,6 +242,13 @@ export default function ListContainer({ type } : { type: 'product' | 'repair' | 
 
   const handlePrintPriceCards = () => {
     bulkPrintPriceCard({ params: { ids: checkedProductIds }, responseType: 'blob' })
+      .then((response: AxiosResponse) => {
+        openBlob(response.data);
+      });
+  };
+
+  const handlePrintLabels = () => {
+    bulkPrintLabel({ params: { ids: checkedProductIds }, responseType: 'blob' })
       .then((response: AxiosResponse) => {
         openBlob(response.data);
       });
@@ -295,6 +303,7 @@ export default function ListContainer({ type } : { type: 'product' | 'repair' | 
           onPrint={handlePrintBarcodes}
           onPrintChecklist={handlePrintChecklists}
           onPrintPriceCard={handlePrintPriceCards}
+          onPrintLabel={handlePrintLabels}
         />
         <Box sx={{ m: '.5rem' }} />
         <List
@@ -313,7 +322,7 @@ export default function ListContainer({ type } : { type: 'product' | 'repair' | 
           }}
           rowsPerPage={rowsPerPage}
           onEdit={(id) => setEditProductId(id)}
-          onDelete={user && can({ user, requiredGroups: ['admin', 'super_admin', 'manager'] }) ? handleDelete : undefined}
+          onDelete={user && can({ user, requiredGroups: ['manager'] }) ? handleDelete : undefined}
         />
         {editProductId && (
         <EditModal

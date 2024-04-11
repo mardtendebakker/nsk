@@ -1,14 +1,14 @@
-import { ListUsersCommandOutput, UserType } from "@aws-sdk/client-cognito-identity-provider";
-import { ResponseMetadata } from "@aws-sdk/types";
-import { ApiProperty } from "@nestjs/swagger";
+import { ListUsersCommandOutput, UserType } from '@aws-sdk/client-cognito-identity-provider';
+import { ResponseMetadata } from '@aws-sdk/types';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class ListUserResponseDto implements ListUsersCommandOutput {
   @ApiProperty()
-  Users?: UserType[];
+    Users?: UserType[];
 
   @ApiProperty()
-  PaginationToken?: string;
+    PaginationToken?: string;
 
   @ApiProperty()
-  $metadata: ResponseMetadata;
+    $metadata: ResponseMetadata;
 }

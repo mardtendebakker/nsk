@@ -10,7 +10,7 @@ export class PrismaUncheckedCreateAServiceInputDto implements Prisma.aserviceUnc
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  id?: number;
+    id?: number;
 
   @ApiProperty({
     enum: AServiceStatus,
@@ -19,7 +19,7 @@ export class PrismaUncheckedCreateAServiceInputDto implements Prisma.aserviceUnc
   })
   @IsEnum(AServiceStatus)
   @Type(() => Number)
-  status: AServiceStatus;
+    status: AServiceStatus;
 
   @ApiProperty({
     enum: AServiceDiscrimination,
@@ -27,27 +27,27 @@ export class PrismaUncheckedCreateAServiceInputDto implements Prisma.aserviceUnc
   })
   @IsEnum(AServiceDiscrimination)
   @Type(() => String)
-  discr: AServiceDiscrimination;
+    discr: AServiceDiscrimination;
 
   @ApiPropertyOptional()
   @Type(() => String)
-  description?: string;
+    description?: string;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  price?: number;
+    price?: number;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  relation_id?: number;
+    relation_id?: number;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  task_id?: number;
+    task_id?: number;
 }

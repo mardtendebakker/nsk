@@ -1,11 +1,11 @@
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { DataDestruction } from "../../calendar/pickup/types/destruction.enum";
-import { IsInt, IsOptional, IsString } from "class-validator";
-import { Transform, Type } from "class-transformer";
-import { formDataDateTransform, formDataNumberTransform, formDataStringTransform } from "../../common/transforms/form-date.transform";
-import { NewContactDto } from "./new-contact.dto";
-import { CommonFormDto } from "./common-form.dto";
-import { PostCommonDto } from "./PostCommon.dto";
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsInt, IsOptional, IsString } from 'class-validator';
+import { Transform, Type } from 'class-transformer';
+import { DataDestruction } from '../../calendar/pickup/types/destruction.enum';
+import { formDataDateTransform, formDataNumberTransform, formDataStringTransform } from '../../common/transforms/form-date.transform';
+import { NewContactDto } from './new-contact.dto';
+import { CommonFormDto } from './common-form.dto';
+import { PostCommonDto } from './PostCommon.dto';
 
 class AddressDto {
   @ApiPropertyOptional()
@@ -13,26 +13,26 @@ class AddressDto {
   @IsOptional()
   @IsString()
   @Type(() => String)
-  address?: string;
+    address?: string;
 
   @ApiPropertyOptional()
   @Transform(formDataStringTransform)
   @IsOptional()
   @IsString()
   @Type(() => String)
-  address_zip?: string;
-  
+    address_zip?: string;
+
   @ApiPropertyOptional()
   @Transform(formDataStringTransform)
   @IsOptional()
   @IsString()
   @Type(() => String)
-  address_city?: string;
+    address_city?: string;
 }
 
 class QuantityProductTypeDto {
   // {type_id_1: '2', type_id_2: ''}
-  [key: string]: string; 
+  [key: string]: string;
 }
 
 export class PickupFormDto extends CommonFormDto {
@@ -40,62 +40,62 @@ export class PickupFormDto extends CommonFormDto {
   @Transform(formDataNumberTransform)
   @IsInt()
   @Type(() => Number)
-  locationId: number;
+    locationId: number;
 
   @ApiProperty()
   @Type(() => NewContactDto)
-  supplier: NewContactDto;
+    supplier: NewContactDto;
 
   @ApiProperty()
   @Transform(formDataNumberTransform)
   @IsInt()
   @Type(() => Number)
-  countAddresses: number;
+    countAddresses: number;
 
   @ApiProperty()
   @Type(() => AddressDto)
-  addresses: AddressDto[];
+    addresses: AddressDto[];
 
   @ApiProperty()
   @Type(() => QuantityProductTypeDto)
-  quantityAddresses: QuantityProductTypeDto[];
-  
+    quantityAddresses: QuantityProductTypeDto[];
+
   @ApiPropertyOptional()
   @Transform(formDataDateTransform)
   @IsOptional()
   @IsString()
   @Type(() => Date)
-  pickupDate: Date;
-  
+    pickupDate: Date;
+
   @ApiPropertyOptional()
   @Transform(formDataStringTransform)
   @IsOptional()
   @IsString()
   @Type(() => String)
-  description?: string;
-  
+    description?: string;
+
   @ApiProperty()
   @Transform(formDataNumberTransform)
   @IsInt()
   @Type(() => Number)
-  dataDestruction: DataDestruction;
-  
+    dataDestruction: DataDestruction;
+
   @ApiPropertyOptional()
   @Transform(formDataStringTransform)
   @IsOptional()
   @IsString()
   @Type(() => String)
-  origin?: string;
-  
+    origin?: string;
+
   @ApiProperty()
   @Transform(formDataNumberTransform)
   @IsInt()
   @Type(() => Number)
-  maxAddresses: number;
+    maxAddresses: number;
 }
 
 export class PostPickupDto extends PostCommonDto {
   @ApiProperty()
   @Type(() => PickupFormDto)
-  "pickup_form": PickupFormDto;
+    'pickup_form': PickupFormDto;
 }

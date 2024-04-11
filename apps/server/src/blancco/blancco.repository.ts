@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client';
-import { PrismaService } from '../prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
 import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class BlanccoRepository {
@@ -13,10 +13,10 @@ export class BlanccoRepository {
   findOrCreateProductType(data: Prisma.product_typeCreateInput) {
     return this.prisma.product_type.upsert({
       where: {
-        name: data.name
+        name: data.name,
       },
       create: data,
-      update: {}
+      update: {},
     });
   }
 

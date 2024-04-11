@@ -1,9 +1,9 @@
 import 'multer';
 import { Injectable } from '@nestjs/common';
-import { FileRepository } from './file.repository';
 import { v4 as uuidv4 } from 'uuid';
 import { ConfigService } from '@nestjs/config';
 import { Prisma, afile } from '@prisma/client';
+import { FileRepository } from './file.repository';
 import { CreateFileDto } from './dto/create-file.dto';
 import { FileS3 } from './file.s3';
 import { PutObjectWithoutKeyInput } from './dto/put-object-without-key-input.dto';
@@ -13,7 +13,7 @@ export class FileService {
   constructor(
     private readonly configService: ConfigService,
     private readonly repository: FileRepository,
-    private readonly fileS3: FileS3
+    private readonly fileS3: FileS3,
   ) {}
 
   async get(id: number) {
@@ -33,11 +33,11 @@ export class FileService {
 
     await this.fileS3.put({
       Key: fileKey,
-      ...putObjectWithoutKeyInput
+      ...putObjectWithoutKeyInput,
     });
 
     try {
-      return this.repository.create({
+      return await this.repository.create({
         ...createFileDto,
         original_client_filename: fileName,
         unique_server_filename:
@@ -68,7 +68,7 @@ export class FileService {
 
     const files = await this.repository.getAll(where);
     const fileKeys = files.map(
-      (file) => `${file.discr}/${file.original_client_filename}`
+      (file) => `${file.discr}/${file.original_client_filename}`,
     );
     this.fileS3.deleteMany(fileKeys);
 

@@ -1,4 +1,4 @@
-import { ProductTypeRelation } from "./types/product-type-relation";
+import { ProductTypeRelation } from './types/product-type-relation';
 
 export class ProductTypeProcess {
   constructor(private readonly productType: ProductTypeRelation) {}
@@ -16,14 +16,14 @@ export class ProductTypeProcess {
         ({ attribute: { attribute_option, ...rest } }: any) => ({
           ...rest,
           options: attribute_option,
-        })
+        }),
       ),
       tasks: product_type_task.map(
         ({ task: { id, name } }: any) => ({
           id,
-          name
-        })
+          name,
+        }),
       ),
-    }
+    };
   }
 }

@@ -3,50 +3,50 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class AOrderEntity implements aorder {
   @ApiProperty()
-  id: number;
+    id: number;
 
   @ApiPropertyOptional()
-  status_id: number | null;
+    status_id: number | null;
 
   @ApiPropertyOptional()
-  customer_id: number | null;
+    customer_id: number | null;
 
   @ApiPropertyOptional()
-  supplier_id: number | null;
+    supplier_id: number | null;
 
   @ApiPropertyOptional()
-  order_nr: string | null;
+    order_nr: string | null;
 
   @ApiPropertyOptional()
-  remarks: string | null;
+    remarks: string | null;
 
   @ApiProperty()
-  order_date: Date;
+    order_date: Date;
 
   @ApiPropertyOptional()
-  discount: number | null;
+    discount: number | null;
 
   @ApiPropertyOptional()
-  transport: number | null;
+    transport: number | null;
 
   @ApiPropertyOptional()
-  is_gift: boolean | null;
+    is_gift: boolean | null;
 
   @ApiProperty()
-  discr: string;
+    discr: string;
 
   @ApiPropertyOptional()
-  backingPurchaseOrder_id: number | null;
+    backingPurchaseOrder_id: number | null;
 
   @ApiPropertyOptional()
-  external_id: number | null;
+    external_id: number | null;
 
   @ApiPropertyOptional()
-  delivery_type: number | null;
+    delivery_type: number | null;
 
   @ApiPropertyOptional()
-  delivery_date: Date | null;
+    delivery_date: Date | null;
 
   @ApiPropertyOptional()
-  delivery_instructions: string | null; 
+    delivery_instructions: string | null;
 }

@@ -1,7 +1,7 @@
 import { Controller, Post } from '@nestjs/common';
-import { ADMINS_GROUPS } from '../common/types/cognito-groups.enum';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Authorization } from '@nestjs-cognito/auth';
+import { ADMINS_GROUPS } from '../common/types/cognito-groups.enum';
 import { BlanccoService } from './blancco.service';
 
 @ApiBearerAuth()

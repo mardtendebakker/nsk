@@ -1,7 +1,7 @@
-import { ApiPropertyOptional } from "@nestjs/swagger";
-import { Transform, Type } from "class-transformer";
-import { IsInt, IsOptional } from "class-validator";
-import { formDataNumberTransform } from "../../common/transforms/form-date.transform";
+import { ApiPropertyOptional } from '@nestjs/swagger';
+import { Transform, Type } from 'class-transformer';
+import { IsInt, IsOptional } from 'class-validator';
+import { formDataNumberTransform } from '../../common/transforms/form-date.transform';
 
 export class ImportDto {
   @ApiPropertyOptional()
@@ -9,5 +9,5 @@ export class ImportDto {
   @Transform(formDataNumberTransform)
   @IsInt()
   @Type(() => Number)
-  partner_id?: number | null;
+    partner_id?: number | null;
 }

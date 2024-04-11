@@ -1,5 +1,7 @@
 import { Authorization } from '@nestjs-cognito/auth';
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import {
+  Controller, Get, Param, Query,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LogisticService } from './logistic.service';
 import { FindLogisticResponeDto, FindLogisticsResponeDto } from './dto/find-logistic-response.dto';
@@ -12,15 +14,15 @@ import { LOGISTICS_GROUPS } from '../common/types/cognito-groups.enum';
 @Controller('logistics')
 export class LogisticController {
   constructor(protected readonly logisticService: LogisticService) {}
-  
+
   @Get('')
-  @ApiResponse({type: FindLogisticsResponeDto})
+  @ApiResponse({ type: FindLogisticsResponeDto })
   findAll(@Query() query: FindManyDto) {
     return this.logisticService.findAll(query);
   }
-  
+
   @Get(':id')
-  @ApiResponse({type: FindLogisticResponeDto})
+  @ApiResponse({ type: FindLogisticResponeDto })
   findOne(@Param('id') id: number) {
     return this.logisticService.findOne(id);
   }

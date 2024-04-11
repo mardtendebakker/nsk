@@ -1,5 +1,5 @@
 export enum EntityStatus {
-    Active,
-    Archived,
-    Deleted
+  Active,
+  Archived,
+  Deleted,
 }

@@ -1,4 +1,4 @@
 export enum AOrderDiscrimination {
   PURCHASE = 'p',
-  SALE = 's'
+  SALE = 's',
 }

@@ -1,65 +1,65 @@
 import { product } from '@prisma/client';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { EntityStatus } from '../../common/types/entity-status.enum';
 import { IsEnum, IsOptional } from 'class-validator';
 import { Type } from 'class-transformer';
+import { EntityStatus } from '../../common/types/entity-status.enum';
 
 export class ProductEntity implements product {
   @ApiProperty()
   @Type(() => Number)
-  id: number;
+    id: number;
 
   @ApiPropertyOptional()
   @IsOptional()
   @Type(() => Number)
-  type_id: number | null;
+    type_id: number | null;
 
   @ApiProperty()
   @Type(() => Number)
-  location_id: number;
+    location_id: number;
 
   @ApiPropertyOptional()
   @IsOptional()
   @Type(() => Number)
-  location_label_id: number | null;
+    location_label_id: number | null;
 
   @ApiPropertyOptional()
   @IsOptional()
   @Type(() => Number)
-  status_id: number | null;
+    status_id: number | null;
 
   @ApiPropertyOptional()
   @IsOptional()
   @Type(() => Number)
-  owner_id: number | null;
+    owner_id: number | null;
 
   @ApiProperty()
-  sku: string;
+    sku: string;
 
   @ApiProperty()
-  name: string;
+    name: string;
 
   @ApiPropertyOptional()
-  description: string | null;
+    description: string | null;
 
   @ApiPropertyOptional()
   @IsOptional()
   @Type(() => Number)
-  price: number | null;
+    price: number | null;
 
   @ApiProperty()
-  created_at: Date;
+    created_at: Date;
 
   @ApiProperty()
-  updated_at: Date;
+    updated_at: Date;
 
   @ApiPropertyOptional()
-  order_updated_at: Date | null;
+    order_updated_at: Date | null;
 
   @ApiPropertyOptional()
   @IsOptional()
   @Type(() => Number)
-  external_id: number | null;
+    external_id: number | null;
 
   @ApiProperty({
     enum: EntityStatus,
@@ -68,5 +68,5 @@ export class ProductEntity implements product {
   })
   @IsEnum(EntityStatus)
   @Type(() => Number)
-  entity_status: EntityStatus;
+    entity_status: EntityStatus;
 }

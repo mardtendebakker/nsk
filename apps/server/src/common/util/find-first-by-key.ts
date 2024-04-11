@@ -1,6 +1,6 @@
 export function findFirstByKey(
   obj: unknown,
-  targetKey: string
+  targetKey: string,
 ): unknown | undefined {
   if (typeof obj === 'object' && obj !== null) {
     if (Array.isArray(obj)) {
@@ -15,11 +15,10 @@ export function findFirstByKey(
         if (Object.prototype.hasOwnProperty.call(obj, key)) {
           if (key === targetKey) {
             return obj[key];
-          } else {
-            const result = findFirstByKey(obj[key], targetKey);
-            if (result !== undefined) {
-              return result;
-            }
+          }
+          const result = findFirstByKey(obj[key], targetKey);
+          if (result !== undefined) {
+            return result;
           }
         }
       }

@@ -9,7 +9,7 @@ import { FileModule } from '../file/file.module';
   controllers: [SplitProductController],
   imports: [
     ProductModule,
-    FileModule
+    FileModule,
   ],
 })
 export class SplitProductModule {}

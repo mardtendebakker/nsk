@@ -1,4 +1,4 @@
-import { BlanccoUnknownField } from "../blancco-unknown-field";
+import { BlanccoUnknownField } from '../blancco-unknown-field';
 
 export type BlanccoVideoCard = BlanccoUnknownField & {
   id?: number;

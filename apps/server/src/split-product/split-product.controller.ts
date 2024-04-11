@@ -1,8 +1,10 @@
-import { Body, Controller, Param, Put } from '@nestjs/common';
+import {
+  Body, Controller, Param, Put,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Authorization } from '@nestjs-cognito/auth';
 import { SplitProductService } from './split-product.service';
 import { SplitDto } from './dto/split.dto';
-import { Authorization } from '@nestjs-cognito/auth';
 import { LOCAL_GROUPS } from '../common/types/cognito-groups.enum';
 
 @ApiBearerAuth()
@@ -14,7 +16,7 @@ export class SplitProductController {
 
   @Put(':id/split-part-of-bundle')
   splitPartOfBundle(
-    @Param('id') id: number,
+  @Param('id') id: number,
     @Body() body: SplitDto,
   ) {
     return this.splitProductService.splitPartOfBundle(id, body);
@@ -22,7 +24,7 @@ export class SplitProductController {
 
   @Put(':id/individualize-part-of-bundle')
   individualizePartOfBundle(
-    @Param('id') id: number,
+  @Param('id') id: number,
     @Body() body: SplitDto,
   ) {
     return this.splitProductService.individualizePartOfBundle(id, body);
@@ -30,7 +32,7 @@ export class SplitProductController {
 
   @Put(':id/individualize-the-whole-stock')
   individualizeTheWholeStock(
-    @Param('id') id: number,
+  @Param('id') id: number,
     @Body() body: SplitDto,
   ) {
     return this.splitProductService.individualizeTheWholeStock(id, body);
@@ -38,7 +40,7 @@ export class SplitProductController {
 
   @Put(':id/individualize-the-whole-bundle')
   individualizeTheWholeBundle(
-    @Param('id') id: number,
+  @Param('id') id: number,
     @Body() body: SplitDto,
   ) {
     return this.splitProductService.individualizeTheWholeBundle(id, body);

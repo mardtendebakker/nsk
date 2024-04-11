@@ -2,7 +2,7 @@ import { INestApplication, Injectable, OnModuleInit } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 
 @Injectable()
-export class PrismaService extends PrismaClient implements OnModuleInit  {
+export class PrismaService extends PrismaClient implements OnModuleInit {
   constructor() {
     super();
     // TODO: prisma middleware for updateAt
@@ -13,7 +13,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit  {
       return Number(this);
     };
   }
-  
+
   async onModuleInit() {
     await this.$connect();
 
@@ -29,7 +29,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit  {
         }
       }
       return obj;
-    }
+    };
 
     const dividePriceBy100 = <T extends { [key: string]: any }>(obj: T): T => {
       for (const key in obj) {
@@ -47,27 +47,29 @@ export class PrismaService extends PrismaClient implements OnModuleInit  {
         }
       }
       return obj;
-    }
+    };
 
     Object.assign(
       this,
       this.$extends({
         query: {
-          async $allOperations({ model, operation, args, query }) {
+          async $allOperations({
+            model, operation, args, query,
+          }) {
             if (
               [
                 'create',
                 'createMany',
                 'update',
                 'updateMany',
-                'upsert'
+                'upsert',
               ].includes(operation)
             ) {
               args.data = multiplyPriceBy100(args.data);
               const result = await query(args);
               return dividePriceBy100(result);
             }
-      
+
             if (
               [
                 'find',
@@ -81,7 +83,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit  {
               const result = await query(args);
               return dividePriceBy100(result);
             }
-  
+
             return query(args);
           },
         },

@@ -1,10 +1,10 @@
-import { ApiProperty, ApiPropertyOptional, PickType } from "@nestjs/swagger";
-import { IFindManyRespone } from "../../common/interface/find-many-respone";
-import { AOrderEntity } from "../entities/aorder.entity";
-import { ProductOrderEntity } from "../../stock/entities/product-order.entity";
-import { ProductEntity } from "../../stock/entities/product.entity";
-import { OrderStatusEntity } from "../../admin/order-status/entities/order-status.entity";
-import { ContactEntity } from "../../contact/entities/contact.entity";
+import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
+import { IFindManyRespone } from '../../common/interface/find-many-respone';
+import { AOrderEntity } from '../entities/aorder.entity';
+import { ProductOrderEntity } from '../../stock/entities/product-order.entity';
+import { ProductEntity } from '../../stock/entities/product.entity';
+import { OrderStatusEntity } from '../../admin/order-status/entities/order-status.entity';
+import { ContactEntity } from '../../contact/entities/contact.entity';
 
 class OrderStatus extends PickType(OrderStatusEntity, [
   'id',
@@ -19,7 +19,7 @@ class SubContact extends PickType(ContactEntity, [
   'zip',
 ]) {
   @ApiProperty()
-  name: string;
+    name: string;
 }
 
 class Contact extends PickType(ContactEntity, [
@@ -29,45 +29,45 @@ class Contact extends PickType(ContactEntity, [
   'zip',
 ]) {
   @ApiProperty()
-  name: string;
-  
+    name: string;
+
   @ApiPropertyOptional()
-  contact?: SubContact;
+    contact?: SubContact;
 }
 
 class ProductDto extends PickType(ProductEntity, [
-  'name'
+  'name',
 ]) {}
 
 export class ProductOrderDto extends PickType(ProductOrderEntity, [
   'quantity',
 ]) {
   @ApiPropertyOptional()
-  product?: ProductDto;
+    product?: ProductDto;
 }
 
 class FindAOrderResponeDto extends PickType(AOrderEntity, [
-  "id",
-  "order_nr",
-  "order_date",
+  'id',
+  'order_nr',
+  'order_date',
 ] as const) {
   @ApiPropertyOptional()
-  order_status?: OrderStatus;
+    order_status?: OrderStatus;
 
   @ApiPropertyOptional()
-  contact_aorder_supplier_idTocontact?: Contact;
+    contact_aorder_supplier_idTocontact?: Contact;
 
   @ApiPropertyOptional()
-  contact_aorder_customer_idTocontact?: Contact;
+    contact_aorder_customer_idTocontact?: Contact;
 
   @ApiPropertyOptional()
-  product_orders?: ProductOrderDto[];
+    product_orders?: ProductOrderDto[];
 }
 
 export class FindAOrdersResponeDto implements IFindManyRespone<FindAOrderResponeDto> {
   @ApiProperty()
-  count: number;
-  
+    count: number;
+
   @ApiProperty()
-  data: FindAOrderResponeDto[]
+    data: FindAOrderResponeDto[];
 }

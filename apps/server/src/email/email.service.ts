@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { SESClient, SendBulkTemplatedEmailCommandInput, SendEmailCommandInput, Template } from "@aws-sdk/client-ses";
+import {
+  SESClient, SendBulkTemplatedEmailCommandInput, SendEmailCommandInput, Template,
+} from '@aws-sdk/client-ses';
 import { SendEmailDto } from './dto/send-email.dto';
 import { EmailSES } from './email.ses';
 import { EmailTemplateDto } from './dto/create-email-template.dto';
@@ -9,10 +11,11 @@ import { BulkTemplate } from './dto/types';
 @Injectable()
 export class EmailService {
   private client: SESClient;
+
   constructor(
-    private readonly emailSES: EmailSES
+    private readonly emailSES: EmailSES,
   ) {}
-  
+
   send(sendEmailDto: SendEmailDto) {
     const params: SendEmailCommandInput = {
       Destination: {
@@ -21,13 +24,13 @@ export class EmailService {
       Source: sendEmailDto.from,
       Message: {
         Subject: {
-          Data: sendEmailDto.subject
+          Data: sendEmailDto.subject,
         },
         Body: {
-          ...(sendEmailDto.text && {Text: {Data: sendEmailDto.text}}),
-          ...(sendEmailDto.html && {Html: {Data: sendEmailDto.html}}),
-        }
-      }
+          ...(sendEmailDto.text && { Text: { Data: sendEmailDto.text } }),
+          ...(sendEmailDto.html && { Html: { Data: sendEmailDto.html } }),
+        },
+      },
     };
 
     return this.emailSES.send(params);
@@ -37,10 +40,10 @@ export class EmailService {
     const params: Template = {
       TemplateName: emailTemplateDto.name,
       SubjectPart: emailTemplateDto.subject,
-      ...(emailTemplateDto.text && {TextPart: emailTemplateDto.text}),
-      ...(emailTemplateDto.html && {HtmlPart: emailTemplateDto.html}),
-    }
-    
+      ...(emailTemplateDto.text && { TextPart: emailTemplateDto.text }),
+      ...(emailTemplateDto.html && { HtmlPart: emailTemplateDto.html }),
+    };
+
     return this.emailSES.createTemplate(params);
   }
 
@@ -53,7 +56,7 @@ export class EmailService {
       Destinations: [{
         Destination: {
           ToAddresses: bulkEmailDto.to,
-        }
+        },
       }],
       Source: bulkEmailDto.from,
       Template: bulkEmailDto.template,

@@ -1,6 +1,7 @@
 import { HttpService } from '@nestjs/axios';
-import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import {
+  BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException,
+} from '@nestjs/common';
 import { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { catchError, lastValueFrom } from 'rxjs';
 import * as AdmZip from 'adm-zip';
@@ -12,19 +13,20 @@ import { BlanccoResponse } from './types/blancco-response';
 import { BlanccoReportsV1 } from './types/blancco-reports-v1';
 import * as DefaultAttribute from './data/default-attributes.json';
 import { BlanccoProductTypes } from './types/blancco-product-types.enum';
+import { ModuleService } from '../module/module.service';
 
 @Injectable()
 export class BlanccoService {
   constructor(
     private readonly purchaseService: PurchaseService,
     private readonly httpService: HttpService,
-    private readonly configService: ConfigService,
-    private readonly repository: BlanccoRepository
+    private readonly moduleService: ModuleService,
+    private readonly repository: BlanccoRepository,
   ) {}
 
   async init() {
     const result: boolean[] = [];
-    
+
     const productTypeNames = Object.values(BlanccoProductTypes);
     for (let i = 0; i < productTypeNames.length; i++) {
       const productTypeName = productTypeNames[i];
@@ -34,8 +36,8 @@ export class BlanccoService {
         is_public: false,
       });
 
-      const attributesData = DefaultAttribute?.[productTypeName] || DefaultAttribute['Default'];
-    
+      const attributesData = DefaultAttribute?.[productTypeName] || DefaultAttribute.Default;
+
       const attributeIds: number[] = [];
       for (const attributeData of attributesData) {
         const attribute = await this.repository.findOrCreateAttribute(attributeData);
@@ -51,7 +53,7 @@ export class BlanccoService {
       }
     }
 
-    return `${result.filter(res => res === true).length} blancco attribute has been created!`;
+    return `${result.filter((res) => res === true).length} blancco attribute has been created!`;
   }
 
   async getReports(orderId: number, newCursor?: string): Promise<BlanccoV1> {
@@ -72,23 +74,23 @@ export class BlanccoService {
 
   getValueFromReportByKey(
     report: unknown,
-    key: string
+    key: string,
   ): string {
-    return <string>this.getValueFromReportByFlattenedKey(report, key);
+    return <string> this.getValueFromReportByFlattenedKey(report, key);
   }
 
   formatNumberWithScale(input: unknown): string {
     let num = Number(input);
-    if (isNaN(num)) {
+    if (Number.isNaN(num)) {
       return String(input);
     }
 
-    const unitSuffixes = ["", "K", "M", "G", "T", "P", "E", "Z", "Y"];
+    const unitSuffixes = ['', 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y'];
     let unitIndex = 0;
 
     while (num >= 1000 && unitIndex < unitSuffixes.length - 1) {
-        num /= 1000;
-        unitIndex++;
+      num /= 1000;
+      unitIndex++;
     }
 
     const roundedNum = Math.floor(num);
@@ -109,15 +111,15 @@ export class BlanccoService {
             const rKey = new RegExp(`^${k}`);
             let val = '';
             value.forEach((item) => {
-              for (const [key, value] of Object.entries(item)) {
-                if (rKey.test(key)) {
-                  val += `${value}, `;
+              for (const [key1, value1] of Object.entries(item)) {
+                if (rKey.test(key1)) {
+                  val += `${value1}, `;
                 }
               }
             });
             value = val.slice(0, -2);
           } else {
-            value = value.find(v => k in v)?.[k];
+            value = value.find((v) => k in v)?.[k];
           }
         } else {
           value = value?.[k];
@@ -132,14 +134,15 @@ export class BlanccoService {
                 for (let j = 0; j < item[k].length; j++) {
                   const obj = item[k][j];
                   const newObj: unknown = {};
-                  for (const key in obj) {
-                    newObj[`${key}${index + 1}`] = obj[key];
+                  // eslint-disable-next-line guard-for-in
+                  for (const key1 in obj) {
+                    newObj[`${key1}${index + 1}`] = obj[key1];
                   }
                   result[k].push(newObj);
                 }
                 return result;
               },
-              { [k]: [] }
+              { [k]: [] },
             );
         } else {
           value = value?.[k];
@@ -153,11 +156,11 @@ export class BlanccoService {
   }
 
   private async downloadReports(search: string, cursor?: string): Promise<BlanccoResponse> {
-    const url = this.configService.get<string>('BLANCCO_API_URL');
+    const config = await this.moduleService.getBlanccoConfig();
 
     const requestConfig: AxiosRequestConfig = {
       headers: {
-        'X-BLANCCO-API-KEY': this.configService.get<string>('BLANCCO_API_KEY'),
+        'X-BLANCCO-API-KEY': config.apiKey,
       },
       responseType: 'arraybuffer',
     };
@@ -174,11 +177,11 @@ export class BlanccoService {
       cursor,
     };
     const response = await lastValueFrom(
-      this.httpService.post(`${url}report/export`, body, requestConfig).pipe(
+      this.httpService.post(`${config.apiUrl}report/export`, body, requestConfig).pipe(
         catchError((error: AxiosError) => {
           throw new HttpException(error.response.data, error.response.status);
-        })
-      )
+        }),
+      ),
     );
 
     return this.handleResponse(response);
@@ -190,14 +193,14 @@ export class BlanccoService {
         zip: response.data,
         cursor: response.headers['x-blancco-cursor'],
       };
-    } else if (response?.status === 204) {
+    } if (response?.status === 204) {
       throw new HttpException({
         status: HttpStatus.NOT_FOUND,
         message: `No Blancco report were found, Blancco message: ${response.statusText}`,
       }, HttpStatus.NOT_FOUND);
     } else {
       throw new BadRequestException(
-        `Blancco status: ${response.status}, message: ${response.statusText}`
+        `Blancco status: ${response.status}, message: ${response.statusText}`,
       );
     }
   }
@@ -219,7 +222,7 @@ export class BlanccoService {
           resultObject[fileName] = jsonObject;
         } catch (error) {
           console.error(
-            `Error parsing JSON file ${entry.name}: ${error.message}`
+            `Error parsing JSON file ${entry.name}: ${error.message}`,
           );
         }
       }

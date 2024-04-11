@@ -1,7 +1,7 @@
 import * as bwipjs from 'bwip-js';
 
-export class PrintProcess {
-  protected cleanString(text = ''): string {
+export class PrintUtil {
+  static cleanString(text = ''): string {
     const utf8: Record<string, string> = {
       '[áàâãªä]': 'a',
       '[ÁÀÂÃÄ]': 'A',
@@ -13,10 +13,10 @@ export class PrintProcess {
       '[ÓÒÔÕÖ]': 'O',
       '[úùûü]': 'u',
       '[ÚÙÛÜ]': 'U',
-      'ç': 'c',
-      'Ç': 'C',
-      'ñ': 'n',
-      'Ñ': 'N',
+      ç: 'c',
+      Ç: 'C',
+      ñ: 'n',
+      Ñ: 'N',
       '–': '-', // UTF-8 hyphen to "normal" hyphen
       '[’‘‹›‚]': ' ', // Literally a single quote
       '[“”«»„]': ' ', // Double quote
@@ -25,20 +25,20 @@ export class PrintProcess {
       '\'': ' ',
       '"': ' ',
     };
-  
+
     const patternArray = Object.keys(utf8);
     const replacementArray = Object.values(utf8);
-  
+
     let cleanedText = text;
-    for (let i = 0; i < patternArray.length; i++) {
+    for (let i = 0; i < patternArray.length; i += 1) {
       const pattern = new RegExp(patternArray[i], 'gu');
       cleanedText = cleanedText.replace(pattern, replacementArray[i]);
     }
-  
+
     return cleanedText;
   }
 
-  async getBarcode(params: {
+  static async getBarcode(params: {
     text: string,
     scale?: number,
     height?: number,
@@ -46,16 +46,16 @@ export class PrintProcess {
     const {
       text,
       scale = 2,
-      height = 10
+      height = 10,
     } = params;
-    
+
     return new Promise((resolve, reject) => {
       bwipjs.toBuffer({
-        bcid:        'code39',
-        text:        this.cleanString(text).toUpperCase(),
-        scale:       scale,
-        height:      height,
-      }, function (err, png) {
+        bcid: 'code39',
+        text: this.cleanString(text).toUpperCase(),
+        scale,
+        height,
+      }, (err, png) => {
         if (err) {
           reject(err);
         } else {
@@ -63,6 +63,6 @@ export class PrintProcess {
           resolve(`data:image/png;base64,${base64String}`);
         }
       });
-    })
+    });
   }
 }

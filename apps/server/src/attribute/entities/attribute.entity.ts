@@ -1,31 +1,31 @@
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { attribute } from "@prisma/client";
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { attribute } from '@prisma/client';
 
 export class AttributeEntity implements attribute {
   @ApiProperty()
-  id: number;
+    id: number;
 
   @ApiPropertyOptional()
-  product_type_filter_id: number | null;
+    product_type_filter_id: number | null;
 
   @ApiProperty()
-  attr_code: string;
+    attr_code: string;
 
   @ApiProperty()
-  name: string;
+    name: string;
 
   @ApiPropertyOptional()
-  price: number | null;
+    price: number | null;
 
   @ApiPropertyOptional()
-  type: number | null;
+    type: number | null;
 
   @ApiProperty()
-  has_quantity: boolean;
+    has_quantity: boolean;
 
   @ApiPropertyOptional()
-  external_id: number | null;
+    external_id: number | null;
 
   @ApiProperty()
-  is_public: boolean;
+    is_public: boolean;
 }

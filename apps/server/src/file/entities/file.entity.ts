@@ -1,31 +1,31 @@
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { afile } from "@prisma/client";
-import { IsString } from "class-validator";
-import { FileDiscrimination } from "../types/file-discrimination.enum";
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { afile } from '@prisma/client';
+import { IsString } from 'class-validator';
+import { FileDiscrimination } from '../types/file-discrimination.enum';
 
 export class FileEntity implements afile {
   @ApiProperty()
-  id: number;
+    id: number;
 
   @ApiPropertyOptional()
-  product_id: number | null;
+    product_id: number | null;
 
   @ApiPropertyOptional()
-  pickup_id: number | null;
+    pickup_id: number | null;
 
   @ApiProperty()
-  original_client_filename: string;
-  
+    original_client_filename: string;
+
   @ApiProperty()
-  unique_server_filename: string;
-  
+    unique_server_filename: string;
+
   @ApiProperty()
   @IsString()
-  discr: FileDiscrimination;
+    discr: FileDiscrimination;
 
   @ApiPropertyOptional()
-  external_id: number | null;
+    external_id: number | null;
 
   @ApiPropertyOptional()
-  order_id: number | null;
+    order_id: number | null;
 }

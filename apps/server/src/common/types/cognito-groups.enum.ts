@@ -10,7 +10,7 @@ export enum CognitoGroups {
 
 export const ADMINS_GROUPS = [
   CognitoGroups.SUPER_ADMIN,
-  CognitoGroups.ADMIN
+  CognitoGroups.ADMIN,
 ];
 
 export const MANAGER_GROUPS = [

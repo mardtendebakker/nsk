@@ -1,0 +1,86 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="Window-target" content="_blank">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nexxus label tag</title>
+  <style>
+    html {
+      -webkit-print-color-adjust: exact;
+    }
+    body {
+      margin: 0;
+      font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+    div {
+      text-align: center;
+      width: 100%;
+    }
+    div.content {
+      width: 100%;
+      padding: 4px;
+    }
+    div.attributes {
+      margin-left: -2px;
+      height: 198px;
+    }
+    table {
+      width: 100%;
+      max-height: 100%;
+    }
+    td {
+      padding: 1px;
+      font-size: 8px;
+    }
+    td.even {
+      background-color: #eef;
+    }
+    .footer {
+      height: 28px;
+    }
+    .barcode {
+      margin-left: -3px;
+      padding-bottom: 0;
+      margin-bottom: 0;
+    }
+    .barcode img {
+      width: 90%;
+      height: 14px;
+    }
+    .sku {
+      margin-top: 0;
+      padding-top: 0;
+      font-size: 9px;
+      line-height: 0;
+    }
+    .pagebreak {
+      page-break-before: always;
+    }
+  </style>
+</head>
+<body>
+{{#each this}}
+  <div class="container pagebreak">
+    <div class="content attributes">
+      <table>
+        {{#each specifications}}
+        <tr>
+          <td class="{{#if even}}even{{/if}}">{{name}}</td>
+          <td class="{{#if even}}even{{/if}}"><b>{{value}}</b></td>
+        </tr>
+        {{/each}}
+      </table>
+    </div>
+    <div class="footer">
+      <div class="content barcode">
+        <img src="{{ product.barcode }}">
+      </div>
+      <div class="content sku">
+        <b>*&nbsp;{{ product.sku }}&nbsp;*</b>
+      </div>
+    </div>
+  </div>
+{{/each}}
+</body>
+</html>

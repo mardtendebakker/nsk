@@ -1,21 +1,21 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IFindManyRespone } from "../../common/interface/find-many-respone";
-import { TaskEntity } from "../entities/task.entity";
+import { ApiProperty } from '@nestjs/swagger';
+import { IFindManyRespone } from '../../common/interface/find-many-respone';
+import { TaskEntity } from '../entities/task.entity';
 
 class productType {
   @ApiProperty()
-  id: number;
-};
+    id: number;
+}
 
 export class FindTaskResponseDto extends TaskEntity {
   @ApiProperty()
-  productTypes: productType[];
+    productTypes: productType[];
 }
 
 export class FindTasksResponeDto implements IFindManyRespone<FindTaskResponseDto> {
   @ApiProperty()
-  count: number;
-  
+    count: number;
+
   @ApiProperty()
-  data: FindTaskResponseDto[]
+    data: FindTaskResponseDto[];
 }

@@ -1,18 +1,23 @@
-import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import {
+  Controller, Get, Param, UseGuards,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Authorization } from '@nestjs-cognito/auth';
 import { VehicleService } from './vehicle.service';
 import { VehicleResponseDto } from './dto/vehicle-response.dto';
 import { PickupService } from '../calendar/pickup/pickup.service';
 import { FindCalendarResponeDto } from '../calendar/dto/find-calendar-response.dto';
 import { requiredModule } from '../common/guard/required-modules.guard';
+import { MANAGER_GROUPS } from '../common/types/cognito-groups.enum';
 
 @ApiBearerAuth()
+@Authorization(MANAGER_GROUPS)
 @ApiTags('vehicles')
 @Controller('vehicles')
 export class VehicleController {
   constructor(
     protected readonly vehicleService: VehicleService,
-    protected readonly pickupService: PickupService
+    protected readonly pickupService: PickupService,
   ) { }
 
   @Get('')

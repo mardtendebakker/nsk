@@ -9,24 +9,23 @@ export class FileRepository {
   getAll(where: Prisma.afileWhereInput) {
     return this.prisma.afile.findMany({ where });
   }
-  
+
   create(data: Prisma.afileCreateInput) {
     return this.prisma.afile.create({
-      data
+      data,
     });
   }
-  
+
   findOne(params: Prisma.afileFindUniqueArgs) {
     const { where, select, include } = params;
     if (include) {
       return this.prisma.afile.findUnique({ where, include });
-    } else if (select) {
+    } if (select) {
       return this.prisma.afile.findUnique({ where, select });
-    } else {
-      return this.prisma.afile.findUnique({ where });
     }
+    return this.prisma.afile.findUnique({ where });
   }
-  
+
   update(params: {
     where: Prisma.afileWhereUniqueInput;
     data: Prisma.afileUpdateInput;

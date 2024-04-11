@@ -10,38 +10,37 @@ export class DeliveryService {
   constructor(protected readonly repository: DeliveryRepository) {}
 
   async findAll(query: FindManyDto): Promise<FindDeliveriesResponeDto> {
-    //TODO get correct data type
-    const { count, data }: { count: number; data: any[] } =
-      await this.repository.findAll({
-        ...query,
-        select: {
-          id: true,
-          order_nr: true,
-          order_status: true,
-          delivery_date: true,
-          contact_aorder_customer_idTocontact: true,
-          product_order: {
-            select: {
-              id: true,
-              product: {
-                select: {
-                  id: true,
-                  name: true,
-                },
+    // TODO get correct data type
+    const { count, data }: { count: number; data: any[] } = await this.repository.findAll({
+      ...query,
+      select: {
+        id: true,
+        order_nr: true,
+        order_status: true,
+        delivery_date: true,
+        contact_aorder_customer_idTocontact: true,
+        product_order: {
+          select: {
+            id: true,
+            product: {
+              select: {
+                id: true,
+                name: true,
               },
             },
           },
         },
-        where: {
-          discr: AOrderDiscrimination.SALE,
-          delivery_date: {
-            gte: query.startsAt,
-            lte: query.endsAt,
-          },
+      },
+      where: {
+        discr: AOrderDiscrimination.SALE,
+        delivery_date: {
+          gte: query.startsAt,
+          lte: query.endsAt,
         },
-        skip: query.skip,
-        take: query.take,
-      });
+      },
+      skip: query.skip,
+      take: query.take,
+    });
 
     const deliveriesDto: FindCalendarResponeDto[] = data.map(
       ({
@@ -62,7 +61,7 @@ export class DeliveryService {
           customer: contact_aorder_customer_idTocontact,
         },
         logistic: null,
-      })
+      }),
     );
 
     return {

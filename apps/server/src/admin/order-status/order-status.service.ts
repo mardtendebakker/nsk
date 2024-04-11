@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { FindManyDto } from './dto/find-many.dto';
 import { OrderStatusRepository } from './order-status.repository';
-import { ConflictException, Injectable } from '@nestjs/common';
 import { UpdateOrderStatusDto } from './dto/update-order-status.dto';
 import { CreateOrderStatusDto } from './dto/create-order-status.dto';
 
@@ -15,13 +15,13 @@ export class OrderStatusService {
       where: {
         ...query.where,
         ...(query.search && { name: { contains: query.search } }),
-      }
+      },
     });
   }
 
   async findOne(id: number) {
     const params: Prisma.order_statusFindUniqueArgs = {
-      where: { id }
+      where: { id },
     };
 
     return this.repository.findOne(params);
@@ -36,7 +36,7 @@ export class OrderStatusService {
   async update(id: number, updateOrderStatusDto: UpdateOrderStatusDto) {
     return this.repository.update({
       where: { id },
-      data: { ...updateOrderStatusDto }
+      data: { ...updateOrderStatusDto },
     });
   }
 
@@ -56,7 +56,7 @@ export class OrderStatusService {
 
   async findByNameOrCreate(createOrderStatusDto: CreateOrderStatusDto) {
     let orderStatus = await this.repository.findFirst({
-      where: { name: createOrderStatusDto.name }
+      where: { name: createOrderStatusDto.name },
     });
 
     if (!orderStatus) {

@@ -18,8 +18,8 @@ export class FileController {
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
   uploadFile(
-    @Body() body: CreateFileDto,
-    @UploadedFile() file: Express.Multer.File
+  @Body() body: CreateFileDto,
+    @UploadedFile() file: Express.Multer.File,
   ) {
     return this.fileService.create(body, {
       Body: file.stream,

@@ -1,6 +1,10 @@
 import { Authorization, AuthorizationGuard } from '@nestjs-cognito/auth';
-import { Body, Controller, Get, Param, Put, Query, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  Body, Controller, Get, Param, Put, Query, UseGuards,
+} from '@nestjs/common';
+import {
+  ApiBearerAuth, ApiBody, ApiResponse, ApiTags,
+} from '@nestjs/swagger';
 import { AdminUserService } from './user.service';
 import { ListUserDto } from './dto/list-user.dto';
 import { ListUserResponseDto } from './dto/list-user-response.dto';
@@ -17,33 +21,30 @@ export class AdminUserController {
   @Get('')
   @ApiResponse({ type: ListUserResponseDto })
   listUsers(@Query() query: ListUserDto) {
-
     return this.adminUserService.getUsers(query);
   }
 
   @Get('groups/:username')
   @ApiResponse({ type: [UpdateUserGroupDto] })
   listGroupsForUser(@Param('username') username: string) {
-
     return this.adminUserService.listGroupsForUser(username);
   }
 
   @Put('groups/:username')
   @UseGuards(AuthorizationGuard([CognitoGroups.SUPER_ADMIN]))
   @ApiResponse({ type: [UpdateUserGroupDto] })
-  @ApiBody({ 
+  @ApiBody({
     type: [UpdateUserGroupDto],
     examples: {
       all_possible_group: {
         value: Object.values(CognitoGroups).map((group, i) => ({
-          group: group,
-          assign: i % 2 === 0
-        }))
-      }
-    }
+          group,
+          assign: i % 2 === 0,
+        })),
+      },
+    },
   })
   updateGroup(@Param('username') username: string, @Body() updateUserGroupDto: UpdateUserGroupDto[]) {
-
     return this.adminUserService.manageUserGroup(username, updateUserGroupDto);
   }
 }

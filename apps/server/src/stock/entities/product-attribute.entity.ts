@@ -1,38 +1,38 @@
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { Type } from "class-transformer";
-import { IsNumber, IsOptional, IsString } from "class-validator";
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class ProductAttributeEntity {
   @ApiProperty()
   @IsNumber()
   @Type(() => Number)
-  product_id: number;
+    product_id: number;
 
   @ApiProperty()
   @IsNumber()
   @Type(() => Number)
-  attribute_id: number;
+    attribute_id: number;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
-  value_product_id: number | null;
+    value_product_id: number | null;
 
   @ApiProperty()
   @IsString()
   @Type(() => String)
-  value: string;
+    value: string;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
-  quantity: number | null;
+    quantity: number | null;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
-  external_id: number | null;
+    external_id: number | null;
 }

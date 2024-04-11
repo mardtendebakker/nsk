@@ -3,17 +3,17 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class LocationTemplateEntity implements location_template {
   @ApiProperty()
-  id: number;
+    id: number;
 
   @ApiProperty()
-  location_id: number;
+    location_id: number;
 
   @ApiProperty({ example: '^\\d-\\d-\\d$' })
-  template: string;
+    template: string;
 
   @ApiProperty()
-  created_at: Date;
+    created_at: Date;
 
   @ApiProperty()
-  updated_at: Date;
+    updated_at: Date;
 }

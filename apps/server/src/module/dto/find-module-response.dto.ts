@@ -1,23 +1,30 @@
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { ModuleName } from "../module.service";
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ModuleName } from '../moduleName.type';
+
+type Config = { [key: string]: { value: string, sensitive?: boolean, required?: boolean } };
 
 export class FindModuleResponseDto {
-    @ApiProperty()
+  @ApiProperty()
+    id: number;
+
+  @ApiProperty()
     name: ModuleName;
-    
-    @ApiProperty()
+
+  @ApiProperty()
     price: number;
 
-    @ApiPropertyOptional()
+  @ApiPropertyOptional()
     activeAt: Date;
 
-    @ApiPropertyOptional()
+  @ApiPropertyOptional()
     expiresAt: Date;
 
-    @ApiProperty()
+  @ApiProperty()
     active: boolean;
 
-    @ApiProperty()
+  @ApiProperty()
     freeTrialUsed: boolean;
-  }
-  
+
+  @ApiPropertyOptional()
+    config?: Config;
+}

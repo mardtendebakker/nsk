@@ -8,6 +8,6 @@ import { PrismaModule } from '../../prisma/prisma.module';
   providers: [PickupService, PickupRepository],
   exports: [PickupService],
   controllers: [PickupController],
-  imports: [PrismaModule]
+  imports: [PrismaModule],
 })
 export class PickupModule {}

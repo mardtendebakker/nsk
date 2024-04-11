@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client';
+import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '../prisma/prisma.service';
 import { AOrder } from './dto/update-many-aorder.dto';
-import { ConfigService } from '@nestjs/config';
 
 export class AOrderRepository {
   private serviceWhere: Prisma.aorderWhereInput = {};
@@ -9,7 +9,7 @@ export class AOrderRepository {
   constructor(
     protected readonly prisma: PrismaService,
     protected readonly configService: ConfigService,
-    protected readonly isRepair?: boolean
+    protected readonly isRepair?: boolean,
   ) {
     this.serviceWhere = {
       repair: { ...(isRepair ? { isNot: null } : { is: null }) },
@@ -17,19 +17,25 @@ export class AOrderRepository {
   }
 
   async findAll(params: Prisma.aorderFindManyArgs) {
-    const { skip, cursor, select, orderBy } = params;
+    const {
+      skip, cursor, select, orderBy,
+    } = params;
     const maxQueryLimit = this.configService.get<number>('MAX_RELATION_QUERY_LIMIT');
-    const take = Number.isFinite(params.take) && params.take <  maxQueryLimit ? params.take : maxQueryLimit;
-    const { 
+    const take = Number.isFinite(params.take)
+    && params.take < maxQueryLimit ? params.take : maxQueryLimit;
+    const {
       repair,
-    ...restWhere } = params.where;
+      ...restWhere
+    } = params.where;
     const where: Prisma.aorderWhereInput = {
       ...(repair ? { repair } : this.serviceWhere),
       ...restWhere,
     };
     const submission = await this.prisma.$transaction([
       this.prisma.aorder.count({ where }),
-      this.prisma.aorder.findMany({ skip, take, cursor, where, select, orderBy })
+      this.prisma.aorder.findMany({
+        skip, take, cursor, where, select, orderBy,
+      }),
     ]);
 
     return {
@@ -39,7 +45,7 @@ export class AOrderRepository {
   }
 
   findBy(params: Prisma.aorderFindManyArgs) {
-    return this.prisma.aorder.findMany(params)
+    return this.prisma.aorder.findMany(params);
   }
 
   create(params: Prisma.aorderCreateArgs) {
@@ -66,14 +72,14 @@ export class AOrderRepository {
   }
 
   deleteMany(ids: number[]) {
-    return this.prisma.aorder.deleteMany({ where: { id: { in: ids } } })
+    return this.prisma.aorder.deleteMany({ where: { id: { in: ids } } });
   }
 
   deleteOne(id: number) {
-    return this.prisma.aorder.delete({ where: { id } })
+    return this.prisma.aorder.delete({ where: { id } });
   }
 
   deletePickup(id: number) {
-    return this.prisma.pickup.delete({ where: { id } })
+    return this.prisma.pickup.delete({ where: { id } });
   }
 }

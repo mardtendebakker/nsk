@@ -1,14 +1,14 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty } from '@nestjs/swagger';
 
 export class AutocompleteResponseDto {
   @ApiProperty()
-  id: number;
-  
+    id: number;
+
   @ApiProperty()
-  label: string;
+    label: string;
 }
 
 export class LocationAutocompleteResponseDto extends AutocompleteResponseDto {
   @ApiProperty()
-  location_template: string[];
+    location_template: string[];
 }

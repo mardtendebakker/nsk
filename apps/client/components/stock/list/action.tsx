@@ -21,6 +21,7 @@ export default function Action({
   onPrint,
   onPrintChecklist,
   onPrintPriceCard,
+  onPrintLabel,
 }:{
   disabled: boolean,
   type: 'product' | 'repair' | 'archived',
@@ -33,6 +34,7 @@ export default function Action({
   onPrint: () => void,
   onPrintChecklist: () => void,
   onPrintPriceCard: () => void,
+  onPrintLabel: () => void,
 }) {
   const { trans } = useTranslation();
   const [showPrintActions, setShowPrintActions] = useState(null);
@@ -105,6 +107,9 @@ export default function Action({
                 </MenuItem>
                 <MenuItem onClick={onPrintPriceCard} disabled={disabled}>
                   {trans('printPriceCard')}
+                </MenuItem>
+                <MenuItem onClick={onPrintLabel} disabled={disabled}>
+                  {trans('printLabel')}
                 </MenuItem>
               </Stack>
             </Popover>

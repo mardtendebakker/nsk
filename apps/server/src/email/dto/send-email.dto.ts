@@ -1,4 +1,4 @@
-import { Subject, TextOrHtml } from "./types";
+import { Subject, TextOrHtml } from './types';
 
 export type SendEmailDto = {
   to: string[],

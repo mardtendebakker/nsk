@@ -1,6 +1,10 @@
 import { Authentication, CognitoUser } from '@nestjs-cognito/auth';
-import { Body, Controller, Get, HttpCode, Post } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import {
+  Body, Controller, Get, HttpCode, Post,
+} from '@nestjs/common';
+import {
+  ApiBearerAuth, ApiOkResponse, ApiResponse, ApiTags, ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 import { ChanngePasswordRequestDto } from './dto/change-password-request.dto';
 import { UserInfoDto } from './dto/user-info.dto';
 import { UserService } from './user.service';
@@ -17,24 +21,24 @@ export class UserController {
   ) {}
 
   @Get('info')
-  @ApiResponse({type: UserInfoDto})
-  @ApiUnauthorizedResponse(({ description: '{}'}))
-  async userInfo(@CognitoUser(Object.keys(new UserInfoDto)) me: UserInfoDto) {
+  @ApiResponse({ type: UserInfoDto })
+  @ApiUnauthorizedResponse(({ description: '{}' }))
+  async userInfo(@CognitoUser(Object.keys(new UserInfoDto())) me: UserInfoDto) {
     const modules = await this.moduleService.findAll();
-    
-    return { 
+
+    return {
       ...me,
-      modules
+      modules,
     };
   }
 
   @Post('changepassword')
   @HttpCode(200)
-  @ApiUnauthorizedResponse(({ description: 'Incorrect username or password.'}))
-  @ApiOkResponse({description: 'SUCCESS'})
+  @ApiUnauthorizedResponse(({ description: 'Incorrect username or password.' }))
+  @ApiOkResponse({ description: 'SUCCESS' })
   changePassword(
-    @CognitoUser("username") username: string,
-    @Body() channgePasswordRequestDto: ChanngePasswordRequestDto
+  @CognitoUser('username') username: string,
+    @Body() channgePasswordRequestDto: ChanngePasswordRequestDto,
   ) {
     return this.userService.changePassword(username, channgePasswordRequestDto);
   }

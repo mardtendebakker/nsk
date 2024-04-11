@@ -1,14 +1,12 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsArray, IsString } from "class-validator";
-import { ModuleName } from "../../module/module.service";
+import { ApiProperty } from '@nestjs/swagger';
+import { IsArray, IsString } from 'class-validator';
 
 export class SetupDto {
-    @ApiProperty()
-    @IsArray()
-    modules: ModuleName[];
+  @ApiProperty()
+  @IsArray()
+    moduleIds: number[];
 
-    @ApiProperty()
-    @IsString()
+  @ApiProperty()
+  @IsString()
     redirectUrl: string;
-  }
-  
+}

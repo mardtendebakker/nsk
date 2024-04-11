@@ -28,6 +28,7 @@ describe('getUserFromResponse', () => {
       username: 'username',
       email: 'email@mail.com',
       refreshToken: 'REFRESH_TOKEN',
+      modules: [],
       accessToken: 'ACCESS_TOKEN',
       emailVerified: false,
       groups: [],

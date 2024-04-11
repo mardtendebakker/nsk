@@ -32,7 +32,7 @@ import { VehicleModule } from '../vehicle/vehicle.module';
 import { FleetGoModule } from '../fleet-go/fleet-go.module';
 import { ModuleModule } from '../module/module.module';
 import { PaymentModule } from '../payment/payment.module';
-import { ModulePaymentModule } from '../module_payment/module_payment.module';
+import { ModulePaymentModule } from '../module-payment/module-payment.module';
 
 @Module({
   imports: [
@@ -87,7 +87,7 @@ import { ModulePaymentModule } from '../module_payment/module_payment.module';
     VehicleModule,
     ModuleModule,
     PaymentModule,
-    ModulePaymentModule
+    ModulePaymentModule,
   ],
   controllers: [AppController],
   providers: [AppService],
