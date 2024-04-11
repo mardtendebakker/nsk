@@ -13,6 +13,8 @@ const nextConfig = {
     svgr: false,
   },
   env: {
+    AXIOS_BASE_URL:
+      process.env.NX_AXIOS_BASE_URL,
     MYPTV_API_KEY:
       'RVVfMjMyYTdmMDdlZjgwNDllMmI1YTUyNGQ0NWNlMTBhYjA6NjNmOTM4ZjAtNTMzZi00M2EwLWEwNDEtYjhjNmE4N2RiN2Iz',
     MYPTV_MAP_STYLE_URL:
