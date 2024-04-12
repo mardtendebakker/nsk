@@ -1,0 +1,23 @@
+{
+  "name": "docs",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/docs",
+  "projectType": "docs",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docusaurus build",
+        "cwd": "apps/docs"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docusaurus start",
+        "cwd": "apps/docs"
+      }
+    }
+  },
+  "tags": []
+}
