@@ -325,25 +325,12 @@ export class StockService {
     return this.repository.deleteOne(id);
   }
 
-  async updateMany(ids: number[], data: Prisma.productUncheckedUpdateManyInput) {
-    return this.repository.updateMany({
-      where: {
-        id: { in: ids },
-      },
-      data,
-    });
-  }
-
-  async updateManyLocation(updateManyProductDto: UpdateManyProductDto) {
+  async updateMany(updateManyProductDto: UpdateManyProductDto) {
     const {
       ids, product: {
-        location_id: locationId, location_label: locationLabelBody,
+        locationId, locationLabel: locationLabelBody, productTypeId, entityStatus, orderUpdatedAt,
       },
     } = updateManyProductDto;
-
-    if (!locationId) {
-      return false;
-    }
 
     let locationLabelId: number;
 
@@ -354,13 +341,22 @@ export class StockService {
       locationLabelId = locationLabel.id;
     }
 
-    return this.updateMany(
-      ids,
-      {
-        location_id: locationId,
-        location_label_id: locationLabelId,
-      },
-    );
+    if (productTypeId) {
+      await this.repository.updateManyProductTypeId({ ids, productTypeId });
+    } else {
+      await this.repository.updateMany({
+        where: {
+          id: { in: ids },
+        },
+        data: {
+          location_id: locationId,
+          location_label_id: locationLabelId,
+          type_id: productTypeId,
+          entity_status: entityStatus,
+          order_updated_at: orderUpdatedAt,
+        },
+      });
+    }
   }
 
   async getAllPublicTypes() {

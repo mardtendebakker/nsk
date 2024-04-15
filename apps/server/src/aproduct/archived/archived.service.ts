@@ -25,10 +25,10 @@ export class ArchivedService extends AProductService {
   }
 
   async archive(ids: number[]) {
-    return this.updateMany(ids, { entity_status: EntityStatus.Archived });
+    return this.updateMany({ ids, product: { entityStatus: EntityStatus.Archived } });
   }
 
   async unarchive(ids: number[]) {
-    return this.updateMany(ids, { entity_status: EntityStatus.Active });
+    return this.updateMany({ ids, product: { entityStatus: EntityStatus.Active } });
   }
 }

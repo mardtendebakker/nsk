@@ -71,8 +71,9 @@ export class SaleService extends AOrderService {
       },
     };
 
-    this.aProductService.updateMany(productIds, {
-      order_updated_at: new Date(),
+    this.aProductService.updateMany({
+      ids: productIds,
+      product: { orderUpdatedAt: new Date() },
     });
 
     return this.repository.update(this.commonIncludePart(addProductsToOrderParams));

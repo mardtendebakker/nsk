@@ -3,10 +3,19 @@ import { IsNumber } from 'class-validator';
 
 export class Product {
   @ApiPropertyOptional()
-    location_id?: number;
+    locationId?: number;
 
   @ApiPropertyOptional()
-    location_label?: string;
+    locationLabel?: string;
+
+  @ApiPropertyOptional()
+    productTypeId?: number;
+
+  @ApiPropertyOptional()
+    entityStatus?: number;
+
+  @ApiPropertyOptional()
+    orderUpdatedAt?: Date;
 }
 
 export class UpdateManyProductDto {

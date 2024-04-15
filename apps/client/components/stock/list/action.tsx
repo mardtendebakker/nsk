@@ -3,11 +3,13 @@ import {
 } from '@mui/material';
 import ChevronRight from '@mui/icons-material/ChevronRight';
 import EditLocation from '@mui/icons-material/EditLocation';
+import Category from '@mui/icons-material/Category';
 import Archive from '@mui/icons-material/Archive';
 import Unarchive from '@mui/icons-material/Unarchive';
 import { useState } from 'react';
 import useTranslation from '../../../hooks/useTranslation';
 import Checkbox from '../../checkbox';
+import Can from '../../can';
 
 export default function Action({
   disabled,
@@ -18,6 +20,7 @@ export default function Action({
   onArchive,
   onUnarchive,
   onChangeLocation,
+  onChangeProductType,
   onPrint,
   onPrintChecklist,
   onPrintPriceCard,
@@ -31,6 +34,7 @@ export default function Action({
   onArchive: () => void,
   onUnarchive: () => void,
   onChangeLocation: () => void,
+  onChangeProductType: () => void,
   onPrint: () => void,
   onPrintChecklist: () => void,
   onPrintPriceCard: () => void,
@@ -72,10 +76,21 @@ export default function Action({
         )}
         {checkedProductsCount > 0
         && (
-        <Button size="small" onClick={onChangeLocation} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
-          <EditLocation sx={{ mr: '.1rem' }} />
-          {trans('changeLocation')}
-        </Button>
+          <Can requiredGroups={['manager']}>
+            <Button size="small" onClick={onChangeLocation} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
+              <EditLocation sx={{ mr: '.1rem' }} />
+              {trans('changeLocation')}
+            </Button>
+          </Can>
+        )}
+        {checkedProductsCount > 0
+        && (
+          <Can requiredGroups={['manager']}>
+            <Button size="small" onClick={onChangeProductType} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
+              <Category sx={{ mr: '.1rem' }} />
+              {trans('changeProductType')}
+            </Button>
+          </Can>
         )}
         {checkedProductsCount > 0
         && (
