@@ -27,6 +27,10 @@ export class ExportPrinter extends IOrderPrinter {
                 )?.value),
               )?.name,
               type: productOrder.product.product_type.name,
+              productionYear: '--',
+              testDate: productOrder.product.updated_at.toISOString().slice(0, 10),
+              testType: 'Functionaliteit',
+              testResult: 'OK',
             },
           }))
         ),

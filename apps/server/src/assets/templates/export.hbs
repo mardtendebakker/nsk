@@ -243,11 +243,11 @@
               <td>{{ product.name }}</td>
               <td>{{ product.brand }}</td>
               <td>{{ product.type }}</td>
-              <td>Year</td>
+              <td>{{ product.productionYear }}</td>
               <td>{{ quantity }}</td>
-              <td>25/03/2024</td>
-              <td>Functionaliteit</td>
-              <td>OK</td>
+              <td>{{ product.testDate }}</td>
+              <td>{{ product.testType }}</td>
+              <td>{{ product.testResult }}</td>
             </tr>
             {{/each}}
           {{/each}}
