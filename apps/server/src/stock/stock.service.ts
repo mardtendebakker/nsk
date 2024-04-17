@@ -272,13 +272,15 @@ export class StockService {
 
     let locationLabelId: number = null;
 
-    if (locationLabelBody) {
-      const locationLabel = await this.locationLabelService.findByLabelOrCreate({
-        location_id: body.location_id || stock.location.id,
-        label: locationLabelBody,
-      });
+    if (locationLabelBody !== undefined) {
+      if (locationLabelBody) {
+        const locationLabel = await this.locationLabelService.findByLabelOrCreate({
+          location_id: body.location_id || stock.location.id,
+          label: locationLabelBody,
+        });
 
-      locationLabelId = locationLabel.id;
+        locationLabelId = locationLabel.id;
+      }
     }
 
     const typeHasChanged = Number.isFinite(body.type_id) && body.type_id !== stock.product_type?.id;
@@ -301,8 +303,8 @@ export class StockService {
     return this.repository.updateOne({
       id,
       data: {
-        location_label_id: locationLabelId,
         ...restBody,
+        ...(locationLabelBody !== undefined && { location_label_id: locationLabelId }),
         ...(productOrders?.length && {
           product_order: {
             update: productOrders.map((productOrder) => ({
