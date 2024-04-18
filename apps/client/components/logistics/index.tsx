@@ -48,7 +48,7 @@ export default function Logistics({ type }: { type: 'pickup' | 'delivery' }) {
 
   const { state: { config } } = useRemoteConfig();
   const [openHours, setOpenHours] = useState<string[]>([]);
-  const [dates, setDates] = useState<Date[]>([new Date()]);
+  const [dates, setDates] = useState<Date[]>([]);
 
   function updateDates(firstDate: Date) {
     setDates(
@@ -105,9 +105,13 @@ export default function Logistics({ type }: { type: 'pickup' | 'delivery' }) {
   }));
 
   useEffect(() => {
+    if (!dates[0]) {
+      return;
+    }
+
     setSelectedLogisticIds([0]);
     refreshList({ newDate: dates[0], router, call });
-  }, [dates[0].toISOString()]);
+  }, [dates[0]?.toISOString()]);
 
   const logistics: Logistic[] = [];
 
@@ -181,11 +185,13 @@ export default function Logistics({ type }: { type: 'pickup' | 'delivery' }) {
               display: 'flex', alignItems: 'center', px: '1rem', py: '2rem', justifyContent: 'space-between',
             }}
             >
+              {dates[0] && (
               <Pagination
                 date={dates[0]}
                 onPrevious={() => updateDates(addDays(dates[0], -7))}
                 onNext={() => updateDates(addDays(dates[0], 7))}
               />
+              )}
               <TextField
                 InputProps={{
                   startAdornment: <Search sx={{ color: (theme) => theme.palette.grey[40] }} />,
