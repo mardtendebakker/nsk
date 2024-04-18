@@ -8,6 +8,7 @@ import { Box } from '@mui/material';
 import {
   Way, fetchPolylineInfo, getMapStyle, getTransformRequest, initViewport, initialMapStyle,
 } from '../../../utils/map';
+import useRemoteConfig from '../../../hooks/useRemoteConfig';
 
 export type Ways = {
   vehicleWay?: Way,
@@ -18,6 +19,7 @@ export default function Map({ ways }:{ ways: Ways }) {
   const [mapStyle, setMapStyle] = useState(initialMapStyle);
   const [viewport, setViewport] = useState(initViewport);
   const [geometry, setGeometry] = useState<GeoJSON.LineString>({ type: 'LineString', coordinates: [] });
+  const { state: { config } } = useRemoteConfig();
 
   const setUp = async () => {
     setGeometry((currentValue) => ({
@@ -30,7 +32,7 @@ export default function Map({ ways }:{ ways: Ways }) {
     }
 
     if (ways.targetWay) {
-      const { coordinates } = await fetchPolylineInfo([ways.vehicleWay, ways.targetWay]);
+      const { coordinates } = await fetchPolylineInfo([ways.vehicleWay, ways.targetWay], config.logistics.apiKey);
 
       setGeometry((currentValue) => ({
         ...currentValue,
@@ -45,21 +47,23 @@ export default function Map({ ways }:{ ways: Ways }) {
   };
 
   useEffect(() => {
-    setUp();
-  }, [JSON.stringify(ways)]);
+    if (config?.logistics.apiKey) {
+      setUp();
+    }
+  }, [JSON.stringify(ways), JSON.stringify(config)]);
 
   useEffect(() => {
     getMapStyle().then(setMapStyle);
   }, []);
 
-  return (
+  return config?.logistics.apiKey ? (
     <ReactMapGL
       height="100%"
       width="100%"
       mapStyle={mapStyle}
       {...viewport}
       onViewportChange={setViewport}
-      transformRequest={(url, resourceType) => getTransformRequest(url, resourceType)}
+      transformRequest={(url, resourceType) => getTransformRequest(url, resourceType, config.logistics.apiKey)}
     >
       <NavigationControl style={{ right: 10, top: 10 }} />
       <Source
@@ -102,5 +106,5 @@ export default function Map({ ways }:{ ways: Ways }) {
         </Marker>
       )}
     </ReactMapGL>
-  );
+  ) : undefined;
 }

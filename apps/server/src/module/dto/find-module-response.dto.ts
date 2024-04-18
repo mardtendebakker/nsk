@@ -1,7 +1,14 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { ModuleName } from '../moduleName.type';
 
-type Config = { [key: string]: { value: string, sensitive?: boolean, required?: boolean } };
+export type Type = 'string' | 'hour' | 'multiSelect' | 'password';
+
+type Config = { [key: string]: {
+  value: string | string[],
+  required?: boolean,
+  type: Type,
+  options?: string[]
+} };
 
 export class FindModuleResponseDto {
   @ApiProperty()

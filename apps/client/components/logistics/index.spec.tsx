@@ -60,7 +60,21 @@ const mockAxios = {
   },
 };
 
+const mockRemoteConfig = {
+  state: {
+    config: {
+      logistics: {
+        apiKey: 'key',
+        maxHour: 18,
+        minHour: 8,
+        days: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'],
+      },
+    },
+  },
+};
+
 jest.mock('../../hooks/useAxios', () => () => mockAxios);
+jest.mock('../../hooks/useRemoteConfig', () => () => mockRemoteConfig);
 jest.mock('next/router', () => ({
   useRouter: () => mockRouter,
 }));

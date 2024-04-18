@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { module } from '@prisma/client';
-import { FindModuleResponseDto } from './dto/find-module-response.dto';
+import { FindModuleResponseDto, Type } from './dto/find-module-response.dto';
 import { ModulePaymentService } from '../module-payment/module-payment.service';
 import { ModuleRepository } from './module.repository';
 import { ModuleName } from './moduleName.type';
@@ -23,6 +23,13 @@ interface BlanccoConfig {
   apiKey: string;
 }
 
+interface LogisticsConfig {
+  apiKey: string;
+  maxHour: number;
+  minHour: number;
+  days: string[];
+}
+
 @Injectable()
 export class ModuleService {
   constructor(
@@ -42,8 +49,8 @@ export class ModuleService {
         id: m.id,
         name: m.name as ModuleName,
         price: m.price,
-        activeAt: payment?.activeAt || null,
-        expiresAt: payment?.expiresAt || null,
+        activeAt: payment?.activeAt,
+        expiresAt: payment?.expiresAt,
         active: dateNow > payment?.activeAt && dateNow < payment?.expiresAt,
         freeTrialUsed: !!payment,
         config: this.buildConfig(m),
@@ -72,6 +79,12 @@ export class ModuleService {
     return JSON.parse(result.config);
   }
 
+  async getLogisticsConfig(): Promise<LogisticsConfig> {
+    const result = await this.repository.findOne({ where: { name: 'logistics' } });
+
+    return JSON.parse(result.config);
+  }
+
   buildConfig(param: module) {
     const config = param.config ? JSON.parse(param.config) : {};
 
@@ -79,36 +92,61 @@ export class ModuleService {
       case 'blancco':
         return {
           apiUrl: {
-            value: config.apiUrl || null,
+            value: config.apiUrl,
             required: true,
+            type: 'string' as Type,
           },
           apiKey: {
-            value: config.apiKey || null,
-            sensitive: true,
+            value: config.apiKey,
             required: true,
+            type: 'password' as Type,
           },
         };
       case 'tracking':
         return {
           clientId: {
-            value: config.clientId || null,
-            sensitive: true,
+            value: config.clientId,
             required: true,
+            type: 'password' as Type,
           },
           clientSecret: {
-            value: config.clientSecret || null,
-            sensitive: true,
+            value: config.clientSecret,
             required: true,
+            type: 'password' as Type,
           },
           username: {
-            value: config.username || null,
-            sensitive: true,
+            value: config.username,
             required: true,
+            type: 'password' as Type,
           },
           password: {
-            value: config.password || null,
-            sensitive: true,
+            value: config.password,
             required: true,
+            type: 'password' as Type,
+          },
+        };
+      case 'logistics':
+        return {
+          apiKey: {
+            value: config.apiKey,
+            required: true,
+            type: 'password' as Type,
+          },
+          minHour: {
+            value: config.minHour,
+            required: true,
+            type: 'hour' as Type,
+          },
+          maxHour: {
+            value: config.maxHour,
+            required: true,
+            type: 'hour' as Type,
+          },
+          days: {
+            value: config.days,
+            required: true,
+            type: 'multiSelect' as Type,
+            options: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'],
           },
         };
       default:
