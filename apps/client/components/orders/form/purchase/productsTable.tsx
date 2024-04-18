@@ -82,6 +82,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
     formRepresentation,
     router,
     call,
+    orderId,
   });
 
   useEffect(() => {
@@ -229,7 +230,16 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
         }}
       />
       )}
-      {editProductId && <EditModal id={editProductId.toString()} onClose={() => setEditProductId(undefined)} onSubmit={() => setEditProductId(undefined)} />}
+      {editProductId && (
+      <EditModal
+        id={editProductId.toString()}
+        onClose={() => setEditProductId(undefined)}
+        onSubmit={() => {
+          defaultRefreshList();
+          setEditProductId(undefined);
+        }}
+      />
+      )}
     </>
   );
 }

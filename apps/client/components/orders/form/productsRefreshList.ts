@@ -6,6 +6,7 @@ export default function refreshList({
   formRepresentation,
   router,
   call,
+  orderId,
 }) {
   const params = new URLSearchParams();
 
@@ -23,7 +24,6 @@ export default function refreshList({
     'location',
     'locationLabel',
     'productStatus',
-    'orderId',
   ].forEach((filter) => {
     if (formRepresentation[filter].value || formRepresentation[filter].value === 0) {
       const value = formRepresentation[filter].value.toString();
@@ -37,6 +37,7 @@ export default function refreshList({
       take: rowsPerPage,
       skip: (page - 1) * rowsPerPage,
       ...paramsToSend,
+      orderId,
     },
   }).then(() => pushURLParams({ params, router })).catch(() => {});
 }
