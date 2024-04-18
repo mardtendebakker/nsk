@@ -76,7 +76,12 @@ export class AOrderService {
       where: {
         ...query.where,
         ...(this.type && { discr: this.type }),
-        ...(search && { order_nr: { contains: search } }),
+        ...(search && {
+          OR: [
+            { order_nr: { contains: search } },
+            { remarks: { contains: search } },
+          ],
+        }),
         ...(status && { status_id: { equals: status } }),
         ...this.getPartnerWhereInput({ createdBy, partner, email }),
       },

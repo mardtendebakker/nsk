@@ -136,6 +136,7 @@ const translation = {
   createProduct: 'Product genereren',
   searchByCustomerNameOrEmail: 'Zoek op klantnaam of e-mail',
   searchBySerialNumberOrNameOrAttr: 'Zoek op serienummer of naam of eigenschap',
+  searchByOrderNumberOrRemarks: 'Zoek op bestelnummer of opmerkingen',
   contact: 'Contact',
   bulkEmail: 'Bulk email',
   invalidEmail: 'Ongeldig emailadres',
