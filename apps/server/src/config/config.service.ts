@@ -13,10 +13,10 @@ export class ConfigService {
 
     return {
       logistics: {
-        apiKey: config.apiKey,
-        maxHour: config.maxHour,
-        minHour: config.minHour,
-        days: config.days,
+        apiKey: config?.apiKey,
+        maxHour: config?.maxHour,
+        minHour: config?.minHour,
+        days: config?.days,
       },
     };
   }
