@@ -3,9 +3,9 @@ import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
-  title: 'My Site',
-  tagline: 'Dinosaurs are cool',
-  favicon: 'img/favicon.ico',
+  title: 'Nexxus',
+  tagline: 'Documentation of nexxus',
+  favicon: 'img/logo.jpg',
 
   // Set the production url of your site here
   url: 'https://your-docusaurus-site.example.com',
@@ -58,25 +58,29 @@ const config: Config = {
     // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
     navbar: {
-      title: 'My Site',
+      title: 'Nexxus',
       logo: {
         alt: 'My Site Logo',
-        src: 'img/logo.svg',
+        src: 'img/logo.jpg',
       },
       items: [
+        {to: '/docs/introduction', label: 'Introduction', position: 'left'},
         {
           type: 'docSidebar',
           sidebarId: 'tutorialSidebar',
           position: 'left',
-          label: 'Tutorial',
+          label: 'Order',
         },
-        {to: '/blog', label: 'Blog', position: 'left'},
+        
+        
+        
         {
           href: 'https://github.com/facebook/docusaurus',
           label: 'GitHub',
           position: 'right',
         },
       ],
+      
     },
     footer: {
       style: 'dark',
@@ -85,8 +89,24 @@ const config: Config = {
           title: 'Docs',
           items: [
             {
-              label: 'Tutorial',
-              to: '/docs/intro',
+              label: 'Order',
+              to: '/docs/category/order',
+            },
+            {
+              label: 'Stocks',
+              to: '/docs/category/stocks',
+            },
+            {
+              label: 'Contact',
+              to: '/docs/category/contact',
+            },
+            {
+              label: 'Logistics',
+              to: '/docs/category/logistic',
+            },
+            {
+              label: 'Admin',
+              to: '/docs/category/Admin',
             },
           ],
         },
@@ -95,15 +115,15 @@ const config: Config = {
           items: [
             {
               label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+              href: '/',
             },
             {
               label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
+              href: '/',
             },
             {
               label: 'Twitter',
-              href: 'https://twitter.com/docusaurus',
+              href: '/',
             },
           ],
         },
@@ -111,12 +131,12 @@ const config: Config = {
           title: 'More',
           items: [
             {
-              label: 'Blog',
-              to: '/blog',
+              label: '???',
+              to: '/',
             },
             {
               label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
+              href: 'https://github.com/mardtendebakker/nsk',
             },
           ],
         },
