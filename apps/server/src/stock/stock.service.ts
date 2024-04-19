@@ -33,6 +33,7 @@ import { UserLabelPrint } from '../print/types/user-label-print';
 import { CompanyLabelPrint } from '../print/types/company-label-print';
 import { ProductAttributeUpdateMany } from './types/update-atrribute';
 import { AttributeGetPayload } from '../attribute/types/attribute-get-payload';
+import { UpdateManyProductResponseDto } from './dto/update-many-product-response.dto';
 
 export class StockService {
   constructor(
@@ -51,7 +52,8 @@ export class StockService {
     return processProdcut.run();
   }
 
-  async findAll(query: FindManyDto, email?: string) {
+  async findAll(query: FindManyDto, email?: string)
+    : Promise<{ count: number; data: ProcessedStock[]; }> {
     const {
       where,
       entityStatus,
@@ -141,7 +143,7 @@ export class StockService {
     if (orderBy) {
       productOrderBy.push(orderBy);
     }
-    productOrderBy.push({ id: 'desc' });
+    productOrderBy.push({ id: orderBy?.id ? orderBy.id : 'desc' });
 
     const result = await this.repository.findAll({
       ...restQuery,
@@ -327,12 +329,15 @@ export class StockService {
     return this.repository.deleteOne(id);
   }
 
-  async updateMany(updateManyProductDto: UpdateManyProductDto) {
+  async updateMany(updateManyProductDto: UpdateManyProductDto): Promise<UpdateManyProductResponseDto> {
     const {
       ids, product: {
         locationId, locationLabel: locationLabelBody, productTypeId, entityStatus, orderUpdatedAt,
       },
     } = updateManyProductDto;
+
+    const totalUpdated = updateManyProductDto.ids.length;
+    if (totalUpdated === 0) return Promise.resolve({ affected: 0 });
 
     let locationLabelId: number;
 
@@ -351,14 +356,52 @@ export class StockService {
           id: { in: ids },
         },
         data: {
-          location_id: locationId,
-          location_label_id: locationLabelId,
-          type_id: productTypeId,
-          entity_status: entityStatus,
-          order_updated_at: orderUpdatedAt,
+          ...(locationId && { location_id: locationId }),
+          ...(locationLabelId && { location_label_id: locationLabelId }),
+          ...(entityStatus && { entity_status: entityStatus }),
+          ...(orderUpdatedAt && { order_updated_at: orderUpdatedAt }),
         },
       });
     }
+
+    return { affected: totalUpdated };
+  }
+
+  async archiveAllSoldOut() {
+    const take = this.configService.get<number>('MAX_RELATION_QUERY_LIMIT') || 100;
+    let cursor;
+    let hasNextPage = true;
+
+    const archiveManyProductDto: UpdateManyProductDto = {
+      ids: [],
+      product: {
+        entityStatus: EntityStatus.Archived,
+      },
+    };
+
+    while (hasNextPage) {
+      // eslint-disable-next-line no-await-in-loop
+      const { data } = await this.findAll({
+        take,
+        skip: cursor ? 1 : 0,
+        cursor: cursor ? { id: cursor } : undefined,
+        orderBy: { id: 'asc' },
+      });
+
+      for (const product of data) {
+        if (product.purch !== 0 && product.purch === product.sold) {
+          archiveManyProductDto.ids.push(product.id);
+        }
+      }
+
+      if (data.length < take) {
+        hasNextPage = false;
+      } else {
+        cursor = data[data.length - 1].id;
+      }
+    }
+
+    return this.updateMany(archiveManyProductDto);
   }
 
   async getAllPublicTypes() {

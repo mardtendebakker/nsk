@@ -1,6 +1,6 @@
 import { ApiResponseProperty } from '@nestjs/swagger';
 
-export class UpdateManyResponseProductDto {
+export class UpdateManyProductResponseDto {
   @ApiResponseProperty()
-    count: number;
+    affected: number;
 }
