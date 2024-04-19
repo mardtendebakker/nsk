@@ -124,6 +124,7 @@ export default function ProductsTable({ orderId, refreshOrder }:{ orderId: strin
     formRepresentation,
     router,
     call,
+    orderId,
   });
 
   useEffect(() => {
