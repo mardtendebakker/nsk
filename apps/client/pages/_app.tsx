@@ -19,6 +19,7 @@ function App({ Component, pageProps }: AppProps) {
       <ThemeProvider>
         <Head>
           <link href="https://fonts.cdnfonts.com/css/inter" rel="stylesheet" />
+          <link rel="icon" href="/assets/favicon.ico" sizes="any" />
           <title>NSK</title>
         </Head>
         <TopLinearProgress />
