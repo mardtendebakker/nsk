@@ -6,6 +6,7 @@ import {
 } from 'class-validator';
 import { CreatePickupUncheckedWithoutAorderInputDto } from '../../calendar/pickup/dto/create-pickup-unchecked-without-aorder-input.dto';
 import { CreateRepairUncheckedWithoutAOrderInputDto } from '../../repair/dto/create-repair-unchecked-without-aorder-input.dt';
+import { CreateDeliveryUncheckedWithoutAorderInputDto } from '../../calendar/delivery/dto/create-delivery-unchecked-without-aorder-input.dto';
 
 export class PrismaAOrderCreateInputDto {
   @ApiPropertyOptional()
@@ -50,20 +51,6 @@ export class PrismaAOrderCreateInputDto {
   @IsInt()
   @Type(() => Number)
   @ValidateIf((_, value) => value !== undefined)
-    delivery_type?: number;
-
-  @ApiPropertyOptional()
-    delivery_date?: string | Date;
-
-  @ApiPropertyOptional()
-  @IsString()
-  @ValidateIf((_, value) => value !== undefined)
-    delivery_instructions?: string;
-
-  @ApiPropertyOptional()
-  @IsInt()
-  @Type(() => Number)
-  @ValidateIf((_, value) => value !== undefined)
     status_id?: number;
 
   @ApiPropertyOptional()
@@ -81,6 +68,10 @@ export class PrismaAOrderCreateInputDto {
   @ApiPropertyOptional()
   @Type(() => CreatePickupUncheckedWithoutAorderInputDto)
     pickup?: CreatePickupUncheckedWithoutAorderInputDto;
+
+  @ApiPropertyOptional()
+  @Type(() => CreateDeliveryUncheckedWithoutAorderInputDto)
+    delivery?: CreateDeliveryUncheckedWithoutAorderInputDto;
 
   @ApiPropertyOptional()
     afile?: Prisma.afileCreateNestedManyWithoutAorderInput;

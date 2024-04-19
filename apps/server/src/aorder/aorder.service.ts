@@ -15,7 +15,7 @@ import { AOrderPayloadRelation } from './types/aorder-payload-relation';
 import { AOrderFindManyReturnType } from './types/aorder-find-many-return-type';
 
 type CommonAOrderDto = Partial<Omit<CreateAOrderDto, 'pickup' | 'repair'>>;
-type CommonAOrderInput = Partial<Omit<Prisma.aorderCreateInput, 'pickup' | 'repair'>>;
+type CommonAOrderInput = Partial<Omit<Prisma.aorderCreateInput, 'pickup' | 'repair' | 'delivery'>>;
 
 export class AOrderService {
   constructor(
@@ -65,7 +65,7 @@ export class AOrderService {
             },
           },
         }),
-        delivery_date: true,
+        delivery: true,
         contact_aorder_supplier_idTocontact: {
           select: this.getContactSelect(),
         },
@@ -121,7 +121,9 @@ export class AOrderService {
       throw new BadRequestException('The operation requires a specific order type');
     }
 
-    const { pickup, repair, ...commonDto } = aorderDto;
+    const {
+      pickup, repair, delivery, ...commonDto
+    } = aorderDto;
 
     const params: Prisma.aorderCreateArgs = {
       data: {
@@ -130,6 +132,7 @@ export class AOrderService {
         discr: this.type,
         order_date: new Date(),
         ...(pickup && { pickup: { create: { ...pickup } } }),
+        ...(delivery && { delivery: { create: { ...delivery } } }),
         ...(repair && { repair: { create: { ...repair } } }),
       },
     };
@@ -158,11 +161,14 @@ export class AOrderService {
   }
 
   async update(id: number, aorderDto: UpdateAOrderDto) {
-    const { pickup, repair, ...commonDto } = aorderDto;
+    const {
+      pickup, repair, delivery, ...commonDto
+    } = aorderDto;
 
     const data: Prisma.aorderUpdateInput = {
       ...await this.processCreateOrUpdateOrderInput(commonDto),
       ...(pickup && { pickup: { upsert: { update: { ...pickup }, create: { ...pickup } } } }),
+      ...(delivery && { delivery: { upsert: { update: { ...delivery }, create: { ...delivery } } } }),
       ...(repair && { repair: { upsert: { update: { ...repair }, create: { ...repair } } } }),
     };
 
@@ -357,6 +363,7 @@ export class AOrderService {
     if (this.type !== AOrderDiscrimination.PURCHASE) {
       include = {
         ...include,
+        delivery: true,
         afile: {
           select: {
             id: true,

@@ -190,7 +190,7 @@ export default function List({
           const contact = type === 'purchase' ? order.contact_aorder_supplier_idTocontact : order.contact_aorder_customer_idTocontact;
           const deliveryOrPickupDate = type === 'purchase'
             ? order?.pickup?.real_pickup_date
-            : order.delivery_date;
+            : order?.delivery?.date;
 
           return (
             <TableRow
