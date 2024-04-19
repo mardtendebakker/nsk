@@ -134,6 +134,7 @@ const translation = {
   createProduct: 'ایجاد کردن محصول',
   searchByCustomerNameOrEmail: 'جستوجو با نام مشتری یا ایمبل',
   searchBySerialNumberOrNameOrAttr: 'جستوجو با شماره سریال یا نام یا مشخصات',
+  searchByOrderNumberOrRemarks: 'جستجو بر اساس شماره سفارش یا اظهارات',
   contact: 'مخاطب',
   bulkEmail: 'ایمیل همگانی',
   invalidEmail: 'ایمیل نا معتبر',

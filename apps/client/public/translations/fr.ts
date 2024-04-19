@@ -127,6 +127,7 @@ const translation = {
   createProduct: 'Créer un produit',
   searchByCustomerNameOrEmail: 'Rechercher par nom de client ou email',
   searchBySerialNumberOrNameOrAttr: 'Rechercher par numéro de série ou nom ou attribut',
+  searchByOrderNumberOrRemarks: 'Recherche par numéro de commande ou remarques',
   contact: 'Contact',
   bulkEmail: 'Email en masse',
   invalidEmail: 'Adresse email invalide',
