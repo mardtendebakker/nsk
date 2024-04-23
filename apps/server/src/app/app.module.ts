@@ -4,7 +4,6 @@ import { CognitoAuthModule } from '@nestjs-cognito/auth';
 import { DashboardModule } from '../dashboard/dashboard.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AuthModule } from '../auth/auth.module';
 import { UserModule } from '../user/user.module';
 import { SaleModule } from '../sale/sale.module';
 import { PurchaseModule } from '../purchase/purchase.module';
@@ -34,6 +33,7 @@ import { ModuleModule } from '../module/module.module';
 import { PaymentModule } from '../payment/payment.module';
 import { ModulePaymentModule } from '../module-payment/module-payment.module';
 import { ConfigModule as MyConfigModule } from '../config/config.module';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [

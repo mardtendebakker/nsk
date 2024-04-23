@@ -1,6 +1,4 @@
-import {
-  BadRequestException, Injectable, UnauthorizedException, UnprocessableEntityException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
   AuthenticationDetails,
@@ -16,12 +14,11 @@ import { EmailOrUsernameDto } from './dto/email-or-username.dto';
 import { RefreshSesionRequestDto } from './dto/refresh-session-request.dto';
 import { UserAuthenticationRequestDto } from './dto/user-authentication-request.dto';
 import { UserRegisterRequestDto } from './dto/user-register-request.dto';
-import { AdminUserService } from '../admin/user/user.service';
+import { AdminUserService } from '../../admin/user/user.service';
 
 @Injectable()
-export class AuthService {
+export class CognitoService {
   private userPool: CognitoUserPool;
-
   constructor(
     private readonly congigService: ConfigService,
     private readonly adminUserService: AdminUserService,
@@ -47,63 +44,67 @@ export class AuthService {
       Username: username,
       Password: password,
     });
-
+    
     const userData = {
       Username: username,
       Pool: this.userPool,
     };
 
     const newUser = new CognitoUser(userData);
-
-    return new Promise((resolve, reject) => newUser.authenticateUser(authenticationDetails, {
-      onSuccess: (result) => {
-        resolve(result);
-      },
-      onFailure: (err) => {
-        reject(new UnauthorizedException(err.message));
-      },
-      newPasswordRequired: async () => {
-        await this.adminUserService.setUserPassword({
-          username,
-          password,
-          permanent: true,
-        });
-        await this.adminUserService.verifyEmail({
-          username,
-        });
-        // reAuthenticateUser
-        return newUser.authenticateUser(authenticationDetails, {
-          onSuccess: (result) => {
-            resolve(result);
-          },
-          onFailure: (err) => {
-            reject(new UnauthorizedException(err.message));
-          },
-        });
-      },
-    }));
+    
+    return new Promise((resolve, reject) => {
+      return newUser.authenticateUser(authenticationDetails, {
+        onSuccess: result => {
+          resolve(result);
+        },
+        onFailure: err => {
+          reject(new UnauthorizedException(err.message));
+        },
+        newPasswordRequired: async () => {
+          await this.adminUserService.setUserPassword({
+            username: username,
+            password: password,
+            permanent: true
+          });
+          await this.adminUserService.verifyEmail({
+            username: username,
+          });
+          // reAuthenticateUser
+          return newUser.authenticateUser(authenticationDetails, {
+            onSuccess: result => {
+              resolve(result);
+            },
+            onFailure: err => {
+              reject(new UnauthorizedException(err.message));
+            },
+          });
+        },
+      });
+    });
   }
 
   signUp(registerRequest: UserRegisterRequestDto) {
     const { username, email, password } = registerRequest;
-    return new Promise((resolve, reject) => this.userPool.signUp(
-      username,
-      password,
-      [new CognitoUserAttribute({ Name: 'email', Value: email })],
-      null,
-      (err, result) => {
-        if (err) {
-          reject(new BadRequestException(err.message));
-        } else {
-          resolve(result.user);
-        }
-      },
-    ));
+    return new Promise((resolve, reject) => {
+      return this.userPool.signUp(
+        username,
+        password,
+        [new CognitoUserAttribute({ Name: 'email', Value: email })],
+        null,
+        (err, result) => {
+          if (err) {
+            reject(new BadRequestException(err.message));
+          } else {
+            resolve(result.user);
+          }
+        },
+      );
+    });
   }
 
   async confirmRegistration(confirmationRegistrationRequest: ConfirmRegistrationRequestDto) {
     const { email, code } = confirmationRegistrationRequest;
-    if (!email.toLowerCase().endsWith('@copiatek.nl')) {
+    if (!email.toLowerCase().endsWith("@copiatek.nl")) {
       throw new UnprocessableEntityException('to activate your user, please contact copiatek.nl');
     }
 
@@ -112,19 +113,21 @@ export class AuthService {
       Username: username,
       Pool: this.userPool,
     };
-
+    
     const user = new CognitoUser(userData);
-    return new Promise((resolve, reject) => user.confirmRegistration(
-      code,
-      true,
-      (err, result) => {
-        if (err) {
-          reject(new BadRequestException(err.message));
-        } else {
-          resolve(result);
+    return new Promise((resolve, reject) => {
+      return user.confirmRegistration(
+        code,
+        true,
+        (err, result) => {
+          if (err) {
+            reject(new BadRequestException(err.message));
+          } else {
+            resolve(result);
+          }
         }
-      },
-    ));
+      );
+    });
   }
 
   resendConfirmationCode(emailOrUsernameDto: EmailOrUsernameDto) {
@@ -134,18 +137,20 @@ export class AuthService {
       Username: emailOrUsername,
       Pool: this.userPool,
     };
-
+    
     const user = new CognitoUser(userData);
 
-    return new Promise((resolve, reject) => user.resendConfirmationCode(
-      (err, result) => {
-        if (err) {
-          reject(new BadRequestException(err.message));
-        } else {
-          resolve(result);
+    return new Promise((resolve, reject) => {
+      return user.resendConfirmationCode(
+        (err, result) => {
+          if (err) {
+            reject(new BadRequestException(err.message));
+          } else {
+            resolve(result);
+          }
         }
-      },
-    ));
+      );
+    });
   }
 
   refreshSession(refreshSessionRequest: RefreshSesionRequestDto) {
@@ -154,19 +159,21 @@ export class AuthService {
       Username: emailOrUsername,
       Pool: this.userPool,
     };
-
+    
     const user = new CognitoUser(userData);
-
-    return new Promise((resolve, reject) => user.refreshSession(
-      new CognitoRefreshToken({ RefreshToken: token }),
-      (err, result) => {
-        if (err) {
-          reject(new BadRequestException(err.message));
-        } else {
-          resolve(result);
+    
+    return new Promise((resolve, reject) => {
+      return user.refreshSession(
+        new CognitoRefreshToken({ RefreshToken: token }),
+        (err, result) => {
+          if (err) {
+            reject(new BadRequestException(err.message));
+          } else {
+            resolve(result);
+          }
         }
-      },
-    ));
+      );
+    });
   }
 
   forgotPassword(emailOrUsernameDto: EmailOrUsernameDto) {
@@ -176,17 +183,19 @@ export class AuthService {
       Username: emailOrUsername,
       Pool: this.userPool,
     };
-
+    
     const user = new CognitoUser(userData);
 
-    return new Promise((resolve, reject) => user.forgotPassword({
-      onSuccess: (result) => {
-        resolve(result);
-      },
-      onFailure: (err) => {
-        reject(new BadRequestException(err.message));
-      },
-    }));
+    return new Promise((resolve, reject) => {
+      return user.forgotPassword({
+        onSuccess: result => {
+          resolve(result);
+        },
+        onFailure: err => {
+          reject(new BadRequestException(err.message));
+        },
+      });
+    });
   }
 
   confirmPassword(confirmPasswordRequestDto: ConfirmPasswordRequestDto) {
@@ -196,16 +205,18 @@ export class AuthService {
       Username: emailOrUsername,
       Pool: this.userPool,
     };
-
+    
     const user = new CognitoUser(userData);
 
-    return new Promise((resolve, reject) => user.confirmPassword(verificationCode, newPassword, {
-      onSuccess: (result) => {
-        resolve(result);
-      },
-      onFailure: (err) => {
-        reject(new BadRequestException(err.message));
-      },
-    }));
+    return new Promise((resolve, reject) => {
+      return user.confirmPassword(verificationCode, newPassword, {
+        onSuccess: result => {
+          resolve(result);
+        },
+        onFailure: err => {
+          reject(new BadRequestException(err.message));
+        },
+      });
+    });
   }
 }

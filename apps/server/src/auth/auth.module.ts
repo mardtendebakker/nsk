@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { AuthController } from './auth.controller';
-import { AdminUserService } from '../admin/user/user.service';
+import { CognitoModule } from '@nestjs-cognito/core';
+import { LocalModule } from './local/local.module';
 
 @Module({
-  providers: [AuthService, AdminUserService],
-  controllers: [AuthController],
-  exports: [AuthService],
+  imports: [
+    CognitoModule,
+    LocalModule,
+  ],
 })
 export class AuthModule {}

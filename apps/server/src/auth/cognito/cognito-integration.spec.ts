@@ -1,10 +1,10 @@
 import * as request from 'supertest';
 import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { AuthService } from './auth.service';
-import { AuthModule } from './auth.module';
+import { CognitoService } from './cognito.service';
+import { CognitoModule } from './cognito.module';
 import { ConfigService } from '@nestjs/config';
-import { AdminUserService } from '../admin/user/user.service';
+import { AdminUserService } from '../../admin/user/user.service';
 
 describe('Auth', () => {
   let app: INestApplication;
@@ -22,7 +22,7 @@ describe('Auth', () => {
     "clockDrift": 0
   }
 
-  const authService = { 
+  const cognitoService = { 
     authenticateUser: () => cognitoUserSession,
   };
 
@@ -33,7 +33,7 @@ describe('Auth', () => {
   beforeAll(async () => {
     const moduleFixture = await Test.createTestingModule({
       imports: [
-        AuthModule,
+        CognitoModule,
       ],
       providers: [
         {
@@ -52,8 +52,8 @@ describe('Auth', () => {
         },
       ],
     })
-    .overrideProvider(AuthService)
-    .useValue(authService)
+    .overrideProvider(CognitoService)
+    .useValue(cognitoService)
     .overrideProvider(AdminUserService)
     .useValue(adminUserService)
     .compile();
@@ -64,13 +64,13 @@ describe('Auth', () => {
 
   it(`POST /login`, () => {
     return request(app.getHttpServer())
-      .post('/auth/login')
+      .post('/auth/cognito/login')
       .send({
         emailOrUsername: 'info@nexuus.com',
         password: 'p@sswo0rd!',
       })
       .expect(200)
-      .expect(authService.authenticateUser());
+      .expect(cognitoService.authenticateUser());
   });
 
   afterAll(async () => {
