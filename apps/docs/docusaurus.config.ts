@@ -64,18 +64,8 @@ const config: Config = {
         src: 'img/logo.jpg',
       },
       items: [
-        {to: '/docs/introduction', label: 'Introduction', position: 'left'},
         {
-          type: 'docSidebar',
-          sidebarId: 'tutorialSidebar',
-          position: 'left',
-          label: 'Order',
-        },
-        
-        
-        
-        {
-          href: 'https://github.com/facebook/docusaurus',
+          href: 'https://github.com/mardtendebakker/nsk',
           label: 'GitHub',
           position: 'right',
         },
