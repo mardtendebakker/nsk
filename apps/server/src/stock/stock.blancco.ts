@@ -103,7 +103,7 @@ export class StockBlancco {
         productTypeName = BlanccoProductTypes.COMPUTER;
       } else if (['Laptop', 'Notebook', 'Convertible'].includes(chassisType)) {
         productTypeName = BlanccoProductTypes.LAPTOP;
-      } else if (['Server', 'Rack Mount Chassis'].includes(chassisType)) {
+      } else if (['Server', 'Rack Mount Chassis', 'Main Server Chassis'].includes(chassisType)) {
         productTypeName = BlanccoProductTypes.SERVER;
       }
     }
