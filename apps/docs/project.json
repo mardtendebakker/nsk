@@ -6,7 +6,9 @@
   "targets": {
     "build": {
       "executor": "nx:run-commands",
+      "out-dir": ["{options.out-dir}"],
       "options": {
+        "out-dir": "../../dist/apps/docs",
         "command": "docusaurus build",
         "cwd": "apps/docs"
       }
