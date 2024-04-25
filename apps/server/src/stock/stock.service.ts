@@ -356,9 +356,9 @@ export class StockService {
           id: { in: ids },
         },
         data: {
-          ...(locationId && { location_id: locationId }),
-          ...(locationLabelId && { location_label_id: locationLabelId }),
-          ...(entityStatus && { entity_status: entityStatus }),
+          ...(Number.isFinite(locationId) && { location_id: locationId }),
+          ...(Number.isFinite(locationLabelId) && { location_label_id: locationLabelId }),
+          ...(Number.isFinite(entityStatus) && { entity_status: entityStatus }),
           ...(orderUpdatedAt && { order_updated_at: orderUpdatedAt }),
         },
       });

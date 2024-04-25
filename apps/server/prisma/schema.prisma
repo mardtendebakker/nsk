@@ -47,8 +47,8 @@ model aorder {
   other_aorder                        aorder[]        @relation("aorderToaorder")
   order_status                        order_status?   @relation(fields: [status_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_416119D96BF700BD")
   contact_aorder_customer_idTocontact contact?        @relation("aorder_customer_idTocontact", fields: [customer_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_416119D99395C3F3")
-  pickup                              pickup?
   delivery                            delivery?
+  pickup                              pickup?
   product_order                       product_order[]
   repair                              repair?
 
@@ -120,8 +120,8 @@ model fos_user {
   license_plate         String?         @db.VarChar(50)
   emailCanonical        String          @db.VarChar(255)
   partner_id            Int?
-  pickup                pickup[]
   delivery              delivery[]
+  pickup                pickup[]
   user_location         user_location[]
 }
 
@@ -410,14 +410,14 @@ model module {
 }
 
 model delivery {
-  id                    Int       @id @default(autoincrement())
-  order_id              Int?      @unique(map: "uniq_delivery_order_id")
-  logistics_id          Int?
-  type                  Int?
-  date                  DateTime? @db.DateTime(0)
-  instructions          String?   @db.LongText
-  fos_user              fos_user? @relation(fields: [logistics_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_delivery_logistics")
-  aorder                aorder?   @relation(fields: [order_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_delivery_aorder")
+  id           Int       @id @default(autoincrement())
+  order_id     Int?      @unique(map: "uniq_delivery_order_id")
+  logistics_id Int?
+  type         Int?
+  date         DateTime? @db.DateTime(0)
+  instructions String?   @db.LongText
+  aorder       aorder?   @relation(fields: [order_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_delivery_aorder")
+  fos_user     fos_user? @relation(fields: [logistics_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_delivery_logistics")
 
   @@index([logistics_id], map: "idx_delivery_logistic")
   @@index([date], map: "idx_date")
