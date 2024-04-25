@@ -90,7 +90,7 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
     discount: formRepresentation.discount.value,
     is_gift: formRepresentation.isGift.value,
     delivery: {
-      date: formRepresentation.deliveryDate.value,
+      date: formRepresentation.deliveryDate.value || null,
       type: formRepresentation.deliveryType.value,
       instructions: formRepresentation.deliveryInstructions.value,
       logistics_id: formRepresentation.logisticId.value || null,
