@@ -49,4 +49,7 @@ export class AOrderEntity implements aorder {
 
   @ApiPropertyOptional()
     delivery_instructions: string | null;
+
+  @ApiPropertyOptional()
+    logistics_id: number | null;
 }

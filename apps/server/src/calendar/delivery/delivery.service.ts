@@ -17,7 +17,7 @@ export class DeliveryService {
         id: true,
         order_nr: true,
         order_status: true,
-        delivery_date: true,
+        delivery: true,
         contact_aorder_customer_idTocontact: true,
         product_order: {
           select: {
@@ -33,9 +33,11 @@ export class DeliveryService {
       },
       where: {
         discr: AOrderDiscrimination.SALE,
-        delivery_date: {
-          gte: query.startsAt,
-          lte: query.endsAt,
+        delivery: {
+          date: {
+            gte: query.startsAt,
+            lte: query.endsAt,
+          },
         },
       },
       skip: query.skip,
@@ -46,13 +48,13 @@ export class DeliveryService {
       ({
         id,
         order_nr,
-        delivery_date,
+        delivery,
         order_status,
         product_order,
         contact_aorder_customer_idTocontact,
       }) => ({
         id,
-        event_date: delivery_date,
+        event_date: delivery?.date,
         event_title: product_order.map(({ product }) => product)?.[0]?.name,
         order: {
           id,

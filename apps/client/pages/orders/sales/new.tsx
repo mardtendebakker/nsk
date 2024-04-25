@@ -33,9 +33,9 @@ export function initFormState(trans, order?: Order) {
     totalPrice: { value: order?.totalPrice },
     discount: { value: order?.discount },
     isGift: { value: !!order?.is_gift },
-    deliveryDate: { value: order?.delivery_date, required: true },
-    deliveryType: { value: order?.delivery_type, required: true },
-    deliveryInstructions: { value: order?.delivery_instructions },
+    deliveryDate: { value: order?.delivery?.date },
+    deliveryType: { value: order?.delivery?.type, required: true },
+    deliveryInstructions: { value: order?.delivery?.instructions },
     customerId: {
       validator: (formRepresentation: FormRepresentation) => {
         if (!formRepresentation.newCustomer.value && formRepresentation.customerId.value == undefined) {
@@ -61,6 +61,9 @@ export function initFormState(trans, order?: Order) {
         }
       },
     },
+    logisticId: {
+      value: order?.delivery?.logistics_id,
+    },
     companyKvkNr: {},
     companyIsPartner: { value: false },
     companyPartner: {},
@@ -79,31 +82,34 @@ export function initFormState(trans, order?: Order) {
 
 export function formRepresentationToBody(formRepresentation: FormRepresentation): object {
   const payload: any = {
-    order_nr: formRepresentation.orderNr.value || undefined,
-    order_date: formRepresentation.orderDate.value || undefined,
-    status_id: formRepresentation.orderStatus.value || undefined,
+    order_nr: formRepresentation.orderNr.value,
+    order_date: formRepresentation.orderDate.value,
+    status_id: formRepresentation.orderStatus.value,
     remarks: formRepresentation.remarks.value,
     transport: formRepresentation.transport.value,
     discount: formRepresentation.discount.value,
     is_gift: formRepresentation.isGift.value,
-    delivery_date: formRepresentation.deliveryDate.value || undefined,
-    delivery_type: formRepresentation.deliveryType.value,
-    delivery_instructions: formRepresentation.deliveryInstructions.value || undefined,
+    delivery: {
+      date: formRepresentation.deliveryDate.value,
+      type: formRepresentation.deliveryType.value,
+      instructions: formRepresentation.deliveryInstructions.value,
+      logistics_id: formRepresentation.logisticId.value || null,
+    },
   };
 
   if (!formRepresentation.newCustomer.value) {
-    payload.customer_id = formRepresentation.customerId.value || undefined;
+    payload.customer_id = formRepresentation.customerId.value;
   } else {
     payload.customer = {
-      name: formRepresentation.name.value || undefined,
-      email: formRepresentation.email.value || undefined,
-      phone: formRepresentation.phone.value || undefined,
-      street: formRepresentation.street.value || undefined,
-      street_extra: formRepresentation.extraStreet.value || undefined,
-      city: formRepresentation.city.value || undefined,
-      zip: formRepresentation.zipcode.value || undefined,
-      state: formRepresentation.state.value || undefined,
-      country: formRepresentation.country.value || undefined,
+      name: formRepresentation.name.value,
+      email: formRepresentation.email.value,
+      phone: formRepresentation.phone.value,
+      street: formRepresentation.street.value,
+      street_extra: formRepresentation.extraStreet.value,
+      city: formRepresentation.city.value,
+      zip: formRepresentation.zipcode.value,
+      state: formRepresentation.state.value,
+      country: formRepresentation.country.value,
     };
 
     if (!formRepresentation.newCompany.value) {
