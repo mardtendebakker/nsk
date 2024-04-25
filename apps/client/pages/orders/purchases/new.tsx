@@ -88,7 +88,7 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
     is_gift: formRepresentation.isGift.value,
     pickup: {
       logistics_id: formRepresentation.logisticId.value || null,
-      real_pickup_date: formRepresentation.pickupDate.value,
+      real_pickup_date: formRepresentation.pickupDate.value || null,
     },
   };
 
