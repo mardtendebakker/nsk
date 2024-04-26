@@ -24,9 +24,9 @@ export class NormalPrinter extends IOrderPrinter {
       transport: aorder.transport ? this.currencyFormat.format(aorder.transport) : '€ 0.00',
       discount: aorder.discount ? this.currencyFormat.format(aorder.discount) : '€ 0.00',
       isGift: aorder.is_gift ? 'YES' : 'NO',
-      delivery_date: aorder.delivery.date ? format(aorder.delivery.date, 'dd-MM-yyyy') : 'Unknown',
-      delivery_type: this.getDeliveryTypeLabel(aorder.delivery.type),
-      delivery_instructions: aorder.delivery.instructions ?? 'None',
+      delivery_date: aorder.delivery?.date ? format(aorder.delivery.date, 'dd-MM-yyyy') : 'Unknown',
+      delivery_type: this.getDeliveryTypeLabel(aorder.delivery?.type),
+      delivery_instructions: aorder.delivery?.instructions ?? 'None',
       ...(aorder.pickup && {
         pickup: {
           real_pickup_date: aorder.pickup.real_pickup_date ? format(aorder.pickup.real_pickup_date, 'dd-MM-yyyy') : 'Unknown',
