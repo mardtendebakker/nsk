@@ -48,7 +48,7 @@ export default function DataSourcePicker(
     fetchWhileDisabled?: boolean
   },
 ) {
-  const { data, call } = useAxios<undefined | object[]>('get', path, { showErrorMessage: false });
+  const { data, call, cancelCalls } = useAxios<undefined | object[]>('get', path, { showErrorMessage: false });
   const debouncedCall = useCallback(debounce(call), []);
   const [currentValue, setCurrentValue] = useState(null);
 
@@ -66,6 +66,8 @@ export default function DataSourcePicker(
     if (disabled && !fetchWhileDisabled) {
       return;
     }
+
+    cancelCalls();
 
     call({ params: { ...params, ids } }).then((response: AxiosResponse) => {
       if (response?.data) {

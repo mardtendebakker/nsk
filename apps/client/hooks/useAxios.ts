@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useSnackbar } from 'notistack';
 import { trans } from 'itranslator';
+import { CancelTokenSource } from 'axios';
 import axios, {
   AxiosResponse, AxiosPromise, CancelToken, AxiosError, CanceledError,
 } from '../utils/axios';
@@ -39,15 +40,20 @@ const useAxios = <Data>(
     response?: AxiosResponse,
     error?: AxiosError,
     performing: boolean,
+    cancelCalls: () => void,
     call: Call,
   } => {
   const [response, setResponse] = useState<AxiosResponse>();
   const [error, setError] = useState<AxiosError>();
   const [performing, setPerforming] = useState<boolean>(false);
   const { enqueueSnackbar } = useSnackbar();
-  const source = useRef(CancelToken.source());
+  const axiosCancelTokens = useRef<CancelTokenSource[]>([]);
 
-  useEffect(() => source.current.cancel, []);
+  useEffect(() => () => {
+    axiosCancelTokens.current.forEach((element) => {
+      element.cancel();
+    });
+  }, []);
 
   async function call(
     explicitPath: string,
@@ -57,9 +63,11 @@ const useAxios = <Data>(
     headers?: object,
   )
     : AxiosPromise<AxiosResponse> {
+    const cancelToken = CancelToken.source();
+    axiosCancelTokens.current.push(cancelToken);
     if (method === POST || method === PATCH || method === PUT) {
       return axios[method](explicitPath, body, {
-        cancelToken: source.current.token,
+        cancelToken: cancelToken.token,
         params: { ...defaultParams, ...params },
         responseType,
         headers,
@@ -67,7 +75,7 @@ const useAxios = <Data>(
     }
 
     return axios[method](explicitPath, {
-      cancelToken: source.current.token, params: { ...defaultParams, ...params }, data: body, responseType,
+      cancelToken: cancelToken.token, params: { ...defaultParams, ...params }, data: body, responseType,
     });
   }
 
@@ -107,6 +115,13 @@ const useAxios = <Data>(
     response,
     error,
     performing,
+    cancelCalls: () => {
+      if (performing) {
+        axiosCancelTokens.current.forEach((element) => {
+          element.cancel();
+        });
+      }
+    },
     /** @throws {Error} */
     call: async (
       {
