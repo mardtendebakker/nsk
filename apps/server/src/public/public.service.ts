@@ -77,21 +77,21 @@ export class PublicService {
   }
 
   async postPickup(params: PostPickupDto, files?: Express.Multer.File[]): Promise<void> {
-    const { pickup_form } = params;
+    const { pickup_form: pickupForm } = params;
 
     await this.captchaVerify(params['g-recaptcha-response']);
 
-    pickup_form.supplier.company_is_supplier = true;
-    const supplier = await this.contactService.checkExists(pickup_form.supplier);
+    pickupForm.supplier.company_is_supplier = true;
+    const supplier = await this.contactService.checkExists(pickupForm.supplier);
 
     const pickupData: CreatePickupUncheckedWithoutAorderInputDto = {
-      origin: pickup_form.origin,
-      data_destruction: pickup_form.dataDestruction,
-      description: pickup_form.description,
-      pickup_date: pickup_form.pickupDate,
+      origin: pickupForm.origin,
+      data_destruction: pickupForm.dataDestruction,
+      description: pickupForm.description,
+      pickup_date: pickupForm.pickupDate,
     };
 
-    const orderStatus = await this.findOrderStatusByNameOrCreate(pickup_form.orderStatusName, true, false, false);
+    const orderStatus = await this.findOrderStatusByNameOrCreate(pickupForm.orderStatusName, true, false, false);
 
     const purchaseData: CreateAOrderDto = {
       supplier_id: supplier.id,
@@ -106,7 +106,7 @@ export class PublicService {
       await this.uploadFiles(purchase.pickup.id, files);
     }
 
-    await this.createProductsForPickup(pickup_form, purchase.id);
+    await this.createProductsForPickup(pickupForm, purchase.id);
 
     // TODO: sendStatusMail
   }
@@ -120,18 +120,18 @@ export class PublicService {
   }
 
   async postOrder(params: PostOrderDto): Promise<void> {
-    const { public_order_form } = params;
+    const { public_order_form: publicOrderForm } = params;
 
     await this.captchaVerify(params['g-recaptcha-response']);
 
-    public_order_form.customer.company_is_customer = true;
-    const customer = await this.contactService.checkExists(public_order_form.customer);
+    publicOrderForm.customer.company_is_customer = true;
+    const customer = await this.contactService.checkExists(publicOrderForm.customer);
 
-    const orderStatus = await this.findOrderStatusByNameOrCreate(public_order_form.orderStatusName, false, true, false);
+    const orderStatus = await this.findOrderStatusByNameOrCreate(publicOrderForm.orderStatusName, false, true, false);
 
     let remarks = '';
 
-    for (const product of public_order_form.products) {
+    for (const product of publicOrderForm.products) {
       if (product.quantity > 0) {
         remarks += `${product.name}: ${product.quantity}x\r\n`;
       }
@@ -148,19 +148,19 @@ export class PublicService {
       remarks,
     };
 
-    const sale = await this.saleService.create(saleData);
+    await this.saleService.create(saleData);
   }
 
   async importSales(authorization:string, params: PostImportDto, file: Express.Multer.File): Promise<void> {
     if (authorization !== this.configService.get<string>('LEERGELD_DENHAAG_AUTH')) {
       throw new UnauthorizedException('Username or Password is invalid!');
     }
-    const { import_form } = params;
+    const { import_form: importForm } = params;
 
     await this.captchaVerify(params['g-recaptcha-response']);
 
-    const sales = await this.saleService.import({
-      partner_id: import_form.partnerId,
+    await this.saleService.import({
+      partner_id: importForm.partnerId,
     }, file);
   }
 
