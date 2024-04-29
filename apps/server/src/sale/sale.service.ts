@@ -117,9 +117,9 @@ export class SaleService extends AOrderService {
     const sheet = workbook.Sheets[sheetName];
     const rows = <IExcelColumn[]>xlsx.utils.sheet_to_json(sheet, { rawNumbers: false });
 
-    const salesP: Promise<AOrderProcessed>[] = [];
+    const sales: AOrderProcessed[] = [];
 
-    rows.forEach(async (row) => {
+    for (const row of rows) {
       const {
         Referentie,
         Bedrijfsnaam,
@@ -179,11 +179,15 @@ export class SaleService extends AOrderService {
           remarks,
         };
 
-        salesP.push(super.create(saleData));
+        try {
+          sales.push(await super.create(saleData));
+        } catch (e) {
+          console.log('sale import e', e);
+        }
       }
-    });
+    }
 
-    return Promise.all(salesP);
+    return sales;
   }
 
   protected getCreateSalesServiceInput(description: string): CreateAServiceDto {
