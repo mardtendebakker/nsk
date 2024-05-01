@@ -127,7 +127,7 @@ function cancelExcelItem(self) {
           })
           .done(function(response) {
             if (response.substring(0, 4) == "http") {
-              window.location.replace(response);
+              window.top.location.replace(response);
             } else {
               thisElement.html(response);
             }
