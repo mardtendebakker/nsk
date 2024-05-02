@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { addDays } from 'date-fns';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
@@ -8,7 +9,7 @@ export class ModulePaymentRepository {
   async findLastValidModulePaymentByModule(moduleName: string) {
     const dateNow = new Date();
 
-    return (await this.prisma.module_payment.findMany({
+    const result = (await this.prisma.module_payment.findMany({
       select: {
         id: true,
         payment_id: true,
@@ -32,5 +33,16 @@ export class ModulePaymentRepository {
       },
       take: 1,
     }))[0];
+
+    if (result) {
+      const expiresAt = addDays(new Date(result.expires_at), 5);
+
+      return {
+        ...result,
+        active: dateNow < expiresAt,
+      };
+    }
+
+    return null;
   }
 }
