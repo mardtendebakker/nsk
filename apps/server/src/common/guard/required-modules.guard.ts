@@ -16,7 +16,7 @@ export function requiredModule(moduleName: ModuleName) {
 
       const foundModule = await this.modulePaymentService.findLastValidModulePaymentByModule(moduleName);
 
-      if (foundModule) {
+      if (foundModule?.active) {
         return (request);
       }
 

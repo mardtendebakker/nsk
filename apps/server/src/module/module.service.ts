@@ -39,7 +39,6 @@ export class ModuleService {
 
   async findAll(): Promise<FindModuleResponseDto[]> {
     const result: FindModuleResponseDto[] = [];
-    const dateNow = new Date();
     const modules = await this.repository.findAll();
 
     for (const m of modules.data) {
@@ -51,7 +50,7 @@ export class ModuleService {
         price: m.price,
         activeAt: payment?.activeAt,
         expiresAt: payment?.expiresAt,
-        active: dateNow > payment?.activeAt && dateNow < payment?.expiresAt,
+        active: payment?.active || false,
         freeTrialUsed: !!payment,
         config: this.buildConfig(m),
       });
