@@ -353,7 +353,7 @@ const translation = {
   months: 'Monate',
   days: 'Tage',
   company: 'Unternehmen',
-  companies: 'Bedrijven',
+  companies: 'Unternehmen',
   editCompany: 'Unternehmen bearbeiten',
   reset: 'Zurücksetzen',
   filter: 'Filter',

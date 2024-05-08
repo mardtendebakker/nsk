@@ -7,7 +7,7 @@ import useTranslation from '../../../hooks/useTranslation';
 const LOCALES = [
   {
     value: 'nl',
-    label: 'Netherlands',
+    label: 'Nederlands',
     icon: '/assets/icons/ic_flag_nl.svg',
   },
   {
@@ -17,8 +17,13 @@ const LOCALES = [
   },
   {
     value: 'de',
-    label: 'Deutsch',
+    label: 'Germans',
     icon: '/assets/icons/ic_flag_de.svg',
+  },
+  {
+    value: 'es',
+    label: 'Español',
+    icon: '/assets/icons/ic_flag_es.svg',
   },
   {
     value: 'ar',
@@ -37,7 +42,7 @@ const LOCALES = [
   },
   {
     value: 'pt',
-    label: 'Portugese',
+    label: 'Português',
     icon: '/assets/icons/ic_flag_pt.svg',
   },
 ];
