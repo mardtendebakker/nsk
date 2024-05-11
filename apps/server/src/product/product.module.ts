@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, Global } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
 import { ProductService } from './product.service';
 import { ProductController } from './product.controller';
@@ -12,6 +12,7 @@ import { BlanccoModule } from '../blancco/blancco.module';
 import { ProductBlancco } from './product.blancco';
 import { PrintModule } from '../print/print.module';
 
+@Global()
 @Module({
   providers: [
     ProductService,
