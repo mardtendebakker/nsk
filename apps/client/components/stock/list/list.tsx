@@ -9,6 +9,7 @@ import { ProductListItem } from '../../../utils/axios/models/product';
 import PaginatedTable from '../../paginatedTable';
 import TableCell from '../../tableCell';
 import Row, { OnCheck } from './row';
+import { ProductType } from '../type';
 
 export default function List({
   type,
@@ -26,7 +27,7 @@ export default function List({
   checkedProductIds,
   disableSelection,
 }: {
-  type: 'product' | 'repair' | 'archived',
+  type: ProductType,
   products: ProductListItem[],
   count: number,
   page: number,

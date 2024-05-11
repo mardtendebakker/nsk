@@ -3,7 +3,9 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import useTranslation from '../../hooks/useTranslation';
 import useResponsive from '../../hooks/useResponsive';
-import { STOCKS_ARCHIVED, STOCKS_PRODUCTS, STOCKS_REPAIR_SERVICES } from '../../utils/routes';
+import {
+  STOCKS_ARCHIVED, STOCKS_PRODUCTS, STOCKS_REPAIR_SERVICES, STOCKS_WEBSHOP,
+} from '../../utils/routes';
 import CreateModal from './createModal';
 import HeaderItem from '../list/headerItem';
 
@@ -28,6 +30,11 @@ export default function Header({ onProductCreated }: { onProductCreated: () => v
       active: router.pathname === STOCKS_ARCHIVED,
       text: trans('archived'),
       href: STOCKS_ARCHIVED,
+    },
+    {
+      active: router.pathname === STOCKS_WEBSHOP,
+      text: trans('webshop'),
+      href: STOCKS_WEBSHOP,
     },
   ];
 

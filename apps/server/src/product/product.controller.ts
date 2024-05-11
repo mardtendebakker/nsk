@@ -1,4 +1,6 @@
-import { Controller } from '@nestjs/common';
+import {
+  Controller,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { StockController } from '../stock/stock.controller';
 import { ProductService } from './product.service';
