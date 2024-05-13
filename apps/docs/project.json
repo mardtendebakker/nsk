@@ -16,7 +16,7 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "docusaurus start",
+        "command": "docusaurus start --no-open",
         "cwd": "apps/docs"
       }
     }

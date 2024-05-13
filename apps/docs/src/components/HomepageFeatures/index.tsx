@@ -28,11 +28,11 @@ const FeatureList: FeatureItem[] = [
     ),
   },
   {
-    title: 'Team of diversity',
+    title: 'Tech stack',
     Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
     description: (
       <>
-       We are working on this application with an international team of 2 full stack developers and a UI/UX designer from Iran, Morocco and India.
+        Nexxus is constructed with Nx.js as a monorepo, along with Nest.js, Next.js, mariaDB, AWS S3, and Cognito.
       </>
     ),
   },
