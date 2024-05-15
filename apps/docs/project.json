@@ -19,6 +19,13 @@
         "command": "docusaurus start --no-open",
         "cwd": "apps/docs"
       }
+    },    
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/docs/jest.config.ts"
+      }
     }
   },
   "tags": []
