@@ -889,8 +889,9 @@ export class StockService {
     }, {}) || {};
 
     const uploadedIdsGroupByAttributeId: Record<string, number[]> = {};
-    Object.entries(filesGroupByAttributeId).forEach(async ([fileAttributeId, uploadedFiles]) => {
+    for (const [fileAttributeId, uploadedFiles] of Object.entries(filesGroupByAttributeId)) {
       // Upload all new files
+      // eslint-disable-next-line no-await-in-loop
       const fileIdsUploaded = await this.uploadFiles(
         productId,
         uploadedFiles.map((file) => ({
@@ -900,7 +901,7 @@ export class StockService {
       );
       // Keep all file ids
       uploadedIdsGroupByAttributeId[fileAttributeId] = fileIdsUploaded;
-    });
+    }
 
     // get all productAttributes
     let productAttributeInclusive = this.addAttributeRelationToProductAttributes(
