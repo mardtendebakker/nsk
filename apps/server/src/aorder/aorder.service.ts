@@ -76,14 +76,10 @@ export class AOrderService {
       where: {
         ...query.where,
         ...(this.type && { discr: this.type }),
-        ...(search && {
-          OR: [
-            { order_nr: { contains: search } },
-            { remarks: { contains: search } },
-          ],
-        }),
         ...(status && { status_id: { equals: status } }),
-        ...this.getPartnerWhereInput({ createdBy, partner, email }),
+        ...this.getAndOrWhereInput({
+          search, createdBy, partner, email,
+        }),
       },
       orderBy: Object.keys(query?.orderBy || {})?.length ? query.orderBy : { id: 'desc' },
     };
@@ -449,6 +445,43 @@ export class AOrderService {
       zip: true,
       state: true,
       country: true,
+    };
+  }
+
+  private getAndOrWhereInput(params: {
+    search?: string,
+    createdBy?: number,
+    partner?: number,
+    email?: string,
+  }): Omit<Prisma.aorderWhereInput, 'id' | 'order_nr'> {
+    const {
+      search, createdBy, partner, email,
+    } = params;
+    return {
+      ...((search || createdBy || partner || email) && {
+        AND: [
+          {
+            ...this.getSearchWhereInput({ search }),
+          },
+          {
+            ...this.getPartnerWhereInput({ createdBy, partner, email }),
+          },
+        ],
+      }),
+    };
+  }
+
+  private getSearchWhereInput(params: {
+    search?: string
+  }): Omit<Prisma.aorderWhereInput, 'id' | 'order_nr'> {
+    const { search } = params;
+    return {
+      ...(search && {
+        OR: [
+          { order_nr: { contains: search } },
+          { remarks: { contains: search } },
+        ],
+      }),
     };
   }
 
