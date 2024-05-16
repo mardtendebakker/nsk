@@ -26,7 +26,7 @@ export class OrderRepository extends AOrderRepository {
       purchaseQuery: Sql;
     saleQuery = Prisma.sql`
       SELECT YEAR(o.order_date) year, MONTH(o.order_date) month, count(1) count
-      FROM nexxus_application.aorder o
+      FROM aorder o
       WHERE o.discr = ${AOrderDiscrimination.SALE}
       AND o.order_date > CURRENT_DATE - INTERVAL ${LAST_TWELVE_MONTH} MONTH
       AND o.status_id <> ${REPAIR_STATUS_ID}
@@ -35,7 +35,7 @@ export class OrderRepository extends AOrderRepository {
     `;
     purchaseQuery = Prisma.sql`
       SELECT YEAR(o.order_date) year, MONTH(o.order_date) month, count(1) count
-      FROM nexxus_application.aorder o
+      FROM aorder o
       WHERE o.discr = ${AOrderDiscrimination.PURCHASE}
       AND o.order_date > CURRENT_DATE - INTERVAL ${LAST_TWELVE_MONTH} MONTH
       AND o.status_id <> ${REPAIR_STATUS_ID}
@@ -44,7 +44,7 @@ export class OrderRepository extends AOrderRepository {
     `;
     repairQuery = Prisma.sql`
       SELECT YEAR(o.order_date) year, MONTH(o.order_date) month, count(1) count
-      FROM nexxus_application.aorder o
+      FROM aorder o
       WHERE o.order_date > CURRENT_DATE - INTERVAL ${LAST_TWELVE_MONTH} MONTH
       AND o.status_id = ${REPAIR_STATUS_ID}
       GROUP BY year, month
@@ -53,7 +53,7 @@ export class OrderRepository extends AOrderRepository {
     if (groupBy === GroupBy.DAYS) {
       saleQuery = Prisma.sql`
         SELECT YEAR(o.order_date) year, MONTH(o.order_date) month, DAY(o.order_date) day, count(1) count
-        FROM nexxus_application.aorder o
+        FROM aorder o
         WHERE o.discr = ${AOrderDiscrimination.SALE}
         AND o.order_date > CURRENT_DATE - INTERVAL ${LAST_THIRTY_DAYS} DAY
         AND o.status_id <> ${REPAIR_STATUS_ID}
@@ -62,7 +62,7 @@ export class OrderRepository extends AOrderRepository {
       `;
       purchaseQuery = Prisma.sql`
         SELECT YEAR(o.order_date) year, MONTH(o.order_date) month, DAY(o.order_date) day, count(1) count
-        FROM nexxus_application.aorder o
+        FROM aorder o
         WHERE o.discr = ${AOrderDiscrimination.PURCHASE}
         AND o.order_date > CURRENT_DATE - INTERVAL ${LAST_THIRTY_DAYS} DAY
         AND o.status_id <> ${REPAIR_STATUS_ID}
@@ -71,7 +71,7 @@ export class OrderRepository extends AOrderRepository {
       `;
       repairQuery = Prisma.sql`
         SELECT YEAR(o.order_date) year, MONTH(o.order_date) month, DAY(o.order_date) day, count(1) count
-        FROM nexxus_application.aorder o
+        FROM aorder o
         WHERE o.order_date > CURRENT_DATE - INTERVAL ${LAST_THIRTY_DAYS} DAY
         AND o.status_id = ${REPAIR_STATUS_ID}
         GROUP BY year, month, day
