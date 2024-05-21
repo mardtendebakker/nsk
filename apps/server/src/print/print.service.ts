@@ -105,7 +105,7 @@ export class PrintService {
         format: 'A6',
 
         margin: {
-          top: 0, bottom: 0, left: 0, right: 0,
+          top: 10, bottom: 10, left: 10, right: 10,
         },
       },
     });
