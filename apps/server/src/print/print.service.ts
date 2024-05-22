@@ -103,7 +103,6 @@ export class PrintService {
       data,
       pdfOptions: {
         format: 'A6',
-
         margin: {
           top: 10, bottom: 10, left: 10, right: 10,
         },

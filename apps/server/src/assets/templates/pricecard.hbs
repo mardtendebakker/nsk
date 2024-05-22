@@ -42,6 +42,17 @@
       font-weight: bold;
       font-size: 24pt;
     }
+    
+    div
+    .barcode {
+      margin-left: -3px;
+      padding-bottom: 0;
+      margin-bottom: 0;
+    }
+
+    div.barcode img {
+      width: 90%;
+    }
 
     table {
       width: 100%;
@@ -91,7 +102,7 @@
     <div class="content price">
       &euro; {{product.price}}
     </div>
-    <div class="content">
+    <div class="content barcode">
       <img src="{{ product.barcode }}">
     </div>
     <div class="content">
