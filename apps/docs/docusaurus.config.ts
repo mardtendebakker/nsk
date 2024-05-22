@@ -65,6 +65,10 @@ const config: Config = {
           title: 'Docs',
           items: [
             {
+              label: 'Introduction',
+              to: '/docs/introduction',
+            },
+            {
               label: 'Order',
               to: '/docs/category/order',
             },
