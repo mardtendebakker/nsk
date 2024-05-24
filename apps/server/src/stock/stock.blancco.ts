@@ -105,6 +105,8 @@ export class StockBlancco {
         productTypeName = BlanccoProductTypes.LAPTOP;
       } else if (['Server', 'Rack Mount Chassis', 'Main Server Chassis'].includes(chassisType)) {
         productTypeName = BlanccoProductTypes.SERVER;
+      } else if (['Mobile Device'].includes(chassisType)) {
+        productTypeName = BlanccoProductTypes.TELEFOON_TABLET;
       }
     }
 
