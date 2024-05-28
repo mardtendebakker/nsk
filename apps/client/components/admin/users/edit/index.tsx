@@ -63,11 +63,11 @@ export default function Edit({ username, onClose, onConfirm }: { username: strin
                 <TextField
                   {...inputParams}
                   label={trans('groups')}
+                  placeholder={trans('selectGroups')}
                 />
               )
 }
             filterSelectedOptions
-            placeholder={trans('selectGroups')}
           />
           <input type="submit" style={{ display: 'none' }} />
         </form>
