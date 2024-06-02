@@ -132,7 +132,7 @@ const translation = {
   createdAt: 'Creado el',
   createProduct: 'Crear producto',
   searchByCustomerNameOrEmail: 'Buscar por nombre de cliente o correo electrónico',
-  searchBySerialNumberOrNameOrAttr: 'Buscar por número de serie o nombre o atributo',
+  searchBySkuOrDescOrNameOrAttr: 'Buscar por número de serie o descuento o nombre o atributo',
   contact: 'Contacto',
   bulkEmail: 'Correo electrónico masivo',
   invalidEmail: 'Correo electrónico no válido',
