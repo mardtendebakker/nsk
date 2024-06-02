@@ -12,12 +12,13 @@ import {
   Query,
   Res,
   StreamableFile,
+  UploadedFile,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
-import { AnyFilesInterceptor } from '@nestjs/platform-express';
+import { AnyFilesInterceptor, FileInterceptor } from '@nestjs/platform-express';
 import type { Response } from 'express';
 import { FindOneProductResponeDto } from './dto/find-one-product-response.dto';
 import { FindProductsResponseDto } from './dto/find-product-respone.dto';
@@ -38,6 +39,7 @@ import {
 } from '../common/types/cognito-groups.enum';
 import { StockBlancco } from './stock.blancco';
 import { requiredModule } from '../common/guard/required-modules.guard';
+import { UploadProductDto } from './dto/upload-product.dto';
 
 @ApiBearerAuth()
 @Authorization(ALL_MAIN_GROUPS)
@@ -237,5 +239,16 @@ export class StockController {
     const count = await this.stockBlancco.importFromBlancco(orderId);
 
     return { count };
+  }
+
+  @Post('upload')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadFile(
+  @Body() body: UploadProductDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    const products = await this.stockService.uploadFromExcel(body, file);
+
+    return { count: products.length };
   }
 }

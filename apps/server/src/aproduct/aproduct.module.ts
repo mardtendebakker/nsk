@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { HttpModule } from '@nestjs/axios';
 import { AProductService } from './aproduct.service';
 import { PrismaModule } from '../prisma/prisma.module';
 import { LocationModule } from '../admin/location/location.module';
@@ -30,6 +31,7 @@ import { PrintModule } from '../print/print.module';
     ArchivedModule,
     BlanccoModule,
     PrintModule,
+    HttpModule,
   ],
   exports: [AProductService],
 })

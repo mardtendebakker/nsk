@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { HttpService } from '@nestjs/axios';
 import { ArchivedRepository } from './archived.repository';
 import { FileService } from '../../file/file.service';
 import { PrintService } from '../../print/print.service';
@@ -18,10 +19,11 @@ export class ArchivedService extends AProductService {
     protected readonly fileService: FileService,
     protected readonly printService: PrintService,
     protected readonly blanccoService: BlanccoService,
+    protected readonly httpService: HttpService,
     protected readonly configService: ConfigService,
     @Inject('ENTITY_STATUS') protected readonly entityStatus: EntityStatus,
   ) {
-    super(repository, locationService, locationLabelService, fileService, printService, blanccoService, configService, entityStatus);
+    super(repository, locationService, locationLabelService, fileService, printService, blanccoService, configService, httpService, entityStatus);
   }
 
   async archive(ids: number[]) {

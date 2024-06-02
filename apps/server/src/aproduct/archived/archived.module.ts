@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { HttpModule } from '@nestjs/axios';
 import { ArchivedService } from './archived.service';
 import { ArchivedRepository } from './archived.repository';
 import { ArchivedController } from './archived.controller';
@@ -29,6 +30,7 @@ import { PrintModule } from '../../print/print.module';
     FileModule,
     BlanccoModule,
     PrintModule,
+    HttpModule,
   ],
   exports: [ArchivedService],
 })
