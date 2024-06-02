@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { HttpService } from '@nestjs/axios';
 import { LocationService } from '../admin/location/location.service';
 import { StockService } from '../stock/stock.service';
 import { ToRepairRepository } from './to-repair.repository';
@@ -19,6 +20,7 @@ export class ToRepairService extends StockService {
     protected readonly printService: PrintService,
     protected readonly blanccoService: BlanccoService,
     protected readonly configService: ConfigService,
+    protected readonly httpService: HttpService,
     @Inject('ENTITY_STATUS') protected readonly entityStatus: EntityStatus,
   ) {
     super(
@@ -29,6 +31,7 @@ export class ToRepairService extends StockService {
       printService,
       blanccoService,
       configService,
+      httpService,
       entityStatus,
     );
   }

@@ -1,6 +1,9 @@
 import { Prisma, afile as AFileEntity } from '@prisma/client';
-import { NotFoundException } from '@nestjs/common';
+import { NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import * as xlsx from 'xlsx';
+import { HttpService } from '@nestjs/axios';
+import { lastValueFrom } from 'rxjs';
 import { LocationService } from '../admin/location/location.service';
 import { StockRepository } from './stock.repository';
 import { StockProcess } from './stock.process';
@@ -13,7 +16,7 @@ import { CreateFileDto } from '../file/dto/create-file.dto';
 import { AttributeType } from '../attribute/enum/attribute-type.enum';
 import { CreateBodyStockDto } from './dto/create-body-stock.dto';
 import { PartialProductAttributeIncludeAttribute } from './types/product-attribute-include-attribute';
-import { ProductRelation } from './types/product-relation';
+import { PartialProductRelation, ProductRelation } from './types/product-relation';
 import { ProcessedStock } from './dto/processed-stock.dto';
 import { ProductAttributeDto } from './dto/product-attribute.dto';
 import { FILE_VALUE_DELIMITER } from './types/file-value-delimiter.const';
@@ -34,6 +37,8 @@ import { CompanyLabelPrint } from '../print/types/company-label-print';
 import { ProductAttributeUpdateMany } from './types/update-atrribute';
 import { AttributeGetPayload } from '../attribute/types/attribute-get-payload';
 import { UpdateManyProductResponseDto } from './dto/update-many-product-response.dto';
+import { IUploadColumn } from './types/upload-column';
+import { UploadProductDto } from './dto/upload-product.dto';
 
 export class StockService {
   constructor(
@@ -44,6 +49,7 @@ export class StockService {
     protected readonly printService: PrintService,
     protected readonly blanccoService: BlanccoService,
     protected readonly configService: ConfigService,
+    protected readonly httpService: HttpService,
     protected readonly entityStatus: EntityStatus,
   ) {}
 
@@ -244,7 +250,7 @@ export class StockService {
 
     const stock = await this.repository.create(createInput);
 
-    if (productAttributes?.length) {
+    if (productAttributes?.length || files?.length) {
       return this.updateOne(
         stock.id,
         { type_id: body.type_id, product_attributes: productAttributes },
@@ -1002,5 +1008,126 @@ export class StockService {
         ],
       }),
     };
+  }
+
+  async uploadFromExcel(params: UploadProductDto, file: Express.Multer.File): Promise<PartialProductRelation[]> {
+    const rows = this.getFirstSheetOfUploadedExcel(file);
+
+    const products: PartialProductRelation[] = [];
+
+    for (const row of rows) {
+      try {
+        const product = await this.processProductRow(params, row);
+        products.push(product);
+      } catch (e) {
+        throw new UnprocessableEntityException(`Error processing row with Artnr ${row.Artnr}:`, e);
+      }
+    }
+
+    return products;
+  }
+
+  private async processProductRow(params: UploadProductDto, row: IUploadColumn): Promise<PartialProductRelation> {
+    const {
+      Artnr,
+      Omschrijving,
+      Levertijd,
+      'Netto inkoopprijs': NettoInkoopprijs,
+      'Afbeelding 1': Afbeelding1,
+      'Afbeelding 2': Afbeelding2,
+      Kleur,
+      Fabrikant,
+      'Kabel Lengte': KabelLengte,
+      Cat,
+      'Managed / Unmanaged': ManagedUnmanaged,
+      Maat,
+      Hoogte,
+      Diepte,
+      Verpakking,
+      Breedte,
+    } = row;
+
+    const productAttributeFiles = await this.uploadProductFiles([Afbeelding1, Afbeelding2]);
+
+    const OmschrijvingArr = Omschrijving.split(',').map((item) => item.trim());
+
+    const name = OmschrijvingArr.shift();
+
+    const description = [
+      OmschrijvingArr.length ? OmschrijvingArr.join('\n') : '',
+      Levertijd || '',
+      Kleur || '',
+      Fabrikant || '',
+      KabelLengte || '',
+      Cat || '',
+      ManagedUnmanaged || '',
+      Maat || '',
+      Hoogte || '',
+      Diepte || '',
+      Verpakking || '',
+      Breedte || '',
+    ].filter((part) => part).join('\n');
+
+    const overigType = 24;
+
+    const price = Number(NettoInkoopprijs);
+
+    const productDto: CreateBodyStockDto = {
+      name,
+      sku: Artnr,
+      location_id: 1,
+      description,
+      type_id: overigType,
+      price,
+      product_orders: [
+        {
+          order_id: params.orderId,
+          quantity: 1,
+        },
+      ],
+    };
+
+    return this.create(productDto, productAttributeFiles);
+  }
+
+  private async uploadProductFiles(urls: string[]): Promise<ProductAttributeFile[]> {
+    const productAttributeFiles: ProductAttributeFile[] = [];
+    for (const url of urls) {
+      if (url) {
+        productAttributeFiles.push(await this.downloadFileFromUrl(url));
+      }
+    }
+
+    return productAttributeFiles;
+  }
+
+  private getFirstSheetOfUploadedExcel(file: Express.Multer.File): IUploadColumn[] {
+    if (!file) {
+      throw new UnprocessableEntityException('file is invalid');
+    }
+    const workbook = xlsx.read(file.buffer, { type: 'buffer' });
+    const sheetName = workbook.SheetNames[0];
+    const sheet = workbook.Sheets[sheetName];
+    return xlsx.utils.sheet_to_json(sheet, { rawNumbers: false });
+  }
+
+  private async downloadFileFromUrl(url: string): Promise<ProductAttributeFile | never> {
+    const IMAGE_ATTRIBUTE_ID = '15';
+    if (!url) {
+      return null;
+    }
+
+    try {
+      const response = await lastValueFrom(
+        this.httpService.get(url, { responseType: 'arraybuffer' }),
+      );
+      const productAttributeFile: ProductAttributeFile = {
+        buffer: response.data,
+        fieldname: IMAGE_ATTRIBUTE_ID,
+        mimetype: response.headers['content-type'],
+      };
+
+      return productAttributeFile;
+    } catch (e) { return null; }
   }
 }
