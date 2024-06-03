@@ -126,6 +126,7 @@ export class StockService {
         OR: [
           { name: { contains: search } },
           { sku: { contains: search } },
+          { description: { contains: search } },
           {
             product_attribute_product_attribute_product_idToproduct: {
               some: {

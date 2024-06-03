@@ -33,7 +33,7 @@ export default function Filter({
         onSearchChange={(value: string) => setValue({ field: 'search', value })}
         searchValue={formRepresentation.search.value?.toString() || ''}
         onReset={onReset}
-        searchLabel={trans('searchBySerialNumberOrNameOrAttr')}
+        searchLabel={trans('searchBySkuOrDescOrNameOrAttr')}
         autoFocus={autoFocus}
       >
         <Box sx={{
