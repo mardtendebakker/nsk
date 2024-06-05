@@ -63,8 +63,12 @@ export class StockBlancco {
 
   private async createProductAttributeByBlanccoReport(orderId: number, report: BlanccoReportV1): Promise<boolean> {
     const sku = this.blanccoService.getValueFromReportByKey(report, BlanccoCustomFiledKeys.SKU_NUMBER);
-    const productTypeName = this.getProductTypeName(report);
+    if (!sku) {
+      console.log(`createProductAttributeByBlanccoReport, No sku found! sku: ${sku}`);
+      return false;
+    }
 
+    const productTypeName = this.getProductTypeName(report);
     if (!productTypeName) {
       console.log(`createProductAttributeByBlanccoReport, No productTypeName found! sku: ${sku}`);
       return false;
