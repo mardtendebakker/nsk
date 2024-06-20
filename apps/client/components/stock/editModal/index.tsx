@@ -17,8 +17,9 @@ import useAxios from '../../../hooks/useAxios';
 import { formRepresentationToBody, initFormState } from '../createModal';
 import ConfirmationDialog from '../../confirmationDialog';
 import { openBlob } from '../../../utils/blob';
-import { Product } from '../../../utils/axios/models/product';
 import { ORDERS_PURCHASES_EDIT, ORDERS_REPAIRS_EDIT, ORDERS_SALES_EDIT } from '../../../utils/routes';
+import { ProductType } from '../type';
+import { Product } from '../../../utils/axios/models/product';
 
 export default function EditModal(
   {
@@ -30,7 +31,7 @@ export default function EditModal(
     onClose: () => void,
     onSubmit: () => void,
     id: string,
-    type?: 'product' | 'repair' | 'archived',
+    type?: ProductType,
   },
 ) {
   const { trans } = useTranslation();

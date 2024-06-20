@@ -17,6 +17,7 @@ import Edit from '../../button/edit';
 import Delete from '../../button/delete';
 import Split from '../../button/split';
 import { price } from '../../../utils/formatter';
+import { ProductType } from '../type';
 
 export type OnCheck = (object: { id: number, checked: boolean }) => void;
 type OnClick = (object: { id: number }) => void;
@@ -36,7 +37,7 @@ export default function Row(
     disableSelection,
   }
   : {
-    type: 'product' | 'repair' | 'archived'
+    type: ProductType
     product: ProductListItem,
     onCheck: OnCheck,
     onClick: OnClick,
