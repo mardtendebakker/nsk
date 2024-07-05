@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import _ from 'lodash';
 import {
-  STOCK_PRODUCTS_PATH, STOCK_REPAIRS_PATH, SPLIT_PRODUCT_INDIVIDUALIZE_PATH, SPLIT_PRODUCT_STOCK_PART_PATH, APRODUCT_BULK_PRINT_BARCODES, AxiosResponse, APRODUCT_BULK_PRINT_CHECKLISTS, APRODUCT_BULK_PRINT_PRICECARDS, STOCK_ARCHIVED_PATH, APRODUCTS_ARCHIVE_SET, APRODUCTS_ARCHIVE_UNSET, APRODUCT_BULK_PRINT_LABELS,
+  STOCK_PRODUCTS_PATH, STOCK_WEBSHOP_PATH, STOCK_REPAIRS_PATH, SPLIT_PRODUCT_INDIVIDUALIZE_PATH, SPLIT_PRODUCT_STOCK_PART_PATH, APRODUCT_BULK_PRINT_BARCODES, AxiosResponse, APRODUCT_BULK_PRINT_CHECKLISTS, APRODUCT_BULK_PRINT_PRICECARDS, STOCK_ARCHIVED_PATH, APRODUCTS_ARCHIVE_SET, APRODUCTS_ARCHIVE_UNSET, APRODUCT_BULK_PRINT_LABELS,
+  APRODUCT_BULK_PUBLISH_TO_STORE,
 } from '../../../utils/axios';
 import List from './list';
 import useAxios from '../../../hooks/useAxios';
@@ -21,6 +22,7 @@ import can from '../../../utils/can';
 import useSecurity from '../../../hooks/useSecurity';
 import PatchLocationModal from './patchLocationModal';
 import PatchProductTypeModal from './patchProductTypeModal';
+import { ProductType } from '../type';
 
 function initFormState(
   {
@@ -97,9 +99,10 @@ const AJAX_PATHS = {
   product: STOCK_PRODUCTS_PATH,
   repair: STOCK_REPAIRS_PATH,
   archived: STOCK_ARCHIVED_PATH,
+  webshop: STOCK_WEBSHOP_PATH,
 };
 
-export default function ListContainer({ type } : { type: 'product' | 'repair' | 'archived' }) {
+export default function ListContainer({ type } : { type: ProductType }) {
   const { state: { user } } = useSecurity();
   const router = useRouter();
   const [showChangeLocationModal, setShowChangeLocationModal] = useState(false);
@@ -127,12 +130,13 @@ export default function ListContainer({ type } : { type: 'product' | 'repair' | 
       withProgressBar: true,
     },
   );
-  const { call: bulkPrint, performing: performingBulkPrintBarcodes } = useAxios('get', APRODUCT_BULK_PRINT_BARCODES);
-  const { call: bulkPrintChecklist, performing: performingBulkPrintChecklists } = useAxios('get', APRODUCT_BULK_PRINT_CHECKLISTS);
-  const { call: bulkPrintPriceCard, performing: performingBulkPrintPriceCards } = useAxios('get', APRODUCT_BULK_PRINT_PRICECARDS);
-  const { call: bulkPrintLabel, performing: performingBulkPrintLabels } = useAxios('get', APRODUCT_BULK_PRINT_LABELS);
-  const { call: bulkPatchArchive, performing: performingBulkPatchArchive } = useAxios('patch', APRODUCTS_ARCHIVE_SET);
-  const { call: bulkPatchUnarchive, performing: performingBulkPatchUnarchive } = useAxios('patch', APRODUCTS_ARCHIVE_UNSET);
+  const { call: bulkPrint, performing: performingBulkPrintBarcodes } = useAxios('get', APRODUCT_BULK_PRINT_BARCODES, { withProgressBar: true });
+  const { call: bulkPrintChecklist, performing: performingBulkPrintChecklists } = useAxios('get', APRODUCT_BULK_PRINT_CHECKLISTS, { withProgressBar: true });
+  const { call: bulkPrintPriceCard, performing: performingBulkPrintPriceCards } = useAxios('get', APRODUCT_BULK_PRINT_PRICECARDS, { withProgressBar: true });
+  const { call: bulkPrintLabel, performing: performingBulkPrintLabels } = useAxios('get', APRODUCT_BULK_PRINT_LABELS, { withProgressBar: true });
+  const { call: bulkPatchArchive, performing: performingBulkPatchArchive } = useAxios('patch', APRODUCTS_ARCHIVE_SET, { withProgressBar: true });
+  const { call: bulkPublishToStore, performing: performingBulkPublishToStore } = useAxios('post', APRODUCT_BULK_PUBLISH_TO_STORE, { showSuccessMessage: true, withProgressBar: true });
+  const { call: bulkPatchUnarchive, performing: performingBulkPatchUnarchive } = useAxios('patch', APRODUCTS_ARCHIVE_UNSET, { withProgressBar: true });
   const { call: callDelete, performing: performingDelete } = useAxios(
     'delete',
     ajaxPath,
@@ -199,13 +203,20 @@ export default function ListContainer({ type } : { type: 'product' | 'repair' | 
       .then(() => defaultRefreshList());
   };
 
-  const disabled = (): boolean => performing || performingDelete || performingPatch || performingBulkPatchArchive || performingBulkPatchUnarchive || performingSplit || performingBulkPrintBarcodes || performingBulkPrintChecklists || performingBulkPrintPriceCards || performingBulkPrintLabels;
+  const disabled = (): boolean => performing || performingBulkPublishToStore || performingDelete || performingPatch || performingBulkPatchArchive || performingBulkPatchUnarchive || performingSplit || performingBulkPrintBarcodes || performingBulkPrintChecklists || performingBulkPrintPriceCards || performingBulkPrintLabels;
 
   const handlePatchArchive = () => {
     bulkPatchArchive({ body: checkedProductIds })
       .then(() => {
         setCheckedProductIds([]);
         defaultRefreshList();
+      });
+  };
+
+  const handlePublishToStore = () => {
+    bulkPublishToStore({ body: checkedProductIds })
+      .then(() => {
+        setCheckedProductIds([]);
       });
   };
 
@@ -313,6 +324,7 @@ export default function ListContainer({ type } : { type: 'product' | 'repair' | 
           onPrintChecklist={handlePrintChecklists}
           onPrintPriceCard={handlePrintPriceCards}
           onPrintLabel={handlePrintLabels}
+          onPublishToStore={handlePublishToStore}
         />
         <Box sx={{ m: '.5rem' }} />
         <List

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { SaleService } from './sale.service';
 import { SaleController } from './sale.controller';
 import { SaleRepository } from './sale.repository';
@@ -9,6 +9,7 @@ import { OrderStatusModule } from '../admin/order-status/order-status.module';
 import { ContactModule } from '../contact/contact.module';
 import { PrintModule } from '../print/print.module';
 
+@Global()
 @Module({
   providers: [
     SaleService,

@@ -5,11 +5,13 @@ import ChevronRight from '@mui/icons-material/ChevronRight';
 import EditLocation from '@mui/icons-material/EditLocation';
 import Category from '@mui/icons-material/Category';
 import Archive from '@mui/icons-material/Archive';
+// import AddBusiness from '@mui/icons-material/AddBusiness';
 import Unarchive from '@mui/icons-material/Unarchive';
 import { useState } from 'react';
 import useTranslation from '../../../hooks/useTranslation';
 import Checkbox from '../../checkbox';
 import Can from '../../can';
+import { ProductType } from '../type';
 
 export default function Action({
   disabled,
@@ -25,9 +27,10 @@ export default function Action({
   onPrintChecklist,
   onPrintPriceCard,
   onPrintLabel,
+  onPublishToStore,
 }:{
   disabled: boolean,
-  type: 'product' | 'repair' | 'archived',
+  type: ProductType,
   allChecked: boolean,
   checkedProductsCount: number,
   onAllCheck: (checked: boolean) => void,
@@ -39,6 +42,7 @@ export default function Action({
   onPrintChecklist: () => void,
   onPrintPriceCard: () => void,
   onPrintLabel: () => void,
+  onPublishToStore: () => void
 }) {
   const { trans } = useTranslation();
   const [showPrintActions, setShowPrintActions] = useState(null);
@@ -60,6 +64,15 @@ export default function Action({
         label={`${trans('selectAll')} ${checkedProductsCount > 0 ? `(${checkedProductsCount} ${trans('selected')})` : ''}`}
       />
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        {/* {checkedProductsCount > 0 && type == 'product'
+        && (
+          <Can requiredGroups={['manager']}>
+            <Button size="small" onClick={onPublishToStore} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
+              <AddBusiness sx={{ mr: '.1rem' }} />
+              {trans('publishToStore')}
+            </Button>
+          </Can>
+        )} */}
         {checkedProductsCount > 0 && type !== 'archived'
         && (
         <Button size="small" onClick={onArchive} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
