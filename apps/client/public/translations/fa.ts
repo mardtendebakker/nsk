@@ -461,6 +461,7 @@ const translation = {
   pickupsBy: ' تحویل توسط ',
   deliveriesBy: 'تحویل توسط',
   everyone: 'همه',
+  magentoCategoryId: 'شناسه دسته Magento',
   logisticsPage: {
     search: {
       placeholder: 'جستجو بر اساس شماره سفارش یا توضیحات',
@@ -475,6 +476,10 @@ const translation = {
     comment: {
       placeholder: 'پاسخ خود را اینجا تایپ کنید',
       label: 'تفسیر',
+    },
+    magentoCategoryId: {
+      placeholder: 'نام کاربری را در اینجا وارد کنید',
+      label: 'شناسه دسته Magento',
     },
     tasks: {
       placeholder: 'وظایف احتمالی را انتخاب کنید',

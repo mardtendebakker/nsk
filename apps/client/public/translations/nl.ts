@@ -472,6 +472,10 @@ const translation = {
       placeholder: 'Typ je reactie hier',
       label: 'Commentaar',
     },
+    magentoCategoryId: {
+      placeholder: 'Vul hier de gebruikersnaam in',
+      label: 'Magento categorie-id',
+    },
     tasks: {
       placeholder: 'Selecteer mogelijke taken',
       label: 'Taken',

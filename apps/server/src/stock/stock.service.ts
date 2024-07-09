@@ -543,6 +543,7 @@ export class StockService {
     const productTypeSelect: Prisma.product_typeSelect = {
       id: true,
       name: true,
+      magento_category_id: true,
       product_type_task: {
         select: {
           task: true,

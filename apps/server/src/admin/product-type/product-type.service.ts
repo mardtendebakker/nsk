@@ -98,6 +98,7 @@ export class ProductTypeService {
       ...select,
       id: true,
       name: true,
+      magento_category_id: true,
       product_type_attribute: {
         select: {
           attribute: {

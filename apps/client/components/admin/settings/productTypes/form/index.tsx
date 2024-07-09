@@ -43,6 +43,17 @@ export default function Form({
         onChange={(e) => setValue({ field: 'comment', value: e.target.value })}
         disabled={disabled}
       />
+      <TextField
+        sx={{ mb: '1rem' }}
+        fullWidth
+        label={trans('productTypeForm.magentoCategoryId.label')}
+        placeholder={trans('productTypeForm.magentoCategoryId.placeholder')}
+        value={formRepresentation.magento_category_id.value || ''}
+        helperText={formRepresentation.magento_category_id.error}
+        error={!!formRepresentation.magento_category_id.error}
+        onChange={(e) => setValue({ field: 'magento_category_id', value: e.target.value })}
+        disabled={disabled}
+      />
       <DataSourcePicker
         multiple
         sx={{ mb: '1rem' }}
