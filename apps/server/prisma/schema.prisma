@@ -240,6 +240,7 @@ model product_status {
 model product_type {
   id                     Int                      @id @default(autoincrement())
   name                   String                   @unique(map: "UNIQ_13675885E237E06") @db.VarChar(255)
+  magento_category_id    String?                  @db.VarChar(255)
   pindex                 Int?
   comment                String?                  @db.LongText
   is_attribute           Boolean                  @default(false)

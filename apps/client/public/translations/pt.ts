@@ -437,6 +437,7 @@ const translation = {
   deliveriesBy: 'Entregue por',
   everyone: 'Todos',
   logistics: 'Logística',
+  magentoCategoryId: 'ID da categoria Magento',
   logisticsPage: {
     search: {
       placeholder: 'Procurar por número do pedido ou descrição',
@@ -450,6 +451,10 @@ const translation = {
     comment: {
       placeholder: 'Digite aqui seu comentário',
       label: 'Comentário',
+    },
+    magentoCategoryId: {
+      placeholder: 'Introduza o nome de utilizador aqui',
+      label: 'ID da categoria Magento',
     },
     tasks: {
       placeholder: 'Selecione possíveis tarefas',

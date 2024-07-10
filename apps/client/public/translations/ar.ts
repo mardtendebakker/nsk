@@ -459,6 +459,7 @@ const translation = {
   deliveriesBy: 'تسليم بواسطة',
   everyone: 'الجميع',
   logistics: 'اللوجستيات',
+  magentoCategoryId: 'معرف فئة Magento',
   logisticsPage: {
     search: {
       placeholder: 'البحث برقم الطلب أو الوصف',
@@ -472,6 +473,10 @@ const translation = {
     comment: {
       placeholder: 'أدخل تعليقك هنا',
       label: 'التعليق',
+    },
+    magentoCategoryId: {
+      placeholder: 'أدخل اسم المستخدم هنا',
+      label: 'معرف فئة Magento',
     },
     tasks: {
       placeholder: 'حدد المهام الممكنة',

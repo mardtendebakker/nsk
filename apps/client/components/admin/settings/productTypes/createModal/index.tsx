@@ -10,6 +10,7 @@ export function initFormState(productType?: ProductType) {
   return {
     name: { value: productType?.name, required: true },
     comment: { value: productType?.comment },
+    magento_category_id: { value: productType?.magento_category_id },
     tasks: { value: productType?.tasks?.map(({ id }) => id) || [] },
     attributes: { value: productType?.attributes?.map(({ id }) => id) || [] },
     is_attribute: { value: productType?.is_attribute || false },

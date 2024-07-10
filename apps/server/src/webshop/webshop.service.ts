@@ -68,6 +68,12 @@ export class WebshopService {
               attribute_set_id: 4,
               price: product.price,
               extension_attributes: {
+                category_links: product.product_type.magento_category_id ? [
+                  {
+                    position: 0,
+                    category_id: product.product_type.magento_category_id,
+                  },
+                ] : undefined,
                 stock_item: {
                   qty: availableQuantity,
                   is_in_stock: availableQuantity > 0 && product.price > 0,
