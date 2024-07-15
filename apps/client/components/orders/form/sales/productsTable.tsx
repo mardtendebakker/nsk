@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Checkbox,
   TableBody,
   TableHead,
   TableRow,
@@ -8,12 +9,15 @@ import {
 import { useEffect, useCallback, useState } from 'react';
 import Add from '@mui/icons-material/Add';
 import { useRouter } from 'next/router';
+import _ from 'lodash';
 import { ProductListItem } from '../../../../utils/axios/models/product';
 import debounce from '../../../../utils/debounce';
 import TextField from '../../../memoizedInput/textField';
 import useTranslation from '../../../../hooks/useTranslation';
 import useAxios from '../../../../hooks/useAxios';
-import { APRODUCT_PATH, SALES_ORDERS_PRODUCTS_PATH, STOCK_PRODUCTS_PATH } from '../../../../utils/axios';
+import {
+  APRODUCT_PATH, SALES_ORDERS_PRODUCTS_PATH, STOCK_PRODUCTS_PATH,
+} from '../../../../utils/axios';
 import Delete from '../../../button/delete';
 import PaginatedTable from '../../../paginatedTable';
 import TableCell from '../../../tableCell';
@@ -26,6 +30,11 @@ import initFormState from '../productsInitFormState';
 import Filter from '../../../stock/list/filter';
 import refreshList from '../productsRefreshList';
 import useForm, { FieldPayload } from '../../../../hooks/useForm';
+import ProductsAction from '../productsAction';
+import useBulkPrintChecklist from '../../../../hooks/apiCalls/useBulkPrintChecklist';
+import useBulkPrintPriceCards from '../../../../hooks/apiCalls/useBulkPrintPriceCards';
+import useBulkPrintLabels from '../../../../hooks/apiCalls/useBulkPrintLabels';
+import useBulkPrintBarcodes from '../../../../hooks/apiCalls/useBulkPrintBarcodes';
 
 export default function ProductsTable({ orderId, refreshOrder }:{ orderId: string, refreshOrder: () => void }) {
   const { state: { user } } = useSecurity();
@@ -34,6 +43,13 @@ export default function ProductsTable({ orderId, refreshOrder }:{ orderId: strin
   const [showProductsModal, setShowProductsModal] = useState(false);
   const [page, setPage] = useState<number>(1);
   const [rowsPerPage, setRowsPerPage] = useState<number>(5);
+
+  const [checkedProductIds, setCheckedProductIds] = useState<number[]>([]);
+
+  const { printChecklists, performing: performingBulkPrintChecklists } = useBulkPrintChecklist({ withProgressBar: true });
+  const { printPriceCards, performing: performingBulkPrintPriceCards } = useBulkPrintPriceCards({ withProgressBar: true });
+  const { printLabels, performing: performingBulkPrintLabels } = useBulkPrintLabels({ withProgressBar: true });
+  const { printBarcodes, performing: performingBulkPrintBarcodes } = useBulkPrintBarcodes({ withProgressBar: true });
 
   const { formRepresentation, setValue, setData } = useForm(initFormState({
     search: getQueryParam('search'),
@@ -123,11 +139,31 @@ export default function ProductsTable({ orderId, refreshOrder }:{ orderId: strin
     });
   };
 
-  const disabled = (): boolean => performing || performingPut || performingPutWithProgressBar || performingDelete;
+  const disabled = (): boolean => performing || performingPut || performingPutWithProgressBar || performingDelete
+  || performingBulkPrintChecklists
+  || performingBulkPrintPriceCards
+  || performingBulkPrintLabels
+  || performingBulkPrintBarcodes;
 
   const handleReset = () => {
     setData(initFormState({ orderId }));
     setPage(1);
+  };
+
+  const handleAllChecked = (checked: boolean) => {
+    setCheckedProductIds(
+      checked
+        ? _.union(checkedProductIds, data.map(({ id }) => id))
+        : checkedProductIds.filter((productId) => !data.find((product: ProductListItem) => product.id == productId)),
+    );
+  };
+
+  const handleRowChecked = ({ id, checked }: { id: number, checked: boolean }) => {
+    if (checked) {
+      setCheckedProductIds((oldValue) => [...oldValue, id]);
+    } else {
+      setCheckedProductIds((oldValue) => oldValue.filter((currentId) => currentId !== id));
+    }
   };
 
   return (
@@ -148,6 +184,17 @@ export default function ProductsTable({ orderId, refreshOrder }:{ orderId: strin
           setValue(payload);
           setPage(1);
         }}
+      />
+      <Box sx={{ m: '.5rem' }} />
+      <ProductsAction
+        disabled={disabled()}
+        allChecked={(_.intersectionWith(checkedProductIds, data, (productId: number, product: ProductListItem) => productId === product.id).length === data.length) && data.length != 0}
+        checkedProductsCount={checkedProductIds.length}
+        onAllCheck={handleAllChecked}
+        onPrint={() => printBarcodes(checkedProductIds)}
+        onPrintChecklist={() => printChecklists(checkedProductIds)}
+        onPrintPriceCard={() => printPriceCards(checkedProductIds)}
+        onPrintLabel={() => printLabels(checkedProductIds)}
       />
       <Box sx={{ m: '.5rem' }} />
       <PaginatedTable
@@ -188,7 +235,15 @@ export default function ProductsTable({ orderId, refreshOrder }:{ orderId: strin
         <TableBody>
           {data.map((product: ProductListItem) => (
             <TableRow key={product.id}>
-              <TableCell>{product.sku}</TableCell>
+              <TableCell>
+                <Checkbox
+                  checked={Boolean(checkedProductIds.find((id) => id === product.id))}
+                  sx={{ mr: '1.5rem' }}
+                  onChange={(e, checked) => handleRowChecked({ id: product.id, checked })}
+                  disabled={disabled()}
+                />
+                {product.sku}
+              </TableCell>
               <TableCell>{product.name}</TableCell>
               <TableCell>{product.type}</TableCell>
               <TableCell>
