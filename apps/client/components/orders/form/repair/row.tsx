@@ -1,4 +1,5 @@
 import {
+  Checkbox,
   Table,
   TableBody,
   TableHead,
@@ -22,6 +23,9 @@ export default function Row({
   onDeleteService,
   onProductPropertyChange,
   onServicePropertyChange,
+  checkedProductIds,
+  onCheck,
+  disabled,
 }: {
   product: ProductListItem,
   onAddService: () => void,
@@ -29,6 +33,9 @@ export default function Row({
   onDeleteService: (id: number) => void,
   onProductPropertyChange: (payload: ProductListItem, property: string, value) => void,
   onServicePropertyChange: (payload: Service, property: string, value) => void,
+  checkedProductIds: number[],
+  onCheck: (object: { id: number, checked: boolean }) => void,
+  disabled: boolean,
 }) {
   const { state: { user } } = useSecurity();
   const { trans } = useTranslation();
@@ -36,7 +43,15 @@ export default function Row({
   return (
     <>
       <TableRow>
-        <TableCell>{product.sku}</TableCell>
+        <TableCell>
+          <Checkbox
+            checked={Boolean(checkedProductIds.find((id) => id === product.id))}
+            sx={{ mr: '1.5rem' }}
+            onChange={(e, checked) => onCheck({ id: product.id, checked })}
+            disabled={disabled}
+          />
+          {product.sku}
+        </TableCell>
         <TableCell>{product.name}</TableCell>
         <TableCell>{product.type}</TableCell>
         <TableCell>{product.location}</TableCell>
