@@ -518,7 +518,11 @@ export class AOrderService {
       ...(partner && { company_contact_company_idTocompany: { company: { id: partner } } }),
       ...(email && {
         OR: [
-          { email },
+          {
+            company_contact_company_idTocompany: {
+              companyContacts: { some: { email } },
+            },
+          },
           {
             company_contact_company_idTocompany: {
               company: { companyContacts: { some: { email } } },
