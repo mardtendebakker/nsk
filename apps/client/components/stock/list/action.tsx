@@ -4,7 +4,7 @@ import {
 import EditLocation from '@mui/icons-material/EditLocation';
 import Category from '@mui/icons-material/Category';
 import Archive from '@mui/icons-material/Archive';
-// import AddBusiness from '@mui/icons-material/AddBusiness';
+import AddBusiness from '@mui/icons-material/AddBusiness';
 import Unarchive from '@mui/icons-material/Unarchive';
 import useTranslation from '../../../hooks/useTranslation';
 import Checkbox from '../../checkbox';
@@ -54,7 +54,7 @@ export default function Action({
         label={`${trans('selectAll')} ${checkedProductsCount > 0 ? `(${checkedProductsCount} ${trans('selected')})` : ''}`}
       />
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        {/* {checkedProductsCount > 0 && type == 'product'
+        {checkedProductsCount > 0 && type == 'product'
         && (
           <Can requiredGroups={['manager']}>
             <Button size="small" onClick={onPublishToStore} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
@@ -62,7 +62,7 @@ export default function Action({
               {trans('publishToStore')}
             </Button>
           </Can>
-        )} */}
+        )}
         {checkedProductsCount > 0 && type !== 'archived'
         && (
         <Button size="small" onClick={onArchive} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
