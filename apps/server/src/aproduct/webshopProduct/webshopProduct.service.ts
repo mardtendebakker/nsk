@@ -8,7 +8,6 @@ import { EntityStatus } from '../../common/types/entity-status.enum';
 import { AProductService } from '../aproduct.service';
 import { LocationService } from '../../admin/location/location.service';
 import { LocationLabelService } from '../../location-label/location-label.service';
-import { BlanccoService } from '../../blancco/blancco.service';
 
 @Injectable()
 export class WebshopProductService extends AProductService {
@@ -18,11 +17,10 @@ export class WebshopProductService extends AProductService {
     protected readonly locationLabelService: LocationLabelService,
     protected readonly fileService: FileService,
     protected readonly printService: PrintService,
-    protected readonly blanccoService: BlanccoService,
     protected readonly configService: ConfigService,
     protected readonly httpService: HttpService,
     @Inject('ENTITY_STATUS') protected readonly entityStatus: EntityStatus,
   ) {
-    super(repository, locationService, locationLabelService, fileService, printService, blanccoService, configService, httpService, entityStatus);
+    super(repository, locationService, locationLabelService, fileService, printService, configService, httpService, entityStatus);
   }
 }

@@ -30,7 +30,6 @@ import { ProductRelationAttributeProcessed } from './types/product-relation-attr
 import { ProductRelationAttributeOrderProcessed } from './types/product-relation-attribute-order-processed';
 import { EntityStatus } from '../common/types/entity-status.enum';
 import { LocationLabelService } from '../location-label/location-label.service';
-import { BlanccoService } from '../blancco/blancco.service';
 import { AttributeIncludeOption } from './types/attribute-include-option';
 import { UserLabelPrint } from '../print/types/user-label-print';
 import { CompanyLabelPrint } from '../print/types/company-label-print';
@@ -47,7 +46,6 @@ export class StockService {
     protected readonly locationLabelService: LocationLabelService,
     protected readonly fileService: FileService,
     protected readonly printService: PrintService,
-    protected readonly blanccoService: BlanccoService,
     protected readonly configService: ConfigService,
     protected readonly httpService: HttpService,
     protected readonly entityStatus: EntityStatus,
