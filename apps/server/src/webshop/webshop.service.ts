@@ -64,7 +64,7 @@ export class WebshopService {
           {
             product: {
               sku: product.sku,
-              name: product.name,
+              name: `${product.name}-${product.id}`,
               attribute_set_id: 4,
               price: product.price,
               extension_attributes: {
