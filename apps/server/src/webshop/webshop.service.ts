@@ -58,13 +58,17 @@ export class WebshopService {
 
   async addProduct(product: ProductRelation, availableQuantity: number): Promise<void> {
     try {
+      const entries2d = await this.getAllEntries(product);
+
+      const entries = [].concat(...entries2d);
+
       const result = await lastValueFrom(
         this.httpService.post(
           `${this.configService.get<string>('MAGENTO_BASE_URL')}rest/V1/products`,
           {
             product: {
               sku: product.sku,
-              name: `${product.name}-${product.id}`,
+              name: this.getProductNameUrl(product),
               attribute_set_id: 4,
               price: product.price,
               extension_attributes: {
@@ -115,47 +119,24 @@ export class WebshopService {
         ),
       );
 
-      const productSku = await result.data.sku;
-
-      product.product_attribute_product_attribute_product_idToproduct.forEach(async (productAttribute) => {
-        const isFile = productAttribute?.attribute?.type === AttributeType.TYPE_FILE;
-        if (isFile) {
-          const fileIds = productAttribute?.value?.split(FILE_VALUE_DELIMITER).map(Number) || [];
-
-          fileIds.forEach(async (fileId) => {
-            const file = await this.fileService.get(fileId);
-
-            await lastValueFrom(
-              this.httpService.post(
-                `${this.configService.get<string>('MAGENTO_BASE_URL')}rest/V1/products/${productSku}/media`,
-                {
-                  entry: {
-                    media_type: 'image',
-                    label: product.name,
-                    types: [
-                      'thumbnail', 'image', 'small_image', 'swatch_image',
-                    ],
-                    content:
-                    {
-                      base64_encoded_data: await file.Body.transformToString('base64'),
-                      type: file.ContentType,
-                      name: String(productAttribute.attribute_id),
-                    },
-                  },
-                },
-                {
-                  headers: {
-                    Authorization: `Bearer ${this.configService.get<string>('MAGENTO_API_KEY')}`,
-                  },
-                },
-              ).pipe(
-                catchError((error: AxiosError) => {
-                  throw new HttpException(error.response.data, error.response.status);
-                }),
-              ),
-            );
-          });
-        }
+      entries.forEach(async (entry) => {
+        await lastValueFrom(
+          this.httpService.post(
+            `${this.configService.get<string>('MAGENTO_BASE_URL')}rest/V1/products/${result.data.sku}/media`,
+            {
+              entry,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${this.configService.get<string>('MAGENTO_API_KEY')}`,
+              },
+            },
+          ).pipe(
+            catchError((error: AxiosError) => {
+              throw new HttpException(error.response.data, error.response.status);
+            }),
+          ),
+        );
       });
     } catch (e) {
       if (e?.status === 400) {
@@ -164,5 +145,59 @@ export class WebshopService {
         throw e;
       }
     }
+  }
+
+  private async getAllEntries(product: ProductRelation): Promise<any[][]> {
+    const entriesPromises = product.product_attribute_product_attribute_product_idToproduct.map(async (productAttribute) => {
+      let entries = [];
+      const isFile = productAttribute?.attribute?.type === AttributeType.TYPE_FILE;
+      if (isFile) {
+        const fileIds = productAttribute?.value?.split(FILE_VALUE_DELIMITER).map(Number) || [];
+
+        entries = await this.getEntries(fileIds, this.getProductNameUrl(product), productAttribute.attribute_id);
+      }
+
+      return entries;
+    });
+
+    return Promise.all(entriesPromises);
+  }
+
+  private async getEntries(fileIds: number[], label: string, attributeId: number): Promise<any[]> {
+    const entryPromises = fileIds.map(async (fileId) => {
+      const file = await this.fileService.get(fileId);
+      const entry = {
+        media_type: 'image',
+        label,
+        position: 1,
+        disabled: false,
+        types: [
+          'thumbnail', 'image', 'small_image', 'swatch_image',
+        ],
+        content:
+        {
+          base64_encoded_data: await file.Body.transformToString('base64'),
+          type: file.ContentType,
+          name: String(attributeId),
+        },
+      };
+
+      return entry;
+    });
+
+    return Promise.all(entryPromises);
+  }
+
+  private generateRandomHash(length) {
+    const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let hash = '';
+    for (let i = 0; i < length; i++) {
+      hash += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return hash;
+  }
+
+  private getProductNameUrl(product: ProductRelation): string {
+    return `${product.name.replace(/ /g, '-')}-${product.id}-${this.generateRandomHash(8)}`;
   }
 }
