@@ -152,7 +152,9 @@ export class WebshopService {
       let entries = [];
       const isFile = productAttribute?.attribute?.type === AttributeType.TYPE_FILE;
       if (isFile) {
-        const fileIds = productAttribute?.value?.split(FILE_VALUE_DELIMITER).map(Number) || [];
+        const fileIds = productAttribute?.value?.split(FILE_VALUE_DELIMITER)
+          .filter((n) => !Number.isNaN(Number(n)) && n.trim() !== '')
+          .map(Number) || [];
 
         entries = await this.getEntries(fileIds, this.getProductNameUrl(product), productAttribute.attribute_id);
       }
