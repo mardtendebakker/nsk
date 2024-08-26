@@ -68,7 +68,7 @@ export class WebshopService {
           {
             product: {
               sku: product.sku,
-              name: this.getProductNameUrl(product),
+              name: this.getProductNameId(product),
               attribute_set_id: 4,
               price: product.price,
               extension_attributes: {
@@ -152,7 +152,9 @@ export class WebshopService {
       let entries = [];
       const isFile = productAttribute?.attribute?.type === AttributeType.TYPE_FILE;
       if (isFile) {
-        const fileIds = productAttribute?.value?.split(FILE_VALUE_DELIMITER).map(Number) || [];
+        const fileIds = productAttribute?.value?.split(FILE_VALUE_DELIMITER)
+          .filter((n) => !Number.isNaN(Number(n)) && n.trim() !== '')
+          .map(Number) || [];
 
         entries = await this.getEntries(fileIds, this.getProductNameUrl(product), productAttribute.attribute_id);
       }
@@ -197,7 +199,11 @@ export class WebshopService {
     return hash;
   }
 
-  private getProductNameUrl(product: ProductRelation): string {
+  private getProductNameId(product: ProductRelation): string {
     return `${product.name.replace(/ /g, '-')}-${product.id}-${this.generateRandomHash(8)}`;
+  }
+
+  private getProductNameUrl(product: ProductRelation): string {
+    return `${this.getProductNameId(product)}-${this.generateRandomHash(8)}`;
   }
 }

@@ -155,8 +155,9 @@ export class SplitProductService {
       const isFile = productAttribute?.attribute?.type === AttributeType.TYPE_FILE;
 
       if (isFile) {
-        const fileIds = productAttribute?.value?.split(FILE_VALUE_DELIMITER).map(Number)
-          || [];
+        const fileIds = productAttribute?.value?.split(FILE_VALUE_DELIMITER)
+          .filter((n) => !Number.isNaN(Number(n)) && n.trim() !== '')
+          .map(Number) || [];
 
         fileIds.forEach(async (fileId) => {
           try {
