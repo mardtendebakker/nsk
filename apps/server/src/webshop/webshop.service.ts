@@ -68,7 +68,7 @@ export class WebshopService {
           {
             product: {
               sku: product.sku,
-              name: this.getProductNameUrl(product),
+              name: this.getProductNameId(product),
               attribute_set_id: 4,
               price: product.price,
               extension_attributes: {
@@ -199,7 +199,11 @@ export class WebshopService {
     return hash;
   }
 
-  private getProductNameUrl(product: ProductRelation): string {
+  private getProductNameId(product: ProductRelation): string {
     return `${product.name.replace(/ /g, '-')}-${product.id}-${this.generateRandomHash(8)}`;
+  }
+
+  private getProductNameUrl(product: ProductRelation): string {
+    return `${this.getProductNameId(product)}-${this.generateRandomHash(8)}`;
   }
 }
