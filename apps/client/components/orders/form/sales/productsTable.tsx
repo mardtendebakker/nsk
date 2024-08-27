@@ -262,7 +262,7 @@ export default function ProductsTable({ orderId, refreshOrder }:{ orderId: strin
                     'price',
                     e.target.value,
                   )}
-                  disabled={!user || !can({ user, requiredGroups: ['manager', 'logistics', 'local'] })}
+                  disabled={!user || !can({ user, requiredGroups: ['admin', 'manager', 'logistics', 'local'] })}
                 />
               </TableCell>
               <TableCell>
@@ -275,7 +275,7 @@ export default function ProductsTable({ orderId, refreshOrder }:{ orderId: strin
                     'quantity',
                     e.target.value,
                   )}
-                  disabled={!user || !can({ user, requiredGroups: ['manager', 'logistics', 'local'] })}
+                  disabled={!user || !can({ user, requiredGroups: ['admin', 'manager', 'logistics', 'local'] })}
                 />
               </TableCell>
               <TableCell align="right">

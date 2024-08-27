@@ -8,10 +8,10 @@ import { VehicleResponseDto } from './dto/vehicle-response.dto';
 import { PickupService } from '../calendar/pickup/pickup.service';
 import { FindCalendarResponeDto } from '../calendar/dto/find-calendar-response.dto';
 import { requiredModule } from '../common/guard/required-modules.guard';
-import { MANAGER_GROUPS } from '../common/types/cognito-groups.enum';
+import { CognitoGroups } from '../common/types/cognito-groups.enum';
 
 @ApiBearerAuth()
-@Authorization(MANAGER_GROUPS)
+@Authorization([CognitoGroups.SUPER_ADMIN, CognitoGroups.LOGISTICS])
 @ApiTags('vehicles')
 @Controller('vehicles')
 export class VehicleController {
