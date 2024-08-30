@@ -19,7 +19,7 @@ export class SaleController extends AOrderController {
   @Put(':id/products')
   @ApiBody({ type: [Number], description: 'Array of product IDs' })
   addProducts(@Param('id') id: number, @Body() productIds: number[]) {
-    return this.saleService.addProducts(id, productIds);
+    return this.saleService.addProducts(id, productIds.map((productId) => ({ productId, quantity: 1 })));
   }
 
   @Delete(':id/products')

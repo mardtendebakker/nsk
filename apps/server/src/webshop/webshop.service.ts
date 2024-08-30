@@ -52,7 +52,7 @@ export class WebshopService {
         zipcode: address.postcode,
       },
       transport: data.shipping_amount,
-      products: data.items.map(({ nexxusId }) => ({ id: nexxusId })),
+      products: data.items,
     });
   }
 
@@ -200,7 +200,7 @@ export class WebshopService {
   }
 
   private getProductNameId(product: ProductRelation): string {
-    return `${product.name.replace(/ /g, '-')}-${product.id}-${this.generateRandomHash(8)}`;
+    return `${product.name.replace(/ /g, '-')}-${product.id}`;
   }
 
   private getProductNameUrl(product: ProductRelation): string {

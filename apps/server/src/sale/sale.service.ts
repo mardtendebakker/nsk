@@ -21,6 +21,7 @@ import { CreateContactDto } from '../contact/dto/create-contact.dto';
 import { IExcelColumn } from './types/excel-column';
 import { ContactService } from '../contact/contact.service';
 import { AOrderProcessed } from '../aorder/types/aorder-processed';
+import { IProductToOrder } from './types/product-to-order';
 
 @Injectable()
 export class SaleService extends AOrderService {
@@ -35,7 +36,8 @@ export class SaleService extends AOrderService {
     super(repository, printService, fileService, contactService, AOrderDiscrimination.SALE);
   }
 
-  async addProducts(id: number, productIds: number[]) {
+  async addProducts(id: number, productsToOrder: IProductToOrder[]) {
+    const productIds = productsToOrder.map(({ productId }) => productId);
     const products = await this.aProductService.findAll({
       where: { id: { in: productIds } },
       excludeByOrderId: id,
@@ -57,7 +59,7 @@ export class SaleService extends AOrderService {
       .map((product) => ({
         product_id: product.id,
         price: product.price,
-        quantity: 1,
+        quantity: productsToOrder.find((pToOrder) => pToOrder.productId === product.id).quantity || 1,
       }));
 
     const addProductsToOrderParams: Prisma.aorderUpdateArgs = {

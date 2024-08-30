@@ -11,6 +11,7 @@ import { LocationLabelModule } from '../location-label/location-label.module';
 import { BlanccoModule } from '../blancco/blancco.module';
 import { AProductBlancco } from './aproduct.blancco';
 import { PrintModule } from '../print/print.module';
+import { WebshopProductModule } from './webshopProduct/webshopProduct.module';
 
 @Module({
   providers: [
@@ -29,6 +30,7 @@ import { PrintModule } from '../print/print.module';
     LocationLabelModule,
     FileModule,
     ArchivedModule,
+    WebshopProductModule,
     BlanccoModule,
     PrintModule,
     HttpModule,

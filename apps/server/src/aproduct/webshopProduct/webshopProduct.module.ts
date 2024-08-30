@@ -8,17 +8,16 @@ import { LocationLabelModule } from '../../location-label/location-label.module'
 import { BlanccoModule } from '../../blancco/blancco.module';
 import { WebshopProductBlancco } from './webshopProduct.blancco';
 import { PrintModule } from '../../print/print.module';
-import { MessagingService } from '../../messaging/messaging.service';
 import { WebshopService } from '../../webshop/webshop.service';
 import { WebshopProductService } from './webshopProduct.service';
 import { WebshopProductRepository } from './webshopProduct.repository';
 import { WebshopProductController } from './webshopProduct.controller';
+import { RabbitMQModule } from '../../rabbitmq/rabbitmq.module';
 
 @Global()
 @Module({
   providers: [
     WebshopProductService,
-    MessagingService,
     WebshopProductRepository,
     WebshopService,
     {
@@ -36,6 +35,7 @@ import { WebshopProductController } from './webshopProduct.controller';
     BlanccoModule,
     PrintModule,
     HttpModule,
+    RabbitMQModule,
   ],
   exports: [WebshopProductService],
 })

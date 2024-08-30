@@ -36,8 +36,7 @@ import { ModulePaymentModule } from '../module-payment/module-payment.module';
 import { ConfigModule as MyConfigModule } from '../config/config.module';
 import { AuthModule } from '../auth/auth.module';
 import { WebshopModule } from '../webshop/webshop.module';
-import { WebshopProductModule } from '../aproduct/webshopProduct/webshopProduct.module';
-import { MessagingModule } from '../messaging/messaging.module';
+import { ConsumerModule } from '../consumer/consumer.module';
 
 @Module({
   imports: [
@@ -49,6 +48,9 @@ import { MessagingModule } from '../messaging/messaging.module';
           MAX_RELATION_QUERY_LIMIT: process.env.MAX_RELATION_QUERY_LIMIT || 100,
           MAX_NONE_RELATION_QUERY_LIMIT:
             process.env.MAX_NONE_RELATION_QUERY_LIMIT || 5000,
+          RABBITMQ_PUBLISH_PRODUCT_TO_STORE: process.env.RABBITMQ_PUBLISH_PRODUCT_TO_STORE || 'publish_product_to_store',
+          RABBITMQ_MAGENTO_ORDER_CREATED: process.env.RABBITMQ_MAGENTO_ORDER_CREATED || 'magento_order_created',
+          RABBITMQ_EXCHANGE: process.env.RABBITMQ_EXCHANGE || 'nexxus',
         }),
       ],
     }),
@@ -96,8 +98,7 @@ import { MessagingModule } from '../messaging/messaging.module';
     MyConfigModule,
     WebshopModule,
     HttpModule,
-    WebshopProductModule,
-    MessagingModule,
+    ConsumerModule,
   ],
   controllers: [AppController],
   providers: [AppService],
