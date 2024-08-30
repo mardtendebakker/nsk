@@ -7,5 +7,5 @@ export class Order {
 
   transport?: number;
 
-  products: { id: string, nexxusId?: string, quantity: number }[];
+  products: { nexxus_id?: string, quantity: number }[];
 }

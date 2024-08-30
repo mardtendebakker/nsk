@@ -8,18 +8,22 @@ import { SaleService } from './sale.service';
 import { AOrderController } from '../aorder/aorder.controller';
 import { ImportDto } from './dto/import-dto';
 import { CognitoGroups, MANAGER_GROUPS, SALE_UPLOADER_GROUPS } from '../common/types/cognito-groups.enum';
+import { RabbitMQService } from '../rabbitmq/rabbitmq.service';
 
 @ApiTags('sales')
 @Controller('sales')
 export class SaleController extends AOrderController {
-  constructor(protected readonly saleService: SaleService) {
+  constructor(
+    protected readonly saleService: SaleService,
+    protected readonly rabbitMQService: RabbitMQService,
+  ) {
     super(saleService);
   }
 
   @Put(':id/products')
   @ApiBody({ type: [Number], description: 'Array of product IDs' })
   addProducts(@Param('id') id: number, @Body() productIds: number[]) {
-    return this.saleService.addProducts(id, productIds);
+    return this.saleService.addProducts(id, productIds.map((productId) => ({ productId, quantity: 1 })));
   }
 
   @Delete(':id/products')
@@ -49,5 +53,12 @@ export class SaleController extends AOrderController {
       return this.saleService.import(body, file, email);
     }
     throw new ForbiddenException('Insufficient permissions to access this api!');
+  }
+
+  @Post('bulk/publish-from-store')
+  @ApiBody({ type: [String], description: 'Array of order IDs' })
+  async publishFromStore(@Body() ids: string[]): Promise<boolean> {
+    await Promise.all(ids.map(async (id) => this.rabbitMQService.publishOrderFromStore(id)));
+    return true;
   }
 }

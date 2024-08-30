@@ -8,6 +8,7 @@ import { AProductModule } from '../aproduct/aproduct.module';
 import { OrderStatusModule } from '../admin/order-status/order-status.module';
 import { ContactModule } from '../contact/contact.module';
 import { PrintModule } from '../print/print.module';
+import { RabbitMQModule } from '../rabbitmq/rabbitmq.module';
 
 @Global()
 @Module({
@@ -27,6 +28,7 @@ import { PrintModule } from '../print/print.module';
     AProductModule,
     OrderStatusModule,
     PrintModule,
+    RabbitMQModule,
   ],
   exports: [SaleService],
 })

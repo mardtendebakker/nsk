@@ -12,10 +12,8 @@ import {
 } from './common/handlebars/handlebars.helpers';
 import { AppModule } from './app/app.module';
 import { NskNotFoundExceptionFilter } from './common/filters/nsk-not-found-exception.filter';
-import { MessagingService } from './messaging/messaging.service';
 
 async function bootstrap() {
-  await MessagingService.connect();
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   const handlebars = hbs.create();

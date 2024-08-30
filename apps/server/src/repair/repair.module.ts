@@ -9,6 +9,7 @@ import { SaleModule } from '../sale/sale.module';
 import { AProductModule } from '../aproduct/aproduct.module';
 import { ContactModule } from '../contact/contact.module';
 import { PrintModule } from '../print/print.module';
+import { RabbitMQModule } from '../rabbitmq/rabbitmq.module';
 
 @Module({
   providers: [
@@ -28,6 +29,7 @@ import { PrintModule } from '../print/print.module';
     AProductModule,
     OrderStatusModule,
     PrintModule,
+    RabbitMQModule,
   ],
   exports: [RepairService],
 })
