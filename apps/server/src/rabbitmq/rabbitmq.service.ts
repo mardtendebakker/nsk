@@ -65,6 +65,10 @@ export class RabbitMQService implements OnModuleInit, OnModuleDestroy {
     await this.pushToQueue(this.ch1, this.PUBLISH_PRODUCT_TO_STORE, JSON.stringify({ productId }));
   }
 
+  async publishOrderFromStore(orderId: string): Promise<void> {
+    await this.pushToQueue(this.ch2, this.MAGENTO_ORDER_CREATED, JSON.stringify({ orderId }));
+  }
+
   async consumeProductPublished(onMessage: (msg) => void) {
     return this.pullFromQueue(this.ch1, this.PUBLISH_PRODUCT_TO_STORE, onMessage);
   }
