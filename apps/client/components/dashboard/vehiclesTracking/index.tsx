@@ -70,7 +70,7 @@ export default function VehiclesTracking() {
 
   const hasTracking = hasModule('tracking');
 
-  const hasRequiredGroups = user && can({ user, requiredGroups: ['manager'] });
+  const hasRequiredGroups = user && can({ user, requiredGroups: ['logistics'] });
 
   useEffect(() => {
     const interval = setInterval(() => {

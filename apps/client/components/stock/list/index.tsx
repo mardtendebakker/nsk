@@ -318,7 +318,7 @@ export default function ListContainer({ type } : { type: ProductType }) {
           }}
           rowsPerPage={rowsPerPage}
           onEdit={(id) => setEditProductId(id)}
-          onDelete={user && can({ user, requiredGroups: ['manager'] }) ? handleDelete : undefined}
+          onDelete={user && can({ user, requiredGroups: ['admin', 'manager'] }) ? handleDelete : undefined}
         />
         {editProductId && (
         <EditModal
