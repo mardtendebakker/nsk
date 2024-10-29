@@ -140,7 +140,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
 
   return (
     <>
-      <Can requiredGroups={['manager', 'logistics', 'local']}>
+      <Can requiredGroups={['admin', 'manager', 'logistics', 'local']}>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Button size="small" onClick={() => setShowForm(true)} sx={{ mb: '.5rem' }}>
             <Add />
@@ -254,7 +254,7 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
                   />
                 </TableCell>
                 <TableCell align="right">
-                  <Can requiredGroups={['manager', 'logistics', 'local']}>
+                  <Can requiredGroups={['admin', 'manager', 'logistics', 'local']}>
                     <Edit onClick={() => setEditProductId(product.id)} />
                   </Can>
                 </TableCell>

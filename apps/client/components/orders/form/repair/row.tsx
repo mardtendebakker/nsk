@@ -88,7 +88,7 @@ export default function Row({
           />
         </TableCell>
         <TableCell align="right">
-          <Can requiredGroups={['manager', 'logistics', 'local']}>
+          <Can requiredGroups={['admin', 'manager', 'logistics', 'local']}>
             <AddButton title={trans('addService')} onClick={onAddService} />
             <Delete onClick={() => onDeleteProduct(product.id)} tooltip />
           </Can>
@@ -150,7 +150,7 @@ export default function Row({
                       />
                     </TableCell>
                     <TableCell>
-                      <Can requiredGroups={['manager', 'logistics', 'local']}>
+                      <Can requiredGroups={['admin', 'manager', 'logistics', 'local']}>
                         <Delete onClick={() => onDeleteService(service.id)} tooltip />
                       </Can>
                     </TableCell>
