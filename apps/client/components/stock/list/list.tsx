@@ -70,11 +70,9 @@ export default function List({
           <TableCell>
             {trans('location')}
           </TableCell>
-          {type == 'product' && (
-            <TableCell>
-              {trans('price')}
-            </TableCell>
-          )}
+          <TableCell>
+            {trans('price')}
+          </TableCell>
           {type != 'product' && (
             <TableCell>
               {trans('orderDate')}
