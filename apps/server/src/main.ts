@@ -48,8 +48,8 @@ async function bootstrap() {
       scheme: 'bearer',
       type: 'http',
     })
-    .setTitle('Revamp')
-    .setDescription('The revamp Open API')
+    .setTitle('Nsk')
+    .setDescription('The Nsk Open API')
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, swaggerConfig);
