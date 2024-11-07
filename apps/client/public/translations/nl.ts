@@ -458,6 +458,8 @@ const translation = {
   deliveriesBy: 'Leveringen door',
   everyone: 'Iedereen',
   logistics: 'Logistiek',
+  dhlTrackingCode: 'DHL-trackingcode',
+  trackDown: 'Spoor op',
   logisticsPage: {
     search: {
       placeholder: 'Zoek op Bestelnummer of beschrijving',

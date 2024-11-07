@@ -23,4 +23,9 @@ export class CreateDeliveryUncheckedWithoutAorderInputDto implements Prisma.deli
   @IsString()
   @ValidateIf((_, value) => value !== undefined)
     instructions?: string;
+
+  @ApiPropertyOptional()
+  @IsString()
+  @ValidateIf((_, value) => value !== undefined)
+    dhl_tracking_code?: string;
 }

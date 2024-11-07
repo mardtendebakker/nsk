@@ -82,6 +82,7 @@ export default useForm;
 
 export interface Field {
   value?: any;
+  originalValue?: any;
   validator?: (formRepresentation: FormRepresentation) => string | undefined | null;
   required?: boolean;
   requiredMessage?: string;

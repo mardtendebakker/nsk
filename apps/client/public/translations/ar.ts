@@ -459,6 +459,8 @@ const translation = {
   deliveriesBy: 'تسليم بواسطة',
   everyone: 'الجميع',
   logistics: 'اللوجستيات',
+  dhlTrackingCode: 'رمز تتبع DHL',
+  trackDown: 'تعقب',
   magentoCategoryId: 'معرف فئة Magento',
   logisticsPage: {
     search: {
