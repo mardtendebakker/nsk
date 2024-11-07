@@ -78,11 +78,9 @@ export default function Row(
         <TableCell>
           {product.location}
         </TableCell>
-        {type == 'product' && (
         <TableCell>
           {price(product.price)}
         </TableCell>
-        )}
         {type != 'product' && (
         <TableCell>
           {product.order_date ? format(new Date(product.order_date), 'yyyy/MM/dd') : '--'}
