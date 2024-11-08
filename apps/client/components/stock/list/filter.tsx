@@ -15,7 +15,7 @@ export default function Filter({
   formRepresentation,
   setValue,
   onReset,
-  autoFocus,
+  autoFocus = false,
 }: {
   disabled: boolean,
   formRepresentation : FormRepresentation,
@@ -92,7 +92,3 @@ export default function Filter({
     </BorderedBox>
   );
 }
-
-Filter.defaultProps = {
-  autoFocus: false,
-};

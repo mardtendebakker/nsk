@@ -21,7 +21,7 @@ export default function AttributeForm({
   setValue,
   formRepresentation,
   productTypeId,
-  disabled,
+  disabled = false,
 }: {
   setValue: SetValue,
   formRepresentation: FormRepresentation,
@@ -107,5 +107,3 @@ export default function AttributeForm({
     </BorderedBox>
   );
 }
-
-AttributeForm.defaultProps = { disabled: false };

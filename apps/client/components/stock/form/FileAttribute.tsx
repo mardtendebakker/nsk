@@ -17,7 +17,7 @@ function FileAttribute({
   value,
   afile,
   onChange,
-  disabled,
+  disabled = false,
 }: {
   attribute: Attribute,
   value: (string | File)[],
@@ -65,8 +65,6 @@ function FileAttribute({
     </Box>
   );
 }
-
-FileAttribute.defaultProps = { disabled: false };
 
 export default memo(
   FileAttribute,

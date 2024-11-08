@@ -11,7 +11,3 @@ export default function Can({
   // eslint-disable-next-line react/jsx-no-useless-fragment
   return user && can({ user, requiredGroups }) && <>{children}</>;
 }
-
-Can.defaultProps = {
-  requiredGroups: undefined,
-};

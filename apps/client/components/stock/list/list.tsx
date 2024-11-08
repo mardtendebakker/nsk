@@ -23,9 +23,9 @@ export default function List({
   onEdit,
   onDelete,
   onSplit,
-  disabled,
   checkedProductIds,
-  disableSelection,
+  disabled = false,
+  disableSelection = () => false,
 }: {
   type: ProductType,
   products: ProductListItem[],
@@ -127,7 +127,3 @@ export default function List({
     </PaginatedTable>
   );
 }
-
-List.defaultProps = {
-  onDelete: undefined, onSplit: undefined, onEdit: undefined, disabled: false, disableSelection: () => false,
-};

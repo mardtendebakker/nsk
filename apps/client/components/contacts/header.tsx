@@ -6,7 +6,7 @@ import useTranslation from '../../hooks/useTranslation';
 import { CONTACTS_NEW } from '../../utils/routes';
 import NewResource from '../button/newResource';
 
-export default function Header({ newContactRoute }:{ newContactRoute ?: string }) {
+export default function Header({ newContactRoute = CONTACTS_NEW }:{ newContactRoute ?: string }) {
   const router = useRouter();
   const { trans } = useTranslation();
 
@@ -20,10 +20,5 @@ export default function Header({ newContactRoute }:{ newContactRoute ?: string }
       </Box>
       <NewResource onClick={() => router.push(newContactRoute)} requiredModule="customer_contact_action" label={trans('newContact')} />
     </Box>
-
   );
 }
-
-Header.defaultProps = {
-  newContactRoute: CONTACTS_NEW,
-};

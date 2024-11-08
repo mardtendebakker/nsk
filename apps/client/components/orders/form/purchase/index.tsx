@@ -216,6 +216,4 @@ function PurchaseForm({
   );
 }
 
-PurchaseForm.defaultProps = { order: undefined, onFileDelete: undefined };
-
 export default PurchaseForm;

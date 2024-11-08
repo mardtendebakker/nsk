@@ -85,8 +85,3 @@ export default function Action({
     </Box>
   );
 }
-
-Action.defaultProps = {
-  id: undefined,
-  onImportFromBlancco: undefined,
-};

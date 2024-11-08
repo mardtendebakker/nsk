@@ -6,7 +6,7 @@ import TextField from '../../input/textField';
 import { price } from '../../../utils/formatter';
 
 function AutocompleteAttribute({
-  value, onChange, attribute, disabled,
+  value, onChange, attribute, disabled = false,
 }
 : {
   attribute: Attribute,
@@ -46,8 +46,6 @@ function AutocompleteAttribute({
     </Box>
   );
 }
-
-AutocompleteAttribute.defaultProps = { disabled: false };
 
 export default memo(
   AutocompleteAttribute,

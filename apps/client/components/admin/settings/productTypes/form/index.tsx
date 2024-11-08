@@ -9,7 +9,7 @@ import Checkbox from '../../../../checkbox';
 export default function Form({
   setValue,
   formRepresentation,
-  disabled,
+  disabled = false,
 }: {
   setValue: SetValue,
   formRepresentation: FormRepresentation
@@ -96,5 +96,3 @@ export default function Form({
     </BorderedBox>
   );
 }
-
-Form.defaultProps = { disabled: false };

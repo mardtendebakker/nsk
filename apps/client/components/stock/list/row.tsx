@@ -157,5 +157,3 @@ export default function Row(
     </>
   );
 }
-
-Row.defaultProps = { onDelete: undefined, onSplit: undefined, onEdit: undefined };

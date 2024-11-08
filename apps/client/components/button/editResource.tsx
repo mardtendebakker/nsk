@@ -6,8 +6,8 @@ import Edit from './edit';
 
 export default function EditResource({
   requiredModule,
+  disabled = false,
   onClick,
-  disabled,
   href,
 }:{ onClick?: () => void, requiredModule: ModuleName, disabled?: boolean, href?: string }) {
   const { trans } = useTranslation();
@@ -23,7 +23,3 @@ export default function EditResource({
     </Tooltip>
   );
 }
-
-EditResource.defaultProps = {
-  disabled: false, onClick: undefined, href: undefined,
-};

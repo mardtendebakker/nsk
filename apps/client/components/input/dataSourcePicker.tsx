@@ -9,24 +9,24 @@ import { AxiosResponse } from '../../utils/axios';
 
 export default function DataSourcePicker(
   {
-    disabled,
-    params,
+    onChange,
+    path,
+    searchKey = 'search',
+    params = {},
+    disabled = false,
     value,
     sx,
     fullWidth,
     label,
     placeholder,
-    displayFieldset,
-    formatter,
-    onChange,
     onCurrentValueChange,
-    path,
-    searchKey,
+    displayFieldset = true,
+    formatter = (object: { id: number | string, label: string }): { id: number | string, label: string } => object,
     helperText,
-    error,
-    multiple,
-    fetchOnSearch,
-    fetchWhileDisabled,
+    error = false,
+    multiple = false,
+    fetchOnSearch = true,
+    fetchWhileDisabled = false,
   }: {
     disabled?: boolean,
     params?: { [key: string]: string | number },
@@ -143,22 +143,3 @@ export default function DataSourcePicker(
     />
   );
 }
-
-DataSourcePicker.defaultProps = {
-  searchKey: 'search',
-  params: {},
-  disabled: false,
-  value: undefined,
-  sx: undefined,
-  fullWidth: undefined,
-  label: undefined,
-  placeholder: undefined,
-  onCurrentValueChange: undefined,
-  displayFieldset: true,
-  formatter: (object): { id: number | string, label: string } => object,
-  helperText: undefined,
-  error: false,
-  multiple: false,
-  fetchOnSearch: true,
-  fetchWhileDisabled: false,
-};
