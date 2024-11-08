@@ -6,5 +6,5 @@ export default memo(
   (
     { inputRef, InputProps, ...prevProps },
     { inputRef: inputRef2, InputProps: InputProps2, ...nextProps },
-  ) => JSON.stringify(prevProps) === JSON.stringify(nextProps),
+  ) => JSON.stringify(prevProps) === JSON.stringify(nextProps) && InputProps === InputProps2,
 );
