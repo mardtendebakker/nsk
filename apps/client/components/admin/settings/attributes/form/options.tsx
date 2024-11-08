@@ -9,7 +9,7 @@ export default function Options({
   setValue,
   setData,
   formRepresentation,
-  disabled,
+  disabled = false,
 }: {
   setValue: SetValue,
   setData: (arg0: FormRepresentation) => void,
@@ -83,5 +83,3 @@ export default function Options({
     </>
   );
 }
-
-Options.defaultProps = { disabled: false };

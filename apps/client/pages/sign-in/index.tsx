@@ -14,7 +14,7 @@ import { FormValues } from '../../components/signIn/types';
 import ChangePasswordForm from '../../components/signIn/changePasswordForm';
 
 export default function SignIn({
-  formType,
+  formType = 'signIn',
 }: {
   formType? : FormValues,
 }) {
@@ -95,7 +95,3 @@ export default function SignIn({
     </>
   );
 }
-
-SignIn.defaultProps = {
-  formType: 'signIn',
-};

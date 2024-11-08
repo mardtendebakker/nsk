@@ -52,8 +52,3 @@ export default function BulkPrintOrder({
     </Button>
   );
 }
-
-BulkPrintOrder.defaultProps = {
-  sx: undefined,
-  disabled: undefined,
-};

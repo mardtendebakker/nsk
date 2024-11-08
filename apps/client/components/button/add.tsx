@@ -6,9 +6,9 @@ import useTranslation from '../../hooks/useTranslation';
 
 export default function Add({
   onClick,
-  disabled,
-  title,
   sx,
+  disabled = false,
+  title,
 }: {
   onClick: () => void,
   disabled?: boolean,
@@ -27,5 +27,3 @@ export default function Add({
     </Tooltip>
   );
 }
-
-Add.defaultProps = { sx: undefined, disabled: false, title: undefined };

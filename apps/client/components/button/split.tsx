@@ -4,7 +4,9 @@ import {
 import Bolt from '@mui/icons-material/Bolt';
 import useTranslation from '../../hooks/useTranslation';
 
-export default function Split({ onClick, disabled, sx }: { onClick: () => void, disabled?: boolean, sx?: SxProps }) {
+export default function Split({
+  onClick, sx, disabled = false,
+}: { onClick: () => void, disabled?: boolean, sx?: SxProps }) {
   const { trans } = useTranslation();
 
   return (
@@ -17,5 +19,3 @@ export default function Split({ onClick, disabled, sx }: { onClick: () => void, 
     </Tooltip>
   );
 }
-
-Split.defaultProps = { sx: undefined, disabled: false };

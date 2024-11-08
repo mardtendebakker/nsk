@@ -2,7 +2,7 @@ import { Box } from '@mui/material';
 
 export type Variant = 'danger' | 'warning' | 'success';
 
-export default function Chip({ variant, children } : { variant?: Variant, children: string | JSX.Element }) {
+export default function Chip({ variant = 'success', children } : { variant: Variant, children: string | JSX.Element }) {
   const COLORS = {
     success: '#008A40',
     warning: '#1F0E8F',
@@ -24,7 +24,3 @@ export default function Chip({ variant, children } : { variant?: Variant, childr
     </Box>
   );
 }
-
-Chip.defaultProps = {
-  variant: 'success',
-};

@@ -1,7 +1,7 @@
 import { Box, Checkbox as BaseCheckbox, Typography } from '@mui/material';
 
 export default function Checkbox({
-  disabled, checked, onCheck, label,
+  disabled = false, checked, onCheck, label,
 }: {
   checked: boolean,
   onCheck: (check:boolean) => void,
@@ -20,5 +20,3 @@ export default function Checkbox({
     </Box>
   );
 }
-
-Checkbox.defaultProps = { disabled: false, label: undefined };

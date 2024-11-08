@@ -7,9 +7,9 @@ import useTranslation from '../../hooks/useTranslation';
 import ConfirmationDialog from '../confirmationDialog';
 
 export default function Delete({
-  tooltip,
   onClick,
-  disabled,
+  tooltip = false,
+  disabled = false,
 }: {
   tooltip?: boolean,
   onClick: () => void,
@@ -67,5 +67,3 @@ export default function Delete({
     </>
   );
 }
-
-Delete.defaultProps = { tooltip: false, disabled: false };

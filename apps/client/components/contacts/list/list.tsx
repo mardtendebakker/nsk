@@ -22,7 +22,7 @@ export default function List({
   rowsPerPage,
   disabled,
   editContactRouteBuilder,
-  hideCompanyFields,
+  hideCompanyFields = false,
 }: {
   contacts: ContactListItem[],
   onDelete: (id: number)=>void,
@@ -131,7 +131,3 @@ export default function List({
     </>
   );
 }
-
-List.defaultProps = {
-  hideCompanyFields: false,
-};

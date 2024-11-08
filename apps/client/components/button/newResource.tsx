@@ -7,7 +7,7 @@ import { ModuleName } from '../../stores/security';
 export default function NewResource({
   requiredModule,
   onClick,
-  disabled,
+  disabled = false,
   label,
 }:{ onClick: () => void, requiredModule: ModuleName, disabled?: boolean, label: string }) {
   const { trans } = useTranslation();
@@ -31,7 +31,3 @@ export default function NewResource({
     </Tooltip>
   );
 }
-
-NewResource.defaultProps = {
-  disabled: false,
-};

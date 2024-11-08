@@ -39,10 +39,6 @@ export default function ThemeProvider({ children }) {
   );
 }
 
-ThemeProvider.defaultProps = {
-  children: undefined,
-};
-
 ThemeProvider.propTypes = {
   children: PropTypes.node,
 };

@@ -11,7 +11,7 @@ export default function ImageInput({
   onChange,
   onClear,
   sx,
-  disabled,
+  disabled = false,
 }: {
   image?: string | File,
   onChange: (arg0: File) => void,
@@ -119,10 +119,3 @@ export default function ImageInput({
     </Box>
   );
 }
-
-ImageInput.defaultProps = {
-  image: undefined,
-  onClear: undefined,
-  sx: undefined,
-  disabled: false,
-};

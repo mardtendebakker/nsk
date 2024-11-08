@@ -5,9 +5,9 @@ import EditIcon from '@mui/icons-material/Edit';
 import useTranslation from '../../hooks/useTranslation';
 
 export default function Edit({
-  onClick,
-  disabled,
   sx,
+  disabled = false,
+  onClick,
   href,
 }: { onClick?: () => void, disabled?: boolean, sx?: SxProps, href?:string }) {
   const { trans } = useTranslation();
@@ -22,7 +22,3 @@ export default function Edit({
     </Tooltip>
   );
 }
-
-Edit.defaultProps = {
-  sx: undefined, disabled: false, onClick: undefined, href: undefined,
-};

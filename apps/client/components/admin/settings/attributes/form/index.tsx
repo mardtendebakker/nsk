@@ -13,7 +13,7 @@ export default function Form({
   setValue,
   setData,
   formRepresentation,
-  disabled,
+  disabled = false,
 }: {
   setValue: SetValue,
   setData: (arg0: FormRepresentation) => void,
@@ -121,5 +121,3 @@ export default function Form({
     </BorderedBox>
   );
 }
-
-Form.defaultProps = { disabled: false };

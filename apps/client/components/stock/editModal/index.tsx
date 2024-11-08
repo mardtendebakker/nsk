@@ -26,7 +26,7 @@ export default function EditModal(
     onClose,
     onSubmit,
     id,
-    type,
+    type = 'product',
   }: {
     onClose: () => void,
     onSubmit: () => void,
@@ -180,7 +180,3 @@ export default function EditModal(
     </>
   );
 }
-
-EditModal.defaultProps = {
-  type: 'product',
-};
