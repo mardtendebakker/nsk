@@ -462,6 +462,8 @@ const translation = {
   deliveriesBy: 'تحویل توسط',
   everyone: 'همه',
   magentoCategoryId: 'شناسه دسته Magento',
+  dhlTrackingCode: 'کد رهگیری DHL',
+  trackDown: 'پیگیری کنید',
   logisticsPage: {
     search: {
       placeholder: 'جستجو بر اساس شماره سفارش یا توضیحات',

@@ -452,6 +452,8 @@ const translation = {
   deliveriesBy: 'Geliefert durch',
   everyone: 'Jeder',
   logistics: 'Logistik',
+  dhlTrackingCode: 'DHL Tracking Code',
+  trackDown: 'Aufspüren',
   magentoCategoryId: 'Magento-Kategorie-ID',
   logisticsPage: {
     search: {

@@ -36,6 +36,7 @@ export function initFormState(trans, order?: Order) {
     deliveryDate: { value: order?.delivery?.date },
     deliveryType: { value: order?.delivery?.type, required: true },
     deliveryInstructions: { value: order?.delivery?.instructions },
+    dhlTrackingCode: { value: order?.delivery?.dhl_tracking_code, originalValue: order?.delivery?.dhl_tracking_code },
     customerId: {
       validator: (formRepresentation: FormRepresentation) => {
         if (!formRepresentation.newCustomer.value && formRepresentation.customerId.value == undefined) {
@@ -94,6 +95,7 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
       type: formRepresentation.deliveryType.value,
       instructions: formRepresentation.deliveryInstructions.value,
       logistics_id: formRepresentation.logisticId.value || null,
+      dhl_tracking_code: formRepresentation.dhlTrackingCode.value || null,
     },
   };
 

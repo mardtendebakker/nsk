@@ -87,5 +87,6 @@ interface Delivery {
   date?:string,
   type?:number,
   instructions?:string,
+  dhl_tracking_code?: string,
   logistics_id?: number,
 }

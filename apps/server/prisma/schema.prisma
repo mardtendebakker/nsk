@@ -411,14 +411,15 @@ model module {
 }
 
 model delivery {
-  id           Int       @id @default(autoincrement())
-  order_id     Int?      @unique(map: "uniq_delivery_order_id")
-  logistics_id Int?
-  type         Int?
-  date         DateTime? @db.DateTime(0)
-  instructions String?   @db.LongText
-  aorder       aorder?   @relation(fields: [order_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_delivery_aorder")
-  fos_user     fos_user? @relation(fields: [logistics_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_delivery_logistics")
+  id                 Int       @id @default(autoincrement())
+  order_id           Int?      @unique(map: "uniq_delivery_order_id")
+  dhl_tracking_code  String?   @db.VarChar(255)     
+  logistics_id       Int?
+  type               Int?
+  date               DateTime? @db.DateTime(0)
+  instructions       String?   @db.LongText
+  aorder             aorder?   @relation(fields: [order_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_delivery_aorder")
+  fos_user           fos_user? @relation(fields: [logistics_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_delivery_logistics")
 
   @@index([logistics_id], map: "idx_delivery_logistic")
   @@index([date], map: "idx_date")
