@@ -158,7 +158,7 @@ export class WebshopService {
           .filter((n) => !Number.isNaN(Number(n)) && n.trim() !== '')
           .map(Number) || [];
 
-        entries = await this.getEntries(fileIds, this.getProductNameUrl(product), productAttribute.attribute_id);
+        entries = await this.getEntries(fileIds, this.getProductNameUrl(product));
       }
 
       return entries;
@@ -167,7 +167,7 @@ export class WebshopService {
     return Promise.all(entriesPromises);
   }
 
-  private async getEntries(fileIds: number[], label: string, attributeId: number): Promise<any[]> {
+  private async getEntries(fileIds: number[], label: string): Promise<any[]> {
     const entryPromises = fileIds.map(async (fileId) => {
       const file = await this.fileService.get(fileId);
       const entry = {
@@ -182,7 +182,7 @@ export class WebshopService {
         {
           base64_encoded_data: await file.Body.transformToString('base64'),
           type: file.ContentType,
-          name: String(attributeId),
+          name: `${this.generateRandomHash(8)}-${this.generateRandomHash(8)}`,
         },
       };
 
