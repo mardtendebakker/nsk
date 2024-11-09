@@ -4,7 +4,7 @@ import TextField from './textField';
 
 export default function DatePicker({
   placeholder, onChange, renderInput, ...rest
-}: DesktopDatePickerProps<Date, Date> & { placeholder?:string, renderInput?: (props: TextFieldProps) => React.ReactElement }) {
+}: { placeholder?:string, renderInput?: ((props: TextFieldProps) => React.ReactElement) } & Omit<DesktopDatePickerProps<Date, Date>, 'renderInput'>) {
   return (
     <DesktopDatePicker
       {...rest}
