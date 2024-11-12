@@ -69,7 +69,7 @@ export class WebshopService {
           `${this.configService.get<string>('MAGENTO_BASE_URL')}rest/V1/products`,
           {
             product: {
-              sku: product.sku,
+              sku: product.id,
               name: this.getProductNameId(product),
               attribute_set_id: 4,
               price: product.price,
