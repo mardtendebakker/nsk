@@ -91,6 +91,10 @@ export class WebshopService {
                   value: product.id.toString(),
                 },
                 {
+                  attribute_code: 'nexxus_sku',
+                  value: product.sku,
+                },
+                {
                   attribute_code: 'meta_title',
                   value: product.name,
                 },
