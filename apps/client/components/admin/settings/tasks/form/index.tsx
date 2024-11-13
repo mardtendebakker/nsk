@@ -8,7 +8,7 @@ import { AUTOCOMPLETE_PRODUCT_TYPES_PATH } from '../../../../../utils/axios';
 export default function Form({
   setValue,
   formRepresentation,
-  disabled,
+  disabled = false,
 }: {
   setValue: SetValue,
   formRepresentation: FormRepresentation
@@ -57,5 +57,3 @@ export default function Form({
     </BorderedBox>
   );
 }
-
-Form.defaultProps = { disabled: false };

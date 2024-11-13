@@ -23,7 +23,7 @@ describe('FileService', () => {
     product_id: null,
     pickup_id: null,
     original_client_filename: "d4425835-34ca-4014-ba8c-21f63c7ccb5d.jpg",
-    unique_server_filename: "revamp-test-bucket",
+    unique_server_filename: "nsk-local-bucket",
     discr: createFileDto.discr,
     external_id: null,
     order_id: null

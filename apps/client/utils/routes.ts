@@ -28,6 +28,7 @@ export const ORDERS_REPAIRS_NEW = '/orders/repairs/new';
 export const ORDERS_SALES_EDIT = '/orders/sales/[id]';
 export const STOCKS_REPAIR_SERVICES = '/stock/repair-services';
 export const STOCKS_ARCHIVED = '/stock/archived';
+export const STOCKS_WEBSHOP = '/stock/webshop';
 export const MY_TASKS = '/my-tasks';
 export const ADMIN_USERS = '/admin/users';
 export const ADMIN_MODULES = '/admin/modules';
@@ -57,7 +58,7 @@ export const getRouteGroups = (uri: string): Group[] => {
   }
 
   if (uri.startsWith('/logistics')) {
-    return ['admin', 'super_admin', 'manager', 'logistics'];
+    return ['super_admin', 'admin', 'manager', 'logistics'];
   }
 
   if (
@@ -65,14 +66,14 @@ export const getRouteGroups = (uri: string): Group[] => {
     || uri.startsWith('/my-tasks')
     || uri.startsWith('/bulk-email')
   ) {
-    return ['admin', 'super_admin', 'manager', 'logistics', 'local'];
+    return ['super_admin', 'admin', 'manager', 'logistics', 'local'];
   }
 
   if (
     uri.startsWith('/orders')
     || uri.startsWith('/contacts')
   ) {
-    return ['admin', 'super_admin', 'manager', 'logistics', 'local', 'partner_sale_uploader', 'partner'];
+    return ['super_admin', 'admin', 'manager', 'logistics', 'local', 'partner_sale_uploader', 'partner'];
   }
 };
 

@@ -8,9 +8,11 @@ import {
 } from '../../utils/routes';
 import can from '../../utils/can';
 import { Group } from '../../stores/security';
+import useRemoteConfig from '../../hooks/useRemoteConfig';
 
 export default function DashboardLayout({ children }: { children: JSX.Element | JSX.Element[] }) {
   const { state: { user }, refreshUserInfo } = useSecurity();
+  const { fetchConfig, state: { config } } = useRemoteConfig();
   const [canShowPage, setCanShowPage] = useState(false);
   const router = useRouter();
 
@@ -33,10 +35,11 @@ export default function DashboardLayout({ children }: { children: JSX.Element | 
   useEffect(() => {
     if (user?.emailVerified) {
       refreshUserInfo().catch(() => {});
+      fetchConfig();
     }
   }, []);
 
-  return user?.emailVerified && canShowPage && (
+  return user?.emailVerified && canShowPage && config && (
     <>
       <Header />
       <Box

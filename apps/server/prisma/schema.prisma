@@ -41,15 +41,13 @@ model aorder {
   discr                               String          @db.VarChar(255)
   backingPurchaseOrder_id             Int?
   external_id                         Int?
-  delivery_type                       Int?
-  delivery_date                       DateTime?       @db.DateTime(0)
-  delivery_instructions               String?         @db.LongText
   afile                               afile[]
   contact_aorder_supplier_idTocontact contact?        @relation("aorder_supplier_idTocontact", fields: [supplier_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_416119D92ADD6D8C")
   aorder                              aorder?         @relation("aorderToaorder", fields: [backingPurchaseOrder_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_416119D930005451")
   other_aorder                        aorder[]        @relation("aorderToaorder")
   order_status                        order_status?   @relation(fields: [status_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_416119D96BF700BD")
   contact_aorder_customer_idTocontact contact?        @relation("aorder_customer_idTocontact", fields: [customer_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_416119D99395C3F3")
+  delivery                            delivery?
   pickup                              pickup?
   product_order                       product_order[]
   repair                              repair?
@@ -58,7 +56,6 @@ model aorder {
   @@index([backingPurchaseOrder_id], map: "IDX_416119D930005451")
   @@index([status_id], map: "IDX_416119D96BF700BD")
   @@index([customer_id], map: "IDX_416119D99395C3F3")
-  @@index([delivery_date], map: "idx_deliveryDate")
 }
 
 model aservice {
@@ -123,6 +120,7 @@ model fos_user {
   license_plate         String?         @db.VarChar(50)
   emailCanonical        String          @db.VarChar(255)
   partner_id            Int?
+  delivery              delivery[]
   pickup                pickup[]
   user_location         user_location[]
 }
@@ -242,6 +240,7 @@ model product_status {
 model product_type {
   id                     Int                      @id @default(autoincrement())
   name                   String                   @unique(map: "UNIQ_13675885E237E06") @db.VarChar(255)
+  magento_category_id    String?                  @db.VarChar(255)
   pindex                 Int?
   comment                String?                  @db.LongText
   is_attribute           Boolean                  @default(false)
@@ -409,4 +408,19 @@ model module {
   updated_at     DateTime         @default(now()) @updatedAt @db.DateTime(0)
   config         String?          @db.LongText
   module_payment module_payment[]
+}
+
+model delivery {
+  id                 Int       @id @default(autoincrement())
+  order_id           Int?      @unique(map: "uniq_delivery_order_id")
+  dhl_tracking_code  String?   @db.VarChar(255)     
+  logistics_id       Int?
+  type               Int?
+  date               DateTime? @db.DateTime(0)
+  instructions       String?   @db.LongText
+  aorder             aorder?   @relation(fields: [order_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_delivery_aorder")
+  fos_user           fos_user? @relation(fields: [logistics_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_delivery_logistics")
+
+  @@index([logistics_id], map: "idx_delivery_logistic")
+  @@index([date], map: "idx_date")
 }

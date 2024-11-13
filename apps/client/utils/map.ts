@@ -1,7 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import { LogisticServiceListItem } from './axios/models/logistic';
 
-const API_KEY = process.env.MYPTV_API_KEY;
 const SEARCH_TEXT_URL = process.env.MYPTV_SEARCH_TEXT_URL;
 const WAY_POINTS_URL = process.env.MYPTV_WAY_POINTS_URL;
 const WAY_POINTS_SEARCH_PREFIX = process.env.MYPTV_WAY_POINTS_SEARCH_PREFIX;
@@ -10,9 +9,9 @@ const UNKNOWN_ADDRESS = process.env.MYPTV_UNKNOWN_ADDRESS;
 const MAP_STYLE_URL = process.env.MYPTV_MAP_STYLE_URL;
 const MAP_TILE_URL = process.env.MYPTV_MAP_TILE_URL;
 
-export const getTransformRequest = (url, resourceType) => {
+export const getTransformRequest = (url, resourceType, apiKey) => {
   if (resourceType === 'Tile') {
-    return { url, headers: { ApiKey: API_KEY } };
+    return { url, headers: { ApiKey: apiKey } };
   }
 
   return { url, headers: {} };
@@ -53,12 +52,12 @@ export interface Way {
   position?: { latitude: number, longitude: number }
 }
 
-export async function fetchWayForLogisticService(logisticServiceItem: LogisticServiceListItem): Promise<LogisticWay> {
+export async function fetchWayForLogisticService(logisticServiceItem: LogisticServiceListItem, apiKey: string): Promise<LogisticWay> {
   const { supplier, customer } = logisticServiceItem.order;
   const contact = supplier || customer;
 
   const address = `${contact.street}, ${contact.zip}, ${contact.city}, ${contact.state}, ${contact.country}`;
-  const result = await axios.get(`${SEARCH_TEXT_URL}${address}`, { headers: { apiKey: API_KEY } });
+  const result = await axios.get(`${SEARCH_TEXT_URL}${address}`, { headers: { apiKey } });
 
   return {
     logisticService: logisticServiceItem,
@@ -67,9 +66,9 @@ export async function fetchWayForLogisticService(logisticServiceItem: LogisticSe
   };
 }
 
-export async function fetchWayForLogisticServices(logisticServices: LogisticServiceListItem[]): Promise<LogisticWay[]> {
+export async function fetchWayForLogisticServices(logisticServices: LogisticServiceListItem[], apiKey: string): Promise<LogisticWay[]> {
   const result = await Promise.allSettled(
-    logisticServices.map((element: LogisticServiceListItem) => element && fetchWayForLogisticService(element)),
+    logisticServices.map((element: LogisticServiceListItem) => element && fetchWayForLogisticService(element, apiKey)),
   );
 
   const fulfilled = result.filter(({ status }) => status == FULFILLED_STATUS) as PromiseFulfilledResult<AxiosResponse>[];
@@ -79,14 +78,14 @@ export async function fetchWayForLogisticServices(logisticServices: LogisticServ
   return ways.filter((way) => way.address != UNKNOWN_ADDRESS);
 }
 
-export async function fetchPolylineInfo(ways: Way[]): Promise<{ coordinates: [], travelTime: number }> {
+export async function fetchPolylineInfo(ways: Way[], apiKey: string): Promise<{ coordinates: [], travelTime: number }> {
   const url = new URL(WAY_POINTS_URL);
 
   ways.forEach((way: Way) => {
     url.searchParams.append(WAY_POINTS_SEARCH_PREFIX, `${way.position.latitude},${way.position.longitude}`);
   });
 
-  const result = await axios.get(url.toString(), { headers: { apiKey: API_KEY } });
+  const result = await axios.get(url.toString(), { headers: { apiKey } });
 
   return {
     coordinates: JSON.parse(result.data.polyline).coordinates,

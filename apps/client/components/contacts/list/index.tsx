@@ -180,5 +180,3 @@ export default function ListContainer({ company, editContactRouteBuilder }: { co
     </>
   );
 }
-
-ListContainer.defaultProps = { company: undefined };

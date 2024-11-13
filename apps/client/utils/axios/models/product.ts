@@ -112,6 +112,7 @@ export interface ProductType {
   name:string,
   pindex: number,
   comment:string,
+  magento_category_id:string,
   is_attribute: boolean,
   is_public: boolean,
   attributes:Attribute[]

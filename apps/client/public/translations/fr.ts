@@ -20,6 +20,7 @@ const translation = {
   newSales: 'Nouvelle vente',
   newPurchase: 'Nouvel achat',
   editCustomer: 'Modifier les informations du client',
+  changeProductType: 'Changer le type de produit',
   pictures: 'Images',
   editOrder: 'Modifier la commande',
   processingAgreement: 'Accord de traitement',
@@ -125,7 +126,8 @@ const translation = {
   createdAt: 'Date de création',
   createProduct: 'Créer un produit',
   searchByCustomerNameOrEmail: 'Rechercher par nom de client ou email',
-  searchBySerialNumberOrNameOrAttr: 'Rechercher par numéro de série ou nom ou attribut',
+  searchBySkuOrDescOrNameOrAttr: 'Rechercher par numéro de série ou description ou nom ou attribut',
+  searchByOrderNumberOrRemarks: 'Recherche par numéro de commande ou remarques',
   contact: 'Contact',
   bulkEmail: 'Email en masse',
   invalidEmail: 'Adresse email invalide',
@@ -430,6 +432,8 @@ const translation = {
   deleteResourceContent: 'Cette action est irréversible. La ressource supprimé sera perdu à jamais.',
   deleteConfirm: 'Oui, supprimer !',
   changeLocationContent: "Vous pouvez modifier l'emplacement des produits sélectionnés",
+  changeProductTypeContent: 'Vous pouvez modifier le type des produits sélectionnés',
+  changeProductTypeWarning: 'La modification du type de produit supprime tous les attributs associés',
   selectLocation: 'Sélectionner un emplacement',
   changeStatus: 'Changer de statut',
   changeStatusContent: 'Modifier le contenu du statut',
@@ -452,6 +456,9 @@ const translation = {
   deliveriesBy: 'Livraisons par',
   everyone: 'Tout le monde',
   logistics: 'Logistique',
+  dhlTrackingCode: 'Code de suivi DHL',
+  trackDown: 'Traquer',
+  magentoCategoryId: 'Identifiant de catégorie Magento',
   logisticsPage: {
     search: {
       placeholder: 'Rechercher par numéro de commande ou description',
@@ -465,6 +472,10 @@ const translation = {
     comment: {
       placeholder: 'Saisissez votre commentaire ici',
       label: 'Commentaire',
+    },
+    magentoCategoryId: {
+      placeholder: 'Saisissez l\'identifiant ici',
+      label: 'Identifiant de catégorie Magento',
     },
     tasks: {
       placeholder: 'Sélectionnez les tâches possibles',

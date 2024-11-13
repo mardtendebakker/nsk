@@ -34,11 +34,13 @@ export default function SideMap({
   onClose,
   logisticService,
   logisticServices,
+  apiKey,
 }: {
   type: 'pickup' | 'delivery',
   onClose: () => void,
   logisticService: LogisticServiceListItem,
-  logisticServices: LogisticServiceListItem[]
+  logisticServices: LogisticServiceListItem[],
+  apiKey: string
 }) {
   const { trans } = useTranslation();
 
@@ -77,13 +79,13 @@ export default function SideMap({
 
     const validWays = [
       buildHomeWay(),
-      ...(await fetchWayForLogisticServices(clonedLogisticServices)),
+      ...(await fetchWayForLogisticServices(clonedLogisticServices, apiKey)),
       buildHomeWay(),
     ];
 
     setWays(validWays);
 
-    const { coordinates, travelTime: fetchedTravelTime } = await fetchPolylineInfo(validWays);
+    const { coordinates, travelTime: fetchedTravelTime } = await fetchPolylineInfo(validWays, apiKey);
 
     setTravelTime(format(new Date(fetchedTravelTime * 1000), 'HH:mm:ss'));
     setGeometry({
@@ -121,7 +123,7 @@ export default function SideMap({
           mapStyle={mapStyle}
           {...viewport}
           onViewportChange={setViewport}
-          transformRequest={(url, resourceType) => getTransformRequest(url, resourceType)}
+          transformRequest={(url, resourceType) => getTransformRequest(url, resourceType, apiKey)}
         >
           <NavigationControl style={{ right: 10, top: 10 }} />
           <Source

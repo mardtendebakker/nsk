@@ -12,30 +12,31 @@ import Link from 'next/link';
 import useTranslation from '../../../hooks/useTranslation';
 import useForm from '../../../hooks/useForm';
 import Form from '../form';
-import { AxiosResponse, APRODUCT_BULK_PRINT_BARCODES, STOCK_PRODUCTS_PATH } from '../../../utils/axios';
+import { STOCK_PRODUCTS_PATH } from '../../../utils/axios';
 import useAxios from '../../../hooks/useAxios';
 import { formRepresentationToBody, initFormState } from '../createModal';
 import ConfirmationDialog from '../../confirmationDialog';
-import { openBlob } from '../../../utils/blob';
-import { Product } from '../../../utils/axios/models/product';
 import { ORDERS_PURCHASES_EDIT, ORDERS_REPAIRS_EDIT, ORDERS_SALES_EDIT } from '../../../utils/routes';
+import { ProductType } from '../type';
+import { Product } from '../../../utils/axios/models/product';
+import useBulkPrintBarcodes from '../../../hooks/apiCalls/useBulkPrintBarcodes';
 
 export default function EditModal(
   {
     onClose,
     onSubmit,
     id,
-    type,
+    type = 'product',
   }: {
     onClose: () => void,
     onSubmit: () => void,
     id: string,
-    type?: 'product' | 'repair' | 'archived',
+    type?: ProductType,
   },
 ) {
   const { trans } = useTranslation();
   const { data: product, call, performing } = useAxios<undefined | Product>('get', STOCK_PRODUCTS_PATH.replace(':id', id));
-  const { call: bulkPrint, performing: performingBulkPrintBarcodes } = useAxios('get', APRODUCT_BULK_PRINT_BARCODES);
+  const { printBarcodes, performing: performingBulkPrintBarcodes } = useBulkPrintBarcodes({ withProgressBar: true });
   const { call: callPut, performing: performingPut } = useAxios('put', STOCK_PRODUCTS_PATH.replace(':id', id), { showSuccessMessage: true });
 
   const { formRepresentation, setValue, validate } = useForm(useMemo(() => initFormState(trans, product), [product]));
@@ -59,13 +60,6 @@ export default function EditModal(
       headers: { 'Content-Type': 'multipart/form-data' },
     })
       .then(onSubmit);
-  };
-
-  const handlePrintBarcode = () => {
-    bulkPrint({ params: { ids: [id] }, responseType: 'blob' })
-      .then((response: AxiosResponse) => {
-        openBlob(response.data);
-      });
   };
 
   const editOrderUrl = (order) => {
@@ -100,7 +94,7 @@ export default function EditModal(
                 setValue={setValue}
                 formRepresentation={formRepresentation}
                 disabled={!canSubmit()}
-                onPrintBarcode={handlePrintBarcode}
+                onPrintBarcode={() => printBarcodes([parseInt(id, 10)])}
               />
               <input type="submit" style={{ display: 'none' }} />
             </form>
@@ -186,7 +180,3 @@ export default function EditModal(
     </>
   );
 }
-
-EditModal.defaultProps = {
-  type: 'product',
-};

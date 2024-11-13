@@ -15,6 +15,7 @@ import { fetchWayForLogisticService } from '../../../utils/map';
 import useAxios from '../../../hooks/useAxios';
 import useSecurity from '../../../hooks/useSecurity';
 import can from '../../../utils/can';
+import useRemoteConfig from '../../../hooks/useRemoteConfig';
 
 export default function VehiclesTracking() {
   const { trans } = useTranslation();
@@ -23,6 +24,7 @@ export default function VehiclesTracking() {
   const [ways, setWays] = useState<Ways>({ vehicleWay: undefined, targetWay: undefined });
   const { call } = useAxios('get', VEHICLES_PATH);
   const { hasModule, state: { user } } = useSecurity();
+  const { state: { config } } = useRemoteConfig();
 
   const buildVehicleWay = (value: Vehicle) => ({ address: '', position: { latitude: value.location.latitude, longitude: value.location.longitude } });
 
@@ -43,6 +45,12 @@ export default function VehiclesTracking() {
   };
 
   const handleSelectPickup = async (value?: LogisticServiceListItem) => {
+    const apiKey = config?.logistics.apiKey;
+
+    if (!apiKey) {
+      return;
+    }
+
     if (!value) {
       setWays((currentValue) => ({
         ...currentValue,
@@ -50,7 +58,7 @@ export default function VehiclesTracking() {
       }));
       setPickup(undefined);
     } else {
-      const targetWay = await fetchWayForLogisticService(value);
+      const targetWay = await fetchWayForLogisticService(value, apiKey);
 
       setWays((currentValue) => ({
         ...currentValue,
@@ -62,7 +70,7 @@ export default function VehiclesTracking() {
 
   const hasTracking = hasModule('tracking');
 
-  const hasRequiredGroups = user && can({ user, requiredGroups: ['manager'] });
+  const hasRequiredGroups = user && can({ user, requiredGroups: ['logistics'] });
 
   useEffect(() => {
     const interval = setInterval(() => {

@@ -14,6 +14,7 @@ const translation = {
   delete: 'حذف',
   lastModifiedAt: 'آخر تعديل في',
   enabled: 'مفعل',
+  changeProductType: 'تغيير نوع المنتج',
   newSupplier: 'مورد جديد',
   rowsPerPage: 'الصفوف في الصفحة',
   users: 'المستخدمين',
@@ -131,7 +132,8 @@ const translation = {
   createdAt: 'تاريخ الإنشاء',
   createProduct: 'إنشاء منتج',
   searchByCustomerNameOrEmail: 'البحث حسب اسم العميل أو البريد الإلكتروني',
-  searchBySerialNumberOrNameOrAttr: 'البحث حسب رقم التسلسل أو الاسم أو سمة',
+  searchBySkuOrDescOrNameOrAttr: 'البحث حسب رقم التسلسل أو الوصف أو الاسم أو سمة',
+  searchByOrderNumberOrRemarks: 'البحث حسب رقم الطلب أو الملاحظات',
   contact: 'الاتصال',
   bulkEmail: 'البريد الإلكتروني الجماعي',
   invalidEmail: 'عنوان البريد الإلكتروني غير صالح',
@@ -433,6 +435,8 @@ const translation = {
   deleteResourceContent: 'هذا الإجراء لا يمكن التراجع عنه. سيتم فقدان المورد المحذوف إلى الأبد.',
   deleteConfirm: 'نعم، حذف!',
   changeLocationContent: 'يمكنك تغيير موقع المنتجات المحددة',
+  changeProductTypeContent: 'يمكنك تغيير نوع المنتجات المحددة',
+  changeProductTypeWarning: 'تعديل نوع المنتج يكمل جميع السمات المرتبطة به',
   selectLocation: 'حدد موقعًا',
   changeStatus: 'تغيير الحالة',
   changeStatusContent: 'تغيير محتوى الحالة',
@@ -455,6 +459,9 @@ const translation = {
   deliveriesBy: 'تسليم بواسطة',
   everyone: 'الجميع',
   logistics: 'اللوجستيات',
+  dhlTrackingCode: 'رمز تتبع DHL',
+  trackDown: 'تعقب',
+  magentoCategoryId: 'معرف فئة Magento',
   logisticsPage: {
     search: {
       placeholder: 'البحث برقم الطلب أو الوصف',
@@ -468,6 +475,10 @@ const translation = {
     comment: {
       placeholder: 'أدخل تعليقك هنا',
       label: 'التعليق',
+    },
+    magentoCategoryId: {
+      placeholder: 'أدخل اسم المستخدم هنا',
+      label: 'معرف فئة Magento',
     },
     tasks: {
       placeholder: 'حدد المهام الممكنة',

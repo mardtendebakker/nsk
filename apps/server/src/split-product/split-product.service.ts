@@ -68,7 +68,6 @@ export class SplitProductService {
 
     const quantity = processedProduct.purch - 1;
     const individualize = true;
-    const sales = true;
 
     return this.splitStock({
       id,
@@ -76,7 +75,6 @@ export class SplitProductService {
       quantity,
       status,
       newSku,
-      sales,
     });
   }
 
@@ -86,73 +84,25 @@ export class SplitProductService {
     quantity?: number;
     status?: number;
     newSku?: boolean;
-    sales?: boolean;
   }) {
     const {
-      id, status, individualize, quantity, sales, newSku,
+      id, status, individualize, quantity, newSku,
     } = params;
-    const product = await this.productService.findOneRelation(id);
-    if (sales) {
-      let i = 1;
-      product.product_order.forEach(async (productOrder) => {
-        if (productOrder.aorder.discr === AOrderDiscrimination.SALE) {
-          const productOrderQuantity = productOrder.quantity ?? 0;
-          const splitToProductP = [];
-          for (let k = 0; k < productOrderQuantity; k += 1) {
-            let newSkuIndex: number;
-            if (newSku) {
-              newSkuIndex = i - 1;
-            }
-            splitToProductP.push(
-              this.splitToProduct({
-                id,
-                nameSupplement: `(split ${i})`,
-                quantity: 1,
-                newSkuIndex,
-                status,
-                sales: true,
-              }),
-            );
-            i += 1;
-          }
-          await Promise.all(splitToProductP);
-        }
-      });
-      const splitToProductP = [];
-      for (let k = i; k <= quantity; k += 1) {
-        let newSkuIndex: number;
-        if (newSku) {
-          newSkuIndex = i - 1;
-        }
-        splitToProductP.push(
-          this.splitToProduct({
-            id,
-            nameSupplement: `(split ${k})`,
-            quantity: 1,
-            newSkuIndex,
-            status,
-          }),
-        );
-      }
-      await Promise.all(splitToProductP);
-    } else if (individualize && quantity > 1) {
-      const splitToProductP = [];
+
+    if (individualize && quantity > 1) {
       for (let i = 1; i <= quantity; i += 1) {
         let newSkuIndex: number;
         if (newSku) {
           newSkuIndex = i - 1;
         }
-        splitToProductP.push(
-          this.splitToProduct({
-            id,
-            nameSupplement: `(split ${i})`,
-            quantity: 1,
-            newSkuIndex,
-            status,
-          }),
-        );
+        // eslint-disable-next-line no-await-in-loop
+        await this.splitToProduct({
+          id,
+          quantity: 1,
+          newSkuIndex,
+          status,
+        });
       }
-      await Promise.all(splitToProductP);
     } else {
       let newSkuIndex: number;
       if (newSku) {
@@ -160,7 +110,6 @@ export class SplitProductService {
       }
       await this.splitToProduct({
         id,
-        nameSupplement: '(split)',
         quantity: Number.isFinite(quantity) ? quantity : 1,
         newSkuIndex,
         status,
@@ -172,34 +121,28 @@ export class SplitProductService {
 
   private async splitToProduct(params: {
     id: number;
-    nameSupplement: string;
     quantity: number;
     newSkuIndex: number;
     status?: number;
-    sales?: boolean;
   }) {
     const {
-      id, nameSupplement, quantity, newSkuIndex, status, sales,
+      id, quantity, newSkuIndex, status,
     } = params;
     const product = await this.productService.findOneRelation(id);
-    const purchaseRelation = product.product_order.find(
-      (productOrder) => productOrder.aorder.discr === AOrderDiscrimination.PURCHASE,
-    );
+
     const salesRelation = product.product_order.find(
       (productOrder) => productOrder.aorder.discr === AOrderDiscrimination.SALE,
+    );
+    if (salesRelation) {
+      throw new Error('Bundle split with sales order involved is not allowed');
+    }
+
+    const purchaseRelation = product.product_order.find(
+      (productOrder) => productOrder.aorder.discr === AOrderDiscrimination.PURCHASE,
     );
     const productAttributes = product.product_attribute_product_attribute_product_idToproduct;
 
     const productOrders: ProductOrderCreateDto[] = [];
-    if (quantity > 1 && sales) {
-      throw new Error('Bundle split with sales order involved is not allowed');
-    } else if (sales) {
-      productOrders.push({
-        order_id: salesRelation.order_id,
-        quantity: 1,
-        ...(salesRelation?.price && { price: salesRelation.price }),
-      });
-    }
     productOrders.push({
       order_id: purchaseRelation.order_id,
       quantity,
@@ -212,8 +155,9 @@ export class SplitProductService {
       const isFile = productAttribute?.attribute?.type === AttributeType.TYPE_FILE;
 
       if (isFile) {
-        const fileIds = productAttribute?.value?.split(FILE_VALUE_DELIMITER).map(Number)
-          || [];
+        const fileIds = productAttribute?.value?.split(FILE_VALUE_DELIMITER)
+          .filter((n) => !Number.isNaN(Number(n)) && n.trim() !== '')
+          .map(Number) || [];
 
         fileIds.forEach(async (fileId) => {
           try {
@@ -244,7 +188,7 @@ export class SplitProductService {
       sku: Number.isFinite(newSkuIndex)
         ? String(Math.floor(Date.now() / 1000) + newSkuIndex)
         : product.sku,
-      name: `${product.name} ${nameSupplement}`,
+      name: product.name,
       location_id: product.location?.id,
       ...(product.location_label?.id && { location_label_id: product.location_label.id }),
       ...(product.product_type?.id && { type_id: product.product_type.id }),
@@ -263,15 +207,9 @@ export class SplitProductService {
         quantity: purchaseRelation.quantity - quantity,
       },
     ];
-    if (sales) {
-      productOrderUpdate.push({
-        id: salesRelation.id,
-        quantity: salesRelation.quantity - quantity,
-      });
-    }
 
     const newProduct = await this.productService.create(newStockDto, files);
-    await this.productService.updateOne(product.id, {
+    await this.productService.updateOne(id, {
       product_orders: productOrderUpdate,
     });
 

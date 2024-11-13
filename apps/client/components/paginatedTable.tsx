@@ -8,7 +8,7 @@ export default function PaginatedTable({
   page,
   rowsPerPage,
   count,
-  disabled,
+  disabled = false,
 }: {
   children: any,
   onPageChange: (arg0: number) => void,
@@ -49,5 +49,3 @@ export default function PaginatedTable({
     </Box>
   );
 }
-
-PaginatedTable.defaultProps = { disabled: false };

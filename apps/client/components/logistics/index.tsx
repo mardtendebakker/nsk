@@ -18,16 +18,9 @@ import Pagination from './pagination';
 import LogisticsList from './logisticsList';
 import pushURLParams from '../../utils/pushURLParams';
 import { getQueryParam } from '../../utils/location';
+import useRemoteConfig from '../../hooks/useRemoteConfig';
 
-const hours = [];
-const HOURS_PER_DAYS = 10;
-const STARTING_HOUR = 8;
 const TILE_HEIGHT = '3rem';
-
-for (let i = 0; i < HOURS_PER_DAYS; i++) {
-  hours.push(`${STARTING_HOUR + i}:00`);
-  hours.push(`${STARTING_HOUR + i}:30`);
-}
 
 const refreshList = ({
   newDate,
@@ -50,22 +43,50 @@ const refreshList = ({
 
 export default function Logistics({ type }: { type: 'pickup' | 'delivery' }) {
   const AJAX_PATH = type == 'pickup' ? CALENDAR_PICKUPS_PATH : CALENDAR_DELIVERIES_PATH;
-
   const { trans } = useTranslation();
   const router = useRouter();
 
-  const [firstDate, setFirstDate] = useState<Date>(
-    setHours(
-      setMinutes(
-        startOfWeek(
-          new Date(getQueryParam('date', new Date().toISOString())),
-          { weekStartsOn: 1 },
+  const { state: { config } } = useRemoteConfig();
+  const [openHours, setOpenHours] = useState<string[]>([]);
+  const [dates, setDates] = useState<Date[]>([]);
+
+  function updateDates(firstDate: Date) {
+    setDates(
+      [
+        new Date(firstDate),
+        addDays(firstDate, 1),
+        addDays(firstDate, 2),
+        addDays(firstDate, 3),
+        addDays(firstDate, 4),
+        addDays(firstDate, 5),
+        addDays(firstDate, 6),
+      ].filter((date) => config?.logistics.days.includes(date.toLocaleDateString('en', { weekday: 'long' }).toLocaleLowerCase())),
+    );
+  }
+
+  useEffect(() => {
+    if (Number.isInteger(config?.logistics?.maxHour) && Number.isInteger(config?.logistics?.minHour)) {
+      const hours = [];
+
+      for (let i = config.logistics.minHour; i < config.logistics.maxHour; i++) {
+        hours.push(`${i}:00`);
+        hours.push(`${i}:30`);
+      }
+
+      setOpenHours(hours);
+
+      updateDates(setHours(
+        setMinutes(
+          startOfWeek(
+            new Date(getQueryParam('date', new Date().toISOString())),
+            { weekStartsOn: 1 },
+          ),
+          0,
         ),
-        0,
-      ),
-      STARTING_HOUR,
-    ),
-  );
+        config.logistics.minHour,
+      ));
+    }
+  }, [JSON.stringify(config)]);
 
   const [selectedLogisticIds, setSelectedLogisticIds] = useState<number[]>([0]);
   const [search, setSearch] = useState('');
@@ -73,14 +94,6 @@ export default function Logistics({ type }: { type: 'pickup' | 'delivery' }) {
     logisticService: LogisticServiceListItem,
     allLogisticServices: LogisticServiceListItem[]
   } | undefined>();
-
-  const dates: Date[] = [
-    new Date(firstDate),
-    addDays(firstDate, 1),
-    addDays(firstDate, 2),
-    addDays(firstDate, 3),
-    addDays(firstDate, 4),
-  ];
 
   const { data: { data = [] } = {}, call } = useAxios<undefined | { data?: LogisticServiceListItem[] }>('get', AJAX_PATH.replace(':id', ''), { withProgressBar: true });
 
@@ -92,9 +105,13 @@ export default function Logistics({ type }: { type: 'pickup' | 'delivery' }) {
   }));
 
   useEffect(() => {
+    if (!dates[0]) {
+      return;
+    }
+
     setSelectedLogisticIds([0]);
-    refreshList({ newDate: firstDate, router, call });
-  }, [firstDate.toISOString()]);
+    refreshList({ newDate: dates[0], router, call });
+  }, [dates[0]?.toISOString()]);
 
   const logistics: Logistic[] = [];
 
@@ -168,11 +185,13 @@ export default function Logistics({ type }: { type: 'pickup' | 'delivery' }) {
               display: 'flex', alignItems: 'center', px: '1rem', py: '2rem', justifyContent: 'space-between',
             }}
             >
+              {dates[0] && (
               <Pagination
-                date={firstDate}
-                onPrevious={() => setFirstDate(addDays(firstDate, -7))}
-                onNext={() => setFirstDate(addDays(firstDate, 7))}
+                date={dates[0]}
+                onPrevious={() => updateDates(addDays(dates[0], -7))}
+                onNext={() => updateDates(addDays(dates[0], 7))}
               />
+              )}
               <TextField
                 InputProps={{
                   startAdornment: <Search sx={{ color: (theme) => theme.palette.grey[40] }} />,
@@ -194,14 +213,14 @@ export default function Logistics({ type }: { type: 'pickup' | 'delivery' }) {
                     <TableCell sx={{ borderBottom: 'unset', width: '10rem' }} />
                     {dates.map((date: Date) => {
                       const formatted = format(date, 'EEEE d');
-                      return <TableCell sx={{ borderLeft: (theme) => `1px solid ${theme.palette.divider}`, width: '18%' }} key={formatted}>{formatted}</TableCell>;
+                      return <TableCell sx={{ borderLeft: (theme) => `1px solid ${theme.palette.divider}` }} key={formatted}>{formatted}</TableCell>;
                     })}
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   <TableRow sx={{ height: '3rem' }}>
                     <TableCell sx={{ verticalAlign: 'baseline', borderBottom: 'unset' }}>
-                      <Box sx={{ marginTop: '-1.67em' }}>{hours[0]}</Box>
+                      <Box sx={{ marginTop: '-1.67em' }}>{openHours[0]}</Box>
                     </TableCell>
                     {dates.map((date: Date) => {
                       const thisDayLogisticServices: LogisticServiceListItem[][] = [];
@@ -246,7 +265,7 @@ export default function Logistics({ type }: { type: 'pickup' | 'delivery' }) {
                       );
                     })}
                   </TableRow>
-                  {hours.map((hour, i) => {
+                  {openHours.map((hour, i) => {
                     if (i == 0) {
                       return undefined;
                     }
@@ -271,12 +290,13 @@ export default function Logistics({ type }: { type: 'pickup' | 'delivery' }) {
           </CardContent>
         </Card>
       </Box>
-      { clickedLogisticService && (
+      { clickedLogisticService && config?.logistics && (
       <SideMap
         type={type}
         logisticServices={clickedLogisticService.allLogisticServices}
         logisticService={clickedLogisticService.logisticService}
         onClose={() => setClickedLogisticService(undefined)}
+        apiKey={config.logistics.apiKey}
       />
       )}
     </>

@@ -9,6 +9,7 @@ import { ProductListItem } from '../../../utils/axios/models/product';
 import PaginatedTable from '../../paginatedTable';
 import TableCell from '../../tableCell';
 import Row, { OnCheck } from './row';
+import { ProductType } from '../type';
 
 export default function List({
   type,
@@ -22,11 +23,11 @@ export default function List({
   onEdit,
   onDelete,
   onSplit,
-  disabled,
   checkedProductIds,
-  disableSelection,
+  disabled = false,
+  disableSelection = () => false,
 }: {
-  type: 'product' | 'repair' | 'archived',
+  type: ProductType,
   products: ProductListItem[],
   count: number,
   page: number,
@@ -69,11 +70,9 @@ export default function List({
           <TableCell>
             {trans('location')}
           </TableCell>
-          {type == 'product' && (
-            <TableCell>
-              {trans('price')}
-            </TableCell>
-          )}
+          <TableCell>
+            {trans('price')}
+          </TableCell>
           {type != 'product' && (
             <TableCell>
               {trans('orderDate')}
@@ -128,7 +127,3 @@ export default function List({
     </PaginatedTable>
   );
 }
-
-List.defaultProps = {
-  onDelete: undefined, onSplit: undefined, onEdit: undefined, disabled: false, disableSelection: () => false,
-};

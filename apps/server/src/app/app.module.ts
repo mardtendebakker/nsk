@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CognitoAuthModule } from '@nestjs-cognito/auth';
+import { HttpModule } from '@nestjs/axios';
 import { DashboardModule } from '../dashboard/dashboard.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AuthModule } from '../auth/auth.module';
 import { UserModule } from '../user/user.module';
 import { SaleModule } from '../sale/sale.module';
 import { PurchaseModule } from '../purchase/purchase.module';
@@ -33,6 +33,10 @@ import { FleetGoModule } from '../fleet-go/fleet-go.module';
 import { ModuleModule } from '../module/module.module';
 import { PaymentModule } from '../payment/payment.module';
 import { ModulePaymentModule } from '../module-payment/module-payment.module';
+import { ConfigModule as MyConfigModule } from '../config/config.module';
+import { AuthModule } from '../auth/auth.module';
+import { WebshopModule } from '../webshop/webshop.module';
+import { ConsumerModule } from '../consumer/consumer.module';
 
 @Module({
   imports: [
@@ -44,6 +48,9 @@ import { ModulePaymentModule } from '../module-payment/module-payment.module';
           MAX_RELATION_QUERY_LIMIT: process.env.MAX_RELATION_QUERY_LIMIT || 100,
           MAX_NONE_RELATION_QUERY_LIMIT:
             process.env.MAX_NONE_RELATION_QUERY_LIMIT || 5000,
+          RABBITMQ_PUBLISH_PRODUCT_TO_STORE: process.env.RABBITMQ_PUBLISH_PRODUCT_TO_STORE || 'publish_product_to_store',
+          RABBITMQ_MAGENTO_ORDER_CREATED: process.env.RABBITMQ_MAGENTO_ORDER_CREATED || 'magento_order_created',
+          RABBITMQ_EXCHANGE: process.env.RABBITMQ_EXCHANGE || 'nexxus',
         }),
       ],
     }),
@@ -88,8 +95,12 @@ import { ModulePaymentModule } from '../module-payment/module-payment.module';
     ModuleModule,
     PaymentModule,
     ModulePaymentModule,
+    MyConfigModule,
+    WebshopModule,
+    HttpModule,
+    ConsumerModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}

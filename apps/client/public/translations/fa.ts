@@ -18,6 +18,7 @@ const translation = {
   rowsPerPage: 'ردیف در صفحه',
   users: 'کاربران',
   newSales: 'فروش جدید',
+  changeProductType: 'تغییر نوع محصول',
   newPurchase: 'خرید جدید',
   editCustomer: 'ویرایش مشتری',
   pictures: 'تصاویر',
@@ -132,7 +133,8 @@ const translation = {
   createdAt: 'ایجاد شده در',
   createProduct: 'ایجاد کردن محصول',
   searchByCustomerNameOrEmail: 'جستوجو با نام مشتری یا ایمبل',
-  searchBySerialNumberOrNameOrAttr: 'جستوجو با شماره سریال یا نام یا مشخصات',
+  searchBySkuOrDescOrNameOrAttr: 'جستوجو با شماره سریال یا شرح یا نام یا مشخصات',
+  searchByOrderNumberOrRemarks: 'جستجو بر اساس شماره سفارش یا اظهارات',
   contact: 'مخاطب',
   bulkEmail: 'ایمیل همگانی',
   invalidEmail: 'ایمیل نا معتبر',
@@ -436,6 +438,8 @@ const translation = {
   deleteResourceContent: 'این عمل قابل بازگشت نیست و همه کاربران دسترسی به آن را از دست خواهند داد.',
   deleteConfirm: 'بله حذف کنید!',
   changeLocationContent: 'می توانید مکان محصولات انتخاب شده را تغییر دهید',
+  changeProductTypeContent: 'تعديل نوع المنتج يكمل جميع السمات المرتبطة به',
+  changeProductTypeWarning: 'تغییر نوع محصول تمام ویژگی های مرتبط را حذف می کند',
   selectLocation: 'یک مکان را انتخاب کنید',
   changeStatus: 'تغییر وضعیت',
   changeStatusContent: 'تغییر محتوای وضعیت',
@@ -457,6 +461,9 @@ const translation = {
   pickupsBy: ' تحویل توسط ',
   deliveriesBy: 'تحویل توسط',
   everyone: 'همه',
+  magentoCategoryId: 'شناسه دسته Magento',
+  dhlTrackingCode: 'کد رهگیری DHL',
+  trackDown: 'پیگیری کنید',
   logisticsPage: {
     search: {
       placeholder: 'جستجو بر اساس شماره سفارش یا توضیحات',
@@ -471,6 +478,10 @@ const translation = {
     comment: {
       placeholder: 'پاسخ خود را اینجا تایپ کنید',
       label: 'تفسیر',
+    },
+    magentoCategoryId: {
+      placeholder: 'نام کاربری را در اینجا وارد کنید',
+      label: 'شناسه دسته Magento',
     },
     tasks: {
       placeholder: 'وظایف احتمالی را انتخاب کنید',

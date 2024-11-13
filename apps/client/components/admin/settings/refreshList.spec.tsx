@@ -28,8 +28,6 @@ function TestC({ page, rowsPerPage, search }: { page:number, rowsPerPage?: numbe
   return <div />;
 }
 
-TestC.defaultProps = { search: undefined, rowsPerPage: undefined };
-
 describe('refreshList', () => {
   it('works with all params passed', async () => {
     render(<TestC page={2} rowsPerPage={20} search="search" />);

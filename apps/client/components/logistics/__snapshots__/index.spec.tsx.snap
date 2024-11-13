@@ -168,31 +168,31 @@ exports[`Logistics component matches snapshot 1`] = `
                   scope="col"
                 />
                 <th
-                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1srz5uu-MuiTableCell-root"
+                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-2w85qi-MuiTableCell-root"
                   scope="col"
                 >
                   maandag 5
                 </th>
                 <th
-                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1srz5uu-MuiTableCell-root"
+                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-2w85qi-MuiTableCell-root"
                   scope="col"
                 >
                   dinsdag 6
                 </th>
                 <th
-                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1srz5uu-MuiTableCell-root"
+                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-2w85qi-MuiTableCell-root"
                   scope="col"
                 >
                   woensdag 7
                 </th>
                 <th
-                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1srz5uu-MuiTableCell-root"
+                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-2w85qi-MuiTableCell-root"
                   scope="col"
                 >
                   donderdag 8
                 </th>
                 <th
-                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1srz5uu-MuiTableCell-root"
+                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-2w85qi-MuiTableCell-root"
                   scope="col"
                 >
                   vrijdag 9

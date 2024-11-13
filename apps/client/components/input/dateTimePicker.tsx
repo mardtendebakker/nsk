@@ -39,8 +39,3 @@ export default function DateTimePicker({
     />
   );
 }
-
-DateTimePicker.defaultProps = {
-  placeholder: undefined,
-  renderInput: undefined,
-};

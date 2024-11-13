@@ -166,6 +166,9 @@ export class BlanccoService {
     };
     const body = {
       filter: {
+        date: {
+          gte: '2023-12-19T00:00:00Z',
+        },
         fields: [
           {
             like: search,

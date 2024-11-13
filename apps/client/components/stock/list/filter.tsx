@@ -15,7 +15,7 @@ export default function Filter({
   formRepresentation,
   setValue,
   onReset,
-  autoFocus,
+  autoFocus = false,
 }: {
   disabled: boolean,
   formRepresentation : FormRepresentation,
@@ -33,7 +33,7 @@ export default function Filter({
         onSearchChange={(value: string) => setValue({ field: 'search', value })}
         searchValue={formRepresentation.search.value?.toString() || ''}
         onReset={onReset}
-        searchLabel={trans('searchBySerialNumberOrNameOrAttr')}
+        searchLabel={trans('searchBySkuOrDescOrNameOrAttr')}
         autoFocus={autoFocus}
       >
         <Box sx={{
@@ -92,7 +92,3 @@ export default function Filter({
     </BorderedBox>
   );
 }
-
-Filter.defaultProps = {
-  autoFocus: false,
-};

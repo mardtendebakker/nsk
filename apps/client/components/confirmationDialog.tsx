@@ -16,14 +16,14 @@ export default function ConfirmationDialog(
     onClose,
     title,
     content,
-    confirmButtonColor,
-    cancelButtonColor,
+    confirmButtonColor = 'primary',
+    cancelButtonColor = 'inherit',
     cancelButtonText,
     confirmButtonText,
-    confirmButtonVariant,
-    cancelButtonVariant,
-    disabled,
-    open,
+    cancelButtonVariant = 'outlined',
+    confirmButtonVariant = 'contained',
+    disabled = false,
+    open = true,
   }:
   {
     onConfirm: ()=>void,
@@ -88,14 +88,3 @@ export default function ConfirmationDialog(
     </Dialog>
   );
 }
-
-ConfirmationDialog.defaultProps = {
-  confirmButtonColor: 'primary',
-  cancelButtonColor: 'inherit',
-  cancelButtonText: undefined,
-  confirmButtonText: undefined,
-  cancelButtonVariant: 'outlined',
-  confirmButtonVariant: 'contained',
-  disabled: false,
-  open: true,
-};

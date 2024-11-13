@@ -1,4 +1,5 @@
 import {
+  Checkbox,
   Table,
   TableBody,
   TableHead,
@@ -22,6 +23,9 @@ export default function Row({
   onDeleteService,
   onProductPropertyChange,
   onServicePropertyChange,
+  checkedProductIds,
+  onCheck,
+  disabled,
 }: {
   product: ProductListItem,
   onAddService: () => void,
@@ -29,6 +33,9 @@ export default function Row({
   onDeleteService: (id: number) => void,
   onProductPropertyChange: (payload: ProductListItem, property: string, value) => void,
   onServicePropertyChange: (payload: Service, property: string, value) => void,
+  checkedProductIds: number[],
+  onCheck: (object: { id: number, checked: boolean }) => void,
+  disabled: boolean,
 }) {
   const { state: { user } } = useSecurity();
   const { trans } = useTranslation();
@@ -36,7 +43,15 @@ export default function Row({
   return (
     <>
       <TableRow>
-        <TableCell>{product.sku}</TableCell>
+        <TableCell>
+          <Checkbox
+            checked={Boolean(checkedProductIds.find((id) => id === product.id))}
+            sx={{ mr: '1.5rem' }}
+            onChange={(e, checked) => onCheck({ id: product.id, checked })}
+            disabled={disabled}
+          />
+          {product.sku}
+        </TableCell>
         <TableCell>{product.name}</TableCell>
         <TableCell>{product.type}</TableCell>
         <TableCell>{product.location}</TableCell>
@@ -56,7 +71,7 @@ export default function Row({
               'price',
               e.target.value,
             )}
-            disabled={!user || !can({ user, requiredGroups: ['manager', 'logistics', 'local'] })}
+            disabled={!user || !can({ user, requiredGroups: ['admin', 'manager', 'logistics', 'local'] })}
           />
         </TableCell>
         <TableCell>
@@ -69,11 +84,11 @@ export default function Row({
               'quantity',
               e.target.value,
             )}
-            disabled={!user || !can({ user, requiredGroups: ['manager', 'logistics', 'local'] })}
+            disabled={!user || !can({ user, requiredGroups: ['admin', 'manager', 'logistics', 'local'] })}
           />
         </TableCell>
         <TableCell align="right">
-          <Can requiredGroups={['manager', 'logistics', 'local']}>
+          <Can requiredGroups={['admin', 'manager', 'logistics', 'local']}>
             <AddButton title={trans('addService')} onClick={onAddService} />
             <Delete onClick={() => onDeleteProduct(product.id)} tooltip />
           </Can>
@@ -104,7 +119,7 @@ export default function Row({
                           'description',
                           e.target.value,
                         )}
-                        disabled={!user || !can({ user, requiredGroups: ['manager', 'logistics', 'local'] })}
+                        disabled={!user || !can({ user, requiredGroups: ['admin', 'manager', 'logistics', 'local'] })}
                       />
                     </TableCell>
                     <TableCell colSpan={2}>
@@ -116,7 +131,7 @@ export default function Row({
                           { title: trans('done'), value: '3' },
                           { title: trans('cancel'), value: '4' },
                         ]}
-                        onChange={(e) => user && can({ user, requiredGroups: ['manager', 'logistics', 'local'] })
+                        onChange={(e) => user && can({ user, requiredGroups: ['admin', 'manager', 'logistics', 'local'] })
                           && onServicePropertyChange(service, 'status', e.target.value)}
                         defaultValue={service.status.toString()}
                       />
@@ -131,11 +146,11 @@ export default function Row({
                           'price',
                           e.target.value,
                         )}
-                        disabled={!user || !can({ user, requiredGroups: ['manager', 'logistics', 'local'] })}
+                        disabled={!user || !can({ user, requiredGroups: ['admin', 'manager', 'logistics', 'local'] })}
                       />
                     </TableCell>
                     <TableCell>
-                      <Can requiredGroups={['manager', 'logistics', 'local']}>
+                      <Can requiredGroups={['admin', 'manager', 'logistics', 'local']}>
                         <Delete onClick={() => onDeleteService(service.id)} tooltip />
                       </Can>
                     </TableCell>

@@ -22,6 +22,9 @@ export class FindModulePaymentResponseDto {
     status: Status;
 
   @ApiProperty()
+    active: boolean;
+
+  @ApiProperty()
     activeAt: Date;
 
   @ApiProperty()

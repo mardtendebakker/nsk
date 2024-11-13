@@ -1,6 +1,6 @@
 import { Typography } from '@mui/material';
 
-export default function MenuItemText({ children, active, color }: { children: string | JSX.Element, active?: boolean, color?: string }) {
+export default function MenuItemText({ children, active = false, color = 'primary' }: { children: string | JSX.Element, active?: boolean, color?: string }) {
   return (
     <Typography
       sx={(theme) => ({ fontWeight: active ? theme.typography.fontWeightBold : undefined })}
@@ -11,5 +11,3 @@ export default function MenuItemText({ children, active, color }: { children: st
     </Typography>
   );
 }
-
-MenuItemText.defaultProps = { active: false, color: 'primary' };

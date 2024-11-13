@@ -48,6 +48,9 @@ export default function List({
           <TableCell>
             {trans('numberOfTasks')}
           </TableCell>
+          <TableCell>
+            {trans('magentoCategoryId')}
+          </TableCell>
           <TableCell align="right">
             {trans('actions')}
           </TableCell>
@@ -64,6 +67,9 @@ export default function List({
             </TableCell>
             <TableCell>
               {productType.tasks?.length || 0}
+            </TableCell>
+            <TableCell>
+              {productType.magento_category_id}
             </TableCell>
             <TableCell align="right">
               <Edit onClick={() => onEdit(productType.id)} disabled={disabled} />

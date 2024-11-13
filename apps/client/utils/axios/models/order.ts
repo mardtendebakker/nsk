@@ -40,7 +40,7 @@ export interface OrderListItem {
   order_nr:string
   order_date:string,
   pickup: { real_pickup_date: string },
-  delivery_date: string,
+  delivery: { date: string },
   order_status: { id: number, name:string, color:string }
   product_orders: ProductOrder[];
   contact_aorder_supplier_idTocontact:Contact,
@@ -62,9 +62,7 @@ export interface Order {
   supplier_id:number,
   customer_id:number,
   pickup?: Pickup,
-  delivery_date:string,
-  delivery_type:number,
-  delivery_instructions:string,
+  delivery?: Delivery,
   totalPrice: number,
   contact_aorder_customer_idTocontact:Contact,
   contact_aorder_supplier_idTocontact:Contact
@@ -82,4 +80,13 @@ interface Pickup {
   data_destruction:number,
   agreement:{ id:number, originalClientFilename:string },
   images:{ originalClientFilename:string }[]
+}
+
+interface Delivery {
+  id:number,
+  date?:string,
+  type?:number,
+  instructions?:string,
+  dhl_tracking_code?: string,
+  logistics_id?: number,
 }

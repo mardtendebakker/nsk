@@ -8,8 +8,12 @@ export enum CognitoGroups {
   PARTNER = 'partner',
 }
 
-export const ADMINS_GROUPS = [
+export const SUPER_ADMIN_GROUPS = [
   CognitoGroups.SUPER_ADMIN,
+];
+
+export const ADMINS_GROUPS = [
+  ...SUPER_ADMIN_GROUPS,
   CognitoGroups.ADMIN,
 ];
 

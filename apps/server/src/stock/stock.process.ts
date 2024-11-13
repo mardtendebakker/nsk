@@ -202,9 +202,10 @@ export class StockProcess {
   private getQuantitySold() {
     let quantitySold = 0;
 
-    if (this.isSaleable) {
-      quantitySold += this.productSaleOrders.reduce((acc, cur) => acc + cur.quantity, 0);
-    }
+    quantitySold += this.productSaleOrders.reduce(
+      (acc, cur) => !cur?.aorder?.repair?.id && acc + cur.quantity,
+      0,
+    );
 
     this.quantitySold = quantitySold;
     return this.quantitySold;

@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import _ from 'lodash';
 import {
-  STOCK_PRODUCTS_PATH, STOCK_REPAIRS_PATH, SPLIT_PRODUCT_INDIVIDUALIZE_PATH, SPLIT_PRODUCT_STOCK_PART_PATH, APRODUCT_BULK_PRINT_BARCODES, AxiosResponse, APRODUCT_BULK_PRINT_CHECKLISTS, APRODUCT_BULK_PRINT_PRICECARDS, STOCK_ARCHIVED_PATH, APRODUCTS_ARCHIVE_SET, APRODUCTS_ARCHIVE_UNSET, APRODUCT_BULK_PRINT_LABELS,
+  STOCK_PRODUCTS_PATH, STOCK_WEBSHOP_PATH, STOCK_REPAIRS_PATH, SPLIT_PRODUCT_INDIVIDUALIZE_PATH, SPLIT_PRODUCT_STOCK_PART_PATH, STOCK_ARCHIVED_PATH, APRODUCTS_ARCHIVE_SET, APRODUCTS_ARCHIVE_UNSET,
+  APRODUCT_BULK_PUBLISH_TO_STORE,
 } from '../../../utils/axios';
 import List from './list';
 import useAxios from '../../../hooks/useAxios';
@@ -15,11 +16,16 @@ import pushURLParams from '../../../utils/pushURLParams';
 import { ProductListItem } from '../../../utils/axios/models/product';
 import SplitModal, { SplitData } from './splitModal';
 import { getQueryParam } from '../../../utils/location';
-import { openBlob } from '../../../utils/blob';
 import Header from '../header';
 import can from '../../../utils/can';
 import useSecurity from '../../../hooks/useSecurity';
 import PatchLocationModal from './patchLocationModal';
+import PatchProductTypeModal from './patchProductTypeModal';
+import { ProductType } from '../type';
+import useBulkPrintChecklist from '../../../hooks/apiCalls/useBulkPrintChecklist';
+import useBulkPrintPriceCards from '../../../hooks/apiCalls/useBulkPrintPriceCards';
+import useBulkPrintLabels from '../../../hooks/apiCalls/useBulkPrintLabels';
+import useBulkPrintBarcodes from '../../../hooks/apiCalls/useBulkPrintBarcodes';
 
 function initFormState(
   {
@@ -96,12 +102,14 @@ const AJAX_PATHS = {
   product: STOCK_PRODUCTS_PATH,
   repair: STOCK_REPAIRS_PATH,
   archived: STOCK_ARCHIVED_PATH,
+  webshop: STOCK_WEBSHOP_PATH,
 };
 
-export default function ListContainer({ type } : { type: 'product' | 'repair' | 'archived' }) {
+export default function ListContainer({ type } : { type: ProductType }) {
   const { state: { user } } = useSecurity();
   const router = useRouter();
   const [showChangeLocationModal, setShowChangeLocationModal] = useState(false);
+  const [showChangeProductTypeModal, setShowChangeProductTypeModal] = useState(false);
   const [page, setPage] = useState<number>(parseInt(getQueryParam('page', '1'), 10));
   const [rowsPerPage, setRowsPerPage] = useState<number>(parseInt(getQueryParam('rowsPerPage', '10'), 10));
   const [editProductId, setEditProductId] = useState<number | undefined>();
@@ -125,12 +133,13 @@ export default function ListContainer({ type } : { type: 'product' | 'repair' | 
       withProgressBar: true,
     },
   );
-  const { call: bulkPrint, performing: performingBulkPrintBarcodes } = useAxios('get', APRODUCT_BULK_PRINT_BARCODES);
-  const { call: bulkPrintChecklist, performing: performingBulkPrintChecklists } = useAxios('get', APRODUCT_BULK_PRINT_CHECKLISTS);
-  const { call: bulkPrintPriceCard, performing: performingBulkPrintPriceCards } = useAxios('get', APRODUCT_BULK_PRINT_PRICECARDS);
-  const { call: bulkPrintLabel, performing: performingBulkPrintLabels } = useAxios('get', APRODUCT_BULK_PRINT_LABELS);
-  const { call: bulkPatchArchive, performing: performingBulkPatchArchive } = useAxios('patch', APRODUCTS_ARCHIVE_SET);
-  const { call: bulkPatchUnarchive, performing: performingBulkPatchUnarchive } = useAxios('patch', APRODUCTS_ARCHIVE_UNSET);
+  const { printBarcodes, performing: performingBulkPrintBarcodes } = useBulkPrintBarcodes({ withProgressBar: true });
+  const { printChecklists, performing: performingBulkPrintChecklists } = useBulkPrintChecklist({ withProgressBar: true });
+  const { printPriceCards, performing: performingBulkPrintPriceCards } = useBulkPrintPriceCards({ withProgressBar: true });
+  const { printLabels, performing: performingBulkPrintLabels } = useBulkPrintLabels({ withProgressBar: true });
+  const { call: bulkPatchArchive, performing: performingBulkPatchArchive } = useAxios('patch', APRODUCTS_ARCHIVE_SET, { withProgressBar: true });
+  const { call: bulkPublishToStore, performing: performingBulkPublishToStore } = useAxios('post', APRODUCT_BULK_PUBLISH_TO_STORE, { showSuccessMessage: true, withProgressBar: true });
+  const { call: bulkPatchUnarchive, performing: performingBulkPatchUnarchive } = useAxios('patch', APRODUCTS_ARCHIVE_UNSET, { withProgressBar: true });
   const { call: callDelete, performing: performingDelete } = useAxios(
     'delete',
     ajaxPath,
@@ -139,7 +148,7 @@ export default function ListContainer({ type } : { type: 'product' | 'repair' | 
       showSuccessMessage: true,
     },
   );
-  const { call: callPatchLocation, performing: performingPatchLocation } = useAxios(
+  const { call: callPatch, performing: performingPatch } = useAxios(
     'patch',
     ajaxPath.replace(':id', ''),
     {
@@ -197,13 +206,20 @@ export default function ListContainer({ type } : { type: 'product' | 'repair' | 
       .then(() => defaultRefreshList());
   };
 
-  const disabled = (): boolean => performing || performingDelete || performingPatchLocation || performingBulkPatchArchive || performingBulkPatchUnarchive || performingSplit || performingBulkPrintBarcodes || performingBulkPrintChecklists || performingBulkPrintPriceCards || performingBulkPrintLabels;
+  const disabled = (): boolean => performing || performingBulkPublishToStore || performingDelete || performingPatch || performingBulkPatchArchive || performingBulkPatchUnarchive || performingSplit || performingBulkPrintBarcodes || performingBulkPrintChecklists || performingBulkPrintPriceCards || performingBulkPrintLabels;
 
   const handlePatchArchive = () => {
     bulkPatchArchive({ body: checkedProductIds })
       .then(() => {
         setCheckedProductIds([]);
         defaultRefreshList();
+      });
+  };
+
+  const handlePublishToStore = () => {
+    bulkPublishToStore({ body: checkedProductIds })
+      .then(() => {
+        setCheckedProductIds([]);
       });
   };
 
@@ -215,42 +231,20 @@ export default function ListContainer({ type } : { type: 'product' | 'repair' | 
       });
   };
 
-  const handlePatchLocation = (product) => {
-    callPatchLocation({ body: { ids: checkedProductIds, product } })
+  const handleSubmitEditProduct = () => {
+    setEditProductId(undefined);
+    defaultRefreshList();
+  };
+
+  const handlePatch = (product) => {
+    callPatch({ body: { ids: checkedProductIds, product } })
       .then(() => {
         setCheckedProductIds([]);
         defaultRefreshList();
       })
       .finally(() => {
         setShowChangeLocationModal(false);
-      });
-  };
-
-  const handlePrintBarcodes = () => {
-    bulkPrint({ params: { ids: checkedProductIds }, responseType: 'blob' })
-      .then((response: AxiosResponse) => {
-        openBlob(response.data);
-      });
-  };
-
-  const handlePrintChecklists = () => {
-    bulkPrintChecklist({ params: { ids: checkedProductIds }, responseType: 'blob' })
-      .then((response: AxiosResponse) => {
-        openBlob(response.data);
-      });
-  };
-
-  const handlePrintPriceCards = () => {
-    bulkPrintPriceCard({ params: { ids: checkedProductIds }, responseType: 'blob' })
-      .then((response: AxiosResponse) => {
-        openBlob(response.data);
-      });
-  };
-
-  const handlePrintLabels = () => {
-    bulkPrintLabel({ params: { ids: checkedProductIds }, responseType: 'blob' })
-      .then((response: AxiosResponse) => {
-        openBlob(response.data);
+        setShowChangeProductTypeModal(false);
       });
   };
 
@@ -300,10 +294,12 @@ export default function ListContainer({ type } : { type: 'product' | 'repair' | 
           onArchive={handlePatchArchive}
           onUnarchive={handlePatchUnarchive}
           onChangeLocation={() => setShowChangeLocationModal(true)}
-          onPrint={handlePrintBarcodes}
-          onPrintChecklist={handlePrintChecklists}
-          onPrintPriceCard={handlePrintPriceCards}
-          onPrintLabel={handlePrintLabels}
+          onChangeProductType={() => setShowChangeProductTypeModal(true)}
+          onPrint={() => printBarcodes(checkedProductIds)}
+          onPrintChecklist={() => printChecklists(checkedProductIds)}
+          onPrintPriceCard={() => printPriceCards(checkedProductIds)}
+          onPrintLabel={() => printLabels(checkedProductIds)}
+          onPublishToStore={handlePublishToStore}
         />
         <Box sx={{ m: '.5rem' }} />
         <List
@@ -322,12 +318,12 @@ export default function ListContainer({ type } : { type: 'product' | 'repair' | 
           }}
           rowsPerPage={rowsPerPage}
           onEdit={(id) => setEditProductId(id)}
-          onDelete={user && can({ user, requiredGroups: ['manager'] }) ? handleDelete : undefined}
+          onDelete={user && can({ user, requiredGroups: ['admin', 'manager'] }) ? handleDelete : undefined}
         />
         {editProductId && (
         <EditModal
           onClose={() => setEditProductId(undefined)}
-          onSubmit={() => setEditProductId(undefined)}
+          onSubmit={handleSubmitEditProduct}
           id={editProductId.toString()}
           type={type}
         />
@@ -335,7 +331,13 @@ export default function ListContainer({ type } : { type: 'product' | 'repair' | 
         {showChangeLocationModal && (
         <PatchLocationModal
           onClose={() => setShowChangeLocationModal(false)}
-          onSubmit={handlePatchLocation}
+          onSubmit={handlePatch}
+        />
+        )}
+        {showChangeProductTypeModal && (
+        <PatchProductTypeModal
+          onClose={() => setShowChangeProductTypeModal(false)}
+          onSubmit={handlePatch}
         />
         )}
         {splitProduct && (

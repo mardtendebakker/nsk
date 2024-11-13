@@ -15,7 +15,7 @@ import { AOrderPayloadRelation } from './types/aorder-payload-relation';
 import { AOrderFindManyReturnType } from './types/aorder-find-many-return-type';
 
 type CommonAOrderDto = Partial<Omit<CreateAOrderDto, 'pickup' | 'repair'>>;
-type CommonAOrderInput = Partial<Omit<Prisma.aorderCreateInput, 'pickup' | 'repair'>>;
+type CommonAOrderInput = Partial<Omit<Prisma.aorderCreateInput, 'pickup' | 'repair' | 'delivery'>>;
 
 export class AOrderService {
   constructor(
@@ -65,7 +65,7 @@ export class AOrderService {
             },
           },
         }),
-        delivery_date: true,
+        delivery: true,
         contact_aorder_supplier_idTocontact: {
           select: this.getContactSelect(),
         },
@@ -76,9 +76,10 @@ export class AOrderService {
       where: {
         ...query.where,
         ...(this.type && { discr: this.type }),
-        ...(search && { order_nr: { contains: search } }),
         ...(status && { status_id: { equals: status } }),
-        ...this.getPartnerWhereInput({ createdBy, partner, email }),
+        ...this.getAndOrWhereInput({
+          search, createdBy, partner, email,
+        }),
       },
       orderBy: Object.keys(query?.orderBy || {})?.length ? query.orderBy : { id: 'desc' },
     };
@@ -116,7 +117,9 @@ export class AOrderService {
       throw new BadRequestException('The operation requires a specific order type');
     }
 
-    const { pickup, repair, ...commonDto } = aorderDto;
+    const {
+      pickup, repair, delivery, ...commonDto
+    } = aorderDto;
 
     const params: Prisma.aorderCreateArgs = {
       data: {
@@ -125,6 +128,7 @@ export class AOrderService {
         discr: this.type,
         order_date: new Date(),
         ...(pickup && { pickup: { create: { ...pickup } } }),
+        ...(delivery && { delivery: { create: { ...delivery } } }),
         ...(repair && { repair: { create: { ...repair } } }),
       },
     };
@@ -153,11 +157,14 @@ export class AOrderService {
   }
 
   async update(id: number, aorderDto: UpdateAOrderDto) {
-    const { pickup, repair, ...commonDto } = aorderDto;
+    const {
+      pickup, repair, delivery, ...commonDto
+    } = aorderDto;
 
     const data: Prisma.aorderUpdateInput = {
       ...await this.processCreateOrUpdateOrderInput(commonDto),
       ...(pickup && { pickup: { upsert: { update: { ...pickup }, create: { ...pickup } } } }),
+      ...(delivery && { delivery: { upsert: { update: { ...delivery }, create: { ...delivery } } } }),
       ...(repair && { repair: { upsert: { update: { ...repair }, create: { ...repair } } } }),
     };
 
@@ -352,6 +359,7 @@ export class AOrderService {
     if (this.type !== AOrderDiscrimination.PURCHASE) {
       include = {
         ...include,
+        delivery: true,
         afile: {
           select: {
             id: true,
@@ -440,6 +448,43 @@ export class AOrderService {
     };
   }
 
+  private getAndOrWhereInput(params: {
+    search?: string,
+    createdBy?: number,
+    partner?: number,
+    email?: string,
+  }): Omit<Prisma.aorderWhereInput, 'id' | 'order_nr'> {
+    const {
+      search, createdBy, partner, email,
+    } = params;
+    return {
+      ...((search || createdBy || partner || email) && {
+        AND: [
+          {
+            ...this.getSearchWhereInput({ search }),
+          },
+          {
+            ...this.getPartnerWhereInput({ createdBy, partner, email }),
+          },
+        ],
+      }),
+    };
+  }
+
+  private getSearchWhereInput(params: {
+    search?: string
+  }): Omit<Prisma.aorderWhereInput, 'id' | 'order_nr'> {
+    const { search } = params;
+    return {
+      ...(search && {
+        OR: [
+          { order_nr: { contains: search } },
+          { remarks: { contains: search } },
+        ],
+      }),
+    };
+  }
+
   private getPartnerWhereInput(params: {
     createdBy?: number,
     partner?: number,
@@ -473,7 +518,11 @@ export class AOrderService {
       ...(partner && { company_contact_company_idTocompany: { company: { id: partner } } }),
       ...(email && {
         OR: [
-          { email },
+          {
+            company_contact_company_idTocompany: {
+              companyContacts: { some: { email } },
+            },
+          },
           {
             company_contact_company_idTocompany: {
               company: { companyContacts: { some: { email } } },

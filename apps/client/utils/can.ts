@@ -5,7 +5,7 @@ export default function can({ user, requiredGroups } : { user: User, requiredGro
   let supportsGroups = true;
 
   if (Array.isArray(requiredGroups)) {
-    supportsGroups = _.intersection(user.groups, [...requiredGroups, 'admin', 'super_admin']).length > 0;
+    supportsGroups = _.intersection(user.groups, [...requiredGroups, 'super_admin']).length > 0;
   }
 
   return supportsGroups;

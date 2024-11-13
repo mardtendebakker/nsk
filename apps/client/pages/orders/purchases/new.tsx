@@ -79,16 +79,16 @@ export function initFormState(trans, order?: Order) {
 
 export function formRepresentationToBody(formRepresentation: FormRepresentation): object {
   const payload: any = {
-    order_nr: formRepresentation.orderNr.value || undefined,
-    order_date: formRepresentation.orderDate.value || undefined,
-    status_id: formRepresentation.orderStatus.value || undefined,
+    order_nr: formRepresentation.orderNr.value,
+    order_date: formRepresentation.orderDate.value,
+    status_id: formRepresentation.orderStatus.value,
     remarks: formRepresentation.remarks.value,
     transport: formRepresentation.transport.value,
     discount: formRepresentation.discount.value,
     is_gift: formRepresentation.isGift.value,
     pickup: {
-      logistics_id: formRepresentation.logisticId.value || undefined,
-      real_pickup_date: formRepresentation.pickupDate.value || undefined,
+      logistics_id: formRepresentation.logisticId.value || null,
+      real_pickup_date: formRepresentation.pickupDate.value || null,
     },
   };
 
@@ -96,15 +96,15 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
     payload.supplier_id = formRepresentation.supplierId.value;
   } else {
     payload.supplier = {
-      name: formRepresentation.name.value || undefined,
-      email: formRepresentation.email.value || undefined,
-      phone: formRepresentation.phone.value || undefined,
-      street: formRepresentation.street.value || undefined,
-      street_extra: formRepresentation.extraStreet.value || undefined,
-      city: formRepresentation.city.value || undefined,
-      zip: formRepresentation.zipcode.value || undefined,
-      state: formRepresentation.state.value || undefined,
-      country: formRepresentation.country.value || undefined,
+      name: formRepresentation.name.value,
+      email: formRepresentation.email.value,
+      phone: formRepresentation.phone.value,
+      street: formRepresentation.street.value,
+      street_extra: formRepresentation.extraStreet.value,
+      city: formRepresentation.city.value,
+      zip: formRepresentation.zipcode.value,
+      state: formRepresentation.state.value,
+      country: formRepresentation.country.value,
     };
 
     if (!formRepresentation.newCompany.value) {

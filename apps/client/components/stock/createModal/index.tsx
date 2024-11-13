@@ -101,7 +101,7 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
   return formData;
 }
 
-export default function CreateModal({ onClose, onSubmit, additionalPayloadData }: {
+export default function CreateModal({ onClose, onSubmit, additionalPayloadData = {} }: {
   onClose: () => void,
   onSubmit: (product: Product) => void,
   additionalPayloadData?: { [key: string]: string }
@@ -162,5 +162,3 @@ export default function CreateModal({ onClose, onSubmit, additionalPayloadData }
     </>
   );
 }
-
-CreateModal.defaultProps = { additionalPayloadData: {} };

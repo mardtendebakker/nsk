@@ -12,27 +12,34 @@ import {
   Query,
   Res,
   StreamableFile,
+  UploadedFile,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
-import { AnyFilesInterceptor } from '@nestjs/platform-express';
+import { AnyFilesInterceptor, FileInterceptor } from '@nestjs/platform-express';
 import type { Response } from 'express';
 import { FindOneProductResponeDto } from './dto/find-one-product-response.dto';
 import { FindProductsResponseDto } from './dto/find-product-respone.dto';
 import { StockService } from './stock.service';
 import { UpdateBodyStockDto } from './dto/update-body-stock.dto';
-import { UpdateManyResponseProductDto } from './dto/update-many-product-response.dts';
+import { UpdateManyProductResponseDto } from './dto/update-many-product-response.dto';
 import { UpdateManyProductDto } from './dto/update-many-product.dto';
 import { FindManyDto } from './dto/find-many.dto';
 import { CreateBodyStockDto } from './dto/create-body-stock.dto';
 import { BulkPrintDTO } from '../print/dto/bulk-print.dto';
 import {
-  ALL_MAIN_GROUPS, CognitoGroups, LOCAL_GROUPS, MANAGER_GROUPS, PARTNERS_GROUPS,
+  ALL_MAIN_GROUPS,
+  CognitoGroups,
+  LOCAL_GROUPS,
+  MANAGER_GROUPS,
+  PARTNERS_GROUPS,
+  SUPER_ADMIN_GROUPS,
 } from '../common/types/cognito-groups.enum';
 import { StockBlancco } from './stock.blancco';
 import { requiredModule } from '../common/guard/required-modules.guard';
+import { UploadProductDto } from './dto/upload-product.dto';
 
 @ApiBearerAuth()
 @Authorization(ALL_MAIN_GROUPS)
@@ -94,10 +101,17 @@ export class StockController {
   }
 
   @Patch('')
-  @UseGuards(AuthorizationGuard(LOCAL_GROUPS))
-  @ApiResponse({ type: UpdateManyResponseProductDto })
+  @UseGuards(AuthorizationGuard(MANAGER_GROUPS))
+  @ApiResponse({ type: UpdateManyProductResponseDto })
   updateMany(@Body() updateManyProductDto: UpdateManyProductDto) {
-    return this.stockService.updateManyLocation(updateManyProductDto);
+    return this.stockService.updateMany(updateManyProductDto);
+  }
+
+  @Patch('archive/all-sold-out')
+  @UseGuards(AuthorizationGuard(SUPER_ADMIN_GROUPS))
+  @ApiResponse({ type: UpdateManyProductResponseDto })
+  archiveAllSoldOut() {
+    return this.stockService.archiveAllSoldOut();
   }
 
   @Delete(':id')
@@ -225,5 +239,16 @@ export class StockController {
     const count = await this.stockBlancco.importFromBlancco(orderId);
 
     return { count };
+  }
+
+  @Post('upload')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadFile(
+  @Body() body: UploadProductDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    const products = await this.stockService.uploadFromExcel(body, file);
+
+    return { count: products.length };
   }
 }

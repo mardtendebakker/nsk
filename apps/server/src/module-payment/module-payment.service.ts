@@ -22,6 +22,7 @@ export class ModulePaymentService {
       transactionId: model.payment.transaction_id,
       price: model.price,
       status: model.payment.status as Status,
+      active: model.active,
       activeAt: model.active_at,
       expiresAt: model.expires_at,
     } : null;

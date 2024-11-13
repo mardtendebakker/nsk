@@ -1,6 +1,9 @@
 import { Prisma, afile as AFileEntity } from '@prisma/client';
-import { NotFoundException } from '@nestjs/common';
+import { NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import * as xlsx from 'xlsx';
+import { HttpService } from '@nestjs/axios';
+import { lastValueFrom } from 'rxjs';
 import { LocationService } from '../admin/location/location.service';
 import { StockRepository } from './stock.repository';
 import { StockProcess } from './stock.process';
@@ -13,7 +16,7 @@ import { CreateFileDto } from '../file/dto/create-file.dto';
 import { AttributeType } from '../attribute/enum/attribute-type.enum';
 import { CreateBodyStockDto } from './dto/create-body-stock.dto';
 import { PartialProductAttributeIncludeAttribute } from './types/product-attribute-include-attribute';
-import { ProductRelation } from './types/product-relation';
+import { PartialProductRelation, ProductRelation } from './types/product-relation';
 import { ProcessedStock } from './dto/processed-stock.dto';
 import { ProductAttributeDto } from './dto/product-attribute.dto';
 import { FILE_VALUE_DELIMITER } from './types/file-value-delimiter.const';
@@ -27,12 +30,14 @@ import { ProductRelationAttributeProcessed } from './types/product-relation-attr
 import { ProductRelationAttributeOrderProcessed } from './types/product-relation-attribute-order-processed';
 import { EntityStatus } from '../common/types/entity-status.enum';
 import { LocationLabelService } from '../location-label/location-label.service';
-import { BlanccoService } from '../blancco/blancco.service';
 import { AttributeIncludeOption } from './types/attribute-include-option';
 import { UserLabelPrint } from '../print/types/user-label-print';
 import { CompanyLabelPrint } from '../print/types/company-label-print';
 import { ProductAttributeUpdateMany } from './types/update-atrribute';
 import { AttributeGetPayload } from '../attribute/types/attribute-get-payload';
+import { UpdateManyProductResponseDto } from './dto/update-many-product-response.dto';
+import { IUploadColumn } from './types/upload-column';
+import { UploadProductDto } from './dto/upload-product.dto';
 
 export class StockService {
   constructor(
@@ -41,8 +46,8 @@ export class StockService {
     protected readonly locationLabelService: LocationLabelService,
     protected readonly fileService: FileService,
     protected readonly printService: PrintService,
-    protected readonly blanccoService: BlanccoService,
     protected readonly configService: ConfigService,
+    protected readonly httpService: HttpService,
     protected readonly entityStatus: EntityStatus,
   ) {}
 
@@ -51,7 +56,8 @@ export class StockService {
     return processProdcut.run();
   }
 
-  async findAll(query: FindManyDto, email?: string) {
+  async findAll(query: FindManyDto, email?: string)
+    : Promise<{ count: number; data: ProcessedStock[]; }> {
     const {
       where,
       entityStatus,
@@ -118,6 +124,7 @@ export class StockService {
         OR: [
           { name: { contains: search } },
           { sku: { contains: search } },
+          { description: { contains: search } },
           {
             product_attribute_product_attribute_product_idToproduct: {
               some: {
@@ -141,7 +148,7 @@ export class StockService {
     if (orderBy) {
       productOrderBy.push(orderBy);
     }
-    productOrderBy.push({ id: 'desc' });
+    productOrderBy.push({ id: orderBy?.id ? orderBy.id : 'desc' });
 
     const result = await this.repository.findAll({
       ...restQuery,
@@ -242,7 +249,7 @@ export class StockService {
 
     const stock = await this.repository.create(createInput);
 
-    if (productAttributes?.length) {
+    if (productAttributes?.length || files?.length) {
       return this.updateOne(
         stock.id,
         { type_id: body.type_id, product_attributes: productAttributes },
@@ -272,13 +279,15 @@ export class StockService {
 
     let locationLabelId: number = null;
 
-    if (locationLabelBody) {
-      const locationLabel = await this.locationLabelService.findByLabelOrCreate({
-        location_id: body.location_id || stock.location.id,
-        label: locationLabelBody,
-      });
+    if (locationLabelBody !== undefined) {
+      if (locationLabelBody) {
+        const locationLabel = await this.locationLabelService.findByLabelOrCreate({
+          location_id: body.location_id || stock.location.id,
+          label: locationLabelBody,
+        });
 
-      locationLabelId = locationLabel.id;
+        locationLabelId = locationLabel.id;
+      }
     }
 
     const typeHasChanged = Number.isFinite(body.type_id) && body.type_id !== stock.product_type?.id;
@@ -301,8 +310,8 @@ export class StockService {
     return this.repository.updateOne({
       id,
       data: {
-        location_label_id: locationLabelId,
         ...restBody,
+        ...(locationLabelBody !== undefined && { location_label_id: locationLabelId }),
         ...(productOrders?.length && {
           product_order: {
             update: productOrders.map((productOrder) => ({
@@ -325,25 +334,15 @@ export class StockService {
     return this.repository.deleteOne(id);
   }
 
-  async updateMany(ids: number[], data: Prisma.productUncheckedUpdateManyInput) {
-    return this.repository.updateMany({
-      where: {
-        id: { in: ids },
-      },
-      data,
-    });
-  }
-
-  async updateManyLocation(updateManyProductDto: UpdateManyProductDto) {
+  async updateMany(updateManyProductDto: UpdateManyProductDto): Promise<UpdateManyProductResponseDto> {
     const {
       ids, product: {
-        location_id: locationId, location_label: locationLabelBody,
+        locationId, locationLabel: locationLabelBody, productTypeId, entityStatus, orderUpdatedAt,
       },
     } = updateManyProductDto;
 
-    if (!locationId) {
-      return false;
-    }
+    const totalUpdated = updateManyProductDto.ids.length;
+    if (totalUpdated === 0) return Promise.resolve({ affected: 0 });
 
     let locationLabelId: number;
 
@@ -354,13 +353,60 @@ export class StockService {
       locationLabelId = locationLabel.id;
     }
 
-    return this.updateMany(
-      ids,
-      {
-        location_id: locationId,
-        location_label_id: locationLabelId,
+    if (productTypeId) {
+      await this.repository.updateManyProductTypeId({ ids, productTypeId });
+    } else {
+      await this.repository.updateMany({
+        where: {
+          id: { in: ids },
+        },
+        data: {
+          ...(Number.isFinite(locationId) && { location_id: locationId }),
+          ...(Number.isFinite(locationLabelId) && { location_label_id: locationLabelId }),
+          ...(Number.isFinite(entityStatus) && { entity_status: entityStatus }),
+          ...(orderUpdatedAt && { order_updated_at: orderUpdatedAt }),
+        },
+      });
+    }
+
+    return { affected: totalUpdated };
+  }
+
+  async archiveAllSoldOut() {
+    const take = this.configService.get<number>('MAX_RELATION_QUERY_LIMIT') || 100;
+    let cursor;
+    let hasNextPage = true;
+
+    const archiveManyProductDto: UpdateManyProductDto = {
+      ids: [],
+      product: {
+        entityStatus: EntityStatus.Archived,
       },
-    );
+    };
+
+    while (hasNextPage) {
+      // eslint-disable-next-line no-await-in-loop
+      const { data } = await this.findAll({
+        take,
+        skip: cursor ? 1 : 0,
+        cursor: cursor ? { id: cursor } : undefined,
+        orderBy: { id: 'asc' },
+      });
+
+      for (const product of data) {
+        if (product.purch !== 0 && product.purch === product.sold) {
+          archiveManyProductDto.ids.push(product.id);
+        }
+      }
+
+      if (data.length < take) {
+        hasNextPage = false;
+      } else {
+        cursor = data[data.length - 1].id;
+      }
+    }
+
+    return this.updateMany(archiveManyProductDto);
   }
 
   async getAllPublicTypes() {
@@ -495,6 +541,7 @@ export class StockService {
     const productTypeSelect: Prisma.product_typeSelect = {
       id: true,
       name: true,
+      magento_category_id: true,
       product_type_task: {
         select: {
           task: true,
@@ -848,8 +895,9 @@ export class StockService {
     }, {}) || {};
 
     const uploadedIdsGroupByAttributeId: Record<string, number[]> = {};
-    Object.entries(filesGroupByAttributeId).forEach(async ([fileAttributeId, uploadedFiles]) => {
+    for (const [fileAttributeId, uploadedFiles] of Object.entries(filesGroupByAttributeId)) {
       // Upload all new files
+      // eslint-disable-next-line no-await-in-loop
       const fileIdsUploaded = await this.uploadFiles(
         productId,
         uploadedFiles.map((file) => ({
@@ -859,7 +907,7 @@ export class StockService {
       );
       // Keep all file ids
       uploadedIdsGroupByAttributeId[fileAttributeId] = fileIdsUploaded;
-    });
+    }
 
     // get all productAttributes
     let productAttributeInclusive = this.addAttributeRelationToProductAttributes(
@@ -960,5 +1008,126 @@ export class StockService {
         ],
       }),
     };
+  }
+
+  async uploadFromExcel(params: UploadProductDto, file: Express.Multer.File): Promise<PartialProductRelation[]> {
+    const rows = this.getFirstSheetOfUploadedExcel(file);
+
+    const products: PartialProductRelation[] = [];
+
+    for (const row of rows) {
+      try {
+        const product = await this.processProductRow(params, row);
+        products.push(product);
+      } catch (e) {
+        throw new UnprocessableEntityException(`Error processing row with Artnr ${row.Artnr}:`, e);
+      }
+    }
+
+    return products;
+  }
+
+  private async processProductRow(params: UploadProductDto, row: IUploadColumn): Promise<PartialProductRelation> {
+    const {
+      Artnr,
+      Omschrijving,
+      Levertijd,
+      'Netto inkoopprijs': NettoInkoopprijs,
+      'Afbeelding 1': Afbeelding1,
+      'Afbeelding 2': Afbeelding2,
+      Kleur,
+      Fabrikant,
+      'Kabel Lengte': KabelLengte,
+      Cat,
+      'Managed / Unmanaged': ManagedUnmanaged,
+      Maat,
+      Hoogte,
+      Diepte,
+      Verpakking,
+      Breedte,
+    } = row;
+
+    const productAttributeFiles = await this.uploadProductFiles([Afbeelding1, Afbeelding2]);
+
+    const OmschrijvingArr = Omschrijving.split(',').map((item) => item.trim());
+
+    const name = OmschrijvingArr.shift();
+
+    const description = [
+      OmschrijvingArr.length ? OmschrijvingArr.join('\n') : '',
+      Levertijd || '',
+      Kleur || '',
+      Fabrikant || '',
+      KabelLengte || '',
+      Cat || '',
+      ManagedUnmanaged || '',
+      Maat || '',
+      Hoogte || '',
+      Diepte || '',
+      Verpakking || '',
+      Breedte || '',
+    ].filter((part) => part).join('\n');
+
+    const overigType = 24;
+
+    const price = Number(NettoInkoopprijs);
+
+    const productDto: CreateBodyStockDto = {
+      name,
+      sku: Artnr,
+      location_id: 1,
+      description,
+      type_id: overigType,
+      price,
+      product_orders: [
+        {
+          order_id: params.orderId,
+          quantity: 1,
+        },
+      ],
+    };
+
+    return this.create(productDto, productAttributeFiles);
+  }
+
+  private async uploadProductFiles(urls: string[]): Promise<ProductAttributeFile[]> {
+    const productAttributeFiles: ProductAttributeFile[] = [];
+    for (const url of urls) {
+      if (url) {
+        productAttributeFiles.push(await this.downloadFileFromUrl(url));
+      }
+    }
+
+    return productAttributeFiles;
+  }
+
+  private getFirstSheetOfUploadedExcel(file: Express.Multer.File): IUploadColumn[] {
+    if (!file) {
+      throw new UnprocessableEntityException('file is invalid');
+    }
+    const workbook = xlsx.read(file.buffer, { type: 'buffer' });
+    const sheetName = workbook.SheetNames[0];
+    const sheet = workbook.Sheets[sheetName];
+    return xlsx.utils.sheet_to_json(sheet, { rawNumbers: false });
+  }
+
+  private async downloadFileFromUrl(url: string): Promise<ProductAttributeFile | never> {
+    const IMAGE_ATTRIBUTE_ID = '15';
+    if (!url) {
+      return null;
+    }
+
+    try {
+      const response = await lastValueFrom(
+        this.httpService.get(url, { responseType: 'arraybuffer' }),
+      );
+      const productAttributeFile: ProductAttributeFile = {
+        buffer: response.data,
+        fieldname: IMAGE_ATTRIBUTE_ID,
+        mimetype: response.headers['content-type'],
+      };
+
+      return productAttributeFile;
+    } catch (e) { return null; }
   }
 }

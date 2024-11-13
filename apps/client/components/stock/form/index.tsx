@@ -17,7 +17,7 @@ import { LocationTemplate } from '../../../utils/axios/models/product';
 export default function Form({
   setValue,
   formRepresentation,
-  disabled,
+  disabled = false,
   onPrintBarcode,
 }: {
   setValue: SetValue,
@@ -183,5 +183,3 @@ export default function Form({
     </>
   );
 }
-
-Form.defaultProps = { disabled: false, onPrintBarcode: undefined };

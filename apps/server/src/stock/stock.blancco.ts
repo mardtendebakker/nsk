@@ -63,8 +63,12 @@ export class StockBlancco {
 
   private async createProductAttributeByBlanccoReport(orderId: number, report: BlanccoReportV1): Promise<boolean> {
     const sku = this.blanccoService.getValueFromReportByKey(report, BlanccoCustomFiledKeys.SKU_NUMBER);
-    const productTypeName = this.getProductTypeName(report);
+    if (!sku) {
+      console.log(`createProductAttributeByBlanccoReport, No sku found! sku: ${sku}`);
+      return false;
+    }
 
+    const productTypeName = this.getProductTypeName(report);
     if (!productTypeName) {
       console.log(`createProductAttributeByBlanccoReport, No productTypeName found! sku: ${sku}`);
       return false;
@@ -101,8 +105,14 @@ export class StockBlancco {
         .getValueFromReportByKey(report, BlanccoHardwareKeys.CHASSIS_TYPE);
       if (['Desktop', 'Low Profile Desktop', 'Mini Tower'].includes(chassisType)) {
         productTypeName = BlanccoProductTypes.COMPUTER;
-      } else if (['Laptop', 'Notebook', 'Convertible'].includes(chassisType)) {
+      } else if (['Laptop', 'Notebook', 'Convertible', 'Portable'].includes(chassisType)) {
         productTypeName = BlanccoProductTypes.LAPTOP;
+      } else if (['Server', 'Rack Mount Chassis', 'Main Server Chassis', 'Tower'].includes(chassisType)) {
+        productTypeName = BlanccoProductTypes.SERVER;
+      } else if (['All In One'].includes(chassisType)) {
+        productTypeName = BlanccoProductTypes.ALL_IN_ONE;
+      } else if (['Mobile Device'].includes(chassisType)) {
+        productTypeName = BlanccoProductTypes.TELEFOON_TABLET;
       }
     }
 

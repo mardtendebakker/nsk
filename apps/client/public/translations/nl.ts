@@ -15,6 +15,7 @@ const translation = {
   delete: 'Verwijderen',
   lastModifiedAt: 'Laatst gewijzigd op',
   enabled: 'Ingeschakeld',
+  changeProductType: 'Producttype wijzigen',
   newSupplier: 'Nieuwe leverancier',
   rowsPerPage: 'Rijen per pagina',
   users: 'Gebruikers',
@@ -134,7 +135,8 @@ const translation = {
   createdAt: 'Datum opgave',
   createProduct: 'Product genereren',
   searchByCustomerNameOrEmail: 'Zoek op klantnaam of e-mail',
-  searchBySerialNumberOrNameOrAttr: 'Zoek op serienummer of naam of eigenschap',
+  searchBySkuOrDescOrNameOrAttr: 'Zoek op serienummer of beschrijving of naam of eigenschap',
+  searchByOrderNumberOrRemarks: 'Zoek op bestelnummer of opmerkingen',
   contact: 'Contact',
   bulkEmail: 'Bulk email',
   invalidEmail: 'Ongeldig emailadres',
@@ -432,6 +434,8 @@ const translation = {
   deleteResourceContent: 'Deze actie is onomkeerbaar. De verwijderde bron zal voor altijd verloren gaan.',
   deleteConfirm: 'Ja, verwijderen!',
   changeLocationContent: 'U kunt de locatie van de geselecteerde producten wijzigen',
+  changeProductTypeContent: 'U kunt het type geselecteerde producten wijzigen',
+  changeProductTypeWarning: 'Als u het producttype wijzigt, worden alle bijbehorende kenmerken verwijderd',
   selectLocation: 'Selecteer een locatie',
   changeStatus: 'Verander status',
   changeStatusContent: 'Statusinhoud wijzigen',
@@ -454,6 +458,8 @@ const translation = {
   deliveriesBy: 'Leveringen door',
   everyone: 'Iedereen',
   logistics: 'Logistiek',
+  dhlTrackingCode: 'DHL-trackingcode',
+  trackDown: 'Spoor op',
   logisticsPage: {
     search: {
       placeholder: 'Zoek op Bestelnummer of beschrijving',
@@ -467,6 +473,10 @@ const translation = {
     comment: {
       placeholder: 'Typ je reactie hier',
       label: 'Commentaar',
+    },
+    magentoCategoryId: {
+      placeholder: 'Vul hier de gebruikersnaam in',
+      label: 'Magento categorie-id',
     },
     tasks: {
       placeholder: 'Selecteer mogelijke taken',

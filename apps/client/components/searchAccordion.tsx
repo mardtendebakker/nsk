@@ -10,13 +10,13 @@ import debounce from '../utils/debounce';
 
 export default function SearchAccordion({
   children,
-  disabled,
   searchValue,
-  searchLabel,
   onSearchChange,
   onReset,
-  disabledFilter,
-  autoFocus,
+  searchLabel,
+  disabled = false,
+  disabledFilter = false,
+  autoFocus = false,
 }: {
   children: JSX.Element,
   disabled?: boolean,
@@ -87,10 +87,3 @@ export default function SearchAccordion({
     </Accordion>
   );
 }
-
-SearchAccordion.defaultProps = {
-  searchLabel: undefined,
-  disabled: false,
-  disabledFilter: false,
-  autoFocus: false,
-};

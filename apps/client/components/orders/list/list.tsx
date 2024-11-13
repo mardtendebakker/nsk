@@ -190,7 +190,7 @@ export default function List({
           const contact = type === 'purchase' ? order.contact_aorder_supplier_idTocontact : order.contact_aorder_customer_idTocontact;
           const deliveryOrPickupDate = type === 'purchase'
             ? order?.pickup?.real_pickup_date
-            : order.delivery_date;
+            : order?.delivery?.date;
 
           return (
             <TableRow
@@ -244,7 +244,7 @@ export default function List({
               </TableCell>
               <TableCell align="right">
                 <Edit href={editPath.replace('[id]', order.id.toString())} disabled={disabled} />
-                <Can requiredGroups={['manager', 'logistics', 'local']}>
+                <Can requiredGroups={['admin', 'manager', 'logistics', 'local']}>
                   <Delete onClick={() => onDelete(order.id)} disabled={disabled} tooltip />
                 </Can>
               </TableCell>

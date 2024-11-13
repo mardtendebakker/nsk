@@ -8,7 +8,7 @@ import {
 import { AdminUserService } from './user.service';
 import { ListUserDto } from './dto/list-user.dto';
 import { ListUserResponseDto } from './dto/list-user-response.dto';
-import { CognitoGroups, MANAGER_GROUPS } from '../../common/types/cognito-groups.enum';
+import { CognitoGroups, MANAGER_GROUPS, SUPER_ADMIN_GROUPS } from '../../common/types/cognito-groups.enum';
 import { UpdateUserGroupDto } from './dto/update-user-group.dto';
 
 @ApiTags('admin-users')
@@ -31,7 +31,7 @@ export class AdminUserController {
   }
 
   @Put('groups/:username')
-  @UseGuards(AuthorizationGuard([CognitoGroups.SUPER_ADMIN]))
+  @UseGuards(AuthorizationGuard(SUPER_ADMIN_GROUPS))
   @ApiResponse({ type: [UpdateUserGroupDto] })
   @ApiBody({
     type: [UpdateUserGroupDto],

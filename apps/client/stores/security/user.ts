@@ -1,6 +1,6 @@
 import { Group } from './group';
 
-export type ModuleName = 'blancco' | 'customer_contact_action' | 'logistics' | 'attributes' | 'tasks' | 'product_statuses' | 'order_statuses' | 'tracking';
+export type ModuleName = 'blancco' | 'customer_contact_action' | 'logistics' | 'attributes' | 'tasks' | 'product_statuses' | 'order_statuses' | 'tracking' | 'dhl_tracking';
 
 export interface Module {
   name: ModuleName;
