@@ -22,7 +22,7 @@ export class ConsumerService implements OnModuleInit {
   private async handleProductPublished(msg: { productId: number }): Promise<void> {
     const foundProduct = await this.productService.findOneRelation(msg.productId);
 
-    if (!foundProduct || foundProduct.entity_status === EntityStatus.Webshop) {
+    if (!foundProduct || ![EntityStatus.Active, EntityStatus.Webshop].includes(foundProduct.entity_status)) {
       return;
     }
 
