@@ -23,6 +23,7 @@ import {
   STOCKS_ARCHIVED,
   getRouteGroups,
   COMPANIES,
+  STOCKS_WEBSHOP,
 } from '../../../utils/routes';
 import useTranslation from '../../../hooks/useTranslation';
 import useResponsive from '../../../hooks/useResponsive';
@@ -102,6 +103,11 @@ export default function Header() {
           title: trans('archived'),
           path: STOCKS_ARCHIVED,
           active: router.pathname.startsWith(STOCKS_ARCHIVED),
+        },
+        {
+          title: trans('webshop'),
+          path: STOCKS_WEBSHOP,
+          active: router.pathname.startsWith(STOCKS_WEBSHOP),
         },
       ],
     },
