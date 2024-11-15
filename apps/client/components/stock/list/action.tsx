@@ -56,7 +56,7 @@ export default function Action({
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         {checkedProductsCount > 0 && ['product', 'webshop'].includes(type)
         && (
-          <Can requiredGroups={['manager']}>
+          <Can requiredGroups={['store_publisher']}>
             <Button size="small" onClick={onPublishToStore} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
               <AddBusiness sx={{ mr: '.1rem' }} />
               {trans('publishToStore')}

@@ -58,7 +58,7 @@ export const getRouteGroups = (uri: string): Group[] => {
   }
 
   if (uri.startsWith('/logistics')) {
-    return ['super_admin', 'admin', 'manager', 'logistics'];
+    return ['super_admin', 'admin', 'manager', 'logistics', 'store_publisher'];
   }
 
   if (
@@ -66,7 +66,7 @@ export const getRouteGroups = (uri: string): Group[] => {
     || uri.startsWith('/my-tasks')
     || uri.startsWith('/bulk-email')
   ) {
-    return ['super_admin', 'admin', 'manager', 'logistics', 'local'];
+    return ['super_admin', 'admin', 'manager', 'logistics', 'local', 'store_publisher'];
   }
 
   if (
