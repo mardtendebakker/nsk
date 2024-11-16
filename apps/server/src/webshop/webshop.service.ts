@@ -42,8 +42,6 @@ export class WebshopService {
 
     return Object.assign(new Order(), {
       id: orderId,
-      createdAt: data.created_at,
-      updatedAt: data.updated_at,
       customer: {
         city: address.city,
         country: address.country,
