@@ -33,28 +33,26 @@ export class ConsumerService implements OnModuleInit {
 
   private async handleWebshopOrderCreated(msg: { orderId: string }): Promise<void> {
     const {
-      createdAt, updatedAt, customer, transport, products,
+      customer, transport, products,
     } = await this.webshopService.fetchOrderById(msg.orderId);
-    if (createdAt === updatedAt) {
-      const order = await this.saleService.create({
-        customer: {
-          email: customer.email,
-          city: customer.city,
-          country: customer.country,
-          phone: customer.phone,
-          name: customer.name,
-          company_name: 'Magento',
-          street: customer.street,
-          zip: customer.zipcode,
-        },
-        status_id: 3,
-        remarks: 'Order from Magento',
-        transport,
-      });
+    const order = await this.saleService.create({
+      customer: {
+        email: customer.email,
+        city: customer.city,
+        country: customer.country,
+        phone: customer.phone,
+        name: customer.name,
+        company_name: 'Magento',
+        street: customer.street,
+        zip: customer.zipcode,
+      },
+      status_id: 3,
+      remarks: 'Order from Magento',
+      transport,
+    });
 
-      await this.saleService.addProducts(order.id, products
-        .filter(({ nexxus_id }) => !!nexxus_id)
-        .map(({ nexxus_id, quantity }) => ({ productId: parseInt(nexxus_id, 10), quantity })));
-    }
+    await this.saleService.addProducts(order.id, products
+      .filter(({ nexxus_id }) => !!nexxus_id)
+      .map(({ nexxus_id, quantity }) => ({ productId: parseInt(nexxus_id, 10), quantity })));
   }
 }
