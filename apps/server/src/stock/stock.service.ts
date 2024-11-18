@@ -122,6 +122,7 @@ export class StockService {
       }),
       ...(search && {
         OR: [
+          { ...((Number(search) && { id: Number(search) })) },
           { name: { contains: search } },
           { sku: { contains: search } },
           { description: { contains: search } },
