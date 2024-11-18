@@ -90,7 +90,7 @@ export default function ImageInput({
         <input
           ref={ref}
           type="file"
-          accept="image/*"
+          accept="image/jpg,image/png,image/jpeg"
           hidden
           id={`image-input-${id}`}
           onChange={handleChange}
