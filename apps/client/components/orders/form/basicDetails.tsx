@@ -94,7 +94,7 @@ export default function BasicDetails({
             fullWidth
             size="medium"
             multiline
-            rows={3}
+            minRows={5}
             label={trans('remarks')}
             placeholder={trans('remarks')}
             name="remarks"
