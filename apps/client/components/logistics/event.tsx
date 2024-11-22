@@ -48,6 +48,11 @@ export default function Event({
     >
       <Tooltip title={(
         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+          <span>
+            {trans('orderNumber')}
+            {': '}
+            {logisticService.order.order_nr}
+          </span>
           <span>{title}</span>
           <span>{body}</span>
           <span>{username}</span>
