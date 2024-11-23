@@ -3,8 +3,10 @@ import {
 } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
-import { catchError, lastValueFrom } from 'rxjs';
-import { AxiosError } from 'axios';
+import {
+  catchError, delay, delayWhen, lastValueFrom, of, retry,
+} from 'rxjs';
+import { AxiosError, AxiosResponse } from 'axios';
 import { Order } from './dto/find-order-response.dto';
 import { ProductRelation } from '../stock/types/product-relation';
 import { FileService } from '../file/file.service';
@@ -17,7 +19,6 @@ export class WebshopService {
     private httpService: HttpService,
     private configService: ConfigService,
     private fileService: FileService,
-
   ) {}
 
   async fetchOrderById(orderId: string): Promise<Order | null> {
@@ -27,7 +28,7 @@ export class WebshopService {
         { headers: { Authorization: `Bearer ${this.configService.get<string>('MAGENTO_API_KEY')}` } },
       ).pipe(
         catchError((error: AxiosError) => {
-          throw new HttpException(error.response.data, error.response.status);
+          throw new HttpException(`${error?.config?.url}->${error?.message}`, error?.response?.status);
         }),
       ),
     );
@@ -62,86 +63,21 @@ export class WebshopService {
 
       const entries = [].concat(...entries2d);
 
-      const result = await lastValueFrom(
-        this.httpService.post(
-          `${this.configService.get<string>('MAGENTO_BASE_URL')}rest/V1/products`,
-          {
-            product: {
-              sku: product.id,
-              name: this.getProductNameId(product),
-              attribute_set_id: 4,
-              price: product.price,
-              extension_attributes: {
-                category_links: product.product_type.magento_category_id ? [
-                  {
-                    position: 0,
-                    category_id: product.product_type.magento_category_id,
-                  },
-                ] : undefined,
-                stock_item: {
-                  qty: availableQuantity,
-                  is_in_stock: availableQuantity > 0 && product.price > 0,
-                },
-              },
-              custom_attributes: [
-                {
-                  attribute_code: 'nexxus_id',
-                  value: product.id.toString(),
-                },
-                {
-                  attribute_code: 'nexxus_sku',
-                  value: product.sku,
-                },
-                {
-                  attribute_code: 'meta_title',
-                  value: product.name,
-                },
-                {
-                  attribute_code: 'meta_description',
-                  value: product.description,
-                },
-                {
-                  attribute_code: 'short_description',
-                  value: product.description,
-                },
-                {
-                  attribute_code: 'description',
-                  value: product.description,
-                },
-              ],
-            },
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${this.configService.get<string>('MAGENTO_API_KEY')}`,
-            },
-          },
-        ).pipe(
-          catchError((error: AxiosError) => {
-            throw new HttpException(error.response.data, error.response.status);
-          }),
-        ),
-      );
+      const uploadedProduct = await this.uploadProduct(product, availableQuantity);
 
-      entries.forEach(async (entry) => {
-        await lastValueFrom(
-          this.httpService.post(
-            `${this.configService.get<string>('MAGENTO_BASE_URL')}rest/V1/products/${result.data.sku}/media`,
-            {
-              entry,
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${this.configService.get<string>('MAGENTO_API_KEY')}`,
-              },
-            },
-          ).pipe(
-            catchError((error: AxiosError) => {
-              throw new HttpException(error.response.data, error.response.status);
-            }),
-          ),
-        );
-      });
+      try {
+        const medias = await this.getProductMedias(uploadedProduct.data.sku);
+        for (const media of medias) {
+          // eslint-disable-next-line no-await-in-loop
+          await this.deleteProductMedia(uploadedProduct.data.sku, media.id);
+        }
+      } catch (error: unknown) {
+        Logger.log('WebshopService->addProduct', error);
+      }
+
+      await this.uploadMedias(uploadedProduct.data.sku, entries);
+
+      Logger.log('WebshopService->addProduct->Succesfull');
     } catch (e) {
       if (e?.status === 400) {
         Logger.error(e?.response?.message);
@@ -194,6 +130,123 @@ export class WebshopService {
     return Promise.all(entryPromises);
   }
 
+  private async uploadProduct(product: ProductRelation, availableQuantity: number): Promise<AxiosResponse> {
+    return this.axiosRequest({
+      method: 'POST',
+      path: '/products',
+      payload: {
+        product: {
+          sku: product.id,
+          name: this.getProductNameId(product),
+          attribute_set_id: 4,
+          price: product.price,
+          extension_attributes: {
+            category_links: product.product_type.magento_category_id ? [
+              {
+                position: 0,
+                category_id: product.product_type.magento_category_id,
+              },
+            ] : undefined,
+            stock_item: {
+              qty: availableQuantity,
+              is_in_stock: availableQuantity > 0 && product.price > 0,
+            },
+          },
+          custom_attributes: [
+            {
+              attribute_code: 'nexxus_id',
+              value: product.id.toString(),
+            },
+            {
+              attribute_code: 'nexxus_sku',
+              value: product.sku,
+            },
+            {
+              attribute_code: 'meta_title',
+              value: product.name,
+            },
+            {
+              attribute_code: 'meta_description',
+              value: product.description,
+            },
+            {
+              attribute_code: 'short_description',
+              value: product.description,
+            },
+            {
+              attribute_code: 'description',
+              value: product.description,
+            },
+          ],
+        },
+      },
+    });
+  }
+
+  private async uploadMedias(sku: string, entries: any[]): Promise<void> {
+    for (const entry of entries) {
+      // eslint-disable-next-line no-await-in-loop
+      await this.axiosRequest({
+        method: 'POST',
+        path: `/products/${sku}/media`,
+        payload: {
+          entry,
+        },
+      });
+    }
+  }
+
+  private async getProductMedias(sku: string): Promise<any[]> {
+    const { data } = await this.axiosRequest({
+      method: 'GET',
+      path: `/products/${sku}/media`,
+    });
+
+    return data;
+  }
+
+  private async deleteProductMedia(sku: string, entryId: string): Promise<AxiosResponse> {
+    const { data } = await this.axiosRequest({
+      method: 'DELETE',
+      path: `/products/${sku}/media/${entryId}`,
+    });
+
+    return data;
+  }
+
+  private async axiosRequest({
+    method,
+    path,
+    payload = null,
+  }: {
+    method: 'GET' | 'POST' | 'DELETE';
+    path: string;
+    payload?: any;
+  }): Promise<AxiosResponse> {
+    const url = `${this.configService.get<string>('MAGENTO_BASE_URL')}rest/V1${path}`;
+    const headers = {
+      Authorization: `Bearer ${this.configService.get<string>('MAGENTO_API_KEY')}`,
+    };
+    const response = await lastValueFrom(
+      this.httpService.request({
+        method,
+        url,
+        headers,
+        ...(payload ? { data: payload } : {}),
+      }).pipe(
+        retry({
+          count: 5,
+          delay: (_error, index) => this.fibonacciDelay(index + 1),
+        }),
+        catchError((error: AxiosError) => {
+          throw new HttpException(`Error during ${method} request to ${url}: ${error.message}`, error?.response?.status);
+        }),
+      ),
+    );
+
+    return response;
+  }
+
   private generateRandomHash(length) {
     const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let hash = '';
@@ -209,5 +262,14 @@ export class WebshopService {
 
   private getProductNameUrl(product: ProductRelation): string {
     return `${this.getProductNameId(product)}-${this.generateRandomHash(8)}`;
+  }
+
+  private fibonacciDelay(attempt: number) {
+    const fib = (n: number): number => {
+      if (n <= 1) return n;
+      return fib(n - 1) + fib(n - 2);
+    };
+    const delayMs = fib(attempt) * 1000;
+    return of(null).pipe(delayWhen(() => of(null).pipe(delay(delayMs))));
   }
 }
