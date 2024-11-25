@@ -46,9 +46,7 @@ import { ConsumerModule } from '../consumer/consumer.module';
       load: [
         () => ({
           MAX_RELATION_QUERY_LIMIT: process.env.MAX_RELATION_QUERY_LIMIT || 100,
-          MAX_NONE_RELATION_QUERY_LIMIT:
-            process.env.MAX_NONE_RELATION_QUERY_LIMIT || 5000,
-          RABBITMQ_PUBLISH_PRODUCT_TO_STORE: process.env.RABBITMQ_PUBLISH_PRODUCT_TO_STORE || 'publish_product_to_store',
+          MAX_NONE_RELATION_QUERY_LIMIT: process.env.MAX_NONE_RELATION_QUERY_LIMIT || 5000,
           RABBITMQ_MAGENTO_ORDER_CREATED: process.env.RABBITMQ_MAGENTO_ORDER_CREATED || 'magento_order_created',
           RABBITMQ_EXCHANGE: process.env.RABBITMQ_EXCHANGE || 'nexxus',
         }),

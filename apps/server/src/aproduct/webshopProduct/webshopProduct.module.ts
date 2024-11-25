@@ -12,7 +12,7 @@ import { WebshopService } from '../../webshop/webshop.service';
 import { WebshopProductService } from './webshopProduct.service';
 import { WebshopProductRepository } from './webshopProduct.repository';
 import { WebshopProductController } from './webshopProduct.controller';
-import { RabbitMQModule } from '../../rabbitmq/rabbitmq.module';
+import { WebshopModule } from '../../webshop/webshop.module';
 
 @Global()
 @Module({
@@ -35,7 +35,7 @@ import { RabbitMQModule } from '../../rabbitmq/rabbitmq.module';
     BlanccoModule,
     PrintModule,
     HttpModule,
-    RabbitMQModule,
+    WebshopModule,
   ],
   exports: [WebshopProductService],
 })

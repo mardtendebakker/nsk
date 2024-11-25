@@ -1,8 +1,6 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { SaleService } from '../sale/sale.service';
 import { WebshopService } from '../webshop/webshop.service';
-import { ProductService } from '../product/product.service';
-import { EntityStatus } from '../common/types/entity-status.enum';
 import { RabbitMQService } from '../rabbitmq/rabbitmq.service';
 
 @Injectable()
@@ -10,25 +8,11 @@ export class ConsumerService implements OnModuleInit {
   constructor(
     private saleService: SaleService,
     private webshopService: WebshopService,
-    private productService: ProductService,
     private rabbitMQService: RabbitMQService,
   ) {}
 
   async onModuleInit() {
-    await this.rabbitMQService.consumeProductPublished(this.handleProductPublished.bind(this));
     await this.rabbitMQService.consumeWebshopOrderCreated(this.handleWebshopOrderCreated.bind(this));
-  }
-
-  private async handleProductPublished(msg: { productId: number }): Promise<void> {
-    const foundProduct = await this.productService.findOneRelation(msg.productId);
-
-    if (!foundProduct || ![EntityStatus.Active, EntityStatus.Webshop].includes(foundProduct.entity_status)) {
-      return;
-    }
-
-    const availableQuantity = this.productService.processStock(foundProduct).sale;
-    await this.webshopService.addProduct(foundProduct, availableQuantity);
-    await this.productService.updateOne(msg.productId, { entity_status: EntityStatus.Webshop });
   }
 
   private async handleWebshopOrderCreated(msg: { orderId: string }): Promise<void> {
