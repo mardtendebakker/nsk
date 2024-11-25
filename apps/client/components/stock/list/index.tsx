@@ -2,9 +2,11 @@ import { Box, Card } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import _ from 'lodash';
+import { trans } from 'itranslator';
 import {
   STOCK_PRODUCTS_PATH, STOCK_WEBSHOP_PATH, STOCK_REPAIRS_PATH, SPLIT_PRODUCT_INDIVIDUALIZE_PATH, SPLIT_PRODUCT_STOCK_PART_PATH, STOCK_ARCHIVED_PATH, APRODUCTS_ARCHIVE_SET, APRODUCTS_ARCHIVE_UNSET,
   APRODUCT_BULK_PUBLISH_TO_STORE,
+  AxiosResponse,
 } from '../../../utils/axios';
 import List from './list';
 import useAxios from '../../../hooks/useAxios';
@@ -138,7 +140,11 @@ export default function ListContainer({ type } : { type: ProductType }) {
   const { printPriceCards, performing: performingBulkPrintPriceCards } = useBulkPrintPriceCards({ withProgressBar: true });
   const { printLabels, performing: performingBulkPrintLabels } = useBulkPrintLabels({ withProgressBar: true });
   const { call: bulkPatchArchive, performing: performingBulkPatchArchive } = useAxios('patch', APRODUCTS_ARCHIVE_SET, { withProgressBar: true });
-  const { call: bulkPublishToStore, performing: performingBulkPublishToStore } = useAxios('post', APRODUCT_BULK_PUBLISH_TO_STORE, { showSuccessMessage: true, withProgressBar: true });
+  const { call: bulkPublishToStore, performing: performingBulkPublishToStore } = useAxios('post', APRODUCT_BULK_PUBLISH_TO_STORE, {
+    showSuccessMessage: true,
+    withProgressBar: true,
+    customSuccessMessage: (response: AxiosResponse) => trans(response.data),
+  });
   const { call: bulkPatchUnarchive, performing: performingBulkPatchUnarchive } = useAxios('patch', APRODUCTS_ARCHIVE_UNSET, { withProgressBar: true });
   const { call: callDelete, performing: performingDelete } = useAxios(
     'delete',

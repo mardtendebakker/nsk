@@ -11,11 +11,7 @@ export class RabbitMQService implements OnModuleInit, OnModuleDestroy {
 
   private ch1: ChannelWrapper;
 
-  private ch2: ChannelWrapper;
-
   private readonly URI: string;
-
-  private readonly PUBLISH_PRODUCT_TO_STORE: string;
 
   private readonly MAGENTO_ORDER_CREATED: string;
 
@@ -25,7 +21,6 @@ export class RabbitMQService implements OnModuleInit, OnModuleDestroy {
 
   constructor(private readonly configService: ConfigService) {
     this.URI = this.configService.get<string>('RABBITMQ_URI');
-    this.PUBLISH_PRODUCT_TO_STORE = this.configService.get<string>('RABBITMQ_PUBLISH_PRODUCT_TO_STORE');
     this.MAGENTO_ORDER_CREATED = this.configService.get<string>('RABBITMQ_MAGENTO_ORDER_CREATED');
     this.EXCHANGE = this.configService.get<string>('RABBITMQ_EXCHANGE');
   }
@@ -38,10 +33,6 @@ export class RabbitMQService implements OnModuleInit, OnModuleDestroy {
     try {
       this.connection = amqp.connect([this.URI]);
       this.ch1 = this.connection.createChannel({
-        json: true,
-        setup: async (channel: ConfirmChannel) => this.setupQueue(channel, this.PUBLISH_PRODUCT_TO_STORE),
-      });
-      this.ch2 = this.connection.createChannel({
         json: true,
         setup: async (channel: ConfirmChannel) => this.setupQueue(channel, this.MAGENTO_ORDER_CREATED),
       });
@@ -61,20 +52,12 @@ export class RabbitMQService implements OnModuleInit, OnModuleDestroy {
     }
   }
 
-  async publishProductToStore(productId: number): Promise<void> {
-    await this.pushToQueue(this.ch1, this.PUBLISH_PRODUCT_TO_STORE, JSON.stringify({ productId }));
-  }
-
   async publishOrderFromStore(orderId: string): Promise<void> {
-    await this.pushToQueue(this.ch2, this.MAGENTO_ORDER_CREATED, JSON.stringify({ orderId }));
-  }
-
-  async consumeProductPublished(onMessage: (msg) => void) {
-    return this.pullFromQueue(this.ch1, this.PUBLISH_PRODUCT_TO_STORE, onMessage);
+    await this.pushToQueue(this.ch1, this.MAGENTO_ORDER_CREATED, JSON.stringify({ orderId }));
   }
 
   async consumeWebshopOrderCreated(onMessage: (msg) => void) {
-    return this.pullFromQueue(this.ch2, this.MAGENTO_ORDER_CREATED, onMessage);
+    return this.pullFromQueue(this.ch1, this.MAGENTO_ORDER_CREATED, onMessage);
   }
 
   private async pushToQueue(channelWrapper: ChannelWrapper, queue: string, text: string) {
