@@ -17,19 +17,73 @@ export class OrderRepository extends AOrderRepository {
     super(prisma, configService);
   }
 
-  async analytics(groupBy: GroupBy): Promise<AnalyticsResultDto> {
+  async analytics(groupBy: GroupBy, email?: string): Promise<AnalyticsResultDto> {
     const REPAIR_STATUS_ID = 45;
     const LAST_THIRTY_DAYS = '30';
     const LAST_TWELVE_MONTH = '12';
 
-    let repairQuery; let saleQuery; let
-      purchaseQuery: Sql;
+    let repairQuery;
+    let saleQuery;
+    let purchaseQuery: Sql;
+
+    const emailCondition = email
+      ? Prisma.sql`
+        AND (
+          o.customer_id IN (
+            SELECT c.id
+            FROM contact c
+            LEFT JOIN company main ON c.company_id = main.id
+            LEFT JOIN company partner ON main.partner_id = partner.id
+            WHERE 
+              c.email = ${email}
+              OR main.id = (
+                SELECT company_id
+                FROM contact
+                WHERE email = ${email}
+              )
+              OR partner.id = (
+                SELECT partner_id
+                FROM company
+                WHERE id = (
+                  SELECT company_id
+                  FROM contact
+                  WHERE email = ${email}
+                )
+              )
+          )
+          OR o.supplier_id IN (
+            SELECT c.id
+            FROM contact c
+            LEFT JOIN company main ON c.company_id = main.id
+            LEFT JOIN company partner ON main.partner_id = partner.id
+            WHERE 
+              c.email = ${email}
+              OR main.id = (
+                SELECT company_id
+                FROM contact
+                WHERE email = ${email}
+              )
+              OR partner.id = (
+                SELECT partner_id
+                FROM company
+                WHERE id = (
+                  SELECT company_id
+                  FROM contact
+                  WHERE email = ${email}
+                )
+              )
+          )
+        )
+      `
+      : Prisma.sql``;
+
     saleQuery = Prisma.sql`
       SELECT YEAR(o.order_date) year, MONTH(o.order_date) month, count(1) count
       FROM aorder o
       WHERE o.discr = ${AOrderDiscrimination.SALE}
       AND o.order_date > CURRENT_DATE - INTERVAL ${LAST_TWELVE_MONTH} MONTH
       AND o.status_id <> ${REPAIR_STATUS_ID}
+      ${emailCondition}
       GROUP BY year, month
       ORDER BY year, month;
     `;
@@ -39,6 +93,7 @@ export class OrderRepository extends AOrderRepository {
       WHERE o.discr = ${AOrderDiscrimination.PURCHASE}
       AND o.order_date > CURRENT_DATE - INTERVAL ${LAST_TWELVE_MONTH} MONTH
       AND o.status_id <> ${REPAIR_STATUS_ID}
+      ${emailCondition}
       GROUP BY year, month
       ORDER BY year, month;
     `;
@@ -47,6 +102,7 @@ export class OrderRepository extends AOrderRepository {
       FROM aorder o
       WHERE o.order_date > CURRENT_DATE - INTERVAL ${LAST_TWELVE_MONTH} MONTH
       AND o.status_id = ${REPAIR_STATUS_ID}
+      ${emailCondition}
       GROUP BY year, month
       ORDER BY year, month;
     `;
@@ -57,6 +113,7 @@ export class OrderRepository extends AOrderRepository {
         WHERE o.discr = ${AOrderDiscrimination.SALE}
         AND o.order_date > CURRENT_DATE - INTERVAL ${LAST_THIRTY_DAYS} DAY
         AND o.status_id <> ${REPAIR_STATUS_ID}
+        ${emailCondition}
         GROUP BY year, month, day
         ORDER BY year, month, day;
       `;
@@ -66,6 +123,7 @@ export class OrderRepository extends AOrderRepository {
         WHERE o.discr = ${AOrderDiscrimination.PURCHASE}
         AND o.order_date > CURRENT_DATE - INTERVAL ${LAST_THIRTY_DAYS} DAY
         AND o.status_id <> ${REPAIR_STATUS_ID}
+        ${emailCondition}
         GROUP BY year, month, day
         ORDER BY year, month, day;
       `;
@@ -74,6 +132,7 @@ export class OrderRepository extends AOrderRepository {
         FROM aorder o
         WHERE o.order_date > CURRENT_DATE - INTERVAL ${LAST_THIRTY_DAYS} DAY
         AND o.status_id = ${REPAIR_STATUS_ID}
+        ${emailCondition}
         GROUP BY year, month, day
         ORDER BY year, month, day;
       `;

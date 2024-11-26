@@ -517,18 +517,12 @@ export class AOrderService {
       ...(createdBy && { id: createdBy }),
       ...(partner && { company_contact_company_idTocompany: { company: { id: partner } } }),
       ...(email && {
-        OR: [
-          {
-            company_contact_company_idTocompany: {
-              companyContacts: { some: { email } },
-            },
-          },
-          {
-            company_contact_company_idTocompany: {
-              company: { companyContacts: { some: { email } } },
-            },
-          },
-        ],
+        company_contact_company_idTocompany: {
+          OR: [
+            { companyContacts: { some: { email } } },
+            { company: { companyContacts: { some: { email } } } },
+          ],
+        },
       }),
     };
   }
