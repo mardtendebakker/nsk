@@ -18,7 +18,7 @@ export class OrderService extends AOrderService {
     super(repository, printService, fileService, contactService);
   }
 
-  async analytics(groupBy: GroupBy): Promise<AnalyticsResultDto> {
-    return this.repository.analytics(groupBy);
+  async analytics(groupBy: GroupBy, email?: string): Promise<AnalyticsResultDto> {
+    return this.repository.analytics(groupBy, email);
   }
 }

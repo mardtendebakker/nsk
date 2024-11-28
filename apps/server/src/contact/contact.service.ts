@@ -25,7 +25,7 @@ export class ContactService {
     } = query;
     const where: Prisma.contactWhereInput = {
       ...query.where,
-      ...this.getPartnerWhereInput(email),
+      ...this.getEmailSearchWhereInput(email, search),
       ...{
         company_contact_company_idTocompany: {
           name: { contains: company },
@@ -34,12 +34,6 @@ export class ContactService {
           is_supplier: isSupplier,
         },
       },
-      ...(search && {
-        OR: [
-          { name: { contains: search } },
-          { email: { contains: search } },
-        ],
-      }),
     };
 
     const { count, data } = await this.repository.findAll({
@@ -245,11 +239,46 @@ export class ContactService {
           { email },
           {
             company_contact_company_idTocompany: {
-              company: { companyContacts: { some: { email } } },
+              OR: [
+                { companyContacts: { some: { email } } },
+                { company: { companyContacts: { some: { email } } } },
+              ],
             },
           },
         ],
       }),
+    };
+  }
+
+  private getSearchWhereInput(search?: string): Omit<Prisma.contactWhereInput, 'id'> {
+    return {
+      ...(search && {
+        OR: [
+          { name: { contains: search } },
+          { email: { contains: search } },
+        ],
+      }),
+    };
+  }
+
+  private getEmailSearchWhereInput(email?: string, search?: string): Omit<Prisma.contactWhereInput, 'id'> {
+    return {
+      ...(email && search && {
+        OR: [
+          { email, name: { contains: search } },
+          {
+            company_contact_company_idTocompany: {
+              OR: [
+                { companyContacts: { some: { email } } },
+                { company: { companyContacts: { some: { email } } } },
+              ],
+            },
+            name: { contains: search },
+          },
+        ],
+      }),
+      ...(email && !search && this.getPartnerWhereInput(email)),
+      ...(!email && search && this.getSearchWhereInput(search)),
     };
   }
 }
