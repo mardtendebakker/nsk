@@ -308,6 +308,17 @@ const translation = {
       placeholder: 'جستوجو بر اساس نام',
     },
   },
+  themeForm: {
+    favicon: {
+      placeholder: 'فاوآیکن خود را انتخاب کنید',
+      caption: 'فایل شما نباید بیش از 4 کیلوبایت باشد',
+    },
+    logo: {
+      placeholder: 'لوگوی خود را انتخاب کنید',
+      caption: 'فایل شما نباید بیش از 80 کیلوبایت باشد',
+    },
+  },
+  manageTheme: 'مدیریت تم',
   listPrice: 'فهرست قیمت',
   editPurchase: 'ویرایش خرید',
   totalPerProductType: 'مجموع در هر نوع محصول',

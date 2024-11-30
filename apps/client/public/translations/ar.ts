@@ -307,6 +307,17 @@ const translation = {
       placeholder: 'البحث بالاسم',
     },
   },
+  themeForm: {
+    favicon: {
+      placeholder: 'اختر الأيقونة المفضلة',
+      caption: 'يجب ألا يتجاوز حجم الملف 4 كيلوبايت',
+    },
+    logo: {
+      placeholder: 'اختر شعارك',
+      caption: 'يجب ألا يتجاوز حجم الملف 80 كيلوبايت',
+    },
+  },
+  manageTheme: 'إدارة السمة',
   listPrice: 'سعر القائمة',
   editPurchase: 'تحرير الشراء',
   totalPerProductType: 'الإجمالي حسب نوع المنتج',

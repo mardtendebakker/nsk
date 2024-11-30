@@ -1,4 +1,4 @@
-import { Box, SxProps } from '@mui/material';
+import { Box, SxProps, Typography } from '@mui/material';
 import {
   ChangeEvent, useEffect, useRef, useState,
 } from 'react';
@@ -12,12 +12,18 @@ export default function ImageInput({
   onClear,
   sx,
   disabled = false,
+  errorMessage = undefined,
+  placeholder = (hovered: boolean) => <Add sx={{ fontSize: '2rem', color: image || hovered ? 'white' : 'black' }} />,
+  accept = 'image/jpg,image/png,image/jpeg',
 }: {
   image?: string | File,
   onChange: (arg0: File) => void,
   onClear?: () => void,
   sx?: SxProps,
-  disabled?: boolean
+  disabled?: boolean,
+  errorMessage?: string,
+  placeholder?: (hovered: boolean) => JSX.Element
+  accept?: string
 }) {
   const ref = useRef<HTMLInputElement>();
   const [hovered, setHovered] = useState(false);
@@ -90,7 +96,7 @@ export default function ImageInput({
         <input
           ref={ref}
           type="file"
-          accept="image/jpg,image/png,image/jpeg"
+          accept={accept}
           hidden
           id={`image-input-${id}`}
           onChange={handleChange}
@@ -99,6 +105,7 @@ export default function ImageInput({
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}
           sx={{
+            mb: '.5rem',
             borderRadius: '.5rem',
             width: '100%',
             height: '100%',
@@ -108,13 +115,14 @@ export default function ImageInput({
             cursor: 'pointer',
             backgroundImage: preview && `url("${preview}")`,
             backgroundPosition: 'center',
-            backgroundSize: 'cover',
+            backgroundSize: 'contain',
             backgroundRepeat: 'no-repeat',
           }}
         >
-          {!image && <Add sx={{ fontSize: '2rem', color: image || hovered ? 'white' : 'black' }} />}
+          {!image && placeholder(hovered)}
           {hovered && image && <Edit sx={{ fontSize: '2rem', color: 'white' }} />}
         </Box>
+        {errorMessage && <Typography color="error">{errorMessage}</Typography>}
       </label>
     </Box>
   );

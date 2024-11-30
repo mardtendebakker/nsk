@@ -32,6 +32,7 @@ export const STOCKS_WEBSHOP = '/stock/webshop';
 export const MY_TASKS = '/my-tasks';
 export const ADMIN_USERS = '/admin/users';
 export const ADMIN_MODULES = '/admin/modules';
+export const ADMIN_THEME = '/admin/theme';
 export const ADMIN_MODULES_PAYMENTS = '/admin/modules/payments';
 export const ADMIN_MODULES_CART = '/admin/modules/cart';
 export const ADMIN_SETTINGS = '/admin/settings';

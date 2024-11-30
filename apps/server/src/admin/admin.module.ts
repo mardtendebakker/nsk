@@ -5,6 +5,7 @@ import { OrderStatusModule } from './order-status/order-status.module';
 import { LocationModule } from './location/location.module';
 import { ProductStatusModule } from './product-status/product-status.module';
 import { ProductTypeModule } from './product-type/product-type.module';
+import { ThemeModule } from './theme/theme.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { ProductTypeModule } from './product-type/product-type.module';
     ProductTypeModule,
     LocationModule,
     LocationTemplateModule,
+    ThemeModule,
   ],
 })
 export class AdminModule {}
