@@ -38,6 +38,7 @@ import { AttributeGetPayload } from '../attribute/types/attribute-get-payload';
 import { UpdateManyProductResponseDto } from './dto/update-many-product-response.dto';
 import { IUploadColumn } from './types/upload-column';
 import { UploadProductDto } from './dto/upload-product.dto';
+import { isWithin64BitRange } from '../common/util/number-utils';
 
 export class StockService {
   constructor(
@@ -122,7 +123,7 @@ export class StockService {
       }),
       ...(search && {
         OR: [
-          { ...((Number(search) && { id: Number(search) })) },
+          { ...((Number(search) && isWithin64BitRange(search) && { id: Number(search) })) },
           { name: { contains: search } },
           { sku: { contains: search } },
           { description: { contains: search } },
