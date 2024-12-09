@@ -13,11 +13,9 @@ import {
   ORDERS_SALES,
   STOCKS_PRODUCTS,
   STOCKS_REPAIR_SERVICES,
-  // MY_TASKS,
   LOGISTICS_DELIVERY,
   LOGISTICS_PICKUP,
   CONTACTS,
-  // BULK_EMAIL,
   ORDERS_REPAIRS,
   STOCKS_ARCHIVED,
   getRouteGroups,
@@ -146,11 +144,6 @@ export default function Header() {
       path: COMPANIES,
       active: router.pathname.startsWith(COMPANIES),
     },
-    /* {
-      title: trans('bulkEmail'),
-      path: BULK_EMAIL,
-      active: router.pathname.startsWith(BULK_EMAIL),
-    }, */
     {
       title: trans('logistics'),
       path: LOGISTICS_PICKUP,
