@@ -28,8 +28,14 @@ export const LOGISTICS_GROUPS = [
   CognitoGroups.LOGISTICS,
 ];
 
+export const STORE_PUBLISHER_GROUPS = [
+  ...MANAGER_GROUPS,
+  CognitoGroups.STORE_PUBLISHER,
+];
+
 export const LOCAL_GROUPS = [
   ...LOGISTICS_GROUPS,
+  CognitoGroups.STORE_PUBLISHER,
   CognitoGroups.LOCAL,
 ];
 
@@ -46,9 +52,4 @@ export const ALL_MAIN_GROUPS = [
 export const SALE_UPLOADER_GROUPS = [
   ...MANAGER_GROUPS,
   CognitoGroups.PARTNER_SALE_UPLOADER,
-];
-
-export const STORE_PUBLISHER_GROUPS = [
-  ...ADMINS_GROUPS,
-  CognitoGroups.STORE_PUBLISHER,
 ];

@@ -29,7 +29,6 @@ export const ORDERS_SALES_EDIT = '/orders/sales/[id]';
 export const STOCKS_REPAIR_SERVICES = '/stock/repair-services';
 export const STOCKS_ARCHIVED = '/stock/archived';
 export const STOCKS_WEBSHOP = '/stock/webshop';
-export const MY_TASKS = '/my-tasks';
 export const ADMIN_USERS = '/admin/users';
 export const ADMIN_MODULES = '/admin/modules';
 export const ADMIN_THEME = '/admin/theme';
@@ -59,23 +58,26 @@ export const getRouteGroups = (uri: string): Group[] => {
   }
 
   if (uri.startsWith('/logistics')) {
-    return ['super_admin', 'admin', 'manager', 'logistics', 'store_publisher'];
+    return ['super_admin', 'admin', 'manager', 'logistics'];
   }
 
-  if (
-    uri.startsWith('/stock')
-    || uri.startsWith('/my-tasks')
-    || uri.startsWith('/bulk-email')
-  ) {
+  if (uri.startsWith('/stock')) {
     return ['super_admin', 'admin', 'manager', 'logistics', 'local', 'store_publisher'];
   }
 
   if (
     uri.startsWith('/orders')
     || uri.startsWith('/contacts')
+    || uri.startsWith('/companies')
+    || DASHBOARD == uri
   ) {
     return ['super_admin', 'admin', 'manager', 'logistics', 'local', 'partner_sale_uploader', 'partner'];
   }
 };
 
-export const getDefaultPath = (user: User) => DASHBOARD;
+export const getDefaultPath = (user: User) => {
+  if (user.groups.length == 1 && user.groups[0] == 'store_publisher') {
+    return STOCKS_WEBSHOP;
+  }
+  return DASHBOARD;
+};
