@@ -13,6 +13,7 @@ export const SALES_ORDERS_PATH = '/sales/:id';
 export const REPAIR_ORDERS_PATH = '/repairs/:id';
 export const SALES_SERVICES_PATH = '/sales-services/:id';
 export const CONFIG_PATH = '/configs';
+export const ADMIN_THEME_PATH = '/admin/theme';
 export const SALES_ORDERS_PRODUCTS_PATH = '/sales/:id/products';
 export const REPAIR_ORDERS_PRODUCTS_PATH = '/repairs/:id/products';
 export const REPAIRS_PATH = '/repairs/:id';

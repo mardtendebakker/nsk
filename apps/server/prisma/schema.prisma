@@ -21,6 +21,8 @@ model afile {
   product                  product? @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_CFAB40EC4584665A")
   aorder                   aorder?  @relation(fields: [order_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_CFAB40EC8D9F6D38")
   pickup                   pickup?  @relation(fields: [pickup_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_CFAB40ECC26E160B")
+  theme_logo               theme?   @relation(name:"logo")
+  theme_favicon            theme?   @relation(name:"favicon")
 
   @@index([product_id], map: "IDX_CFAB40EC4584665A")
   @@index([order_id], map: "IDX_CFAB40EC8D9F6D38")
@@ -423,4 +425,17 @@ model delivery {
 
   @@index([logistics_id], map: "idx_delivery_logistic")
   @@index([date], map: "idx_date")
+}
+
+model theme {
+  id                 Int       @id @default(autoincrement())
+  palette            String    @db.LongText 
+  company_name       String
+  logo_id            Int       @unique 
+  favicon_id         Int       @unique 
+  logo               afile     @relation(name:"logo", fields: [logo_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_theme_logo")
+  favicon            afile     @relation(name:"favicon", fields: [favicon_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_theme_favicon")
+
+  @@index([logo_id], map: "idx_theme_logo")
+  @@index([favicon_id], map: "idx_theme_favicon")
 }

@@ -1,22 +1,32 @@
 import PropTypes from 'prop-types';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 // @mui
 import { CssBaseline } from '@mui/material';
 import { ThemeProvider as MUIThemeProvider, createTheme, StyledEngineProvider } from '@mui/material/styles';
 //
-import palette from './palette';
 import shadows from './shadows';
 import typography from './typography';
 import GlobalStyles from './globalStyles';
 import customShadows from './customShadows';
 import componentsOverride from './overrides';
+import useTheme from '../hooks/useTheme';
+import initPalette from './palette';
 
 // ----------------------------------------------------------------------
 
 export default function ThemeProvider({ children }) {
+  const { state: { theme: { palette } }, fetchTheme } = useTheme();
+
+  useEffect(() => {
+    fetchTheme();
+  }, []);
+
   const themeOptions = useMemo(
     () => ({
-      palette,
+      palette: {
+        ...initPalette,
+        palette,
+      },
       shape: { borderRadius: 2.2 },
       typography,
       shadows: shadows(),
