@@ -12,6 +12,9 @@ export class AttributeEntity implements attribute {
     attr_code: string;
 
   @ApiProperty()
+    magento_attr_code: string | null;
+
+  @ApiProperty()
     name: string;
 
   @ApiPropertyOptional()

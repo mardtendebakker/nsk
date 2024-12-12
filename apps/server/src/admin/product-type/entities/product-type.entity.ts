@@ -12,6 +12,9 @@ export class ProductTypeEntity implements product_type {
     magento_category_id: string | null;
 
   @ApiPropertyOptional()
+    magento_attr_set_id: string | null;
+
+  @ApiPropertyOptional()
     pindex: number | null;
 
   @ApiPropertyOptional()
