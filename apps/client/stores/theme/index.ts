@@ -6,14 +6,58 @@ export interface State {
   loading: boolean,
 }
 
+const DEFAULT_PALETTE = {
+  primary: {
+    light: '#D2DCF5',
+    main: '#1F0E8F',
+    dark: '#1B2A3D',
+    contrastText: '#fff',
+  },
+  secondary: {
+    lighter: '#D6E4FF',
+    light: '#84A9FF',
+    main: '#3366FF',
+    dark: '#1939B7',
+    darker: '#091A7A',
+    contrastText: '#fff',
+  },
+  info: {
+    light: '#D7E0FA',
+    main: '#1F0E8F',
+    contrastText: '#fff',
+  },
+  success: {
+    light: '#DCFAEA',
+    main: '#008A40',
+    contrastText: '#1B2A3D',
+  },
+  warning: {
+    lighter: '#FFF7CD',
+    light: '#FAF2C6',
+    main: '#AA4603',
+    dark: '#B78103',
+    darker: '#7A4F01',
+    contrastText: '#1B2A3D',
+  },
+  error: {
+    light: '#F6D5D5',
+    main: '#B82929',
+    dark: '#B72136',
+    darker: '#850D0D',
+    contrastText: '#fff',
+  },
+};
+
 export const FETCH_THEME_REQUEST = 'FETCH_THEME_REQUEST';
 export const FETCH_THEME_REQUEST_FAILED = 'FETCH_THEME_REQUEST_FAILED';
 export const FETCH_THEME_REQUEST_SUCCEEDED = 'FETCH_THEME_REQUEST_SUCCEEDED';
+export const RESET_PALETTE_REQUEST = 'RESET_PALETTE_REQUEST';
 
 export const EVENTS = [
   FETCH_THEME_REQUEST,
   FETCH_THEME_REQUEST_FAILED,
   FETCH_THEME_REQUEST_SUCCEEDED,
+  RESET_PALETTE_REQUEST,
 ];
 
 function reducer(
@@ -27,6 +71,8 @@ function reducer(
       return { ...currentState, loading: false };
     case FETCH_THEME_REQUEST:
       return { ...currentState, loading: true };
+    case RESET_PALETTE_REQUEST:
+      return { theme: { ...currentState.theme, palette: DEFAULT_PALETTE }, loading: false };
     default:
       return currentState;
   }
@@ -43,47 +89,7 @@ class ThemeEmitter extends EventEmitter {
         companyName: 'Nexxus',
         logo: null,
         favicon: null,
-        palette: {
-          primary: {
-            light: '#D2DCF5',
-            main: '#1F0E8F',
-            dark: '#1B2A3D',
-            contrastText: '#fff',
-          },
-          secondary: {
-            lighter: '#D6E4FF',
-            light: '#84A9FF',
-            main: '#3366FF',
-            dark: '#1939B7',
-            darker: '#091A7A',
-            contrastText: '#fff',
-          },
-          info: {
-            light: '#D7E0FA',
-            main: '#1F0E8F',
-            contrastText: '#fff',
-          },
-          success: {
-            light: '#DCFAEA',
-            main: '#008A40',
-            contrastText: '#1B2A3D',
-          },
-          warning: {
-            lighter: '#FFF7CD',
-            light: '#FAF2C6',
-            main: '#AA4603',
-            dark: '#B78103',
-            darker: '#7A4F01',
-            contrastText: '#1B2A3D',
-          },
-          error: {
-            light: '#F6D5D5',
-            main: '#B82929',
-            dark: '#B72136',
-            darker: '#850D0D',
-            contrastText: '#fff',
-          },
-        },
+        palette: DEFAULT_PALETTE,
       },
     };
   }

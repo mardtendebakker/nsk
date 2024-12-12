@@ -2,7 +2,9 @@ import { Box, Button } from '@mui/material';
 import Check from '@mui/icons-material/Check';
 import useTranslation from '../../../hooks/useTranslation';
 
-export default function Action({ disabled, onDiscard, onSave }:{ disabled: boolean, onDiscard: () => void, onSave: () => void }) {
+export default function Action({
+  disabled, onReset, onSave,
+}:{ disabled: boolean, onReset: () => void, onSave: () => void }) {
   const { trans } = useTranslation();
 
   return (
@@ -11,9 +13,9 @@ export default function Action({ disabled, onDiscard, onSave }:{ disabled: boole
         size="small"
         disabled={disabled}
         variant="outlined"
-        onClick={onDiscard}
+        onClick={onReset}
       >
-        {trans('discard')}
+        {trans('reset')}
       </Button>
       <Box sx={{ m: '.1rem' }} />
       <Button

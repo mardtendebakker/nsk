@@ -3,6 +3,7 @@ import themeStore, {
   FETCH_THEME_REQUEST,
   FETCH_THEME_REQUEST_SUCCEEDED,
   FETCH_THEME_REQUEST_FAILED,
+  RESET_PALETTE_REQUEST,
   EVENTS,
   State,
 } from '../stores/theme';
@@ -12,6 +13,7 @@ import { buildAFileLink } from '../utils/afile';
 const useTheme = (): {
   state: State,
   fetchTheme: () => Promise<void>,
+  resetPalette: () => void,
 } => {
   const [state, setState] = useState<State>(themeStore.state);
 
@@ -33,6 +35,9 @@ const useTheme = (): {
 
   return {
     state,
+    resetPalette: () => {
+      themeStore.emit(RESET_PALETTE_REQUEST);
+    },
     fetchTheme: async () => {
       themeStore.emit(FETCH_THEME_REQUEST);
       try {
