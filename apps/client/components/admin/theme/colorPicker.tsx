@@ -2,23 +2,31 @@ import {
   Box, SxProps, Tooltip, Typography,
 } from '@mui/material';
 import { memo } from 'react';
+import debounce from '../../../utils/debounce';
 
 function ColorPicker({
-  title,
+  label,
   palette,
   sx,
   onChange,
   disabled,
 }:{
   palette: { [key: string]: string },
-  title: string,
+  label: string,
   sx: SxProps,
   disabled: boolean,
-  onChange: ({ key, value }: { key:string, value: string, title: string }) => void
+  onChange: (value: { [key: string]: string }) => void
 }) {
+  const handleChange = debounce((value: string, key: string) => {
+    onChange({
+      ...palette,
+      [key]: value,
+    });
+  });
+
   return (
     <Box sx={sx}>
-      <Typography variant="body1" color="text.secondary">{title}</Typography>
+      <Typography variant="body1" color="text.secondary">{label}</Typography>
       <Box sx={{
         display: 'flex',
         border: (theme) => `1px solid ${theme.palette.divider}`,
@@ -28,7 +36,7 @@ function ColorPicker({
       }}
       >
         {Object.keys(palette).map((key) => {
-          const k = title + key;
+          const k = label + key;
 
           return (
             // eslint-disable-next-line jsx-a11y/label-has-associated-control
@@ -40,9 +48,7 @@ function ColorPicker({
                 value={palette[key]}
                 style={{ visibility: 'hidden', position: 'absolute' }}
                 disabled={disabled}
-                onChange={(e) => {
-                  onChange({ key, value: e.target.value, title });
-                }}
+                onChange={(e) => handleChange(e.target.value, key)}
               />
               <Tooltip title={key}>
                 <Box

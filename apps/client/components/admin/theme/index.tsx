@@ -2,7 +2,6 @@ import {
   Box, Button, Card, CardContent, Theme as MaterialTheme, Typography,
 } from '@mui/material';
 import CloudDownload from '@mui/icons-material/CloudDownload';
-import { useMemo } from 'react';
 import Action from './action';
 import ColorPicker from './colorPicker';
 import TextField from '../../memoizedInput/textField';
@@ -15,10 +14,12 @@ import { ADMIN_THEME_PATH } from '../../../utils/axios';
 import { Theme as ThemeModel } from '../../../utils/axios/models/theme';
 import useTheme from '../../../hooks/useTheme';
 
+const PALETTE_PREFIX = 'palette:';
+const createPaletteElementKey = (label: string): string => `${PALETTE_PREFIX}${label}`;
+
 function initFormState(theme: ThemeModel, trans: Trans) {
-  return {
+  const state = {
     companyName: { value: theme.companyName, required: true },
-    palette: { value: theme.palette, required: true },
     logo: {
       value: theme.logo,
       required: true,
@@ -38,23 +39,40 @@ function initFormState(theme: ThemeModel, trans: Trans) {
       },
     },
   };
+
+  Object.keys(theme.palette).forEach((paletteElementKey) => {
+    state[createPaletteElementKey(paletteElementKey)] = { value: theme.palette[paletteElementKey] };
+  });
+
+  return state;
 }
 
 export default function Theme() {
   const { trans } = useTranslation();
   const isDesktop = useResponsive('up', 'sm');
   const { call, performing } = useAxios('put', ADMIN_THEME_PATH, { showSuccessMessage: true, withProgressBar: true });
-  const { state: { theme: MyTheme, loading }, fetchTheme } = useTheme();
+  const { state: { theme: myTheme, loading }, fetchTheme, resetPalette } = useTheme();
 
-  const { formRepresentation, setValue, validate } = useForm(useMemo(() => initFormState(MyTheme, trans), [MyTheme]));
+  const {
+    formRepresentation, setValue, validate,
+  } = useForm(initFormState(myTheme, trans));
 
   const canSubmit = () => !performing && !loading;
 
   const prepareBody = (): FormData => {
     const formData = new FormData();
 
+    const palette = {};
+
     formData.append('companyName', formRepresentation.companyName.value);
-    formData.append('palette', JSON.stringify(formRepresentation.palette.value));
+
+    Object.keys(formRepresentation).forEach((key) => {
+      if (key.includes(PALETTE_PREFIX)) {
+        palette[key.split(PALETTE_PREFIX)[1]] = formRepresentation[key].value;
+      }
+    });
+
+    formData.append('palette', JSON.stringify(palette));
 
     if (formRepresentation.logo.value instanceof File) {
       formData.append('logo', formRepresentation.logo.value);
@@ -94,10 +112,21 @@ export default function Theme() {
     </Box>
   );
 
+  const handleColorChange = (value: { [key: string]: string }, label: string) => {
+    setValue({
+      field: createPaletteElementKey(label),
+      value,
+    });
+  };
+
   return (
     <Card sx={{ maxWidth: '80rem' }}>
       <CardContent>
-        <Action disabled={false} onDiscard={() => {}} onSave={handleSubmit} />
+        <Action
+          disabled={!canSubmit()}
+          onReset={resetPalette}
+          onSave={handleSubmit}
+        />
         <Box sx={{
           display: 'flex',
           flexDirection: isDesktop ? 'unset' : 'column',
@@ -118,26 +147,15 @@ export default function Theme() {
             />
             {
             Object
-              .keys(formRepresentation.palette.value || {})
-              .map((key) => (
+              .keys(myTheme.palette || {})
+              .map((label) => (
                 <ColorPicker
                   disabled={!canSubmit()}
-                  key={key}
-                  palette={{ ...formRepresentation.palette.value[key] }}
-                  title={key}
+                  key={label}
+                  palette={formRepresentation[createPaletteElementKey(label)].value}
+                  label={label}
                   sx={{ mb: '.5rem' }}
-                  onChange={({ key: paletteKey, value, title }) => {
-                    setValue({
-                      field: 'palette',
-                      value: {
-                        ...formRepresentation.palette.value,
-                        [title]: {
-                          ...formRepresentation.palette.value[title],
-                          [paletteKey]: value,
-                        },
-                      },
-                    });
-                  }}
+                  onChange={(value) => handleColorChange(value, label)}
                 />
               ))
             }
