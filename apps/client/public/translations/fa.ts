@@ -319,6 +319,8 @@ const translation = {
     },
   },
   manageTheme: 'مدیریت تم',
+  magentoAttrCode: 'کد ویژگی مگنتو',
+  magentoAttrSetId: 'شناسه مجموعه ویژگی مگنتو',
   listPrice: 'فهرست قیمت',
   editPurchase: 'ویرایش خرید',
   totalPerProductType: 'مجموع در هر نوع محصول',

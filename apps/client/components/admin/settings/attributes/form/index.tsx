@@ -41,13 +41,23 @@ export default function Form({
             disabled={disabled}
           />
           <TextField
-            sx={{ mr: '1rem', flex: 0.4, flexGrow: 0.65 }}
+            sx={{ mr: '1rem', flex: 0.2, flexGrow: 0.65 }}
             label={trans('attributeForm.name.label')}
             placeholder={trans('attributeForm.name.placeholder')}
             value={formRepresentation.name.value || ''}
             helperText={formRepresentation.name.error}
             error={!!formRepresentation.name.error}
             onChange={(e) => setValue({ field: 'name', value: e.target.value })}
+            disabled={disabled}
+          />
+          <TextField
+            sx={{ mr: '1rem', flex: 0.2, flexGrow: 0.65 }}
+            label={trans('attributeForm.magentoAttrCode.label')}
+            placeholder={trans('attributeForm.magentoAttrCode.placeholder')}
+            value={formRepresentation.magento_attr_code.value || ''}
+            helperText={formRepresentation.magento_attr_code.error}
+            error={!!formRepresentation.magento_attr_code.error}
+            onChange={(e) => setValue({ field: 'magento_attr_code', value: e.target.value })}
             disabled={disabled}
           />
           { !formRepresentation.id.value && (

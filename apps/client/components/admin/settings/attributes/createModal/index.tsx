@@ -11,6 +11,7 @@ export function initFormState(attribute?: Attribute) {
     id: { value: attribute?.id },
     code: { value: attribute?.attr_code, required: true },
     name: { value: attribute?.name, required: true },
+    magento_attr_code: { value: attribute?.magento_attr_code },
     type: { value: attribute?.type || 0 },
     isPublic: { value: attribute?.is_public || false },
     productTypes: { value: attribute?.productTypes?.map(({ id }) => id) || [] },
@@ -29,6 +30,7 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
   const body: any = {
     attr_code: formRepresentation.code.value || undefined,
     name: formRepresentation.name.value || undefined,
+    magento_attr_code: formRepresentation.magento_attr_code.value || undefined,
     type: formRepresentation.type.value,
     is_public: formRepresentation.isPublic.value,
     productTypes: formRepresentation.productTypes.value,

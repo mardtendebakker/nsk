@@ -18,6 +18,7 @@ export class AttributeService {
       price: true,
       type: true,
       is_public: true,
+      magento_attr_code: true,
       product_type_attribute: {
         select: {
           product_type_id: true,

@@ -48,6 +48,9 @@ export default function List({
           <TableCell>
             {trans('type')}
           </TableCell>
+          <TableCell>
+            {trans('magentoAttrCode')}
+          </TableCell>
           <TableCell align="right">
             {trans('actions')}
           </TableCell>
@@ -64,6 +67,9 @@ export default function List({
             </TableCell>
             <TableCell>
               {attribute.type}
+            </TableCell>
+            <TableCell>
+              {attribute.magento_attr_code }
             </TableCell>
             <TableCell align="right">
               <EditResource onClick={() => onEdit(attribute.id)} disabled={disabled} requiredModule="attributes" />

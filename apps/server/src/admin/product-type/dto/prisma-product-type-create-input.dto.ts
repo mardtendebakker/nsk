@@ -19,6 +19,12 @@ export class PrismaProductTypeCreateInputDto implements Prisma.product_typeCreat
 
   @ApiPropertyOptional()
   @IsOptional()
+  @IsString()
+  @Type(() => String)
+    magento_attr_set_id?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
   @IsInt()
   @Type(() => Number)
     pindex?: number;
