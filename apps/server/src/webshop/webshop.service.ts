@@ -12,6 +12,9 @@ import { ProductRelation } from '../stock/types/product-relation';
 import { FileService } from '../file/file.service';
 import { AttributeType } from '../attribute/enum/attribute-type.enum';
 import { FILE_VALUE_DELIMITER } from '../stock/types/file-value-delimiter.const';
+import { MagentoCustomeAttributes } from './types/magento-custom-attributes';
+import { hasValue } from '../common/util/has-value';
+import { MagentoAttributeOption } from './types/magento-attribute-option';
 
 @Injectable()
 export class WebshopService {
@@ -60,7 +63,6 @@ export class WebshopService {
   async addProduct(product: ProductRelation, availableQuantity: number): Promise<void> {
     try {
       const entries2d = await this.getAllEntries(product);
-
       const entries = [].concat(...entries2d);
 
       const uploadedProduct = await this.uploadProduct(product, availableQuantity);
@@ -131,6 +133,31 @@ export class WebshopService {
   }
 
   private async uploadProduct(product: ProductRelation, availableQuantity: number): Promise<AxiosResponse> {
+    const magentoAttrSetId = Number(product.product_type.magento_attr_set_id);
+    const customAttributes: MagentoCustomeAttributes[] = [
+      {
+        attribute_code: 'meta_title',
+        value: product.name,
+      },
+      {
+        attribute_code: 'meta_description',
+        value: product.description,
+      },
+      {
+        attribute_code: 'short_description',
+        value: product.description,
+      },
+      {
+        attribute_code: 'description',
+        value: product.description,
+      },
+    ];
+
+    if (magentoAttrSetId) {
+      const otherCustomAttributes = await this.getCustomAttributes(product);
+      customAttributes.push(...otherCustomAttributes);
+    }
+
     return this.axiosRequest({
       method: 'POST',
       path: '/products',
@@ -138,7 +165,7 @@ export class WebshopService {
         product: {
           sku: product.id,
           name: this.getProductNameId(product),
-          attribute_set_id: 4,
+          attribute_set_id: magentoAttrSetId || 4,
           price: product.price,
           extension_attributes: {
             category_links: product.product_type.magento_category_id ? [
@@ -152,35 +179,58 @@ export class WebshopService {
               is_in_stock: availableQuantity > 0 && product.price > 0,
             },
           },
-          custom_attributes: [
-            {
-              attribute_code: 'nexxus_id',
-              value: product.id.toString(),
-            },
-            {
-              attribute_code: 'nexxus_sku',
-              value: product.sku,
-            },
-            {
-              attribute_code: 'meta_title',
-              value: product.name,
-            },
-            {
-              attribute_code: 'meta_description',
-              value: product.description,
-            },
-            {
-              attribute_code: 'short_description',
-              value: product.description,
-            },
-            {
-              attribute_code: 'description',
-              value: product.description,
-            },
-          ],
+          custom_attributes: customAttributes,
         },
       },
     });
+  }
+
+  private async getCustomAttributes(product: ProductRelation): Promise<MagentoCustomeAttributes[]> {
+    const customAttributePromises = product.product_attribute_product_attribute_product_idToproduct.map(async (productAttribute) => {
+      const attributeType = productAttribute?.attribute?.type;
+      const attributeCode = productAttribute?.attribute?.magento_attr_code;
+      const attributeValue = productAttribute?.value;
+
+      if (!hasValue(attributeCode) || !hasValue(attributeValue)) return null;
+
+      switch (attributeType) {
+        case AttributeType.TYPE_TEXT:
+          return {
+            attribute_code: attributeCode,
+            value: attributeValue,
+          };
+
+        case AttributeType.TYPE_SELECT: {
+          const options = await this.getProductAttributeOptions(attributeCode);
+          const selectedOptionName = productAttribute?.attribute?.attribute_option
+            ?.find((option) => option.id === Number(attributeValue))?.name;
+
+          const foundOption = options.find((option) => option.label.toLocaleLowerCase() === selectedOptionName?.toLocaleLowerCase());
+
+          if (foundOption) {
+            return {
+              attribute_code: attributeCode,
+              value: foundOption.value,
+            };
+          }
+
+          const optionValue = await this.createProductAttributeOptions({
+            attributeCode,
+            attributeLabel: selectedOptionName[0].toUpperCase() + selectedOptionName.slice(1),
+          });
+
+          return {
+            attribute_code: attributeCode,
+            value: optionValue,
+          };
+        }
+
+        default:
+          return null;
+      }
+    });
+
+    return (await Promise.all(customAttributePromises)).filter(Boolean);
   }
 
   private async uploadMedias(sku: string, entries: any[]): Promise<void> {
@@ -194,6 +244,29 @@ export class WebshopService {
         },
       });
     }
+  }
+
+  private async getProductAttributeOptions(attributeCode: string): Promise<MagentoAttributeOption[]> {
+    const { data } = await this.axiosRequest({
+      method: 'GET',
+      path: `/products/attributes/${attributeCode}/options`,
+    });
+
+    return data;
+  }
+
+  private async createProductAttributeOptions({ attributeCode, attributeLabel }: { attributeCode: string; attributeLabel: string; }): Promise<string> {
+    const { data } = await this.axiosRequest({
+      method: 'POST',
+      path: `/products/attributes/${attributeCode}/options`,
+      payload: {
+        option: {
+          label: attributeLabel,
+        },
+      },
+    });
+
+    return data;
   }
 
   private async getProductMedias(sku: string): Promise<any[]> {
@@ -219,7 +292,7 @@ export class WebshopService {
     path,
     payload = null,
   }: {
-    method: 'GET' | 'POST' | 'DELETE';
+    method: 'GET' | 'POST' | 'PUT' | 'DELETE';
     path: string;
     payload?: any;
   }): Promise<AxiosResponse> {

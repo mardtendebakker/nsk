@@ -618,6 +618,7 @@ export class StockService {
     };
 
     const attributeSelect: Prisma.attributeSelect = {
+      magento_attr_code: true,
       name: true,
       price: true,
       type: true,
