@@ -79,6 +79,7 @@ model attribute {
   id                     Int                      @id @default(autoincrement())
   product_type_filter_id Int?
   attr_code              String                   @db.VarChar(255)
+  magento_attr_code      String?                  @db.VarChar(255)
   name                   String                   @unique(map: "UNIQ_FA7AEFFB5E237E06") @db.VarChar(255)
   price                  Int?
   type                   Int?
@@ -240,18 +241,20 @@ model product_status {
 }
 
 model product_type {
-  id                     Int                      @id @default(autoincrement())
-  name                   String                   @unique(map: "UNIQ_13675885E237E06") @db.VarChar(255)
-  magento_category_id    String?                  @db.VarChar(50)
-  pindex                 Int?
-  comment                String?                  @db.LongText
-  is_attribute           Boolean                  @default(false)
-  external_id            Int?
-  is_public              Boolean                  @default(true)
-  attribute              attribute[]
-  product                product[]
-  product_type_attribute product_type_attribute[]
-  product_type_task      product_type_task[]
+  id                       Int                      @id @default(autoincrement())
+  name                     String                   @unique(map: "UNIQ_13675885E237E06") @db.VarChar(255)
+  magento_category_id      String?                  @db.VarChar(50)
+  magento_attr_set_id      String?                  @db.VarChar(50)
+  magento_group_details_id String?                  @db.VarChar(50)
+  pindex                   Int?
+  comment                  String?                  @db.LongText
+  is_attribute             Boolean                  @default(false)
+  external_id              Int?
+  is_public                Boolean                  @default(true)
+  attribute                attribute[]
+  product                  product[]
+  product_type_attribute   product_type_attribute[]
+  product_type_task        product_type_task[]
 }
 
 model product_type_attribute {

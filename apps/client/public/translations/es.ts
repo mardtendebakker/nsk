@@ -313,6 +313,8 @@ const translation = {
     },
   },
   manageTheme: 'Gestionar el tema',
+  magentoAttrCode: 'Código de atributo de Magento',
+  magentoAttrSetId: 'ID del conjunto de atributos de Magento',
   listPrice: 'Precio de lista',
   editPurchase: 'Editar compra',
   totalPerProductType: 'Total por tipo de producto',

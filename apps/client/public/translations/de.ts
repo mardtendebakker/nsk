@@ -313,6 +313,8 @@ const translation = {
     },
   },
   manageTheme: 'Thema verwalten',
+  magentoAttrCode: 'Magento-Attributcode',
+  magentoAttrSetId: 'Magento-Attributsatz-ID',
   listPrice: 'Cataloguspreis',
   editPurchase: 'Einkauf ändern',
   totalPerProductType: 'Gesamt pro Produktart',

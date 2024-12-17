@@ -8,5 +8,6 @@ import { AttributeController } from './attribute.controller';
   providers: [AttributeService, AttributeRepository],
   controllers: [AttributeController],
   imports: [PrismaModule],
+  exports: [AttributeService],
 })
 export class AttributeModule {}

@@ -99,6 +99,7 @@ export interface Attribute {
   id:number,
   name:string,
   type:number,
+  magento_attr_code: string,
   attr_code:number,
   is_public:boolean,
   product_type_id:number,
@@ -113,6 +114,7 @@ export interface ProductType {
   pindex: number,
   comment:string,
   magento_category_id:string,
+  magento_attr_set_id: string,
   is_attribute: boolean,
   is_public: boolean,
   attributes:Attribute[]

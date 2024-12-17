@@ -316,6 +316,8 @@ const translation = {
       caption: 'Uw bestand mag niet groter zijn dan 80 KB',
     },
   },
+  magentoAttrCode: 'Magento-attribuutcode',
+  magentoAttrSetId: 'Magento-attributenset-ID',
   manageTheme: 'Thema beheren',
   listPrice: 'Catalogusprijs',
   editPurchase: 'Inkoop wijzigen',

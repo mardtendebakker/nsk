@@ -13,6 +13,8 @@ import { WebshopProductService } from './webshopProduct.service';
 import { WebshopProductRepository } from './webshopProduct.repository';
 import { WebshopProductController } from './webshopProduct.controller';
 import { WebshopModule } from '../../webshop/webshop.module';
+import { AttributeModule } from '../../attribute/attribute.module';
+import { ProductTypeModule } from '../../admin/product-type/product-type.module';
 
 @Global()
 @Module({
@@ -36,6 +38,8 @@ import { WebshopModule } from '../../webshop/webshop.module';
     PrintModule,
     HttpModule,
     WebshopModule,
+    ProductTypeModule,
+    AttributeModule,
   ],
   exports: [WebshopProductService],
 })

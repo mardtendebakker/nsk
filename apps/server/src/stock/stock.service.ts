@@ -544,6 +544,8 @@ export class StockService {
       id: true,
       name: true,
       magento_category_id: true,
+      magento_attr_set_id: true,
+      magento_group_details_id: true,
       product_type_task: {
         select: {
           task: true,
@@ -617,6 +619,7 @@ export class StockService {
     };
 
     const attributeSelect: Prisma.attributeSelect = {
+      magento_attr_code: true,
       name: true,
       price: true,
       type: true,

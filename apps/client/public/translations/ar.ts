@@ -318,6 +318,8 @@ const translation = {
     },
   },
   manageTheme: 'إدارة السمة',
+  magentoAttrCode: 'كود خاصية ماجنتو',
+  magentoAttrSetId: 'معرّف مجموعة خصائص ماجنتو',
   listPrice: 'سعر القائمة',
   editPurchase: 'تحرير الشراء',
   totalPerProductType: 'الإجمالي حسب نوع المنتج',

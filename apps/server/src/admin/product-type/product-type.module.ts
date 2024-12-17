@@ -8,5 +8,6 @@ import { ProductTypeController } from './product-type.controller';
   providers: [ProductTypeService, ProductTypeRepository],
   controllers: [ProductTypeController],
   imports: [PrismaModule],
+  exports: [ProductTypeService],
 })
 export class ProductTypeModule {}
