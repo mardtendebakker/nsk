@@ -456,7 +456,7 @@ export class WebshopService {
         attributeSetId,
         attributeGroupId,
         attributeCode,
-        sortOrder: 32,
+        sortOrder: 120,
       },
     });
 
