@@ -52,26 +52,30 @@ export class ProductTypeService {
       where: { id },
       data: {
         ...rest,
-        product_type_attribute: {
-          deleteMany: {
-            product_type_id: id,
+        ...(attributes && {
+          product_type_attribute: {
+            deleteMany: {
+              product_type_id: id,
+            },
+            createMany: {
+              data: attributes.map((attributeId) => ({
+                attribute_id: attributeId,
+              })),
+            },
           },
-          createMany: {
-            data: attributes.map((attributeId) => ({
-              attribute_id: attributeId,
-            })),
+        }),
+        ...(tasks && {
+          product_type_task: {
+            deleteMany: {
+              product_type_id: id,
+            },
+            createMany: {
+              data: tasks.map((taskId) => ({
+                task_id: taskId,
+              })),
+            },
           },
-        },
-        product_type_task: {
-          deleteMany: {
-            product_type_id: id,
-          },
-          createMany: {
-            data: tasks.map((taskId) => ({
-              task_id: taskId,
-            })),
-          },
-        },
+        }),
       },
     });
   }

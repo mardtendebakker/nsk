@@ -12,16 +12,28 @@ import { ProductRelation } from '../stock/types/product-relation';
 import { FileService } from '../file/file.service';
 import { AttributeType } from '../attribute/enum/attribute-type.enum';
 import { FILE_VALUE_DELIMITER } from '../stock/types/file-value-delimiter.const';
-import { MagentoCustomeAttributes } from './types/magento-custom-attributes';
+import { MagentoCustomeAttrs } from './types/magento-custom-attrs';
 import { hasValue } from '../common/util/has-value';
-import { MagentoAttributeOption } from './types/magento-attribute-option';
+import { MagentoAttrOption } from './types/magento-attr-option';
+import { ProductAttributeIncludeAttribute } from '../stock/types/product-attribute-include-attribute';
+import { MagentoAttrInput } from './enum/magento-attr-input.enum';
+import { MagentoAttrScope } from './enum/magento-attr-scope.enum';
+import { MagentoEntityTypeId } from './enum/magento-entity-type-id.enum';
+import { MagentoAttr } from './types/magento-attr';
+import { AttributeService } from '../attribute/attribute.service';
+import { MagentoAttrGroupDetailsName } from './enum/magento-attr-group-details-name.enum';
+import { MagentoAttrSetId } from './enum/magento-attr-set-id.enum';
+import { MagentoAttrSet } from './types/magento-attr-set';
+import { ProductTypeService } from '../admin/product-type/product-type.service';
 
 @Injectable()
 export class WebshopService {
   constructor(
-    private httpService: HttpService,
-    private configService: ConfigService,
-    private fileService: FileService,
+    private readonly httpService: HttpService,
+    private readonly configService: ConfigService,
+    private readonly fileService: FileService,
+    private readonly productTypeService: ProductTypeService,
+    private readonly attributeService: AttributeService,
   ) {}
 
   async fetchOrderById(orderId: string): Promise<Order | null> {
@@ -82,7 +94,7 @@ export class WebshopService {
       Logger.log('WebshopService->addProduct->Succesfull');
     } catch (e) {
       if (e?.status === 400) {
-        Logger.error(e?.response?.message);
+        Logger.error(e.response?.message || e.response || e.message);
       } else {
         throw e;
       }
@@ -133,8 +145,9 @@ export class WebshopService {
   }
 
   private async uploadProduct(product: ProductRelation, availableQuantity: number): Promise<AxiosResponse> {
-    const magentoAttrSetId = Number(product.product_type.magento_attr_set_id);
-    const customAttributes: MagentoCustomeAttributes[] = [
+    let magentoAttrSetId = product.product_type.magento_attr_set_id;
+    let magentoGroupDetailsId = product.product_type.magento_group_details_id;
+    const customAttributes: MagentoCustomeAttrs[] = [
       {
         attribute_code: 'meta_title',
         value: product.name,
@@ -153,10 +166,25 @@ export class WebshopService {
       },
     ];
 
-    if (magentoAttrSetId) {
-      const otherCustomAttributes = await this.getCustomAttributes(product);
-      customAttributes.push(...otherCustomAttributes);
+    if (!hasValue(magentoAttrSetId)) {
+      magentoAttrSetId = await this.getAttrSetId(product.product_type.name);
+      this.productTypeService.update(product.product_type.id, {
+        magento_attr_set_id: magentoAttrSetId,
+      });
     }
+    if (!hasValue(magentoGroupDetailsId)) {
+      magentoGroupDetailsId = await this.findGroupDetailsId(magentoAttrSetId);
+      this.productTypeService.update(product.product_type.id, {
+        magento_group_details_id: magentoGroupDetailsId,
+      });
+    }
+
+    const otherCustomAttributes = await this.getCustomAttrs({
+      product,
+      attributeSetId: magentoAttrSetId,
+      attributeGroupId: magentoGroupDetailsId,
+    });
+    customAttributes.push(...otherCustomAttributes);
 
     return this.axiosRequest({
       method: 'POST',
@@ -185,52 +213,160 @@ export class WebshopService {
     });
   }
 
-  private async getCustomAttributes(product: ProductRelation): Promise<MagentoCustomeAttributes[]> {
-    const customAttributePromises = product.product_attribute_product_attribute_product_idToproduct.map(async (productAttribute) => {
-      const attributeType = productAttribute?.attribute?.type;
-      const attributeCode = productAttribute?.attribute?.magento_attr_code;
-      const attributeValue = productAttribute?.value;
+  private async getAttrSetId(attributeSetName: string): Promise<string> {
+    let attrSet: MagentoAttrSet;
 
-      if (!hasValue(attributeCode) || !hasValue(attributeValue)) return null;
+    try {
+      attrSet = await this.searchAttrSet(attributeSetName);
+    } catch (e) {
+      attrSet = await this.createAttrSet(attributeSetName);
+    }
+
+    return String(attrSet.attribute_set_id);
+  }
+
+  private async searchAttrSet(attributeSetName: string): Promise<MagentoAttrSet> {
+    const { data } = await this.axiosRequest({
+      method: 'GET',
+      path: '/products/attribute-sets/sets/list',
+      params: {
+        'search_criteria[filter_groups][0][filters][0][field]': 'attribute_set_name',
+        'search_criteria[filter_groups][0][filters][0][value]': attributeSetName,
+        'search_criteria[filter_groups][0][filters][0][condition_type]': 'eq',
+      },
+    });
+
+    if (data?.items?.[0]) {
+      return data?.items?.[0];
+    }
+    throw new HttpException(`attribute set with name: ${attributeSetName}, not found!`, 404);
+  }
+
+  private async createAttrSet(attributeSetName: string): Promise<MagentoAttrSet> {
+    const { data } = await this.axiosRequest({
+      method: 'POST',
+      path: '/products/attribute-sets',
+      payload: {
+        attributeSet: {
+          attribute_set_name: this.firstLetterUpperCase(attributeSetName),
+          sort_order: 0,
+          entity_type_id: MagentoEntityTypeId.CATALOG_PRODUCT,
+        },
+        skeletonId: MagentoAttrSetId.DEFAULT,
+      },
+    });
+
+    return data;
+  }
+
+  private async findGroupDetailsId(attributeSetId: string): Promise<string> {
+    const { data } = await this.axiosRequest({
+      method: 'GET',
+      path: '/products/attribute-sets/groups/list',
+      params: {
+        'search_criteria[filter_groups][0][filters][0][field]': 'attribute_set_id',
+        'search_criteria[filter_groups][0][filters][0][value]': attributeSetId,
+        'search_criteria[filter_groups][0][filters][0][condition_type]': 'eq',
+        'search_criteria[filter_groups][0][filters][1][field]': 'attribute_group_name',
+        'search_criteria[filter_groups][0][filters][1][value]': MagentoAttrGroupDetailsName.PRODUCT_DETAILS,
+        'search_criteria[filter_groups][0][filters][1][condition_type]': 'eq',
+      },
+    });
+
+    if (data?.items?.[0]) {
+      return data?.items?.[0].attribute_group_id;
+    }
+    throw new HttpException(`attribute group with id: ${attributeSetId}, not found!`, 404);
+  }
+
+  private async getCustomAttrs({
+    product,
+    attributeSetId,
+    attributeGroupId,
+  }: {
+    product: ProductRelation;
+    attributeSetId: string;
+    attributeGroupId: string;
+  }): Promise<MagentoCustomeAttrs[]> {
+    const customAttributes: MagentoCustomeAttrs[] = [];
+
+    for (const productAttribute of product.product_attribute_product_attribute_product_idToproduct) {
+      const attributeType = productAttribute?.attribute?.type;
+      const attributeValue = productAttribute?.value;
+      let attributeCode = productAttribute?.attribute?.magento_attr_code;
+
+      if (![AttributeType.TYPE_TEXT, AttributeType.TYPE_SELECT].includes(attributeType)) {
+        // eslint-disable-next-line no-continue
+        continue;
+      }
+
+      if (!hasValue(attributeValue)) {
+        // eslint-disable-next-line no-continue
+        continue;
+      }
+
+      if (!hasValue(attributeCode)) {
+        // eslint-disable-next-line no-await-in-loop
+        const magentoAttribute = await this.getProductCustomAttr(productAttribute);
+        attributeCode = magentoAttribute.attribute_code;
+
+        // eslint-disable-next-line no-await-in-loop
+        await this.attributeService.update(productAttribute.attribute_id, {
+          magento_attr_code: attributeCode,
+        });
+
+        // eslint-disable-next-line no-await-in-loop
+        await this.addAttrToAttrSet({
+          attributeSetId,
+          attributeGroupId,
+          attributeCode,
+        });
+      }
 
       switch (attributeType) {
         case AttributeType.TYPE_TEXT:
-          return {
+          customAttributes.push({
             attribute_code: attributeCode,
             value: attributeValue,
-          };
+          });
+          break;
 
         case AttributeType.TYPE_SELECT: {
-          const options = await this.getProductAttributeOptions(attributeCode);
+          // eslint-disable-next-line no-await-in-loop
+          const options = await this.getProductAttrOptions(attributeCode);
           const selectedOptionName = productAttribute?.attribute?.attribute_option
             ?.find((option) => option.id === Number(attributeValue))?.name;
 
-          const foundOption = options.find((option) => option.label.toLocaleLowerCase() === selectedOptionName?.toLocaleLowerCase());
+          const foundOption = options.find(
+            (option) => option.label.toLowerCase() === selectedOptionName?.toLowerCase(),
+          );
 
           if (foundOption) {
-            return {
+            customAttributes.push({
               attribute_code: attributeCode,
               value: foundOption.value,
-            };
+            });
+          } else {
+            // eslint-disable-next-line no-await-in-loop
+            const optionValue = await this.createProductAttrOptions({
+              attributeCode,
+              attributeLabel: this.firstLetterUpperCase(selectedOptionName),
+            });
+
+            customAttributes.push({
+              attribute_code: attributeCode,
+              value: optionValue,
+            });
           }
-
-          const optionValue = await this.createProductAttributeOptions({
-            attributeCode,
-            attributeLabel: selectedOptionName[0].toUpperCase() + selectedOptionName.slice(1),
-          });
-
-          return {
-            attribute_code: attributeCode,
-            value: optionValue,
-          };
+          break;
         }
 
         default:
-          return null;
+          break;
       }
-    });
+    }
 
-    return (await Promise.all(customAttributePromises)).filter(Boolean);
+    return customAttributes;
   }
 
   private async uploadMedias(sku: string, entries: any[]): Promise<void> {
@@ -246,7 +382,88 @@ export class WebshopService {
     }
   }
 
-  private async getProductAttributeOptions(attributeCode: string): Promise<MagentoAttributeOption[]> {
+  private async getProductCustomAttr(productAttribute: ProductAttributeIncludeAttribute): Promise<MagentoAttr> {
+    let productCustomAttr: MagentoAttr;
+
+    try {
+      productCustomAttr = await this.searchProductCustomAttr(productAttribute);
+    } catch (e) {
+      productCustomAttr = await this.createProductCustomAttr(productAttribute);
+    }
+
+    return productCustomAttr;
+  }
+
+  private async searchProductCustomAttr(productAttribute: ProductAttributeIncludeAttribute): Promise<MagentoAttr> {
+    const attributeCode = this.getAttrCode(productAttribute);
+
+    const { data } = await this.axiosRequest({
+      method: 'GET',
+      path: `/products/attributes/${attributeCode}`,
+      retryCount: 0,
+    });
+
+    return data;
+  }
+
+  private async createProductCustomAttr(productAttribute: ProductAttributeIncludeAttribute): Promise<MagentoAttr> {
+    const attributeType = productAttribute?.attribute?.type;
+    const attributePayload = {
+      attribute: {
+        is_html_allowed_on_front: true,
+        used_for_sort_by: attributeType !== AttributeType.TYPE_SELECT,
+        is_filterable: attributeType === AttributeType.TYPE_SELECT,
+        is_filterable_in_search: attributeType === AttributeType.TYPE_SELECT,
+        is_used_in_grid: true,
+        is_visible_in_grid: true,
+        is_filterable_in_grid: true,
+        is_searchable: '1',
+        is_visible_in_advanced_search: '1',
+        is_comparable: '1',
+        is_used_for_promo_rules: '1',
+        is_visible_on_front: '1',
+        used_in_product_listing: '1',
+        frontend_input: attributeType === AttributeType.TYPE_SELECT ? MagentoAttrInput.SELECT : MagentoAttrInput.TEXT,
+        default_frontend_label: this.firstLetterUpperCase(productAttribute.attribute.name),
+        scope: MagentoAttrScope.GLOBAL,
+        attribute_code: this.getAttrCode(productAttribute),
+        entity_type_id: MagentoEntityTypeId.CATALOG_PRODUCT,
+      },
+    };
+
+    const { data } = await this.axiosRequest({
+      method: 'POST',
+      path: '/products/attributes',
+      payload: attributePayload,
+    });
+
+    return data;
+  }
+
+  private async addAttrToAttrSet({
+    attributeSetId,
+    attributeGroupId,
+    attributeCode,
+  }: {
+    attributeSetId: string,
+    attributeGroupId: string,
+    attributeCode: string
+  }) {
+    const { data } = await this.axiosRequest({
+      method: 'POST',
+      path: '/products/attribute-sets/attributes',
+      payload: {
+        attributeSetId,
+        attributeGroupId,
+        attributeCode,
+        sortOrder: 32,
+      },
+    });
+
+    return data;
+  }
+
+  private async getProductAttrOptions(attributeCode: string): Promise<MagentoAttrOption[]> {
     const { data } = await this.axiosRequest({
       method: 'GET',
       path: `/products/attributes/${attributeCode}/options`,
@@ -255,7 +472,7 @@ export class WebshopService {
     return data;
   }
 
-  private async createProductAttributeOptions({ attributeCode, attributeLabel }: { attributeCode: string; attributeLabel: string; }): Promise<string> {
+  private async createProductAttrOptions({ attributeCode, attributeLabel }: { attributeCode: string; attributeLabel: string; }): Promise<string> {
     const { data } = await this.axiosRequest({
       method: 'POST',
       path: `/products/attributes/${attributeCode}/options`,
@@ -290,11 +507,15 @@ export class WebshopService {
   private async axiosRequest({
     method,
     path,
+    params = null,
     payload = null,
+    retryCount = 5,
   }: {
     method: 'GET' | 'POST' | 'PUT' | 'DELETE';
     path: string;
+    params?: any;
     payload?: any;
+    retryCount?: number;
   }): Promise<AxiosResponse> {
     const url = `${this.configService.get<string>('MAGENTO_BASE_URL')}rest/V1${path}`;
     const headers = {
@@ -305,11 +526,15 @@ export class WebshopService {
         method,
         url,
         headers,
-        ...(payload ? { data: payload } : {}),
+        ...(params && { params }),
+        ...(payload && { data: payload }),
       }).pipe(
         retry({
-          count: 5,
-          delay: (_error, index) => this.fibonacciDelay(index + 1),
+          count: retryCount,
+          delay: (_error, index) => {
+            Logger.error(method, path, _error);
+            return this.fibonacciDelay(index + 1);
+          },
         }),
         catchError((error: AxiosError) => {
           throw new HttpException(`Error during ${method} request to ${url}: ${error.message}`, error?.response?.status);
@@ -331,6 +556,14 @@ export class WebshopService {
 
   private getProductNameId(product: ProductRelation): string {
     return `${product.name.replace(/ /g, '-')}-${product.id}`;
+  }
+
+  private getAttrCode(productAttribute: ProductAttributeIncludeAttribute): string {
+    return productAttribute.attribute.name.replace(/ /g, '_').toLowerCase();
+  }
+
+  private firstLetterUpperCase(word: string): string {
+    return word[0].toLocaleUpperCase() + word.slice(1);
   }
 
   private getProductNameUrl(product: ProductRelation): string {

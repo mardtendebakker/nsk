@@ -29,7 +29,7 @@ export class CreateAttributeDto extends OmitType(PrismaAttributeCreateInputDto, 
   'product_type_attribute',
 ] as const) {
   @ApiProperty()
-  @Transform(({ value }) => (Array.isArray(value) ? value.map((id: string) => parseInt(id)) : parseInt(value)))
+  @Transform(({ value }) => (Array.isArray(value) ? value.map((id: string) => parseInt(id, 10)) : parseInt(value, 10)))
     productTypes: number[];
 
   @ApiPropertyOptional()

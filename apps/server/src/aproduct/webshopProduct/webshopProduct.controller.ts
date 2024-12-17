@@ -13,7 +13,7 @@ import { CognitoGroups, STORE_PUBLISHER_GROUPS } from '../../common/types/cognit
 export class WebshopProductController extends AproductController {
   constructor(
     protected readonly webshopProductService: WebshopProductService,
-    protected readonly webshopProductBlancco:WebshopProductBlancco,
+    protected readonly webshopProductBlancco: WebshopProductBlancco,
   ) {
     super(webshopProductService, webshopProductBlancco);
   }

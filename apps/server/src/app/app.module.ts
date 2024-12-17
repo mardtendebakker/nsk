@@ -35,7 +35,6 @@ import { PaymentModule } from '../payment/payment.module';
 import { ModulePaymentModule } from '../module-payment/module-payment.module';
 import { ConfigModule as MyConfigModule } from '../config/config.module';
 import { AuthModule } from '../auth/auth.module';
-import { WebshopModule } from '../webshop/webshop.module';
 import { ConsumerModule } from '../consumer/consumer.module';
 
 @Module({
@@ -94,7 +93,6 @@ import { ConsumerModule } from '../consumer/consumer.module';
     PaymentModule,
     ModulePaymentModule,
     MyConfigModule,
-    WebshopModule,
     HttpModule,
     ConsumerModule,
   ],
