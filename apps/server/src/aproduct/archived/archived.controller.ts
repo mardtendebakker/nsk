@@ -3,6 +3,7 @@ import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { ArchivedService } from './archived.service';
 import { AproductController } from '../aproduct.controller';
 import { ArchivedBlancco } from './archived.blancco';
+import { SecurityService } from '../../security/service/security.service';
 
 @ApiTags('aproducts-archive')
 @Controller('aproducts/archive')
@@ -10,8 +11,9 @@ export class ArchivedController extends AproductController {
   constructor(
     protected readonly archivedService: ArchivedService,
     protected readonly archivedBlancco: ArchivedBlancco,
+    protected readonly securityService: SecurityService,
   ) {
-    super(archivedService, archivedBlancco);
+    super(archivedService, archivedBlancco, securityService);
   }
 
   @Patch('set')

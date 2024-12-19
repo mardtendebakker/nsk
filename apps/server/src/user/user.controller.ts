@@ -1,45 +1,34 @@
-import { Authentication, CognitoUser } from '@nestjs-cognito/auth';
 import {
-  Body, Controller, Get, HttpCode, Post,
+  Body, Controller, Get, Param, Patch, Query,
 } from '@nestjs/common';
 import {
-  ApiBearerAuth, ApiOkResponse, ApiResponse, ApiTags, ApiUnauthorizedResponse,
+  ApiBearerAuth, ApiResponse, ApiTags, ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { ChanngePasswordRequestDto } from './dto/change-password-request.dto';
-import { UserInfoDto } from './dto/user-info.dto';
+import { Authorization } from '../security/decorator/authorization.decorator';
 import { UserService } from './user.service';
-import { ModuleService } from '../module/module.service';
+import { ADMINS_GROUPS } from './model/group.enum';
+import { FindManyDto } from './dto/find-many.dto';
+import { PatchDto } from './dto/patch.dto';
+import { UserResponseDto } from './dto/user-response.dto';
 
-@ApiTags('user')
-@Controller('user')
+@ApiTags('users')
+@Controller('users')
 @ApiBearerAuth()
-@Authentication()
 export class UserController {
-  constructor(
-    private readonly userService: UserService,
-    private readonly moduleService: ModuleService,
-  ) {}
+  constructor(private userService: UserService) {}
 
-  @Get('info')
-  @ApiResponse({ type: UserInfoDto })
+  @Get('')
+  @ApiResponse({ type: UserResponseDto, isArray: true })
+  @Authorization(ADMINS_GROUPS)
   @ApiUnauthorizedResponse(({ description: '{}' }))
-  async userInfo(@CognitoUser(Object.keys(new UserInfoDto())) me: UserInfoDto) {
-    const modules = await this.moduleService.findAll();
-
-    return {
-      ...me,
-      modules,
-    };
+  getAll(@Query() query: FindManyDto) {
+    return this.userService.findAll(query);
   }
 
-  @Post('changepassword')
-  @HttpCode(200)
-  @ApiUnauthorizedResponse(({ description: 'Incorrect username or password.' }))
-  @ApiOkResponse({ description: 'SUCCESS' })
-  changePassword(
-  @CognitoUser('username') username: string,
-    @Body() channgePasswordRequestDto: ChanngePasswordRequestDto,
-  ) {
-    return this.userService.changePassword(username, channgePasswordRequestDto);
+  @Patch('/:id')
+  @Authorization(ADMINS_GROUPS)
+  @ApiUnauthorizedResponse(({ description: '{}' }))
+  async patch(@Param('id') id: number, @Body() body: PatchDto) {
+    await this.userService.update(id, { groups: body.groups });
   }
 }

@@ -1,14 +1,15 @@
 import {
-  Body, Controller, Delete, ForbiddenException, Param, Post, Put, UploadedFile, UseGuards, UseInterceptors,
+  Body, Controller, Delete, ForbiddenException, Param, Post, Put, UploadedFile, UseInterceptors,
 } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { AuthorizationGuard, CognitoUser } from '@nestjs-cognito/auth';
 import { SaleService } from './sale.service';
 import { AOrderController } from '../aorder/aorder.controller';
 import { ImportDto } from './dto/import-dto';
-import { CognitoGroups, MANAGER_GROUPS, SALE_UPLOADER_GROUPS } from '../common/types/cognito-groups.enum';
 import { RabbitMQService } from '../rabbitmq/rabbitmq.service';
+import { ConnectedUser, ConnectedUserType } from '../security/decorator/connected-user.decorator';
+import { MANAGER_GROUPS, SALE_UPLOADER_GROUPS, Group } from '../user/model/group.enum';
+import { Authorization } from '../security/decorator/authorization.decorator';
 
 @ApiTags('sales')
 @Controller('sales')
@@ -33,23 +34,16 @@ export class SaleController extends AOrderController {
   }
 
   @Post('import')
-  @UseGuards(AuthorizationGuard(SALE_UPLOADER_GROUPS))
+  @Authorization(SALE_UPLOADER_GROUPS)
   @UseInterceptors(FileInterceptor('file'))
   importSales(
   @Body() body: ImportDto,
     @UploadedFile() file: Express.Multer.File,
-    @CognitoUser(['groups', 'email'])
-    {
-      groups,
-      email,
-    }: {
-      groups: CognitoGroups[];
-      email: string;
-    },
+    @ConnectedUser() { groups, email }: ConnectedUserType,
   ) {
     if (groups.some((group) => MANAGER_GROUPS.includes(group))) {
       return this.saleService.import(body, file);
-    } if (groups.some((group) => [CognitoGroups.PARTNER_SALE_UPLOADER].includes(group))) {
+    } if (groups.some((group) => [Group.PARTNER_SALE_UPLOADER].includes(group))) {
       return this.saleService.import(body, file, email);
     }
     throw new ForbiddenException('Insufficient permissions to access this api!');

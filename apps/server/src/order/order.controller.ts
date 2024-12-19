@@ -2,14 +2,13 @@ import {
   Controller, ForbiddenException, Get, Query,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Authorization, CognitoUser } from '@nestjs-cognito/auth';
 import { OrderService } from './order.service';
 import { AnalyticsResultDto } from './dto/analytics-result.dto';
 import { AnalyticsDto } from './dto/analytics.dto';
 import { AOrderController } from '../aorder/aorder.controller';
-import {
-  ALL_MAIN_GROUPS, CognitoGroups, LOCAL_GROUPS, PARTNERS_GROUPS,
-} from '../common/types/cognito-groups.enum';
+import { ALL_MAIN_GROUPS, LOCAL_GROUPS, PARTNERS_GROUPS } from '../user/model/group.enum';
+import { ConnectedUser, ConnectedUserType } from '../security/decorator/connected-user.decorator';
+import { Authorization } from '../security/decorator/authorization.decorator';
 
 @ApiBearerAuth()
 @Authorization(ALL_MAIN_GROUPS)
@@ -24,14 +23,11 @@ export class OrderController extends AOrderController {
   @ApiResponse({ type: AnalyticsResultDto })
   analytics(
   @Query() query: AnalyticsDto,
-    @CognitoUser(['groups', 'email'])
+    @ConnectedUser()
     {
       groups,
       email,
-    }: {
-      groups: CognitoGroups[];
-      email: string;
-    },
+    }: ConnectedUserType,
   ) {
     if (groups.some((group) => LOCAL_GROUPS.includes(group))) {
       return this.orderService.analytics(query.groupby);

@@ -37,6 +37,7 @@
     "amqp-connection-manager": "^4.1.14",
     "amqplib": "^0.10.4",
     "axios": "1.6.8",
+    "bcrypt": "^5.1.1",
     "bwip-js": "^3.4.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",

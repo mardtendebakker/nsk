@@ -3,7 +3,6 @@ import { getUser } from '../storage';
 import securityStore, { SIGN_IN_REQUEST_SUCCEEDED, SIGN_OUT } from '../../stores/security';
 import axiosClient from './client';
 import { REFRESH_TOKEN_PATH, SIGN_IN_PATH } from './paths';
-import buildUserFromResponse from './buildUserFromResponse';
 
 const EXCLUDED_PATHS = [SIGN_IN_PATH, REFRESH_TOKEN_PATH];
 
@@ -36,7 +35,7 @@ export default async (err: AxiosError): Promise<any> => {
       try {
         const response = await axiosClient
           .post(REFRESH_TOKEN_PATH, { emailOrUsername: user.username, token: user.refreshToken });
-        const newUser = buildUserFromResponse(response);
+        const newUser = response.data;
         securityStore.emit(SIGN_IN_REQUEST_SUCCEEDED, newUser);
         subscribers.map((cb) => cb(newUser.accessToken));
         subscribers = [];

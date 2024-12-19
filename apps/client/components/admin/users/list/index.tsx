@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import List from './list';
 import Filter from './filter';
 import useAxios from '../../../../hooks/useAxios';
-import { ADMIN_USERS_PATH } from '../../../../utils/axios';
+import { USERS_PATH } from '../../../../utils/axios';
 import useForm, { FieldPayload } from '../../../../hooks/useForm';
 import pushURLParams from '../../../../utils/pushURLParams';
 import { getQueryParam } from '../../../../utils/location';
@@ -34,13 +34,17 @@ function initFormState(
 }
 
 function refreshList({
-  pageToken,
+  page,
   rowsPerPage = 10,
   formRepresentation,
   router,
   call,
 }) {
   const params = new URLSearchParams();
+
+  if (page > 1) {
+    params.append('page', page.toString());
+  }
 
   params.append('rowsPerPage', rowsPerPage.toString());
 
@@ -56,8 +60,8 @@ function refreshList({
 
   return call({
     params: {
-      limit: rowsPerPage,
-      pageToken,
+      take: rowsPerPage,
+      skip: (page - 1) * rowsPerPage,
       ...paramsToSend,
     },
   })
@@ -70,10 +74,8 @@ function refreshList({
 export default function ListContainer() {
   const router = useRouter();
   const [rowsPerPage, setRowsPerPage] = useState<number>(parseInt(getQueryParam('rowsPerPage', '10'), 10));
-  const [users, setUsers] = useState<UserListItem[]>([]);
-  const [pagination, setPagination] = useState([]);
-  const [hasNextPage, setHasNextPage] = useState(false);
-  const [editUsername, setEditUsername] = useState<string | undefined>();
+  const [page, setPage] = useState<number>(parseInt(getQueryParam('page', '1'), 10));
+  const [editUser, setEditUser] = useState<undefined | UserListItem>();
 
   const { formRepresentation, setValue, setData } = useForm(initFormState({
     search: getQueryParam('search'),
@@ -82,9 +84,9 @@ export default function ListContainer() {
     lastActive: getQueryParam('lastActive'),
   }));
 
-  const { data: { count = 0 } = {}, call, performing } = useAxios<undefined | { count?:number }>(
+  const { data: { count = 0, data = [] } = {}, call, performing } = useAxios<undefined | { count?:number, data: UserListItem[] }>(
     'get',
-    ADMIN_USERS_PATH.replace(':id', ''),
+    USERS_PATH.replace(':id', ''),
     {
       withProgressBar: true,
     },
@@ -92,15 +94,11 @@ export default function ListContainer() {
 
   useEffect(() => {
     refreshList({
-      pageToken: undefined,
+      page,
       rowsPerPage,
       formRepresentation,
       router,
       call,
-    }).then(({ data: { data: userList, pageToken } }) => {
-      setHasNextPage(!!pageToken);
-      setPagination([undefined, pageToken]);
-      setUsers(userList);
     });
   }, [
     rowsPerPage,
@@ -110,42 +108,9 @@ export default function ListContainer() {
     formRepresentation.lastActive.value,
   ]);
 
-  const handleNextPageClicked = () => {
-    refreshList({
-      pageToken: pagination[pagination.length - 1],
-      rowsPerPage,
-      formRepresentation,
-      router,
-      call,
-    }).then(({ data: { data: userList, pageToken } }) => {
-      setHasNextPage(!!pageToken);
-      if (pageToken) {
-        setPagination([...pagination, pageToken]);
-      }
-      setUsers(userList);
-    });
-  };
-
-  const handlePreviousPageClicked = () => {
-    const paginationCopy = [...pagination];
-    paginationCopy.splice(paginationCopy.length - 2);
-
-    refreshList({
-      pageToken: paginationCopy[paginationCopy.length - 1],
-      rowsPerPage,
-      formRepresentation,
-      router,
-      call,
-    }).then(({ data: { data: userList, pageToken } }) => {
-      setHasNextPage(!!pageToken);
-      setPagination([...paginationCopy, pageToken]);
-      setUsers(userList);
-    });
-  };
-
   const handleRowsPerPageChange = (newRowsPerPage: number) => {
     setRowsPerPage(newRowsPerPage);
-    setPagination([]);
+    setPage(1);
   };
 
   return (
@@ -159,17 +124,35 @@ export default function ListContainer() {
       <Box sx={{ m: '1rem' }} />
       <List
         disabled={performing}
-        users={users}
+        users={data}
         count={count}
-        hasNextPage={hasNextPage}
-        hasPreviousPage={pagination.length > 2}
-        onGoNext={handleNextPageClicked}
-        onGoPrevious={handlePreviousPageClicked}
         onRowsPerPageChange={handleRowsPerPageChange}
         rowsPerPage={rowsPerPage}
-        onEdit={setEditUsername}
+        onEdit={setEditUser}
+        page={page}
+        onPageChange={(newPage) => {
+          setPage(newPage);
+        }}
       />
-      {editUsername && <Edit username={editUsername} onClose={() => setEditUsername(undefined)} onConfirm={() => setEditUsername(undefined)} />}
+
+      {!!editUser && (
+      <Edit
+        user={editUser}
+        onClose={() => setEditUser(undefined)}
+        onConfirm={
+        () => {
+          refreshList({
+            page,
+            rowsPerPage,
+            formRepresentation,
+            router,
+            call,
+          });
+          setEditUser(undefined);
+        }
+      }
+      />
+      )}
     </Card>
   );
 }

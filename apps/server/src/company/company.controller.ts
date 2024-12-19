@@ -1,4 +1,3 @@
-import { Authorization, CognitoUser } from '@nestjs-cognito/auth';
 import {
   Body, Controller, Delete, ForbiddenException, Get, Param, Post, Put, Query, UseGuards,
 } from '@nestjs/common';
@@ -6,13 +5,13 @@ import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CompanyService } from './company.service';
 import { FindCompaniesResponseDto } from './dto/find-company-response.dto';
 import { FindManyDto } from './dto/find-many.dto';
-import {
-  ALL_MAIN_GROUPS, CognitoGroups, LOCAL_GROUPS, PARTNERS_GROUPS,
-} from '../common/types/cognito-groups.enum';
 import { CompanyEntity } from './entities/company.entity';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 import { requiredModule } from '../common/guard/required-modules.guard';
+import { ALL_MAIN_GROUPS, LOCAL_GROUPS, PARTNERS_GROUPS } from '../user/model/group.enum';
+import { ConnectedUser, ConnectedUserType } from '../security/decorator/connected-user.decorator';
+import { Authorization } from '../security/decorator/authorization.decorator';
 
 @ApiBearerAuth()
 @Authorization(ALL_MAIN_GROUPS)
@@ -25,14 +24,11 @@ export class CompanyController {
   @ApiResponse({ type: FindCompaniesResponseDto })
   findAll(
   @Query() query: FindManyDto,
-    @CognitoUser(['groups', 'email'])
+    @ConnectedUser()
     {
       groups,
       email,
-    }: {
-      groups: CognitoGroups[];
-      email: string;
-    },
+    }: ConnectedUserType,
   ) {
     if (groups.some((group) => LOCAL_GROUPS.includes(group))) {
       return this.companyService.findAll(query);
@@ -47,14 +43,11 @@ export class CompanyController {
   @UseGuards(requiredModule('customer_contact_action'))
   findOne(
   @Param('id') id: number,
-    @CognitoUser(['groups', 'email'])
+    @ConnectedUser()
     {
       groups,
       email,
-    }: {
-      groups: CognitoGroups[];
-      email: string;
-    },
+    }: ConnectedUserType,
   ) {
     if (groups.some((group) => LOCAL_GROUPS.includes(group))) {
       return this.companyService.findOne(id);
@@ -69,14 +62,11 @@ export class CompanyController {
   @UseGuards(requiredModule('customer_contact_action'))
   create(
   @Body() body: CreateCompanyDto,
-    @CognitoUser(['groups', 'email'])
+    @ConnectedUser()
     {
       groups,
       email,
-    }: {
-      groups: CognitoGroups[];
-      email: string;
-    },
+    }: ConnectedUserType,
   ) {
     if (groups.some((group) => LOCAL_GROUPS.includes(group))) {
       return this.companyService.create(body);
@@ -92,14 +82,11 @@ export class CompanyController {
   update(
   @Param('id') id: number,
     @Body() updateCompanyDto: UpdateCompanyDto,
-    @CognitoUser(['groups', 'email'])
+    @ConnectedUser()
     {
       groups,
       email,
-    }: {
-      groups: CognitoGroups[];
-      email: string;
-    },
+    }: ConnectedUserType,
   ) {
     if (groups.some((group) => LOCAL_GROUPS.includes(group))) {
       return this.companyService.update(id, updateCompanyDto);
@@ -113,14 +100,11 @@ export class CompanyController {
   @UseGuards(requiredModule('customer_contact_action'))
   delete(
   @Param('id') id: number,
-    @CognitoUser(['groups', 'email'])
+    @ConnectedUser()
     {
       groups,
       email,
-    }: {
-      groups: CognitoGroups[];
-      email: string;
-    },
+    }: ConnectedUserType,
   ) {
     if (groups.some((group) => LOCAL_GROUPS.includes(group))) {
       return this.companyService.delete(id);

@@ -12,6 +12,7 @@ import { BlanccoModule } from '../blancco/blancco.module';
 import { AProductBlancco } from './aproduct.blancco';
 import { PrintModule } from '../print/print.module';
 import { WebshopProductModule } from './webshopProduct/webshopProduct.module';
+import { SecurityModule } from '../security/security.module';
 
 @Module({
   providers: [
@@ -34,6 +35,7 @@ import { WebshopProductModule } from './webshopProduct/webshopProduct.module';
     BlanccoModule,
     PrintModule,
     HttpModule,
+    SecurityModule,
   ],
   exports: [AProductService],
 })

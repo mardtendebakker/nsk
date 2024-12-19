@@ -1,14 +1,13 @@
 import {
-  Controller, ForbiddenException, Get, Query, UseGuards,
+  Controller, ForbiddenException, Get, Query,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Authorization, AuthorizationGuard, CognitoUser } from '@nestjs-cognito/auth';
 import { AutocompleteService } from './autocomplete.service';
 import { AutocompleteDto, LocationLabelsAutocompleteDto } from './dto/autocomplete.dto';
 import { AutocompleteResponseDto, LocationAutocompleteResponseDto } from './dto/autocomplete-response.dto';
-import {
-  ALL_MAIN_GROUPS, CognitoGroups, LOCAL_GROUPS, PARTNERS_GROUPS,
-} from '../common/types/cognito-groups.enum';
+import { ALL_MAIN_GROUPS, LOCAL_GROUPS, PARTNERS_GROUPS } from '../user/model/group.enum';
+import { ConnectedUser, ConnectedUserType } from '../security/decorator/connected-user.decorator';
+import { Authorization } from '../security/decorator/authorization.decorator';
 
 @ApiBearerAuth()
 @Authorization(ALL_MAIN_GROUPS)
@@ -39,14 +38,11 @@ export class AutocompleteController {
   @ApiResponse({ type: AutocompleteResponseDto, isArray: true })
   contacts(
   @Query() query: AutocompleteDto,
-    @CognitoUser(['groups', 'email'])
+    @ConnectedUser()
     {
       groups,
       email,
-    }: {
-      groups: CognitoGroups[];
-      email: string;
-    },
+    }: ConnectedUserType,
   ) {
     if (groups.some((group) => LOCAL_GROUPS.includes(group))) {
       return this.autocompleteService.findContacts(query);
@@ -57,7 +53,7 @@ export class AutocompleteController {
   }
 
   @Get('/partners')
-  @UseGuards(AuthorizationGuard(LOCAL_GROUPS))
+  @Authorization(LOCAL_GROUPS)
   @ApiResponse({ type: AutocompleteResponseDto, isArray: true })
   partners(@Query() query: AutocompleteDto) {
     return this.autocompleteService.findPartners(query);
@@ -67,14 +63,11 @@ export class AutocompleteController {
   @ApiResponse({ type: AutocompleteResponseDto, isArray: true })
   companies(
   @Query() query: AutocompleteDto,
-    @CognitoUser(['groups', 'email'])
+    @ConnectedUser()
     {
       groups,
       email,
-    }: {
-      groups: CognitoGroups[];
-      email: string;
-    },
+    }: ConnectedUserType,
   ) {
     if (groups.some((group) => LOCAL_GROUPS.includes(group))) {
       return this.autocompleteService.findCompanies(query);
