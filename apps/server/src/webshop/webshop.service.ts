@@ -21,7 +21,7 @@ import { MagentoAttrScope } from './enum/magento-attr-scope.enum';
 import { MagentoEntityTypeId } from './enum/magento-entity-type-id.enum';
 import { MagentoAttr } from './types/magento-attr';
 import { AttributeService } from '../attribute/attribute.service';
-import { MagentoAttrGroupDetailsName } from './enum/magento-attr-group-details-name.enum';
+import { MagentoAttrGroupCode, MagentoAttrGroupName } from './enum/magento-attr-group.enum';
 import { MagentoAttrSetId } from './enum/magento-attr-set-id.enum';
 import { MagentoAttrSet } from './types/magento-attr-set';
 import { ProductTypeService } from '../admin/product-type/product-type.service';
@@ -146,7 +146,7 @@ export class WebshopService {
 
   private async uploadProduct(product: ProductRelation, availableQuantity: number): Promise<AxiosResponse> {
     let magentoAttrSetId = product.product_type.magento_attr_set_id;
-    let magentoGroupDetailsId = product.product_type.magento_group_details_id;
+    let magentoGroupSpecId = product.product_type.magento_group_spec_id;
     const customAttributes: MagentoCustomeAttrs[] = [
       {
         attribute_code: 'meta_title',
@@ -172,17 +172,25 @@ export class WebshopService {
         magento_attr_set_id: magentoAttrSetId,
       });
     }
-    if (!hasValue(magentoGroupDetailsId)) {
-      magentoGroupDetailsId = await this.findGroupDetailsId(magentoAttrSetId);
+    if (!hasValue(magentoGroupSpecId)) {
+      try {
+        magentoGroupSpecId = await this.findGroupSpecId(magentoAttrSetId);
+      } catch (e) {
+        if (e.status === 404) {
+          magentoGroupSpecId = await this.createGroupSpec(magentoAttrSetId);
+        } else {
+          throw e;
+        }
+      }
       this.productTypeService.update(product.product_type.id, {
-        magento_group_details_id: magentoGroupDetailsId,
+        magento_group_spec_id: magentoGroupSpecId,
       });
     }
 
     const otherCustomAttributes = await this.getCustomAttrs({
       product,
       attributeSetId: magentoAttrSetId,
-      attributeGroupId: magentoGroupDetailsId,
+      attributeGroupId: magentoGroupSpecId,
     });
     customAttributes.push(...otherCustomAttributes);
 
@@ -259,7 +267,7 @@ export class WebshopService {
     return data;
   }
 
-  private async findGroupDetailsId(attributeSetId: string): Promise<string> {
+  private async findGroupSpecId(attributeSetId: string): Promise<string> {
     const { data } = await this.axiosRequest({
       method: 'GET',
       path: '/products/attribute-sets/groups/list',
@@ -268,7 +276,7 @@ export class WebshopService {
         'search_criteria[filter_groups][0][filters][0][value]': attributeSetId,
         'search_criteria[filter_groups][0][filters][0][condition_type]': 'eq',
         'search_criteria[filter_groups][0][filters][1][field]': 'attribute_group_name',
-        'search_criteria[filter_groups][0][filters][1][value]': MagentoAttrGroupDetailsName.PRODUCT_DETAILS,
+        'search_criteria[filter_groups][0][filters][1][value]': MagentoAttrGroupName.PRODUCT_SPECIFICATIONS,
         'search_criteria[filter_groups][0][filters][1][condition_type]': 'eq',
       },
     });
@@ -277,6 +285,27 @@ export class WebshopService {
       return data?.items?.[0].attribute_group_id;
     }
     throw new HttpException(`attribute group with id: ${attributeSetId}, not found!`, 404);
+  }
+
+  private async createGroupSpec(attributeSetId: string): Promise<string> {
+    const payload = {
+      group: {
+        attribute_group_name: MagentoAttrGroupName.PRODUCT_SPECIFICATIONS,
+        attribute_set_id: attributeSetId,
+        extension_attributes: {
+          attribute_group_code: MagentoAttrGroupCode.PRODUCT_SPECIFICATIONS,
+          sort_order: 11,
+        },
+      },
+    };
+
+    const { data } = await this.axiosRequest({
+      method: 'POST',
+      path: '/products/attribute-sets/groups',
+      payload,
+    });
+
+    return data.attribute_group_id;
   }
 
   private async getCustomAttrs({
@@ -293,6 +322,7 @@ export class WebshopService {
     for (const productAttribute of product.product_attribute_product_attribute_product_idToproduct) {
       const attributeType = productAttribute?.attribute?.type;
       const attributeValue = productAttribute?.value;
+      const attributeId = productAttribute?.attribute?.id;
       let attributeCode = productAttribute?.attribute?.magento_attr_code;
 
       if (![AttributeType.TYPE_TEXT, AttributeType.TYPE_SELECT].includes(attributeType)) {
@@ -319,6 +349,7 @@ export class WebshopService {
         await this.addAttrToAttrSet({
           attributeSetId,
           attributeGroupId,
+          attributeId,
           attributeCode,
         });
       }
@@ -443,10 +474,12 @@ export class WebshopService {
   private async addAttrToAttrSet({
     attributeSetId,
     attributeGroupId,
+    attributeId,
     attributeCode,
   }: {
     attributeSetId: string,
     attributeGroupId: string,
+    attributeId: number,
     attributeCode: string
   }) {
     const { data } = await this.axiosRequest({
@@ -456,7 +489,7 @@ export class WebshopService {
         attributeSetId,
         attributeGroupId,
         attributeCode,
-        sortOrder: 120,
+        sortOrder: attributeId,
       },
     });
 
