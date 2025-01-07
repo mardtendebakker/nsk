@@ -27,7 +27,7 @@ export class PrismaProductTypeCreateInputDto implements Prisma.product_typeCreat
   @IsOptional()
   @IsString()
   @Type(() => String)
-    magento_group_details_id?: string;
+    magento_group_spec_id?: string;
 
   @ApiPropertyOptional()
   @IsOptional()
