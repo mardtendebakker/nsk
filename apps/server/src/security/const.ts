@@ -1,0 +1,1 @@
+export const SECURITY_SYSTEM = 'SECURITY_SYSTEM';

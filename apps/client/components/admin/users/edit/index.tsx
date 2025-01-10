@@ -2,42 +2,31 @@ import { useEffect, useState } from 'react';
 import { Autocomplete, TextField } from '@mui/material';
 import useTranslation from '../../../../hooks/useTranslation';
 import ConfirmationDialog from '../../../confirmationDialog';
-import { ADMIN_USERS_GROUPS } from '../../../../utils/axios';
+import { USERS_PATH } from '../../../../utils/axios';
 import useAxios from '../../../../hooks/useAxios';
-import { Group } from '../../../../utils/axios/models/user';
+import { Groups, UserListItem } from '../../../../utils/axios/models/user';
 
-export default function Edit({ username, onClose, onConfirm }: { username: string, onClose: () => void, onConfirm: () => void }) {
+export default function Edit({ user, onClose, onConfirm }: { user: UserListItem, onClose: () => void, onConfirm: () => void }) {
   const { trans } = useTranslation();
-  const { call, data = [], performing } = useAxios<undefined | Group[]>('get', ADMIN_USERS_GROUPS.replace(':username', username), { withProgressBar: true });
-  const { call: callPut, performing: performingPut } = useAxios('put', ADMIN_USERS_GROUPS.replace(':username', username), { withProgressBar: true, showSuccessMessage: true });
+  const { call, performing } = useAxios('patch', USERS_PATH.replace(':id', user.id.toString()), { withProgressBar: true, showSuccessMessage: true });
   const [selectedOptions, setSelectedOptions] = useState<{ id: string, label: string }[]>([]);
 
   useEffect(() => {
-    call().catch(() => {});
+    setSelectedOptions(
+      user.groups.map((group: string) => ({ id: group, label: group })),
+    );
   }, []);
 
-  useEffect(() => {
-    if (data.length > 0) {
-      setSelectedOptions(
-        data.filter(({ assign }) => assign).map(({ group }) => ({ id: group, label: group })),
-      );
-    }
-  }, [data]);
-
-  const options = data.map(({ group }) => ({ id: group, label: group }));
+  const options = Groups.map((group) => ({ id: group, label: group }));
 
   const handleSubmit = () => {
-    callPut({
-      body: data.map(({ group }) => ({ group, assign: !!selectedOptions.find((element) => element.id == group) })),
-    }).then(onConfirm);
+    call({ body: { groups: selectedOptions.map(({ id }) => id) } }).then(onConfirm);
   };
-
-  const disabled = performing || performingPut || data.length == 0;
 
   return (
     <ConfirmationDialog
-      open={!!username}
-      disabled={disabled}
+      open
+      disabled={performing}
       title={<>{trans('editUser')}</>}
       onClose={onClose}
       onConfirm={handleSubmit}
@@ -46,7 +35,7 @@ export default function Edit({ username, onClose, onConfirm }: { username: strin
           <Autocomplete
             multiple
             options={options}
-            disabled={disabled}
+            disabled={performing}
             size="small"
             sx={{ width: '20rem', mt: '.5rem' }}
             onChange={(_, selected) => {

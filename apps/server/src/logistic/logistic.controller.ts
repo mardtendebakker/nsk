@@ -1,4 +1,3 @@
-import { Authorization } from '@nestjs-cognito/auth';
 import {
   Controller, Get, Param, Query,
 } from '@nestjs/common';
@@ -6,7 +5,8 @@ import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LogisticService } from './logistic.service';
 import { FindLogisticResponeDto, FindLogisticsResponeDto } from './dto/find-logistic-response.dto';
 import { FindManyDto } from './dto/find-many.dto';
-import { LOGISTICS_GROUPS } from '../common/types/cognito-groups.enum';
+import { LOGISTICS_GROUPS } from '../user/model/group.enum';
+import { Authorization } from '../security/decorator/authorization.decorator';
 
 @ApiBearerAuth()
 @Authorization(LOGISTICS_GROUPS)

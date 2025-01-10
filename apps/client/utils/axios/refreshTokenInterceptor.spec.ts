@@ -1,6 +1,5 @@
 import { AxiosError, CanceledError } from 'axios';
 import refreshTokenInterceptor from './refreshTokenInterceptor';
-import buildUserFromResponse from './buildUserFromResponse';
 import securityStore from '../../stores/security';
 
 const config = { url: 'resources', headers: {} };
@@ -10,8 +9,6 @@ const user = {
   refreshToken: 'refresh_token',
   accessToken: 'access_token',
 };
-
-jest.mock('./buildUserFromResponse', () => jest.fn(() => user));
 
 function mockedClient() {}
 mockedClient.post = jest.fn();
@@ -74,7 +71,6 @@ describe('refreshTokenInterceptor', () => {
       { emailOrUsername: user.username, token: user.refreshToken },
     );
 
-    expect(buildUserFromResponse).toHaveReturnedWith(user);
     expect(securityStore.emit).toHaveBeenCalledWith('SIGN_IN_REQUEST_SUCCEEDED', user);
   });
   it('sends a new request with the refreshed token and resolves the promise', async () => {
@@ -88,7 +84,6 @@ describe('refreshTokenInterceptor', () => {
       '/auth/refresh',
       { emailOrUsername: user.username, token: user.refreshToken },
     );
-    expect(buildUserFromResponse).toHaveReturnedWith(user);
     expect(securityStore.emit).toHaveBeenCalledWith('SIGN_IN_REQUEST_SUCCEEDED', user);
   });
   it('logs the user out if token refresh fails', async () => {

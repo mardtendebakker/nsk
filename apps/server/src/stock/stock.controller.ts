@@ -1,4 +1,3 @@
-import { Authorization, AuthorizationGuard, CognitoUser } from '@nestjs-cognito/auth';
 import {
   Body,
   Delete,
@@ -29,17 +28,15 @@ import { UpdateManyProductDto } from './dto/update-many-product.dto';
 import { FindManyDto } from './dto/find-many.dto';
 import { CreateBodyStockDto } from './dto/create-body-stock.dto';
 import { BulkPrintDTO } from '../print/dto/bulk-print.dto';
-import {
-  ALL_MAIN_GROUPS,
-  CognitoGroups,
-  LOCAL_GROUPS,
-  MANAGER_GROUPS,
-  PARTNERS_GROUPS,
-  SUPER_ADMIN_GROUPS,
-} from '../common/types/cognito-groups.enum';
 import { StockBlancco } from './stock.blancco';
 import { requiredModule } from '../common/guard/required-modules.guard';
 import { UploadProductDto } from './dto/upload-product.dto';
+import { ConnectedUser, ConnectedUserType } from '../security/decorator/connected-user.decorator';
+import {
+  ALL_MAIN_GROUPS, LOCAL_GROUPS, MANAGER_GROUPS, PARTNERS_GROUPS, SUPER_ADMIN_GROUPS,
+} from '../user/model/group.enum';
+import { Authorization } from '../security/decorator/authorization.decorator';
+import { SecurityService } from '../security/service/security.service';
 
 @ApiBearerAuth()
 @Authorization(ALL_MAIN_GROUPS)
@@ -47,20 +44,18 @@ export class StockController {
   constructor(
     protected readonly stockService: StockService,
     protected readonly stockBlancco: StockBlancco,
+    protected readonly securityService: SecurityService,
   ) {}
 
   @Get('')
   @ApiResponse({ type: FindProductsResponseDto })
   findAll(
   @Query() query: FindManyDto,
-    @CognitoUser(['groups', 'email'])
+    @ConnectedUser()
     {
       groups,
       email,
-    }: {
-      groups: CognitoGroups[];
-      email: string;
-    },
+    }: ConnectedUserType,
   ) {
     if (groups.some((group) => LOCAL_GROUPS.includes(group))) {
       return this.stockService.findAll(query);
@@ -71,14 +66,14 @@ export class StockController {
   }
 
   @Get(':id')
-  @UseGuards(AuthorizationGuard(LOCAL_GROUPS))
+  @Authorization(LOCAL_GROUPS)
   @ApiResponse({ type: FindOneProductResponeDto })
   findOne(@Param('id') id: number) {
     return this.stockService.findOneCustomSelect(id);
   }
 
   @Post('')
-  @UseGuards(AuthorizationGuard(LOCAL_GROUPS))
+  @Authorization(LOCAL_GROUPS)
   @UseInterceptors(AnyFilesInterceptor())
   @ApiResponse({ type: FindOneProductResponeDto })
   create(
@@ -89,7 +84,7 @@ export class StockController {
   }
 
   @Put(':id')
-  @UseGuards(AuthorizationGuard(LOCAL_GROUPS))
+  @Authorization(LOCAL_GROUPS)
   @UseInterceptors(AnyFilesInterceptor())
   @ApiResponse({ type: FindOneProductResponeDto })
   updateOne(
@@ -101,21 +96,21 @@ export class StockController {
   }
 
   @Patch('')
-  @UseGuards(AuthorizationGuard(MANAGER_GROUPS))
+  @Authorization(MANAGER_GROUPS)
   @ApiResponse({ type: UpdateManyProductResponseDto })
   updateMany(@Body() updateManyProductDto: UpdateManyProductDto) {
     return this.stockService.updateMany(updateManyProductDto);
   }
 
   @Patch('archive/all-sold-out')
-  @UseGuards(AuthorizationGuard(SUPER_ADMIN_GROUPS))
+  @Authorization(SUPER_ADMIN_GROUPS)
   @ApiResponse({ type: UpdateManyProductResponseDto })
   archiveAllSoldOut() {
     return this.stockService.archiveAllSoldOut();
   }
 
   @Delete(':id')
-  @UseGuards(AuthorizationGuard(MANAGER_GROUPS))
+  @Authorization(MANAGER_GROUPS)
   deleteOne(@Param('id') id: number) {
     return this.stockService.deleteOne(id);
   }
@@ -205,24 +200,16 @@ export class StockController {
   async printLabels(
   @Query() bulkPrintDTO: BulkPrintDTO,
     @Res({ passthrough: true }) res: Response,
-    @CognitoUser(['gender', 'given_name', 'family_name'])
-    {
-      gender,
-      given_name,
-      family_name,
-    }: {
-      gender: string;
-      given_name: string;
-      family_name: string;
-    },
+    @ConnectedUser() { username }: ConnectedUserType,
   ) {
     const { ids } = bulkPrintDTO;
+    const user = await this.securityService.findOneByUsername(username);
     const pdfStream = await this.stockService.printLabels({
       ids,
       user: {
-        gender,
-        given_name,
-        family_name,
+        gender: user.gender,
+        given_name: user.firstName,
+        family_name: user.lastName,
       },
     });
     res.set({
@@ -233,7 +220,7 @@ export class StockController {
   }
 
   @Patch('blancco/:orderId')
-  @UseGuards(AuthorizationGuard(LOCAL_GROUPS))
+  @Authorization(LOCAL_GROUPS)
   @UseGuards(requiredModule('blancco'))
   async importFromBlancco(@Param('orderId') orderId: number) {
     const count = await this.stockBlancco.importFromBlancco(orderId);

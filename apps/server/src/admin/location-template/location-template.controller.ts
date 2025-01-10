@@ -1,4 +1,3 @@
-import { Authorization } from '@nestjs-cognito/auth';
 import {
   Body, Controller, Delete, Get, Param, Post, Put, Query,
 } from '@nestjs/common';
@@ -9,7 +8,8 @@ import { FindManyDto } from './dto/find-many.dto';
 import { LocationTemplateEntity } from './entities/location-template.entity';
 import { CreateLocationTemplateDto } from './dto/create-location-template.dto';
 import { UpdateLocationTemplateDto } from './dto/update-location-template.dto';
-import { MANAGER_GROUPS } from '../../common/types/cognito-groups.enum';
+import { MANAGER_GROUPS } from '../../user/model/group.enum';
+import { Authorization } from '../../security/decorator/authorization.decorator';
 
 @ApiBearerAuth()
 @Authorization(MANAGER_GROUPS)

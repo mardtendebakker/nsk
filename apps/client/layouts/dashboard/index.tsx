@@ -23,7 +23,6 @@ export default function DashboardLayout({ children }: { children: JSX.Element | 
       router.push(ACCOUNT_VERIFICATION);
     } else {
       const requiredGroups: undefined | Group[] = getRouteGroups(router.pathname);
-
       if (requiredGroups && !can({ user, requiredGroups })) {
         router.push(getDefaultPath(user));
       } else {

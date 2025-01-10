@@ -11,6 +11,7 @@ import { LocationLabelModule } from '../location-label/location-label.module';
 import { BlanccoModule } from '../blancco/blancco.module';
 import { ProductBlancco } from './product.blancco';
 import { PrintModule } from '../print/print.module';
+import { SecurityModule } from '../security/security.module';
 
 @Global()
 @Module({
@@ -36,6 +37,7 @@ import { PrintModule } from '../print/print.module';
     BlanccoModule,
     PrintModule,
     HttpModule,
+    SecurityModule,
   ],
   exports: [ProductService],
 })

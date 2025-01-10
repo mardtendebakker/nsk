@@ -1,6 +1,7 @@
 import { Group } from './group';
 
 export type ModuleName = 'blancco' | 'customer_contact_action' | 'logistics' | 'attributes' | 'tasks' | 'product_statuses' | 'order_statuses' | 'tracking' | 'dhl_tracking';
+export type SecuritySystem = 'COGNITO' | 'JWT';
 
 export interface Module {
   name: ModuleName;
@@ -17,5 +18,6 @@ export interface User {
   accessToken?: string,
   refreshToken?: string,
   emailVerified: boolean,
-  modules: Module[]
+  modules: Module[],
+  securitySystem: SecuritySystem
 }
