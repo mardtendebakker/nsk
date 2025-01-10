@@ -38,6 +38,7 @@ import { AttributeGetPayload } from '../attribute/types/attribute-get-payload';
 import { UpdateManyProductResponseDto } from './dto/update-many-product-response.dto';
 import { IUploadColumn } from './types/upload-column';
 import { UploadProductDto } from './dto/upload-product.dto';
+import { isWithin64BitRange } from '../common/util/number-utils';
 
 export class StockService {
   constructor(
@@ -122,6 +123,7 @@ export class StockService {
       }),
       ...(search && {
         OR: [
+          { ...((Number(search) && isWithin64BitRange(search) && { id: Number(search) })) },
           { name: { contains: search } },
           { sku: { contains: search } },
           { description: { contains: search } },
@@ -542,6 +544,8 @@ export class StockService {
       id: true,
       name: true,
       magento_category_id: true,
+      magento_attr_set_id: true,
+      magento_group_spec_id: true,
       product_type_task: {
         select: {
           task: true,
@@ -615,6 +619,8 @@ export class StockService {
     };
 
     const attributeSelect: Prisma.attributeSelect = {
+      id: true,
+      magento_attr_code: true,
       name: true,
       price: true,
       type: true,

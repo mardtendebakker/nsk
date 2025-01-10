@@ -5,6 +5,7 @@ import { useState } from 'react';
 import useTranslation from '../../hooks/useTranslation';
 import {
   ADMIN_USERS, ADMIN_SETTINGS, ADMIN_SETTINGS_LOCATIONS, ADMIN_MODULES,
+  ADMIN_THEME,
 } from '../../utils/routes';
 import Create from './users/create';
 import useResponsive from '../../hooks/useResponsive';
@@ -32,6 +33,11 @@ export default function Header() {
       active: router.pathname.includes(ADMIN_MODULES),
       text: trans('manageModules'),
       href: ADMIN_MODULES,
+    },
+    {
+      active: router.pathname.includes(ADMIN_THEME),
+      text: trans('manageTheme'),
+      href: ADMIN_THEME,
     },
   ];
 

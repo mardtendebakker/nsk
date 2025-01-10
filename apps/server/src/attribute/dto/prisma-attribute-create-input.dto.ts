@@ -16,6 +16,11 @@ export class PrismaAttributeCreateInputDto implements Prisma.attributeCreateInpu
   @ValidateIf((_, value) => value !== undefined)
     attr_code: string;
 
+  @ApiProperty()
+  @IsString()
+  @ValidateIf((_, value) => value !== undefined)
+    magento_attr_code: string;
+
   @ApiPropertyOptional()
   @IsNumber()
   @Type(() => Number)

@@ -54,9 +54,9 @@ export default function Action({
         label={`${trans('selectAll')} ${checkedProductsCount > 0 ? `(${checkedProductsCount} ${trans('selected')})` : ''}`}
       />
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        {checkedProductsCount > 0 && type == 'product'
+        {checkedProductsCount > 0 && ['product', 'webshop'].includes(type)
         && (
-          <Can requiredGroups={['manager']}>
+          <Can requiredGroups={['store_publisher', 'admin', 'manager']}>
             <Button size="small" onClick={onPublishToStore} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
               <AddBusiness sx={{ mr: '.1rem' }} />
               {trans('publishToStore')}

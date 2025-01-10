@@ -1,7 +1,6 @@
 import {
   Box, AppBar, Toolbar, List, Drawer, IconButton, Tooltip,
 } from '@mui/material';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Menu from '@mui/icons-material/Menu';
@@ -14,15 +13,14 @@ import {
   ORDERS_SALES,
   STOCKS_PRODUCTS,
   STOCKS_REPAIR_SERVICES,
-  // MY_TASKS,
   LOGISTICS_DELIVERY,
   LOGISTICS_PICKUP,
   CONTACTS,
-  // BULK_EMAIL,
   ORDERS_REPAIRS,
   STOCKS_ARCHIVED,
   getRouteGroups,
   COMPANIES,
+  STOCKS_WEBSHOP,
 } from '../../../utils/routes';
 import useTranslation from '../../../hooks/useTranslation';
 import useResponsive from '../../../hooks/useResponsive';
@@ -31,6 +29,7 @@ import MenuItemText from '../../../components/menuTextItem';
 import Can from '../../../components/can';
 import useSecurity from '../../../hooks/useSecurity';
 import { MenuItemDescription } from '../../../components/navItem';
+import useTheme from '../../../hooks/useTheme';
 
 function MenuItem(
   {
@@ -75,6 +74,7 @@ export default function Header() {
   const [open, setOpen] = useState(false);
   const isDesktop = useResponsive('up', 'md');
   const { hasModule } = useSecurity();
+  const { state: { theme: { logo } } } = useTheme();
 
   const MENU_LIST: MenuItemDescription[] = [
     {
@@ -102,6 +102,11 @@ export default function Header() {
           title: trans('archived'),
           path: STOCKS_ARCHIVED,
           active: router.pathname.startsWith(STOCKS_ARCHIVED),
+        },
+        {
+          title: trans('webshop'),
+          path: STOCKS_WEBSHOP,
+          active: router.pathname.startsWith(STOCKS_WEBSHOP),
         },
       ],
     },
@@ -139,11 +144,6 @@ export default function Header() {
       path: COMPANIES,
       active: router.pathname.startsWith(COMPANIES),
     },
-    /* {
-      title: trans('bulkEmail'),
-      path: BULK_EMAIL,
-      active: router.pathname.startsWith(BULK_EMAIL),
-    }, */
     {
       title: trans('logistics'),
       path: LOGISTICS_PICKUP,
@@ -191,7 +191,8 @@ export default function Header() {
         )}
         {isDesktop && (
           <>
-            <Image src="/assets/logo.jpg" alt="logo" width={50} height={9} />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={logo || '/assets/logo.jpg'} alt="logo" width={50} height={9} />
             <List sx={{ p: 1, display: 'flex' }}>
               {MENU_LIST.map((item) => (
                 <MenuItem key={item.path} item={item} />
@@ -206,12 +207,6 @@ export default function Header() {
             alignItems: 'center',
           }}
         >
-          {/* <MenuItem item={{
-            title: trans('myTasks'),
-            path: MY_TASKS,
-            active: router.pathname === MY_TASKS,
-          }}
-          /> */}
           <Box sx={{ mr: '2rem' }} />
           <LanguagePopover />
           <Box sx={(theme) => ({

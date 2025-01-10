@@ -1,4 +1,6 @@
-import { BadRequestException, Injectable, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
+import {
+  BadRequestException, Injectable, UnauthorizedException, UnprocessableEntityException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
   AuthenticationDetails,
@@ -19,6 +21,7 @@ import { AdminUserService } from '../../admin/user/user.service';
 @Injectable()
 export class CognitoService {
   private userPool: CognitoUserPool;
+
   constructor(
     private readonly congigService: ConfigService,
     private readonly adminUserService: AdminUserService,
@@ -44,37 +47,37 @@ export class CognitoService {
       Username: username,
       Password: password,
     });
-    
+
     const userData = {
       Username: username,
       Pool: this.userPool,
     };
 
     const newUser = new CognitoUser(userData);
-    
+
     return new Promise((resolve, reject) => {
-      return newUser.authenticateUser(authenticationDetails, {
-        onSuccess: result => {
+      newUser.authenticateUser(authenticationDetails, {
+        onSuccess: (result) => {
           resolve(result);
         },
-        onFailure: err => {
+        onFailure: (err) => {
           reject(new UnauthorizedException(err.message));
         },
         newPasswordRequired: async () => {
           await this.adminUserService.setUserPassword({
-            username: username,
-            password: password,
-            permanent: true
+            username,
+            password,
+            permanent: true,
           });
           await this.adminUserService.verifyEmail({
-            username: username,
+            username,
           });
           // reAuthenticateUser
           return newUser.authenticateUser(authenticationDetails, {
-            onSuccess: result => {
+            onSuccess: (result) => {
               resolve(result);
             },
-            onFailure: err => {
+            onFailure: (err) => {
               reject(new UnauthorizedException(err.message));
             },
           });
@@ -85,8 +88,12 @@ export class CognitoService {
 
   signUp(registerRequest: UserRegisterRequestDto) {
     const { username, email, password } = registerRequest;
+    if (!email.toLowerCase().endsWith('@copiatek.nl')) {
+      throw new UnprocessableEntityException('to register a user, please contact copiatek.nl');
+    }
+
     return new Promise((resolve, reject) => {
-      return this.userPool.signUp(
+      this.userPool.signUp(
         username,
         password,
         [new CognitoUserAttribute({ Name: 'email', Value: email })],
@@ -104,19 +111,16 @@ export class CognitoService {
 
   async confirmRegistration(confirmationRegistrationRequest: ConfirmRegistrationRequestDto) {
     const { email, code } = confirmationRegistrationRequest;
-    if (!email.toLowerCase().endsWith("@copiatek.nl")) {
-      throw new UnprocessableEntityException('to activate your user, please contact copiatek.nl');
-    }
 
     const username = await this.adminUserService.findUsernameByEmail({ email });
     const userData = {
       Username: username,
       Pool: this.userPool,
     };
-    
+
     const user = new CognitoUser(userData);
     return new Promise((resolve, reject) => {
-      return user.confirmRegistration(
+      user.confirmRegistration(
         code,
         true,
         (err, result) => {
@@ -125,7 +129,7 @@ export class CognitoService {
           } else {
             resolve(result);
           }
-        }
+        },
       );
     });
   }
@@ -137,18 +141,18 @@ export class CognitoService {
       Username: emailOrUsername,
       Pool: this.userPool,
     };
-    
+
     const user = new CognitoUser(userData);
 
     return new Promise((resolve, reject) => {
-      return user.resendConfirmationCode(
+      user.resendConfirmationCode(
         (err, result) => {
           if (err) {
             reject(new BadRequestException(err.message));
           } else {
             resolve(result);
           }
-        }
+        },
       );
     });
   }
@@ -159,11 +163,11 @@ export class CognitoService {
       Username: emailOrUsername,
       Pool: this.userPool,
     };
-    
+
     const user = new CognitoUser(userData);
-    
+
     return new Promise((resolve, reject) => {
-      return user.refreshSession(
+      user.refreshSession(
         new CognitoRefreshToken({ RefreshToken: token }),
         (err, result) => {
           if (err) {
@@ -171,7 +175,7 @@ export class CognitoService {
           } else {
             resolve(result);
           }
-        }
+        },
       );
     });
   }
@@ -183,15 +187,15 @@ export class CognitoService {
       Username: emailOrUsername,
       Pool: this.userPool,
     };
-    
+
     const user = new CognitoUser(userData);
 
     return new Promise((resolve, reject) => {
-      return user.forgotPassword({
-        onSuccess: result => {
+      user.forgotPassword({
+        onSuccess: (result) => {
           resolve(result);
         },
-        onFailure: err => {
+        onFailure: (err) => {
           reject(new BadRequestException(err.message));
         },
       });
@@ -205,15 +209,15 @@ export class CognitoService {
       Username: emailOrUsername,
       Pool: this.userPool,
     };
-    
+
     const user = new CognitoUser(userData);
 
     return new Promise((resolve, reject) => {
-      return user.confirmPassword(verificationCode, newPassword, {
-        onSuccess: result => {
+      user.confirmPassword(verificationCode, newPassword, {
+        onSuccess: (result) => {
           resolve(result);
         },
-        onFailure: err => {
+        onFailure: (err) => {
           reject(new BadRequestException(err.message));
         },
       });

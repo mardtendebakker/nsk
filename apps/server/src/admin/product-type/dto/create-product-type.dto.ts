@@ -12,12 +12,12 @@ export class CreateProductTypeDto extends OmitType(PrismaProductTypeCreateInputD
   @ApiPropertyOptional()
   @IsOptional()
   @IsNumber({}, { each: true })
-  @Transform(({ value }) => (Array.isArray(value) ? value.map((id: string) => parseInt(id)) : parseInt(value)))
+  @Transform(({ value }) => (Array.isArray(value) ? value.map((id: string) => parseInt(id, 10)) : parseInt(value, 10)))
     attributes: number[];
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsNumber({}, { each: true })
-  @Transform(({ value }) => (Array.isArray(value) ? value.map((id: string) => parseInt(id)) : parseInt(value)))
+  @Transform(({ value }) => (Array.isArray(value) ? value.map((id: string) => parseInt(id, 10)) : parseInt(value, 10)))
     tasks: number[];
 }

@@ -1,9 +1,13 @@
-import BaseTableCell, { TableCellProps } from '@mui/material/TableCell';
+import BaseTableCell, { TableCellProps as BaseTableCellProps } from '@mui/material/TableCell';
 
-export default function TableCell({ children, ...rest }: TableCellProps) {
+interface TableCellProps extends BaseTableCellProps {
+  withPlaceHolder?: boolean
+}
+
+export default function TableCell({ children, withPlaceHolder = true, ...rest }: TableCellProps) {
   return (
     <BaseTableCell {...rest}>
-      {children || '--'}
+      {withPlaceHolder && (children || '--')}
     </BaseTableCell>
   );
 }

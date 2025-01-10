@@ -5,6 +5,7 @@ export enum CognitoGroups {
   LOGISTICS = 'logistics',
   LOCAL = 'local',
   PARTNER_SALE_UPLOADER = 'partner_sale_uploader',
+  STORE_PUBLISHER = 'store_publisher',
   PARTNER = 'partner',
 }
 
@@ -27,8 +28,14 @@ export const LOGISTICS_GROUPS = [
   CognitoGroups.LOGISTICS,
 ];
 
+export const STORE_PUBLISHER_GROUPS = [
+  ...MANAGER_GROUPS,
+  CognitoGroups.STORE_PUBLISHER,
+];
+
 export const LOCAL_GROUPS = [
   ...LOGISTICS_GROUPS,
+  CognitoGroups.STORE_PUBLISHER,
   CognitoGroups.LOCAL,
 ];
 

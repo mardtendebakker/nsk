@@ -301,6 +301,19 @@ const translation = {
       placeholder: 'Procurar pelo nome',
     },
   },
+  themeForm: {
+    favicon: {
+      placeholder: 'Escolha seu favicon',
+      caption: 'O arquivo não deve exceder 4 KB',
+    },
+    logo: {
+      placeholder: 'Escolha seu logotipo',
+      caption: 'O arquivo não deve exceder 80 KB',
+    },
+  },
+  manageTheme: 'Gerir o tema',
+  magentoAttrCode: 'Código de atributo do Magento',
+  magentoAttrSetId: 'ID do conjunto de atributos do Magento',
   listPrice: 'Preço do catálago',
   editPurchase: 'Alterar Ordem de Compra',
   totalPerProductType: 'Total por tipo de produto',

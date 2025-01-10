@@ -18,6 +18,7 @@ export class AttributeService {
       price: true,
       type: true,
       is_public: true,
+      magento_attr_code: true,
       product_type_attribute: {
         select: {
           product_type_id: true,
@@ -81,17 +82,19 @@ export class AttributeService {
       ...rest
     } = updateAttributeDto;
 
-    const productTypeCreate: Prisma.product_type_attributeUncheckedCreateWithoutAttributeInput[] = productTypes.map((productTypeId) => ({ product_type_id: productTypeId }));
-
-    await this.repository.deleteAllProductTypes(id);
-    await this.repository.deleteAllOptions(id);
+    if (productTypes) await this.repository.deleteAllProductTypes(id);
+    if (options) await this.repository.deleteAllOptions(id);
 
     return this.repository.update({
       where: { id },
       data: {
         ...rest,
-        product_type_attribute: { create: productTypeCreate },
-        attribute_option: { create: options },
+        ...(productTypes && {
+          product_type_attribute: {
+            create: productTypes.map((productTypeId) => ({ product_type_id: productTypeId })),
+          },
+        }),
+        ...(options && { attribute_option: { create: options } }),
       },
     });
   }

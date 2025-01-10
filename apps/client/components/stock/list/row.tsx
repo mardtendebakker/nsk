@@ -62,15 +62,20 @@ export default function Row(
         <TableCell>
           <Checkbox
             checked={Boolean(checkedProductIds.find((id) => id === product.id))}
-            sx={{ mr: '1.5rem' }}
+            sx={{ p: '0' }}
             onChange={(_, checked) => onCheck({ id: product.id, checked })}
             disabled={disabled || disableSelection(product)}
           />
+        </TableCell>
+        <TableCell>
           {onEdit ? (
             <Box sx={{ textDecoration: 'underline', cursor: 'pointer', display: 'inline' }} onClick={() => onEdit(product.id)}>
-              {product.sku}
+              {product.id}
             </Box>
-          ) : product.sku}
+          ) : product.id}
+        </TableCell>
+        <TableCell>
+          {product.sku}
         </TableCell>
         <TableCell>
           {product.name}

@@ -54,6 +54,17 @@ export default function Form({
         onChange={(e) => setValue({ field: 'magento_category_id', value: e.target.value })}
         disabled={disabled}
       />
+      <TextField
+        sx={{ mb: '1rem' }}
+        fullWidth
+        label={trans('productTypeForm.magentoAttrSetId.label')}
+        placeholder={trans('productTypeForm.magentoAttrSetId.placeholder')}
+        value={formRepresentation.magento_attr_set_id.value || ''}
+        helperText={formRepresentation.magento_attr_set_id.error}
+        error={!!formRepresentation.magento_attr_set_id.error}
+        onChange={(e) => setValue({ field: 'magento_attr_set_id', value: e.target.value })}
+        disabled={disabled}
+      />
       <DataSourcePicker
         multiple
         sx={{ mb: '1rem' }}

@@ -15,14 +15,17 @@ export class CompanyService {
 
   async findAll(query: FindManyDto, email?: string) {
     const {
-      search, is_customer, is_partner, is_supplier,
+      search,
+      is_customer: isCustomer,
+      is_partner: isPartner,
+      is_supplier: isSupplier,
     } = query;
     const where: Prisma.companyWhereInput = {
       ...this.getPartnerWhereInput(email),
       name: { contains: search || '' },
-      is_customer,
-      is_partner,
-      is_supplier,
+      is_customer: isCustomer,
+      is_partner: isPartner,
+      is_supplier: isSupplier,
     };
 
     const { count, data } = await this.repository.findAll({

@@ -306,6 +306,19 @@ const translation = {
       placeholder: 'Zoek op naam',
     },
   },
+  themeForm: {
+    favicon: {
+      placeholder: 'Kies uw favicon',
+      caption: 'Uw bestand mag niet groter zijn dan 4 KB',
+    },
+    logo: {
+      placeholder: 'Kies uw logo',
+      caption: 'Uw bestand mag niet groter zijn dan 80 KB',
+    },
+  },
+  magentoAttrCode: 'Magento-attribuutcode',
+  magentoAttrSetId: 'Magento-attributenset-ID',
+  manageTheme: 'Thema beheren',
   listPrice: 'Catalogusprijs',
   editPurchase: 'Inkoop wijzigen',
   totalPerProductType: 'Totaal per productsoort',

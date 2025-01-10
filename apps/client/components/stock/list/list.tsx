@@ -61,6 +61,10 @@ export default function List({
     >
       <TableHead>
         <TableRow>
+          <TableCell withPlaceHolder={false} width="5px" />
+          <TableCell>
+            {trans('Atr.nr')}
+          </TableCell>
           <TableCell>
             {trans('serialNumber')}
           </TableCell>
