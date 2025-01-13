@@ -19,5 +19,5 @@ export interface User {
   refreshToken?: string,
   emailVerified: boolean,
   modules: Module[],
-  securitySystem: SecuritySystem
+  securitySystem?: SecuritySystem
 }
