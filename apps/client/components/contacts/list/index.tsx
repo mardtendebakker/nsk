@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, Card } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import List from './list';
@@ -149,7 +149,7 @@ export default function ListContainer({ company, editContactRouteBuilder }: { co
   const disabled = (): boolean => performing || performingDelete;
 
   return (
-    <>
+    <Card sx={{ overflowX: 'auto', p: '1.5rem' }}>
       <Filter
         onReset={handleReset}
         disabled={disabled()}
@@ -177,6 +177,6 @@ export default function ListContainer({ company, editContactRouteBuilder }: { co
         rowsPerPage={rowsPerPage}
         editContactRouteBuilder={editContactRouteBuilder}
       />
-    </>
+    </Card>
   );
 }

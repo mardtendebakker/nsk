@@ -43,6 +43,16 @@ exports[`Header component matches snapshot 1`] = `
           manageModules
         </h5>
       </a>
+      <a
+        href="/admin/theme"
+        style="text-decoration: none;"
+      >
+        <h5
+          class="MuiTypography-root MuiTypography-h5 css-1k3vp8i-MuiTypography-root"
+        >
+          manageTheme
+        </h5>
+      </a>
     </div>
     <button
       class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeSmall MuiButton-containedSizeSmall MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeSmall MuiButton-containedSizeSmall css-11qr2p8-MuiButtonBase-root-MuiButton-root"

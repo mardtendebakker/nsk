@@ -8,6 +8,7 @@ import { AUTOCOMPLETE_PRODUCT_TYPES_PATH } from '../../../../../utils/axios';
 import DataSourcePicker from '../../../../memoizedInput/dataSourcePicker';
 import Options from './options';
 import Checkbox from '../../../../checkbox';
+import useResponsive from '../../../../../hooks/useResponsive';
 
 export default function Form({
   setValue,
@@ -21,16 +22,18 @@ export default function Form({
   disabled?: boolean
 }) {
   const { trans } = useTranslation();
+  const isDesktop = useResponsive('up', 'md');
 
   return (
-    <BorderedBox sx={{ width: '80rem', p: '1rem' }}>
+    <BorderedBox sx={{ width: isDesktop ? '40rem' : undefined, p: '1rem' }}>
       <Grid
         container
         spacing={1}
         sx={{ flexDirection: 'column' }}
       >
-        <Grid sx={{ flex: 1, display: 'flex' }} item>
+        <Grid sx={{ flex: 1, display: 'flex', flexDirection: 'column' }} item>
           <TextField
+            fullWidth
             sx={{ mr: '1rem', flex: 0.25 }}
             label={trans('attributeForm.code.label')}
             placeholder={trans('attributeForm.code.placeholder')}
@@ -41,7 +44,10 @@ export default function Form({
             disabled={disabled}
           />
           <TextField
-            sx={{ mr: '1rem', flex: 0.2, flexGrow: 0.65 }}
+            fullWidth
+            sx={{
+              mr: '1rem', flex: 0.2, flexGrow: 0.65, mt: '.5rem',
+            }}
             label={trans('attributeForm.name.label')}
             placeholder={trans('attributeForm.name.placeholder')}
             value={formRepresentation.name.value || ''}
@@ -51,7 +57,10 @@ export default function Form({
             disabled={disabled}
           />
           <TextField
-            sx={{ mr: '1rem', flex: 0.2, flexGrow: 0.65 }}
+            fullWidth
+            sx={{
+              mr: '1rem', flex: 0.2, flexGrow: 0.65, mt: '.5rem',
+            }}
             label={trans('attributeForm.magentoAttrCode.label')}
             placeholder={trans('attributeForm.magentoAttrCode.placeholder')}
             value={formRepresentation.magento_attr_code.value || ''}
@@ -62,7 +71,7 @@ export default function Form({
           />
           { !formRepresentation.id.value && (
           <Select
-            sx={{ flex: 0.25 }}
+            sx={{ flex: 0.25, mt: '.5rem' }}
             value={formRepresentation.type.value}
             onChange={(e) => setValue({ field: 'type', value: e.target.value })}
             options={[
@@ -81,9 +90,9 @@ export default function Form({
             label={trans('isPublic')}
           />
         </Grid>
-        <Grid sx={{ display: 'flex' }} item>
+        <Grid sx={{ display: 'flex', flexDirection: 'column' }} item>
           <DataSourcePicker
-            sx={{ flex: 0.5, flexGrow: 1 }}
+            sx={{ flex: 0.5, flexGrow: 1, mt: '.5rem' }}
             multiple
             disabled={disabled}
             path={AUTOCOMPLETE_PRODUCT_TYPES_PATH}
@@ -98,7 +107,8 @@ export default function Form({
           {(formRepresentation.type.value === 2 || formRepresentation.type.value === 0)
           && (
           <TextField
-            sx={{ flex: 0.5, flexGrow: 1, ml: '1rem' }}
+            fullWidth
+            sx={{ flex: 0.5, flexGrow: 1, mt: '.5rem' }}
             type="number"
             value={formRepresentation.price.value || ''}
             placeholder="0.00"
@@ -111,7 +121,7 @@ export default function Form({
           {formRepresentation.type.value === 3
           && (
           <DataSourcePicker
-            sx={{ flex: 0.5, flexGrow: 1, ml: '1rem' }}
+            sx={{ flex: 0.5, flexGrow: 1, mt: '.5rem' }}
             disabled={disabled}
             path={AUTOCOMPLETE_PRODUCT_TYPES_PATH}
             label={trans('attributeForm.productType.label')}

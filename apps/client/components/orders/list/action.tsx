@@ -8,6 +8,7 @@ import useTranslation from '../../../hooks/useTranslation';
 import Checkbox from '../../checkbox';
 import Can from '../../can';
 import { OrderPrint } from '../../../utils/axios/models/types';
+import useResponsive from '../../../hooks/useResponsive';
 
 export default function Action({
   disabled,
@@ -26,6 +27,7 @@ export default function Action({
 }) {
   const { trans } = useTranslation();
   const [showPrintActions, setShowPrintActions] = useState(null);
+  const isDesktop = useResponsive('up', 'md');
 
   const handlePrint = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     setShowPrintActions(event.currentTarget);
@@ -35,18 +37,23 @@ export default function Action({
     setShowPrintActions(null);
   };
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+    <Box sx={{ display: 'flex', justifyContent: 'space-between', flexDirection: isDesktop ? undefined : 'column' }}>
       <Checkbox
         disabled={disabled}
         checked={allChecked}
         onCheck={onAllCheck}
         label={`${trans('selectAll')} ${checkedOrdersCount > 0 ? `(${checkedOrdersCount} ${trans('selected')})` : ''}`}
       />
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+      <Box sx={{
+        display: 'flex',
+        alignItems: isDesktop ? 'center' : 'flex-start',
+        flexDirection: isDesktop ? undefined : 'column',
+      }}
+      >
         {checkedOrdersCount > 0
         && (
           <Can requiredGroups={['admin', 'manager', 'logistics', 'local']}>
-            <Button size="small" onClick={onChangeStatus} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
+            <Button size="small" onClick={onChangeStatus} sx={{ m: '.5rem' }} variant="outlined" color="primary" disabled={disabled}>
               <Loop sx={{ mr: '.1rem' }} />
               {trans('changeStatus')}
             </Button>
@@ -55,7 +62,7 @@ export default function Action({
         {checkedOrdersCount > 0
         && (
           <>
-            <Button size="small" onClick={handlePrint} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
+            <Button size="small" onClick={handlePrint} sx={{ m: '.5rem' }} variant="outlined" color="primary" disabled={disabled}>
               {trans('print')}
               <ChevronRight sx={{ transform: 'rotate(90deg)' }} />
             </Button>

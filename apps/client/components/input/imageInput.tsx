@@ -68,8 +68,8 @@ export default function ImageInput({
     <Box sx={{
       p: '.5rem',
       border: (theme) => `1px solid ${theme.palette.divider}`,
-      width: '100%',
-      height: '14rem',
+      width: '10rem',
+      height: '10rem',
       borderRadius: '.5rem',
       boxShadow: hovered ? 'inset 0 0 0 100rem rgba(0,0,0,.4)' : undefined,
       transition: 'all .3s',

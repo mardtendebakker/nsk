@@ -4,6 +4,7 @@ import useTranslation from '../../../../../hooks/useTranslation';
 import BorderedBox from '../../../../borderedBox';
 import TextField from '../../../../memoizedInput/textField';
 import Checkbox from '../../../../checkbox';
+import useResponsive from '../../../../../hooks/useResponsive';
 
 export default function Form({
   setValue,
@@ -15,9 +16,10 @@ export default function Form({
   disabled?: boolean
 }) {
   const { trans } = useTranslation();
+  const isDesktop = useResponsive('up', 'md');
 
   return (
-    <BorderedBox sx={{ width: '80rem', p: '1rem' }}>
+    <BorderedBox sx={{ p: '1rem' }}>
       <TextField
         sx={{ mb: '1rem' }}
         fullWidth
@@ -29,13 +31,13 @@ export default function Form({
         onChange={(e) => setValue({ field: 'name', value: e.target.value })}
         disabled={disabled}
       />
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <input
-          onChange={(e) => setValue({ field: 'color', value: e.target.value })}
-          type="color"
-          style={{ width: '10rem' }}
-          value={formRepresentation.color.value || '#ffffff'}
-        />
+      <input
+        onChange={(e) => setValue({ field: 'color', value: e.target.value })}
+        type="color"
+        style={{ width: '10rem' }}
+        value={formRepresentation.color.value || '#ffffff'}
+      />
+      <Box sx={{ display: 'flex', flexDirection: isDesktop ? undefined : 'column', mt: '.5rem' }}>
         <Checkbox
           disabled={disabled}
           onCheck={(checked) => setValue({ field: 'isStock', value: checked })}

@@ -31,7 +31,7 @@ export default function PrintActions({
 
   return (
     <>
-      <Button size="small" onClick={handlePrint} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
+      <Button size="small" onClick={handlePrint} sx={{ m: '.5rem' }} variant="outlined" color="primary" disabled={disabled}>
         {trans('print')}
         <ChevronRight sx={{ transform: 'rotate(90deg)' }} />
       </Button>

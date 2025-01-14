@@ -6,7 +6,7 @@ exports[`List matches snapshot 1`] = `
     class="MuiBox-root css-0"
   >
     <div
-      class="MuiBox-root css-1saiftj"
+      class="MuiBox-root css-rmb6pr"
     >
       <h4
         class="MuiTypography-root MuiTypography-h4 css-5lbw0b-MuiTypography-root"
@@ -14,7 +14,7 @@ exports[`List matches snapshot 1`] = `
         attributes (0)
       </h4>
       <div
-        class="MuiBox-root css-0"
+        class="MuiBox-root css-k008qs"
       >
         <div
           class="MuiFormControl-root MuiTextField-root css-iyo0lz-MuiFormControl-root-MuiTextField-root"
@@ -105,6 +105,12 @@ exports[`List matches snapshot 1`] = `
               type
             </th>
             <th
+              class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-1howxi1-MuiTableCell-root"
+              scope="col"
+            >
+              magentoAttrCode
+            </th>
+            <th
               class="MuiTableCell-root MuiTableCell-head MuiTableCell-alignRight MuiTableCell-sizeSmall css-6qfsqn-MuiTableCell-root"
               scope="col"
             >
@@ -117,7 +123,7 @@ exports[`List matches snapshot 1`] = `
         />
       </table>
       <div
-        class="MuiTablePagination-root css-39edef-MuiTablePagination-root"
+        class="MuiTablePagination-root css-1solmlx-MuiTablePagination-root"
       >
         <div
           class="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular MuiTablePagination-toolbar css-78c6dr-MuiToolbar-root-MuiTablePagination-toolbar"

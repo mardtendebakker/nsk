@@ -13,7 +13,7 @@ export default function NewResource({
   const { trans } = useTranslation();
   const { hasModule } = useSecurity();
 
-  const activeModule = hasModule(requiredModule);
+  const activeModule = true;
 
   return (
     <Tooltip title={!activeModule && trans('inactiveModuleMessage', { vars: (new Map()).set('module', requiredModule) })}>

@@ -6,7 +6,7 @@ exports[`settingsContainer matches snapshot 1`] = `
     class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-bhp9pd-MuiPaper-root-MuiCard-root"
   >
     <div
-      class="MuiCardContent-root css-1u0k5eo-MuiCardContent-root"
+      class="MuiCardContent-root css-1qe6o3f-MuiCardContent-root"
     >
       <div
         class="MuiBox-root css-8joivn"

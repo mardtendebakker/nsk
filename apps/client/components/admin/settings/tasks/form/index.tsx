@@ -17,7 +17,7 @@ export default function Form({
   const { trans } = useTranslation();
 
   return (
-    <BorderedBox sx={{ width: '80rem', p: '1rem' }}>
+    <BorderedBox sx={{ p: '1rem' }}>
       <TextField
         sx={{ mb: '1rem' }}
         fullWidth
