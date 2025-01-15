@@ -15,6 +15,7 @@ import TextField from '../../../../memoizedInput/textField';
 import { getQueryParam } from '../../../../../utils/location';
 import { Task } from '../../../../../utils/axios/models/product';
 import NewResource from '../../../../button/newResource';
+import useResponsive from '../../../../../hooks/useResponsive';
 
 export default function ListContainer() {
   const { trans } = useTranslation();
@@ -24,6 +25,7 @@ export default function ListContainer() {
   const [showForm, setShowForm] = useState<boolean>(false);
   const [editTaskId, setEditTaskId] = useState<number | undefined>();
   const [search, setSearch] = useState(getQueryParam('search', ''));
+  const isDesktop = useResponsive('up', 'md');
 
   const { data: { data = [], count = 0 } = {}, call, performing } = useAxios<undefined | { data?: Task[], count?: number }>(
     'get',
@@ -50,12 +52,15 @@ export default function ListContainer() {
 
   return (
     <Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: '1rem' }}>
+      <Box sx={{
+        display: 'flex', justifyContent: 'space-between', mb: '1rem', flexDirection: isDesktop ? undefined : 'column',
+      }}
+      >
         <Typography variant="h4">
           {trans('tasks')}
           {` (${count})`}
         </Typography>
-        <Box>
+        <Box sx={{ display: 'flex' }}>
           <TextField
             sx={{ mr: '.5rem' }}
             onChange={(e) => {

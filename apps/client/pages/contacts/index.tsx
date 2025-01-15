@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { Box, Card } from '@mui/material';
+import { Box } from '@mui/material';
 import useTranslation from '../../hooks/useTranslation';
 import DashboardLayout from '../../layouts/dashboard';
 import Header from '../../components/contacts/header';
@@ -17,11 +17,9 @@ function Contacts() {
       </Head>
       <Header />
       <Box sx={{ mt: '1.5rem' }} />
-      <Card sx={{ overflowX: 'auto', p: '1.5rem' }}>
-        <List
-          editContactRouteBuilder={(contact: ContactListItem) => CONTACTS_EDIT.replace('[id]', contact.id.toString())}
-        />
-      </Card>
+      <List
+        editContactRouteBuilder={(contact: ContactListItem) => CONTACTS_EDIT.replace('[id]', contact.id.toString())}
+      />
     </DashboardLayout>
   );
 }

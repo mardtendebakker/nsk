@@ -27,7 +27,7 @@ function FileAttribute({
 }) {
   return (
     <Box sx={{
-      display: 'flex', flexDirection: 'column', pb: '1rem', pr: '1rem', flex: '0 33%',
+      display: 'flex', flexDirection: 'column', flex: '0 30%', m: '.5rem',
     }}
     >
       <Typography
@@ -42,9 +42,7 @@ function FileAttribute({
           <ImageInput
             // eslint-disable-next-line react/no-array-index-key
             key={i}
-            sx={{
-              height: '7rem', flex: '0 31%', mr: (i + 1) % 3 !== 0 && '.5rem', mb: '.5rem',
-            }}
+            sx={{ mr: (i + 1) % 3 !== 0 && '.5rem' }}
             image={image instanceof File ? image : buildImageLink(image, afile)}
             onChange={(file: File) => onChange([...value.filter((element) => element != image), file])}
             onClear={() => onChange(value.filter((element) => element != image))}
@@ -53,9 +51,6 @@ function FileAttribute({
         ))
         }
         <ImageInput
-          sx={{
-            height: '7rem', flex: '0 31%', mr: '.5rem', mb: '.5rem',
-          }}
           image={undefined}
           onChange={(file: File) => onChange([...value, file])}
           onClear={() => {}}

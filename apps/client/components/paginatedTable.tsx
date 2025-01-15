@@ -29,7 +29,7 @@ export default function PaginatedTable({
         size="small"
         component="div"
         sx={{
-          display: 'flex', justifyContent: 'end', mt: '2rem', overflow: 'hidden',
+          display: 'flex', justifyContent: 'end', mt: '2rem', overflow: 'visible',
         }}
         count={count}
         onPageChange={(_, newPage) => {

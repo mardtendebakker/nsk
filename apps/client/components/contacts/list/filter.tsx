@@ -46,7 +46,7 @@ export default function Filter({
           flex: 1,
           display: 'flex',
           justifyContent: 'space-between',
-          flexDirection: isDesktop ? 'unset' : 'column',
+          flexDirection: isDesktop ? undefined : 'column',
         }}
         >
           <MemoizedTextField
@@ -65,7 +65,11 @@ export default function Filter({
               },
             }}
           />
-          <Box sx={{ display: 'flex' }}>
+          <Box sx={{
+            display: 'flex',
+            flexDirection: isDesktop ? undefined : 'column',
+          }}
+          >
             <Checkbox
               checked={formRepresentation.is_customer.value}
               onCheck={(checked) => setValue({ field: 'is_customer', value: checked })}

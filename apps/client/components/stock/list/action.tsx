@@ -11,6 +11,7 @@ import Checkbox from '../../checkbox';
 import Can from '../../can';
 import { ProductType } from '../type';
 import PrintActions from '../../printActions';
+import useResponsive from '../../../hooks/useResponsive';
 
 export default function Action({
   disabled,
@@ -44,20 +45,26 @@ export default function Action({
   onPublishToStore: () => void
 }) {
   const { trans } = useTranslation();
+  const isDesktop = useResponsive('up', 'md');
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+    <Box sx={{ display: 'flex', justifyContent: 'space-between', flexDirection: isDesktop ? undefined : 'column' }}>
       <Checkbox
         disabled={disabled}
         checked={allChecked}
         onCheck={onAllCheck}
         label={`${trans('selectAll')} ${checkedProductsCount > 0 ? `(${checkedProductsCount} ${trans('selected')})` : ''}`}
       />
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+      <Box sx={{
+        display: 'flex',
+        alignItems: isDesktop ? 'center' : 'flex-start',
+        flexDirection: isDesktop ? undefined : 'column',
+      }}
+      >
         {checkedProductsCount > 0 && ['product', 'webshop'].includes(type)
         && (
           <Can requiredGroups={['store_publisher', 'admin', 'manager']}>
-            <Button size="small" onClick={onPublishToStore} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
+            <Button size="small" onClick={onPublishToStore} sx={{ m: '.5rem' }} variant="outlined" color="primary" disabled={disabled}>
               <AddBusiness sx={{ mr: '.1rem' }} />
               {trans('publishToStore')}
             </Button>
@@ -65,14 +72,14 @@ export default function Action({
         )}
         {checkedProductsCount > 0 && type !== 'archived'
         && (
-        <Button size="small" onClick={onArchive} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
+        <Button size="small" onClick={onArchive} sx={{ m: '.5rem' }} variant="outlined" color="primary" disabled={disabled}>
           <Archive sx={{ mr: '.1rem' }} />
           {trans('archive')}
         </Button>
         )}
         {checkedProductsCount > 0 && type === 'archived'
         && (
-        <Button size="small" onClick={onUnarchive} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
+        <Button size="small" onClick={onUnarchive} sx={{ m: '.5rem' }} variant="outlined" color="primary" disabled={disabled}>
           <Unarchive sx={{ mr: '.1rem' }} />
           {trans('unarchive')}
         </Button>
@@ -80,7 +87,7 @@ export default function Action({
         {checkedProductsCount > 0
         && (
           <Can requiredGroups={['manager']}>
-            <Button size="small" onClick={onChangeLocation} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
+            <Button size="small" onClick={onChangeLocation} sx={{ m: '.5rem' }} variant="outlined" color="primary" disabled={disabled}>
               <EditLocation sx={{ mr: '.1rem' }} />
               {trans('changeLocation')}
             </Button>
@@ -89,7 +96,7 @@ export default function Action({
         {checkedProductsCount > 0
         && (
           <Can requiredGroups={['manager']}>
-            <Button size="small" onClick={onChangeProductType} sx={{ mr: '1rem' }} variant="outlined" color="primary" disabled={disabled}>
+            <Button size="small" onClick={onChangeProductType} sx={{ m: '.5rem' }} variant="outlined" color="primary" disabled={disabled}>
               <Category sx={{ mr: '.1rem' }} />
               {trans('changeProductType')}
             </Button>

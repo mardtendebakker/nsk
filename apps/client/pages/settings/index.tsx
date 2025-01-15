@@ -12,7 +12,7 @@ function Settings() {
       <Head>
         <title>{trans('settings')}</title>
       </Head>
-      <Box sx={{ width: 450 }}>
+      <Box sx={{ maxWidth: 450 }}>
         <PasswordForm />
       </Box>
     </DashboardLayout>
