@@ -94,19 +94,7 @@ export class CognitoService {
   }
 
   signIn(param: SignInRequestDto): Promise<SignInResponseDto> {
-    return this.authenticate(param, (result: CognitoUserSession) : SignInResponseDto => {
-      const idToken = result.getIdToken();
-
-      return {
-        username: idToken.payload['cognito:username'],
-        email: idToken.payload.email,
-        accessToken: idToken.getJwtToken(),
-        refreshToken: result.getRefreshToken().getToken(),
-        emailVerified: idToken.payload.email_verified,
-        groups: idToken.payload['cognito:groups'] || [],
-        securitySystem: SecuritySystem.COGNITO,
-      };
-    }) as Promise<SignInResponseDto>;
+    return this.authenticate(param, (result: CognitoUserSession) : SignInResponseDto => this.signInResponse(result)) as Promise<SignInResponseDto>;
   }
 
   signUp({ username, email, password }: SignUpRequestDto) {
@@ -171,7 +159,7 @@ export class CognitoService {
     });
   }
 
-  refreshToken({ emailOrUsername, token }: RefreshTokenRequestDto): Promise<{ accessToken: string }> {
+  refreshToken({ emailOrUsername, token }: RefreshTokenRequestDto): Promise<SignInResponseDto> {
     const userData = {
       Username: emailOrUsername,
       Pool: this.userPool,
@@ -186,7 +174,7 @@ export class CognitoService {
           if (err) {
             reject(new BadRequestException(err.message));
           } else {
-            resolve(result);
+            resolve(this.signInResponse(result));
           }
         },
       );
@@ -282,5 +270,19 @@ export class CognitoService {
         },
       );
     });
+  }
+
+  private signInResponse(user: CognitoUserSession): SignInResponseDto {
+    const idToken = user.getIdToken();
+
+    return {
+      username: idToken.payload['cognito:username'],
+      email: idToken.payload.email,
+      accessToken: idToken.getJwtToken(),
+      refreshToken: user.getRefreshToken().getToken(),
+      emailVerified: idToken.payload.email_verified,
+      groups: idToken.payload['cognito:groups'] || [],
+      securitySystem: SecuritySystem.COGNITO,
+    };
   }
 }
