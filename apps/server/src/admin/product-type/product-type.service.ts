@@ -6,6 +6,7 @@ import { ProductTypeRepository } from './product-type.repository';
 import { ProductTypeProcess } from './product-type-process';
 import { ProductTypeRelation } from './types/product-type-relation';
 import { CreateProductTypeDto } from './dto/create-product-type.dto';
+import { TypeAttributeUpdateData } from './types/type-attribute-update-data';
 
 @Injectable()
 export class ProductTypeService {
@@ -77,6 +78,18 @@ export class ProductTypeService {
           },
         }),
       },
+    });
+  }
+
+  async updateTypeAttribute(id: number, attribute_id: number, data: TypeAttributeUpdateData) {
+    return this.repository.updateTypeAttribute({
+      where: {
+        product_type_id_attribute_id: {
+          product_type_id: id,
+          attribute_id,
+        },
+      },
+      data,
     });
   }
 

@@ -70,8 +70,6 @@ export class PrismaProductTypeCreateInputDto implements Prisma.product_typeCreat
   @IsOptional()
     product_type_attribute?: Prisma.product_type_attributeCreateNestedManyWithoutProduct_typeInput;
 
-  4;
-
   @ApiPropertyOptional()
   @IsOptional()
     product_type_task?: Prisma.product_type_taskCreateNestedManyWithoutProduct_typeInput;
