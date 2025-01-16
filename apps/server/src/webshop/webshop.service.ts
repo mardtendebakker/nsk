@@ -388,6 +388,10 @@ export class WebshopService {
           const selectedOptionName = productAttribute?.attribute?.attribute_option
             ?.find((option) => option.id === Number(attributeValue))?.name;
 
+          if (!selectedOptionName) {
+            break;
+          }
+
           const foundOption = options.find(
             (option) => option.label.toLowerCase() === selectedOptionName?.toLowerCase(),
           );
