@@ -258,10 +258,11 @@ model product_type {
 }
 
 model product_type_attribute {
-  product_type_id Int
-  attribute_id    Int
-  product_type    product_type @relation(fields: [product_type_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "FK_1DD5D0C714959723")
-  attribute       attribute    @relation(fields: [attribute_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "FK_1DD5D0C7B6E62EFA")
+  product_type_id     Int
+  attribute_id        Int
+  magento_in_attr_set Boolean?
+  product_type        product_type @relation(fields: [product_type_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "FK_1DD5D0C714959723")
+  attribute           attribute    @relation(fields: [attribute_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "FK_1DD5D0C7B6E62EFA")
 
   @@id([product_type_id, attribute_id])
   @@index([product_type_id], map: "IDX_1DD5D0C714959723")
@@ -444,21 +445,21 @@ model theme {
 }
 
 model user {
-  id                          Int      @id              @default(autoincrement()) 
-  first_name                  String?  @db.VarChar(50) 
-  last_name                   String?  @db.VarChar(50) 
-  username                    String   @db.VarChar(50)
-  email                       String   @db.VarChar(50)
-  gender                      Gender?
-  enabled                     Boolean                   @default(false)
-  email_verified              Boolean                   @default(false)
-  password                    String   @db.LongText
-  groups                      String   @db.LongText  
-  refresh_token               String   @db.LongText 
-  email_confirmation_code     String?  @db.VarChar(10)
-  password_verification_code  String? @db.VarChar(10)
-  created_at                  DateTime                  @default(now())           @db.DateTime(0)
-  updated_at                  DateTime                  @updatedAt                @db.DateTime(0)
+  id                         Int      @id @default(autoincrement())
+  first_name                 String?  @db.VarChar(50)
+  last_name                  String?  @db.VarChar(50)
+  username                   String   @db.VarChar(50)
+  email                      String   @db.VarChar(50)
+  gender                     Gender?
+  enabled                    Boolean  @default(false)
+  email_verified             Boolean  @default(false)
+  password                   String   @db.LongText
+  refresh_token              String   @db.LongText
+  groups                     String   @db.LongText
+  email_confirmation_code    String?  @db.VarChar(10)
+  password_verification_code String?  @db.VarChar(10)
+  created_at                 DateTime @default(now()) @db.DateTime(0)
+  updated_at                 DateTime @updatedAt @db.DateTime(0)
 }
 
 enum Gender {

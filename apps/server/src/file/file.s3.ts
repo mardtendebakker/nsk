@@ -20,12 +20,12 @@ export class FileS3 {
       throw new Error('The Key must be provided');
     }
 
-    const delCommand = new GetObjectCommand({
+    const getCommand = new GetObjectCommand({
       Bucket: this.configService.get<string>('S3_FILE_BUCKET'),
       Key,
     });
 
-    return this.client.send(delCommand);
+    return this.client.send(getCommand);
   }
 
   async put(putObjectInput: PutObjectInput) {

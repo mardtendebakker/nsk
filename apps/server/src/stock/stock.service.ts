@@ -546,6 +546,12 @@ export class StockService {
       magento_category_id: true,
       magento_attr_set_id: true,
       magento_group_spec_id: true,
+      product_type_attribute: {
+        select: {
+          attribute_id: true,
+          magento_in_attr_set: true,
+        },
+      },
       product_type_task: {
         select: {
           task: true,

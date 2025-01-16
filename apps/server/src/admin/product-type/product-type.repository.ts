@@ -38,6 +38,10 @@ export class ProductTypeRepository {
     return this.prisma.product_type.update(params);
   }
 
+  updateTypeAttribute(params: Prisma.product_type_attributeUpdateArgs) {
+    return this.prisma.product_type_attribute.update(params);
+  }
+
   create(params: Prisma.product_typeCreateArgs) {
     return this.prisma.product_type.create(params);
   }
