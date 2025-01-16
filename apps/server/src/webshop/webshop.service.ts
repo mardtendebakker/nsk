@@ -388,6 +388,10 @@ export class WebshopService {
           const selectedOptionName = productAttribute?.attribute?.attribute_option
             ?.find((option) => option.id === Number(attributeValue))?.name;
 
+          if (!selectedOptionName) {
+            break;
+          }
+
           const foundOption = options.find(
             (option) => option.label.toLowerCase() === selectedOptionName?.toLowerCase(),
           );
@@ -608,11 +612,11 @@ export class WebshopService {
   }
 
   private getProductNameId(product: ProductRelation): string {
-    return `${product.name.replace(/ /g, '-')}-${product.id}`;
+    return `${product.name.replace(/[^a-zA-Z0-9]/g, '-')}-${product.id}`;
   }
 
   private getAttrCode(productAttribute: ProductAttributeIncludeAttribute): string {
-    return productAttribute.attribute.name.replace(/ /g, '_').toLowerCase();
+    return productAttribute.attribute.name.toLowerCase().replace(/[^a-z0-9]/g, '_');
   }
 
   private firstLetterUpperCase(word: string): string {
