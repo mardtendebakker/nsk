@@ -86,15 +86,15 @@ export class WebshopService {
           await this.deleteProductMedia(uploadedProduct.data.sku, media.id);
         }
       } catch (error: unknown) {
-        Logger.log('WebshopService->addProduct', error);
+        Logger.log('WebshopService->addProduct', error, 'Art.nr:', product.id);
       }
 
       await this.uploadMedias(uploadedProduct.data.sku, entries);
 
-      Logger.log('WebshopService->addProduct->Succesfull');
+      Logger.log('WebshopService->addProduct->Succesfull->Art.nr:', product.id);
     } catch (e) {
       if (e?.status === 400) {
-        Logger.error(e.response?.message || e.response || e.message);
+        Logger.error(e.response?.message || e.response || e.message, 'Art.nr:', product.id);
       } else {
         throw e;
       }
