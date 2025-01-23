@@ -13,7 +13,12 @@ export interface Contact {
   zip?: string,
   company_id:string,
   company_name:string,
-  contact: SubContact
+  contact: SubContact,
+  tax: {
+    value: number,
+    label: string,
+    code: number
+  }
 }
 export interface SubContact {
   id:string,
