@@ -8,6 +8,7 @@ import { AutocompleteResponseDto, LocationAutocompleteResponseDto } from './dto/
 import { ALL_MAIN_GROUPS, LOCAL_GROUPS, PARTNERS_GROUPS } from '../user/model/group.enum';
 import { ConnectedUser, ConnectedUserType } from '../security/decorator/connected-user.decorator';
 import { Authorization } from '../security/decorator/authorization.decorator';
+import { TAX_CODES } from '../company/const/tax-code';
 
 @ApiBearerAuth()
 @Authorization(ALL_MAIN_GROUPS)
@@ -57,6 +58,13 @@ export class AutocompleteController {
   @ApiResponse({ type: AutocompleteResponseDto, isArray: true })
   partners(@Query() query: AutocompleteDto) {
     return this.autocompleteService.findPartners(query);
+  }
+
+  @Get('/tax-codes')
+  @Authorization(LOCAL_GROUPS)
+  @ApiResponse({ type: AutocompleteResponseDto, isArray: true })
+  taxCodes() {
+    return TAX_CODES.map(({ code, label }) => ({ id: code, label }));
   }
 
   @Get('/companies')

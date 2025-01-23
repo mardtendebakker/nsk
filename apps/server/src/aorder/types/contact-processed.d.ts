@@ -1,9 +1,11 @@
+import { TaxCode } from '../../company/const/tax-code';
 import { ContactRelation } from '../../contact/types/contact-relation';
 import { AOrderContact } from './aorder-contact';
 
 type AaOrderCompany = {
   company_id: number,
   company_name: string,
+  tax: TaxCode
 };
 export type ContactProcessed = Omit<
 ContactRelation,
