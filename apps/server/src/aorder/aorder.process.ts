@@ -4,6 +4,7 @@ import { AOrderPayloadRelation } from './types/aorder-payload-relation';
 import { CompanyRelation } from '../company/types/company-relation';
 import { AOrderProcessed, TotalPerProductReturn } from './types/aorder-processed';
 import { AaOrderCompany, ContactProcessed } from './types/contact-processed';
+import { TAX_CODES } from '../company/const/tax-code';
 
 type CompanyWithoutCompany = Omit<CompanyRelation, 'company'>;
 type CompanyWithoutCompanyContacts = Omit<CompanyRelation, 'companyContacts'>;
@@ -48,7 +49,6 @@ export class AOrderProcess {
       ...restPartnerCompanySupplier
     } = partnerCompanySupplier || {};
     const partnerMainContactSupplier = partnerContactsSupplier?.find((c) => c.is_main);
-    this.totalPrice = this.calculateTotalPrice();
     this.totalPerProductType = this.calculateTotalPerProductType();
 
     const customerProcessed: ContactProcessed = {
@@ -65,6 +65,8 @@ export class AOrderProcess {
         },
       }),
     };
+
+    this.totalPrice = this.calculateTotalPrice(customerProcessed?.tax?.value || 0);
 
     const supplierProcessed: ContactProcessed = {
       ...restSupplier,
@@ -94,7 +96,7 @@ export class AOrderProcess {
     };
   }
 
-  private calculateTotalPrice(): number {
+  private calculateTotalPrice(tax: number): number {
     let price = 0;
 
     if (this.aorder.is_gift) {
@@ -123,7 +125,7 @@ export class AOrderProcess {
       price += this.aorder.transport;
     }
 
-    return price;
+    return price * (1 + tax / 100);
   }
 
   private calculateTotalPerProductType(): TotalPerProductReturn {
@@ -151,6 +153,7 @@ export class AOrderProcess {
     return {
       company_id: company.id,
       company_name: company.name,
+      tax: TAX_CODES.find(({ code }) => code == company.tax_code),
     };
   }
 }

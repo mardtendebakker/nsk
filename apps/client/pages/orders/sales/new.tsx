@@ -31,6 +31,7 @@ export function initFormState(trans, order?: Order) {
     remarks: { value: order?.remarks },
     transport: { value: order?.transport },
     totalPrice: { value: order?.totalPrice },
+    tax: { value: order?.contact_aorder_customer_idTocontact?.tax?.value || 0 },
     discount: { value: order?.discount },
     isGift: { value: !!order?.is_gift },
     deliveryDate: { value: order?.delivery?.date },

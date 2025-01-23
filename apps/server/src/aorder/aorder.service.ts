@@ -418,10 +418,12 @@ export class AOrderService {
         select: {
           id: true,
           name: true,
+          tax_code: true,
           company: {
             select: {
               id: true,
               name: true,
+              tax_code: true,
               companyContacts: {
                 select: {
                   id: true,

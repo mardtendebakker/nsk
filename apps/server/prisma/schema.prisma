@@ -369,6 +369,7 @@ model company {
   is_customer     Boolean   @default(false)
   is_supplier     Boolean   @default(false)
   is_partner      Boolean   @default(false)
+  tax_code        Int       @default(2)
   company         company?  @relation("companyToCompany", fields: [partner_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "company_partner_id_fk")
   other_company   company[] @relation("companyToCompany")
   companyContacts contact[] @relation("contact_company_idTocompany")
