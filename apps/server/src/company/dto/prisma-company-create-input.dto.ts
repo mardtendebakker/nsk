@@ -39,4 +39,9 @@ export class PrismaCompanyCreateInputDto implements Prisma.companyUncheckedCreat
   @IsInt()
   @Type(() => Number)
     partner_id?: number;
+
+  @ApiProperty()
+  @IsInt()
+  @Type(() => Number)
+    tax_code: number;
 }

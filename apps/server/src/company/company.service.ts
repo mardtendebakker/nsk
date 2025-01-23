@@ -40,6 +40,7 @@ export class CompanyService {
         _count: {
           select: { companyContacts: true },
         },
+        tax_code: true,
       },
       where,
       orderBy: Object.keys(query?.orderBy || {})?.length ? query.orderBy : { id: 'desc' },
