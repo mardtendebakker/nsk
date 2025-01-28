@@ -212,10 +212,10 @@ export class PublicService {
     };
   }
 
-  private async uploadFiles(pickupId: number, files: Express.Multer.File[]): Promise<afile[]> {
+  private async uploadFiles(pickupId: number, pickupFiles: Express.Multer.File[]): Promise<afile[]> {
     const afiles: afile[] = [];
     // group files by attribute id
-    const filesGroupByFileDiscr: { [key in FileDiscrimination]?: Express.Multer.File[] } = files.reduce((acc, obj) => {
+    const filesGroupByFileDiscr: { [key in FileDiscrimination]?: Express.Multer.File[] } = pickupFiles.reduce((acc, obj) => {
       const { fieldname } = obj;
 
       if (!acc[fieldname]) {
@@ -234,11 +234,12 @@ export class PublicService {
 
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        const afile = await this.fileService.create(createFileDto, {
+        // eslint-disable-next-line no-await-in-loop
+        const aFile = await this.fileService.create(createFileDto, {
           Body: file.buffer,
           ContentType: file.mimetype,
         });
-        afiles.push(afile);
+        afiles.push(aFile);
       }
     }
 
@@ -265,6 +266,7 @@ export class PublicService {
 
     for (let i = 0; i < quantityAddresses.length; i++) {
       const quantityProductTypes = quantityAddresses[i];
+      // eslint-disable-next-line guard-for-in
       for (const key in quantityProductTypes) {
         const quantity = Number(quantityProductTypes[key]);
 
@@ -296,6 +298,7 @@ export class PublicService {
             ],
           };
 
+          // eslint-disable-next-line no-await-in-loop
           const product = await this.productService.create(productDto);
 
           products.push(product);

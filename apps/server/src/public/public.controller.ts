@@ -1,8 +1,9 @@
 import {
   Body, Controller, Get, Headers, Post, Query, Render, Res, UnauthorizedException, UploadedFile, UploadedFiles, UseInterceptors,
 } from '@nestjs/common';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { Response } from 'express';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { AnyFilesInterceptor, FileInterceptor } from '@nestjs/platform-express';
 import { PublicService } from './public.service';
 import { GetPickupDto } from './dto/get-pickup.dto';
@@ -39,6 +40,7 @@ export class PublicController {
   }
 
   @Post('pickup')
+  @ApiConsumes('multipart/form-data')
   @UseInterceptors(AnyFilesInterceptor())
   async postPickup(
   @Body() body: PostPickupDto,
@@ -72,6 +74,7 @@ export class PublicController {
   }
 
   @Post('order')
+  @ApiConsumes('multipart/form-data')
   async postOrder(
   @Body() body: PostOrderDto,
     @Res() res: Response,
@@ -100,6 +103,7 @@ export class PublicController {
   }
 
   @Post('import')
+  @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('file'))
   async importSales(
   @Body() body: PostImportDto,
