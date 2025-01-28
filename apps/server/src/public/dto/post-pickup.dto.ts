@@ -98,4 +98,22 @@ export class PostPickupDto extends PostCommonDto {
   @ApiProperty()
   @Type(() => PickupFormDto)
     'pickup_form': PickupFormDto;
+
+  @ApiProperty({
+    type: 'array',
+    items: { type: 'string', format: 'binary' },
+    description: 'Multiple images',
+  })
+  @IsOptional()
+  @Type(() => Object)
+    pi: Express.Multer.File[];
+
+  @ApiProperty({
+    type: 'string',
+    format: 'binary',
+    description: 'Single PDF',
+  })
+  @IsOptional()
+  @Type(() => Object)
+    pa: Express.Multer.File;
 }

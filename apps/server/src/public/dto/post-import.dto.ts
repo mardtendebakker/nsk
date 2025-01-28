@@ -17,4 +17,13 @@ export class PostImportDto extends PostCommonDto {
   @ApiProperty()
   @Type(() => ImportFormDto)
     'import_form': ImportFormDto;
+
+  @ApiProperty({
+    type: 'string',
+    format: 'binary',
+    description: 'Single Excel file',
+  })
+  @IsOptional()
+  @Type(() => Object)
+    file: Express.Multer.File;
 }
