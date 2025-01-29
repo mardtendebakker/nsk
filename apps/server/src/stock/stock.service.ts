@@ -1010,14 +1010,12 @@ export class StockService {
   private getContactWhereInput(email?: string): Prisma.contactWhereInput {
     return {
       ...(email && {
-        OR: [
-          { email },
-          {
-            company_contact_company_idTocompany: {
-              company: { companyContacts: { some: { email } } },
-            },
-          },
-        ],
+        company_contact_company_idTocompany: {
+          OR: [
+            { companyContacts: { some: { email } } },
+            { company: { companyContacts: { some: { email } } } },
+          ],
+        },
       }),
     };
   }
