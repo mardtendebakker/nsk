@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SettingsContainer matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    data-testid="card"
+  >
+    <div
+      data-testid="card-content"
+    >
+      <div
+        data-testid="box"
+      >
+        <div
+          data-testid="menu"
+        >
+          Menu Component
+        </div>
+      </div>
+      <div
+        data-testid="box"
+      >
+        <div>
+          Test Child Content
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

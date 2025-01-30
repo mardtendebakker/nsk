@@ -1,0 +1,52 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SettingsModal matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    data-testid="confirmation-dialog"
+  >
+    <form
+      name="settings-form"
+    >
+      <div
+        data-testid="mock-box"
+      >
+        <input
+          data-testid="mock-textfield"
+          value="initial text"
+        />
+        <input
+          data-testid="mock-sensitive-textfield"
+          type="password"
+          value="secret"
+        />
+        <input
+          data-testid="autocomplete-input"
+          value="option1,option2"
+        />
+        <input
+          data-testid="timepicker-input"
+          type="text"
+          value="Wed Jan 01 2020 14:00:00 GMT+0100 (GMT+01:00)"
+        />
+        <input
+          style="display: none;"
+          type="submit"
+        />
+      </div>
+    </form>
+    <button
+      data-testid="confirm-button"
+      type="button"
+    >
+      Confirm
+    </button>
+    <button
+      data-testid="cancel-button"
+      type="button"
+    >
+      Cancel
+    </button>
+  </div>
+</DocumentFragment>
+`;

@@ -26,6 +26,8 @@ const mockForm = {
     attributes: [],
     is_attribute: true,
     is_public: true,
+    magento_attr_set_id: null,
+    magento_category_id: null,
   }),
   setValue: jest.fn(() => {}),
   validate: jest.fn((): void | { [key: string]: string } => {}),
@@ -67,7 +69,7 @@ describe('EditModal', () => {
     waitFor(() => expect(onSubmitMock).toBeCalled());
     expect(mockAxios.call).toBeCalledWith({
       body: {
-        attributes: [], comment: 'comment', is_attribute: true, is_public: true, name: 'name', tasks: [],
+        attributes: [], comment: 'comment', is_attribute: true, is_public: true, magento_attr_set_id: null, magento_category_id: null, name: 'name', tasks: [],
       },
     });
   });

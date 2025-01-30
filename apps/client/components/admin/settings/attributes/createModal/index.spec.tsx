@@ -83,10 +83,13 @@ describe('CreateModal', () => {
         is_public: true,
         attributes: [],
         tasks: [],
+        magento_attr_set_id: '1',
+        magento_category_id: '2',
       }],
       product_type_id: 3,
       price: 4,
       options: [],
+      magento_attr_code: '3',
     })).toEqual({
       code: {
         required: true,
@@ -97,6 +100,9 @@ describe('CreateModal', () => {
       },
       isPublic: {
         value: true,
+      },
+      magento_attr_code: {
+        value: '3',
       },
       name: {
         required: true,
@@ -131,6 +137,9 @@ describe('CreateModal', () => {
       isPublic: {
         value: true,
       },
+      magento_attr_code: {
+        value: '3',
+      },
       name: {
         required: true,
         value: 'name',
@@ -153,6 +162,7 @@ describe('CreateModal', () => {
     })).toEqual({
       attr_code: 7,
       is_public: true,
+      magento_attr_code: '3',
       name: 'name',
       options: [{ id: undefined, name: 'test', price: 5 }],
       productTypes: [2],
@@ -168,6 +178,9 @@ describe('CreateModal', () => {
       },
       isPublic: {
         value: true,
+      },
+      magento_attr_code: {
+        value: '3',
       },
       name: {
         required: true,
@@ -190,6 +203,7 @@ describe('CreateModal', () => {
     })).toEqual({
       attr_code: 7,
       is_public: true,
+      magento_attr_code: '3',
       name: 'name',
       options: [],
       price: 4,
@@ -206,6 +220,9 @@ describe('CreateModal', () => {
       },
       isPublic: {
         value: true,
+      },
+      magento_attr_code: {
+        value: '3',
       },
       name: {
         required: true,
@@ -228,6 +245,7 @@ describe('CreateModal', () => {
     })).toEqual({
       attr_code: 7,
       is_public: true,
+      magento_attr_code: '3',
       name: 'name',
       options: [],
       productTypes: [2],
