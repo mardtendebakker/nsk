@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Menu Component matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    data-testid="menu-list"
+  >
+    <div
+      data-testid="nav-item"
+    >
+      modules
+    </div>
+    <div
+      data-testid="nav-item"
+    >
+      payments
+    </div>
+    <div
+      data-testid="nav-item"
+    >
+      cart (5)
+    </div>
+  </div>
+</DocumentFragment>
+`;

@@ -52,7 +52,7 @@ describe('CreateModal', () => {
     waitFor(() => expect(onSubmitMock).toBeCalled());
     expect(mockAxios.call).toBeCalledWith({
       body: {
-        attributes: [], comment: null, is_attribute: null, is_public: null, name: null, tasks: [],
+        attributes: [], comment: null, is_attribute: null, is_public: null, magento_attr_set_id: null, magento_category_id: null, name: null, tasks: [],
       },
     });
   });
@@ -72,17 +72,19 @@ describe('CreateModal', () => {
         attributes: [],
         is_attribute: true,
         is_public: true,
+        magento_attr_set_id: '1',
+        magento_category_id: '2',
       }),
     ).toEqual({
-      attributes: { value: [] }, comment: { value: 'comment' }, is_attribute: { value: true }, is_public: { value: true }, name: { required: true, value: 'name' }, tasks: { value: [] },
+      attributes: { value: [] }, comment: { value: 'comment' }, is_attribute: { value: true }, is_public: { value: true }, magento_attr_set_id: { value: '1' }, magento_category_id: { value: '2' }, name: { required: true, value: 'name' }, tasks: { value: [] },
     });
   });
 
   it('build payload properly', () => {
     expect(formRepresentationToBody({
-      attributes: { value: [] }, comment: { value: 'comment' }, is_attribute: { value: true }, is_public: { value: true }, name: { required: true, value: 'name' }, tasks: { value: [] },
+      attributes: { value: [] }, comment: { value: 'comment' }, is_attribute: { value: true }, is_public: { value: true }, magento_attr_set_id: { value: '1' }, magento_category_id: { value: '2' }, name: { required: true, value: 'name' }, tasks: { value: [] },
     })).toEqual({
-      attributes: [], comment: 'comment', is_attribute: true, is_public: true, name: 'name', tasks: [],
+      attributes: [], comment: 'comment', is_attribute: true, is_public: true, magento_attr_set_id: '1', magento_category_id: '2', name: 'name', tasks: [],
     });
   });
 });
