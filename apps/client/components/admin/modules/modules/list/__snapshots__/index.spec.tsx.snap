@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ListContainer Component matches snapshot 1`] = `
+<DocumentFragment>
+  <h4
+    class="MuiTypography-root MuiTypography-h4 css-4il6ew-MuiTypography-root"
+  >
+    modules
+  </h4>
+  <div
+    data-testid="mock-list"
+  >
+    <div
+      data-testid="module-1"
+    >
+      <button
+        data-testid="free-trial-1"
+        type="button"
+      >
+        Free Trial
+      </button>
+      <button
+        data-testid="settings-1"
+        type="button"
+      >
+        Settings
+      </button>
+    </div>
+    <div
+      data-testid="module-2"
+    >
+      <button
+        data-testid="free-trial-2"
+        type="button"
+      >
+        Free Trial
+      </button>
+      <button
+        data-testid="settings-2"
+        type="button"
+      >
+        Settings
+      </button>
+    </div>
+  </div>
+</DocumentFragment>
+`;

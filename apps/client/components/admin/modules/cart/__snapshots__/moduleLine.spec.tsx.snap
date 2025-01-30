@@ -1,0 +1,52 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ModuleLine Component matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="MuiBox-root css-17sib13"
+  >
+    <div
+      data-testid="confirmation-dialog"
+    >
+      <button
+        data-testid="confirm-button"
+        type="button"
+      >
+        Confirm
+      </button>
+      <button
+        data-testid="cancel-button"
+        type="button"
+      >
+        Cancel
+      </button>
+    </div>
+    <div
+      class="MuiBox-root css-1lekzkb"
+    >
+      <h2
+        class="MuiTypography-root MuiTypography-h2 css-1sra7t5-MuiTypography-root"
+      >
+        Test Module
+      </h2>
+      <p
+        class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+      >
+        € 99,99
+      </p>
+    </div>
+    <div
+      class="MuiBox-root css-1bvc4cc"
+    >
+      <span
+        class="MuiTypography-root MuiTypography-caption css-n9mh9m-MuiTypography-root"
+      >
+        Remove
+      </span>
+    </div>
+    <hr
+      class="MuiDivider-root MuiDivider-fullWidth css-1x67s69-MuiDivider-root"
+    />
+  </div>
+</DocumentFragment>
+`;
