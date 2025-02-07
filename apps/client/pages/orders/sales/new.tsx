@@ -31,6 +31,7 @@ export function initFormState(trans, order?: Order) {
     remarks: { value: order?.remarks },
     transport: { value: order?.transport },
     totalPrice: { value: order?.totalPrice },
+    tax: { value: order?.contact_aorder_customer_idTocontact?.tax?.value || 0 },
     discount: { value: order?.discount },
     isGift: { value: !!order?.is_gift },
     deliveryDate: { value: order?.delivery?.date },
@@ -68,6 +69,7 @@ export function initFormState(trans, order?: Order) {
     companyKvkNr: {},
     companyIsPartner: { value: false },
     companyPartner: {},
+    companyTaxCode: { required: true },
     name: {},
     email: { validator: requiredCustomerFieldValidator('email', trans) },
     phone: { validator: requiredCustomerFieldValidator('phone', trans) },
@@ -121,6 +123,7 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
       payload.customer.company_kvk_nr = formRepresentation.companyKvkNr.value;
       payload.customer.company_is_partner = formRepresentation.companyIsPartner.value;
       payload.customer.company_partner_id = formRepresentation.companyPartner.value;
+      payload.supplier.company_tax_code = formRepresentation.companyTaxCode.value;
     }
   }
 
