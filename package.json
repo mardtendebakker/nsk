@@ -91,6 +91,7 @@
     "@nx/workspace": "19.1.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "15.0.6",
+    "@testing-library/user-event": "^14.6.1",
     "@types/amqplib": "^0.10.5",
     "@types/bwip-js": "^3.2.0",
     "@types/jest": "29.4.4",
