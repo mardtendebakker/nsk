@@ -3,7 +3,7 @@ import {
 } from '@nestjs/common';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Response } from 'express';
-import { ApiConsumes, ApiTags } from '@nestjs/swagger';
+import { ApiConsumes, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AnyFilesInterceptor, FileInterceptor } from '@nestjs/platform-express';
 import { PublicService } from './public.service';
 import { GetPickupDto } from './dto/get-pickup.dto';
@@ -12,6 +12,7 @@ import { PostOrderDto } from './dto/post-order.dto';
 import { GetOrderDto } from './dto/get-order.dto';
 import { GetImportDto } from './dto/get-import.dto';
 import { PostImportDto } from './dto/post-import.dto';
+import { FindProductTypeResponseDto } from '../admin/product-type/dto/find-product-type-response.dto';
 
 @ApiTags('nsk-public')
 @Controller('nsk/public')
@@ -22,6 +23,36 @@ export class PublicController {
   @Render('pickuptest')
   getPickupTest() {
     return {};
+  }
+
+  @Get('product-types')
+  @ApiResponse({ type: [FindProductTypeResponseDto] })
+  getProductTypes() {
+    return this.publicService.getAllProductTypes();
+  }
+
+  @Get('data-destruction-choices')
+  @ApiResponse({
+    status: 200,
+    description: 'Return available data destruction choices',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            'data-destruction-id': { type: 'string', example: 'data-destruction-description' },
+          },
+        },
+      },
+    },
+  })
+  getDataDestructionChoices() {
+    const orderedChoices = {};
+    this.publicService.getDataDestructionChoices().forEach((value, key) => {
+      orderedChoices[key] = value;
+    });
+
+    return orderedChoices;
   }
 
   @Get('pickup')
