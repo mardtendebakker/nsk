@@ -24,6 +24,7 @@ import { PostOrderDto } from './dto/post-order.dto';
 import { SaleService } from '../sale/sale.service';
 import { PostImportDto } from './dto/post-import.dto';
 import { ContactService } from '../contact/contact.service';
+import { DataDestructionDesc } from '../calendar/pickup/types/destruction-desc.enum';
 
 @Injectable()
 export class PublicService {
@@ -44,9 +45,9 @@ export class PublicService {
 
   getDataDestructionChoices(): DataDestructionChoice {
     const dataDestructionChoices: DataDestructionChoice = new Map();
-    dataDestructionChoices.set(DataDestruction.DATADESTRUCTION_KILLDISK, 'HDD wipe report');
-    dataDestructionChoices.set(DataDestruction.DATADESTRUCTION_NONE, 'Geen HDD aangeleverd');
-    dataDestructionChoices.set(DataDestruction.DATADESTRUCTION_SHRED, 'HDD op locatie shredden a €12,50 (extra 0.89ct per KM)');
+    dataDestructionChoices.set(DataDestruction.DATADESTRUCTION_KILLDISK, DataDestructionDesc[DataDestruction.DATADESTRUCTION_KILLDISK]);
+    dataDestructionChoices.set(DataDestruction.DATADESTRUCTION_NONE, DataDestructionDesc[DataDestruction.DATADESTRUCTION_NONE]);
+    dataDestructionChoices.set(DataDestruction.DATADESTRUCTION_SHRED, DataDestructionDesc[DataDestruction.DATADESTRUCTION_SHRED]);
 
     return dataDestructionChoices;
   }
