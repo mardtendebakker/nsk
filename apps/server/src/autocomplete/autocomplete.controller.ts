@@ -115,10 +115,16 @@ export class AutocompleteController {
     return this.autocompleteService.findSuppliers(query);
   }
 
-  @Get('/logistics')
+  @Get('/drivers')
   @ApiResponse({ type: AutocompleteResponseDto, isArray: true })
-  logistics(@Query() query: AutocompleteDto) {
-    return this.autocompleteService.findLogistics(query);
+  drivers(@Query() query: AutocompleteDto) {
+    return this.autocompleteService.findDrivers(query);
+  }
+
+  @Get('/vehicles')
+  @ApiResponse({ type: AutocompleteResponseDto, isArray: true })
+  vehicles(@Query() query: AutocompleteDto) {
+    return this.autocompleteService.findVehicles(query);
   }
 
   @Get('/locations')

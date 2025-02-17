@@ -186,7 +186,7 @@ export default function SideMap({
             <LocalShippingOutlined sx={{ mr: '.5rem', fontSize: '1.2rem' }} />
             {trans('logisticServiceBy')}
             {': '}
-            {logisticService?.logistic?.username || '--'}
+            {logisticService?.driver?.username || '--'}
           </Typography>
           <Typography variant="body1" sx={{ mb: '1rem', display: 'flex', alignItems: 'center' }}>
             <TimerOutlined sx={{ mr: '.5rem', fontSize: '1.2rem' }} />
@@ -246,18 +246,18 @@ export default function SideMap({
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Avatar sx={{ mr: '1rem' }}>
                 <Typography variant="h5">
-                  {logisticService.logistic
-                    ? (logisticService.logistic.firstname.charAt(0)?.toUpperCase() || '') + (logisticService.logistic.lastname.charAt(0)?.toUpperCase() || '')
+                  {logisticService.driver
+                    ? (logisticService.driver.first_name.charAt(0)?.toUpperCase() || '') + (logisticService.driver.last_name.charAt(0)?.toUpperCase() || '')
                     : '--'}
                 </Typography>
               </Avatar>
               <Box>
                 <Typography variant="h5">
-                  {logisticService.logistic
-                    ? `${logisticService.logistic.firstname} ${logisticService.logistic.lastname}`
+                  {logisticService.driver
+                    ? `${logisticService.driver.first_name} ${logisticService.driver.last_name}`
                     : '--'}
                 </Typography>
-                <Typography variant="body1">{logisticService.logistic?.username || '--'}</Typography>
+                <Typography variant="body1">{logisticService.driver?.username || '--'}</Typography>
               </Box>
             </Box>
             <Divider sx={{ mt: '.5rem' }} />
@@ -269,9 +269,12 @@ export default function SideMap({
             </Typography>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Avatar sx={{ mr: '1rem' }}><LocalShippingOutlined sx={{ fontSize: '1.2rem' }} /></Avatar>
-              <Typography variant="h5">
-                {logisticService.logistic?.username || '--'}
-              </Typography>
+              <Box>
+                <Typography variant="h5">
+                  {logisticService.vehicle?.registration_number || '--'}
+                </Typography>
+                <Typography variant="body1">{logisticService.vehicle?.name || '--'}</Typography>
+              </Box>
             </Box>
           </Box>
           <Button

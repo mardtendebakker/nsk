@@ -53,8 +53,11 @@ export function initFormState(trans, order?: Order) {
       },
       value: order?.supplier_id,
     },
-    logisticId: {
-      value: order?.pickup?.logistics_id,
+    driverId: {
+      value: order?.pickup?.driver_id,
+    },
+    vehicleId: {
+      value: order?.pickup?.vehicle_id,
     },
     newSupplier: { value: false },
     name: {},
@@ -99,7 +102,8 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
     discount: formRepresentation.discount.value,
     is_gift: formRepresentation.isGift.value,
     pickup: {
-      logistics_id: formRepresentation.logisticId.value || null,
+      vehicle_id: formRepresentation.vehicleId.value || null,
+      driver_id: formRepresentation.driverId.value || null,
       real_pickup_date: formRepresentation.pickupDate.value || null,
     },
   };

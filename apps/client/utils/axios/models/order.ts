@@ -79,7 +79,8 @@ export interface Order {
 interface Pickup {
   id:number,
   afile:AFile[],
-  logistics_id:number,
+  driver_id:number,
+  vehicle_id:number,
   pickup_date:string,
   real_pickup_date:string,
   description:string,
@@ -95,5 +96,6 @@ interface Delivery {
   type?:number,
   instructions?:string,
   dhl_tracking_code?: string,
-  logistics_id?: number,
+  vehicle_id?: number,
+  driver_id?: number,
 }
