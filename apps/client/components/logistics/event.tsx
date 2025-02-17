@@ -25,7 +25,7 @@ export default function Event({
 
   const color = logisticService?.order?.order_status?.color;
   const body = logisticService.event_title || trans(type);
-  const username = logisticService.logistic?.username || '';
+  const username = `${logisticService.driver?.first_name || ''} ${logisticService.driver?.last_name || ''}`;
 
   return (
     <Box

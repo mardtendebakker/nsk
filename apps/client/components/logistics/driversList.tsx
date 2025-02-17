@@ -1,18 +1,18 @@
 import {
   MenuItem, MenuList,
 } from '@mui/material';
-import { Logistic } from '../../utils/axios/models/logistic';
+import { Driver } from '../../utils/axios/models/logistic';
 import MenuItemText from '../menuTextItem';
 import useTranslation from '../../hooks/useTranslation';
 
-export default function LogisticsList({
+export default function DriversList({
   onClick,
-  selectedLogisticIds,
-  logistics,
+  selectedDriverIds,
+  drivers,
 }: {
   onClick: (logistiId: number) => void,
-  selectedLogisticIds: number[],
-  logistics: Logistic[]
+  selectedDriverIds: number[],
+  drivers: Driver[]
 }) {
   const { trans } = useTranslation();
 
@@ -23,22 +23,22 @@ export default function LogisticsList({
         sx={(theme) => ({
           borderRadius: '.25rem',
           fontWeight: theme.typography.fontWeightMedium,
-          background: selectedLogisticIds[0] === 0 ? theme.palette.primary.light : undefined,
-          color: selectedLogisticIds[0] === 0 ? theme.palette.primary.main : undefined,
+          background: selectedDriverIds[0] === 0 ? theme.palette.primary.light : undefined,
+          color: selectedDriverIds[0] === 0 ? theme.palette.primary.main : undefined,
           mb: '.2rem',
           p: '.5rem .75rem',
         })}
       >
-        <MenuItemText active={selectedLogisticIds[0] === 0}>
+        <MenuItemText active={selectedDriverIds[0] === 0}>
           {trans('everyone')}
         </MenuItemText>
       </MenuItem>
-      {logistics.map((logistic: Logistic) => {
-        const active = !!selectedLogisticIds.find((element) => element == logistic.id);
+      {drivers.map((driver: Driver) => {
+        const active = !!selectedDriverIds.find((element) => element == driver.id);
         return (
           <MenuItem
-            onClick={() => onClick(logistic.id)}
-            key={logistic.id}
+            onClick={() => onClick(driver.id)}
+            key={driver.id}
             sx={(theme) => ({
               borderRadius: '.25rem',
               fontWeight: theme.typography.fontWeightMedium,
@@ -51,7 +51,7 @@ export default function LogisticsList({
             })}
           >
             <MenuItemText active={active}>
-              {logistic.username}
+              {driver.username}
             </MenuItemText>
           </MenuItem>
         );

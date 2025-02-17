@@ -50,12 +50,20 @@ export class PickupService {
             },
           },
         },
-        fos_user: {
+        driver: {
           select: {
             id: true,
             username: true,
-            firstname: true,
-            lastname: true,
+            first_name: true,
+            last_name: true,
+            email: true,
+          },
+        },
+        vehicle: {
+          select: {
+            id: true,
+            name: true,
+            registration_number: true,
           },
         },
       },
@@ -65,8 +73,8 @@ export class PickupService {
           lte: query.endsAt,
         },
         ...(query.licensePlate ? {
-          fos_user: {
-            license_plate: {
+          vehicle: {
+            registration_number: {
               equals: query.licensePlate,
             },
           },
@@ -89,7 +97,6 @@ export class PickupService {
           },
         },
         real_pickup_date,
-        fos_user,
         ...prickupRest
       }) => ({
         ...prickupRest,
@@ -104,7 +111,6 @@ export class PickupService {
             company_name: company_supplier.name,
           },
         },
-        logistic: fos_user,
       }),
     );
 

@@ -12,13 +12,13 @@ import Event from './event';
 import useAxios, { Call } from '../../hooks/useAxios';
 import { CALENDAR_PICKUPS_PATH, CALENDAR_DELIVERIES_PATH } from '../../utils/axios';
 import TextField from '../input/textField';
-import { Logistic, LogisticServiceListItem } from '../../utils/axios/models/logistic';
+import { Driver, LogisticServiceListItem } from '../../utils/axios/models/logistic';
 import SideMap from './sideMap';
 import Pagination from './pagination';
-import LogisticsList from './logisticsList';
 import pushURLParams from '../../utils/pushURLParams';
 import { getQueryParam } from '../../utils/location';
 import useRemoteConfig from '../../hooks/useRemoteConfig';
+import DriversList from './driversList';
 
 const TILE_HEIGHT = '3rem';
 
@@ -88,7 +88,7 @@ export default function Logistics({ type }: { type: 'pickup' | 'delivery' }) {
     }
   }, [JSON.stringify(config)]);
 
-  const [selectedLogisticIds, setSelectedLogisticIds] = useState<number[]>([0]);
+  const [selectedDriverIds, setSelectedDriverIds] = useState<number[]>([0]);
   const [search, setSearch] = useState('');
   const [clickedLogisticService, setClickedLogisticService] = useState<{
     logisticService: LogisticServiceListItem,
@@ -97,10 +97,10 @@ export default function Logistics({ type }: { type: 'pickup' | 'delivery' }) {
 
   const { data: { data = [] } = {}, call } = useAxios<undefined | { data?: LogisticServiceListItem[] }>('get', AJAX_PATH.replace(':id', ''), { withProgressBar: true });
 
-  const formattedDataWithDefaultLogistic = data.map(({ logistic, ...rest }): LogisticServiceListItem => ({
+  const formattedDataWithDefaultLogistic = data.map(({ driver, ...rest }): LogisticServiceListItem => ({
     ...rest,
-    logistic: logistic || {
-      id: 1, firstname: 'Anonymous', lastname: 'Driver', username: 'Unknown', email: 'Unknown',
+    driver: driver || {
+      id: 1, first_name: 'Anonymous', last_name: 'Driver', username: 'Unknown', email: 'Unknown',
     },
   }));
 
@@ -109,32 +109,32 @@ export default function Logistics({ type }: { type: 'pickup' | 'delivery' }) {
       return;
     }
 
-    setSelectedLogisticIds([0]);
+    setSelectedDriverIds([0]);
     refreshList({ newDate: dates[0], router, call });
   }, [dates[0]?.toISOString()]);
 
-  const logistics: Logistic[] = [];
+  const drivers: Driver[] = [];
 
-  formattedDataWithDefaultLogistic.forEach(({ logistic }) => {
-    if (!logistics.find((element) => element.id == logistic.id)) {
-      logistics.push(logistic);
+  formattedDataWithDefaultLogistic.forEach(({ driver }) => {
+    if (!drivers.find((element) => element.id == driver.id)) {
+      drivers.push(driver);
     }
   });
 
-  const handleLogisticClick = (logisticId: number) => {
-    if (selectedLogisticIds.find((element) => element == logisticId)) {
-      setSelectedLogisticIds((currentValue) => currentValue.filter((element) => element != logisticId));
-    } else if (logisticId != 0) {
-      setSelectedLogisticIds((currentValue) => [...currentValue.filter((element) => element != 0), logisticId]);
+  const handleDriverClick = (driverId: number) => {
+    if (selectedDriverIds.find((element) => element == driverId)) {
+      setSelectedDriverIds((currentValue) => currentValue.filter((element) => element != driverId));
+    } else if (driverId != 0) {
+      setSelectedDriverIds((currentValue) => [...currentValue.filter((element) => element != 0), driverId]);
     } else {
-      setSelectedLogisticIds([logisticId]);
+      setSelectedDriverIds([driverId]);
     }
   };
 
   const formatLogisticServiceName = (logisticService: LogisticServiceListItem) => logisticService.event_title || trans(type);
 
   const logisticServices: LogisticServiceListItem[] = formattedDataWithDefaultLogistic.filter((logisticService: LogisticServiceListItem) => {
-    const selected = selectedLogisticIds[0] === 0 || selectedLogisticIds.includes(logisticService.logistic.id);
+    const selected = selectedDriverIds[0] === 0 || selectedDriverIds.includes(logisticService.vehicle.id);
 
     return selected && (formatLogisticServiceName(logisticService)?.includes(search) || logisticService.order.order_nr.includes(search));
   });
@@ -177,7 +177,7 @@ export default function Logistics({ type }: { type: 'pickup' | 'delivery' }) {
             {type == 'pickup' ? trans('pickupsBy') : trans('deliveriesBy')}
             :
           </Typography>
-          <LogisticsList onClick={handleLogisticClick} logistics={logistics} selectedLogisticIds={selectedLogisticIds} />
+          <DriversList onClick={handleDriverClick} drivers={drivers} selectedDriverIds={selectedDriverIds} />
         </Box>
         <Card sx={{ flex: 0.85 }}>
           <CardContent sx={{ display: 'flex', flexDirection: 'column', px: 0 }}>
@@ -247,8 +247,13 @@ export default function Logistics({ type }: { type: 'pickup' | 'delivery' }) {
                               onClick={() => {
                                 setClickedLogisticService({
                                   logisticService,
-                                  allLogisticServices: thisDayLogisticServices.flat().filter((element) => element.logistic && (element.logistic.id == logisticService.logistic.id)),
+                                  allLogisticServices: thisDayLogisticServices.flat().filter((element) => {
+                                    if (element.driver && element.vehicle) {
+                                      return element.driver.id == logisticService.driver.id && element.vehicle.id == logisticService.vehicle.id;
+                                    }
 
+                                    return false;
+                                  }),
                                 });
                               }}
                               logisticService={logisticService}

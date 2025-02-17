@@ -50,8 +50,12 @@ export class AutocompleteService {
     return this.repository.findSuppliers(autocompleteDto);
   }
 
-  async findLogistics(autocompleteDto: AutocompleteDto) {
-    return this.repository.findLogistics(autocompleteDto);
+  async findDrivers(autocompleteDto: AutocompleteDto) {
+    return this.repository.findDrivers(autocompleteDto);
+  }
+
+  async findVehicles(autocompleteDto: AutocompleteDto) {
+    return this.repository.findVehicles(autocompleteDto);
   }
 
   async findLocations(autocompleteDto: AutocompleteDto) {

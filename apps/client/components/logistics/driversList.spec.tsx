@@ -1,25 +1,25 @@
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
-import LogisticsList from './logisticsList';
+import DriversList from './driversList';
 
 function RenderC({ onClick } : { onClick:(logistiId: number) => void }) {
   return (
-    <LogisticsList
-      logistics={[{
+    <DriversList
+      drivers={[{
         id: 1,
         username: 'username',
-        firstname: 'firstname',
-        lastname: 'lastname',
+        first_name: 'firstname',
+        last_name: 'lastname',
         email: 'email@gmail.com',
       }, {
         id: 2,
         username: 'username2',
-        firstname: 'firstname2',
-        lastname: 'lastname2',
+        first_name: 'firstname2',
+        last_name: 'lastname2',
         email: 'email2@gmail.com',
       }]}
       onClick={onClick}
-      selectedLogisticIds={[1]}
+      selectedDriverIds={[1]}
     />
   );
 }

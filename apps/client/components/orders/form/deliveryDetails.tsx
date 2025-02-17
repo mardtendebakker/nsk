@@ -9,7 +9,7 @@ import Select from '../../memoizedInput/select';
 import TextField from '../../memoizedInput/textField';
 import DateTimePicker from '../../input/dateTimePicker';
 import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
-import { AUTOCOMPLETE_LOGISTICS_PATH } from '../../../utils/axios';
+import { AUTOCOMPLETE_DRIVERS_PATH, AUTOCOMPLETE_VEHICLES_PATH } from '../../../utils/axios';
 import useSecurity from '../../../hooks/useSecurity';
 
 export default function DeliveryDetails({
@@ -59,16 +59,33 @@ export default function DeliveryDetails({
           />
           {showDeliveryDateChangedMessage && <Typography color="error" sx={{ mt: '.5rem' }}>{trans('orderMightShouldChangeWarning')}</Typography>}
           <Box sx={{ m: '.25rem' }} />
+
+          <Box sx={{ m: '.25rem' }} />
           <DataSourcePicker
             fullWidth
             disabled={disabled}
-            path={AUTOCOMPLETE_LOGISTICS_PATH}
-            label={trans('logistic')}
-            placeholder={trans('selectLogistic')}
+            path={AUTOCOMPLETE_VEHICLES_PATH}
+            label={trans('vehicle')}
+            placeholder={trans('selectVehicle')}
             onChange={(value: { id: number }) => {
-              setValue({ field: 'logisticId', value: value?.id });
+              setValue({ field: 'vehicleId', value: value?.id });
             }}
-            value={formRepresentation.logisticId.value}
+            value={formRepresentation.vehicleId.value}
+            formatter={({ id, username, ...rest }: any) => ({
+              id, label: username, username, ...rest,
+            })}
+          />
+          <Box sx={{ m: '.25rem' }} />
+          <DataSourcePicker
+            fullWidth
+            disabled={disabled}
+            path={AUTOCOMPLETE_DRIVERS_PATH}
+            label={trans('driver')}
+            placeholder={trans('selectDriver')}
+            onChange={(value: { id: number }) => {
+              setValue({ field: 'driverId', value: value?.id });
+            }}
+            value={formRepresentation.driverId.value}
             formatter={({ id, username, ...rest }: any) => ({
               id, label: username, username, ...rest,
             })}
