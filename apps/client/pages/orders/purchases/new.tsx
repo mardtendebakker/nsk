@@ -23,6 +23,14 @@ function requiredSupplierFieldValidator(field: string, trans) {
   };
 }
 
+export function requiredCompanyFieldValidator(field: string, trans) {
+  return (formRepresentation: FormRepresentation) => {
+    if (formRepresentation.newCompany.value && !formRepresentation[field].value) {
+      return trans('requiredField');
+    }
+  };
+}
+
 export function initFormState(trans, order?: Order) {
   return {
     orderNr: { value: order?.order_nr },
@@ -32,6 +40,7 @@ export function initFormState(trans, order?: Order) {
     remarks: { value: order?.remarks },
     transport: { value: order?.transport },
     totalPrice: { value: order?.totalPrice },
+    tax: { value: order?.contact_aorder_supplier_idTocontact?.tax?.value || 0 },
     discount: { value: order?.discount },
     isGift: { value: !!order?.is_gift },
     supplierId: {
@@ -66,6 +75,7 @@ export function initFormState(trans, order?: Order) {
     companyKvkNr: {},
     companyIsPartner: { value: false },
     companyPartner: {},
+    companyTaxCode: { validator: requiredCompanyFieldValidator('companyTaxCode', trans) },
     email: { validator: requiredSupplierFieldValidator('email', trans) },
     phone: { validator: requiredSupplierFieldValidator('phone', trans) },
     street: { validator: requiredSupplierFieldValidator('street', trans) },
@@ -114,6 +124,7 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
       payload.supplier.company_kvk_nr = formRepresentation.companyKvkNr.value;
       payload.supplier.company_is_partner = formRepresentation.companyIsPartner.value;
       payload.supplier.company_partner_id = formRepresentation.companyPartner.value;
+      payload.supplier.company_tax_code = formRepresentation.companyTaxCode.value;
     }
   }
 

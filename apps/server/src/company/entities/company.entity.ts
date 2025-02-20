@@ -22,4 +22,7 @@ export class CompanyEntity implements company {
 
   @ApiPropertyOptional()
     partner_id: number | null;
+
+  @ApiProperty()
+    tax_code: number;
 }

@@ -74,6 +74,14 @@ export default function PricingDetails({
             :
             {' '}
             {(formRepresentation.totalPrice.value || 0 as number).toFixed(2)}
+            {' '}
+            (
+            {(formRepresentation.tax.value || 0 as number)}
+            %
+            {' '}
+            {trans('tax')}
+            )
+
           </Typography>
         </Grid>
       </Grid>

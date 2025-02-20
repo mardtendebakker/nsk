@@ -96,6 +96,7 @@ export class ContactService {
       company_is_customer: companyIsCustomer,
       company_is_supplier: companyIsSupplier,
       company_partner_id: companyPartnerId,
+      company_tax_code: companyTaxCode,
       ...restContactDto
     } = createDto;
 
@@ -126,6 +127,7 @@ export class ContactService {
             is_partner: companyIsPartner,
             is_customer: companyIsCustomer,
             is_supplier: companyIsSupplier,
+            tax_code: companyTaxCode,
             ...(companyPartnerId && { partner_id: companyPartnerId }),
             ...(email && { partner_id: (await this.findPartnerByEmail(email))?.id }),
           },
