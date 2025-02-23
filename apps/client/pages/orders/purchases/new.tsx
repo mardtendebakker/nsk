@@ -40,7 +40,9 @@ export function initFormState(trans, order?: Order) {
     remarks: { value: order?.remarks },
     transport: { value: order?.transport },
     totalPrice: { value: order?.totalPrice },
-    tax: { value: order?.contact_aorder_supplier_idTocontact?.tax?.value || 0 },
+    totalPriceExtVat: { value: order?.totalPriceExtVat },
+    vatValue: { value: order?.vatValue },
+    vat: { value: order?.contact_aorder_supplier_idTocontact?.vat?.value || 0 },
     discount: { value: order?.discount },
     isGift: { value: !!order?.is_gift },
     supplierId: {
@@ -75,7 +77,7 @@ export function initFormState(trans, order?: Order) {
     companyKvkNr: {},
     companyIsPartner: { value: false },
     companyPartner: {},
-    companyTaxCode: { validator: requiredCompanyFieldValidator('companyTaxCode', trans) },
+    companyVatCode: { validator: requiredCompanyFieldValidator('companyVatCode', trans) },
     email: { validator: requiredSupplierFieldValidator('email', trans) },
     phone: { validator: requiredSupplierFieldValidator('phone', trans) },
     street: { validator: requiredSupplierFieldValidator('street', trans) },
@@ -124,7 +126,7 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
       payload.supplier.company_kvk_nr = formRepresentation.companyKvkNr.value;
       payload.supplier.company_is_partner = formRepresentation.companyIsPartner.value;
       payload.supplier.company_partner_id = formRepresentation.companyPartner.value;
-      payload.supplier.company_tax_code = formRepresentation.companyTaxCode.value;
+      payload.supplier.company_vat_code = formRepresentation.companyVatCode.value;
     }
   }
 

@@ -43,7 +43,7 @@ model aorder {
   discr                               String          @db.VarChar(255)
   backingPurchaseOrder_id             Int?
   external_id                         Int?
-  tax_rate                            Float           @db.Float @default(21)
+  vat_rate                            Float           @db.Float @default(21)
   afile                               afile[]
   contact_aorder_supplier_idTocontact contact?        @relation("aorder_supplier_idTocontact", fields: [supplier_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK_416119D92ADD6D8C")
   aorder                              aorder?         @relation("aorderToaorder", fields: [backingPurchaseOrder_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK_416119D930005451")
@@ -370,7 +370,7 @@ model company {
   is_customer     Boolean   @default(false)
   is_supplier     Boolean   @default(false)
   is_partner      Boolean   @default(false)
-  tax_code        Int       @default(2)
+  vat_code        Int       @default(2)
   company         company?  @relation("companyToCompany", fields: [partner_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "company_partner_id_fk")
   other_company   company[] @relation("companyToCompany")
   companyContacts contact[] @relation("contact_company_idTocompany")

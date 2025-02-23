@@ -14,7 +14,7 @@ export interface Contact {
   company_id:string,
   company_name:string,
   contact: SubContact,
-  tax: {
+  vat: {
     value: number,
     label: string,
     code: number
@@ -69,6 +69,8 @@ export interface Order {
   pickup?: Pickup,
   delivery?: Delivery,
   totalPrice: number,
+  totalPriceExtVat: number,
+  vatValue: number,
   contact_aorder_customer_idTocontact:Contact,
   contact_aorder_supplier_idTocontact:Contact
   totalPerProductType: object

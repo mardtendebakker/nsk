@@ -43,5 +43,5 @@ export class PrismaCompanyCreateInputDto implements Prisma.companyUncheckedCreat
   @ApiProperty()
   @IsInt()
   @Type(() => Number)
-    tax_code: number;
+    vat_code: number;
 }

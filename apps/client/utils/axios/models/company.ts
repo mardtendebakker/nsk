@@ -16,5 +16,5 @@ export interface Company {
   is_supplier:boolean,
   is_customer:boolean,
   partner_id:number,
-  tax_code:number,
+  vat_code:number,
 }

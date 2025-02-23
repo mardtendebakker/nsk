@@ -54,5 +54,5 @@ export class AOrderEntity implements aorder {
     logistics_id: number | null;
 
   @ApiProperty()
-    tax_rate: number;
+    vat_rate: number;
 }
