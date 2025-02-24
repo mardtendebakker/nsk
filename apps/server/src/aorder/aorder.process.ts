@@ -131,7 +131,6 @@ export class AOrderProcess {
     }
 
     let totalPrice = price * (1 + vat / 100);
-    console.log(vat);
     if (this.aorder.discount > 0) {
       totalPrice -= this.aorder.discount;
     }
