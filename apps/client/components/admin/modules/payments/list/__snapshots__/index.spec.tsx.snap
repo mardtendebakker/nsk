@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Payments Component matches snapshot 1`] = `
+<DocumentFragment>
+  <h4
+    class="MuiTypography-root MuiTypography-h4 css-4il6ew-MuiTypography-root"
+  >
+    payments
+  </h4>
+  <div
+    data-testid="mock-list"
+  >
+    <button
+      data-testid="change-page"
+      type="button"
+    >
+      Change Page
+    </button>
+    <button
+      data-testid="change-rows"
+      type="button"
+    >
+      Change Rows
+    </button>
+    <button
+      data-testid="subscribe"
+      type="button"
+    >
+      Subscribe
+    </button>
+  </div>
+</DocumentFragment>
+`;

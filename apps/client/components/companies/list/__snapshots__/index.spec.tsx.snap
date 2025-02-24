@@ -318,6 +318,7 @@ exports[`List matches snapshot 1`] = `
               class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignRight MuiTableCell-sizeSmall css-dv0mq-MuiTableCell-root"
             >
               <span
+                aria-label="inactiveModuleMessage"
                 class=""
                 data-mui-internal-clone-element="true"
               >
@@ -326,10 +327,11 @@ exports[`List matches snapshot 1`] = `
                   data-mui-internal-clone-element="true"
                 >
                   <a
-                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1rb4sk0-MuiButtonBase-root-MuiIconButton-root"
+                    aria-disabled="true"
+                    class="MuiButtonBase-root Mui-disabled MuiIconButton-root Mui-disabled MuiIconButton-sizeSmall css-1rb4sk0-MuiButtonBase-root-MuiIconButton-root"
                     data-testid="edit-icon-button"
                     href="/companies/1"
-                    tabindex="0"
+                    tabindex="-1"
                   >
                     <svg
                       aria-hidden="true"
@@ -342,9 +344,6 @@ exports[`List matches snapshot 1`] = `
                         d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"
                       />
                     </svg>
-                    <span
-                      class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-                    />
                   </a>
                 </span>
               </span>
