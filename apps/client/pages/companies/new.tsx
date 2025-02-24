@@ -36,8 +36,8 @@ export function initFormState(company?: Company) {
     partner: {
       value: company?.partner_id,
     },
-    tax_code: {
-      value: company?.tax_code,
+    vat_code: {
+      value: company?.vat_code,
       required: true,
     },
   };
@@ -51,7 +51,7 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
     is_customer: formRepresentation.is_customer.value,
     is_supplier: formRepresentation.is_supplier.value,
     partner_id: formRepresentation.is_partner.value ? null : formRepresentation.partner.value,
-    tax_code: formRepresentation.tax_code.value,
+    vat_code: formRepresentation.vat_code.value,
   };
 }
 

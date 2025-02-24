@@ -24,5 +24,5 @@ export class CompanyEntity implements company {
     partner_id: number | null;
 
   @ApiProperty()
-    tax_code: number;
+    vat_code: number;
 }

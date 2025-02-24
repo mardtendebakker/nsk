@@ -69,19 +69,31 @@ export default function PricingDetails({
           />
         </Grid>
         <Grid item>
-          <Typography variant="h3">
+          <Typography variant="h4">
             {trans('total')}
             :
             {' '}
             {(formRepresentation.totalPrice.value || 0 as number).toFixed(2)}
             {' '}
             (
-            {(formRepresentation.tax.value || 0 as number)}
+            {(formRepresentation.vat.value || 0 as number)}
             %
             {' '}
-            {trans('tax')}
+            {trans('vat')}
             )
 
+          </Typography>
+          <Typography variant="h4" sx={{ mt: '.5rem' }}>
+            {trans('totalExtVat')}
+            :
+            {' '}
+            {(formRepresentation.totalPriceExtVat.value || 0 as number).toFixed(2)}
+          </Typography>
+          <Typography variant="h4" sx={{ mt: '.5rem' }}>
+            {trans('vatValue')}
+            :
+            {' '}
+            {(formRepresentation.vatValue.value || 0 as number).toFixed(2)}
           </Typography>
         </Grid>
       </Grid>

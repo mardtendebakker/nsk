@@ -20,7 +20,7 @@ jest.mock('next/router', () => ({
 
 const mockUseSecurity = {
   state: {
-    user: { get emailVerified() { return true; } },
+    user: { get emailVerified() { return true; }, groups: [] },
   },
   refreshUserInfo: jest.fn(() => Promise.resolve()),
 };
@@ -62,7 +62,7 @@ describe('DashboardLayout', () => {
   });
   it('should redirects to dashboard', () => {
     jest.requireMock('../../hooks/useSecurity').mockImplementation(() => ({
-      state: { user: { get emailVerified() { return true; } } },
+      state: { user: { get emailVerified() { return true; }, groups: [] } },
       refreshUserInfo: jest.fn(() => Promise.resolve()),
     }));
     jest.requireMock('../../utils/can').mockImplementation(() => false);

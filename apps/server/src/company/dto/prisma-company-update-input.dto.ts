@@ -42,7 +42,7 @@ export class PrismaCompanyUpdateInputDto implements Prisma.companyUncheckedUpdat
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-    tax_code?: number;
+    vat_code?: number;
 
   @ApiPropertyOptional()
   @IsOptional()

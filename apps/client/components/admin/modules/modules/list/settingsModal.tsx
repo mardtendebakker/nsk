@@ -56,7 +56,7 @@ export default function SettingsModal({
       onConfirm={handleSave}
       disabled={disabled}
       content={(
-        <form onSubmit={(e) => { e.preventDefault(); handleSave(); }}>
+        <form onSubmit={(e) => { e.preventDefault(); handleSave(); }} name="settings-form">
           <Box sx={{ width: '20rem' }}>
             {configEntries.map(([key, config]) => {
               switch (config.type) {
@@ -98,6 +98,7 @@ export default function SettingsModal({
                       views={['hours']}
                       value={Number.isInteger(parseInt(formRepresentation[key].value, 10)) ? set(new Date(), { hours: formRepresentation[key].value, minutes: 0 }) : null}
                       onChange={(value) => setValue({ field: key, value: value.getHours() })}
+                      disabled={disabled}
                       renderInput={(inputParams) => (
                         <BaseTextField
                           {...inputParams}

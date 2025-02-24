@@ -9,7 +9,7 @@ import useResponsive from '../../../hooks/useResponsive';
 import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
 import Checkbox from '../../checkbox';
 import Can from '../../can';
-import { AUTOCOMPLETE_PARTNERS_PATH, AUTOCOMPLETE_TAX_CODES_PATH } from '../../../utils/axios';
+import { AUTOCOMPLETE_PARTNERS_PATH, AUTOCOMPLETE_VAT_CODES_PATH } from '../../../utils/axios';
 
 function Form({ formRepresentation, disabled, setValue }: {
   formRepresentation : FormRepresentation,
@@ -72,15 +72,15 @@ function Form({ formRepresentation, disabled, setValue }: {
       >
         <DataSourcePicker
           sx={{ flex: 0.33 }}
-          label={trans('tax')}
-          path={AUTOCOMPLETE_TAX_CODES_PATH}
+          label={trans('vat')}
+          path={AUTOCOMPLETE_VAT_CODES_PATH}
           disabled={disabled}
           fullWidth
-          placeholder={trans('selectTax')}
-          value={formRepresentation.companyTaxCode.value}
-          onChange={(value: { id: number }) => setValue({ field: 'companyTaxCode', value: value?.id || null })}
-          error={Boolean(formRepresentation.companyTaxCode.error)}
-          helperText={formRepresentation.companyTaxCode.error}
+          placeholder={trans('selectVat')}
+          value={formRepresentation.companyVatCode.value}
+          onChange={(value: { id: number }) => setValue({ field: 'companyVatCode', value: value?.id || null })}
+          error={Boolean(formRepresentation.companyVatCode.error)}
+          helperText={formRepresentation.companyVatCode.error}
         />
         <Box sx={{ m: '.25rem' }} />
         <Can requiredGroups={['admin', 'manager', 'logistics', 'local']}>
