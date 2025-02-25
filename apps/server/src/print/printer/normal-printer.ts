@@ -23,7 +23,7 @@ export class NormalPrinter extends IOrderPrinter {
       totalPrice: aorder.totalPrice ? this.currencyFormat.format(aorder.totalPrice) : '€ 0.00',
       transport: aorder.transport ? this.currencyFormat.format(aorder.transport) : '€ 0.00',
       discount: aorder.discount ? this.currencyFormat.format(aorder.discount) : '€ 0.00',
-      isGift: aorder.is_gift ? 'YES' : 'NO',
+      isGift: aorder.is_gift,
       delivery_date: aorder.delivery?.date ? format(aorder.delivery.date, 'dd-MM-yyyy') : 'Unknown',
       delivery_type: this.getDeliveryTypeLabel(aorder.delivery?.type),
       delivery_instructions: aorder.delivery?.instructions ?? 'None',
