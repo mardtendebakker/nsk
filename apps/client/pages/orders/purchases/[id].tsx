@@ -167,7 +167,7 @@ function UpdatePurchaseOrder() {
                 item
                 xs={12}
               >
-                { id && <ProductsTable orderId={id.toString()} /> }
+                { id && <ProductsTable orderId={id.toString()} vatFactor={formRepresentation.vatFactor.value} /> }
               </Grid>
             </Grid>
             <Action

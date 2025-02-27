@@ -18,7 +18,6 @@ export default function PricingDetails({
   setValue: SetValue
 }) {
   const { trans } = useTranslation();
-
   return (
     <>
       <Typography
@@ -43,10 +42,31 @@ export default function PricingDetails({
             label={trans('transportCost')}
             placeholder="0.00"
             type="number"
-            onChange={(e) => setValue({ field: 'transport', value: e.target.value })}
+            onChange={(e) => {
+              setValue({ field: 'transport', value: e.target.value });
+              setValue({ field: 'transportInclVat', value: parseFloat(e.target.value) * formRepresentation.vatFactor.value });
+            }}
             value={formRepresentation.transport.value || ''}
           />
           <Box sx={{ m: '.25rem' }} />
+          <TextField
+            disabled={disabled}
+            sx={{ width: '10rem' }}
+            label={trans('transportCostInclVat')}
+            placeholder="0.00"
+            type="number"
+            onChange={(e) => {
+              setValue({ field: 'transport', value: parseFloat(e.target.value) / formRepresentation.vatFactor.value });
+              setValue({ field: 'transportInclVat', value: e.target.value });
+            }}
+            value={formRepresentation.transportInclVat.value || ''}
+          />
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          sx={{ display: 'flex', flex: 1, alignItems: 'center' }}
+        >
           <TextField
             disabled={disabled}
             sx={{ width: '10rem' }}
@@ -68,7 +88,7 @@ export default function PricingDetails({
             label={trans('gift')}
           />
         </Grid>
-        <Grid item>
+        <Grid item sx={{ mt: '.5rem' }}>
           <Typography variant="h4">
             {trans('total')}
             :
@@ -76,7 +96,7 @@ export default function PricingDetails({
             {(formRepresentation.totalPrice.value || 0 as number).toFixed(2)}
             {' '}
             (
-            {(formRepresentation.vat.value || 0 as number)}
+            {(formRepresentation.vat.value as number)}
             %
             {' '}
             {trans('vat')}

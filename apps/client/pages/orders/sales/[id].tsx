@@ -118,7 +118,7 @@ function UpdateSalesOrder() {
                 item
                 xs={12}
               >
-                {id && <ProductsTable orderId={id.toString()} refreshOrder={() => fetchSalesOrder()} />}
+                {id && <ProductsTable orderId={id.toString()} refreshOrder={() => fetchSalesOrder()} vatFactor={formRepresentation.vatFactor.value} />}
               </Grid>
             </Grid>
             <Action
