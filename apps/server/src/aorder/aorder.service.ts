@@ -141,7 +141,7 @@ export class AOrderService {
     || order?.contact_aorder_customer_idTocontact?.company_contact_company_idTocompany?.vat_code
     || 2;
 
-    const vatRate = VAT_CODES[vatCode].value || 2;
+    const vatRate = VAT_CODES.find(({ code }) => code == vatCode).value || 0;
 
     if (commonDto.order_nr === undefined) {
       const { id, order_date: orderDate } = order;

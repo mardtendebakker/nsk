@@ -68,7 +68,7 @@ export class AOrderProcess {
       }),
     };
 
-    const { totalPrice, vatValue } = this.calculateTotalPrice(customerProcessed?.vat?.value || VAT_CODES.find(({ code }) => code == 2).value);
+    const { totalPrice, vatValue } = this.calculateTotalPrice(customerProcessed?.vat?.value || 0);
     this.totalPrice = totalPrice;
     this.vatValue = vatValue;
 
