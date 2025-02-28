@@ -7,6 +7,7 @@ import useTranslation from '../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../hooks/useForm';
 import TextField from '../../memoizedInput/textField';
 import Checkbox from '../../checkbox';
+import useResponsive from '../../../hooks/useResponsive';
 
 export default function PricingDetails({
   formRepresentation,
@@ -17,6 +18,7 @@ export default function PricingDetails({
   disabled: boolean,
   setValue: SetValue
 }) {
+  const isDesktop = useResponsive('up', 'md');
   const { trans } = useTranslation();
   return (
     <>
@@ -34,11 +36,13 @@ export default function PricingDetails({
         <Grid
           item
           xs={12}
-          sx={{ display: 'flex', flex: 1, alignItems: 'center' }}
+          sx={{
+            display: 'flex', flex: 1, flexDirection: !isDesktop ? 'column' : undefined,
+          }}
         >
           <TextField
             disabled={disabled}
-            sx={{ width: '10rem' }}
+            sx={{ width: isDesktop ? '10rem' : undefined }}
             label={trans('transportCost')}
             placeholder="0.00"
             type="number"
@@ -51,7 +55,7 @@ export default function PricingDetails({
           <Box sx={{ m: '.25rem' }} />
           <TextField
             disabled={disabled}
-            sx={{ width: '10rem' }}
+            sx={{ width: isDesktop ? '10rem' : undefined }}
             label={trans('transportCostInclVat')}
             placeholder="0.00"
             type="number"
@@ -88,33 +92,29 @@ export default function PricingDetails({
             label={trans('gift')}
           />
         </Grid>
-        <Grid item sx={{ mt: '.5rem' }}>
-          <Typography variant="h4">
-            {trans('total')}
-            :
-            {' '}
-            {(formRepresentation.totalPrice.value || 0 as number).toFixed(2)}
-            {' '}
-            (
-            {(formRepresentation.vat.value as number)}
-            %
-            {' '}
-            {trans('vat')}
-            )
-
-          </Typography>
-          <Typography variant="h4" sx={{ mt: '.5rem' }}>
-            {trans('totalExtVat')}
-            :
-            {' '}
-            {(formRepresentation.totalPriceExtVat.value || 0 as number).toFixed(2)}
-          </Typography>
-          <Typography variant="h4" sx={{ mt: '.5rem' }}>
-            {trans('vatValue')}
-            :
-            {' '}
-            {(formRepresentation.vatValue.value || 0 as number).toFixed(2)}
-          </Typography>
+        <Grid item sx={{ display: 'flex', flexDirection: 'column' }}>
+          <TextField
+            sx={{ width: isDesktop ? '10rem' : undefined }}
+            label={trans('priceInclVat')}
+            placeholder="0.00"
+            type="number"
+            value={(formRepresentation.totalPrice.value || 0 as number).toFixed(2)}
+          />
+          <TextField
+            sx={{ width: isDesktop ? '10rem' : undefined }}
+            label={trans('priceExclVat')}
+            placeholder="0.00"
+            type="number"
+            value={(formRepresentation.totalPriceExtVat.value || 0 as number).toFixed(2)}
+          />
+          <TextField
+            fullWidth={!isDesktop}
+            sx={{ width: isDesktop ? '10rem' : undefined }}
+            label={trans('vat')}
+            placeholder="0.00"
+            type="number"
+            value={(formRepresentation.vatValue.value || 0 as number).toFixed(2)}
+          />
         </Grid>
       </Grid>
     </>
