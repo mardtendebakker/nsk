@@ -31,10 +31,17 @@ export function initFormState(trans, order?: Order) {
     orderStatus: { required: true, value: order?.status_id },
     remarks: { value: order?.remarks },
     transport: { value: order?.transport },
+    transportInclVat: {
+      value: order?.transport
+      // eslint-disable-next-line no-unsafe-optional-chaining
+        ? (order?.transport * 1 + (order?.vat_rate || 0 / 100))
+        : 0,
+    },
     totalPrice: { value: order?.totalPrice },
     totalPriceExtVat: { value: order?.totalPriceExtVat },
     vatValue: { value: order?.vatValue },
-    vat: { value: order?.contact_aorder_customer_idTocontact?.vat?.value || 0 },
+    vat: { value: order?.vat_rate || 0 },
+    vatFactor: { value: 1 + (order?.vat_rate || 0) / 100 },
     discount: { value: order?.discount },
     isGift: { value: !!order?.is_gift },
     deliveryDate: { value: order?.delivery?.date },

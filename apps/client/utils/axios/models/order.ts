@@ -74,6 +74,7 @@ export interface Order {
   contact_aorder_customer_idTocontact:Contact,
   contact_aorder_supplier_idTocontact:Contact
   totalPerProductType: object
+  vat_rate: number
 }
 
 interface Pickup {

@@ -130,10 +130,11 @@ export class AOrderProcess {
       price += this.aorder.transport;
     }
 
-    let totalPrice = price * (1 + vat / 100);
     if (this.aorder.discount > 0) {
-      totalPrice -= this.aorder.discount;
+      price -= this.aorder.discount;
     }
+
+    const totalPrice = price * (1 + vat / 100);
 
     return {
       totalPrice,

@@ -4,7 +4,6 @@ import {
   TableBody,
   TableHead,
   TableRow,
-  Checkbox,
 } from '@mui/material';
 import {
   useState, useEffect, useCallback,
@@ -14,17 +13,13 @@ import { useRouter } from 'next/router';
 import _ from 'lodash';
 import { Product, ProductListItem } from '../../../../utils/axios/models/product';
 import debounce from '../../../../utils/debounce';
-import TextField from '../../../memoizedInput/textField';
 import CreateModal from '../../../stock/createModal';
 import useTranslation from '../../../../hooks/useTranslation';
 import useAxios from '../../../../hooks/useAxios';
 import { APRODUCT_PATH } from '../../../../utils/axios';
 import EditModal from '../../../stock/editModal';
-import Edit from '../../../button/edit';
 import PaginatedTable from '../../../paginatedTable';
 import TableCell from '../../../tableCell';
-import can from '../../../../utils/can';
-import useSecurity from '../../../../hooks/useSecurity';
 import Can from '../../../can';
 import Filter from '../../../stock/list/filter';
 import useForm, { FieldPayload } from '../../../../hooks/useForm';
@@ -36,9 +31,9 @@ import useBulkPrintChecklist from '../../../../hooks/apiCalls/useBulkPrintCheckl
 import useBulkPrintPriceCards from '../../../../hooks/apiCalls/useBulkPrintPriceCards';
 import useBulkPrintLabels from '../../../../hooks/apiCalls/useBulkPrintLabels';
 import useBulkPrintBarcodes from '../../../../hooks/apiCalls/useBulkPrintBarcodes';
+import Row from './row';
 
-export default function ProductsTable({ orderId }:{ orderId: string }) {
-  const { state: { user } } = useSecurity();
+export default function ProductsTable({ orderId, vatFactor }:{ orderId: string, vatFactor: number }) {
   const router = useRouter();
   const [showForm, setShowForm] = useState<boolean>(false);
   const { formRepresentation, setValue, setData } = useForm(initFormState({
@@ -75,6 +70,15 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
 
   const { call: callPut, performing: performingPut } = useAxios('put', undefined, { withProgressBar: true });
 
+  const defaultRefreshList = () => refreshList({
+    page,
+    rowsPerPage,
+    formRepresentation,
+    router,
+    call,
+    orderId,
+  });
+
   const handleProductPropertyChange = useCallback(debounce((product: ProductListItem, property: string, value) => {
     callPut({
       path: APRODUCT_PATH.replace(':id', product.id.toString()),
@@ -88,15 +92,6 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
       },
     });
   }), []);
-
-  const defaultRefreshList = () => refreshList({
-    page,
-    rowsPerPage,
-    formRepresentation,
-    router,
-    call,
-    orderId,
-  });
 
   useEffect(() => {
     defaultRefreshList();
@@ -200,6 +195,9 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
               {trans('purchasePrice')}
             </TableCell>
             <TableCell>
+              {trans('purchasePriceInclVat')}
+            </TableCell>
+            <TableCell>
               {trans('purchaseQuantity')}
             </TableCell>
             <TableCell align="right">
@@ -210,55 +208,16 @@ export default function ProductsTable({ orderId }:{ orderId: string }) {
         <TableBody>
           {data.map(
             (product: ProductListItem) => (
-              <TableRow key={product.id}>
-                <TableCell>
-                  <Checkbox
-                    checked={Boolean(checkedProductIds.find((id) => id === product.id))}
-                    sx={{ mr: '1.5rem' }}
-                    onChange={(e, checked) => handleRowChecked({ id: product.id, checked })}
-                    disabled={disabled()}
-                  />
-                  {product.id}
-                </TableCell>
-                <TableCell>{product.sku}</TableCell>
-                <TableCell>{product.name}</TableCell>
-                <TableCell>{product.type}</TableCell>
-                <TableCell>{product.location}</TableCell>
-                <TableCell>
-                  {product.price}
-                </TableCell>
-                <TableCell>
-                  <TextField
-                    type="number"
-                    placeholder="1"
-                    defaultValue={product.product_order.price.toString()}
-                    onChange={(e) => handleProductPropertyChange(
-                      product,
-                      'price',
-                      e.target.value,
-                    )}
-                    disabled={!user || !can({ user, requiredGroups: ['admin', 'manager', 'logistics', 'local'] })}
-                  />
-                </TableCell>
-                <TableCell>
-                  <TextField
-                    type="number"
-                    placeholder="1"
-                    defaultValue={product.product_order.quantity.toString()}
-                    onChange={(e) => handleProductPropertyChange(
-                      product,
-                      'quantity',
-                      e.target.value,
-                    )}
-                    disabled={!user || !can({ user, requiredGroups: ['admin', 'manager', 'logistics', 'local'] })}
-                  />
-                </TableCell>
-                <TableCell align="right">
-                  <Can requiredGroups={['admin', 'manager', 'logistics', 'local']}>
-                    <Edit onClick={() => setEditProductId(product.id)} />
-                  </Can>
-                </TableCell>
-              </TableRow>
+              <Row
+                key={product.id}
+                product={product}
+                onProductPropertyChange={handleProductPropertyChange}
+                disabled={disabled()}
+                onRowChecked={handleRowChecked}
+                checkedProductIds={checkedProductIds}
+                onEditProduct={setEditProductId}
+                vatFactor={vatFactor}
+              />
             ),
           )}
         </TableBody>
