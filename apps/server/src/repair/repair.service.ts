@@ -10,6 +10,7 @@ import { SaleService } from '../sale/sale.service';
 import { AProductService } from '../aproduct/aproduct.service';
 import { REPAIR_PRODUCT_LOCATION_ID, REPAIR_PRODUCT_NAME } from '../to-repair/enum/repair-product.const';
 import { ContactService } from '../contact/contact.service';
+import { OrderStatuses } from '../admin/order-status/enums/order-statuses.enum';
 
 @Injectable()
 export class RepairService extends SaleService {
@@ -62,7 +63,7 @@ export class RepairService extends SaleService {
 
   private findRepairOrderStatusOrCreate() {
     const createOrderStatusDto: CreateOrderStatusDto = {
-      name: 'To repair',
+      name: OrderStatuses.TO_REPAIR,
       is_purchase: false,
       is_sale: false,
       is_repair: true,
