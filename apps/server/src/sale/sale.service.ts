@@ -22,6 +22,7 @@ import { IExcelColumn } from './types/excel-column';
 import { ContactService } from '../contact/contact.service';
 import { AOrderProcessed } from '../aorder/types/aorder-processed';
 import { IProductToOrder } from './types/product-to-order';
+import { OrderStatuses } from '../admin/order-status/enums/order-statuses.enum';
 
 @Injectable()
 export class SaleService extends AOrderService {
@@ -166,7 +167,7 @@ export class SaleService extends AOrderService {
         };
 
         const customer = await this.contactService.checkExists(customerData);
-        const orderStatus = await this.findOrderStatusByNameOrCreate('Products to assign', false, true, false);
+        const orderStatus = await this.findOrderStatusByNameOrCreate(OrderStatuses.PRODUCTS_TO_ASSIGN, false, true, false);
         const remarks = `Referentie: ${Referentie || ''}\r\n`
                       + `Gebouw: ${Gebouw || ''}\r\n`
                       + `Verdieping: ${Verdieping || ''}\r\n`
