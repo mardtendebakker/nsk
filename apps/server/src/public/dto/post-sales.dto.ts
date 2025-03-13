@@ -5,7 +5,6 @@ import { PostCommonDto } from './PostCommon.dto';
 import { CommonFormDto } from './common-form.dto';
 import { NewContactDto } from './new-contact.dto';
 import { formDataNumberTransform, formDataStringTransform } from '../../common/transforms/form-date.transform';
-import { TermsDto } from './terms.dto';
 
 class Product {
   @ApiProperty()
@@ -21,22 +20,18 @@ class Product {
     quantity: number;
 }
 
-class PublicOrderFormDto extends CommonFormDto {
+class PublicSalesFormDto extends CommonFormDto {
   @ApiProperty()
   @Type(() => NewContactDto)
     customer: NewContactDto;
-
-  @ApiProperty()
-  @Type(() => TermsDto)
-    terms: TermsDto;
 
   @ApiProperty()
   @Type(() => Product)
     products: Product[];
 }
 
-export class PostOrderDto extends PostCommonDto {
+export class PostSalesDto extends PostCommonDto {
   @ApiProperty()
-  @Type(() => PublicOrderFormDto)
-    'public_order_form': PublicOrderFormDto;
+  @Type(() => PublicSalesFormDto)
+    'public_sales_form': PublicSalesFormDto;
 }

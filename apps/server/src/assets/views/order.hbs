@@ -1,14 +1,18 @@
-<div id="orderform"><form name="public_order_form" method="post" class="form-horizontal">
+<div id="logos" style="width: 100%;padding: 0;background: url(https://cdn.shopify.com/s/files/1/0886/6280/2778/files/UWV-desktop.png) no-repeat;height: 200px;background-repeat: no-repeat;background-position: center;background-size: contain;"></div>
+<h2>UWV donatieprogramma</h2>
+<div id="toelichting">Dit formulier is bedoeld voor schenkingsaanvragen voor ICT-apparatuur vanuit het UWV. Aan het eind van elk kwartaal (maart, juni, september, december) nemen wij deze aanvragen in behandeling. Het principe van wie het eerst komt, wie het eerst maalt, is geldig. De donaties zijn bedoeld voor gebruik binnen Nederland. Dit donatieprogramma komt voort uit een samenwerking tussen UWV, KPN, Vooruit en Daans Magazijn.</div>
+<br>
+<form name="public_order_form" method="post" class="form-horizontal">
 
   <div class="panel panel-default">
     <div class="panel-heading">
-      <span class="glyphicon glyphicon-play" aria-hidden="true"></span> Your details
+      <span class="glyphicon glyphicon-play" aria-hidden="true"></span> Contactgegevens
     </div>
     <div class="panel-body">
       {{#each form}}
         {{#each customer}}
           <div class="form-group">
-            <label class="col-sm-3 control-label required" for="public_order_form_supplier_{{@key}}">{{this.label}}{{#if this.required}} *{{/if}}</label>
+            <label class="col-sm-3 control-label required" for="public_order_form_customer_{{@key}}">{{this.label}}{{#if this.required}} *{{/if}}</label>
             <div class="col-sm-9">
               <input 
                 type="text"
@@ -27,14 +31,48 @@
 
   <div class="panel panel-default">
     <div class="panel-heading">
-      <span class="glyphicon glyphicon-play" aria-hidden="true"></span> Products
+      <span class="glyphicon glyphicon-play" aria-hidden="true"></span> Voorwaarden
     </div>
     <div class="panel-body">
+      <p>
+        Om in aanmerking te komen voor de schenking moet uw organisatie aan minimaal één van onderstaande voorwaarden voldoen. Aan welke voorwaarde(n) voldoet uw organisatie?
+      </p>
+      {{#each form}}
+        {{#each terms}}
+          <div>
+            <div class="col-xs-10">
+              <label for="public_order_form_terms_{{@key}}">{{this.label}}</label>
+            </div>
+            <div class="col-xs-2 text-right">
+              <input 
+                type="checkbox"
+                id="public_order_form_terms_{{@key}}"
+                name="public_order_form[terms][{{@key}}]"
+                value="{{this.value}}"
+              >
+            </div>
+          </div>
+        {{/each}}
+      {{/each}}
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <span class="glyphicon glyphicon-play" aria-hidden="true"></span> Gewenste producten
+    </div>
+    <div class="panel-body">
+      <p>Het is mogelijk om werkplekken en smartphones aan te vragen. U mag hierbij maximaal 50 werkplekken en maximaal 20 smartphones aanvragen.</p>
       {{#each products}}
+        {{#if this.title}}
+          <h3>{{this.title}}</h3>
+        {{/if}}
+        {{#if this.desc}}
+          <p>{{this.desc}}</p>
+        {{/if}}
         <div class="form-group">
           <div class="col-sm-3" style="margin-top: 8px"><b>{{this.name}}</b></div>
           <div class="col-sm-5" style="margin-top: 8px">{{this.remark}}</div>
-          <div class="col-sm-2" style="margin-top: 8px">€ {{this.price}}</div>
+          <div class="col-sm-2" style="margin-top: 8px"></div>
           <div class="col-sm-2">
             <input
               type="number"
@@ -46,6 +84,9 @@
           </div>
         </div>
         <input type="hidden" id="public_order_form_products_{{@index}}_name" name="public_order_form[products][{{@index}}][name]" value="{{this.name}}">
+        {{#unless this.title}}
+          <p>&nbsp;</p>
+        {{/unless}}
       {{/each}}
 
     </div>
@@ -62,7 +103,7 @@
 
       <div class="row" style="margin-top: 10px">
         <div class="col-sm-9 col-sm-offset-3">
-          <button type="submit" id="public_order_form_save" name="public_order_form[save]" class="btn-success btn" style="width: 150px;">Send</button>
+          <button type="submit" id="public_order_form_save" name="public_order_form[save]" class="btn-success btn" style="width: 200px;">Donatieaanvraag versturen</button>
         </div>
       </div>
     </div>
@@ -76,4 +117,3 @@
 <div id="errorContainer" style="color: red"></div>
 
 <script src="https://www.google.com/recaptcha/api.js" async="" defer=""></script>
-</div>

@@ -4,7 +4,7 @@
     <title>Nexxus order form test</title>
   </head>
   <body>
-  
+
 	<div id="orderform" style="margin: 50px; width: 800px"></div>
   
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -17,29 +17,23 @@
             // confirmPage: 'http://www.nu.nl',
             products: [
               {
-                name: 'Computerset',
-                remark: null,
-                price: 160.92
+                id: 'desktop',
+                title: 'Werkplekken',
+                desc: 'U mag in totaal maximaal 50 werkplekken aanvragen.',
+                name: 'Desktop + monitor',
+                remark: null
               },
               {
-                name: 'Basis laptops',
-                remark: null,
-                price: 189
+                id: 'laptop',
+                name: 'Laptop',
+                remark: null
               },
               {
-                name: 'Geavanceerde laptop',
-                remark: null,
-                price: 301.32
-              },
-              {
-                name: 'Chromebook',
-                remark: null,
-                price: 160.92
-              },
-              {
-                name: 'Nieuwe Laptop',
-                remark: null,
-                price: 625
+                id: 'phone',
+                title: 'Smartphones',
+                desc: 'U mag in totaal maximaal 20 smartphones aanvragen. Indien uw aanvraag wordt gehonoreerd ontvangt u van ons een smartphone met een minimale Android versie 7.0, 16Gb opslagcapaciteit en 5” schermformaat.',
+                name: 'Smartphones',
+                remark: null
               },
             ]
         });

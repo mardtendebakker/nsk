@@ -25,6 +25,7 @@ import { SaleService } from '../sale/sale.service';
 import { PostImportDto } from './dto/post-import.dto';
 import { ContactService } from '../contact/contact.service';
 import { DataDestructionDesc } from '../calendar/pickup/types/destruction-desc.enum';
+import { PostSalesDto } from './dto/post-sales.dto';
 
 @Injectable()
 export class PublicService {
@@ -112,12 +113,53 @@ export class PublicService {
     // TODO: sendStatusMail
   }
 
-  getOrderForm() {
+  getSalesForm() {
     return {
       form: {
         customer: this.getContactForm(),
       },
     };
+  }
+
+  getOrderForm() {
+    return {
+      form: {
+        terms: this.getTermsAndConditionsForm(),
+        customer: this.getContactForm(),
+      },
+    };
+  }
+
+  async postSales(params: PostSalesDto): Promise<void> {
+    const { public_sales_form: publicSalesForm } = params;
+
+    await this.captchaVerify(params['g-recaptcha-response']);
+
+    publicSalesForm.customer.company_is_customer = true;
+    const customer = await this.contactService.checkExists(publicSalesForm.customer);
+
+    const orderStatus = await this.findOrderStatusByNameOrCreate(publicSalesForm.orderStatusName, false, true, false);
+
+    let remarks = '';
+
+    for (const product of publicSalesForm.products) {
+      if (product.quantity > 0) {
+        remarks += `${product.name}: ${product.quantity}x\r\n`;
+      }
+    }
+
+    if (remarks.length < 4) {
+      remarks = 'No quantities entered...';
+    }
+
+    const saleData: CreateAOrderDto = {
+      customer_id: customer.id,
+      is_gift: false,
+      status_id: orderStatus.id,
+      remarks,
+    };
+
+    await this.saleService.create(saleData);
   }
 
   async postOrder(params: PostOrderDto): Promise<void> {
@@ -141,6 +183,10 @@ export class PublicService {
     if (remarks.length < 4) {
       remarks = 'No quantities entered...';
     }
+
+    Object.keys(publicOrderForm.terms).forEach((key) => {
+      remarks += `${key}: ☑\r\n`;
+    });
 
     const saleData: CreateAOrderDto = {
       customer_id: customer.id,
@@ -174,10 +220,37 @@ export class PublicService {
     U mag ook mailen naar logistiek@copiatek.nl Zet u voor de zekerheid dit emailadres in uw Whitelist.`;
   }
 
+  getPostSalesSuccessMessage(): string {
+    return `Hartelijk dank voor uw interesse in onze producten. 
+    Heeft u vragen of is er spoed geboden? Belt u ons dan meteen via 070 2136312.
+    Wij nemen contact met u op over uw bestelling.`;
+  }
+
   getPostOrderSuccessMessage(): string {
     return `Hartelijk dank voor uw interesse in onze producten. 
     Heeft u vragen of is er spoed geboden? Belt u ons dan meteen via 070 2136312.
     Wij nemen contact met u op over uw bestelling.`;
+  }
+
+  private getTermsAndConditionsForm() {
+    return {
+      reintegratie: {
+        label: '(Re)integratie in de samenleving',
+        checked: false,
+      },
+      afstand: {
+        label: 'Verminderen van afstand tot de arbeidsmarkt',
+        checked: false,
+      },
+      levensstijl: {
+        label: 'Stimuleren ontwikkelen van een (sportief) gezonde levensstijl',
+        checked: false,
+      },
+      resocialisatie: {
+        label: '(Re)socialisatie ondersteunen',
+        checked: false,
+      },
+    };
   }
 
   private getContactForm() {
@@ -189,6 +262,10 @@ export class PublicService {
       company_name: {
         label: 'Bedrijfsnaam van de klant',
         required: true,
+      },
+      company_kvk_nr: {
+        label: 'KVK-nummer',
+        required: false,
       },
       email: {
         label: 'E-mail',
