@@ -3,9 +3,9 @@ import { Transform, Type } from 'class-transformer';
 import { IsInt, IsString } from 'class-validator';
 import { PostCommonDto } from './PostCommon.dto';
 import { CommonFormDto } from './common-form.dto';
-import { NewContactDto } from './new-contact.dto';
 import { formDataNumberTransform, formDataStringTransform } from '../../common/transforms/form-date.transform';
 import { TermsDto } from './terms.dto';
+import { OrderContactDto } from './order-contact.dto';
 
 class Product {
   @ApiProperty()
@@ -23,8 +23,8 @@ class Product {
 
 class PublicOrderFormDto extends CommonFormDto {
   @ApiProperty()
-  @Type(() => NewContactDto)
-    customer: NewContactDto;
+  @Type(() => OrderContactDto)
+    customer: OrderContactDto;
 
   @ApiProperty()
   @Type(() => TermsDto)
