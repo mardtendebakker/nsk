@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="nl">
+  <head>
+    <title>Nexxus sales form test</title>
+  </head>
+  <body>
+  
+	<div id="salesform" style="margin: 50px; width: 800px"></div>
+  
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="/nsk/js/jquery.nexxus-order.js"></script>
+    <!-- script src="https://nexxus.eco/nsk/js/jquery.nexxus-order.js"></script -->
+	<script>
+	
+	    $("#salesform").nexxusSales({
+            recaptchaKey: '6LdzW4QUAAAAANRAfkgl8Cz4-QNUcNEJomOj5wgX',
+            // confirmPage: 'http://www.nu.nl',
+            products: [
+              {
+                name: 'Computerset',
+                remark: null,
+                price: 160.92
+              },
+              {
+                name: 'Basis laptops',
+                remark: null,
+                price: 189
+              },
+              {
+                name: 'Geavanceerde laptop',
+                remark: null,
+                price: 301.32
+              },
+              {
+                name: 'Chromebook',
+                remark: null,
+                price: 160.92
+              },
+              {
+                name: 'Nieuwe Laptop',
+                remark: null,
+                price: 625
+              },
+            ]
+        });
+	
+	</script>
+  </body>
+</html>
