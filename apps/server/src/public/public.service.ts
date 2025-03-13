@@ -125,7 +125,7 @@ export class PublicService {
     return {
       form: {
         terms: this.getTermsAndConditionsForm(),
-        customer: this.getContactForm(),
+        customer: this.getContactOrderForm(),
       },
     };
   }
@@ -167,7 +167,9 @@ export class PublicService {
 
     await this.captchaVerify(params['g-recaptcha-response']);
 
-    publicOrderForm.customer.company_is_customer = true;
+    const { customer: customerDto } = publicOrderForm;
+    customerDto.company_is_customer = true;
+    const { reason } = customerDto;
     const customer = await this.contactService.checkExists(publicOrderForm.customer);
 
     const orderStatus = await this.findOrderStatusByNameOrCreate(publicOrderForm.orderStatusName, false, true, false);
@@ -187,6 +189,7 @@ export class PublicService {
     Object.keys(publicOrderForm.terms).forEach((key) => {
       remarks += `${key}: ☑\r\n`;
     });
+    remarks += `Reden aanvraag: ${reason}`;
 
     const saleData: CreateAOrderDto = {
       customer_id: customer.id,
@@ -263,10 +266,6 @@ export class PublicService {
         label: 'Bedrijfsnaam van de klant',
         required: true,
       },
-      company_kvk_nr: {
-        label: 'KVK-nummer',
-        required: false,
-      },
       email: {
         label: 'E-mail',
         required: true,
@@ -286,6 +285,47 @@ export class PublicService {
       city: {
         label: 'Woonplaats',
         required: true,
+      },
+    };
+  }
+
+  private getContactOrderForm() {
+    return {
+      name: {
+        label: 'Uw volledige naam',
+        required: false,
+      },
+      company_name: {
+        label: 'Naam organisatie',
+        required: true,
+      },
+      company_kvk_nr: {
+        label: 'KVK-nummer',
+        required: true,
+      },
+      street: {
+        label: 'Adres organisatie',
+        required: true,
+      },
+      zip: {
+        label: 'Postcode',
+        required: true,
+      },
+      city: {
+        label: 'Vestigingsplaats',
+        required: true,
+      },
+      phone: {
+        label: 'Telefoonnummer (overdag bereikbaar)',
+        required: true,
+      },
+      email: {
+        label: 'Uw e-mailadres',
+        required: true,
+      },
+      reason: {
+        label: 'Reden aanvraag',
+        required: false,
       },
     };
   }
