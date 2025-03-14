@@ -73,8 +73,11 @@ export function initFormState(trans, order?: Order) {
         }
       },
     },
-    logisticId: {
-      value: order?.delivery?.logistics_id,
+    vehicleId: {
+      value: order?.delivery?.vehicle_id,
+    },
+    driverId: {
+      value: order?.delivery?.driver_id,
     },
     companyKvkNr: {},
     companyIsPartner: { value: false },
@@ -106,7 +109,8 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
       date: formRepresentation.deliveryDate.value || null,
       type: formRepresentation.deliveryType.value,
       instructions: formRepresentation.deliveryInstructions.value,
-      logistics_id: formRepresentation.logisticId.value || null,
+      vehicle_id: formRepresentation.vehicleId.value || null,
+      driver_id: formRepresentation.driverId.value || null,
       dhl_tracking_code: formRepresentation.dhlTrackingCode.value || null,
     },
   };

@@ -172,18 +172,18 @@ export default function VehiclesTracking() {
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <Avatar sx={{ mr: '1rem' }}>
                   <Typography variant="h5">
-                    {pickup.logistic
-                      ? (pickup.logistic.firstname.charAt(0)?.toUpperCase() || '') + (pickup.logistic.lastname.charAt(0)?.toUpperCase() || '')
+                    {pickup.driver
+                      ? (pickup.driver.first_name.charAt(0)?.toUpperCase() || '') + (pickup.driver.last_name.charAt(0)?.toUpperCase() || '')
                       : '--'}
                   </Typography>
                 </Avatar>
                 <Box>
                   <Typography variant="h5">
-                    {pickup.logistic
-                      ? `${pickup.logistic.firstname} ${pickup.logistic.lastname}`
+                    {pickup.driver
+                      ? `${pickup.driver.first_name} ${pickup.driver.last_name}`
                       : '--'}
                   </Typography>
-                  <Typography variant="body1">{pickup.logistic?.username || '--'}</Typography>
+                  <Typography variant="body1">{pickup.driver?.username || '--'}</Typography>
                 </Box>
               </Box>
               <Divider sx={{ mt: '.5rem' }} />
@@ -196,7 +196,7 @@ export default function VehiclesTracking() {
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <Avatar sx={{ mr: '1rem' }}><LocalShippingOutlined sx={{ fontSize: '1.2rem' }} /></Avatar>
                 <Typography variant="h5">
-                  {pickup.logistic?.username || '--'}
+                  {pickup.vehicle?.registration_number || '--'}
                 </Typography>
               </Box>
             </Box>

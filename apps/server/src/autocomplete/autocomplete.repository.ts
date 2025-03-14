@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { AutocompleteDto, LocationLabelsAutocompleteDto } from './dto/autocomplete.dto';
 import { AutocompleteResponseDto } from './dto/autocomplete-response.dto';
 import { PrismaService } from '../prisma/prisma.service';
-import { LogisticRole } from '../logistic/types/logistic-role.enum';
+import { Group } from '../user/model/group.enum';
 
 const DEFAULT_TAKE = 50;
 
@@ -111,21 +111,21 @@ export class AutocompleteRepository {
     });
   }
 
-  async findLogistics(autocompleteDto: AutocompleteDto): Promise<AutocompleteResponseDto[]> {
-    const firstResult = await this.prisma.fos_user.findMany({
+  async findDrivers(autocompleteDto: AutocompleteDto): Promise<AutocompleteResponseDto[]> {
+    const firstResult = await this.prisma.user.findMany({
       take: DEFAULT_TAKE,
       where: {
         id: { in: autocompleteDto.ids },
-        roles: LogisticRole.LOGISTIC_ROLE,
+        groups: { contains: Group.LOGISTICS },
       },
     });
 
-    const secondResult = await this.prisma.fos_user.findMany({
+    const secondResult = await this.prisma.user.findMany({
       take: DEFAULT_TAKE,
       where: {
         username: { contains: autocompleteDto.search || '' },
         id: { notIn: firstResult.map(({ id }) => id) },
-        roles: LogisticRole.LOGISTIC_ROLE,
+        groups: { contains: Group.LOGISTICS },
       },
     });
 
@@ -135,6 +135,30 @@ export class AutocompleteRepository {
     ]
       .sort((a, b) => (a.id > b.id ? 1 : -1))
       .map(({ id, username }) => ({ id, label: username }));
+  }
+
+  async findVehicles(autocompleteDto: AutocompleteDto): Promise<AutocompleteResponseDto[]> {
+    const firstResult = await this.prisma.vehicle.findMany({
+      take: DEFAULT_TAKE,
+      where: {
+        id: { in: autocompleteDto.ids },
+      },
+    });
+
+    const secondResult = await this.prisma.vehicle.findMany({
+      take: DEFAULT_TAKE,
+      where: {
+        registration_number: { contains: autocompleteDto.search || '' },
+        id: { notIn: firstResult.map(({ id }) => id) },
+      },
+    });
+
+    return [
+      ...firstResult,
+      ...secondResult,
+    ]
+      .sort((a, b) => (a.id > b.id ? 1 : -1))
+      .map(({ id, registration_number }) => ({ id, label: registration_number }));
   }
 
   async findContacts(autocompleteDto: AutocompleteDto, email?: string): Promise<AutocompleteResponseDto[]> {
