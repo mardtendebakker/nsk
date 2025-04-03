@@ -517,6 +517,7 @@ export class StockService {
         order_nr: order.order_nr,
         order_date: order.order_date,
         discr: order.discr,
+        vat_rate: order.vat_rate,
         contact:
           order?.contact_aorder_customer_idTocontact?.name
           || order?.contact_aorder_supplier_idTocontact?.name,
@@ -571,6 +572,7 @@ export class StockService {
       order_date: true,
       order_nr: true,
       discr: true,
+      vat_rate: true,
       contact_aorder_customer_idTocontact: {
         select: {
           name: true,

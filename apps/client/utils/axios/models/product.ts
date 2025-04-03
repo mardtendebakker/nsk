@@ -7,7 +7,8 @@ interface Order {
   company: string,
   order_date: string,
   order_nr: string,
-  status: string
+  status: string,
+  vat_rate: number
 }
 
 export interface LocationTemplate {

@@ -41,6 +41,8 @@ export default function Form({
     return keys.reduce((accumulator, currentValue) => accumulator + (formRepresentation[currentValue].additionalData?.selectedOption?.price || 0), 0);
   };
 
+  const listPrice = calculateListPrice();
+
   return (
     <>
       <BorderedBox sx={{ p: '1rem' }}>
@@ -105,7 +107,7 @@ export default function Form({
             sx={{ display: 'flex', flex: 1, flexDirection: isDesktop ? undefined : 'column' }}
           >
             <DataSourcePicker
-              sx={{ flex: 0.33, m: '.5rem' }}
+              sx={{ flex: 0.20, m: '.5rem' }}
               path={AUTOCOMPLETE_LOCATIONS_PATH}
               searchKey="name"
               label={trans('location')}
@@ -119,7 +121,7 @@ export default function Form({
               disabled={disabled}
             />
             <TextField
-              sx={{ flex: 0.33, m: '.5rem' }}
+              sx={{ flex: 0.20, m: '.5rem' }}
               label={trans('locationLabel')}
               placeholder={trans('selectLocationLabel')}
               value={formRepresentation.location_label.value || ''}
@@ -129,7 +131,7 @@ export default function Form({
               disabled={disabled || !formRepresentation.location_id.value}
             />
             <DataSourcePicker
-              sx={{ flex: 0.33, m: '.5rem' }}
+              sx={{ flex: 0.20, m: '.5rem' }}
               path={AUTOCOMPLETE_PRODUCT_STATUSES_PATH}
               label={trans('status')}
               placeholder={trans('selectStatus')}
@@ -138,25 +140,53 @@ export default function Form({
               disabled={disabled}
             />
             <Box sx={{
-              flex: 0.33, display: 'flex', flexDirection: 'column', m: '.5rem',
+              flex: 0.20, display: 'flex', flexDirection: 'column', m: '.5rem',
             }}
             >
               <TextField
                 type="number"
-                label={trans('retailPrice')}
+                label={trans('retailPriceExtVat')}
                 placeholder="0.00"
                 value={formRepresentation.price.value || '0'}
                 InputProps={{
                   startAdornment: (<Box sx={{ mr: '.2rem' }}>€</Box>),
                 }}
-                onChange={(e) => setValue({ field: 'price', value: e.target.value })}
+                onChange={(e) => {
+                  setValue({ field: 'price', value: e.target.value });
+                  setValue({ field: 'priceInclVat', value: parseFloat(e.target.value) * formRepresentation.vatFactor.value });
+                }}
                 disabled={disabled}
               />
               <Typography variant="subtitle2" color="primary" sx={{ mt: '.5rem' }}>
-                {trans('listPrice')}
+                {trans('listPriceExtVat')}
                 :
                 {' '}
-                {price(calculateListPrice())}
+                {price(listPrice)}
+              </Typography>
+            </Box>
+            <Box sx={{
+              flex: 0.20, display: 'flex', flexDirection: 'column', m: '.5rem',
+            }}
+            >
+              <TextField
+                type="number"
+                label={trans('retailPriceInclVat')}
+                placeholder="0.00"
+                value={formRepresentation.priceInclVat.value || '0'}
+                InputProps={{
+                  startAdornment: (<Box sx={{ mr: '.2rem' }}>€</Box>),
+                }}
+                onChange={(e) => {
+                  setValue({ field: 'price', value: parseFloat(e.target.value) / formRepresentation.vatFactor.value });
+                  setValue({ field: 'priceInclVat', value: e.target.value });
+                }}
+                disabled={disabled}
+              />
+              <Typography variant="subtitle2" color="primary" sx={{ mt: '.5rem' }}>
+                {trans('listPriceInclVat')}
+                :
+                {' '}
+                {price(listPrice * formRepresentation.vatFactor.value)}
               </Typography>
             </Box>
           </Grid>

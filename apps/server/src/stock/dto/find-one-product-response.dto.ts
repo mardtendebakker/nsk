@@ -20,6 +20,7 @@ class AOrderDto extends PickType(AOrderEntity, [
   'order_nr',
   'order_date',
   'discr',
+  'vat_rate',
 ]) {
   @ApiProperty()
     contact: string;
