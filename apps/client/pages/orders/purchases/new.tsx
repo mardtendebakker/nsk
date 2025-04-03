@@ -41,8 +41,7 @@ export function initFormState(trans, order?: Order) {
     transport: { value: order?.transport },
     transportInclVat: {
       value: order?.transport
-      // eslint-disable-next-line no-unsafe-optional-chaining
-        ? (order?.transport * 1 + (order?.vat_rate || 0 / 100))
+        ? order.transport * (1 + (order?.vat_rate || 0 / 100))
         : 0,
     },
     totalPrice: { value: order?.totalPrice },

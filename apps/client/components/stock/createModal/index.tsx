@@ -58,8 +58,7 @@ export function initFormState(trans: Trans, product?: Product): FormRepresentati
     price: { value: product?.price || 0, required: true },
     priceInclVat: {
       value: product?.price
-      // eslint-disable-next-line no-unsafe-optional-chaining
-        ? (product.price * 1 + (vat / 100))
+        ? product.price * (1 + (vat / 100))
         : 0,
     },
     vatFactor: { value: 1 + vat / 100 },
