@@ -628,6 +628,7 @@ const translation = {
   deleteUsedOrderStatusMessage: 'Estado del pedido utilizado por un pedido existente.',
   vehiclesTracking: 'Seguimiento de vehículos',
   vehicle: 'Vehículo',
+  driver: 'Conductor',
   selectVehicle: 'Seleccione un vehículo',
   running: 'En marcha',
   stopped: 'Detenido',

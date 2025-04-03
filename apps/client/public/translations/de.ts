@@ -628,6 +628,7 @@ const translation = {
   deleteUsedOrderStatusMessage: 'Bestellstatus wird bereits von einer bestehenden Bestellung verwendet.',
   vehiclesTracking: 'Fahrzeugverfolgung',
   vehicle: 'Das Fahrzeug',
+  driver: 'Fahrer',
   selectVehicle: 'Ein Fahrzeug auswählen',
   running: 'In Bewegung',
   stopped: 'Gestoppt',

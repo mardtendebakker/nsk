@@ -609,6 +609,8 @@ const translation = {
   supplierInfo: 'Fornecedor',
   driverInfo: 'Motorista',
   vehicleInfo: 'Veículo',
+  vehicle: 'veículo',
+  driver: 'Motorista',
   contacts: 'Contatos',
   deleteUsedOrderStatusMessage: 'Status do pedido usado por um pedido existente.',
   // http status

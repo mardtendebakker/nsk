@@ -636,6 +636,7 @@ const translation = {
   contacts: 'جهات الاتصال',
   deleteUsedOrderStatusMessage: 'حالة الطلب مستخدمة في طلب قائم.',
   vehicle: 'مركبة',
+  driver: 'سائق',
   vehiclesTracking: 'تتبع المركبات',
   selectVehicle: 'اختر مركبة',
   running: 'في حركة',

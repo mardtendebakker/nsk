@@ -637,6 +637,7 @@ const translation = {
   contacts: 'مخاطبین',
   deleteUsedOrderStatusMessage: 'وضعیت سفارش توسط یک سفارش موجود استفاده می شود.',
   vehicle: 'وسیله نقلیه',
+  driver: 'راننده',
   vehiclesTracking: 'ردیابی وسیله نقلیه',
   selectVehicle: 'وسیله نقلیه را انتخاب کنید',
   running: 'في حركة',

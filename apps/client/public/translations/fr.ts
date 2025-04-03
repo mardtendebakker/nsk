@@ -632,6 +632,7 @@ const translation = {
   deleteUsedOrderStatusMessage: 'Statut de commande utilisé par une commande existante.',
   vehiclesTracking: 'Suivi des véhicules',
   vehicle: 'Véhicule',
+  driver: 'Conducteur',
   selectVehicle: 'Sélectionner un véhicule',
   running: 'En mouvement',
   stopped: 'En arrêt',
