@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Status } from '../status';
+import { Status } from '../types/status';
 
 class Module {
   @ApiProperty()

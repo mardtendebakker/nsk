@@ -432,7 +432,7 @@ export class PublicService {
   private async captchaVerify(recaptcha: string): Promise<boolean> {
     const url = 'https://www.google.com/recaptcha/api/siteverify';
 
-    const requestConfig: AxiosRequestConfig = {
+    const requestConfig = {
       params: {
         secret: this.configService.get<string>('RECAPTCHA_SECRET'),
         response: recaptcha,
