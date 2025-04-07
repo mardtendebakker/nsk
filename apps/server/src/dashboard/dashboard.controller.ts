@@ -1,11 +1,12 @@
-import { Controller, ForbiddenException, Get } from '@nestjs/common';
+import {
+  Controller, ForbiddenException, Get,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Authorization, CognitoUser } from '@nestjs-cognito/auth';
 import { DashboardService } from './dashboard.service';
 import { TotalCount } from './dto/total-count.dto';
-import {
-  ALL_MAIN_GROUPS, CognitoGroups, LOCAL_GROUPS, PARTNERS_GROUPS,
-} from '../common/types/cognito-groups.enum';
+import { ConnectedUser, ConnectedUserType } from '../security/decorator/connected-user.decorator';
+import { ALL_MAIN_GROUPS, LOCAL_GROUPS, PARTNERS_GROUPS } from '../user/model/group.enum';
+import { Authorization } from '../security/decorator/authorization.decorator';
 
 @ApiBearerAuth()
 @Authorization(ALL_MAIN_GROUPS)
@@ -17,14 +18,11 @@ export class DashboardController {
   @Get('total/count')
   @ApiResponse({ type: TotalCount })
   totalCount(
-  @CognitoUser(['groups', 'email'])
+  @ConnectedUser()
     {
       groups,
       email,
-    }: {
-      groups: CognitoGroups[];
-      email: string;
-    },
+    }: ConnectedUserType,
   ) {
     if (groups.some((group) => LOCAL_GROUPS.includes(group))) {
       return this.dashboardService.totalCount();

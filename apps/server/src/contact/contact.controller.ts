@@ -1,4 +1,3 @@
-import { Authorization, CognitoUser } from '@nestjs-cognito/auth';
 import {
   Body, Controller, Delete, ForbiddenException, Get, Param, Post, Put, Query, UseGuards,
 } from '@nestjs/common';
@@ -9,10 +8,10 @@ import { UpdateContactDto } from './dto/update-contact.dto';
 import { ContactEntity } from './entities/contact.entity';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { FindManyDto } from './dto/find-many.dto';
-import {
-  ALL_MAIN_GROUPS, CognitoGroups, LOCAL_GROUPS, PARTNERS_GROUPS,
-} from '../common/types/cognito-groups.enum';
 import { requiredModule } from '../common/guard/required-modules.guard';
+import { ALL_MAIN_GROUPS, LOCAL_GROUPS, PARTNERS_GROUPS } from '../user/model/group.enum';
+import { ConnectedUser, ConnectedUserType } from '../security/decorator/connected-user.decorator';
+import { Authorization } from '../security/decorator/authorization.decorator';
 
 @ApiBearerAuth()
 @Authorization(ALL_MAIN_GROUPS)
@@ -25,14 +24,11 @@ export class ContactController {
   @ApiResponse({ type: FindContactsResponeDto })
   findAll(
   @Query() query: FindManyDto,
-    @CognitoUser(['groups', 'email'])
+    @ConnectedUser()
     {
       groups,
       email,
-    }: {
-      groups: CognitoGroups[];
-      email: string;
-    },
+    }: ConnectedUserType,
   ) {
     if (groups.some((group) => LOCAL_GROUPS.includes(group))) {
       return this.contactService.findAll(query);
@@ -47,14 +43,11 @@ export class ContactController {
   @UseGuards(requiredModule('customer_contact_action'))
   findOne(
   @Param('id') id: number,
-    @CognitoUser(['groups', 'email'])
+    @ConnectedUser()
     {
       groups,
       email,
-    }: {
-      groups: CognitoGroups[];
-      email: string;
-    },
+    }: ConnectedUserType,
   ) {
     if (groups.some((group) => LOCAL_GROUPS.includes(group))) {
       return this.contactService.findOne(id);
@@ -69,14 +62,11 @@ export class ContactController {
   @UseGuards(requiredModule('customer_contact_action'))
   create(
   @Body() body: CreateContactDto,
-    @CognitoUser(['groups', 'email'])
+    @ConnectedUser()
     {
       groups,
       email,
-    }: {
-      groups: CognitoGroups[];
-      email: string;
-    },
+    }: ConnectedUserType,
   ) {
     if (groups.some((group) => LOCAL_GROUPS.includes(group))) {
       return this.contactService.create(body);
@@ -92,14 +82,11 @@ export class ContactController {
   update(
   @Param('id') id: number,
     @Body() updateContactDto: UpdateContactDto,
-    @CognitoUser(['groups', 'email'])
+    @ConnectedUser()
     {
       groups,
       email,
-    }: {
-      groups: CognitoGroups[];
-      email: string;
-    },
+    }: ConnectedUserType,
   ) {
     if (groups.some((group) => LOCAL_GROUPS.includes(group))) {
       return this.contactService.update(id, updateContactDto);
@@ -113,14 +100,11 @@ export class ContactController {
   @UseGuards(requiredModule('customer_contact_action'))
   delete(
   @Param('id') id: number,
-    @CognitoUser(['groups', 'email'])
+    @ConnectedUser()
     {
       groups,
       email,
-    }: {
-      groups: CognitoGroups[];
-      email: string;
-    },
+    }: ConnectedUserType,
   ) {
     if (groups.some((group) => LOCAL_GROUPS.includes(group))) {
       return this.contactService.delete(id);

@@ -24,6 +24,8 @@ import { PostOrderDto } from './dto/post-order.dto';
 import { SaleService } from '../sale/sale.service';
 import { PostImportDto } from './dto/post-import.dto';
 import { ContactService } from '../contact/contact.service';
+import { DataDestructionDesc } from '../calendar/pickup/types/destruction-desc.enum';
+import { PostSalesDto } from './dto/post-sales.dto';
 
 @Injectable()
 export class PublicService {
@@ -44,9 +46,9 @@ export class PublicService {
 
   getDataDestructionChoices(): DataDestructionChoice {
     const dataDestructionChoices: DataDestructionChoice = new Map();
-    dataDestructionChoices.set(DataDestruction.DATADESTRUCTION_KILLDISK, 'HDD wipe report');
-    dataDestructionChoices.set(DataDestruction.DATADESTRUCTION_NONE, 'Geen HDD aangeleverd');
-    dataDestructionChoices.set(DataDestruction.DATADESTRUCTION_SHRED, 'HDD op locatie shredden a €12,50 (extra 0.89ct per KM)');
+    dataDestructionChoices.set(DataDestruction.DATADESTRUCTION_KILLDISK, DataDestructionDesc[DataDestruction.DATADESTRUCTION_KILLDISK]);
+    dataDestructionChoices.set(DataDestruction.DATADESTRUCTION_NONE, DataDestructionDesc[DataDestruction.DATADESTRUCTION_NONE]);
+    dataDestructionChoices.set(DataDestruction.DATADESTRUCTION_SHRED, DataDestructionDesc[DataDestruction.DATADESTRUCTION_SHRED]);
 
     return dataDestructionChoices;
   }
@@ -111,7 +113,7 @@ export class PublicService {
     // TODO: sendStatusMail
   }
 
-  getOrderForm() {
+  getSalesForm() {
     return {
       form: {
         customer: this.getContactForm(),
@@ -119,12 +121,55 @@ export class PublicService {
     };
   }
 
+  getOrderForm() {
+    return {
+      form: {
+        terms: this.getTermsAndConditionsForm(),
+        customer: this.getContactOrderForm(),
+      },
+    };
+  }
+
+  async postSales(params: PostSalesDto): Promise<void> {
+    const { public_sales_form: publicSalesForm } = params;
+
+    await this.captchaVerify(params['g-recaptcha-response']);
+
+    publicSalesForm.customer.company_is_customer = true;
+    const customer = await this.contactService.checkExists(publicSalesForm.customer);
+
+    const orderStatus = await this.findOrderStatusByNameOrCreate(publicSalesForm.orderStatusName, false, true, false);
+
+    let remarks = '';
+
+    for (const product of publicSalesForm.products) {
+      if (product.quantity > 0) {
+        remarks += `${product.name}: ${product.quantity}x\r\n`;
+      }
+    }
+
+    if (remarks.length < 4) {
+      remarks = 'No quantities entered...';
+    }
+
+    const saleData: CreateAOrderDto = {
+      customer_id: customer.id,
+      is_gift: false,
+      status_id: orderStatus.id,
+      remarks,
+    };
+
+    await this.saleService.create(saleData);
+  }
+
   async postOrder(params: PostOrderDto): Promise<void> {
     const { public_order_form: publicOrderForm } = params;
 
     await this.captchaVerify(params['g-recaptcha-response']);
 
-    publicOrderForm.customer.company_is_customer = true;
+    const { customer: customerDto } = publicOrderForm;
+    customerDto.company_is_customer = true;
+    const { reason } = customerDto;
     const customer = await this.contactService.checkExists(publicOrderForm.customer);
 
     const orderStatus = await this.findOrderStatusByNameOrCreate(publicOrderForm.orderStatusName, false, true, false);
@@ -140,6 +185,11 @@ export class PublicService {
     if (remarks.length < 4) {
       remarks = 'No quantities entered...';
     }
+
+    Object.keys(publicOrderForm.terms).forEach((key) => {
+      remarks += `${key}: ☑\r\n`;
+    });
+    remarks += `Reden aanvraag: ${reason}`;
 
     const saleData: CreateAOrderDto = {
       customer_id: customer.id,
@@ -173,10 +223,37 @@ export class PublicService {
     U mag ook mailen naar logistiek@copiatek.nl Zet u voor de zekerheid dit emailadres in uw Whitelist.`;
   }
 
+  getPostSalesSuccessMessage(): string {
+    return `Hartelijk dank voor uw interesse in onze producten. 
+    Heeft u vragen of is er spoed geboden? Belt u ons dan meteen via 070 2136312.
+    Wij nemen contact met u op over uw bestelling.`;
+  }
+
   getPostOrderSuccessMessage(): string {
     return `Hartelijk dank voor uw interesse in onze producten. 
     Heeft u vragen of is er spoed geboden? Belt u ons dan meteen via 070 2136312.
     Wij nemen contact met u op over uw bestelling.`;
+  }
+
+  private getTermsAndConditionsForm() {
+    return {
+      reintegratie: {
+        label: '(Re)integratie in de samenleving',
+        checked: false,
+      },
+      afstand: {
+        label: 'Verminderen van afstand tot de arbeidsmarkt',
+        checked: false,
+      },
+      levensstijl: {
+        label: 'Stimuleren ontwikkelen van een (sportief) gezonde levensstijl',
+        checked: false,
+      },
+      resocialisatie: {
+        label: '(Re)socialisatie ondersteunen',
+        checked: false,
+      },
+    };
   }
 
   private getContactForm() {
@@ -212,10 +289,51 @@ export class PublicService {
     };
   }
 
-  private async uploadFiles(pickupId: number, files: Express.Multer.File[]): Promise<afile[]> {
+  private getContactOrderForm() {
+    return {
+      name: {
+        label: 'Uw volledige naam',
+        required: false,
+      },
+      company_name: {
+        label: 'Naam organisatie',
+        required: true,
+      },
+      company_kvk_nr: {
+        label: 'KVK-nummer',
+        required: true,
+      },
+      street: {
+        label: 'Adres organisatie',
+        required: true,
+      },
+      zip: {
+        label: 'Postcode',
+        required: true,
+      },
+      city: {
+        label: 'Vestigingsplaats',
+        required: true,
+      },
+      phone: {
+        label: 'Telefoonnummer (overdag bereikbaar)',
+        required: true,
+      },
+      email: {
+        label: 'Uw e-mailadres',
+        required: true,
+      },
+      reason: {
+        label: 'Reden aanvraag',
+        required: false,
+      },
+    };
+  }
+
+  private async uploadFiles(pickupId: number, pickupFiles: Express.Multer.File[]): Promise<afile[]> {
     const afiles: afile[] = [];
     // group files by attribute id
-    const filesGroupByFileDiscr: { [key in FileDiscrimination]?: Express.Multer.File[] } = files.reduce((acc, obj) => {
+    const filesGroupByFileDiscr: { [key in FileDiscrimination]?: Express.Multer.File[] } = pickupFiles.reduce((acc, obj) => {
       const { fieldname } = obj;
 
       if (!acc[fieldname]) {
@@ -234,11 +352,12 @@ export class PublicService {
 
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        const afile = await this.fileService.create(createFileDto, {
+        // eslint-disable-next-line no-await-in-loop
+        const aFile = await this.fileService.create(createFileDto, {
           Body: file.buffer,
           ContentType: file.mimetype,
         });
-        afiles.push(afile);
+        afiles.push(aFile);
       }
     }
 
@@ -265,6 +384,7 @@ export class PublicService {
 
     for (let i = 0; i < quantityAddresses.length; i++) {
       const quantityProductTypes = quantityAddresses[i];
+      // eslint-disable-next-line guard-for-in
       for (const key in quantityProductTypes) {
         const quantity = Number(quantityProductTypes[key]);
 
@@ -296,6 +416,7 @@ export class PublicService {
             ],
           };
 
+          // eslint-disable-next-line no-await-in-loop
           const product = await this.productService.create(productDto);
 
           products.push(product);

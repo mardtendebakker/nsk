@@ -13,7 +13,12 @@ export interface Contact {
   zip?: string,
   company_id:string,
   company_name:string,
-  contact: SubContact
+  contact: SubContact,
+  vat: {
+    value: number,
+    label: string,
+    code: number
+  }
 }
 export interface SubContact {
   id:string,
@@ -64,15 +69,19 @@ export interface Order {
   pickup?: Pickup,
   delivery?: Delivery,
   totalPrice: number,
+  totalPriceExtVat: number,
+  vatValue: number,
   contact_aorder_customer_idTocontact:Contact,
   contact_aorder_supplier_idTocontact:Contact
   totalPerProductType: object
+  vat_rate: number
 }
 
 interface Pickup {
   id:number,
   afile:AFile[],
-  logistics_id:number,
+  driver_id:number,
+  vehicle_id:number,
   pickup_date:string,
   real_pickup_date:string,
   description:string,
@@ -88,5 +97,6 @@ interface Delivery {
   type?:number,
   instructions?:string,
   dhl_tracking_code?: string,
-  logistics_id?: number,
+  vehicle_id?: number,
+  driver_id?: number,
 }

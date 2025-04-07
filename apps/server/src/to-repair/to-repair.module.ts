@@ -11,6 +11,7 @@ import { LocationLabelModule } from '../location-label/location-label.module';
 import { BlanccoModule } from '../blancco/blancco.module';
 import { ToRepairBlancco } from './to-repair.blancco';
 import { PrintModule } from '../print/print.module';
+import { SecurityModule } from '../security/security.module';
 
 @Module({
   providers: [
@@ -35,6 +36,7 @@ import { PrintModule } from '../print/print.module';
     BlanccoModule,
     PrintModule,
     HttpModule,
+    SecurityModule,
   ],
   exports: [ToRepairService],
 })

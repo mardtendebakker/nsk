@@ -18,7 +18,7 @@ export default function SearchAccordion({
   disabledFilter = false,
   autoFocus = false,
 }: {
-  children: JSX.Element,
+  children?: JSX.Element,
   disabled?: boolean,
   searchValue: string,
   searchLabel?: string,
@@ -80,10 +80,14 @@ export default function SearchAccordion({
           )}
         </Box>
       </AccordionSummary>
-      <Divider />
-      <AccordionDetails>
-        {children}
-      </AccordionDetails>
+      {!disabledFilter && (
+      <>
+        <Divider />
+        <AccordionDetails>
+          {children}
+        </AccordionDetails>
+      </>
+      )}
     </Accordion>
   );
 }

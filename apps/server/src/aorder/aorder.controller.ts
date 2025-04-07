@@ -1,8 +1,7 @@
-import { Authorization, AuthorizationGuard, CognitoUser } from '@nestjs-cognito/auth';
 import {
   Get, Post, Put, Patch, Delete,
   Body, Param, Query,
-  HttpStatus, Res, StreamableFile, UseGuards, ForbiddenException,
+  HttpStatus, Res, StreamableFile, ForbiddenException,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 import type { Response } from 'express';
@@ -16,12 +15,13 @@ import { UpdateManyAOrderDto } from './dto/update-many-aorder.dto';
 import { UpdateManyResponseAOrderDto } from './dto/update-many-aorder-response.dts';
 import { BulkPrintDTO } from '../print/dto/bulk-print.dto';
 import {
-  CognitoGroups,
   ADMINS_GROUPS,
   ALL_MAIN_GROUPS,
   LOCAL_GROUPS,
   PARTNERS_GROUPS,
-} from '../common/types/cognito-groups.enum';
+} from '../user/model/group.enum';
+import { ConnectedUser, ConnectedUserType } from '../security/decorator/connected-user.decorator';
+import { Authorization } from '../security/decorator/authorization.decorator';
 
 @ApiBearerAuth()
 @Authorization(ALL_MAIN_GROUPS)
@@ -30,17 +30,8 @@ export class AOrderController {
 
   @Get('')
   @ApiResponse({ type: FindAOrdersResponeDto })
-  findAll(
-  @Query() query: FindManyDto,
-    @CognitoUser(['groups', 'email'])
-    {
-      groups,
-      email,
-    }: {
-      groups: CognitoGroups[];
-      email: string;
-    },
-  ) {
+  @Authorization(ALL_MAIN_GROUPS)
+  findAll(@Query() query: FindManyDto, @ConnectedUser() { groups, email }: ConnectedUserType) {
     if (groups.some((group) => LOCAL_GROUPS.includes(group))) {
       return this.aorderService.findAll(query);
     } if (groups.some((group) => PARTNERS_GROUPS.includes(group))) {
@@ -51,17 +42,7 @@ export class AOrderController {
 
   @Get(':id')
   @ApiResponse({ type: AOrderEntity })
-  findOne(
-  @Param('id') id: number,
-    @CognitoUser(['groups', 'email'])
-    {
-      groups,
-      email,
-    }: {
-      groups: CognitoGroups[];
-      email: string;
-    },
-  ) {
+  findOne(@Param('id') id: number, @ConnectedUser() { groups, email }: ConnectedUserType) {
     if (groups.some((group) => LOCAL_GROUPS.includes(group))) {
       return this.aorderService.findOne(id);
     } if (groups.some((group) => PARTNERS_GROUPS.includes(group))) {
@@ -71,34 +52,34 @@ export class AOrderController {
   }
 
   @Post('')
-  @UseGuards(AuthorizationGuard(LOCAL_GROUPS))
+  @Authorization(LOCAL_GROUPS)
   @ApiResponse({ type: AOrderEntity })
   create(@Body() body: CreateAOrderDto) {
     return this.aorderService.create(body);
   }
 
   @Put(':id')
-  @UseGuards(AuthorizationGuard(LOCAL_GROUPS))
+  @Authorization(LOCAL_GROUPS)
   @ApiResponse({ type: AOrderEntity })
   update(@Param('id') id: number, @Body() updateAOrderDto: UpdateAOrderDto) {
     return this.aorderService.update(id, updateAOrderDto);
   }
 
   @Patch('')
-  @UseGuards(AuthorizationGuard(LOCAL_GROUPS))
+  @Authorization(LOCAL_GROUPS)
   @ApiResponse({ type: UpdateManyResponseAOrderDto })
   updateMany(@Body() updateManyAOrderDto: UpdateManyAOrderDto) {
     return this.aorderService.updateMany(updateManyAOrderDto);
   }
 
   @Delete(':id')
-  @UseGuards(AuthorizationGuard(ADMINS_GROUPS))
+  @Authorization(ADMINS_GROUPS)
   deleteOne(@Param('id') id: number) {
     return this.aorderService.deleteOne(id);
   }
 
   @Delete(':id/files')
-  @UseGuards(AuthorizationGuard(ADMINS_GROUPS))
+  @Authorization(ADMINS_GROUPS)
   deleteFiles(
   @Param('id') id: number,
     @Body() fileIds: number[],
@@ -121,15 +102,8 @@ export class AOrderController {
   })
   async printAOrders(
   @Query() bulkPrintDTO: BulkPrintDTO,
-    @Res({ passthrough: true }) res: Response,
-    @CognitoUser(['groups', 'email'])
-    {
-      groups,
-      email,
-    }: {
-      groups: CognitoGroups[];
-      email: string;
-    },
+    @Res({ passthrough: true }) res: Response, @ConnectedUser()
+    { groups, email }: ConnectedUserType,
   ) {
     const { ids } = bulkPrintDTO;
 
@@ -165,15 +139,8 @@ export class AOrderController {
   })
   async printExport(
   @Query() bulkPrintDTO: BulkPrintDTO,
-    @Res({ passthrough: true }) res: Response,
-    @CognitoUser(['groups', 'email'])
-    {
-      groups,
-      email,
-    }: {
-      groups: CognitoGroups[];
-      email: string;
-    },
+    @Res({ passthrough: true }) res: Response, @ConnectedUser()
+    { groups, email }: ConnectedUserType,
   ) {
     const { ids } = bulkPrintDTO;
 

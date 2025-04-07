@@ -11,7 +11,7 @@ import useResponsive from '../../hooks/useResponsive';
 import DataSourcePicker from '../memoizedInput/dataSourcePicker';
 import Checkbox from '../checkbox';
 import Can from '../can';
-import { AUTOCOMPLETE_PARTNERS_PATH } from '../../utils/axios';
+import { AUTOCOMPLETE_PARTNERS_PATH, AUTOCOMPLETE_VAT_CODES_PATH } from '../../utils/axios';
 
 function Form({ formRepresentation, disabled, setValue }: {
   formRepresentation : FormRepresentation,
@@ -91,17 +91,31 @@ function Form({ formRepresentation, disabled, setValue }: {
         >
           <Can requiredGroups={['admin', 'manager', 'logistics', 'local']}>
             {!formRepresentation.is_partner.value && (
-              <DataSourcePicker
-                sx={{ flex: 0.33 }}
-                label={trans('partner')}
-                path={AUTOCOMPLETE_PARTNERS_PATH}
-                disabled={disabled}
-                fullWidth
-                placeholder={trans('selectPartner')}
-                value={formRepresentation.partner.value}
-                onChange={(value: { id: number }) => setValue({ field: 'partner', value: value?.id || null })}
-              />
+            <DataSourcePicker
+              sx={{ flex: 0.33 }}
+              label={trans('partner')}
+              path={AUTOCOMPLETE_PARTNERS_PATH}
+              disabled={disabled}
+              fullWidth
+              placeholder={trans('selectPartner')}
+              value={formRepresentation.partner.value}
+              onChange={(value: { id: number }) => setValue({ field: 'partner', value: value?.id || null })}
+            />
             )}
+            <Box sx={{ m: '.25rem' }} />
+            <DataSourcePicker
+              sx={{ flex: 0.33 }}
+              label={trans('vat')}
+              path={AUTOCOMPLETE_VAT_CODES_PATH}
+              disabled={disabled}
+              fullWidth
+              placeholder={trans('selectVat')}
+              value={formRepresentation.vat_code.value}
+              onChange={(value: { id: number }) => setValue({ field: 'vat_code', value: value?.id || null })}
+              error={Boolean(formRepresentation.vat_code.error)}
+              helperText={formRepresentation.vat_code.error}
+            />
+            <Box sx={{ m: '.25rem' }} />
           </Can>
         </Grid>
       </Grid>

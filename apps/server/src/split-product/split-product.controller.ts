@@ -2,10 +2,10 @@ import {
   Body, Controller, Param, Put,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { Authorization } from '@nestjs-cognito/auth';
 import { SplitProductService } from './split-product.service';
 import { SplitDto } from './dto/split.dto';
-import { LOCAL_GROUPS } from '../common/types/cognito-groups.enum';
+import { LOCAL_GROUPS } from '../user/model/group.enum';
+import { Authorization } from '../security/decorator/authorization.decorator';
 
 @ApiBearerAuth()
 @Authorization(LOCAL_GROUPS)

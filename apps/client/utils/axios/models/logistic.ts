@@ -1,9 +1,24 @@
+export interface Vehicle {
+  id: number,
+  name: string,
+  registration_number: string,
+}
+
+export interface Driver {
+  id: number,
+  username: string,
+  first_name: string
+  last_name: string
+  email: string
+}
+
 export interface LogisticServiceListItem {
   id: number,
   event_date:string,
   event_title:string,
   order:Order,
-  logistic:Logistic,
+  vehicle?:Vehicle,
+  driver?: Driver,
 }
 
 export interface Supplier {
@@ -22,14 +37,6 @@ export type Customer = Supplier;
 
 export interface OrderStatus {
   color:string,
-}
-
-export interface Logistic {
-  id:number,
-  username:string,
-  firstname:string,
-  lastname:string,
-  email:string,
 }
 
 export interface Order {

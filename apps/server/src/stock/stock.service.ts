@@ -517,6 +517,7 @@ export class StockService {
         order_nr: order.order_nr,
         order_date: order.order_date,
         discr: order.discr,
+        vat_rate: order.vat_rate,
         contact:
           order?.contact_aorder_customer_idTocontact?.name
           || order?.contact_aorder_supplier_idTocontact?.name,
@@ -546,6 +547,12 @@ export class StockService {
       magento_category_id: true,
       magento_attr_set_id: true,
       magento_group_spec_id: true,
+      product_type_attribute: {
+        select: {
+          attribute_id: true,
+          magento_in_attr_set: true,
+        },
+      },
       product_type_task: {
         select: {
           task: true,
@@ -565,6 +572,7 @@ export class StockService {
       order_date: true,
       order_nr: true,
       discr: true,
+      vat_rate: true,
       contact_aorder_customer_idTocontact: {
         select: {
           name: true,
@@ -1004,14 +1012,12 @@ export class StockService {
   private getContactWhereInput(email?: string): Prisma.contactWhereInput {
     return {
       ...(email && {
-        OR: [
-          { email },
-          {
-            company_contact_company_idTocompany: {
-              company: { companyContacts: { some: { email } } },
-            },
-          },
-        ],
+        company_contact_company_idTocompany: {
+          OR: [
+            { companyContacts: { some: { email } } },
+            { company: { companyContacts: { some: { email } } } },
+          ],
+        },
       }),
     };
   }

@@ -5,6 +5,7 @@ import { CognitoTestingModule } from '@nestjs-cognito/testing';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { OrderStatusModule } from '../order-status/order-status.module';
 import { OrderStatusRepository } from './order-status.repository';
+import { OrderStatuses } from './enums/order-statuses.enum';
 
 
 describe('OrderStatus', () => {
@@ -131,7 +132,7 @@ describe('OrderStatus', () => {
         "is_sale": true,
         "is_repair": false,
         "pindex": 7,
-        "name": "Products to assign",
+        "name": OrderStatuses.PRODUCTS_TO_ASSIGN,
         "color": "#000000",
         "mailbody": "Beste %supplier.name%,\r\n\r\nHartelijk dank voor uw bestelling. De opdracht is bij ons bekend onder SO %order.nr%.\r\nZodra de bestelstatus wordt veranderd, ontvangt u daar een email over.\r\n\r\nMet vriendelijke groet,\r\n%user.name% \r\n\r\nCopiatek\r\nTelevisiestraat 2-E, Unit 501\r\n2525 KD Den Haag\r\nTel 070 2136312"
       },
@@ -141,7 +142,7 @@ describe('OrderStatus', () => {
         "is_sale": false,
         "is_repair": false,
         "pindex": 1,
-        "name": "To plan and pickup",
+        "name": OrderStatuses.TO_PLAN_AND_PICKUP,
         "color": "#000000",
         "mailbody": null
       },
@@ -151,7 +152,7 @@ describe('OrderStatus', () => {
         "is_sale": true,
         "is_repair": false,
         "pindex": null,
-        "name": "To repair",
+        "name": OrderStatuses.TO_REPAIR,
         "color": null,
         "mailbody": null
       },

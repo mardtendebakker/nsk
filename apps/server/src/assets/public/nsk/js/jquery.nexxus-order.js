@@ -24,7 +24,6 @@
     var thisElement;
     
     $.fn.nexxusOrder = function( options ) {
- 
         // Default options.
         var settings = $.extend({
             recaptchaKey: '6LdzW4QUAAAAANRAfkgl8Cz4-QNUcNEJomOj5wgX',
@@ -98,7 +97,30 @@
             e.stopPropagation();
     
             return false;
-        });  
+        });
+
+        thisElement.find('#public_order_form_products_0_quantity, #public_order_form_products_1_quantity').on('input', function() {
+            var quantity0 = parseInt($('#public_order_form_products_0_quantity').val()) || 0;
+            var quantity1 = parseInt($('#public_order_form_products_1_quantity').val()) || 0;
+
+            if (quantity0 + quantity1 > 50) {
+                $(this).val($(this).data('previousValue') || 0); // Reset to previous value
+            } else {
+                // Save the current value
+                $(this).data('previousValue', $(this).val());
+            }
+        });
+
+        thisElement.find('#public_order_form_products_2_quantity').on('input', function() {
+            var quantity2 = parseInt($('#public_order_form_products_2_quantity').val()) || 0;
+
+            if (quantity2 > 20) {
+                $(this).val($(this).data('previousValue') || 0); // Reset to previous value
+            } else {
+                // Save the current value
+                $(this).data('previousValue', $(this).val());
+            }
+        });
     }
 
     function loadCSS(href) {

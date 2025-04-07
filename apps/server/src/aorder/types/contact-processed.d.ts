@@ -1,9 +1,11 @@
+import { VatCode } from '../../company/const/vat-code';
 import { ContactRelation } from '../../contact/types/contact-relation';
 import { AOrderContact } from './aorder-contact';
 
 type AaOrderCompany = {
   company_id: number,
   company_name: string,
+  vat: VatCode
 };
 export type ContactProcessed = Omit<
 ContactRelation,

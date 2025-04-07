@@ -4,12 +4,15 @@ import { AOrderPayloadRelation } from './types/aorder-payload-relation';
 import { CompanyRelation } from '../company/types/company-relation';
 import { AOrderProcessed, TotalPerProductReturn } from './types/aorder-processed';
 import { AaOrderCompany, ContactProcessed } from './types/contact-processed';
+import { VAT_CODES } from '../company/const/vat-code';
 
 type CompanyWithoutCompany = Omit<CompanyRelation, 'company'>;
 type CompanyWithoutCompanyContacts = Omit<CompanyRelation, 'companyContacts'>;
 
 export class AOrderProcess {
   private totalPrice: number;
+
+  private vatValue: number;
 
   private totalPerProductType: TotalPerProductReturn;
 
@@ -48,7 +51,6 @@ export class AOrderProcess {
       ...restPartnerCompanySupplier
     } = partnerCompanySupplier || {};
     const partnerMainContactSupplier = partnerContactsSupplier?.find((c) => c.is_main);
-    this.totalPrice = this.calculateTotalPrice();
     this.totalPerProductType = this.calculateTotalPerProductType();
 
     const customerProcessed: ContactProcessed = {
@@ -65,6 +67,10 @@ export class AOrderProcess {
         },
       }),
     };
+
+    const { totalPrice, vatValue } = this.calculateTotalPrice(customerProcessed?.vat?.value || 0);
+    this.totalPrice = totalPrice;
+    this.vatValue = vatValue;
 
     const supplierProcessed: ContactProcessed = {
       ...restSupplier,
@@ -90,15 +96,20 @@ export class AOrderProcess {
         contact_aorder_supplier_idTocontact: supplierProcessed,
       }),
       totalPrice: this.totalPrice,
+      vatValue: this.vatValue,
+      totalPriceExtVat: this.totalPrice - this.vatValue,
       totalPerProductType: this.totalPerProductType,
     };
   }
 
-  private calculateTotalPrice(): number {
+  private calculateTotalPrice(vat: number): { totalPrice: number, vatValue: number } {
     let price = 0;
 
     if (this.aorder.is_gift) {
-      return price;
+      return {
+        totalPrice: 0,
+        vatValue: 0,
+      };
     }
 
     for (let i = 0; i < this.aorder?.product_order?.length; i += 1) {
@@ -115,15 +126,20 @@ export class AOrderProcess {
       }
     }
 
-    if (this.aorder.discount > 0) {
-      price -= this.aorder.discount;
-    }
-
     if (this.aorder.transport > 0) {
       price += this.aorder.transport;
     }
 
-    return price;
+    if (this.aorder.discount > 0) {
+      price -= this.aorder.discount;
+    }
+
+    const totalPrice = price * (1 + vat / 100);
+
+    return {
+      totalPrice,
+      vatValue: totalPrice - price,
+    };
   }
 
   private calculateTotalPerProductType(): TotalPerProductReturn {
@@ -151,6 +167,7 @@ export class AOrderProcess {
     return {
       company_id: company.id,
       company_name: company.name,
+      vat: VAT_CODES.find(({ code }) => code == company.vat_code),
     };
   }
 }

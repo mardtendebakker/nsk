@@ -1,5 +1,5 @@
 import {
-  Box, Card, CardContent, Table, TableBody, TableCell, TableHead, TableRow, Typography,
+  Box, Card, CardContent, Table, TableBody, TableCell, TableHead, TableRow,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import Search from '@mui/icons-material/Search';
@@ -12,13 +12,13 @@ import Event from './event';
 import useAxios, { Call } from '../../hooks/useAxios';
 import { CALENDAR_PICKUPS_PATH, CALENDAR_DELIVERIES_PATH } from '../../utils/axios';
 import TextField from '../input/textField';
-import { Logistic, LogisticServiceListItem } from '../../utils/axios/models/logistic';
+import { Driver, LogisticServiceListItem, Vehicle } from '../../utils/axios/models/logistic';
 import SideMap from './sideMap';
 import Pagination from './pagination';
-import LogisticsList from './logisticsList';
 import pushURLParams from '../../utils/pushURLParams';
 import { getQueryParam } from '../../utils/location';
 import useRemoteConfig from '../../hooks/useRemoteConfig';
+import Autocomplete from '../memoizedInput/autocomplete';
 
 const TILE_HEIGHT = '3rem';
 
@@ -88,7 +88,8 @@ export default function Logistics({ type }: { type: 'pickup' | 'delivery' }) {
     }
   }, [JSON.stringify(config)]);
 
-  const [selectedLogisticIds, setSelectedLogisticIds] = useState<number[]>([0]);
+  const [selectedDriverIds, setSelectedDriverIds] = useState<number[]>([]);
+  const [selectedVehicleIds, setSelectedVehicleIds] = useState<number[]>([]);
   const [search, setSearch] = useState('');
   const [clickedLogisticService, setClickedLogisticService] = useState<{
     logisticService: LogisticServiceListItem,
@@ -97,10 +98,10 @@ export default function Logistics({ type }: { type: 'pickup' | 'delivery' }) {
 
   const { data: { data = [] } = {}, call } = useAxios<undefined | { data?: LogisticServiceListItem[] }>('get', AJAX_PATH.replace(':id', ''), { withProgressBar: true });
 
-  const formattedDataWithDefaultLogistic = data.map(({ logistic, ...rest }): LogisticServiceListItem => ({
+  const formattedDataWithDefaultLogistic = data.map(({ driver, ...rest }): LogisticServiceListItem => ({
     ...rest,
-    logistic: logistic || {
-      id: 1, firstname: 'Anonymous', lastname: 'Driver', username: 'Unknown', email: 'Unknown',
+    driver: driver || {
+      id: 0, first_name: 'Anonymous', last_name: 'Driver', username: 'Unknown', email: 'Unknown',
     },
   }));
 
@@ -109,34 +110,29 @@ export default function Logistics({ type }: { type: 'pickup' | 'delivery' }) {
       return;
     }
 
-    setSelectedLogisticIds([0]);
+    setSelectedDriverIds([]);
     refreshList({ newDate: dates[0], router, call });
   }, [dates[0]?.toISOString()]);
 
-  const logistics: Logistic[] = [];
+  const drivers: Driver[] = [];
+  const vehicles: Vehicle[] = [];
 
-  formattedDataWithDefaultLogistic.forEach(({ logistic }) => {
-    if (!logistics.find((element) => element.id == logistic.id)) {
-      logistics.push(logistic);
+  formattedDataWithDefaultLogistic.forEach(({ driver, vehicle }) => {
+    if (driver && !drivers.find((element) => element.id == driver.id)) {
+      drivers.push(driver);
+    }
+    if (vehicle && !vehicles.find((element) => element.id == vehicle.id)) {
+      vehicles.push(vehicle);
     }
   });
-
-  const handleLogisticClick = (logisticId: number) => {
-    if (selectedLogisticIds.find((element) => element == logisticId)) {
-      setSelectedLogisticIds((currentValue) => currentValue.filter((element) => element != logisticId));
-    } else if (logisticId != 0) {
-      setSelectedLogisticIds((currentValue) => [...currentValue.filter((element) => element != 0), logisticId]);
-    } else {
-      setSelectedLogisticIds([logisticId]);
-    }
-  };
 
   const formatLogisticServiceName = (logisticService: LogisticServiceListItem) => logisticService.event_title || trans(type);
 
   const logisticServices: LogisticServiceListItem[] = formattedDataWithDefaultLogistic.filter((logisticService: LogisticServiceListItem) => {
-    const selected = selectedLogisticIds[0] === 0 || selectedLogisticIds.includes(logisticService.logistic.id);
+    const selectedDriver = selectedDriverIds.length == 0 || selectedDriverIds.includes(logisticService.driver?.id);
+    const selectedVehicle = selectedVehicleIds.length == 0 || selectedVehicleIds.includes(logisticService.vehicle?.id);
 
-    return selected && (formatLogisticServiceName(logisticService)?.includes(search) || logisticService.order.order_nr.includes(search));
+    return selectedDriver && selectedVehicle && (formatLogisticServiceName(logisticService)?.includes(search) || logisticService.order.order_nr.includes(search));
   });
 
   const overlappingLogisticServices: LogisticServiceListItem[][] = [];
@@ -173,11 +169,43 @@ export default function Logistics({ type }: { type: 'pickup' | 'delivery' }) {
     <>
       <Box sx={{ display: 'flex' }}>
         <Box sx={{ flex: 0.15, pr: '5rem', maxWidth: '25rem' }}>
-          <Typography sx={(theme) => ({ color: theme.palette.text.secondary })}>
-            {type == 'pickup' ? trans('pickupsBy') : trans('deliveriesBy')}
-            :
-          </Typography>
-          <LogisticsList onClick={handleLogisticClick} logistics={logistics} selectedLogisticIds={selectedLogisticIds} />
+          <Autocomplete
+            fullWidth
+            size="small"
+            multiple
+            options={drivers.map(({ id, username }) => ({ id, label: username }))}
+            filterSelectedOptions
+            onChange={(_, selectedOptions: { id: number, label: string }[]) => {
+              setSelectedDriverIds(selectedOptions.map(({ id }) => id));
+            }}
+            renderInput={
+                          (params) => (
+                            <TextField
+                              {...params}
+                              placeholder={type == 'pickup' ? trans('pickupsBy') : trans('deliveriesBy')}
+                            />
+                          )
+                      }
+          />
+          <Autocomplete
+            sx={{ mt: '.5rem' }}
+            fullWidth
+            size="small"
+            multiple
+            options={vehicles.map(({ id, registration_number }) => ({ id, label: registration_number }))}
+            filterSelectedOptions
+            onChange={(_, selectedOptions: { id: number, label: string }[]) => {
+              setSelectedVehicleIds(selectedOptions.map(({ id }) => id));
+            }}
+            renderInput={
+                          (params) => (
+                            <TextField
+                              {...params}
+                              placeholder={trans('vehicle')}
+                            />
+                          )
+                      }
+          />
         </Box>
         <Card sx={{ flex: 0.85 }}>
           <CardContent sx={{ display: 'flex', flexDirection: 'column', px: 0 }}>
@@ -247,8 +275,13 @@ export default function Logistics({ type }: { type: 'pickup' | 'delivery' }) {
                               onClick={() => {
                                 setClickedLogisticService({
                                   logisticService,
-                                  allLogisticServices: thisDayLogisticServices.flat().filter((element) => element.logistic && (element.logistic.id == logisticService.logistic.id)),
+                                  allLogisticServices: thisDayLogisticServices.flat().filter((element) => {
+                                    if (element.driver && element.vehicle) {
+                                      return element.driver.id == logisticService.driver.id && element.vehicle.id == logisticService.vehicle.id;
+                                    }
 
+                                    return false;
+                                  }),
                                 });
                               }}
                               logisticService={logisticService}

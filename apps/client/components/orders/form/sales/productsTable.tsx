@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  Checkbox,
   TableBody,
   TableHead,
   TableRow,
@@ -12,18 +11,14 @@ import { useRouter } from 'next/router';
 import _ from 'lodash';
 import { ProductListItem } from '../../../../utils/axios/models/product';
 import debounce from '../../../../utils/debounce';
-import TextField from '../../../memoizedInput/textField';
 import useTranslation from '../../../../hooks/useTranslation';
 import useAxios from '../../../../hooks/useAxios';
 import {
   APRODUCT_PATH, SALES_ORDERS_PRODUCTS_PATH, STOCK_PRODUCTS_PATH,
 } from '../../../../utils/axios';
-import Delete from '../../../button/delete';
 import PaginatedTable from '../../../paginatedTable';
 import TableCell from '../../../tableCell';
 import AddProductsModal from '../addProductsModal';
-import can from '../../../../utils/can';
-import useSecurity from '../../../../hooks/useSecurity';
 import Can from '../../../can';
 import { getQueryParam } from '../../../../utils/location';
 import initFormState from '../productsInitFormState';
@@ -35,9 +30,9 @@ import useBulkPrintChecklist from '../../../../hooks/apiCalls/useBulkPrintCheckl
 import useBulkPrintPriceCards from '../../../../hooks/apiCalls/useBulkPrintPriceCards';
 import useBulkPrintLabels from '../../../../hooks/apiCalls/useBulkPrintLabels';
 import useBulkPrintBarcodes from '../../../../hooks/apiCalls/useBulkPrintBarcodes';
+import Row from './row';
 
-export default function ProductsTable({ orderId, refreshOrder }:{ orderId: string, refreshOrder: () => void }) {
-  const { state: { user } } = useSecurity();
+export default function ProductsTable({ orderId, refreshOrder, vatFactor }:{ orderId: string, refreshOrder: () => void, vatFactor:number }) {
   const router = useRouter();
   const { trans } = useTranslation();
   const [showProductsModal, setShowProductsModal] = useState(false);
@@ -225,6 +220,9 @@ export default function ProductsTable({ orderId, refreshOrder }:{ orderId: strin
               {trans('salePrice')}
             </TableCell>
             <TableCell>
+              {trans('salePriceInclVat')}
+            </TableCell>
+            <TableCell>
               {trans('quantity')}
             </TableCell>
             <TableCell align="right">
@@ -234,56 +232,16 @@ export default function ProductsTable({ orderId, refreshOrder }:{ orderId: strin
         </TableHead>
         <TableBody>
           {data.map((product: ProductListItem) => (
-            <TableRow key={product.id}>
-              <TableCell>
-                <Checkbox
-                  checked={Boolean(checkedProductIds.find((id) => id === product.id))}
-                  sx={{ mr: '1.5rem' }}
-                  onChange={(e, checked) => handleRowChecked({ id: product.id, checked })}
-                  disabled={disabled()}
-                />
-                {product.sku}
-              </TableCell>
-              <TableCell>{product.name}</TableCell>
-              <TableCell>{product.type}</TableCell>
-              <TableCell>
-                {product.price}
-              </TableCell>
-              <TableCell>
-                {product.stock}
-              </TableCell>
-              <TableCell>
-                <TextField
-                  type="number"
-                  placeholder="1"
-                  defaultValue={product.product_order.price.toString()}
-                  onChange={(e) => handleProductPropertyChange(
-                    product,
-                    'price',
-                    e.target.value,
-                  )}
-                  disabled={!user || !can({ user, requiredGroups: ['admin', 'manager', 'logistics', 'local'] })}
-                />
-              </TableCell>
-              <TableCell>
-                <TextField
-                  type="number"
-                  placeholder="1"
-                  defaultValue={product.product_order.quantity.toString()}
-                  onChange={(e) => handleProductPropertyChange(
-                    product,
-                    'quantity',
-                    e.target.value,
-                  )}
-                  disabled={!user || !can({ user, requiredGroups: ['admin', 'manager', 'logistics', 'local'] })}
-                />
-              </TableCell>
-              <TableCell align="right">
-                <Can requiredGroups={['admin', 'manager', 'logistics', 'local']}>
-                  <Delete onClick={() => handleDeleteProduct(product.id)} tooltip />
-                </Can>
-              </TableCell>
-            </TableRow>
+            <Row
+              key={product.id}
+              product={product}
+              onProductPropertyChange={handleProductPropertyChange}
+              disabled={disabled()}
+              onRowChecked={handleRowChecked}
+              checkedProductIds={checkedProductIds}
+              onDeleteProduct={handleDeleteProduct}
+              vatFactor={vatFactor}
+            />
           ))}
         </TableBody>
       </PaginatedTable>

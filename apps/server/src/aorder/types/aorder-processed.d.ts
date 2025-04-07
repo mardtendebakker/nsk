@@ -12,6 +12,8 @@ AOrderPayloadRelation,
 'pickup'
 > & {
   totalPrice: number;
+  vatValue: number;
+  totalPriceExtVat: number;
   totalPerProductType: TotalPerProductReturn;
   product_order: ProductOrderRelationProduct[];
   contact_aorder_supplier_idTocontact?: ContactProcessed;

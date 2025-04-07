@@ -214,13 +214,7 @@
             <tr><td>&nbsp;</td><td></td></tr>
             <tr><td>Transport</td><td>{{ transport }}</td></tr>
             <tr><td>Discount</td><td>{{ discount }}</td></tr>
-            <tr><td>Gift</td><td>
-              {{#if isGift}}
-                Yes
-              {{else}}
-                No
-              {{/if}}
-            </td></tr>
+            {{#if isGift}}<tr><td>This order is a gift</td></tr>{{/if}}
           </table>
         </div>
         {{#ifCond customer '||' supplier}}

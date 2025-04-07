@@ -2,16 +2,16 @@ import {
   Controller, Get, Param, UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Authorization } from '@nestjs-cognito/auth';
 import { VehicleService } from './vehicle.service';
 import { VehicleResponseDto } from './dto/vehicle-response.dto';
 import { PickupService } from '../calendar/pickup/pickup.service';
 import { FindCalendarResponeDto } from '../calendar/dto/find-calendar-response.dto';
 import { requiredModule } from '../common/guard/required-modules.guard';
-import { CognitoGroups } from '../common/types/cognito-groups.enum';
+import { Group } from '../user/model/group.enum';
+import { Authorization } from '../security/decorator/authorization.decorator';
 
 @ApiBearerAuth()
-@Authorization([CognitoGroups.SUPER_ADMIN, CognitoGroups.LOGISTICS])
+@Authorization([Group.SUPER_ADMIN, Group.LOGISTICS])
 @ApiTags('vehicles')
 @Controller('vehicles')
 export class VehicleController {

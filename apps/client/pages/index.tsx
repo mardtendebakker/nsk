@@ -12,10 +12,12 @@ import DueToday from '../components/dashboard/dueToday';
 import VehiclesTracking from '../components/dashboard/vehiclesTracking';
 import Analytics from '../components/dashboard/analytics';
 import { ORDERS_ANALYTICS_PATH } from '../utils/axios';
+import useResponsive from '../hooks/useResponsive';
 
 function Dashboard() {
   const { state: { user } } = useSecurity();
   const { trans } = useTranslation();
+  const isDesktop = useResponsive('up', 'md');
 
   return (
     <DashboardLayout>
@@ -30,7 +32,7 @@ function Dashboard() {
       </Typography>
       <Box sx={{ m: '.5rem' }} />
       <IndicatorRow />
-      <Box sx={{ mt: '.5rem', display: 'flex' }}>
+      <Box sx={{ mt: '.5rem', display: 'flex', flexDirection: isDesktop ? undefined : 'column-reverse' }}>
         <Box sx={{ flex: '.8', mr: '.5rem' }}>
           <Analytics label={trans('productAnalytics')} path={ORDERS_ANALYTICS_PATH} />
           <Box sx={{ m: '.5rem' }} />

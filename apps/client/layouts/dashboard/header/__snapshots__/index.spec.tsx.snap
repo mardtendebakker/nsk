@@ -10,13 +10,8 @@ exports[`Header matches snapshot 1`] = `
     >
       <img
         alt="logo"
-        data-nimg="1"
-        decoding="async"
         height="9"
-        loading="lazy"
-        src="/_next/image?url=%2Fassets%2Flogo.jpg&w=128&q=75"
-        srcset="/_next/image?url=%2Fassets%2Flogo.jpg&w=64&q=75 1x, /_next/image?url=%2Fassets%2Flogo.jpg&w=128&q=75 2x"
-        style="color: transparent;"
+        src="/assets/logo.jpg"
         width="50"
       />
       <ul
@@ -122,7 +117,7 @@ exports[`Header matches snapshot 1`] = `
           type="button"
         >
           <img
-            alt="Netherlands"
+            alt="Nederlands"
             height="20"
             src="/assets/icons/ic_flag_nl.svg"
             width="30"

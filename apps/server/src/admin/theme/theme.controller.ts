@@ -7,20 +7,20 @@ import {
   ApiBearerAuth, ApiBody, ApiConsumes, ApiResponse, ApiTags,
 } from '@nestjs/swagger';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
-import { Authorization } from '@nestjs-cognito/auth';
 import { ThemeService } from './theme.service';
 import { FindThemeResponseDto } from './dto/find-theme-response.dto';
-import { MANAGER_GROUPS } from '../../common/types/cognito-groups.enum';
+import { MANAGER_GROUPS } from '../../user/model/group.enum';
+import { Authorization } from '../../security/decorator/authorization.decorator';
 
 @ApiTags('admin-theme')
 @Controller('admin/theme')
 @ApiBearerAuth()
-@Authorization(MANAGER_GROUPS)
 export class ThemeController {
   constructor(protected readonly themeService: ThemeService) {}
 
   @Get('')
   @ApiResponse({ type: FindThemeResponseDto })
+  @Authorization()
   async get() {
     const theme = await this.themeService.getTheme();
 
@@ -52,6 +52,7 @@ export class ThemeController {
       },
     },
   })
+  @Authorization(MANAGER_GROUPS)
   @UseInterceptors(AnyFilesInterceptor())
   @ApiResponse({ type: FindThemeResponseDto })
   createOrUpdate(@Body() body, @UploadedFiles() files?: Express.Multer.File[]) {

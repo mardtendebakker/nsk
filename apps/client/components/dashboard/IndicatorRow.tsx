@@ -7,10 +7,11 @@ import { price } from '../../utils/formatter';
 import useAxios from '../../hooks/useAxios';
 import { DASHBOARD_TOTAL_COUNT } from '../../utils/routes';
 import { TotalCount } from '../../utils/axios/models/dashboard';
+import useResponsive from '../../hooks/useResponsive';
 
 function Indicator({ title, value }: { title: string, value: number | string }) {
   return (
-    <Box sx={{ mx: '.5rem' }}>
+    <Box sx={{ m: '.5rem' }}>
       <Typography variant="inherit" color="text.secondary">{title}</Typography>
       <Typography variant="h3">{value}</Typography>
     </Box>
@@ -19,6 +20,7 @@ function Indicator({ title, value }: { title: string, value: number | string }) 
 
 export default function IndicatorRow() {
   const { call, data = {} } = useAxios<TotalCount | undefined>('get', DASHBOARD_TOTAL_COUNT);
+  const isDesktop = useResponsive('up', 'md');
 
   useEffect(() => {
     call().catch(() => {});
@@ -26,7 +28,10 @@ export default function IndicatorRow() {
 
   return (
     <Card>
-      <CardContent sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
+      <CardContent sx={{
+        display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', flexDirection: isDesktop ? undefined : 'column',
+      }}
+      >
         {
         [
           { title: 'Test Test 1', value: price(100) },

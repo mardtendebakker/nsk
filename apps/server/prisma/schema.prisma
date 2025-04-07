@@ -43,6 +43,7 @@ model aorder {
   discr                               String          @db.VarChar(255)
   backingPurchaseOrder_id             Int?
   external_id                         Int?
+  vat_rate                            Float           @db.Float @default(21)
   afile                               afile[]
   contact_aorder_supplier_idTocontact contact?        @relation("aorder_supplier_idTocontact", fields: [supplier_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK_416119D92ADD6D8C")
   aorder                              aorder?         @relation("aorderToaorder", fields: [backingPurchaseOrder_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK_416119D930005451")
@@ -123,8 +124,6 @@ model fos_user {
   license_plate         String?         @db.VarChar(50)
   emailCanonical        String          @db.VarChar(255)
   partner_id            Int?
-  delivery              delivery[]
-  pickup                pickup[]
   user_location         user_location[]
 }
 
@@ -153,17 +152,20 @@ model order_status {
 model pickup {
   id               Int       @id @default(autoincrement())
   order_id         Int?      @unique(map: "UNIQ_419E39FD8D9F6D38")
-  logistics_id     Int?
+  driver_id        Int?
+  vehicle_id       Int?
   pickup_date      DateTime? @db.DateTime(0)
   real_pickup_date DateTime? @db.DateTime(0)
   origin           String?   @db.VarChar(255)
   data_destruction Int?
   description      String?   @db.LongText
   afile            afile[]
-  fos_user         fos_user? @relation(fields: [logistics_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK_419E39FD7D418FFA")
   aorder           aorder?   @relation(fields: [order_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK_419E39FD8D9F6D38")
+  driver           user?     @relation(fields: [driver_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_pickup_driver")
+  vehicle          vehicle?  @relation(fields: [vehicle_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_pickup_vehicle")
 
-  @@index([logistics_id], map: "IDX_419E39FD7D418FFA")
+  @@index([driver_id], map: "idx_pickup_driver")
+  @@index([vehicle_id], map: "idx_pickup_vehicle")
   @@index([real_pickup_date], map: "idx_realPickupDate")
 }
 
@@ -258,10 +260,11 @@ model product_type {
 }
 
 model product_type_attribute {
-  product_type_id Int
-  attribute_id    Int
-  product_type    product_type @relation(fields: [product_type_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "FK_1DD5D0C714959723")
-  attribute       attribute    @relation(fields: [attribute_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "FK_1DD5D0C7B6E62EFA")
+  product_type_id     Int
+  attribute_id        Int
+  magento_in_attr_set Boolean?
+  product_type        product_type @relation(fields: [product_type_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "FK_1DD5D0C714959723")
+  attribute           attribute    @relation(fields: [attribute_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "FK_1DD5D0C7B6E62EFA")
 
   @@id([product_type_id, attribute_id])
   @@index([product_type_id], map: "IDX_1DD5D0C714959723")
@@ -368,6 +371,7 @@ model company {
   is_customer     Boolean   @default(false)
   is_supplier     Boolean   @default(false)
   is_partner      Boolean   @default(false)
+  vat_code        Int       @default(2)
   company         company?  @relation("companyToCompany", fields: [partner_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "company_partner_id_fk")
   other_company   company[] @relation("companyToCompany")
   companyContacts contact[] @relation("contact_company_idTocompany")
@@ -418,15 +422,18 @@ model module {
 model delivery {
   id                Int       @id @default(autoincrement())
   order_id          Int?      @unique(map: "uniq_delivery_order_id")
-  logistics_id      Int?
+  driver_id         Int?
+  vehicle_id        Int?
   type              Int?
   date              DateTime? @db.DateTime(0)
   instructions      String?   @db.LongText
   dhl_tracking_code String?   @db.VarChar(255)
   aorder            aorder?   @relation(fields: [order_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_delivery_aorder")
-  fos_user          fos_user? @relation(fields: [logistics_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_delivery_logistics")
+  driver            user?     @relation(fields: [driver_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_delivery_driver")
+  vehicle           vehicle?  @relation(fields: [vehicle_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_delivery_vehicle")
 
-  @@index([logistics_id], map: "idx_delivery_logistic")
+  @@index([driver_id], map: "idx_delivery_driver")
+  @@index([vehicle_id], map: "idx_delivery_vehicle")
   @@index([date], map: "idx_date")
 }
 
@@ -441,4 +448,42 @@ model theme {
 
   @@index([logo_id], map: "idx_theme_logo")
   @@index([favicon_id], map: "idx_theme_favicon")
+}
+
+model user {
+  id                         Int        @id @default(autoincrement())
+  first_name                 String?    @db.VarChar(50)
+  last_name                  String?    @db.VarChar(50)
+  username                   String     @db.VarChar(50)
+  email                      String     @db.VarChar(50)
+  gender                     Gender?
+  enabled                    Boolean    @default(false)
+  email_verified             Boolean    @default(false)
+  password                   String     @db.LongText
+  refresh_token              String     @db.LongText
+  groups                     String     @db.LongText
+  email_confirmation_code    String?    @db.VarChar(10)
+  password_verification_code String?    @db.VarChar(10)
+  created_at                 DateTime   @default(now()) @db.DateTime(0)
+  updated_at                 DateTime   @updatedAt @db.DateTime(0)
+  pickup                     pickup[]
+  delivery                   delivery[]
+}
+
+model vehicle {
+  id                  Int          @id @default(autoincrement())
+  name                String       @db.VarChar(50)
+  registration_number String       @db.VarChar(50)
+  type                VehicleType?
+  pickup              pickup[]
+  delivery            delivery[]
+}
+
+enum VehicleType {
+  car
+}
+
+enum Gender {
+  male
+  female
 }

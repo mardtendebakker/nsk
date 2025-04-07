@@ -23,6 +23,14 @@ function requiredSupplierFieldValidator(field: string, trans) {
   };
 }
 
+export function requiredCompanyFieldValidator(field: string, trans) {
+  return (formRepresentation: FormRepresentation) => {
+    if (formRepresentation.newCompany.value && !formRepresentation[field].value) {
+      return trans('requiredField');
+    }
+  };
+}
+
 export function initFormState(trans, order?: Order) {
   return {
     orderNr: { value: order?.order_nr },
@@ -31,7 +39,16 @@ export function initFormState(trans, order?: Order) {
     orderStatus: { required: true, value: order?.status_id },
     remarks: { value: order?.remarks },
     transport: { value: order?.transport },
+    transportInclVat: {
+      value: order?.transport
+        ? order.transport * (1 + (order?.vat_rate || 0) / 100)
+        : 0,
+    },
     totalPrice: { value: order?.totalPrice },
+    totalPriceExtVat: { value: order?.totalPriceExtVat },
+    vatValue: { value: order?.vatValue },
+    vat: { value: order?.vat_rate || 0 },
+    vatFactor: { value: 1 + (order?.vat_rate || 0) / 100 },
     discount: { value: order?.discount },
     isGift: { value: !!order?.is_gift },
     supplierId: {
@@ -42,8 +59,11 @@ export function initFormState(trans, order?: Order) {
       },
       value: order?.supplier_id,
     },
-    logisticId: {
-      value: order?.pickup?.logistics_id,
+    driverId: {
+      value: order?.pickup?.driver_id,
+    },
+    vehicleId: {
+      value: order?.pickup?.vehicle_id,
     },
     newSupplier: { value: false },
     name: {},
@@ -66,6 +86,7 @@ export function initFormState(trans, order?: Order) {
     companyKvkNr: {},
     companyIsPartner: { value: false },
     companyPartner: {},
+    companyVatCode: { validator: requiredCompanyFieldValidator('companyVatCode', trans) },
     email: { validator: requiredSupplierFieldValidator('email', trans) },
     phone: { validator: requiredSupplierFieldValidator('phone', trans) },
     street: { validator: requiredSupplierFieldValidator('street', trans) },
@@ -87,7 +108,8 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
     discount: formRepresentation.discount.value,
     is_gift: formRepresentation.isGift.value,
     pickup: {
-      logistics_id: formRepresentation.logisticId.value || null,
+      vehicle_id: formRepresentation.vehicleId.value || null,
+      driver_id: formRepresentation.driverId.value || null,
       real_pickup_date: formRepresentation.pickupDate.value || null,
     },
   };
@@ -114,6 +136,7 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
       payload.supplier.company_kvk_nr = formRepresentation.companyKvkNr.value;
       payload.supplier.company_is_partner = formRepresentation.companyIsPartner.value;
       payload.supplier.company_partner_id = formRepresentation.companyPartner.value;
+      payload.supplier.company_vat_code = formRepresentation.companyVatCode.value;
     }
   }
 

@@ -34,7 +34,6 @@ import axiosClient, {
 } from '../utils/axios';
 import useAxios from './useAxios';
 import useTranslation from './useTranslation';
-import buildUserFromResponse from '../utils/axios/buildUserFromResponse';
 
 const useSecurity = (): {
   state: State,
@@ -125,7 +124,7 @@ const useSecurity = (): {
       try {
         const response = await call({ body });
         if (response) {
-          securityStore.emit(SIGN_IN_REQUEST_SUCCEEDED, buildUserFromResponse(response));
+          securityStore.emit(SIGN_IN_REQUEST_SUCCEEDED, response.data);
         }
       } catch (e) {
         securityStore.emit(SIGN_IN_REQUEST_FAILED);

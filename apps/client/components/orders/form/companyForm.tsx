@@ -9,7 +9,7 @@ import useResponsive from '../../../hooks/useResponsive';
 import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
 import Checkbox from '../../checkbox';
 import Can from '../../can';
-import { AUTOCOMPLETE_PARTNERS_PATH } from '../../../utils/axios';
+import { AUTOCOMPLETE_PARTNERS_PATH, AUTOCOMPLETE_VAT_CODES_PATH } from '../../../utils/axios';
 
 function Form({ formRepresentation, disabled, setValue }: {
   formRepresentation : FormRepresentation,
@@ -70,6 +70,19 @@ function Form({ formRepresentation, disabled, setValue }: {
         xs={12}
         sx={{ display: 'flex', flex: 1, flexDirection: isDesktop ? 'row' : 'column' }}
       >
+        <DataSourcePicker
+          sx={{ flex: 0.33 }}
+          label={trans('vat')}
+          path={AUTOCOMPLETE_VAT_CODES_PATH}
+          disabled={disabled}
+          fullWidth
+          placeholder={trans('selectVat')}
+          value={formRepresentation.companyVatCode.value}
+          onChange={(value: { id: number }) => setValue({ field: 'companyVatCode', value: value?.id || null })}
+          error={Boolean(formRepresentation.companyVatCode.error)}
+          helperText={formRepresentation.companyVatCode.error}
+        />
+        <Box sx={{ m: '.25rem' }} />
         <Can requiredGroups={['admin', 'manager', 'logistics', 'local']}>
           {!formRepresentation.companyIsPartner.value && (
             <DataSourcePicker

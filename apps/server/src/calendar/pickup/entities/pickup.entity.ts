@@ -9,7 +9,10 @@ export class PickupEntity implements pickup {
     order_id: number | null;
 
   @ApiProperty()
-    logistics_id: number | null;
+    vehicle_id: number | null;
+
+  @ApiProperty()
+    driver_id: number | null;
 
   @ApiProperty()
     pickup_date: Date | null;

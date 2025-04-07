@@ -40,6 +40,12 @@ export class PrismaCompanyUpdateInputDto implements Prisma.companyUncheckedUpdat
 
   @ApiPropertyOptional()
   @IsOptional()
+  @IsInt()
+  @Type(() => Number)
+    vat_code?: number;
+
+  @ApiPropertyOptional()
+  @IsOptional()
   @IsBoolean()
   @Type(() => Boolean)
     is_partner?: boolean;

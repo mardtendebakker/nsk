@@ -13,6 +13,7 @@ import { AOrderProductProcess } from './aorder-product.process';
 import { ContactService } from '../contact/contact.service';
 import { AOrderPayloadRelation } from './types/aorder-payload-relation';
 import { AOrderFindManyReturnType } from './types/aorder-find-many-return-type';
+import { VAT_CODES } from '../company/const/vat-code';
 
 type CommonAOrderDto = Partial<Omit<CreateAOrderDto, 'pickup' | 'repair'>>;
 type CommonAOrderInput = Partial<Omit<Prisma.aorderCreateInput, 'pickup' | 'repair' | 'delivery'>>;
@@ -136,6 +137,12 @@ export class AOrderService {
     const order = <AOrderPayloadRelation> await this.repository
       .create(this.commonIncludePart(params));
 
+    const vatCode = order.contact_aorder_supplier_idTocontact?.company_contact_company_idTocompany?.vat_code
+    || order?.contact_aorder_customer_idTocontact?.company_contact_company_idTocompany?.vat_code
+    || 2;
+
+    const vatRate = VAT_CODES.find(({ code }) => code == vatCode).value || 0;
+
     if (commonDto.order_nr === undefined) {
       const { id, order_date: orderDate } = order;
 
@@ -144,9 +151,10 @@ export class AOrderService {
       try {
         await this.repository.update({
           where: { id },
-          data: { order_nr: orderNumber },
+          data: { order_nr: orderNumber, vat_rate: vatRate },
         });
         order.order_nr = orderNumber;
+        order.vat_rate = vatRate;
       } catch (e) {
         this.repository.deleteMany([id]);
         throw e;
@@ -418,10 +426,12 @@ export class AOrderService {
         select: {
           id: true,
           name: true,
+          vat_code: true,
           company: {
             select: {
               id: true,
               name: true,
+              vat_code: true,
               companyContacts: {
                 select: {
                   id: true,

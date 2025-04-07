@@ -34,8 +34,8 @@ import { ModuleModule } from '../module/module.module';
 import { PaymentModule } from '../payment/payment.module';
 import { ModulePaymentModule } from '../module-payment/module-payment.module';
 import { ConfigModule as MyConfigModule } from '../config/config.module';
-import { AuthModule } from '../auth/auth.module';
 import { ConsumerModule } from '../consumer/consumer.module';
+import { SecurityModule } from '../security/security.module';
 
 @Module({
   imports: [
@@ -62,7 +62,6 @@ import { ConsumerModule } from '../consumer/consumer.module';
       }),
       inject: [ConfigService],
     }),
-    AuthModule,
     UserModule,
     DashboardModule,
     PurchaseModule,
@@ -95,6 +94,7 @@ import { ConsumerModule } from '../consumer/consumer.module';
     MyConfigModule,
     HttpModule,
     ConsumerModule,
+    SecurityModule,
   ],
   controllers: [AppController],
   providers: [AppService],

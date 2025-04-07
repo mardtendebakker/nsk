@@ -10,6 +10,7 @@ import { AFile } from '../../../utils/axios/models/aFile';
 import useAxios from '../../../hooks/useAxios';
 import { PRODUCT_TYPES_PATH } from '../../../utils/axios';
 import TextField from '../../memoizedInput/textField';
+import useResponsive from '../../../hooks/useResponsive';
 
 export const buildProductTypeKey = (productType: { id?: number }): string => `attribute:${productType.id}`;
 
@@ -29,6 +30,7 @@ export default function AttributeForm({
   disabled?: boolean
 }) {
   const { trans } = useTranslation();
+  const isDesktop = useResponsive('up', 'md');
   const { data: productTypeRelation, call } = useAxios<undefined | ProductType>('get', PRODUCT_TYPES_PATH.replace(':id', productTypeId));
   useEffect(() => {
     call().catch(() => {});
@@ -56,14 +58,20 @@ export default function AttributeForm({
   );
 
   return (
-    <BorderedBox sx={{ width: '80rem', p: '1rem', mt: '1.5rem' }}>
+    <BorderedBox sx={{ p: '1rem', mt: '1.5rem' }}>
       <Typography
         sx={{ mb: '2rem' }}
         variant="h4"
       >
         {trans('attributes')}
       </Typography>
-      <Grid sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-start' }}>
+      <Grid sx={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        alignItems: isDesktop ? 'flex-start' : undefined,
+        flexDirection: isDesktop ? undefined : 'column',
+      }}
+      >
         {
           productTypeRelation?.attributes?.map((attribute: Attribute) => {
             if (attribute.type == 1 || attribute.type == 3) {
@@ -80,7 +88,7 @@ export default function AttributeForm({
               return (
                 <TextField
                   key={buildAttributeKey(attribute, productTypeRelation)}
-                  sx={{ flex: '0 33%', pr: '.5rem' }}
+                  sx={{ m: '.5rem', flex: '0 30%' }}
                   label={attribute.name}
                   value={getAttributeValue(attribute) || ''}
                   onChange={(e) => { handleAttributeChange(attribute, e.target.value); }}

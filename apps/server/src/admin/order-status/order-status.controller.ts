@@ -1,4 +1,3 @@
-import { Authorization } from '@nestjs-cognito/auth';
 import {
   Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards,
 } from '@nestjs/common';
@@ -9,8 +8,9 @@ import { FindManyDto } from './dto/find-many.dto';
 import { OrderStatusEntity } from './entities/order-status.entity';
 import { UpdateOrderStatusDto } from './dto/update-order-status.dto';
 import { CreateOrderStatusDto } from './dto/create-order-status.dto';
-import { MANAGER_GROUPS } from '../../common/types/cognito-groups.enum';
 import { requiredModule } from '../../common/guard/required-modules.guard';
+import { MANAGER_GROUPS } from '../../user/model/group.enum';
+import { Authorization } from '../../security/decorator/authorization.decorator';
 
 @ApiBearerAuth()
 @Authorization(MANAGER_GROUPS)

@@ -13,6 +13,7 @@ import {
 import AttributeForm, { buildProductTypeKey } from './AttributeForm';
 import { price } from '../../../utils/formatter';
 import { LocationTemplate } from '../../../utils/axios/models/product';
+import useResponsive from '../../../hooks/useResponsive';
 
 export default function Form({
   setValue,
@@ -26,6 +27,7 @@ export default function Form({
   onPrintBarcode?: () => void
 }) {
   const { trans } = useTranslation();
+  const isDesktop = useResponsive('up', 'md');
 
   const calculateListPrice = (): number => {
     if (!formRepresentation.type_id.value) {
@@ -39,9 +41,11 @@ export default function Form({
     return keys.reduce((accumulator, currentValue) => accumulator + (formRepresentation[currentValue].additionalData?.selectedOption?.price || 0), 0);
   };
 
+  const listPrice = calculateListPrice();
+
   return (
     <>
-      <BorderedBox sx={{ width: '80rem', p: '1rem' }}>
+      <BorderedBox sx={{ p: '1rem' }}>
         <Typography
           sx={{ mb: '2rem' }}
           variant="h4"
@@ -51,14 +55,15 @@ export default function Form({
         <Grid
           container
           spacing={1}
+          sx={{ display: 'flex', flexDirection: isDesktop ? undefined : 'column' }}
         >
           <Grid
             item
             xs={12}
-            sx={{ display: 'flex', flex: 1 }}
+            sx={{ display: 'flex', flex: 1, flexDirection: isDesktop ? undefined : 'column' }}
           >
             <TextField
-              sx={{ flex: 0.33, mr: '.5rem' }}
+              sx={{ flex: 0.33, m: '.5rem' }}
               label={trans('productForm.sku.label')}
               placeholder={trans('productForm.sku.placeholder')}
               value={formRepresentation.sku.value || ''}
@@ -77,7 +82,7 @@ export default function Form({
               }}
             />
             <TextField
-              sx={{ flex: 0.33, mr: '.5rem' }}
+              sx={{ flex: 0.33, m: '.5rem' }}
               label={trans('productName')}
               placeholder={trans('productName')}
               value={formRepresentation.name.value || ''}
@@ -87,7 +92,7 @@ export default function Form({
               disabled={disabled}
             />
             <DataSourcePicker
-              sx={{ flex: 0.33 }}
+              sx={{ flex: 0.33, m: '.5rem' }}
               path={AUTOCOMPLETE_PRODUCT_TYPES_PATH}
               label={trans('productType')}
               placeholder={trans('selectProductType')}
@@ -99,10 +104,10 @@ export default function Form({
           <Grid
             item
             xs={12}
-            sx={{ display: 'flex', flex: 1 }}
+            sx={{ display: 'flex', flex: 1, flexDirection: isDesktop ? undefined : 'column' }}
           >
             <DataSourcePicker
-              sx={{ flex: 0.33, mr: '.5rem' }}
+              sx={{ flex: 0.20, m: '.5rem' }}
               path={AUTOCOMPLETE_LOCATIONS_PATH}
               searchKey="name"
               label={trans('location')}
@@ -116,7 +121,7 @@ export default function Form({
               disabled={disabled}
             />
             <TextField
-              sx={{ flex: 0.33, mr: '.5rem' }}
+              sx={{ flex: 0.20, m: '.5rem' }}
               label={trans('locationLabel')}
               placeholder={trans('selectLocationLabel')}
               value={formRepresentation.location_label.value || ''}
@@ -126,7 +131,7 @@ export default function Form({
               disabled={disabled || !formRepresentation.location_id.value}
             />
             <DataSourcePicker
-              sx={{ flex: 0.33, mr: '.5rem' }}
+              sx={{ flex: 0.20, m: '.5rem' }}
               path={AUTOCOMPLETE_PRODUCT_STATUSES_PATH}
               label={trans('status')}
               placeholder={trans('selectStatus')}
@@ -134,23 +139,54 @@ export default function Form({
               value={formRepresentation.status_id.value?.toString()}
               disabled={disabled}
             />
-            <Box sx={{ flex: 0.33, display: 'flex', flexDirection: 'column' }}>
+            <Box sx={{
+              flex: 0.20, display: 'flex', flexDirection: 'column', m: '.5rem',
+            }}
+            >
               <TextField
                 type="number"
-                label={trans('retailPrice')}
+                label={trans('retailPriceExtVat')}
                 placeholder="0.00"
                 value={formRepresentation.price.value || '0'}
                 InputProps={{
                   startAdornment: (<Box sx={{ mr: '.2rem' }}>€</Box>),
                 }}
-                onChange={(e) => setValue({ field: 'price', value: e.target.value })}
+                onChange={(e) => {
+                  setValue({ field: 'price', value: e.target.value });
+                  setValue({ field: 'priceInclVat', value: parseFloat(e.target.value) * formRepresentation.vatFactor.value });
+                }}
                 disabled={disabled}
               />
               <Typography variant="subtitle2" color="primary" sx={{ mt: '.5rem' }}>
-                {trans('listPrice')}
+                {trans('listPriceExtVat')}
                 :
                 {' '}
-                {price(calculateListPrice())}
+                {price(listPrice)}
+              </Typography>
+            </Box>
+            <Box sx={{
+              flex: 0.20, display: 'flex', flexDirection: 'column', m: '.5rem',
+            }}
+            >
+              <TextField
+                type="number"
+                label={trans('retailPriceInclVat')}
+                placeholder="0.00"
+                value={formRepresentation.priceInclVat.value || '0'}
+                InputProps={{
+                  startAdornment: (<Box sx={{ mr: '.2rem' }}>€</Box>),
+                }}
+                onChange={(e) => {
+                  setValue({ field: 'price', value: parseFloat(e.target.value) / formRepresentation.vatFactor.value });
+                  setValue({ field: 'priceInclVat', value: e.target.value });
+                }}
+                disabled={disabled}
+              />
+              <Typography variant="subtitle2" color="primary" sx={{ mt: '.5rem' }}>
+                {trans('listPriceInclVat')}
+                :
+                {' '}
+                {price(listPrice * formRepresentation.vatFactor.value)}
               </Typography>
             </Box>
           </Grid>
@@ -159,6 +195,7 @@ export default function Form({
             sx={{ display: 'flex', flex: 1 }}
           >
             <TextField
+              sx={{ m: '.5rem' }}
               fullWidth
               size="medium"
               multiline

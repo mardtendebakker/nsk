@@ -1,4 +1,3 @@
-import { Authorization } from '@nestjs-cognito/auth';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import {
   Body, Delete, Param, Post, Put,
@@ -6,7 +5,8 @@ import {
 import { AServiceService } from './aservice-service';
 import { UpdateServiceDto } from './dto/update-aservice.dto';
 import { CreateServiceDto } from './dto/create-service.dto';
-import { LOCAL_GROUPS } from '../common/types/cognito-groups.enum';
+import { LOCAL_GROUPS } from '../user/model/group.enum';
+import { Authorization } from '../security/decorator/authorization.decorator';
 
 @ApiBearerAuth()
 @Authorization(LOCAL_GROUPS)

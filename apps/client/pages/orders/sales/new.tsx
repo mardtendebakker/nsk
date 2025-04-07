@@ -14,6 +14,7 @@ import useForm, { FormRepresentation } from '../../../hooks/useForm';
 import useTranslation from '../../../hooks/useTranslation';
 import { ORDERS_SALES, ORDERS_SALES_EDIT } from '../../../utils/routes';
 import { Order } from '../../../utils/axios/models/order';
+import { requiredCompanyFieldValidator } from '../purchases/new';
 
 function requiredCustomerFieldValidator(field: string, trans) {
   return (formRepresentation: FormRepresentation) => {
@@ -30,7 +31,16 @@ export function initFormState(trans, order?: Order) {
     orderStatus: { required: true, value: order?.status_id },
     remarks: { value: order?.remarks },
     transport: { value: order?.transport },
+    transportInclVat: {
+      value: order?.transport
+        ? order.transport * (1 + (order?.vat_rate || 0) / 100)
+        : 0,
+    },
     totalPrice: { value: order?.totalPrice },
+    totalPriceExtVat: { value: order?.totalPriceExtVat },
+    vatValue: { value: order?.vatValue },
+    vat: { value: order?.vat_rate || 0 },
+    vatFactor: { value: 1 + (order?.vat_rate || 0) / 100 },
     discount: { value: order?.discount },
     isGift: { value: !!order?.is_gift },
     deliveryDate: { value: order?.delivery?.date },
@@ -62,12 +72,16 @@ export function initFormState(trans, order?: Order) {
         }
       },
     },
-    logisticId: {
-      value: order?.delivery?.logistics_id,
+    vehicleId: {
+      value: order?.delivery?.vehicle_id,
+    },
+    driverId: {
+      value: order?.delivery?.driver_id,
     },
     companyKvkNr: {},
     companyIsPartner: { value: false },
     companyPartner: {},
+    companyVatCode: { validator: requiredCompanyFieldValidator('companyVatCode', trans) },
     name: {},
     email: { validator: requiredCustomerFieldValidator('email', trans) },
     phone: { validator: requiredCustomerFieldValidator('phone', trans) },
@@ -94,7 +108,8 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
       date: formRepresentation.deliveryDate.value || null,
       type: formRepresentation.deliveryType.value,
       instructions: formRepresentation.deliveryInstructions.value,
-      logistics_id: formRepresentation.logisticId.value || null,
+      vehicle_id: formRepresentation.vehicleId.value || null,
+      driver_id: formRepresentation.driverId.value || null,
       dhl_tracking_code: formRepresentation.dhlTrackingCode.value || null,
     },
   };
@@ -121,6 +136,7 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
       payload.customer.company_kvk_nr = formRepresentation.companyKvkNr.value;
       payload.customer.company_is_partner = formRepresentation.companyIsPartner.value;
       payload.customer.company_partner_id = formRepresentation.companyPartner.value;
+      payload.supplier.company_vat_code = formRepresentation.companyVatCode.value;
     }
   }
 

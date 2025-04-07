@@ -1,6 +1,5 @@
 import { AxiosError, CanceledError } from 'axios';
 import refreshTokenInterceptor from './refreshTokenInterceptor';
-import buildUserFromResponse from './buildUserFromResponse';
 import securityStore from '../../stores/security';
 
 const config = { url: 'resources', headers: {} };
@@ -10,8 +9,6 @@ const user = {
   refreshToken: 'refresh_token',
   accessToken: 'access_token',
 };
-
-jest.mock('./buildUserFromResponse', () => jest.fn(() => user));
 
 function mockedClient() {}
 mockedClient.post = jest.fn();
@@ -38,7 +35,7 @@ jest.mock('../../stores/security', () => ({
 }));
 
 describe('refreshTokenInterceptor', () => {
-  afterEach(() => {
+  beforeEach(() => {
     jest.clearAllMocks();
   });
   it('rejects for CanceledError', async () => {
@@ -53,7 +50,7 @@ describe('refreshTokenInterceptor', () => {
   });
 
   it('returns a rejected promise for excluded paths', async () => {
-    const error = { config: { url: '/auth/login' }, response: originalResponse };
+    const error = { config: { url: '/security/sign-in' }, response: originalResponse };
     expect.assertions(1);
 
     try {
@@ -63,32 +60,30 @@ describe('refreshTokenInterceptor', () => {
     }
   });
   it('attempts to refresh the token if status code is 401', async () => {
-    const error = { config, response: originalResponse };
-    const response = { data: {} };
+    const error = { config, response: originalResponse, status: 401 };
+    const response = { data: user };
     mockedClient.post.mockResolvedValue(response);
 
     await refreshTokenInterceptor(error as AxiosError);
 
     expect(mockedClient.post).toHaveBeenCalledWith(
-      '/auth/refresh',
+      '/security/refresh-token',
       { emailOrUsername: user.username, token: user.refreshToken },
     );
 
-    expect(buildUserFromResponse).toHaveReturnedWith(user);
     expect(securityStore.emit).toHaveBeenCalledWith('SIGN_IN_REQUEST_SUCCEEDED', user);
   });
   it('sends a new request with the refreshed token and resolves the promise', async () => {
     const error = { config, response: originalResponse };
-    const response = { data: {} };
+    const response = { data: user };
     mockedClient.post.mockResolvedValueOnce(response);
 
     await refreshTokenInterceptor(error as AxiosError);
 
     expect(mockedClient.post).toHaveBeenCalledWith(
-      '/auth/refresh',
+      '/security/refresh-token',
       { emailOrUsername: user.username, token: user.refreshToken },
     );
-    expect(buildUserFromResponse).toHaveReturnedWith(user);
     expect(securityStore.emit).toHaveBeenCalledWith('SIGN_IN_REQUEST_SUCCEEDED', user);
   });
   it('logs the user out if token refresh fails', async () => {
@@ -104,7 +99,7 @@ describe('refreshTokenInterceptor', () => {
 
     expect(thrown).toBeTruthy();
     expect(mockedClient.post).toHaveBeenCalledWith(
-      '/auth/refresh',
+      '/security/refresh-token',
       { emailOrUsername: user.username, token: user.refreshToken },
     );
 

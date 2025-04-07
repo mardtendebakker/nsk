@@ -1,50 +1,41 @@
 import {
-  Box,
-  IconButton,
   Table,
   TableBody,
   TableHead,
+  TablePagination,
   TableRow,
-  Typography,
 } from '@mui/material';
 import { format } from 'date-fns';
 import Check from '@mui/icons-material/Check';
-import ChevronRight from '@mui/icons-material/ChevronRight';
-import ChevronLeft from '@mui/icons-material/ChevronLeft';
 import useTranslation from '../../../../hooks/useTranslation';
 import { UserListItem } from '../../../../utils/axios/models/user';
 import TableCell from '../../../tableCell';
-import Select from '../../../input/select';
 import Edit from '../../../button/edit';
 import Can from '../../../can';
 
 export default function List({
   users = [],
-  hasNextPage,
-  hasPreviousPage,
-  onGoNext,
-  onGoPrevious,
+  onEdit,
+  count,
+  page,
+  onPageChange,
   onRowsPerPageChange,
   rowsPerPage,
-  count,
   disabled,
-  onEdit,
 }: {
   users: UserListItem[],
-  hasNextPage: boolean,
-  hasPreviousPage: boolean,
-  onGoNext: () => void,
-  onGoPrevious: () => void,
+  onEdit: (user: UserListItem)=>void,
+  count: number,
+  page: number,
+  onPageChange: (newPage: number)=>void,
   onRowsPerPageChange: (rowsPerPage: number)=>void,
   rowsPerPage: number,
-  count,
-  disabled: boolean,
-  onEdit: (username: string) => void
+  disabled: boolean
 }) {
   const { trans } = useTranslation();
 
   return (
-    <Box sx={{ width: '100%', overflowX: 'scroll' }}>
+    <>
       <Table size="small">
         <TableHead>
           <TableRow>
@@ -52,16 +43,16 @@ export default function List({
               {trans('username')}
             </TableCell>
             <TableCell>
-              {trans('status')}
+              {trans('email')}
             </TableCell>
             <TableCell>
-              {trans('enabled')}
+              {trans('emailVerified')}
             </TableCell>
             <TableCell>
               {trans('createdAt')}
             </TableCell>
             <TableCell>
-              {trans('lastModifiedAt')}
+              {trans('updatedAt')}
             </TableCell>
             <TableCell align="right">
               {trans('actions')}
@@ -69,59 +60,52 @@ export default function List({
           </TableRow>
         </TableHead>
         <TableBody>
+
           {users.map((user: UserListItem) => (
-            <TableRow key={user.Username}>
+            <TableRow key={user.id}>
               <TableCell>
-                {user.Username}
+                {user.username}
               </TableCell>
               <TableCell>
-                {user.UserStatus}
+                {user.email}
               </TableCell>
               <TableCell>
-                {user.Enabled && <Check />}
+                {user.emailVerified && <Check />}
               </TableCell>
               <TableCell>
-                {user.UserCreateDate && format(new Date(user.UserCreateDate), 'yyyy/MM/dd')}
+                {format(new Date(user.createdAt), 'yyyy/MM/dd')}
               </TableCell>
               <TableCell>
-                {user.UserLastModifiedDate && format(new Date(user.UserLastModifiedDate), 'yyyy/MM/dd')}
+                {format(new Date(user.updatedAt), 'yyyy/MM/dd')}
               </TableCell>
               <TableCell align="right">
                 <Can requiredGroups={['super_admin']}>
-                  <Edit onClick={() => onEdit(user.Username)} disabled={disabled} />
+                  <Edit onClick={() => onEdit(user)} disabled={disabled} />
                 </Can>
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
-      <Box sx={{
-        display: 'flex', justifyContent: 'flex-end', alignItems: ' center', mt: '2rem', overflowX: 'scroll', minWidth: '25rem',
-      }}
-      >
-        <Typography variant="body2" sx={{ mr: '.5rem' }}>
-          {trans('rowsPerPage')}
-        </Typography>
-        <Select
-          sx={{ mr: '1.5rem' }}
-          variant="standard"
-          value={rowsPerPage}
-          onChange={(e) => onRowsPerPageChange(parseInt(e.target.value, 10))}
-          options={[
-            { title: '5', value: 5 },
-            { title: '10', value: 10 },
-            { title: '25', value: 25 },
-            { title: '50', value: 50 },
-          ]}
-        />
-        <Typography variant="body2" sx={{ mr: '1.5rem' }}>
-          {count}
-          {' '}
-          {trans('users')}
-        </Typography>
-        <IconButton onClick={onGoPrevious} disabled={!hasPreviousPage || disabled}><ChevronLeft /></IconButton>
-        <IconButton onClick={onGoNext} disabled={!hasNextPage || disabled}><ChevronRight /></IconButton>
-      </Box>
-    </Box>
+      <TablePagination
+        size="small"
+        component="div"
+        sx={{ display: 'flex', justifyContent: 'end', mt: '2rem' }}
+        count={count}
+        onPageChange={(_, newPage) => {
+          if (!disabled) {
+            onPageChange(newPage + 1);
+          }
+        }}
+        page={page - 1}
+        rowsPerPage={rowsPerPage}
+        rowsPerPageOptions={[10, 25, 50]}
+        onRowsPerPageChange={(e) => {
+          if (!disabled) {
+            onRowsPerPageChange(parseInt(e.target.value, 10));
+          }
+        }}
+      />
+    </>
   );
 }

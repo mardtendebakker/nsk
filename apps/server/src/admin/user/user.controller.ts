@@ -1,6 +1,5 @@
-import { Authorization, AuthorizationGuard } from '@nestjs-cognito/auth';
 import {
-  Body, Controller, Get, Param, Put, Query, UseGuards,
+  Body, Controller, Get, Param, Put, Query,
 } from '@nestjs/common';
 import {
   ApiBearerAuth, ApiBody, ApiResponse, ApiTags,
@@ -8,8 +7,9 @@ import {
 import { AdminUserService } from './user.service';
 import { ListUserDto } from './dto/list-user.dto';
 import { ListUserResponseDto } from './dto/list-user-response.dto';
-import { CognitoGroups, MANAGER_GROUPS, SUPER_ADMIN_GROUPS } from '../../common/types/cognito-groups.enum';
 import { UpdateUserGroupDto } from './dto/update-user-group.dto';
+import { Group, MANAGER_GROUPS, SUPER_ADMIN_GROUPS } from '../../user/model/group.enum';
+import { Authorization } from '../../security/decorator/authorization.decorator';
 
 @ApiTags('admin-users')
 @Controller('admin/users')
@@ -31,13 +31,13 @@ export class AdminUserController {
   }
 
   @Put('groups/:username')
-  @UseGuards(AuthorizationGuard(SUPER_ADMIN_GROUPS))
+  @Authorization(SUPER_ADMIN_GROUPS)
   @ApiResponse({ type: [UpdateUserGroupDto] })
   @ApiBody({
     type: [UpdateUserGroupDto],
     examples: {
       all_possible_group: {
-        value: Object.values(CognitoGroups).map((group, i) => ({
+        value: Object.values(Group).map((group, i) => ({
           group,
           assign: i % 2 === 0,
         })),

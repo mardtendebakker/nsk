@@ -8,6 +8,8 @@ import { LocationTemplate, Product } from '../../../utils/axios/models/product';
 import ConfirmationDialog from '../../confirmationDialog';
 import { buildAttributeKey } from '../form/AttributeForm';
 
+const EXCLUDED_PROPERTIES = ['priceInclVat', 'vatFactor', 'afile'];
+
 export function initFormState(trans: Trans, product?: Product): FormRepresentation {
   const attributes = {};
 
@@ -23,6 +25,8 @@ export function initFormState(trans: Trans, product?: Product): FormRepresentati
       },
     };
   });
+
+  const vat = product?.product_orders[0]?.order.vat_rate || 0;
 
   return {
     afile: { value: product?.afile },
@@ -52,6 +56,12 @@ export function initFormState(trans: Trans, product?: Product): FormRepresentati
     },
     status_id: { value: product?.product_status?.id },
     price: { value: product?.price || 0, required: true },
+    priceInclVat: {
+      value: product?.price
+        ? product.price * (1 + (vat / 100))
+        : 0,
+    },
+    vatFactor: { value: 1 + vat / 100 },
     description: { value: product?.description },
     ...attributes,
   };
@@ -63,7 +73,7 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
   const fileIds = [];
 
   Object.keys(formRepresentation).forEach((key) => {
-    if (key == 'afile') {
+    if (EXCLUDED_PROPERTIES.includes(key)) {
       return;
     }
 

@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Cart Component matches snapshot 1`] = `
+<DocumentFragment>
+  <h4
+    class="MuiTypography-root MuiTypography-h4 css-4il6ew-MuiTypography-root"
+  >
+    Shopping Cart
+  </h4>
+  <p
+    class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+  >
+    Your cart is empty
+  </p>
+</DocumentFragment>
+`;
