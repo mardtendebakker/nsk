@@ -50,3 +50,4 @@ ecosystem.config.js
 
 # Nx
 .nx/cache
+.nx/workspace-data

@@ -227,7 +227,7 @@ export class StockProcess {
       quantitySaleable = this.getQuantityPurchased();
     }
 
-    this.quantitySaleable = quantitySaleable - this.quantitySold ?? this.getQuantitySold();
+    this.quantitySaleable = quantitySaleable - (this.quantitySold ?? this.getQuantitySold());
     return this.quantitySaleable;
   }
 

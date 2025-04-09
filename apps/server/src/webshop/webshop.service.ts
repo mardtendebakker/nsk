@@ -599,7 +599,7 @@ export class WebshopService {
       ),
     );
 
-    return response;
+    return response as AxiosResponse;
   }
 
   private generateRandomHash(length) {

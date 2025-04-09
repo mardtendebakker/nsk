@@ -2,11 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ModulePaymentRepository } from './module-payment.repository';
 import { FindModulePaymentResponseDto } from './dto/find-module-payment-response.dto';
 import { ModuleName } from '../module/moduleName.type';
-import { Status } from './status.type';
-
-export const PAID = 'paid';
-export const PENDING = 'pending';
-export const REFUNDED = 'refunded';
+import { Status } from '../payment/types/status';
 
 @Injectable()
 export class ModulePaymentService {

@@ -2,7 +2,9 @@ import { HttpService } from '@nestjs/axios';
 import {
   BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException,
 } from '@nestjs/common';
-import { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
+import {
+  AxiosError, AxiosRequestConfig, AxiosResponse, ResponseType,
+} from 'axios';
 import { catchError, lastValueFrom } from 'rxjs';
 import * as AdmZip from 'adm-zip';
 import { PurchaseService } from '../purchase/purchase.service';
@@ -157,12 +159,13 @@ export class BlanccoService {
 
   private async downloadReports(search: string, cursor?: string): Promise<BlanccoResponse> {
     const config = await this.moduleService.getBlanccoConfig();
+    const responseType: ResponseType = 'arraybuffer';
 
-    const requestConfig: AxiosRequestConfig = {
+    const requestConfig = {
       headers: {
         'X-BLANCCO-API-KEY': config.apiKey,
       },
-      responseType: 'arraybuffer',
+      responseType,
     };
     const body = {
       filter: {
@@ -179,13 +182,13 @@ export class BlanccoService {
       format: BlanccoFormat.JSON,
       cursor,
     };
-    const response = await lastValueFrom(
+    const response = (await lastValueFrom(
       this.httpService.post(`${config.apiUrl}report/export`, body, requestConfig).pipe(
         catchError((error: AxiosError) => {
           throw new HttpException(error.response.data, error.response.status);
         }),
       ),
-    );
+    )) as AxiosResponse;
 
     return this.handleResponse(response);
   }

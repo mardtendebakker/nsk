@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Prisma } from '@prisma/client';
 import { add } from 'date-fns';
-import { PAID } from './status';
+import { PAID } from './types/status';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()

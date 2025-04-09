@@ -1,5 +1,8 @@
-import { PutObjectCommandInput } from '@aws-sdk/client-s3';
+import {
+  ChecksumAlgorithm, ObjectCannedACL, ObjectLockLegalHoldStatus, ObjectLockMode, PutObjectCommandInput, RequestPayer, ServerSideEncryption, StorageClass,
+} from '@aws-sdk/client-s3';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsEnum } from 'class-validator';
 import { Readable } from 'stream';
 
 export class PutObjectInput implements Partial<PutObjectCommandInput> {
@@ -10,7 +13,8 @@ export class PutObjectInput implements Partial<PutObjectCommandInput> {
     Key: string;
 
   @ApiPropertyOptional()
-    ACL?: string;
+  @IsEnum(ObjectCannedACL)
+    ACL?: ObjectCannedACL;
 
   @ApiPropertyOptional()
     CacheControl?: string;
@@ -34,7 +38,8 @@ export class PutObjectInput implements Partial<PutObjectCommandInput> {
     ContentType?: string;
 
   @ApiPropertyOptional()
-    ChecksumAlgorithm?: string;
+  @IsEnum(ChecksumAlgorithm)
+    ChecksumAlgorithm?: ChecksumAlgorithm;
 
   @ApiPropertyOptional()
     ChecksumCRC32?: string;
@@ -67,10 +72,12 @@ export class PutObjectInput implements Partial<PutObjectCommandInput> {
     Metadata?: Record<string, string>;
 
   @ApiPropertyOptional()
-    ServerSideEncryption?: string;
+  @IsEnum(ServerSideEncryption)
+    ServerSideEncryption?: ServerSideEncryption;
 
   @ApiPropertyOptional()
-    StorageClass?: string;
+  @IsEnum(StorageClass)
+    StorageClass?: StorageClass;
 
   @ApiPropertyOptional()
     WebsiteRedirectLocation?: string;
@@ -94,19 +101,22 @@ export class PutObjectInput implements Partial<PutObjectCommandInput> {
     BucketKeyEnabled?: boolean;
 
   @ApiPropertyOptional()
-    RequestPayer?: string;
+  @IsEnum(RequestPayer)
+    RequestPayer?: RequestPayer;
 
   @ApiPropertyOptional()
     Tagging?: string;
 
   @ApiPropertyOptional()
-    ObjectLockMode?: string;
+  @IsEnum(ObjectLockMode)
+    ObjectLockMode?: ObjectLockMode;
 
   @ApiPropertyOptional()
     ObjectLockRetainUntilDate?: Date;
 
   @ApiPropertyOptional()
-    ObjectLockLegalHoldStatus?: string;
+  @IsEnum(ObjectLockLegalHoldStatus)
+    ObjectLockLegalHoldStatus?: ObjectLockLegalHoldStatus;
 
   @ApiPropertyOptional()
     ExpectedBucketOwner?: string;
