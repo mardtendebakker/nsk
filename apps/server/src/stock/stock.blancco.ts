@@ -103,7 +103,7 @@ export class StockBlancco {
     if (!productTypeName) {
       const chassisType = this.blanccoService
         .getValueFromReportByKey(report, BlanccoHardwareKeys.CHASSIS_TYPE);
-      if (['Desktop', 'Low Profile Desktop', 'Mini Tower'].includes(chassisType)) {
+      if (['Desktop', 'Low Profile Desktop', 'Mini Tower', 'Mini PC'].includes(chassisType)) {
         productTypeName = BlanccoProductTypes.COMPUTER;
       } else if (['Laptop', 'Notebook', 'Convertible', 'Portable'].includes(chassisType)) {
         productTypeName = BlanccoProductTypes.LAPTOP;
