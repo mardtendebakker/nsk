@@ -95,6 +95,7 @@ export class WebshopService {
     } catch (e) {
       if (e?.status === 400) {
         Logger.error(e.response?.message || e.response || e.message, 'Art.nr:', product.id);
+        throw e;
       } else {
         throw e;
       }
