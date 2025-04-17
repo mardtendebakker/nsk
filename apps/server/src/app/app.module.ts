@@ -36,6 +36,8 @@ import { ModulePaymentModule } from '../module-payment/module-payment.module';
 import { ConfigModule as MyConfigModule } from '../config/config.module';
 import { ConsumerModule } from '../consumer/consumer.module';
 import { SecurityModule } from '../security/security.module';
+import { VehicleAdminModule } from '../admin/vehicle/vehicle.module';
+import { DriverAdminModule } from '../admin/driver/driver.module';
 
 @Module({
   imports: [
@@ -95,6 +97,8 @@ import { SecurityModule } from '../security/security.module';
     HttpModule,
     ConsumerModule,
     SecurityModule,
+    VehicleAdminModule,
+    DriverAdminModule,
   ],
   controllers: [AppController],
   providers: [AppService],

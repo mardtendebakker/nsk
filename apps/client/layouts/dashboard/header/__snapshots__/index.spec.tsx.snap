@@ -130,7 +130,7 @@ exports[`Header matches snapshot 1`] = `
           class="MuiBox-root css-16cpzd8"
         />
         <div
-          class="MuiAvatar-root MuiAvatar-circular MuiAvatar-colorDefault css-1dnh70-MuiAvatar-root"
+          class="MuiAvatar-root MuiAvatar-circular MuiAvatar-colorDefault css-qsmhl1-MuiAvatar-root"
         >
           <svg
             aria-hidden="true"

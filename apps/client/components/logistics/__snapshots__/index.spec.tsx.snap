@@ -8,45 +8,138 @@ exports[`Logistics component matches snapshot 1`] = `
     <div
       class="MuiBox-root css-17xfadb"
     >
-      <p
-        class="MuiTypography-root MuiTypography-body1 css-1pnmrwp-MuiTypography-root"
+      <div
+        class="MuiAutocomplete-root MuiAutocomplete-fullWidth MuiAutocomplete-hasPopupIcon css-1u6ug4u-MuiAutocomplete-root"
       >
-        pickupsBy:
-      </p>
-      <ul
-        class="MuiList-root MuiList-padding css-h4y409-MuiList-root"
-        role="menu"
-        tabindex="-1"
+        <div
+          class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-1rzemrl-MuiFormControl-root-MuiTextField-root"
+        >
+          <div
+            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-sizeSmall MuiInputBase-adornedEnd MuiAutocomplete-inputRoot css-154xyx0-MuiInputBase-root-MuiOutlinedInput-root"
+          >
+            <input
+              aria-autocomplete="list"
+              aria-expanded="false"
+              aria-invalid="false"
+              autocapitalize="none"
+              autocomplete="off"
+              class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall MuiInputBase-inputAdornedEnd MuiAutocomplete-input MuiAutocomplete-inputFocused css-19qh8xo-MuiInputBase-input-MuiOutlinedInput-input"
+              id=":r0:"
+              placeholder="pickupsBy"
+              role="combobox"
+              spellcheck="false"
+              type="text"
+              value=""
+            />
+            <div
+              class="MuiAutocomplete-endAdornment css-p1olib-MuiAutocomplete-endAdornment"
+            >
+              <button
+                aria-label="Open"
+                class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium MuiAutocomplete-popupIndicator css-qzbt6i-MuiButtonBase-root-MuiIconButton-root-MuiAutocomplete-popupIndicator"
+                tabindex="-1"
+                title="Open"
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                  data-testid="ArrowDropDownIcon"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M7 10l5 5 5-5z"
+                  />
+                </svg>
+                <span
+                  class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                />
+              </button>
+            </div>
+            <fieldset
+              aria-hidden="true"
+              class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+            >
+              <legend
+                class="css-ihdtdm"
+              >
+                <span
+                  class="notranslate"
+                >
+                  ​
+                </span>
+              </legend>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+      <div
+        class="MuiAutocomplete-root MuiAutocomplete-fullWidth MuiAutocomplete-hasPopupIcon css-13jxhlw-MuiAutocomplete-root"
       >
-        <li
-          class="MuiButtonBase-root MuiMenuItem-root MuiMenuItem-gutters MuiMenuItem-root MuiMenuItem-gutters css-1own8wy-MuiButtonBase-root-MuiMenuItem-root"
-          role="menuitem"
-          tabindex="0"
+        <div
+          class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-1rzemrl-MuiFormControl-root-MuiTextField-root"
         >
-          <p
-            class="MuiTypography-root MuiTypography-body1 css-1we0tu4-MuiTypography-root"
+          <div
+            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-sizeSmall MuiInputBase-adornedEnd MuiAutocomplete-inputRoot css-154xyx0-MuiInputBase-root-MuiOutlinedInput-root"
           >
-            everyone
-          </p>
-          <span
-            class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-          />
-        </li>
-        <li
-          class="MuiButtonBase-root MuiMenuItem-root MuiMenuItem-gutters MuiMenuItem-root MuiMenuItem-gutters css-5785nc-MuiButtonBase-root-MuiMenuItem-root"
-          role="menuitem"
-          tabindex="-1"
-        >
-          <p
-            class="MuiTypography-root MuiTypography-body1 css-vkc4v8-MuiTypography-root"
-          >
-            username1
-          </p>
-          <span
-            class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-          />
-        </li>
-      </ul>
+            <input
+              aria-autocomplete="list"
+              aria-expanded="false"
+              aria-invalid="false"
+              autocapitalize="none"
+              autocomplete="off"
+              class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall MuiInputBase-inputAdornedEnd MuiAutocomplete-input MuiAutocomplete-inputFocused css-19qh8xo-MuiInputBase-input-MuiOutlinedInput-input"
+              id=":r2:"
+              placeholder="vehicle"
+              role="combobox"
+              spellcheck="false"
+              type="text"
+              value=""
+            />
+            <div
+              class="MuiAutocomplete-endAdornment css-p1olib-MuiAutocomplete-endAdornment"
+            >
+              <button
+                aria-label="Open"
+                class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium MuiAutocomplete-popupIndicator css-qzbt6i-MuiButtonBase-root-MuiIconButton-root-MuiAutocomplete-popupIndicator"
+                tabindex="-1"
+                title="Open"
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                  data-testid="ArrowDropDownIcon"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M7 10l5 5 5-5z"
+                  />
+                </svg>
+                <span
+                  class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                />
+              </button>
+            </div>
+            <fieldset
+              aria-hidden="true"
+              class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+            >
+              <legend
+                class="css-ihdtdm"
+              >
+                <span
+                  class="notranslate"
+                >
+                  ​
+                </span>
+              </legend>
+            </fieldset>
+          </div>
+        </div>
+      </div>
     </div>
     <div
       class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-ofgx0x-MuiPaper-root-MuiCard-root"
@@ -122,13 +215,13 @@ exports[`Logistics component matches snapshot 1`] = `
                 viewBox="0 0 24 24"
               >
                 <path
-                  d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+                  d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"
                 />
               </svg>
               <input
                 aria-invalid="false"
                 class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall MuiInputBase-inputAdornedStart css-1ua80n0-MuiInputBase-input-MuiOutlinedInput-input"
-                id=":r0:"
+                id=":r4:"
                 name="logistics-search"
                 placeholder="logisticsPage.search.placeholder"
                 type="text"
@@ -238,7 +331,7 @@ exports[`Logistics component matches snapshot 1`] = `
                       data-mui-internal-clone-element="true"
                     >
                       <p
-                        class="MuiTypography-root MuiTypography-inherit css-37jdci-MuiTypography-root"
+                        class="MuiTypography-root MuiTypography-inherit css-191i2np-MuiTypography-root"
                       >
                         event11, 11:10
                       </p>
@@ -253,7 +346,7 @@ exports[`Logistics component matches snapshot 1`] = `
                       data-mui-internal-clone-element="true"
                     >
                       <p
-                        class="MuiTypography-root MuiTypography-inherit css-37jdci-MuiTypography-root"
+                        class="MuiTypography-root MuiTypography-inherit css-191i2np-MuiTypography-root"
                       >
                         event22, 11:10
                       </p>

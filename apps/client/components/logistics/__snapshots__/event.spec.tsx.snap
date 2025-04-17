@@ -11,7 +11,7 @@ exports[`event matches snapshot 1`] = `
       data-mui-internal-clone-element="true"
     >
       <p
-        class="MuiTypography-root MuiTypography-inherit css-37jdci-MuiTypography-root"
+        class="MuiTypography-root MuiTypography-inherit css-191i2np-MuiTypography-root"
       >
         eventTitle, 
       </p>

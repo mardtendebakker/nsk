@@ -1,5 +1,48 @@
 const translation = {
   id: 'ID',
+  vehicles: 'Voertuigen',
+  drivers: 'Bestuurders',
+  firstName: 'Voornaam',
+  lastName: 'Achternaam',
+  newDriver: 'Nieuwe bestuurder',
+  newVehicle: 'Nieuw voertuig',
+  registrationNumber: 'Kentekennummer',
+  editVehicle: 'Voertuig bewerken',
+  editDriver: 'Bestuurder bewerken',
+  manageLogistics: 'Logistiek beheren',
+  vehiclesList: {
+    search: {
+      placeholder: 'Zoeken op naam of kentekennummer',
+    },
+  },
+  vehicleForm: {
+    name: {
+      label: 'Voertuignaam',
+      placeholder: 'Voer voertuignaam in',
+    },
+    registrationNumber: {
+      label: 'Kentekennummer van het voertuig',
+      placeholder: 'Voer kentekennummer van het voertuig in',
+    },
+  },
+  driverForm: {
+    firstName: {
+      label: 'Voornaam',
+      placeholder: 'Voer voornaam van bestuurder in',
+    },
+    lastName: {
+      label: 'Achternaam',
+      placeholder: 'Voer achternaam van bestuurder in',
+    },
+    email: {
+      label: 'E-mail',
+      placeholder: 'Voer e-mail van bestuurder in',
+    },
+    username: {
+      label: 'Gebruikersnaam',
+      placeholder: 'Voer gebruikersnaam van bestuurder in',
+    },
+  },
   signIn: 'Log in',
   home: 'home',
   welcomeBackGreetings: 'Hallo, welkom terug',
