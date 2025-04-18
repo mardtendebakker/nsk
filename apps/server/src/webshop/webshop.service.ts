@@ -165,6 +165,10 @@ export class WebshopService {
         attribute_code: 'description',
         value: product.description,
       },
+      {
+        attribute_code: 'tax_class_id',
+        value: '2',
+      },
     ];
 
     if (!hasValue(magentoAttrSetId)) {
