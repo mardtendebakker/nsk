@@ -111,7 +111,7 @@ export class StockBlancco {
         productTypeName = BlanccoProductTypes.SERVER;
       } else if (['All In One'].includes(chassisType)) {
         productTypeName = BlanccoProductTypes.ALL_IN_ONE;
-      } else if (['Mobile Device'].includes(chassisType)) {
+      } else if (['Mobile Device', 'Tablet'].includes(chassisType)) {
         productTypeName = BlanccoProductTypes.TELEFOON_TABLET;
       }
     }
