@@ -24,6 +24,7 @@ export class ThemeService {
 
     return result ? {
       companyName: result.company_name,
+      dashboardMessage: result.dashboard_message,
       logo: afileFormat(result.logo),
       favicon: afileFormat(result.favicon),
       palette: JSON.parse(result.palette),
@@ -31,8 +32,8 @@ export class ThemeService {
   }
 
   async updateOrCreate({
-    companyName, palette, logo, favicon,
-  }: { companyName: string, palette: string, logo?: Express.Multer.File, favicon?: Express.Multer.File }): Promise<FindThemeResponseDto> {
+    companyName, dashboardMessage, palette, logo, favicon,
+  }: { companyName: string, dashboardMessage?: string, palette: string, logo?: Express.Multer.File, favicon?: Express.Multer.File }): Promise<FindThemeResponseDto> {
     const result = await this.themeRepository.findOne();
 
     let newLogo: afile | undefined;
@@ -61,6 +62,7 @@ export class ThemeService {
 
     const data = {
       company_name: companyName,
+      dashboard_message: dashboardMessage,
       logo: newLogo ? {
         connect: newLogo,
       } : undefined,
@@ -85,6 +87,7 @@ export class ThemeService {
     }
 
     return {
+      dashboardMessage: theme.dashboard_message,
       companyName: theme.company_name,
       logo: afileFormat(theme.logo),
       favicon: afileFormat(theme.favicon),

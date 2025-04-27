@@ -1,0 +1,1 @@
+ALTER TABLE `theme` ADD COLUMN `dashboard_message` VARCHAR(255) NULL;

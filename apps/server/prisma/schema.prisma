@@ -438,13 +438,14 @@ model delivery {
 }
 
 model theme {
-  id           Int    @id @default(autoincrement())
-  company_name String @db.VarChar(255)
-  palette      String @db.LongText
-  logo_id      Int    @unique
-  favicon_id   Int    @unique
-  favicon      afile  @relation("favicon", fields: [favicon_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_theme_favicon")
-  logo         afile  @relation("logo", fields: [logo_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_theme_logo")
+  id                Int     @id @default(autoincrement())
+  company_name      String  @db.VarChar(255)
+  dashboard_message String? @db.VarChar(255)
+  palette           String  @db.LongText
+  logo_id           Int     @unique
+  favicon_id        Int     @unique
+  favicon           afile   @relation("favicon", fields: [favicon_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_theme_favicon")
+  logo              afile   @relation("logo", fields: [logo_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_theme_logo")
 
   @@index([logo_id], map: "idx_theme_logo")
   @@index([favicon_id], map: "idx_theme_favicon")

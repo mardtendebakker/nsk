@@ -26,4 +26,7 @@ export class FindThemeResponseDto {
 
   @ApiProperty()
     companyName: string;
+
+  @ApiProperty()
+    dashboardMessage: string;
 }

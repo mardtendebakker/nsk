@@ -10,6 +10,7 @@ const translation = {
   editVehicle: 'ویرایش وسیله نقلیه',
   editDriver: 'ویرایش راننده',
   manageLogistics: 'مدیریت لجستیک',
+  dashboardMessage: 'پیام داشبورد',
   vehiclesList: {
     search: {
       placeholder: 'جستجو بر اساس نام یا شماره ثبت',

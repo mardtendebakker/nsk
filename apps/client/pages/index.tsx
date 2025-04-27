@@ -13,9 +13,11 @@ import VehiclesTracking from '../components/dashboard/vehiclesTracking';
 import Analytics from '../components/dashboard/analytics';
 import { ORDERS_ANALYTICS_PATH } from '../utils/axios';
 import useResponsive from '../hooks/useResponsive';
+import useTheme from '../hooks/useTheme';
 
 function Dashboard() {
   const { state: { user } } = useSecurity();
+  const { state: { theme: { dashboardMessage } } } = useTheme();
   const { trans } = useTranslation();
   const isDesktop = useResponsive('up', 'md');
 
@@ -24,12 +26,17 @@ function Dashboard() {
       <Head>
         <title>{trans('dashboard')}</title>
       </Head>
-      <Typography variant="h3">
-        {trans('hello')}
-        {', '}
-        {user?.username}
-        !
-      </Typography>
+      <Box>
+        <Typography variant="h3">
+          {trans('hello')}
+          {', '}
+          {user?.username}
+          !
+        </Typography>
+        <Typography variant="h3" color="green">
+          {dashboardMessage}
+        </Typography>
+      </Box>
       <Box sx={{ m: '.5rem' }} />
       <IndicatorRow />
       <Box sx={{ mt: '.5rem', display: 'flex', flexDirection: isDesktop ? undefined : 'column-reverse' }}>

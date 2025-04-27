@@ -20,6 +20,7 @@ const createPaletteElementKey = (label: string): string => `${PALETTE_PREFIX}${l
 function initFormState(theme: ThemeModel, trans: Trans) {
   const state = {
     companyName: { value: theme.companyName, required: true },
+    dashboardMessage: { value: theme.dashboardMessage },
     logo: {
       value: theme.logo,
       required: true,
@@ -65,6 +66,7 @@ export default function Theme() {
     const palette = {};
 
     formData.append('companyName', formRepresentation.companyName.value);
+    formData.append('dashboardMessage', formRepresentation.dashboardMessage.value);
 
     Object.keys(formRepresentation).forEach((key) => {
       if (key.includes(PALETTE_PREFIX)) {
@@ -138,11 +140,22 @@ export default function Theme() {
               disabled={!canSubmit()}
               fullWidth
               sx={{ mb: '.5rem' }}
-              label={trans('company_name')}
+              label={trans('dashboardMessage')}
+              value={formRepresentation.dashboardMessage.value || ''}
+              helperText={formRepresentation.dashboardMessage.error}
+              error={!!formRepresentation.dashboardMessage.error}
+              placeholder={trans('dashboardMessage')}
+              onChange={(e) => setValue({ field: 'dashboardMessage', value: e.target.value })}
+            />
+            <TextField
+              disabled={!canSubmit()}
+              fullWidth
+              sx={{ mb: '.5rem' }}
+              label={trans('companyName')}
               value={formRepresentation.companyName.value || ''}
               helperText={formRepresentation.companyName.error}
               error={!!formRepresentation.companyName.error}
-              placeholder={trans('company_name')}
+              placeholder={trans('companyName')}
               onChange={(e) => setValue({ field: 'companyName', value: e.target.value })}
             />
             {
