@@ -3,7 +3,7 @@ import useAxios from '../../../../../hooks/useAxios';
 import useTranslation from '../../../../../hooks/useTranslation';
 import useForm from '../../../../../hooks/useForm';
 import Form from '../form';
-import { VEHICLES_PATH } from '../../../../../utils/axios';
+import { ADMIN_VEHICLES_PATH } from '../../../../../utils/axios';
 import { initFormState, formRepresentationToBody } from '../createModal';
 import ConfirmationDialog from '../../../../confirmationDialog';
 import { Vehicle } from '../../../../../utils/axios/models/logistic';
@@ -15,8 +15,8 @@ export default function EditModal({ onClose, onSubmit, id }: {
 }) {
   const { trans } = useTranslation();
 
-  const { data: vehicle, call, performing } = useAxios<Vehicle | undefined>('get', VEHICLES_PATH.replace(':id', id));
-  const { call: callPut, performing: performingPut } = useAxios('put', VEHICLES_PATH.replace(':id', id), { showSuccessMessage: true });
+  const { data: vehicle, call, performing } = useAxios<Vehicle | undefined>('get', ADMIN_VEHICLES_PATH.replace(':id', id));
+  const { call: callPut, performing: performingPut } = useAxios('put', ADMIN_VEHICLES_PATH.replace(':id', id), { showSuccessMessage: true });
   const { formRepresentation, setValue, validate } = useForm(useMemo(() => initFormState(vehicle), [vehicle]));
 
   useEffect(() => {

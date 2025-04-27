@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import List from './list';
 import useTranslation from '../../../../../hooks/useTranslation';
-import { DRIVERS_PATH } from '../../../../../utils/axios';
+import { ADMIN_DRIVERS_PATH } from '../../../../../utils/axios';
 import useAxios from '../../../../../hooks/useAxios';
 import CreateModal from '../createModal';
 import EditModal from '../editModal';
@@ -27,7 +27,7 @@ export default function ListContainer() {
 
   const { data: { data = [], count = 0 } = {}, call, performing } = useAxios<undefined | { data?: Driver[], count?: number }>(
     'get',
-    DRIVERS_PATH.replace(':id', ''),
+    ADMIN_DRIVERS_PATH.replace(':id', ''),
     {
       withProgressBar: true,
     },
@@ -60,7 +60,7 @@ export default function ListContainer() {
   }), [rowsPerPage]);
 
   const handleDelete = (id: number) => {
-    callDelete({ path: DRIVERS_PATH.replace(':id', id.toString()) })
+    callDelete({ path: ADMIN_DRIVERS_PATH.replace(':id', id.toString()) })
       .then(() => {
         setPage(1);
       })

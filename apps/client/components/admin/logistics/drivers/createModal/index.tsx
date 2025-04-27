@@ -2,7 +2,7 @@ import useAxios from '../../../../../hooks/useAxios';
 import useTranslation from '../../../../../hooks/useTranslation';
 import useForm, { FormRepresentation } from '../../../../../hooks/useForm';
 import Form from '../form';
-import { DRIVERS_PATH } from '../../../../../utils/axios';
+import { ADMIN_DRIVERS_PATH } from '../../../../../utils/axios';
 import { Driver } from '../../../../../utils/axios/models/logistic';
 import ConfirmationDialog from '../../../../confirmationDialog';
 
@@ -34,7 +34,7 @@ export default function CreateModal({ onClose, onSubmit }: {
   const { trans } = useTranslation();
   const { formRepresentation, setValue, validate } = useForm(formState);
 
-  const { call, performing } = useAxios('post', DRIVERS_PATH.replace(':id', ''), { showSuccessMessage: true, withProgressBar: true });
+  const { call, performing } = useAxios('post', ADMIN_DRIVERS_PATH.replace(':id', ''), { showSuccessMessage: true, withProgressBar: true });
 
   const handleSave = () => {
     if (validate() || performing) {

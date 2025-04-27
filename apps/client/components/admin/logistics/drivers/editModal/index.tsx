@@ -3,7 +3,7 @@ import useAxios from '../../../../../hooks/useAxios';
 import useTranslation from '../../../../../hooks/useTranslation';
 import useForm from '../../../../../hooks/useForm';
 import Form from '../form';
-import { DRIVERS_PATH } from '../../../../../utils/axios';
+import { ADMIN_DRIVERS_PATH } from '../../../../../utils/axios';
 import { initFormState, formRepresentationToBody } from '../createModal';
 import ConfirmationDialog from '../../../../confirmationDialog';
 import { Driver } from '../../../../../utils/axios/models/logistic';
@@ -15,8 +15,8 @@ export default function EditModal({ onClose, onSubmit, id }: {
 }) {
   const { trans } = useTranslation();
 
-  const { data: driver, call, performing } = useAxios<Driver | undefined>('get', DRIVERS_PATH.replace(':id', id));
-  const { call: callPut, performing: performingPut } = useAxios('put', DRIVERS_PATH.replace(':id', id), { showSuccessMessage: true });
+  const { data: driver, call, performing } = useAxios<Driver | undefined>('get', ADMIN_DRIVERS_PATH.replace(':id', id));
+  const { call: callPut, performing: performingPut } = useAxios('put', ADMIN_DRIVERS_PATH.replace(':id', id), { showSuccessMessage: true });
   const { formRepresentation, setValue, validate } = useForm(useMemo(() => initFormState(driver), [driver]));
 
   useEffect(() => {
