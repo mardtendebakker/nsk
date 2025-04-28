@@ -8,11 +8,11 @@ export default function DeleteResource({
   requiredModule,
   onClick,
   disabled,
-}:{ onClick: () => void, requiredModule: ModuleName, disabled: boolean }) {
+}:{ onClick: () => void, requiredModule?: ModuleName, disabled: boolean }) {
   const { trans } = useTranslation();
   const { hasModule } = useSecurity();
 
-  const activeModule = hasModule(requiredModule);
+  const activeModule = requiredModule ? hasModule(requiredModule) : true;
 
   return (
     <Tooltip title={!activeModule && trans('inactiveModuleMessage', { vars: (new Map()).set('module', requiredModule) })}>

@@ -51,7 +51,7 @@ exports[`List matches snapshot 1`] = `
           data-mui-internal-clone-element="true"
         >
           <button
-            class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeSmall MuiButton-containedSizeSmall MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeSmall MuiButton-containedSizeSmall css-11qr2p8-MuiButtonBase-root-MuiButton-root"
+            class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeSmall MuiButton-containedSizeSmall MuiButton-colorPrimary MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeSmall MuiButton-containedSizeSmall MuiButton-colorPrimary css-11qr2p8-MuiButtonBase-root-MuiButton-root"
             tabindex="0"
             type="button"
           >
@@ -63,7 +63,7 @@ exports[`List matches snapshot 1`] = `
               viewBox="0 0 24 24"
             >
               <path
-                d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"
+                d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6z"
               />
             </svg>
             newTask
@@ -132,21 +132,23 @@ exports[`List matches snapshot 1`] = `
             rowsPerPage
           </p>
           <div
-            class="MuiInputBase-root MuiInputBase-colorPrimary css-16c50h-MuiInputBase-root-MuiTablePagination-select"
+            class="MuiInputBase-root MuiInputBase-colorPrimary MuiTablePagination-input css-16c50h-MuiInputBase-root-MuiTablePagination-select"
           >
             <div
+              aria-controls=":r4:"
               aria-expanded="false"
               aria-haspopup="listbox"
               aria-labelledby=":r3: :r2:"
               class="MuiSelect-select MuiTablePagination-select MuiSelect-standard MuiInputBase-input css-194a1fa-MuiSelect-select-MuiInputBase-input"
               id=":r2:"
-              role="button"
+              role="combobox"
               tabindex="0"
             >
               10
             </div>
             <input
               aria-hidden="true"
+              aria-invalid="false"
               class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
               tabindex="-1"
               value="10"

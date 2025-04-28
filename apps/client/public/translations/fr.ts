@@ -1,5 +1,48 @@
 const translation = {
   id: 'ID',
+  vehicles: 'Véhicules',
+  drivers: 'Conducteurs',
+  firstName: 'Prénom',
+  lastName: 'Nom',
+  newDriver: 'Nouveau conducteur',
+  newVehicle: 'Nouveau véhicule',
+  registrationNumber: 'Numéro d\'immatriculation',
+  editVehicle: 'Modifier le véhicule',
+  editDriver: 'Modifier le conducteur',
+  manageLogistics: 'Gérer la logistique',
+  vehiclesList: {
+    search: {
+      placeholder: 'Rechercher par nom ou numéro d\'immatriculation',
+    },
+  },
+  vehicleForm: {
+    name: {
+      label: 'Nom du véhicule',
+      placeholder: 'Saisir le nom du véhicule',
+    },
+    registrationNumber: {
+      label: 'Numéro d\'immatriculation du véhicule',
+      placeholder: 'Saisir le numéro d\'immatriculation du véhicule',
+    },
+  },
+  driverForm: {
+    firstName: {
+      label: 'Prénom',
+      placeholder: 'Saisir le prénom du conducteur',
+    },
+    lastName: {
+      label: 'Nom',
+      placeholder: 'Saisir le nom du conducteur',
+    },
+    email: {
+      label: 'Email',
+      placeholder: 'Saisir l\'email du conducteur',
+    },
+    username: {
+      label: 'Nom d\'utilisateur',
+      placeholder: 'Saisir le nom d\'utilisateur du conducteur',
+    },
+  },
   signIn: 'Se connecter',
   welcomeBackGreetings: 'Bonjour, heureux de vous revoir',
   emailAddress: 'Adresse e-mail',

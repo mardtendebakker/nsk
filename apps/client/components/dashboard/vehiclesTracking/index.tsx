@@ -7,7 +7,9 @@ import LocalShippingOutlined from '@mui/icons-material/LocalShippingOutlined';
 import useTranslation from '../../../hooks/useTranslation';
 import GeoMap, { Ways } from './map';
 import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
-import { VEHICLES_TODAY_PICKUPS_PATH, VEHICLES_PATH, AxiosResponse } from '../../../utils/axios';
+import {
+  VEHICLES_TODAY_PICKUPS_PATH, VEHICLES_PATH, AxiosResponse,
+} from '../../../utils/axios';
 import { Vehicle } from '../../../utils/axios/models/vehicle';
 import { LogisticServiceListItem } from '../../../utils/axios/models/logistic';
 import RunningStatus from './runnningStatus';

@@ -1,6 +1,6 @@
 import { Prisma } from '@prisma/client';
 import { ConfigService } from '@nestjs/config';
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
@@ -33,6 +33,18 @@ export class UserRepository {
 
   findOne(params: Prisma.userFindFirstArgs) {
     return this.prisma.user.findFirst(params);
+  }
+
+  async delete(params: Prisma.userDeleteArgs) {
+    try {
+      return await this.prisma.user.delete(params);
+    } catch (err) {
+      if (err.code === 'P2003') {
+        throw new ConflictException();
+      }
+
+      throw err;
+    }
   }
 
   find(params: Prisma.userFindManyArgs) {
