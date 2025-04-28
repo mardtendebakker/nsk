@@ -10,6 +10,7 @@ const translation = {
   editVehicle: 'Voertuig bewerken',
   editDriver: 'Bestuurder bewerken',
   manageLogistics: 'Logistiek beheren',
+  dashboardMessage: 'Dashboard-bericht',
   vehiclesList: {
     search: {
       placeholder: 'Zoeken op naam of kentekennummer',
@@ -94,7 +95,7 @@ const translation = {
   username: 'Gebruikersnaam',
   phone: 'Telefoon',
   phone2: 'Mobiel',
-  company_name: 'Bedrijfsnaam',
+  companyName: 'Bedrijfsnaam',
   company_kvk_nr: 'Kvk Nummer',
   street: 'Straat',
   street_extra: 'Toevoeging',

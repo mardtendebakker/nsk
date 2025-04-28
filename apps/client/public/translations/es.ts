@@ -10,6 +10,7 @@ const translation = {
   editVehicle: 'Editar vehículo',
   editDriver: 'Editar conductor',
   manageLogistics: 'Gestionar logística',
+  dashboardMessage: 'Mensaje del tablero',
   vehiclesList: {
     search: {
       placeholder: 'Buscar por nombre o número de matrícula',
@@ -91,7 +92,7 @@ const translation = {
   username: 'Nombre de usuario',
   phone: 'Teléfono',
   phone2: 'Celular',
-  company_name: 'Nombre de la empresa',
+  companyName: 'Nombre de la empresa',
   company_kvk_nr: 'Número de la Cámara de Comercio',
   street: 'Calle',
   street_extra: 'Complemento de calle',

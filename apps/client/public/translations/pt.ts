@@ -13,6 +13,7 @@ const translation = {
   editVehicle: 'Editar veículo',
   editDriver: 'Editar motorista',
   manageLogistics: 'Gerenciar logística',
+  dashboardMessage: 'Mensagem do painel',
   vehiclesList: {
     search: {
       placeholder: 'Pesquisar por nome ou número de registro',
@@ -96,7 +97,7 @@ const translation = {
   phone: 'Telefone',
   phone2: 'Identificador do cliente',
   clientId: 'Klant-ID',
-  company_name: 'Nome da empresa',
+  companyName: 'Nome da empresa',
   company_kvk_nr: 'Número KVK',
   street: 'Rua',
   street_extra: 'Adicional',

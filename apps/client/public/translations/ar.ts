@@ -10,6 +10,7 @@ const translation = {
   editVehicle: 'تعديل المركبة',
   editDriver: 'تعديل السائق',
   manageLogistics: 'إدارة الخدمات اللوجستية',
+  dashboardMessage: 'رسالة لوحة المعلومات',
   vehiclesList: {
     search: {
       placeholder: 'البحث بالاسم أو رقم التسجيل',

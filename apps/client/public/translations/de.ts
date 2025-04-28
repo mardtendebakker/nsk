@@ -91,7 +91,7 @@ const translation = {
   username: 'Benutzername',
   phone: 'Telefon',
   phone2: 'Mobil',
-  company_name: 'Firmenname',
+  companyName: 'Firmenname',
   company_kvk_nr: 'Handelsregisternummer',
   street: 'Straße',
   street_extra: 'Zusatz',
@@ -99,6 +99,7 @@ const translation = {
   zipcode: 'Postleitzahl',
   state: 'Provinz',
   createOrder: 'Eine Bestellung anlegen',
+  dashboardMessage: 'Dashboard-Nachricht',
   blancco: {
     name: 'Blancco',
     import: 'Importieren',
