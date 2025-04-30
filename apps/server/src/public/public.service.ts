@@ -446,7 +446,7 @@ export class PublicService {
       ),
     );
 
-    if (data?.success) {
+    if (data?.success && (!data.score || data.score >= 0.5)) {
       return true;
     }
     throw new BadRequestException(`recaptcha failed: ${data['error-codes']}`);
