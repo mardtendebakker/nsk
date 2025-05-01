@@ -26,6 +26,7 @@ import { PostImportDto } from './dto/post-import.dto';
 import { ContactService } from '../contact/contact.service';
 import { DataDestructionDesc } from './types/destruction-desc.enum';
 import { PostSalesDto } from './dto/post-sales.dto';
+import { InvalidRecaptchaKeyException } from './exceptions/invalid-recaptcha-key.exception';
 
 @Injectable()
 export class PublicService {
@@ -81,7 +82,7 @@ export class PublicService {
   async postPickup(params: PostPickupDto, files?: Express.Multer.File[]): Promise<void> {
     const { pickup_form: pickupForm } = params;
 
-    await this.captchaVerify(params['g-recaptcha-response']);
+    await this.verifyCaptcha(params['g-recaptcha-response']);
 
     pickupForm.supplier.company_is_supplier = true;
     const supplier = await this.contactService.checkExists(pickupForm.supplier);
@@ -133,7 +134,7 @@ export class PublicService {
   async postSales(params: PostSalesDto): Promise<void> {
     const { public_sales_form: publicSalesForm } = params;
 
-    await this.captchaVerify(params['g-recaptcha-response']);
+    await this.verifyCaptcha(params['g-recaptcha-response']);
 
     publicSalesForm.customer.company_is_customer = true;
     const customer = await this.contactService.checkExists(publicSalesForm.customer);
@@ -165,7 +166,7 @@ export class PublicService {
   async postOrder(params: PostOrderDto): Promise<void> {
     const { public_order_form: publicOrderForm } = params;
 
-    await this.captchaVerify(params['g-recaptcha-response']);
+    await this.verifyCaptcha(params['g-recaptcha-response']);
 
     const { customer: customerDto } = publicOrderForm;
     customerDto.company_is_customer = true;
@@ -207,7 +208,7 @@ export class PublicService {
     }
     const { import_form: importForm } = params;
 
-    await this.captchaVerify(params['g-recaptcha-response']);
+    await this.verifyCaptcha(params['g-recaptcha-response']);
 
     await this.saleService.import({
       partner_id: importForm.partnerId,
@@ -429,13 +430,30 @@ export class PublicService {
     return products;
   }
 
-  private async captchaVerify(recaptcha: string): Promise<boolean> {
+  async verifyCaptcha(token: string): Promise<boolean> {
+    let result = false;
+    const v2Secret = this.configService.get<string>('RECAPTCHA_SECRET_V2');
+    const v3Secret = this.configService.get<string>('RECAPTCHA_SECRET_V3');
+    try {
+      result = await this.verifyCaptchaToken(token, v3Secret);
+    } catch (err) {
+      if (err instanceof InvalidRecaptchaKeyException) {
+        result = await this.verifyCaptchaToken(token, v2Secret);
+      } else {
+        throw err;
+      }
+    }
+
+    return result;
+  }
+
+  private async verifyCaptchaToken(token: string, secret: string): Promise<boolean> {
     const url = 'https://www.google.com/recaptcha/api/siteverify';
 
     const requestConfig = {
       params: {
-        secret: this.configService.get<string>('RECAPTCHA_SECRET'),
-        response: recaptcha,
+        secret,
+        response: token,
       },
     };
     const { data } = await lastValueFrom(
@@ -445,6 +463,10 @@ export class PublicService {
         }),
       ),
     );
+
+    if (data['error-codes']?.includes('invalid-keys')) {
+      throw new InvalidRecaptchaKeyException();
+    }
 
     if (data?.success && (!data.score || data.score >= 0.5)) {
       return true;
