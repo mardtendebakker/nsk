@@ -24,7 +24,7 @@ import { PostOrderDto } from './dto/post-order.dto';
 import { SaleService } from '../sale/sale.service';
 import { PostImportDto } from './dto/post-import.dto';
 import { ContactService } from '../contact/contact.service';
-import { DataDestructionDesc } from '../calendar/pickup/types/destruction-desc.enum';
+import { DataDestructionDesc } from './types/destruction-desc.enum';
 import { PostSalesDto } from './dto/post-sales.dto';
 
 @Injectable()
