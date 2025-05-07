@@ -39,6 +39,7 @@ export class ThemeController {
       properties: {
         palette: { type: 'object', nullable: false },
         companyName: { type: 'string', nullable: false },
+        dashboardMessage: { type: 'string' },
         logo: {
           type: 'string',
           format: 'binary',

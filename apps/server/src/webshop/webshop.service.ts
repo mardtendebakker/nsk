@@ -95,6 +95,7 @@ export class WebshopService {
     } catch (e) {
       if (e?.status === 400) {
         Logger.error(e.response?.message || e.response || e.message, 'Art.nr:', product.id);
+        throw e;
       } else {
         throw e;
       }
@@ -163,6 +164,10 @@ export class WebshopService {
       {
         attribute_code: 'description',
         value: product.description,
+      },
+      {
+        attribute_code: 'tax_class_id',
+        value: '2',
       },
     ];
 
@@ -599,7 +604,7 @@ export class WebshopService {
       ),
     );
 
-    return response;
+    return response as AxiosResponse;
   }
 
   private generateRandomHash(length) {

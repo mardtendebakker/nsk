@@ -1,5 +1,49 @@
 const translation = {
   id: 'ID',
+  vehicles: 'Vehículos',
+  drivers: 'Conductores',
+  firstName: 'Nombre',
+  lastName: 'Apellido',
+  newDriver: 'Nuevo conductor',
+  newVehicle: 'Nuevo vehículo',
+  registrationNumber: 'Número de matrícula',
+  editVehicle: 'Editar vehículo',
+  editDriver: 'Editar conductor',
+  manageLogistics: 'Gestionar logística',
+  dashboardMessage: 'Mensaje del tablero',
+  vehiclesList: {
+    search: {
+      placeholder: 'Buscar por nombre o número de matrícula',
+    },
+  },
+  vehicleForm: {
+    name: {
+      label: 'Nombre del vehículo',
+      placeholder: 'Escriba el nombre del vehículo',
+    },
+    registrationNumber: {
+      label: 'Número de matrícula del vehículo',
+      placeholder: 'Escriba el número de matrícula del vehículo',
+    },
+  },
+  driverForm: {
+    firstName: {
+      label: 'Nombre',
+      placeholder: 'Escriba el nombre del conductor',
+    },
+    lastName: {
+      label: 'Apellido',
+      placeholder: 'Escriba el apellido del conductor',
+    },
+    email: {
+      label: 'Correo electrónico',
+      placeholder: 'Escriba el correo electrónico del conductor',
+    },
+    username: {
+      label: 'Nombre de usuario',
+      placeholder: 'Escriba el nombre de usuario del conductor',
+    },
+  },
   signIn: 'Iniciar sesión',
   home: 'inicio',
   welcomeBackGreetings: 'Hola, bienvenido de nuevo',
@@ -48,7 +92,7 @@ const translation = {
   username: 'Nombre de usuario',
   phone: 'Teléfono',
   phone2: 'Celular',
-  company_name: 'Nombre de la empresa',
+  companyName: 'Nombre de la empresa',
   company_kvk_nr: 'Número de la Cámara de Comercio',
   street: 'Calle',
   street_extra: 'Complemento de calle',

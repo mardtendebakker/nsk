@@ -52,11 +52,28 @@ export class PickupFormDto extends CommonFormDto {
   @Type(() => Number)
     countAddresses: number;
 
-  @ApiProperty()
+  @ApiProperty({
+    type: 'array',
+    items: {
+      type: 'object',
+      additionalProperties: { type: 'string' },
+      example: [
+        { address: '', address_zip: '', address_city: '' },
+        { address: 'AN_ARRAY_OF_ADDRESS_OBJECTS', address_zip: 'WITH_A_FIXED_LENGTH_EQUAL_TO_maxAddresses', address_city: 'IF_NO_ADDRESS_PROVIDED_VALUES_ARE_EMPTY' },
+      ],
+    },
+  })
   @Type(() => AddressDto)
     addresses: AddressDto[];
 
-  @ApiProperty()
+  @ApiProperty({
+    type: 'array',
+    items: {
+      type: 'object',
+      additionalProperties: { type: 'string' },
+      example: { type_id_1: 'USER_INPUT_QUANTITY_FOR_PRODUCT_TYPE_1 e.g. "5"', type_id_2: '7' },
+    },
+  })
   @Type(() => QuantityProductTypeDto)
     quantityAddresses: QuantityProductTypeDto[];
 

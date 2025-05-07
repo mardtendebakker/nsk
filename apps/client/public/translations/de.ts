@@ -1,5 +1,48 @@
 const translation = {
   id: 'ID',
+  vehicles: 'Fahrzeuge',
+  drivers: 'Fahrer',
+  firstName: 'Vorname',
+  lastName: 'Nachname',
+  newDriver: 'Neuer Fahrer',
+  newVehicle: 'Neues Fahrzeug',
+  registrationNumber: 'Zulassungsnummer',
+  editVehicle: 'Fahrzeug bearbeiten',
+  editDriver: 'Fahrer bearbeiten',
+  manageLogistics: 'Logistik verwalten',
+  vehiclesList: {
+    search: {
+      placeholder: 'Nach Name oder Zulassungsnummer suchen',
+    },
+  },
+  vehicleForm: {
+    name: {
+      label: 'Fahrzeugname',
+      placeholder: 'Fahrzeugname eingeben',
+    },
+    registrationNumber: {
+      label: 'Fahrzeug-Zulassungsnummer',
+      placeholder: 'Fahrzeug-Zulassungsnummer eingeben',
+    },
+  },
+  driverForm: {
+    firstName: {
+      label: 'Vorname',
+      placeholder: 'Vorname des Fahrers eingeben',
+    },
+    lastName: {
+      label: 'Nachname',
+      placeholder: 'Nachname des Fahrers eingeben',
+    },
+    email: {
+      label: 'E-Mail',
+      placeholder: 'E-Mail des Fahrers eingeben',
+    },
+    username: {
+      label: 'Benutzername',
+      placeholder: 'Benutzername des Fahrers eingeben',
+    },
+  },
   signIn: 'Anmelden',
   home: 'Startseite',
   welcomeBackGreetings: 'Hallo, willkommen zurück',
@@ -48,7 +91,7 @@ const translation = {
   username: 'Benutzername',
   phone: 'Telefon',
   phone2: 'Mobil',
-  company_name: 'Firmenname',
+  companyName: 'Firmenname',
   company_kvk_nr: 'Handelsregisternummer',
   street: 'Straße',
   street_extra: 'Zusatz',
@@ -56,6 +99,7 @@ const translation = {
   zipcode: 'Postleitzahl',
   state: 'Provinz',
   createOrder: 'Eine Bestellung anlegen',
+  dashboardMessage: 'Dashboard-Nachricht',
   blancco: {
     name: 'Blancco',
     import: 'Importieren',

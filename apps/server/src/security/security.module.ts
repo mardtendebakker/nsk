@@ -22,6 +22,7 @@ import { PrismaService } from '../prisma/prisma.service';
         jwtVerifier: {
           userPoolId: configService.get('COGNITO_USER_POOL_ID'),
           clientId: configService.get('COGNITO_CLIENT_ID'),
+          tokenUse: 'id',
         },
       }),
       inject: [ConfigService],

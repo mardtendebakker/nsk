@@ -7,7 +7,7 @@ import { FindManyDto } from './dto/find-many.dto';
 import { FindManyPaymentResponseDto } from './dto/find-many-payment-response.dto';
 import { SetupDto } from './dto/setup.dto';
 import { ModuleService } from '../module/module.service';
-import { PAID, PENDING, Status } from './status';
+import { PAID, PENDING, Status } from './types/status';
 
 const FREE_TRIAL = 'free_trial';
 

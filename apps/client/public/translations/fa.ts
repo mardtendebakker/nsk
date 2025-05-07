@@ -1,5 +1,49 @@
 const translation = {
   id: 'شناسه',
+  vehicles: 'وسایل نقلیه',
+  drivers: 'رانندگان',
+  firstName: 'نام',
+  lastName: 'نام خانوادگی',
+  newDriver: 'راننده جدید',
+  newVehicle: 'وسیله نقلیه جدید',
+  registrationNumber: 'شماره ثبت',
+  editVehicle: 'ویرایش وسیله نقلیه',
+  editDriver: 'ویرایش راننده',
+  manageLogistics: 'مدیریت لجستیک',
+  dashboardMessage: 'پیام داشبورد',
+  vehiclesList: {
+    search: {
+      placeholder: 'جستجو بر اساس نام یا شماره ثبت',
+    },
+  },
+  vehicleForm: {
+    name: {
+      label: 'نام وسیله نقلیه',
+      placeholder: 'نام وسیله نقلیه را وارد کنید',
+    },
+    registrationNumber: {
+      label: 'شماره ثبت وسیله نقلیه',
+      placeholder: 'شماره ثبت وسیله نقلیه را وارد کنید',
+    },
+  },
+  driverForm: {
+    firstName: {
+      label: 'نام',
+      placeholder: 'نام راننده را وارد کنید',
+    },
+    lastName: {
+      label: 'نام خانوادگی',
+      placeholder: 'نام خانوادگی راننده را وارد کنید',
+    },
+    email: {
+      label: 'ایمیل',
+      placeholder: 'ایمیل راننده را وارد کنید',
+    },
+    username: {
+      label: 'نام کاربری',
+      placeholder: 'نام کاربری راننده را وارد کنید',
+    },
+  },
   signIn: 'ورود',
   welcomeBackGreetings: 'سلام، خوش آمدید',
   emailAddress: 'آدرس ایمیل',

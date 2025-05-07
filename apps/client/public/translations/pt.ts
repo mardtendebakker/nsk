@@ -3,6 +3,50 @@
 
 const translation = {
   id: 'ID',
+  vehicles: 'Veículos',
+  drivers: 'Motoristas',
+  firstName: 'Nome',
+  lastName: 'Sobrenome',
+  newDriver: 'Novo motorista',
+  newVehicle: 'Novo veículo',
+  registrationNumber: 'Número de registro',
+  editVehicle: 'Editar veículo',
+  editDriver: 'Editar motorista',
+  manageLogistics: 'Gerenciar logística',
+  dashboardMessage: 'Mensagem do painel',
+  vehiclesList: {
+    search: {
+      placeholder: 'Pesquisar por nome ou número de registro',
+    },
+  },
+  vehicleForm: {
+    name: {
+      label: 'Nome do veículo',
+      placeholder: 'Digite o nome do veículo',
+    },
+    registrationNumber: {
+      label: 'Número de registro do veículo',
+      placeholder: 'Digite o número de registro do veículo',
+    },
+  },
+  driverForm: {
+    firstName: {
+      label: 'Nome',
+      placeholder: 'Digite o nome do motorista',
+    },
+    lastName: {
+      label: 'Sobrenome',
+      placeholder: 'Digite o sobrenome do motorista',
+    },
+    email: {
+      label: 'Email',
+      placeholder: 'Digite o email do motorista',
+    },
+    username: {
+      label: 'Nome de usuário',
+      placeholder: 'Digite o nome de usuário do motorista',
+    },
+  },
   signIn: 'Entrar',
   welcomeBackGreetings: 'Olá, seja bem-vindo',
   emailAddress: 'Endereço de e-mail',
@@ -53,7 +97,7 @@ const translation = {
   phone: 'Telefone',
   phone2: 'Identificador do cliente',
   clientId: 'Klant-ID',
-  company_name: 'Nome da empresa',
+  companyName: 'Nome da empresa',
   company_kvk_nr: 'Número KVK',
   street: 'Rua',
   street_extra: 'Adicional',

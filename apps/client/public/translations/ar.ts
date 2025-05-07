@@ -1,5 +1,49 @@
 const translation = {
   id: 'ID',
+  vehicles: 'المركبات',
+  drivers: 'السائقين',
+  firstName: 'الاسم الأول',
+  lastName: 'اسم العائلة',
+  newDriver: 'سائق جديد',
+  newVehicle: 'مركبة جديدة',
+  registrationNumber: 'رقم التسجيل',
+  editVehicle: 'تعديل المركبة',
+  editDriver: 'تعديل السائق',
+  manageLogistics: 'إدارة الخدمات اللوجستية',
+  dashboardMessage: 'رسالة لوحة المعلومات',
+  vehiclesList: {
+    search: {
+      placeholder: 'البحث بالاسم أو رقم التسجيل',
+    },
+  },
+  vehicleForm: {
+    name: {
+      label: 'اسم المركبة',
+      placeholder: 'اكتب اسم المركبة',
+    },
+    registrationNumber: {
+      label: 'رقم تسجيل المركبة',
+      placeholder: 'اكتب رقم تسجيل المركبة',
+    },
+  },
+  driverForm: {
+    firstName: {
+      label: 'الاسم الأول',
+      placeholder: 'اكتب الاسم الأول للسائق',
+    },
+    lastName: {
+      label: 'اسم العائلة',
+      placeholder: 'اكتب اسم عائلة السائق',
+    },
+    email: {
+      label: 'البريد الإلكتروني',
+      placeholder: 'اكتب البريد الإلكتروني للسائق',
+    },
+    username: {
+      label: 'اسم المستخدم',
+      placeholder: 'اكتب اسم مستخدم السائق',
+    },
+  },
   signIn: 'تسجيل الدخول',
   welcomeBackGreetings: 'مرحبًا، سعداء برؤيتك مرة أخرى',
   emailAddress: 'عنوان البريد الإلكتروني',

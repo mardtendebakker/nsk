@@ -3,7 +3,7 @@
 exports[`AccountPopover matches snapshot 1`] = `
 <DocumentFragment>
   <div
-    class="MuiAvatar-root MuiAvatar-circular MuiAvatar-colorDefault css-1dnh70-MuiAvatar-root"
+    class="MuiAvatar-root MuiAvatar-circular MuiAvatar-colorDefault css-qsmhl1-MuiAvatar-root"
   >
     <svg
       aria-hidden="true"
