@@ -13,6 +13,9 @@ export class FileEntity implements afile {
   @ApiPropertyOptional()
     pickup_id: number | null;
 
+  @ApiPropertyOptional()
+    delivery_id: number | null;
+
   @ApiProperty()
     original_client_filename: string;
 
