@@ -3,5 +3,6 @@ export enum FileDiscrimination {
   PICKUP_IMAGE_FILE = 'pi',
   PICKUP_AGREEMENT_FILE = 'pa',
   DELIVERY_IMAGE_FILE = 'di',
+  DELIVERY_AGREEMENT_FILE = 'da',
   THEME_IMAGE_FILE = 'ti',
 }

@@ -4,15 +4,11 @@ import {
 import { HttpService } from '@nestjs/axios';
 import { catchError, lastValueFrom } from 'rxjs';
 import { ConfigService } from '@nestjs/config';
-import { AxiosError, AxiosRequestConfig } from 'axios';
-import { afile } from '@prisma/client';
+import { AxiosError } from 'axios';
 import { PurchaseService } from '../purchase/purchase.service';
 import { PostPickupDto, PickupFormDto } from './dto/post-pickup.dto';
 import { OrderStatusService } from '../admin/order-status/order-status.service';
 import { CreateOrderStatusDto } from '../admin/order-status/dto/create-order-status.dto';
-import { FileService } from '../file/file.service';
-import { CreateFileDto } from '../file/dto/create-file.dto';
-import { FileDiscrimination } from '../file/types/file-discrimination.enum';
 import { CreateAOrderDto } from '../aorder/dto/create-aorder.dto';
 import { CreatePickupUncheckedWithoutAorderInputDto } from '../calendar/pickup/dto/create-pickup-unchecked-without-aorder-input.dto';
 import { ProductService } from '../product/product.service';
@@ -34,7 +30,6 @@ export class PublicService {
     private readonly saleService: SaleService,
     private readonly contactService: ContactService,
     private readonly orderStatusService: OrderStatusService,
-    private readonly fileService: FileService,
     private readonly productService: ProductService,
     private readonly httpService: HttpService,
     private readonly configService: ConfigService,
@@ -102,11 +97,7 @@ export class PublicService {
       status_id: orderStatus.id,
     };
 
-    const purchase = await this.purchaseService.create(purchaseData);
-
-    if (files?.length) {
-      await this.uploadFiles(purchase.pickup.id, files);
-    }
+    const purchase = await this.purchaseService.create(purchaseData, files);
 
     await this.createProductsForPickup(pickupForm, purchase.id);
 
@@ -328,40 +319,6 @@ export class PublicService {
         required: false,
       },
     };
-  }
-
-  private async uploadFiles(pickupId: number, pickupFiles: Express.Multer.File[]): Promise<afile[]> {
-    const afiles: afile[] = [];
-    // group files by attribute id
-    const filesGroupByFileDiscr: { [key in FileDiscrimination]?: Express.Multer.File[] } = pickupFiles.reduce((acc, obj) => {
-      const { fieldname } = obj;
-
-      if (!acc[fieldname]) {
-        acc[fieldname] = [];
-      }
-
-      acc[fieldname].push(obj);
-      return acc;
-    }, {});
-
-    for (const [fileDiscr, files] of Object.entries(filesGroupByFileDiscr)) {
-      const createFileDto: CreateFileDto = {
-        discr: <FileDiscrimination>fileDiscr,
-        pickup_id: pickupId,
-      };
-
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        // eslint-disable-next-line no-await-in-loop
-        const aFile = await this.fileService.create(createFileDto, {
-          Body: file.buffer,
-          ContentType: file.mimetype,
-        });
-        afiles.push(aFile);
-      }
-    }
-
-    return afiles;
   }
 
   private findOrderStatusByNameOrCreate(name: string, isPurchase: boolean, isSale: boolean, isRepair: boolean) {
