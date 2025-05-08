@@ -590,11 +590,11 @@ const translation = {
   origin: 'اصل و نسب',
   dataDestruction: 'تخریب داده ها',
   selectLogistic: 'انتخاب ترابری',
-  none: 'هیج',
+  none: 'حامل داده‌ وجود ندارد',
   format: 'قالب',
-  destructionStatement: 'اعلامیه تخریب',
-  shred: 'خرد کن',
-  killDisk: 'تایید شده حذف داده ها',
+  statement: 'اعلامیه تخریب',
+  degauss: 'حذف اطلاعات با پالس الکترومغناطیسی EMP',
+  eraseData: 'پاک‌سازی داده‌ها تأیید شده',
   attributeForm: {
     code: {
       label: 'کد',

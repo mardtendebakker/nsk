@@ -47,9 +47,9 @@ export class PublicService {
 
   getDataDestructionChoices(): DataDestructionChoice {
     const dataDestructionChoices: DataDestructionChoice = new Map();
-    dataDestructionChoices.set(DataDestruction.DATADESTRUCTION_KILLDISK, DataDestructionDesc[DataDestruction.DATADESTRUCTION_KILLDISK]);
+    dataDestructionChoices.set(DataDestruction.DATADESTRUCTION_ERASEDATA, DataDestructionDesc[DataDestruction.DATADESTRUCTION_ERASEDATA]);
     dataDestructionChoices.set(DataDestruction.DATADESTRUCTION_NONE, DataDestructionDesc[DataDestruction.DATADESTRUCTION_NONE]);
-    dataDestructionChoices.set(DataDestruction.DATADESTRUCTION_SHRED, DataDestructionDesc[DataDestruction.DATADESTRUCTION_SHRED]);
+    dataDestructionChoices.set(DataDestruction.DATADESTRUCTION_DEGAUSS, DataDestructionDesc[DataDestruction.DATADESTRUCTION_DEGAUSS]);
 
     return dataDestructionChoices;
   }

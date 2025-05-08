@@ -580,11 +580,11 @@ const translation = {
   origin: 'Ursprung',
   dataDestruction: 'Datenvernichtung',
   selectLogistic: 'Logistik auswählen',
-  none: 'Keine',
+  none: 'Keine Datenträger',
   format: 'Format',
-  destructionStatement: 'Vernichtungserklärung',
-  shred: 'Schreddern',
-  killDisk: 'Zertifiziertes Datenlöschen',
+  statement: 'Vernichtungserklärung',
+  degauss: 'Entmagnetisieren durch EMP',
+  eraseData: 'Zertifiziertes Datenlöschen',
   attributeForm: {
     code: {
       label: 'Code',
