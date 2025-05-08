@@ -585,11 +585,11 @@ const translation = {
   origin: 'oorsprong',
   dataDestruction: 'Gegevens vernietiging',
   selectLogistic: 'Logistiek kiezen',
-  none: 'Geen',
+  none: 'Geen Datadragers',
   format: 'Formaat',
-  destructionStatement: 'Vernietigingsverklaring',
-  shred: 'Versnipperen',
-  killDisk: 'Gecertificeerd Data verwijderen',
+  statement: 'Vernietigingsverklaring',
+  degauss: 'Demagnetiseren met EMP',
+  eraseData: 'Gecertificeerd Data Verwijderen',
   attributeForm: {
     code: {
       label: 'Code',
