@@ -124,6 +124,7 @@ export class SaleService extends AOrderService {
 
     for (const row of rows) {
       const {
+        __EMPTY: ZonderTitel,
         Referentie,
         Bedrijfsnaam,
         Voornaam,
@@ -146,14 +147,28 @@ export class SaleService extends AOrderService {
 
       if (Bedrijfsnaam || Voornaam || Achternaam) {
       // Leergeld puts partner name in field Bedrijfsnaam :-(
-        const companyName = Bedrijfsnaam && !Bedrijfsnaam.includes('Leergeld')
-          ? Bedrijfsnaam
-          : `${Voornaam} ${Achternaam}`.trim();
+        let companyName: string;
+
+        if (Bedrijfsnaam && !Bedrijfsnaam?.includes('Leergeld')) {
+          companyName = Bedrijfsnaam;
+        } else if (Bedrijfsnaam?.includes('Leergeld Den Haag')) {
+          companyName = Voornaam;
+        } else {
+          companyName = `${Voornaam} ${Achternaam ?? ''}`.trim();
+        }
+
+        let contactName: string;
+
+        if (Bedrijfsnaam?.includes('Leergeld') && AfleverReferentie?.trim()) {
+          contactName = AfleverReferentie;
+        } else {
+          contactName = `${Voornaam} ${Achternaam ?? ''}`.trim();
+        }
 
         const customerData: CreateContactDto = {
-          name: `${Voornaam} ${Achternaam}`.trim(),
+          name: contactName,
           company_name: companyName,
-          street: `${Straatnaam} ${Huisnummer} ${HuisnummerToevoeging}`.trim(),
+          street: `${Straatnaam} ${Huisnummer} ${HuisnummerToevoeging ?? ''}`.trim(),
           zip: Postcode,
           city: Plaatsnaam,
           country: Landcode,
@@ -173,7 +188,8 @@ export class SaleService extends AOrderService {
                       + `Verdieping: ${Verdieping || ''}\r\n`
                       + `Afdeling: ${Afdeling || ''}\r\n`
                       + `Deurcode: ${Deurcode || ''}\r\n`
-                      + `Aflever referentie: ${AfleverReferentie || ''}`;
+                      + `Aflever referentie: ${AfleverReferentie || ''}\r\n`
+                      + `Zonder titel: ${ZonderTitel || ''}`;
 
         const saleData: CreateAOrderDto = {
           customer_id: customer.id,
