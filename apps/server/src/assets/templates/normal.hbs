@@ -232,7 +232,7 @@
             <tr><td width="50%">Company Name</td><td>{{#if customer}}{{ customer.company_name }}{{else}}{{ supplier.company_name }}{{/if}}</td></tr>
             <tr><td>KvK nr</td><td>{{#if customer}}{{ customer.company_kvk_nr }}{{else}}{{ supplier.company_kvk_nr }}{{/if}}</td></tr>
             <tr><td>E-mail</td><td>{{#if customer}}{{ customer.email }}{{else}}{{ supplier.email }}{{/if}}</td></tr>
-            <tr><td>Phone</td><td>{{#if customer}}{{ customer.phone }}{{else}}{{ supplier.phone }}{{/if}}</td></tr>
+            <tr><td>Phone</td><td>{{#if customer}}{{#if customer.phone}}{{ customer.phone }}{{else}}{{ customer.phone2 }}{{/if}}{{else}}{{#if supplier.phone}}{{ supplier.phone }}{{else}}{{ supplier.phone2 }}{{/if}}{{/if}}</td></tr>
             <tr><td>Street</td><td>{{#if customer}}{{ customer.street }}{{else}}{{ supplier.street }}{{/if}}</td></tr>
             <tr><td>Street extra</td><td>{{#if customer}}{{ customer.street_extra }}{{else}}{{ supplier.street_extra }}{{/if}}</td></tr>
             <tr><td>City</td><td>{{#if customer}}{{ customer.city }}{{else}}{{ supplier.city }}{{/if}}</td></tr>
