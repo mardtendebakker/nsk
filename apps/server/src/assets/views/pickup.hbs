@@ -145,7 +145,7 @@
         <div class="col-sm-9">
           <select id="pickup_form_dataDestruction" name="pickup_form[dataDestruction]" class="form-control">
             {{#each dataDestructionChoices}}
-              <option value="{{this.[0]}}"> {{this.[1]}} </option>
+              <option value="{{this.id}}"> {{this.description}} </option>
             {{/each}}
           </select>
         </div>
