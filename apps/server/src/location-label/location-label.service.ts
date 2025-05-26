@@ -18,13 +18,13 @@ export class LocationLabelService {
     });
   }
 
-  async findByLabelOrCreate(createLocationLabelDto: CreateLocationLabelDto) {
+  async findByLabelOrCreate({ location_id, label }: CreateLocationLabelDto) {
     let locationLabel = await this.repository.findFirst({
-      where: { label: createLocationLabelDto.label },
+      where: { location_id, label },
     });
 
     if (!locationLabel) {
-      locationLabel = await this.create(createLocationLabelDto);
+      locationLabel = await this.create({ location_id, label });
     }
 
     return locationLabel;
