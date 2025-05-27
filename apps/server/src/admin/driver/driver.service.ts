@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import * as crypto from 'node:crypto';
 import bcrypt = require('bcrypt');
@@ -41,13 +41,27 @@ export class DriverService {
   }
 
   async create(body: CreateDriverDto) {
-    return this.repository.create({
-      data: {
-        ...body,
-        groups: JSON.stringify([Group.LOGISTICS.toString]),
-        refresh_token: crypto.randomBytes(20).toString('hex'),
-        password: bcrypt.hashSync(Math.random(), 12),
-      },
-    });
+    try {
+      return await this.repository.create({
+        data: {
+          ...body,
+          groups: JSON.stringify([Group.LOGISTICS.toString()]),
+          refresh_token: crypto.randomBytes(20).toString('hex'),
+          password: bcrypt.hashSync(Math.random().toString(), 12),
+        },
+      });
+    } catch (error) {
+      return this.handleError(error);
+    }
+  }
+
+  handleError(error: Prisma.PrismaClientKnownRequestError) {
+    if (error?.message?.includes('uniq_username')) {
+      throw new ConflictException('Username already exist');
+    } else if (error?.message?.includes('uniq_email')) {
+      throw new ConflictException('Email already exist');
+    }
+
+    throw error;
   }
 }
