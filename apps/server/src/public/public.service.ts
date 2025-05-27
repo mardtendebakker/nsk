@@ -136,6 +136,7 @@ export class PublicService {
   getOrderForm() {
     return {
       form: {
+        extra: this.getExtra(),
         terms: this.getTermsAndConditionsForm(),
         customer: this.getContactOrderForm(),
       },
@@ -181,7 +182,6 @@ export class PublicService {
 
     const { customer: customerDto } = publicOrderForm;
     customerDto.company_is_customer = true;
-    const { reason } = customerDto;
     const customer = await this.contactService.checkExists(publicOrderForm.customer);
 
     const orderStatus = await this.findOrderStatusByNameOrCreate(publicOrderForm.orderStatusName, false, true, false);
@@ -198,10 +198,12 @@ export class PublicService {
       remarks = 'No quantities entered...';
     }
 
-    Object.keys(publicOrderForm.terms).forEach((key) => {
-      remarks += `${key}: ☑\r\n`;
-    });
-    remarks += `Reden aanvraag: ${reason}`;
+    if (publicOrderForm.terms) {
+      Object.keys(publicOrderForm.terms).forEach((key) => {
+        remarks += `${key}: ☑\r\n`;
+      });
+    }
+    remarks += `Reden aanvraag: ${publicOrderForm.extra.reason}`;
 
     const saleData: CreateAOrderDto = {
       customer_id: customer.id,
@@ -245,6 +247,15 @@ export class PublicService {
     return `Hartelijk dank voor uw interesse in onze producten. 
     Heeft u vragen of is er spoed geboden? Belt u ons dan meteen via 070 2136312.
     Wij nemen contact met u op over uw bestelling.`;
+  }
+
+  private getExtra() {
+    return {
+      reason: {
+        label: 'Reden aanvraag',
+        required: false,
+      },
+    };
   }
 
   private getTermsAndConditionsForm() {
@@ -334,10 +345,6 @@ export class PublicService {
       email: {
         label: 'Uw e-mailadres',
         required: true,
-      },
-      reason: {
-        label: 'Reden aanvraag',
-        required: false,
       },
     };
   }

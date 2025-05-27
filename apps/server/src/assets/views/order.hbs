@@ -25,6 +25,21 @@
             </div>
           </div>
         {{/each}}
+        {{#each extra}}
+          <div class="form-group">
+            <label class="col-sm-3 control-label required" for="public_order_form_extra_{{@key}}">{{this.label}}{{#if this.required}} *{{/if}}</label>
+            <div class="col-sm-9">
+              <input 
+                type="text"
+                id="public_order_form_extra_{{@key}}"
+                name="public_order_form[extra][{{@key}}]"
+                {{#if this.required}}required="required"{{/if}}
+                class="form-control"
+                value="{{this.value}}"
+              >
+            </div>
+          </div>
+        {{/each}}
       {{/each}}
     </div>
   </div>
