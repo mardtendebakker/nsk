@@ -59,7 +59,7 @@ function UpdateSalesOrder() {
       return;
     }
 
-    call({ body: formRepresentationToBody(formRepresentation) })
+    call({ body: formRepresentationToBody(formRepresentation), headers: { 'Content-Type': 'multipart/form-data' } })
       .then(() => {
         fetchSalesOrder();
       });

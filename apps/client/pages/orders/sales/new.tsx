@@ -15,6 +15,7 @@ import useTranslation from '../../../hooks/useTranslation';
 import { ORDERS_SALES, ORDERS_SALES_EDIT } from '../../../utils/routes';
 import { Order } from '../../../utils/axios/models/order';
 import { requiredCompanyFieldValidator } from '../purchases/new';
+import { AFile } from '../../../utils/axios/models/aFile';
 
 function requiredCustomerFieldValidator(field: string, trans) {
   return (formRepresentation: FormRepresentation) => {
@@ -25,6 +26,17 @@ function requiredCustomerFieldValidator(field: string, trans) {
 }
 
 export function initFormState(trans, order?: Order) {
+  let agreementAFile: AFile | undefined;
+  const picturesAFiles: { [key: string]: AFile } = {};
+
+  order?.delivery?.afile?.forEach((aFile: AFile, key) => {
+    if (aFile.discr == 'pa') {
+      agreementAFile = aFile;
+    } else if (aFile.discr == 'pi') {
+      picturesAFiles[key] = aFile;
+    }
+  });
+
   return {
     orderNr: { value: order?.order_nr },
     orderDate: { value: order?.order_date ? new Date(order?.order_date) : new Date(), required: true },
@@ -92,55 +104,85 @@ export function initFormState(trans, order?: Order) {
     state: {},
     country: {},
     totalPerProductType: { value: order?.totalPerProductType },
+    agreementAFile: { value: agreementAFile },
+    picturesAFiles: { value: picturesAFiles },
   };
 }
 
 export function formRepresentationToBody(formRepresentation: FormRepresentation): object {
-  const payload: any = {
-    order_nr: formRepresentation.orderNr.value,
-    order_date: formRepresentation.orderDate.value,
-    status_id: formRepresentation.orderStatus.value,
-    remarks: formRepresentation.remarks.value,
-    transport: formRepresentation.transport.value,
-    discount: formRepresentation.discount.value,
-    is_gift: formRepresentation.isGift.value,
-    delivery: {
-      date: formRepresentation.deliveryDate.value || null,
-      type: formRepresentation.deliveryType.value,
-      instructions: formRepresentation.deliveryInstructions.value,
-      vehicle_id: formRepresentation.vehicleId.value || null,
-      driver_id: formRepresentation.driverId.value || null,
-      dhl_tracking_code: formRepresentation.dhlTrackingCode.value || null,
-    },
-  };
+  const formData = new FormData();
 
+  // Add basic order fields
+  formData.append('order_nr', formRepresentation.orderNr.value);
+  formData.append('order_date', formRepresentation.orderDate.value);
+  formData.append('status_id', formRepresentation.orderStatus.value);
+  formData.append('remarks', formRepresentation.remarks.value);
+  formData.append('transport', formRepresentation.transport.value);
+  formData.append('discount', formRepresentation.discount.value);
+  formData.append('is_gift', formRepresentation.isGift.value.toString());
+
+  if (formRepresentation.deliveryDate.value) {
+    formData.append('delivery.date', formRepresentation.deliveryDate.value);
+  }
+  /* formData.append('delivery', JSON.stringify({
+    date: formRepresentation.deliveryDate.value || null,
+    type: formRepresentation.deliveryType.value,
+    instructions: formRepresentation.deliveryInstructions.value,
+    vehicle_id: formRepresentation.vehicleId.value || null,
+    driver_id: formRepresentation.driverId.value || null,
+    dhl_tracking_code: formRepresentation.dhlTrackingCode.value || null,
+  })); */
+
+  /*
+  if (formRepresentation.deliveryDate.value) {
+    formData.append('delivery.date', formRepresentation.deliveryDate.value);
+  }
+  formData.append('delivery.type', formRepresentation.deliveryType.value);
+  formData.append('delivery.instructions', formRepresentation.deliveryInstructions.value);
+
+  if (formRepresentation.vehicleId.value) {
+    formData.append('delivery.vehicle_id', formRepresentation.vehicleId.value);
+  }
+
+  if (formRepresentation.driverId.value) {
+    formData.append('delivery.driver_id', formRepresentation.driverId.value);
+  }
+
+  if (formRepresentation.dhlTrackingCode.value) {
+    formData.append('delivery.dhl_tracking_code', formRepresentation.dhlTrackingCode.value);
+  } */
+
+  // Handle customer information
   if (!formRepresentation.newCustomer.value) {
-    payload.customer_id = formRepresentation.customerId.value;
+    // Existing customer
+    formData.append('customer_id', formRepresentation.customerId.value);
   } else {
-    payload.customer = {
-      name: formRepresentation.name.value,
-      email: formRepresentation.email.value,
-      phone: formRepresentation.phone.value,
-      street: formRepresentation.street.value,
-      street_extra: formRepresentation.extraStreet.value,
-      city: formRepresentation.city.value,
-      zip: formRepresentation.zipcode.value,
-      state: formRepresentation.state.value,
-      country: formRepresentation.country.value,
-    };
+    // New customer
+    formData.append('customer.name', formRepresentation.name.value);
+    formData.append('customer.email', formRepresentation.email.value);
+    formData.append('customer.phone', formRepresentation.phone.value);
+    formData.append('customer.street', formRepresentation.street.value);
+    formData.append('customer.street_extra', formRepresentation.extraStreet.value);
+    formData.append('customer.city', formRepresentation.city.value);
+    formData.append('customer.zip', formRepresentation.zipcode.value);
+    formData.append('customer.state', formRepresentation.state.value);
+    formData.append('customer.country', formRepresentation.country.value);
 
+    // Handle company information
     if (!formRepresentation.newCompany.value) {
-      payload.customer.company_id = formRepresentation.companyId.value;
+      // Existing company
+      formData.append('customer.company_id', formRepresentation.companyId.value);
     } else {
-      payload.customer.company_name = formRepresentation.companyName.value;
-      payload.customer.company_kvk_nr = formRepresentation.companyKvkNr.value;
-      payload.customer.company_is_partner = formRepresentation.companyIsPartner.value;
-      payload.customer.company_partner_id = formRepresentation.companyPartner.value;
-      payload.supplier.company_vat_code = formRepresentation.companyVatCode.value;
+      // New company
+      formData.append('customer.company_name', formRepresentation.companyName.value);
+      formData.append('customer.company_kvk_nr', formRepresentation.companyKvkNr.value);
+      formData.append('customer.company_is_partner', formRepresentation.companyIsPartner.value.toString());
+      formData.append('customer.company_partner_id', formRepresentation.companyPartner.value);
+      formData.append('customer.company_vat_code', formRepresentation.companyVatCode.value);
     }
   }
 
-  return payload;
+  return formData;
 }
 
 function NewSalesOrder() {
@@ -163,6 +205,7 @@ function NewSalesOrder() {
 
     call({
       body: formRepresentationToBody(formRepresentation),
+      headers: { 'Content-Type': 'multipart/form-data' },
     }).then((response: AxiosResponse) => {
       router.push(ORDERS_SALES_EDIT.replace('[id]', response.data.id));
     });

@@ -46,7 +46,7 @@ export class DriverService {
         ...body,
         groups: JSON.stringify([Group.LOGISTICS.toString]),
         refresh_token: crypto.randomBytes(20).toString('hex'),
-        password: bcrypt.hashSync(Math.random(), 12),
+        password: bcrypt.hashSync(Math.random().toString(), 12),
       },
     });
   }
