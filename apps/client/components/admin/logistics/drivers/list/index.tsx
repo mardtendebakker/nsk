@@ -62,7 +62,7 @@ export default function ListContainer() {
   const handleDelete = (id: number) => {
     callDelete({ path: ADMIN_DRIVERS_PATH.replace(':id', id.toString()) })
       .then(() => {
-        setPage(1);
+        handleSearchChange();
       })
       .catch(() => {});
   };
