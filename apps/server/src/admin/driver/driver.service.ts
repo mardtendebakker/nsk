@@ -56,9 +56,9 @@ export class DriverService {
   }
 
   handleError(error: Prisma.PrismaClientKnownRequestError) {
-    if (error?.message?.includes('uniq_username')) {
+    if (error.code === 'P2002' && error?.message?.includes('username')) {
       throw new ConflictException('Username already exist');
-    } else if (error?.message?.includes('uniq_email')) {
+    } else if (error.code === 'P2002' && error?.message?.includes('email')) {
       throw new ConflictException('Email already exist');
     }
 

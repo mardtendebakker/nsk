@@ -56,7 +56,7 @@ export class VehicleService {
   }
 
   handleError(error: Prisma.PrismaClientKnownRequestError) {
-    if (error.code === 'P2002') {
+    if (error.code === 'P2002' && error?.message?.includes('registration_number')) {
       throw new ConflictException('Registration number already exist');
     }
 
