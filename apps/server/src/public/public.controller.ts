@@ -15,6 +15,7 @@ import { PostImportDto } from './dto/post-import.dto';
 import { FindProductTypeResponseDto } from '../admin/product-type/dto/find-product-type-response.dto';
 import { GetSalesDto } from './dto/get-sales.dto';
 import { PostSalesDto } from './dto/post-sales.dto';
+import { DataDestructionDto } from './dto/get-data-destruction.dto';
 
 @ApiTags('nsk-public')
 @Controller('nsk/public')
@@ -57,11 +58,21 @@ export class PublicController {
     return orderedChoices;
   }
 
+  @Get('data-destructions')
+  @ApiResponse({
+    type: [DataDestructionDto],
+    status: 200,
+    description: 'Return available data destruction choices',
+  })
+  getDataDestructions() {
+    return this.publicService.getDataDestructions();
+  }
+
   @Get('pickup')
   @Render('pickup')
   async getPickup(@Query() query: GetPickupDto) {
     const allProductTypes = await this.publicService.getAllProductTypes();
-    const dataDestructionChoices = this.publicService.getDataDestructionChoices();
+    const dataDestructionChoices = this.publicService.getDataDestructions();
     const form = this.publicService.getPickupForm();
 
     return {

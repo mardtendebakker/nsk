@@ -514,6 +514,7 @@ export class AOrderService {
       name: true,
       email: true,
       phone: true,
+      phone2: true,
       street: true,
       street_extra: true,
       city: true,

@@ -20,8 +20,10 @@ import { PostOrderDto } from './dto/post-order.dto';
 import { SaleService } from '../sale/sale.service';
 import { PostImportDto } from './dto/post-import.dto';
 import { ContactService } from '../contact/contact.service';
-import { DataDestructionDesc } from '../calendar/pickup/types/destruction-desc.enum';
+import { DataDestructionDesc } from './types/destruction-desc.enum';
 import { PostSalesDto } from './dto/post-sales.dto';
+import { InvalidRecaptchaKeyException } from './exceptions/invalid-recaptcha-key.exception';
+import { DataDestructionDto } from './dto/get-data-destruction.dto';
 
 @Injectable()
 export class PublicService {
@@ -41,9 +43,19 @@ export class PublicService {
 
   getDataDestructionChoices(): DataDestructionChoice {
     const dataDestructionChoices: DataDestructionChoice = new Map();
-    dataDestructionChoices.set(DataDestruction.DATADESTRUCTION_KILLDISK, DataDestructionDesc[DataDestruction.DATADESTRUCTION_KILLDISK]);
+    dataDestructionChoices.set(DataDestruction.DATADESTRUCTION_ERASEDATA, DataDestructionDesc[DataDestruction.DATADESTRUCTION_ERASEDATA]);
     dataDestructionChoices.set(DataDestruction.DATADESTRUCTION_NONE, DataDestructionDesc[DataDestruction.DATADESTRUCTION_NONE]);
-    dataDestructionChoices.set(DataDestruction.DATADESTRUCTION_SHRED, DataDestructionDesc[DataDestruction.DATADESTRUCTION_SHRED]);
+    dataDestructionChoices.set(DataDestruction.DATADESTRUCTION_DEGAUSS, DataDestructionDesc[DataDestruction.DATADESTRUCTION_DEGAUSS]);
+
+    return dataDestructionChoices;
+  }
+
+  getDataDestructions(): DataDestructionDto[] {
+    const dataDestructionChoices: DataDestructionDto[] = [
+      { id: DataDestruction.DATADESTRUCTION_NONE, description: DataDestructionDesc[DataDestruction.DATADESTRUCTION_NONE] },
+      { id: DataDestruction.DATADESTRUCTION_ERASEDATA, description: DataDestructionDesc[DataDestruction.DATADESTRUCTION_ERASEDATA] },
+      { id: DataDestruction.DATADESTRUCTION_DEGAUSS, description: DataDestructionDesc[DataDestruction.DATADESTRUCTION_DEGAUSS] },
+    ];
 
     return dataDestructionChoices;
   }
@@ -76,7 +88,7 @@ export class PublicService {
   async postPickup(params: PostPickupDto, files?: Express.Multer.File[]): Promise<void> {
     const { pickup_form: pickupForm } = params;
 
-    await this.captchaVerify(params['g-recaptcha-response']);
+    await this.verifyCaptcha(params['g-recaptcha-response']);
 
     pickupForm.supplier.company_is_supplier = true;
     const supplier = await this.contactService.checkExists(pickupForm.supplier);
@@ -115,6 +127,7 @@ export class PublicService {
   getOrderForm() {
     return {
       form: {
+        extra: this.getExtra(),
         terms: this.getTermsAndConditionsForm(),
         customer: this.getContactOrderForm(),
       },
@@ -124,7 +137,7 @@ export class PublicService {
   async postSales(params: PostSalesDto): Promise<void> {
     const { public_sales_form: publicSalesForm } = params;
 
-    await this.captchaVerify(params['g-recaptcha-response']);
+    await this.verifyCaptcha(params['g-recaptcha-response']);
 
     publicSalesForm.customer.company_is_customer = true;
     const customer = await this.contactService.checkExists(publicSalesForm.customer);
@@ -156,11 +169,10 @@ export class PublicService {
   async postOrder(params: PostOrderDto): Promise<void> {
     const { public_order_form: publicOrderForm } = params;
 
-    await this.captchaVerify(params['g-recaptcha-response']);
+    await this.verifyCaptcha(params['g-recaptcha-response']);
 
     const { customer: customerDto } = publicOrderForm;
     customerDto.company_is_customer = true;
-    const { reason } = customerDto;
     const customer = await this.contactService.checkExists(publicOrderForm.customer);
 
     const orderStatus = await this.findOrderStatusByNameOrCreate(publicOrderForm.orderStatusName, false, true, false);
@@ -177,10 +189,12 @@ export class PublicService {
       remarks = 'No quantities entered...';
     }
 
-    Object.keys(publicOrderForm.terms).forEach((key) => {
-      remarks += `${key}: ☑\r\n`;
-    });
-    remarks += `Reden aanvraag: ${reason}`;
+    if (publicOrderForm.terms) {
+      Object.keys(publicOrderForm.terms).forEach((key) => {
+        remarks += `${key}: ☑\r\n`;
+      });
+    }
+    remarks += `Reden aanvraag: ${publicOrderForm.extra.reason}`;
 
     const saleData: CreateAOrderDto = {
       customer_id: customer.id,
@@ -198,7 +212,7 @@ export class PublicService {
     }
     const { import_form: importForm } = params;
 
-    await this.captchaVerify(params['g-recaptcha-response']);
+    await this.verifyCaptcha(params['g-recaptcha-response']);
 
     await this.saleService.import({
       partner_id: importForm.partnerId,
@@ -224,6 +238,15 @@ export class PublicService {
     return `Hartelijk dank voor uw interesse in onze producten. 
     Heeft u vragen of is er spoed geboden? Belt u ons dan meteen via 070 2136312.
     Wij nemen contact met u op over uw bestelling.`;
+  }
+
+  private getExtra() {
+    return {
+      reason: {
+        label: 'Reden aanvraag',
+        required: false,
+      },
+    };
   }
 
   private getTermsAndConditionsForm() {
@@ -314,10 +337,6 @@ export class PublicService {
         label: 'Uw e-mailadres',
         required: true,
       },
-      reason: {
-        label: 'Reden aanvraag',
-        required: false,
-      },
     };
   }
 
@@ -386,13 +405,30 @@ export class PublicService {
     return products;
   }
 
-  private async captchaVerify(recaptcha: string): Promise<boolean> {
+  async verifyCaptcha(token: string): Promise<boolean> {
+    let result = false;
+    const v2Secret = this.configService.get<string>('RECAPTCHA_SECRET_V2');
+    const v3Secret = this.configService.get<string>('RECAPTCHA_SECRET_V3');
+    try {
+      result = await this.verifyCaptchaToken(token, v3Secret);
+    } catch (err) {
+      if (err instanceof InvalidRecaptchaKeyException) {
+        result = await this.verifyCaptchaToken(token, v2Secret);
+      } else {
+        throw err;
+      }
+    }
+
+    return result;
+  }
+
+  private async verifyCaptchaToken(token: string, secret: string): Promise<boolean> {
     const url = 'https://www.google.com/recaptcha/api/siteverify';
 
     const requestConfig = {
       params: {
-        secret: this.configService.get<string>('RECAPTCHA_SECRET'),
-        response: recaptcha,
+        secret,
+        response: token,
       },
     };
     const { data } = await lastValueFrom(
@@ -402,6 +438,10 @@ export class PublicService {
         }),
       ),
     );
+
+    if (data['error-codes']?.includes('invalid-keys')) {
+      throw new InvalidRecaptchaKeyException();
+    }
 
     if (data?.success && (!data.score || data.score >= 0.5)) {
       return true;

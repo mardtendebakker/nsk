@@ -45,9 +45,9 @@ function PurchaseForm({
   const DATA_DESTRUCTION = {
     0: trans('none'),
     1: trans('format'),
-    2: trans('destructionStatement'),
-    3: trans('shred'),
-    4: trans('killDisk'),
+    2: trans('statement'),
+    3: trans('degauss'),
+    4: trans('eraseData'),
   };
 
   let agreementAFile: AFile | undefined;

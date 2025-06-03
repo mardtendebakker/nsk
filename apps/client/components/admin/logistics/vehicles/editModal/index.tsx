@@ -31,7 +31,8 @@ export default function EditModal({ onClose, onSubmit, id }: {
     }
 
     callPut({ body: formRepresentationToBody(formRepresentation) })
-      .then(onSubmit);
+      .then(onSubmit)
+      .catch(() => {});
   };
 
   return (

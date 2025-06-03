@@ -106,7 +106,7 @@ export class CompanyService {
     return this.repository.findFirst({
       where: {
         companyContacts: {
-          some: { email, is_main: true },
+          some: { email },
         },
       },
     });

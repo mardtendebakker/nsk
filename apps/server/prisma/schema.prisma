@@ -459,8 +459,8 @@ model user {
   id                         Int        @id @default(autoincrement())
   first_name                 String?    @db.VarChar(50)
   last_name                  String?    @db.VarChar(50)
-  username                   String     @db.VarChar(50)
-  email                      String     @db.VarChar(50)
+  username                   String     @db.VarChar(50)                 @unique(map: "uniq_username")
+  email                      String     @db.VarChar(50)                 @unique(map: "uniq_email")
   gender                     Gender?
   enabled                    Boolean    @default(false)
   email_verified             Boolean    @default(false)
@@ -478,7 +478,7 @@ model user {
 model vehicle {
   id                  Int          @id @default(autoincrement())
   name                String       @db.VarChar(50)
-  registration_number String       @db.VarChar(50)
+  registration_number String       @db.VarChar(50)              @unique(map: "uniq_registration_number")
   type                VehicleType?
   delivery            delivery[]
   pickup              pickup[]
