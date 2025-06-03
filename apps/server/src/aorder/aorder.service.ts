@@ -154,7 +154,7 @@ export class AOrderService {
 
     const vatRate = VAT_CODES.find(({ code }) => code == vatCode).value || 0;
 
-    if (commonDto.order_nr === undefined) {
+    if (!commonDto.order_nr || commonDto.order_nr === '') {
       const { id, order_date: orderDate } = order;
 
       const orderNumber = orderDate.getFullYear() + id.toString().padStart(6, '0');
@@ -336,6 +336,7 @@ export class AOrderService {
       customer,
       supplier_id: supplierIdDto,
       supplier,
+      pa, pi, da, di,
       ...rest
     } = orderDto;
 

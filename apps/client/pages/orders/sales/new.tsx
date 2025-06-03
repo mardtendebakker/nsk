@@ -30,9 +30,9 @@ export function initFormState(trans, order?: Order) {
   const picturesAFiles: { [key: string]: AFile } = {};
 
   order?.delivery?.afile?.forEach((aFile: AFile, key) => {
-    if (aFile.discr == 'pa') {
+    if (aFile.discr == 'da') {
       agreementAFile = aFile;
-    } else if (aFile.discr == 'pi') {
+    } else if (aFile.discr == 'di') {
       picturesAFiles[key] = aFile;
     }
   });
@@ -42,7 +42,7 @@ export function initFormState(trans, order?: Order) {
     orderDate: { value: order?.order_date ? new Date(order?.order_date) : new Date(), required: true },
     orderStatus: { required: true, value: order?.status_id },
     remarks: { value: order?.remarks },
-    transport: { value: order?.transport },
+    transport: { value: order?.transport || 0 },
     transportInclVat: {
       value: order?.transport
         ? order.transport * (1 + (order?.vat_rate || 0) / 100)
@@ -53,7 +53,7 @@ export function initFormState(trans, order?: Order) {
     vatValue: { value: order?.vatValue },
     vat: { value: order?.vat_rate || 0 },
     vatFactor: { value: 1 + (order?.vat_rate || 0) / 100 },
-    discount: { value: order?.discount },
+    discount: { value: order?.discount || 0 },
     isGift: { value: !!order?.is_gift },
     deliveryDate: { value: order?.delivery?.date },
     deliveryType: { value: order?.delivery?.type, required: true },
@@ -113,16 +113,16 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
   const formData = new FormData();
 
   // Add basic order fields
-  formData.append('order_nr', formRepresentation.orderNr.value);
-  formData.append('order_date', formRepresentation.orderDate.value);
+  formData.append('order_nr', formRepresentation.orderNr.value || null);
+  formData.append('order_date', formRepresentation.orderDate.value || null);
   formData.append('status_id', formRepresentation.orderStatus.value);
-  formData.append('remarks', formRepresentation.remarks.value);
-  formData.append('transport', formRepresentation.transport.value);
-  formData.append('discount', formRepresentation.discount.value);
-  formData.append('is_gift', formRepresentation.isGift.value.toString());
+  formData.append('remarks', formRepresentation.remarks.value || null);
+  formData.append('transport', formRepresentation.transport.value || null);
+  formData.append('discount', formRepresentation.discount.value || null);
+  formData.append('is_gift', formRepresentation.isGift.value.toString() || null);
 
   if (formRepresentation.deliveryDate.value) {
-    formData.append('delivery.date', formRepresentation.deliveryDate.value);
+    formData.append('delivery[date]', formRepresentation.deliveryDate.value);
   }
   /* formData.append('delivery', JSON.stringify({
     date: formRepresentation.deliveryDate.value || null,
@@ -158,28 +158,40 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
     formData.append('customer_id', formRepresentation.customerId.value);
   } else {
     // New customer
-    formData.append('customer.name', formRepresentation.name.value);
-    formData.append('customer.email', formRepresentation.email.value);
-    formData.append('customer.phone', formRepresentation.phone.value);
-    formData.append('customer.street', formRepresentation.street.value);
-    formData.append('customer.street_extra', formRepresentation.extraStreet.value);
-    formData.append('customer.city', formRepresentation.city.value);
-    formData.append('customer.zip', formRepresentation.zipcode.value);
-    formData.append('customer.state', formRepresentation.state.value);
-    formData.append('customer.country', formRepresentation.country.value);
+    formData.append('customer[name]', formRepresentation.name.value || null);
+    formData.append('customer[email]', formRepresentation.email.value);
+    formData.append('customer[phone]', formRepresentation.phone.value);
+    formData.append('customer[street]', formRepresentation.street.value);
+    formData.append('customer[street_extra]', formRepresentation.extraStreet.value || null);
+    formData.append('customer[city]', formRepresentation.city.value);
+    formData.append('customer[zip]', formRepresentation.zipcode.value || null);
+    formData.append('customer[state]', formRepresentation.state.value || null);
+    formData.append('customer[country]', formRepresentation.country.value || null);
 
     // Handle company information
     if (!formRepresentation.newCompany.value) {
       // Existing company
-      formData.append('customer.company_id', formRepresentation.companyId.value);
+      formData.append('customer[company_id]', formRepresentation.companyId.value);
     } else {
       // New company
-      formData.append('customer.company_name', formRepresentation.companyName.value);
-      formData.append('customer.company_kvk_nr', formRepresentation.companyKvkNr.value);
-      formData.append('customer.company_is_partner', formRepresentation.companyIsPartner.value.toString());
-      formData.append('customer.company_partner_id', formRepresentation.companyPartner.value);
-      formData.append('customer.company_vat_code', formRepresentation.companyVatCode.value);
+      formData.append('customer[company_name]', formRepresentation.companyName.value);
+      formData.append('customer[company_kvk_nr]', formRepresentation.companyKvkNr.value || null);
+      formData.append('customer[company_is_partner]', formRepresentation.companyIsPartner.value.toString() || null);
+      formData.append('customer[company_partner_id]', formRepresentation.companyPartner.value || null);
+      formData.append('customer[company_vat_code]', formRepresentation.companyVatCode.value);
     }
+  }
+
+  if (formRepresentation.agreementAFile.value instanceof File) {
+    formData.append('da', formRepresentation.agreementAFile.value);
+  }
+
+  if (formRepresentation.picturesAFiles.value) {
+    Object.values(formRepresentation.picturesAFiles.value).forEach((img) => {
+      if (img instanceof File) {
+        formData.append('di', img);
+      }
+    });
   }
 
   return formData;

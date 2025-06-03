@@ -1,33 +1,39 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Prisma } from '@prisma/client';
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import {
   IsBoolean, IsInt, IsNumber, IsOptional, IsString,
 } from 'class-validator';
+import { formDataDateTransform, formDataNumberTransform, formDataStringTransform } from '../../common/transforms/form-date.transform';
 
 export class PrismaAOrderCreateInputDto implements Prisma.aorderCreateInput {
   @ApiPropertyOptional()
+  @Transform(formDataStringTransform)
   @IsString()
   @IsOptional()
     order_nr?: string;
 
   @ApiPropertyOptional()
+  @Transform(formDataStringTransform)
   @IsString()
   @IsOptional()
     remarks?: string;
 
   @ApiProperty()
+  @Transform(formDataDateTransform)
   @IsString()
   @Type(() => Date)
     order_date: Date;
 
   @ApiPropertyOptional()
+  @Transform(formDataNumberTransform)
   @IsNumber()
   @Type(() => Number)
   @IsOptional()
     discount?: number;
 
   @ApiPropertyOptional()
+  @Transform(formDataNumberTransform)
   @IsNumber()
   @Type(() => Number)
   @IsOptional()
@@ -44,12 +50,14 @@ export class PrismaAOrderCreateInputDto implements Prisma.aorderCreateInput {
     discr: string;
 
   @ApiPropertyOptional()
+  @Transform(formDataNumberTransform)
   @IsInt()
   @Type(() => Number)
   @IsOptional()
     external_id?: number;
 
   @ApiPropertyOptional()
+  @Transform(formDataNumberTransform)
   @IsInt()
   @Type(() => Number)
   @IsOptional()
