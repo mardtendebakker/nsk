@@ -124,33 +124,6 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
   if (formRepresentation.deliveryDate.value) {
     formData.append('delivery[date]', formRepresentation.deliveryDate.value);
   }
-  /* formData.append('delivery', JSON.stringify({
-    date: formRepresentation.deliveryDate.value || null,
-    type: formRepresentation.deliveryType.value,
-    instructions: formRepresentation.deliveryInstructions.value,
-    vehicle_id: formRepresentation.vehicleId.value || null,
-    driver_id: formRepresentation.driverId.value || null,
-    dhl_tracking_code: formRepresentation.dhlTrackingCode.value || null,
-  })); */
-
-  /*
-  if (formRepresentation.deliveryDate.value) {
-    formData.append('delivery.date', formRepresentation.deliveryDate.value);
-  }
-  formData.append('delivery.type', formRepresentation.deliveryType.value);
-  formData.append('delivery.instructions', formRepresentation.deliveryInstructions.value);
-
-  if (formRepresentation.vehicleId.value) {
-    formData.append('delivery.vehicle_id', formRepresentation.vehicleId.value);
-  }
-
-  if (formRepresentation.driverId.value) {
-    formData.append('delivery.driver_id', formRepresentation.driverId.value);
-  }
-
-  if (formRepresentation.dhlTrackingCode.value) {
-    formData.append('delivery.dhl_tracking_code', formRepresentation.dhlTrackingCode.value);
-  } */
 
   // Handle customer information
   if (!formRepresentation.newCustomer.value) {

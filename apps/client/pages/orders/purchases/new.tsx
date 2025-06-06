@@ -14,6 +14,7 @@ import useForm, { FormRepresentation } from '../../../hooks/useForm';
 import useTranslation from '../../../hooks/useTranslation';
 import { ORDERS_PURCHASES, ORDERS_PURCHASES_EDIT } from '../../../utils/routes';
 import { Order } from '../../../utils/axios/models/order';
+import { AFile } from '../../../utils/axios/models/aFile';
 
 function requiredSupplierFieldValidator(field: string, trans) {
   return (formRepresentation: FormRepresentation) => {
@@ -32,6 +33,17 @@ export function requiredCompanyFieldValidator(field: string, trans) {
 }
 
 export function initFormState(trans, order?: Order) {
+  let agreementAFile: AFile | undefined;
+  const picturesAFiles: { [key: string]: AFile } = {};
+
+  order?.pickup?.afile?.forEach((aFile: AFile, key) => {
+    if (aFile.discr == 'pa') {
+      agreementAFile = aFile;
+    } else if (aFile.discr == 'pi') {
+      picturesAFiles[key] = aFile;
+    }
+  });
+
   return {
     orderNr: { value: order?.order_nr },
     orderDate: { value: order?.order_date ? new Date(order?.order_date) : new Date(), required: true },
@@ -95,6 +107,8 @@ export function initFormState(trans, order?: Order) {
     zipcode: {},
     state: {},
     country: {},
+    agreementAFile: { value: agreementAFile },
+    picturesAFiles: { value: picturesAFiles },
   };
 }
 

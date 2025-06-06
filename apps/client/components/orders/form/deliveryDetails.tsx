@@ -24,6 +24,7 @@ import ImageInput from '../../input/imageInput';
 export default function DeliveryDetails({
   formRepresentation,
   disabled,
+  onFileDelete,
   setValue,
 }: {
   formRepresentation : FormRepresentation,
@@ -39,6 +40,7 @@ export default function DeliveryDetails({
     <ImageInput
       key={key}
       disabled={disabled}
+      disableEdit
       image={picture instanceof File ? picture : buildAFileLink(picture)}
       onChange={(file: File) => {
         const clonedValue = structuredClone(formRepresentation.picturesAFiles.value);
@@ -51,12 +53,16 @@ export default function DeliveryDetails({
       }}
       onClear={() => {
         const clonedValue = structuredClone(formRepresentation.picturesAFiles.value);
-        delete clonedValue[key];
 
-        setValue({
-          field: 'picturesAFiles',
-          value: clonedValue,
-        });
+        if (onFileDelete && clonedValue[key].id) {
+          onFileDelete(clonedValue[key]);
+        } else {
+          delete clonedValue[key];
+          setValue({
+            field: 'picturesAFiles',
+            value: clonedValue,
+          });
+        }
       }}
       sx={{ mr: '.5rem', border: (theme: Theme) => `1px dashed ${theme.palette.divider}`, mt: '1.5rem' }}
     />
@@ -210,6 +216,9 @@ export default function DeliveryDetails({
                                   <Delete
                                     tooltip
                                     onClick={() => {
+                                      if (onFileDelete && formRepresentation.agreementAFile.value?.id) {
+                                        onFileDelete(formRepresentation.agreementAFile.value);
+                                      }
                                       setValue({ field: 'agreementAFile', value: undefined });
                                     }}
                                     disabled={disabled}

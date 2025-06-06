@@ -10,15 +10,18 @@ import CustomerDetails from '../customerDetails';
 import DeliveryDetails from '../deliveryDetails';
 import useResponsive from '../../../../hooks/useResponsive';
 import TotalPerProductType from '../totalPerProductType';
+import { AFile } from '../../../../utils/axios/models/aFile';
 
 function SalesForm({
   formRepresentation,
   disabled,
   setValue,
+  onFileDelete,
 }: {
   formRepresentation : FormRepresentation,
   disabled:boolean,
   setValue: SetValue,
+  onFileDelete?: (file: AFile) => void,
 }) {
   const isDesktop = useResponsive('up', 'md');
 
@@ -38,7 +41,7 @@ function SalesForm({
       <Divider sx={{ mx: '1.5rem' }} />
       <CardContent sx={{ display: 'flex', flexDirection: isDesktop ? 'row' : 'column' }}>
         <Box sx={{ flex: 1 }}>
-          <DeliveryDetails formRepresentation={formRepresentation} disabled={disabled} setValue={setValue} />
+          <DeliveryDetails formRepresentation={formRepresentation} disabled={disabled} setValue={setValue} onFileDelete={onFileDelete} />
         </Box>
         <Box sx={{ m: '.5rem' }} />
         <Box sx={{ flex: 1 }}>
