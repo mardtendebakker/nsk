@@ -22,7 +22,7 @@ export abstract class IOrderPrinter extends IPrinter {
   protected getDataDestructionLabel(dataDestruction: DataDestruction) {
     switch (dataDestruction) {
       case DataDestruction.DATADESTRUCTION_NONE:
-        return 'No Data Carrier';
+        return 'No data carriers provided';
       case DataDestruction.DATADESTRUCTION_FORMAT:
         return 'Format';
       case DataDestruction.DATADESTRUCTION_STATEMENT:
@@ -30,7 +30,7 @@ export abstract class IOrderPrinter extends IPrinter {
       case DataDestruction.DATADESTRUCTION_DEGAUSS:
         return 'Degauss by EMP';
       case DataDestruction.DATADESTRUCTION_ERASEDATA:
-        return 'Erase Data Certified';
+        return 'Certified wipe report';
       default:
         return 'Unknown';
     }
