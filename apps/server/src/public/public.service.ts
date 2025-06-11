@@ -28,6 +28,7 @@ import { DataDestructionDesc } from './types/destruction-desc.enum';
 import { PostSalesDto } from './dto/post-sales.dto';
 import { InvalidRecaptchaKeyException } from './exceptions/invalid-recaptcha-key.exception';
 import { DataDestructionDto } from './dto/get-data-destruction.dto';
+import { DataDestructionExtra } from './types/destruction-extra.enum';
 
 @Injectable()
 export class PublicService {
@@ -50,16 +51,14 @@ export class PublicService {
     const dataDestructionChoices: DataDestructionChoice = new Map();
     dataDestructionChoices.set(DataDestruction.DATADESTRUCTION_ERASEDATA, DataDestructionDesc[DataDestruction.DATADESTRUCTION_ERASEDATA]);
     dataDestructionChoices.set(DataDestruction.DATADESTRUCTION_NONE, DataDestructionDesc[DataDestruction.DATADESTRUCTION_NONE]);
-    dataDestructionChoices.set(DataDestruction.DATADESTRUCTION_DEGAUSS, DataDestructionDesc[DataDestruction.DATADESTRUCTION_DEGAUSS]);
 
     return dataDestructionChoices;
   }
 
   getDataDestructions(): DataDestructionDto[] {
     const dataDestructionChoices: DataDestructionDto[] = [
-      { id: DataDestruction.DATADESTRUCTION_NONE, description: DataDestructionDesc[DataDestruction.DATADESTRUCTION_NONE] },
-      { id: DataDestruction.DATADESTRUCTION_ERASEDATA, description: DataDestructionDesc[DataDestruction.DATADESTRUCTION_ERASEDATA] },
-      { id: DataDestruction.DATADESTRUCTION_DEGAUSS, description: DataDestructionDesc[DataDestruction.DATADESTRUCTION_DEGAUSS] },
+      { id: DataDestruction.DATADESTRUCTION_NONE, description: DataDestructionDesc[DataDestruction.DATADESTRUCTION_NONE], extra: DataDestructionExtra[DataDestruction.DATADESTRUCTION_NONE] },
+      { id: DataDestruction.DATADESTRUCTION_ERASEDATA, description: DataDestructionDesc[DataDestruction.DATADESTRUCTION_ERASEDATA], extra: DataDestructionExtra[DataDestruction.DATADESTRUCTION_ERASEDATA] },
     ];
 
     return dataDestructionChoices;

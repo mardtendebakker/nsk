@@ -6,7 +6,11 @@ export class DataDestructionDto {
   @IsInt()
     id: number;
 
-  @ApiProperty({ example: 'HDD wipe report', description: 'Description of the Data Destruction' })
+  @ApiProperty({ example: 'Datadrager gecertificeerd wipen', description: 'The description of the Data Destruction' })
   @IsString()
     description: string;
+
+  @ApiProperty({ example: 'Indien wipen niet lukt wordt de drager degaussed (EMP)', description: 'The extra information of the Data Destruction' })
+  @IsString()
+    extra: string;
 }
