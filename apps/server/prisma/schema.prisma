@@ -10,23 +10,23 @@ datasource db {
 }
 
 model afile {
-  id                       Int      @id @default(autoincrement())
+  id                       Int       @id @default(autoincrement())
   product_id               Int?
   pickup_id                Int?
-  original_client_filename String   @db.VarChar(255)
-  unique_server_filename   String   @db.VarChar(255)
-  discr                    String   @db.VarChar(255)
+  delivery_id              Int?
+  original_client_filename String    @db.VarChar(255)
+  unique_server_filename   String    @db.VarChar(255)
+  discr                    String    @db.VarChar(255)
   external_id              Int?
-  order_id                 Int?
-  product                  product? @relation(fields: [product_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK_CFAB40EC4584665A")
-  aorder                   aorder?  @relation(fields: [order_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK_CFAB40EC8D9F6D38")
-  pickup                   pickup?  @relation(fields: [pickup_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK_CFAB40ECC26E160B")
-  theme_favicon            theme?   @relation("favicon")
-  theme_logo               theme?   @relation("logo")
+  product                  product?  @relation(fields: [product_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK_CFAB40EC4584665A")
+  pickup                   pickup?   @relation(fields: [pickup_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK_CFAB40ECC26E160B")
+  delivery                 delivery? @relation(fields: [delivery_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK_afile_delivery")
+  theme_favicon            theme?    @relation("favicon")
+  theme_logo               theme?    @relation("logo")
 
   @@index([product_id], map: "IDX_CFAB40EC4584665A")
-  @@index([order_id], map: "IDX_CFAB40EC8D9F6D38")
   @@index([pickup_id], map: "IDX_CFAB40ECC26E160B")
+  @@index([delivery_id], map: "IDX_afile_delivery")
 }
 
 model aorder {
@@ -43,8 +43,7 @@ model aorder {
   discr                               String          @db.VarChar(255)
   backingPurchaseOrder_id             Int?
   external_id                         Int?
-  vat_rate                            Float           @db.Float @default(21)
-  afile                               afile[]
+  vat_rate                            Float?          @db.Float
   contact_aorder_supplier_idTocontact contact?        @relation("aorder_supplier_idTocontact", fields: [supplier_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK_416119D92ADD6D8C")
   aorder                              aorder?         @relation("aorderToaorder", fields: [backingPurchaseOrder_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK_416119D930005451")
   other_aorder                        aorder[]        @relation("aorderToaorder")
@@ -152,13 +151,14 @@ model order_status {
 model pickup {
   id               Int       @id @default(autoincrement())
   order_id         Int?      @unique(map: "UNIQ_419E39FD8D9F6D38")
-  driver_id        Int?
-  vehicle_id       Int?
+  logistics_id     Int?
   pickup_date      DateTime? @db.DateTime(0)
   real_pickup_date DateTime? @db.DateTime(0)
   origin           String?   @db.VarChar(255)
   data_destruction Int?
   description      String?   @db.LongText
+  driver_id        Int?
+  vehicle_id       Int?
   afile            afile[]
   aorder           aorder?   @relation(fields: [order_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK_419E39FD8D9F6D38")
   driver           user?     @relation(fields: [driver_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_pickup_driver")
@@ -167,6 +167,7 @@ model pickup {
   @@index([driver_id], map: "idx_pickup_driver")
   @@index([vehicle_id], map: "idx_pickup_vehicle")
   @@index([real_pickup_date], map: "idx_realPickupDate")
+  @@index([logistics_id], map: "IDX_419E39FD7D418FFA")
 }
 
 model product {
@@ -371,7 +372,7 @@ model company {
   is_customer     Boolean   @default(false)
   is_supplier     Boolean   @default(false)
   is_partner      Boolean   @default(false)
-  vat_code        Int       @default(2)
+  vat_code        Int?
   company         company?  @relation("companyToCompany", fields: [partner_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "company_partner_id_fk")
   other_company   company[] @relation("companyToCompany")
   companyContacts contact[] @relation("contact_company_idTocompany")
@@ -422,12 +423,14 @@ model module {
 model delivery {
   id                Int       @id @default(autoincrement())
   order_id          Int?      @unique(map: "uniq_delivery_order_id")
-  driver_id         Int?
-  vehicle_id        Int?
+  logistics_id      Int?
   type              Int?
   date              DateTime? @db.DateTime(0)
   instructions      String?   @db.LongText
   dhl_tracking_code String?   @db.VarChar(255)
+  driver_id         Int?
+  vehicle_id        Int?
+  afile             afile[]
   aorder            aorder?   @relation(fields: [order_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_delivery_aorder")
   driver            user?     @relation(fields: [driver_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_delivery_driver")
   vehicle           vehicle?  @relation(fields: [vehicle_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_delivery_vehicle")
@@ -435,15 +438,16 @@ model delivery {
   @@index([driver_id], map: "idx_delivery_driver")
   @@index([vehicle_id], map: "idx_delivery_vehicle")
   @@index([date], map: "idx_date")
+  @@index([logistics_id], map: "idx_delivery_logistic")
 }
 
 model theme {
   id                Int     @id @default(autoincrement())
   company_name      String  @db.VarChar(255)
-  dashboard_message String? @db.VarChar(255)
   palette           String  @db.LongText
   logo_id           Int     @unique
   favicon_id        Int     @unique
+  dashboard_message String? @db.VarChar(255)
   favicon           afile   @relation("favicon", fields: [favicon_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_theme_favicon")
   logo              afile   @relation("logo", fields: [logo_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_theme_logo")
 
@@ -467,8 +471,8 @@ model user {
   password_verification_code String?    @db.VarChar(10)
   created_at                 DateTime   @default(now()) @db.DateTime(0)
   updated_at                 DateTime   @updatedAt @db.DateTime(0)
-  pickup                     pickup[]
   delivery                   delivery[]
+  pickup                     pickup[]
 }
 
 model vehicle {
@@ -476,8 +480,8 @@ model vehicle {
   name                String       @db.VarChar(50)
   registration_number String       @db.VarChar(50)              @unique(map: "uniq_registration_number")
   type                VehicleType?
-  pickup              pickup[]
   delivery            delivery[]
+  pickup              pickup[]
 }
 
 enum VehicleType {

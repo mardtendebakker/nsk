@@ -1,5 +1,9 @@
 import {
   Box, Grid, Typography, Button,
+  Table,
+  TableRow,
+  TableBody,
+  Theme,
 } from '@mui/material';
 import { useState } from 'react';
 import useTranslation from '../../../hooks/useTranslation';
@@ -11,19 +15,58 @@ import DateTimePicker from '../../input/dateTimePicker';
 import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
 import { AUTOCOMPLETE_DRIVERS_PATH, AUTOCOMPLETE_VEHICLES_PATH } from '../../../utils/axios';
 import useSecurity from '../../../hooks/useSecurity';
+import TableCell from '../../tableCell';
+import { AFile } from '../../../utils/axios/models/aFile';
+import { buildAFileLink } from '../../../utils/afile';
+import Delete from '../../button/delete';
+import ImageInput from '../../input/imageInput';
 
 export default function DeliveryDetails({
   formRepresentation,
   disabled,
+  onFileDelete,
   setValue,
 }: {
   formRepresentation : FormRepresentation,
   disabled:boolean,
+  onFileDelete?: (file: AFile) => void,
   setValue: SetValue,
 }) {
   const { trans } = useTranslation();
   const [showDeliveryDateChangedMessage, setShowDeliveryDateChangedMessage] = useState(false);
   const { hasModule } = useSecurity();
+
+  const pictures = Object.entries(formRepresentation.picturesAFiles.value).map(([key, picture]: [string, File:AFile]) => (
+    <ImageInput
+      key={key}
+      disabled={disabled}
+      disableEdit
+      image={picture instanceof File ? picture : buildAFileLink(picture)}
+      onChange={(file: File) => {
+        const clonedValue = structuredClone(formRepresentation.picturesAFiles.value);
+        clonedValue[key] = file;
+
+        setValue({
+          field: 'picturesAFiles',
+          value: clonedValue,
+        });
+      }}
+      onClear={() => {
+        const clonedValue = structuredClone(formRepresentation.picturesAFiles.value);
+
+        if (onFileDelete && clonedValue[key].id) {
+          onFileDelete(clonedValue[key]);
+        } else {
+          delete clonedValue[key];
+          setValue({
+            field: 'picturesAFiles',
+            value: clonedValue,
+          });
+        }
+      }}
+      sx={{ mr: '.5rem', border: (theme: Theme) => `1px dashed ${theme.palette.divider}`, mt: '1.5rem' }}
+    />
+  ));
 
   return (
     <>
@@ -149,6 +192,62 @@ export default function DeliveryDetails({
             />
           </Box>
           )}
+          <Grid
+            sx={{ display: 'flex', mt: '.5rem' }}
+            item
+          >
+            <Table size="small">
+              <TableBody>
+                <TableRow>
+                  <TableCell>{trans('processingAgreement')}</TableCell>
+                  <TableCell>
+                    {
+                                (!formRepresentation.agreementAFile?.value || formRepresentation.agreementAFile.value instanceof File)
+                                && <input type="file" onChange={(e) => { setValue({ field: 'agreementAFile', value: (e.target as HTMLInputElement).files[0] }); }} accept=".pdf" />
+                                }
+                    {
+                                formRepresentation.agreementAFile?.value
+                                && !(formRepresentation.agreementAFile.value instanceof File)
+                                && (
+                                <>
+                                  <a href={buildAFileLink(formRepresentation.agreementAFile.value)} target="_blank" rel="noreferrer" style={{ margin: '.5rem' }}>
+                                    {formRepresentation.agreementAFile.value.original_client_filename}
+                                  </a>
+                                  <Delete
+                                    tooltip
+                                    onClick={() => {
+                                      if (onFileDelete && formRepresentation.agreementAFile.value?.id) {
+                                        onFileDelete(formRepresentation.agreementAFile.value);
+                                      }
+                                      setValue({ field: 'agreementAFile', value: undefined });
+                                    }}
+                                    disabled={disabled}
+                                  />
+                                </>
+                                )
+                    }
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>{trans('pictures')}</TableCell>
+                  <TableCell sx={{ display: 'flex', flexWrap: 'wrap' }}>
+                    {pictures.length > 0 && pictures }
+                    <ImageInput
+                      sx={{ mr: '.5rem', border: (theme: Theme) => `1px dashed ${theme.palette.divider}`, mt: '1.5rem' }}
+                      image={undefined}
+                      onChange={(file: File) => {
+                        const clonedValue = structuredClone(formRepresentation.picturesAFiles.value);
+                        clonedValue[Math.random()] = file;
+                        setValue({ field: 'picturesAFiles', value: clonedValue });
+                      }}
+                      onClear={() => {}}
+                      disabled={disabled}
+                    />
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </Grid>
         </Grid>
       </Grid>
     </>

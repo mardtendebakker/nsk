@@ -4,7 +4,7 @@ import {
 } from 'react';
 import Add from '@mui/icons-material/Add';
 import Edit from '@mui/icons-material/Edit';
-import Close from '@mui/icons-material/Close';
+import Delete from '../button/delete';
 
 export default function ImageInput({
   image,
@@ -12,15 +12,17 @@ export default function ImageInput({
   onClear,
   sx,
   disabled = false,
+  disableEdit = false,
   errorMessage = undefined,
   placeholder = (hovered: boolean) => <Add sx={{ fontSize: '2rem', color: image || hovered ? 'white' : 'black' }} />,
   accept = 'image/jpg,image/png,image/jpeg',
 }: {
   image?: string | File,
-  onChange: (arg0: File) => void,
+  onChange?: (arg0: File) => void,
   onClear?: () => void,
   sx?: SxProps,
   disabled?: boolean,
+  disableEdit?: boolean,
   errorMessage?: string,
   placeholder?: (hovered: boolean) => JSX.Element
   accept?: string
@@ -43,13 +45,13 @@ export default function ImageInput({
   }, [image]);
 
   const handleChange = (e: ChangeEvent) => {
-    if (disabled) {
+    if (disabled || (disableEdit && image)) {
       return;
     }
 
     const file = (e.target as HTMLInputElement).files[0];
 
-    if (file) {
+    if (file && onChange) {
       onChange(file);
     }
   };
@@ -63,6 +65,7 @@ export default function ImageInput({
   };
 
   const id = Math.random().toString().split('.')[1];
+  const isEditDisabled = disabled || (disableEdit && image);
 
   return (
     <Box sx={{
@@ -71,28 +74,27 @@ export default function ImageInput({
       width: '10rem',
       height: '10rem',
       borderRadius: '.5rem',
-      boxShadow: hovered ? 'inset 0 0 0 100rem rgba(0,0,0,.4)' : undefined,
+      boxShadow: hovered && onChange && !isEditDisabled ? 'inset 0 0 0 100rem rgba(0,0,0,.4)' : undefined,
       transition: 'all .3s',
       position: 'relative',
       ...sx,
     }}
     >
       {image && (
-      <Close
-        onClick={handleClear}
+      <Delete
         sx={{
-          cursor: 'pointer',
-          fontSize: '1.8rem',
-          bgcolor: (theme) => theme.palette.primary.dark,
-          color: 'white',
           borderRadius: '.5rem',
           position: 'absolute',
           top: 0,
           right: 0,
         }}
+        tooltip
+        onClick={handleClear}
+        disabled={disabled}
       />
       )}
       <label htmlFor={`image-input-${id}`}>
+        {onChange && !isEditDisabled && (
         <input
           ref={ref}
           type="file"
@@ -101,6 +103,7 @@ export default function ImageInput({
           id={`image-input-${id}`}
           onChange={handleChange}
         />
+        )}
         <Box
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}
@@ -112,15 +115,15 @@ export default function ImageInput({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            cursor: 'pointer',
+            cursor: isEditDisabled ? 'default' : 'pointer',
             backgroundImage: preview && `url("${preview}")`,
             backgroundPosition: 'center',
             backgroundSize: 'contain',
             backgroundRepeat: 'no-repeat',
           }}
         >
-          {!image && placeholder(hovered)}
-          {hovered && image && <Edit sx={{ fontSize: '2rem', color: 'white' }} />}
+          {onChange && !image && placeholder(hovered)}
+          {onChange && hovered && image && !disableEdit && <Edit sx={{ fontSize: '2rem', color: 'white' }} />}
         </Box>
         {errorMessage && <Typography color="error">{errorMessage}</Typography>}
       </label>

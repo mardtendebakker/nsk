@@ -22,6 +22,7 @@ export const PURCHASE_ORDERS_PATH = '/purchases/:id';
 export const PAYMENTS_PATH = '/payments/:id';
 export const PAYMENTS_SUBSCRIPTION_PATH = '/payments/:id/subscription';
 export const PURCHASE_ORDERS_FILES_PATH = '/purchases/:orderId/files/:id';
+export const SALES_ORDERS_FILES_PATH = '/sales/:orderId/files/:id';
 export const STOCK_PRODUCTS_PATH = '/products/:id';
 export const APRODUCT_PATH = '/aproduct/:id';
 export const ADMIN_USERS_PATH = '/admin/users';

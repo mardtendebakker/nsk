@@ -93,6 +93,7 @@ interface Pickup {
 
 interface Delivery {
   id:number,
+  afile:AFile[],
   date?:string,
   type?:number,
   instructions?:string,

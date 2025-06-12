@@ -1,40 +1,48 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Prisma } from '@prisma/client';
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import {
-  IsBoolean, IsInt, IsNumber, IsString, ValidateIf,
+  IsBoolean, IsInt, IsNumber, IsOptional, IsString,
 } from 'class-validator';
-import { CreatePickupUncheckedWithoutAorderInputDto } from '../../calendar/pickup/dto/create-pickup-unchecked-without-aorder-input.dto';
-import { CreateRepairUncheckedWithoutAOrderInputDto } from '../../repair/dto/create-repair-unchecked-without-aorder-input.dt';
-import { CreateDeliveryUncheckedWithoutAorderInputDto } from '../../calendar/delivery/dto/create-delivery-unchecked-without-aorder-input.dto';
+import { formDataDateTransform, formDataNumberTransform, formDataStringTransform } from '../../common/transforms/form-date.transform';
 
-export class PrismaAOrderCreateInputDto {
+export class PrismaAOrderCreateInputDto implements Prisma.aorderCreateInput {
   @ApiPropertyOptional()
+  @Transform(formDataStringTransform)
   @IsString()
-  @ValidateIf((_, value) => value !== undefined)
+  @IsOptional()
     order_nr?: string;
 
   @ApiPropertyOptional()
+  @Transform(formDataStringTransform)
   @IsString()
-  @ValidateIf((_, value) => value !== undefined)
+  @IsOptional()
     remarks?: string;
 
+  @ApiProperty()
+  @Transform(formDataDateTransform)
+  @IsString()
+  @Type(() => Date)
+    order_date: Date;
+
   @ApiPropertyOptional()
+  @Transform(formDataNumberTransform)
   @IsNumber()
   @Type(() => Number)
-  @ValidateIf((_, value) => value !== undefined)
+  @IsOptional()
     discount?: number;
 
   @ApiPropertyOptional()
+  @Transform(formDataNumberTransform)
   @IsNumber()
   @Type(() => Number)
-  @ValidateIf((_, value) => value !== undefined)
+  @IsOptional()
     transport?: number;
 
   @ApiPropertyOptional()
   @IsBoolean()
   @Type(() => Boolean)
-  @ValidateIf((_, value) => value !== undefined)
+  @IsOptional()
     is_gift?: boolean;
 
   @ApiProperty()
@@ -42,39 +50,27 @@ export class PrismaAOrderCreateInputDto {
     discr: string;
 
   @ApiPropertyOptional()
+  @Transform(formDataNumberTransform)
   @IsInt()
   @Type(() => Number)
-  @ValidateIf((_, value) => value !== undefined)
+  @IsOptional()
     external_id?: number;
 
   @ApiPropertyOptional()
+  @Transform(formDataNumberTransform)
   @IsInt()
   @Type(() => Number)
-  @ValidateIf((_, value) => value !== undefined)
-    status_id?: number;
+  @IsOptional()
+    vat_rate?: number;
 
   @ApiPropertyOptional()
-  @IsInt()
-  @Type(() => Number)
-  @ValidateIf((_, value) => value !== undefined)
-    customer_id?: number;
+    contact_aorder_supplier_idTocontact?: Prisma.contactCreateNestedOneWithoutSupplierOrdersInput;
 
   @ApiPropertyOptional()
-  @IsInt()
-  @Type(() => Number)
-  @ValidateIf((_, value) => value !== undefined)
-    supplier_id?: number;
+    order_status?: Prisma.order_statusCreateNestedOneWithoutAorderInput;
 
   @ApiPropertyOptional()
-  @Type(() => CreatePickupUncheckedWithoutAorderInputDto)
-    pickup?: CreatePickupUncheckedWithoutAorderInputDto;
-
-  @ApiPropertyOptional()
-  @Type(() => CreateDeliveryUncheckedWithoutAorderInputDto)
-    delivery?: CreateDeliveryUncheckedWithoutAorderInputDto;
-
-  @ApiPropertyOptional()
-    afile?: Prisma.afileCreateNestedManyWithoutAorderInput;
+    contact_aorder_customer_idTocontact?: Prisma.contactCreateNestedOneWithoutCustomerOrdersInput;
 
   @ApiPropertyOptional()
     aorder?: Prisma.aorderCreateNestedOneWithoutOther_aorderInput;
@@ -83,9 +79,14 @@ export class PrismaAOrderCreateInputDto {
     other_aorder?: Prisma.aorderCreateNestedManyWithoutAorderInput;
 
   @ApiPropertyOptional()
+    delivery?: Prisma.deliveryCreateNestedOneWithoutAorderInput;
+
+  @ApiPropertyOptional()
+    pickup?: Prisma.pickupCreateNestedOneWithoutAorderInput;
+
+  @ApiPropertyOptional()
     product_order?: Prisma.product_orderCreateNestedManyWithoutAorderInput;
 
   @ApiPropertyOptional()
-  @Type(() => CreateRepairUncheckedWithoutAOrderInputDto)
-    repair?: CreateRepairUncheckedWithoutAOrderInputDto;
+    repair?: Prisma.repairCreateNestedOneWithoutAorderInput;
 }

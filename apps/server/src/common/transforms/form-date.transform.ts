@@ -3,11 +3,11 @@ import { TransformFnParams } from 'class-transformer';
 export function formDataNumberTransform(params: TransformFnParams) {
   const { value } = params;
 
-  if (value === 'null' || isNaN(value)) {
+  if (value === null || isNaN(value)) {
     return null;
   }
 
-  return value;
+  return Number(value);
 }
 
 export function formDataStringTransform(params: TransformFnParams) {
@@ -23,7 +23,7 @@ export function formDataStringTransform(params: TransformFnParams) {
 export function formDataDateTransform(params: TransformFnParams) {
   const { value } = params;
 
-  if (isNaN(new Date(value).getTime())) {
+  if (value === null || isNaN(new Date(value).getTime())) {
     return null;
   }
 
