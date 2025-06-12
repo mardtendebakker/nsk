@@ -1,4 +1,4 @@
-<div id="logos" style="width: 100%;padding: 0;background: url(https://nsk-prod-bucket.s3.eu-central-1.amazonaws.com/public/donatie-form.png) no-repeat;height: 200px;background-repeat: no-repeat;background-position: center;background-size: contain;"></div>
+<div id="logos" style="width: 100%;padding: 0;background: url(https://nsk-prod-bucket.s3.eu-central-1.amazonaws.com/public/donatie-form.jpg) no-repeat;height: 200px;background-repeat: no-repeat;background-position: center;background-size: contain;"></div>
 <h2>UWV donatieprogramma</h2>
 <div id="toelichting">Dit formulier is bedoeld voor schenkingsaanvragen voor ICT-apparatuur vanuit het UWV. Aan het eind van elk kwartaal (maart, juni, september, december) nemen wij deze aanvragen in behandeling. Het principe van wie het eerst komt, wie het eerst maalt, is geldig. De donaties zijn bedoeld voor gebruik binnen Nederland. Dit donatieprogramma komt voort uit een samenwerking tussen UWV, TCS en Copiatek.</div>
 <br>
@@ -18,6 +18,21 @@
                 type="text"
                 id="public_order_form_customer_{{@key}}"
                 name="public_order_form[customer][{{@key}}]"
+                {{#if this.required}}required="required"{{/if}}
+                class="form-control"
+                value="{{this.value}}"
+              >
+            </div>
+          </div>
+        {{/each}}
+        {{#each extra}}
+          <div class="form-group">
+            <label class="col-sm-3 control-label required" for="public_order_form_extra_{{@key}}">{{this.label}}{{#if this.required}} *{{/if}}</label>
+            <div class="col-sm-9">
+              <input 
+                type="text"
+                id="public_order_form_extra_{{@key}}"
+                name="public_order_form[extra][{{@key}}]"
                 {{#if this.required}}required="required"{{/if}}
                 class="form-control"
                 value="{{this.value}}"
@@ -80,6 +95,7 @@
               name="public_order_form[products][{{@index}}][quantity]"
               class="form-control"
               placeholder="0"
+              min="0"
             >
           </div>
         </div>

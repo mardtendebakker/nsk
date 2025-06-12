@@ -1,4 +1,5 @@
 export interface IExcelColumn {
+  __EMPTY?: string;
   Referentie?: string;
   Bedrijfsnaam?: string;
   Voornaam?: string;

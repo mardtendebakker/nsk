@@ -565,11 +565,11 @@ const translation = {
   origin: 'Origem',
   dataDestruction: 'Destruição de dados',
   selectLogistic: 'Selecionar logística',
-  none: 'Nenhum',
+  none: 'Sem suportes de dados',
   format: 'Formato',
-  destructionStatement: 'Declaração de destruição',
-  shred: 'Triturar',
-  killDisk: 'Exclusão de dados certificada',
+  statement: 'Declaração de destruição',
+  degauss: 'Desmagnetizar por EMP',
+  eraseData: 'Exclusão de dados certificada',
   attributeForm: {
     code: {
       label: 'Código',

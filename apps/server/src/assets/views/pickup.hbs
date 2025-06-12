@@ -46,6 +46,7 @@
                 {{#if this.required}}required="required"{{/if}}
                 class="form-control"
                 value="{{this.value}}"
+                min="0"
               >
             </div>
             <div class="col-sm-7" style="margin-top: 7px">
@@ -112,6 +113,7 @@
                       data-toggle="tooltip"
                       title=""
                       data-original-title="Aantal voor adres {{increment @index}}"
+                      min="0"
                     >
                   </td>
                 {{/times}}
@@ -143,7 +145,7 @@
         <div class="col-sm-9">
           <select id="pickup_form_dataDestruction" name="pickup_form[dataDestruction]" class="form-control">
             {{#each dataDestructionChoices}}
-              <option value="{{this.[0]}}"> {{this.[1]}} </option>
+              <option value="{{this.id}}"> {{this.description}} </option>
             {{/each}}
           </select>
         </div>

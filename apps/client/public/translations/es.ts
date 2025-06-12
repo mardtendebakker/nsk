@@ -580,11 +580,11 @@ const translation = {
   origin: 'Origen',
   dataDestruction: 'Destrucción de datos',
   selectLogistic: 'Seleccionar logística',
-  none: 'Ninguno',
+  none: 'Sin soportes de datos',
   format: 'Formato',
-  destructionStatement: 'Declaración de destrucción',
-  shred: 'Triturar',
-  killDisk: 'Eliminar datos certificados',
+  statement: 'Declaración de destrucción',
+  degauss: 'Desmagnetizar por EMP',
+  eraseData: 'Eliminar datos certificados',
   attributeForm: {
     code: {
       label: 'Código',

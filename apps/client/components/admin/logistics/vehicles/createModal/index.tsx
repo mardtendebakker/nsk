@@ -37,7 +37,8 @@ export default function CreateModal({ onClose, onSubmit }: {
     }
 
     call({ body: formRepresentationToBody(formRepresentation) })
-      .then(onSubmit);
+      .then(onSubmit)
+      .catch(() => {});
   };
 
   return (

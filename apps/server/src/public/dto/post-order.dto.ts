@@ -6,6 +6,7 @@ import { CommonFormDto } from './common-form.dto';
 import { formDataNumberTransform, formDataStringTransform } from '../../common/transforms/form-date.transform';
 import { TermsDto } from './terms.dto';
 import { OrderContactDto } from './order-contact.dto';
+import { ExtraDto } from './extra.dto';
 
 class Product {
   @ApiProperty()
@@ -25,6 +26,10 @@ class PublicOrderFormDto extends CommonFormDto {
   @ApiProperty()
   @Type(() => OrderContactDto)
     customer: OrderContactDto;
+
+  @ApiProperty()
+  @Type(() => ExtraDto)
+    extra?: ExtraDto;
 
   @ApiProperty()
   @Type(() => TermsDto)

@@ -587,11 +587,11 @@ const translation = {
   origin: 'الأصل',
   dataDestruction: 'تدمير البيانات',
   selectLogistic: 'حدد لوجستي',
-  none: 'لا شيء',
+  none: 'لا شيء وسائط بيانات',
   format: 'التنسيق',
-  destructionStatement: 'بيان التدمير',
-  shred: 'تمزيق',
-  killDisk: 'حذف البيانات المعتمدة',
+  statement: 'بيان التدمير',
+  degauss: 'إزالة المغناطيسية بواسطة النبضة الكهرومغناطيسية EMP',
+  eraseData: 'حذف البيانات المعتمدة',
   attributeForm: {
     code: {
       label: 'الكود',

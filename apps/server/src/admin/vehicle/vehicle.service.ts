@@ -37,32 +37,29 @@ export class VehicleService {
 
   async update(id: number, body: UpdateVehicleDto) {
     const { name, registration_number } = body;
-    await this.checkUniqueness(body, id);
-    return this.repository.update({ where: { id }, data: { name, registration_number } });
+    try {
+      return await this.repository.update({ where: { id }, data: { name, registration_number } });
+    } catch (err) {
+      return this.handleError(err);
+    }
   }
 
   delete(id: number) { return this.repository.delete({ where: { id } }); }
 
   async create(body: CreateVehicleDto) {
     const { name, registration_number } = body;
-    await this.checkUniqueness(body, undefined);
-    return this.repository.create({ name, registration_number });
+    try {
+      return await this.repository.create({ name, registration_number });
+    } catch (err) {
+      return this.handleError(err);
+    }
   }
 
-  async checkUniqueness(body: CreateVehicleDto | UpdateVehicleDto, id: number | undefined) {
-    const { name, registration_number } = body;
-    if (name) {
-      const { data } = await this.repository.findAll({ where: { name, NOT: { id } } });
-      if (data.length > 0) {
-        throw new ConflictException('Name already exist');
-      }
+  handleError(error: Prisma.PrismaClientKnownRequestError) {
+    if (error.code === 'P2002' && error?.message?.includes('registration_number')) {
+      throw new ConflictException('Registration number already exist');
     }
 
-    if (registration_number) {
-      const { data } = await this.repository.findAll({ where: { registration_number, NOT: { id } } });
-      if (data.length > 0) {
-        throw new ConflictException('Registration number already exist');
-      }
-    }
+    throw error;
   }
 }

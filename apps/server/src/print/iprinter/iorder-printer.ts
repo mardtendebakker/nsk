@@ -1,7 +1,7 @@
 import { IPrinter } from './iprinter';
 import { PrintableOrderData } from '../types/printable-order';
 import { DeliveryType } from '../../aorder/types/delivery-type.enum';
-import { DataDestruction } from '../../aorder/types/data-destruction.enum';
+import { DataDestruction } from '../../calendar/pickup/types/destruction.enum';
 
 export abstract class IOrderPrinter extends IPrinter {
   protected abstract transform(data: PrintableOrderData): Promise<unknown[]>;
@@ -22,15 +22,15 @@ export abstract class IOrderPrinter extends IPrinter {
   protected getDataDestructionLabel(dataDestruction: DataDestruction) {
     switch (dataDestruction) {
       case DataDestruction.DATADESTRUCTION_NONE:
-        return 'None';
+        return 'No data carriers provided';
       case DataDestruction.DATADESTRUCTION_FORMAT:
         return 'Format';
       case DataDestruction.DATADESTRUCTION_STATEMENT:
         return 'Statement';
-      case DataDestruction.DATADESTRUCTION_SHRED:
-        return 'Shred';
-      case DataDestruction.DATADESTRUCTION_KILLDISK:
-        return 'Killdisk';
+      case DataDestruction.DATADESTRUCTION_DEGAUSS:
+        return 'Degauss by EMP';
+      case DataDestruction.DATADESTRUCTION_ERASEDATA:
+        return 'Certified wipe report';
       default:
         return 'Unknown';
     }
