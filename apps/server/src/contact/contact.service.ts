@@ -115,6 +115,13 @@ export class ContactService {
       customConnectOrCreate = {
         connect: { id: companyId },
       };
+      if (companyIsPartner || companyIsCustomer || companyIsSupplier) {
+        this.companyService.update(companyId, {
+          ...(companyIsPartner && { is_partner: true }),
+          ...(companyIsCustomer && { is_customer: true }),
+          ...(companyIsSupplier && { is_supplier: true }),
+        });
+      }
     } else {
       customConnectOrCreate = {
         connectOrCreate: {

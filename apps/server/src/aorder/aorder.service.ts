@@ -357,7 +357,7 @@ export class AOrderService {
         company_is_partner: false,
         company_is_customer: false,
         company_is_supplier: true,
-      })).id;
+      }))?.id;
     }
 
     const data: CommonAOrderInput = {

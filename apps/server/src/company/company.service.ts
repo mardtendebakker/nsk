@@ -76,10 +76,6 @@ export class CompanyService {
   }
 
   async update(id: number, updateDto: UpdateCompanyDto, email?: string) {
-    if (await this.repository.findOne({ where: { name: updateDto.name, NOT: { id } } })) {
-      throw new ConflictException('Name already exist');
-    }
-
     return this.repository.update({
       where: {
         id,

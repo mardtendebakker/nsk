@@ -117,16 +117,16 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
   formData.append('order_date', formRepresentation.orderDate.value || null);
   formData.append('status_id', formRepresentation.orderStatus.value);
   formData.append('remarks', formRepresentation.remarks.value || null);
-  formData.append('transport', formRepresentation.transport.value || null);
-  formData.append('discount', formRepresentation.discount.value || null);
-  formData.append('is_gift', formRepresentation.isGift.value.toString() || null);
+  formData.append('transport', formRepresentation.transport.value);
+  formData.append('discount', formRepresentation.discount.value);
+  formData.append('is_gift', formRepresentation.isGift.value);
 
   // Add delivery fields
   formData.append('delivery[date]', formRepresentation.deliveryDate.value || null);
-  formData.append('delivery[type]', formRepresentation.deliveryType.value || null);
+  formData.append('delivery[type]', formRepresentation.deliveryType.value);
   formData.append('delivery[instructions]', formRepresentation.deliveryInstructions.value || null);
-  formData.append('delivery[vehicle_id]', formRepresentation.vehicleId.value || null);
-  formData.append('delivery[driver_id]', formRepresentation.driverId.value || null);
+  formData.append('delivery[vehicle_id]', formRepresentation.vehicleId.value);
+  formData.append('delivery[driver_id]', formRepresentation.driverId.value);
   formData.append('delivery[dhl_tracking_code]', formRepresentation.dhlTrackingCode.value || null);
 
   // Handle customer information
@@ -153,8 +153,8 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
       // New company
       formData.append('customer[company_name]', formRepresentation.companyName.value);
       formData.append('customer[company_kvk_nr]', formRepresentation.companyKvkNr.value || null);
-      formData.append('customer[company_is_partner]', formRepresentation.companyIsPartner.value.toString() || null);
-      formData.append('customer[company_partner_id]', formRepresentation.companyPartner.value || null);
+      formData.append('customer[company_is_partner]', formRepresentation.companyIsPartner.value);
+      formData.append('customer[company_partner_id]', formRepresentation.companyPartner.value);
       formData.append('customer[company_vat_code]', formRepresentation.companyVatCode.value);
     }
   }
