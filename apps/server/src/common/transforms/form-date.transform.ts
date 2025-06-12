@@ -29,3 +29,17 @@ export function formDataDateTransform(params: TransformFnParams) {
 
   return new Date(value);
 }
+
+export function formDataBoolTransform(params: TransformFnParams) {
+  const { value } = params;
+
+  if (value === null) {
+    return null;
+  }
+
+  if (value === 'false') {
+    return false;
+  }
+
+  return !!value;
+}

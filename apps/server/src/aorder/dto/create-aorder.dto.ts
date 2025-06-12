@@ -1,16 +1,17 @@
 import { ApiPropertyOptional, OmitType } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
-import { IsInt, IsOptional } from 'class-validator';
+import { IsBoolean, IsInt, IsOptional } from 'class-validator';
 import { PrismaAOrderCreateInputDto } from './prisma-aorder-create-input.dto';
 import { CreateContactAOrderDto } from './create-contact-aorder.dto';
 import { CreatePickupUncheckedWithoutAorderInputDto } from '../../calendar/pickup/dto/create-pickup-unchecked-without-aorder-input.dto';
 import { CreateDeliveryUncheckedWithoutAorderInputDto } from '../../calendar/delivery/dto/create-delivery-unchecked-without-aorder-input.dto';
 import { CreateRepairUncheckedWithoutAOrderInputDto } from '../../repair/dto/create-repair-unchecked-without-aorder-input.dt';
-import { formDataDateTransform, formDataNumberTransform } from '../../common/transforms/form-date.transform';
+import { formDataBoolTransform, formDataDateTransform, formDataNumberTransform } from '../../common/transforms/form-date.transform';
 
 export class CreateAOrderDto extends OmitType(PrismaAOrderCreateInputDto, [
   'discr',
   'order_date',
+  'is_gift',
   'aorder',
   'other_aorder',
   'pickup',
@@ -28,6 +29,12 @@ export class CreateAOrderDto extends OmitType(PrismaAOrderCreateInputDto, [
   @Type(() => Number)
   @IsOptional()
     status_id?: number;
+
+  @ApiPropertyOptional()
+  @Transform(formDataBoolTransform)
+  @IsBoolean()
+  @IsOptional()
+    is_gift?: boolean;
 
   @ApiPropertyOptional()
   @Transform(formDataNumberTransform)
