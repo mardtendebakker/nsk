@@ -121,9 +121,13 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
   formData.append('discount', formRepresentation.discount.value || null);
   formData.append('is_gift', formRepresentation.isGift.value.toString() || null);
 
-  if (formRepresentation.deliveryDate.value) {
-    formData.append('delivery[date]', formRepresentation.deliveryDate.value);
-  }
+  // Add delivery fields
+  formData.append('delivery[date]', formRepresentation.deliveryDate.value || null);
+  formData.append('delivery[type]', formRepresentation.deliveryType.value || null);
+  formData.append('delivery[instructions]', formRepresentation.deliveryInstructions.value || null);
+  formData.append('delivery[vehicle_id]', formRepresentation.vehicleId.value || null);
+  formData.append('delivery[driver_id]', formRepresentation.driverId.value || null);
+  formData.append('delivery[dhl_tracking_code]', formRepresentation.dhlTrackingCode.value || null);
 
   // Handle customer information
   if (!formRepresentation.newCustomer.value) {
