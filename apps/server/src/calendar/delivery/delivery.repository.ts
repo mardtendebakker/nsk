@@ -10,7 +10,7 @@ export class DeliveryRepository {
     protected readonly configService: ConfigService,
   ) {}
 
-  async findAll(params: Prisma.aorderFindManyArgs) {
+  async findAll(params: Prisma.deliveryFindManyArgs) {
     const {
       skip, cursor, where, select, orderBy,
     } = params;
@@ -18,8 +18,8 @@ export class DeliveryRepository {
     const take = Number.isFinite(params.take) && params.take < maxQueryLimit ? params.take : maxQueryLimit;
 
     const submission = await this.prisma.$transaction([
-      this.prisma.aorder.count({ where }),
-      this.prisma.aorder.findMany({
+      this.prisma.delivery.count({ where }),
+      this.prisma.delivery.findMany({
         skip, take, cursor, where, select, orderBy,
       }),
     ]);
@@ -29,6 +29,4 @@ export class DeliveryRepository {
       data: submission[1],
     };
   }
-
-  8;
 }

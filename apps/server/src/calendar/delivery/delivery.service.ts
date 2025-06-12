@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DeliveryRepository } from './delivery.repository';
 import { FindManyDto } from '../dto/find-many.dto';
-import { AOrderDiscrimination } from '../../aorder/types/aorder-discrimination.enum';
 import { FindDeliveriesResponeDto } from './dto/find-delivery-response.dto';
 import { FindCalendarResponeDto } from '../dto/find-calendar-response.dto';
 
@@ -15,30 +14,67 @@ export class DeliveryService {
       ...query,
       select: {
         id: true,
-        order_nr: true,
-        order_status: true,
-        delivery: true,
-        contact_aorder_customer_idTocontact: true,
-        product_order: {
+        date: true,
+        aorder: {
           select: {
             id: true,
-            product: {
+            order_nr: true,
+            order_status: true,
+            contact_aorder_customer_idTocontact: {
+              select: {
+                name: true,
+                email: true,
+                city: true,
+                country: true,
+                state: true,
+                zip: true,
+                street: true,
+                phone: true,
+                company_contact_company_idTocompany: true,
+              },
+            },
+            product_order: {
               select: {
                 id: true,
-                name: true,
+                product: {
+                  select: {
+                    id: true,
+                    name: true,
+                  },
+                },
               },
             },
           },
         },
-      },
-      where: {
-        discr: AOrderDiscrimination.SALE,
-        delivery: {
-          date: {
-            gte: query.startsAt,
-            lte: query.endsAt,
+        driver: {
+          select: {
+            id: true,
+            username: true,
+            first_name: true,
+            last_name: true,
+            email: true,
           },
         },
+        vehicle: {
+          select: {
+            id: true,
+            name: true,
+            registration_number: true,
+          },
+        },
+      },
+      where: {
+        date: {
+          gte: query.startsAt,
+          lte: query.endsAt,
+        },
+        ...(query.licensePlate ? {
+          vehicle: {
+            registration_number: {
+              equals: query.licensePlate,
+            },
+          },
+        } : undefined),
       },
       skip: query.skip,
       take: query.take,
@@ -46,23 +82,31 @@ export class DeliveryService {
 
     const deliveriesDto: FindCalendarResponeDto[] = data.map(
       ({
-        id,
-        order_nr,
-        delivery,
-        order_status,
-        product_order,
-        contact_aorder_customer_idTocontact,
+        aorder: {
+          id,
+          order_nr,
+          order_status,
+          product_order,
+          contact_aorder_customer_idTocontact: {
+            company_contact_company_idTocompany: company_customer,
+            ...rest_customer
+          },
+        },
+        date,
+        ...deliveryRest
       }) => ({
-        id,
-        event_date: delivery?.date,
+        ...deliveryRest,
+        event_date: date,
         event_title: product_order.map(({ product }) => product)?.[0]?.name,
         order: {
           id,
           order_nr,
           order_status,
-          customer: contact_aorder_customer_idTocontact,
+          customer: {
+            ...rest_customer,
+            company_name: company_customer.name,
+          },
         },
-        logistic: null,
       }),
     );
 
