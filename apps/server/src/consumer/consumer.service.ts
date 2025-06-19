@@ -15,10 +15,10 @@ export class ConsumerService implements OnModuleInit {
     await this.rabbitMQService.consumeWebshopOrderCreated(this.handleWebshopOrderCreated.bind(this));
   }
 
-  private async handleWebshopOrderCreated(msg: { orderId: string }): Promise<void> {
+  private async handleWebshopOrderCreated(msg: { order_id: string }): Promise<void> {
     const {
       customer, transport, products,
-    } = await this.webshopService.fetchOrderById(msg.orderId);
+    } = await this.webshopService.fetchOrderById(msg.order_id);
     const order = await this.saleService.create({
       customer: {
         email: customer.email,
