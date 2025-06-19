@@ -13,7 +13,7 @@ export class RabbitMQService implements OnModuleInit, OnModuleDestroy {
 
   private readonly URI: string;
 
-  private readonly MAGENTO_ORDER_CREATED: string;
+  private readonly MAGENTO_ORDER_PAID: string;
 
   private readonly EXCHANGE: string;
 
@@ -21,7 +21,7 @@ export class RabbitMQService implements OnModuleInit, OnModuleDestroy {
 
   constructor(private readonly configService: ConfigService) {
     this.URI = this.configService.get<string>('RABBITMQ_URI');
-    this.MAGENTO_ORDER_CREATED = this.configService.get<string>('RABBITMQ_MAGENTO_ORDER_CREATED');
+    this.MAGENTO_ORDER_PAID = this.configService.get<string>('RABBITMQ_MAGENTO_ORDER_PAID');
     this.EXCHANGE = this.configService.get<string>('RABBITMQ_EXCHANGE');
   }
 
@@ -34,7 +34,7 @@ export class RabbitMQService implements OnModuleInit, OnModuleDestroy {
       this.connection = amqp.connect([this.URI]);
       this.ch1 = this.connection.createChannel({
         json: true,
-        setup: async (channel: ConfirmChannel) => this.setupQueue(channel, this.MAGENTO_ORDER_CREATED),
+        setup: async (channel: ConfirmChannel) => this.setupQueue(channel, this.MAGENTO_ORDER_PAID),
       });
       this.logger.log('*** CONNECTED TO RABBITMQ SERVERE ***');
     } catch (err) {
@@ -53,11 +53,11 @@ export class RabbitMQService implements OnModuleInit, OnModuleDestroy {
   }
 
   async publishOrderFromStore(orderId: string): Promise<void> {
-    await this.pushToQueue(this.ch1, this.MAGENTO_ORDER_CREATED, JSON.stringify({ orderId }));
+    await this.pushToQueue(this.ch1, this.MAGENTO_ORDER_PAID, JSON.stringify({ orderId }));
   }
 
   async consumeWebshopOrderCreated(onMessage: (msg) => void) {
-    return this.pullFromQueue(this.ch1, this.MAGENTO_ORDER_CREATED, onMessage);
+    return this.pullFromQueue(this.ch1, this.MAGENTO_ORDER_PAID, onMessage);
   }
 
   private async pushToQueue(channelWrapper: ChannelWrapper, queue: string, text: string) {
