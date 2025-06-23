@@ -16,6 +16,16 @@ export class ConsumerService implements OnModuleInit {
   }
 
   private async handleWebshopOrderCreated(msg: { order_id: string }): Promise<void> {
+    const remarks = `Magento Order #${msg.order_id}`;
+    const checkOrderExist = await this.saleService.findAll({
+      where: {
+        remarks: { contains: remarks },
+      },
+    });
+    if (checkOrderExist?.data?.length) {
+      return;
+    }
+
     const {
       customer, transport, products,
     } = await this.webshopService.fetchOrderById(msg.order_id);
@@ -31,7 +41,7 @@ export class ConsumerService implements OnModuleInit {
         zip: customer.zipcode,
       },
       status_id: 3,
-      remarks: 'Order from Magento',
+      remarks: `${remarks}\r\n`,
       transport,
     });
 
