@@ -51,6 +51,9 @@ export default function List({
             {trans('company_kvk_nr')}
           </TableCell>
           <TableCell>
+            {trans('company_rsin_nr')}
+          </TableCell>
+          <TableCell>
             {trans('isPartner')}
           </TableCell>
           <TableCell>
@@ -78,6 +81,9 @@ export default function List({
             </TableCell>
             <TableCell>
               {company.kvk_nr}
+            </TableCell>
+            <TableCell>
+              {company.rsin_nr}
             </TableCell>
             <TableCell>
               {company.is_partner && <Check />}

@@ -316,6 +316,10 @@ export class PublicService {
         label: 'KVK-nummer',
         required: true,
       },
+      company_rsin_nr: {
+        label: 'RSIN-nummer',
+        required: false,
+      },
       street: {
         label: 'Adres organisatie',
         required: true,

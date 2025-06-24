@@ -97,6 +97,12 @@
         "schema": "apps/server/prisma/schema.prisma"
       }
     },
+    "prisma-reset": {
+      "executor": "@nx-tools/nx-prisma:reset",
+      "options": {
+        "schema": "apps/server/prisma/schema.prisma"
+      }
+    },
     "prisma-status": {
       "executor": "@nx-tools/nx-prisma:status",
       "options": {

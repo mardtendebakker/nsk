@@ -99,11 +99,10 @@
             return false;
         });
 
-        thisElement.find('#public_order_form_products_0_quantity, #public_order_form_products_1_quantity').on('input', function() {
+        thisElement.find('#public_order_form_products_0_quantity').on('input', function() {
             var quantity0 = parseInt($('#public_order_form_products_0_quantity').val()) || 0;
-            var quantity1 = parseInt($('#public_order_form_products_1_quantity').val()) || 0;
 
-            if (quantity0 + quantity1 > 50) {
+            if (quantity0 > 50) {
                 $(this).val($(this).data('previousValue') || 0); // Reset to previous value
             } else {
                 // Save the current value
@@ -111,10 +110,10 @@
             }
         });
 
-        thisElement.find('#public_order_form_products_2_quantity').on('input', function() {
-            var quantity2 = parseInt($('#public_order_form_products_2_quantity').val()) || 0;
+        thisElement.find('#public_order_form_products_1_quantity').on('input', function() {
+            var quantity1 = parseInt($('#public_order_form_products_1_quantity').val()) || 0;
 
-            if (quantity2 > 20) {
+            if (quantity1 > 50) {
                 $(this).val($(this).data('previousValue') || 0); // Reset to previous value
             } else {
                 // Save the current value

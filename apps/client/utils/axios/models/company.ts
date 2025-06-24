@@ -2,6 +2,7 @@ export interface CompanyListItem {
   id:number,
   name:string,
   kvk_nr:string,
+  rsin_nr:string,
   is_partner:boolean,
   is_supplier:boolean,
   is_customer:boolean,

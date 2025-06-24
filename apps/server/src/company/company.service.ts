@@ -34,6 +34,7 @@ export class CompanyService {
         id: true,
         name: true,
         kvk_nr: true,
+        rsin_nr: true,
         is_customer: true,
         is_partner: true,
         is_supplier: true,
