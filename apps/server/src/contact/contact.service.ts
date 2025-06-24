@@ -92,6 +92,7 @@ export class ContactService {
       company_id: companyId,
       company_name: companyName,
       company_kvk_nr: companyKvkNr,
+      company_rsin_nr: companyRsinNr,
       company_is_partner: companyIsPartner,
       company_is_customer: companyIsCustomer,
       company_is_supplier: companyIsSupplier,
@@ -131,6 +132,7 @@ export class ContactService {
           create: {
             name: companyName,
             kvk_nr: companyKvkNr,
+            rsin_nr: companyRsinNr,
             is_partner: companyIsPartner,
             is_customer: companyIsCustomer,
             is_supplier: companyIsSupplier,

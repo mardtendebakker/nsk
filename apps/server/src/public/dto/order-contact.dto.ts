@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
 import { IsInt } from 'class-validator';
 import { formDataNumberTransform } from '../../common/transforms/form-date.transform';
@@ -10,4 +10,10 @@ export class OrderContactDto extends NewContactDto {
   @IsInt()
   @Type(() => Number)
     company_kvk_nr?: number;
+
+  @ApiPropertyOptional()
+  @Transform(formDataNumberTransform)
+  @IsInt()
+  @Type(() => Number)
+    company_rsin_nr?: number;
 }
