@@ -167,11 +167,13 @@ export class PublicService {
 
   async postOrder(params: PostOrderDto): Promise<void> {
     const { public_order_form: publicOrderForm } = params;
+    const TCS_COMPANY_ID = 9043;
 
     await this.verifyCaptcha(params['g-recaptcha-response']);
 
     const { customer: customerDto } = publicOrderForm;
     customerDto.company_is_customer = true;
+    customerDto.company_partner_id = TCS_COMPANY_ID;
     const customer = await this.contactService.checkExists(publicOrderForm.customer);
 
     const orderStatus = await this.findOrderStatusByNameOrCreate(publicOrderForm.orderStatusName, false, true, false);
