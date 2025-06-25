@@ -16,4 +16,10 @@ export class OrderContactDto extends NewContactDto {
   @IsInt()
   @Type(() => Number)
     company_rsin_nr?: number;
+
+  @ApiPropertyOptional()
+  @Transform(formDataNumberTransform)
+  @IsInt()
+  @Type(() => Number)
+    company_partner_id?: number;
 }
