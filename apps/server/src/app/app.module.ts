@@ -48,7 +48,7 @@ import { DriverAdminModule } from '../admin/driver/driver.module';
         () => ({
           MAX_RELATION_QUERY_LIMIT: process.env.MAX_RELATION_QUERY_LIMIT || 100,
           MAX_NONE_RELATION_QUERY_LIMIT: process.env.MAX_NONE_RELATION_QUERY_LIMIT || 5000,
-          RABBITMQ_MAGENTO_ORDER_PAID: process.env.RABBITMQ_MAGENTO_ORDER_PAID || 'magento_order_paid',
+          RABBITMQ_MAGENTO_PAYMENT_PAID: process.env.RABBITMQ_MAGENTO_PAYMENT_PAID || 'magento_payment_paid',
           RABBITMQ_EXCHANGE: process.env.RABBITMQ_EXCHANGE || 'nexxus',
         }),
       ],
