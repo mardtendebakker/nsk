@@ -40,7 +40,7 @@
       {{#each form}}
         {{#each customer}}
           <div class="form-group">
-            <label class="col-sm-3 control-label required" for="public_order_form_customer_{{@key}}">{{this.label}}{{#if this.required}} *{{/if}}</label>
+            <label class="col-sm-3 control-label required" for="public_order_form_customer_{{@key}}">{{this.label}}{{#if this.required}} *{{else}} (Optioneel){{/if}}</label>
             <div class="col-sm-9">
               <input 
                 type="text"
@@ -50,12 +50,13 @@
                 class="form-control"
                 value="{{this.value}}"
               >
+              {{#if this.error}}<div id="public_order_form_customer_error_{{@key}}" class="alert alert-warning text-center" style="padding:5px;margin:5px auto;display:none;">{{this.error}}</div>{{/if}}
             </div>
           </div>
         {{/each}}
         {{#each extra}}
           <div class="form-group">
-            <label class="col-sm-3 control-label required" for="public_order_form_extra_{{@key}}">{{this.label}}{{#if this.required}} *{{/if}}</label>
+            <label class="col-sm-3 control-label required" for="public_order_form_extra_{{@key}}">{{this.label}}{{#if this.required}} *{{else}} (Optioneel){{/if}}</label>
             <div class="col-sm-9">
               <input 
                 type="text"
@@ -69,6 +70,7 @@
           </div>
         {{/each}}
       {{/each}}
+      <div>*Is verplicht om in te vullen.</div>
     </div>
   </div>
 
@@ -97,6 +99,11 @@
           </div>
         {{/each}}
       {{/each}}
+      <div>
+        <div class="col-xs-12">
+          <div id="terms-error" class="alert alert-warning text-center" style="padding:5px;margin:5px auto;display:none;">Selecteer minimaal één optie</div>
+        </div>
+      </div>
     </div>
   </div>
   <div class="panel panel-default">
@@ -120,15 +127,18 @@
                   name="public_order_form[products][{{@index}}][quantity]"
                   class="form-control"
                   placeholder="0"
-                  min="{{this.min}}"
-                  max="{{this.max}}"
+                  min="0"
                 >
               </div>
             <input type="hidden" id="public_order_form_products_{{@index}}_name" name="public_order_form[products][{{@index}}][name]" value="{{this.name}}">
           </div>
         </div>
       {{/each}}
-
+      <div>
+        <div class="col-xs-12">
+          <div id="quantity-error" class="alert alert-warning text-center" style="padding:5px;margin:5px auto;display:none;">Het totale aantal moet groter zijn dan 2</div>
+        </div>
+      </div>
     </div>
   </div>
 
