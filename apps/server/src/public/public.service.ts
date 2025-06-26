@@ -245,7 +245,7 @@ export class PublicService {
     return {
       reason: {
         label: 'Reden aanvraag',
-        required: false,
+        required: true,
       },
     };
   }
@@ -308,7 +308,7 @@ export class PublicService {
     return {
       name: {
         label: 'Uw volledige naam',
-        required: false,
+        required: true,
       },
       company_name: {
         label: 'Naam organisatie',
@@ -317,6 +317,7 @@ export class PublicService {
       company_kvk_nr: {
         label: 'KVK-nummer',
         required: true,
+        error: 'KvK-nummer bestaat uit precies 8 cijfers, bijvoorbeeld: 12345678',
       },
       company_rsin_nr: {
         label: 'RSIN-nummer',
@@ -329,6 +330,7 @@ export class PublicService {
       zip: {
         label: 'Postcode',
         required: true,
+        error: 'Postcode bestaat uit 4 cijfers gevolgd door 2 letters, bijvoorbeeld: 3706BL of 3706 BL',
       },
       city: {
         label: 'Vestigingsplaats',
