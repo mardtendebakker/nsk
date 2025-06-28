@@ -13,16 +13,16 @@ import { ContactListItem } from '../../../utils/axios/models/contact';
 
 function initFormState(
   {
-    search, company, disableCompany, is_customer, is_supplier, is_partner,
+    search, company_id, disableCompany, is_customer, is_supplier, is_partner,
   }:
-  { search?: string, company?: string, disableCompany?: boolean, is_customer?: boolean, is_supplier?: boolean, is_partner?: boolean },
+  { search?: string, company_id?: string, disableCompany?: boolean, is_customer?: boolean, is_supplier?: boolean, is_partner?: boolean },
 ) {
   return {
     search: {
       value: search,
     },
-    company: {
-      value: company,
+    company_id: {
+      value: company_id,
       disabled: !!disableCompany,
     },
     is_customer: {
@@ -54,7 +54,7 @@ function refreshList({
 
   const paramsToSend = {};
 
-  ['search', 'company'].forEach((filter) => {
+  ['search', 'company_id'].forEach((filter) => {
     if (formRepresentation[filter].value || formRepresentation[filter].value === 0) {
       const value = formRepresentation[filter].value.toString();
       params.append(filter, value);
@@ -86,7 +86,7 @@ export default function ListContainer({ company, editContactRouteBuilder }: { co
 
   const { formRepresentation, setValue, setData } = useForm(initFormState({
     search: getQueryParam('search'),
-    company: company?.name || getQueryParam('company'),
+    company_id: company?.id?.toString() || getQueryParam('company_id'),
     is_customer: getQueryParam('is_customer') === 'true',
     is_partner: getQueryParam('is_partner') === 'true',
     is_supplier: getQueryParam('is_supplier') === 'true',
@@ -122,7 +122,7 @@ export default function ListContainer({ company, editContactRouteBuilder }: { co
     page,
     rowsPerPage,
     formRepresentation.search.value,
-    formRepresentation.company.value,
+    formRepresentation.company_id.value,
     formRepresentation.is_customer.value,
     formRepresentation.is_supplier.value,
     formRepresentation.is_partner.value,
@@ -130,7 +130,7 @@ export default function ListContainer({ company, editContactRouteBuilder }: { co
 
   const handleReset = () => {
     setPage(1);
-    setData(initFormState({ company: formRepresentation.company.value, disableCompany: !!company }));
+    setData(initFormState({ disableCompany: !!company }));
   };
 
   const handleDelete = (id: number) => {

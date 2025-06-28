@@ -18,7 +18,7 @@ export class ContactService {
   async findAll(query: FindManyDto, email?: string) {
     const {
       search,
-      company,
+      company_id: companyId,
       is_customer: isCustomer,
       is_partner: isPartner,
       is_supplier: isSupplier,
@@ -28,7 +28,7 @@ export class ContactService {
       ...this.getEmailSearchWhereInput(email, search),
       ...{
         company_contact_company_idTocompany: {
-          name: { contains: company },
+          id: companyId,
           is_customer: isCustomer,
           is_partner: isPartner,
           is_supplier: isSupplier,

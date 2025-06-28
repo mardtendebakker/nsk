@@ -1,6 +1,8 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsBoolean, IsOptional, IsString } from 'class-validator';
-import { Transform } from 'class-transformer';
+import {
+  IsBoolean, IsInt, IsOptional, IsString,
+} from 'class-validator';
+import { Transform, Type } from 'class-transformer';
 import { FindManyDto as BaseFindManyDto } from '../../common/dto/find-many.dto';
 
 const booleanTransformer = ({ value }) => {
@@ -19,8 +21,9 @@ export class FindManyDto extends BaseFindManyDto {
 
   @ApiPropertyOptional()
   @IsOptional()
-  @IsString()
-    company?: string;
+  @Type(() => Number)
+  @IsInt()
+    company_id?: number;
 
   @ApiPropertyOptional()
   @Transform(booleanTransformer)
