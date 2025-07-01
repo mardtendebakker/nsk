@@ -46,13 +46,15 @@ export default function ShippingDetails({
   };
 
   const pictures = Object.entries(formRepresentation.picturesAFiles.value).map(([key, picture]: [string, File:AFile]) => (
-    <ImageInput
-      key={key}
-      disabled={disabled}
-      image={picture instanceof File ? picture : buildAFileLink(picture)}
-      onClear={() => onFileDelete(picture)}
-      sx={{ mr: '.5rem', border: (theme: Theme) => `1px dashed ${theme.palette.divider}`, mt: '1.5rem' }}
-    />
+    <a href={buildAFileLink(picture)} target="_blank" rel="noreferrer">
+      <ImageInput
+        key={key}
+        disabled={disabled}
+        image={buildAFileLink(picture)}
+        onClear={() => onFileDelete(picture)}
+        sx={{ mr: '.5rem', border: (theme: Theme) => `1px dashed ${theme.palette.divider}`, mt: '1.5rem' }}
+      />
+    </a>
   ));
 
   return (
