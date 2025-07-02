@@ -1,13 +1,13 @@
 import { Box } from '@mui/material';
-import { useRef } from 'react';
-import MemoizedTextField from '../../memoizedInput/textField';
 import useTranslation from '../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../hooks/useForm';
 import BorderedBox from '../../borderedBox';
 import SearchAccordion from '../../searchAccordion';
-import debounce from '../../../utils/debounce';
 import useResponsive from '../../../hooks/useResponsive';
 import Checkbox from '../../checkbox';
+import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
+import { AUTOCOMPLETE_COMPANIES_PATH } from '../../../utils/axios';
+import ListFilterDivider from '../../listFilterDivider';
 
 export default function Filter({
   disabled,
@@ -20,14 +20,11 @@ export default function Filter({
   setValue: SetValue,
   onReset: () => void
 }) {
-  const companyInputRef = useRef<HTMLInputElement>(null);
   const { trans } = useTranslation();
   const isDesktop = useResponsive('up', 'sm');
-  const debouncedSetValue = debounce(setValue.bind(null));
 
   const handleReset = () => {
     onReset();
-    if (!formRepresentation.company.disabled) { companyInputRef.current.value = ''; }
   };
 
   return (
@@ -38,9 +35,9 @@ export default function Filter({
         onSearchChange={(value: string) => setValue({ field: 'search', value })}
         searchValue={formRepresentation.search.value?.toString() || ''}
         onReset={handleReset}
-        disabledFilter={formRepresentation.company.disabled}
+        disabledFilter={formRepresentation.company_id.disabled}
       >
-        {!formRepresentation.company.disabled
+        {!formRepresentation.company_id.disabled
         && (
         <Box sx={{
           flex: 1,
@@ -49,22 +46,17 @@ export default function Filter({
           flexDirection: isDesktop ? undefined : 'column',
         }}
         >
-          <MemoizedTextField
-            inputRef={companyInputRef}
-            disabled={disabled || formRepresentation.company?.disabled}
-            name="search"
-            placeholder={trans('company')}
+
+          <DataSourcePicker
+            path={AUTOCOMPLETE_COMPANIES_PATH}
+            disabled={disabled}
             fullWidth
-            defaultValue={formRepresentation.company.value || ''}
-            onChange={(e) => debouncedSetValue({ field: 'company', value: e.target.value })}
-            type="text"
-            sx={{
-              flex: 0.5,
-              fieldset: {
-                display: 'none',
-              },
-            }}
+            displayFieldset={false}
+            placeholder={trans('company')}
+            onChange={(selected: { id: number }) => setValue({ field: 'company_id', value: selected?.id })}
+            value={formRepresentation.company_id.value?.toString()}
           />
+          <ListFilterDivider horizontal={!isDesktop} />
           <Box sx={{
             display: 'flex',
             flexDirection: isDesktop ? undefined : 'column',
