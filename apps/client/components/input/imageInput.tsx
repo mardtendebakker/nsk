@@ -1,9 +1,12 @@
-import { Box, SxProps, Typography } from '@mui/material';
+import {
+  Box, IconButton, SxProps, Typography,
+} from '@mui/material';
 import {
   ChangeEvent, useEffect, useRef, useState,
 } from 'react';
 import Add from '@mui/icons-material/Add';
 import Edit from '@mui/icons-material/Edit';
+import Eye from '@mui/icons-material/RemoveRedEye';
 import Delete from '../button/delete';
 
 export default function ImageInput({
@@ -25,7 +28,7 @@ export default function ImageInput({
   disableEdit?: boolean,
   errorMessage?: string,
   placeholder?: (hovered: boolean) => JSX.Element
-  accept?: string
+  accept?: string,
 }) {
   const ref = useRef<HTMLInputElement>();
   const [hovered, setHovered] = useState(false);
@@ -83,15 +86,34 @@ export default function ImageInput({
       {image && (
       <Delete
         sx={{
-          borderRadius: '.5rem',
+          borderRadius: '1rem',
           position: 'absolute',
-          top: 0,
-          right: 0,
+          top: -10,
+          right: 2,
+          background: 'white',
         }}
         tooltip
         onClick={handleClear}
         disabled={disabled}
       />
+      )}
+      {typeof image == 'string' && (
+        <IconButton
+          sx={{
+            borderRadius: '1rem',
+            border: 0,
+            position: 'absolute',
+            background: 'white',
+            top: -10,
+            right: 32,
+          }}
+          onClick={() => window.open(image, '_blank')}
+          size="small"
+          color="primary"
+          disabled={disabled}
+        >
+          <Eye sx={{ fontSize: '1rem' }} />
+        </IconButton>
       )}
       <label htmlFor={`image-input-${id}`}>
         {onChange && !isEditDisabled && (
