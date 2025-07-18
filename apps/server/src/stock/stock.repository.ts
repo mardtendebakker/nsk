@@ -9,6 +9,37 @@ export class StockRepository {
     protected readonly isRepair?: boolean,
   ) {}
 
+  async refreshStock(): Promise<void> {
+    await this.prisma.$queryRaw`TRUNCATE TABLE stock;`;
+
+    await this.prisma.$queryRaw`
+    INSERT INTO stock (product_id)
+    SELECT p.id
+    FROM product p
+    JOIN product_order po ON po.product_id = p.id
+
+    LEFT JOIN (
+        SELECT po.product_id, SUM(po.quantity) AS purchased_qty
+        FROM product_order po
+        JOIN aorder ao ON ao.id = po.order_id
+        WHERE ao.discr = 'p'
+        GROUP BY po.product_id
+    ) pq ON pq.product_id = p.id
+
+    LEFT JOIN (
+        SELECT po.product_id, SUM(po.quantity) AS sold_qty
+        FROM product_order po
+        JOIN aorder ao ON ao.id = po.order_id
+        LEFT JOIN repair r ON r.order_id = ao.id
+        WHERE ao.discr = 's' AND r.id IS NULL
+        GROUP BY po.product_id
+    ) sq ON sq.product_id = p.id
+
+    WHERE COALESCE(pq.purchased_qty, 0) > COALESCE(sq.sold_qty, 0)
+    GROUP BY p.id;
+    `;
+  }
+
   async findAll(params: Prisma.productFindManyArgs) {
     const {
       skip, cursor, select, orderBy,

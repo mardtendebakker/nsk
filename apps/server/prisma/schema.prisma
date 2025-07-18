@@ -177,6 +177,7 @@ model product {
   location_label_id                                             Int?
   status_id                                                     Int?
   owner_id                                                      Int?
+  stock                                                         stock?
   sku                                                           String              @db.VarChar(16)
   name                                                          String              @db.VarChar(255)
   description                                                   String?             @db.LongText
@@ -194,11 +195,18 @@ model product {
   product_attribute_product_attribute_product_idToproduct       product_attribute[] @relation("product_attribute_product_idToproduct")
   product_attribute_product_attribute_value_product_idToproduct product_attribute[] @relation("product_attribute_value_product_idToproduct")
   product_order                                                 product_order[]
-
   @@index([location_id], map: "IDX_D34A04AD64D218E")
   @@index([status_id], map: "IDX_D34A04AD6BF700BD")
   @@index([type_id], map: "IDX_D34A04ADC54C8C93")
   @@index([location_label_id], map: "product_location_label_id_fkey")
+}
+
+model stock {
+  id                             Int                 @id @default(autoincrement())
+  product_id                     Int                 @unique(map: "uniq_product") 
+  product                        product             @relation(fields: [product_id], references: [id], onUpdate: Restrict, onDelete: Cascade, map: "fk_product")
+
+  @@index([product_id], map: "idx_product")
 }
 
 model product_attribute {

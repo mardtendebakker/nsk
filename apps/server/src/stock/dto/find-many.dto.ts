@@ -5,7 +5,7 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import { FindManyDto as BaseFindManyDto } from '../../common/dto/find-many.dto';
 import { AOrderDiscrimination } from '../../aorder/types/aorder-discrimination.enum';
 import { EntityStatus } from '../../common/types/entity-status.enum';
@@ -69,4 +69,9 @@ export class FindManyDto extends BaseFindManyDto {
   @IsEnum(EntityStatus)
   @Type(() => Number)
     entityStatus?: EntityStatus;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @Transform(({ value }) => value === '1')
+    inStockOnly?: boolean;
 }

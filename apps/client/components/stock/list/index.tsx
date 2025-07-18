@@ -66,6 +66,7 @@ function refreshList({
   formRepresentation,
   router,
   call,
+  type,
 }) {
   const params = new URLSearchParams();
 
@@ -95,6 +96,7 @@ function refreshList({
     params: {
       take: rowsPerPage,
       skip: (page - 1) * rowsPerPage,
+      inStockOnly: type == 'product' ? 1 : 0,
       ...paramsToSend,
     },
   }).then(() => pushURLParams({ params, router })).catch(() => {});
@@ -177,6 +179,7 @@ export default function ListContainer({ type } : { type: ProductType }) {
     formRepresentation,
     router,
     call,
+    type,
   });
 
   useEffect(() => {

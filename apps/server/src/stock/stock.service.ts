@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import * as xlsx from 'xlsx';
 import { HttpService } from '@nestjs/axios';
 import { lastValueFrom } from 'rxjs';
+import { Cron, CronExpression } from '@nestjs/schedule';
 import { LocationService } from '../admin/location/location.service';
 import { StockRepository } from './stock.repository';
 import { StockProcess } from './stock.process';
@@ -57,6 +58,11 @@ export class StockService {
     return processProdcut.run();
   }
 
+  @Cron(CronExpression.EVERY_10_MINUTES, { name: 'refreshStock' })
+  async refreshStock() {
+    await this.repository.refreshStock();
+  }
+
   async findAll(query: FindManyDto, email?: string)
     : Promise<{ count: number; data: ProcessedStock[]; }> {
     const {
@@ -72,6 +78,7 @@ export class StockService {
       search,
       orderBy,
       select,
+      inStockOnly,
       ...restQuery
     } = query;
 
@@ -90,6 +97,7 @@ export class StockService {
 
     const productwhere: Prisma.productWhereInput = {
       ...where,
+      ...inStockOnly ? { stock: { isNot: null } } : {},
       ...(Number.isFinite(entityStatus) && { entity_status: entityStatus }),
       ...(Number.isFinite(this.entityStatus) && { entity_status: this.entityStatus }),
       ...(orderId || excludeByOrderId || excludeByOrderDiscr || email) && {
