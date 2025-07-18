@@ -1,6 +1,6 @@
 import { Box, Card } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import { NextRouter, useRouter } from 'next/router';
 import _ from 'lodash';
 import { trans } from 'itranslator';
 import {
@@ -67,6 +67,13 @@ function refreshList({
   router,
   call,
   type,
+}:{
+  page: number,
+  rowsPerPage: number,
+  formRepresentation: object,
+  router: NextRouter,
+  call,
+  type: ProductType,
 }) {
   const params = new URLSearchParams();
 
@@ -97,6 +104,7 @@ function refreshList({
       take: rowsPerPage,
       skip: (page - 1) * rowsPerPage,
       inStockOnly: type == 'product' ? 1 : 0,
+      outOfStockOnly: type == 'outOfStock' ? 1 : 0,
       ...paramsToSend,
     },
   }).then(() => pushURLParams({ params, router })).catch(() => {});
@@ -107,6 +115,7 @@ const AJAX_PATHS = {
   repair: STOCK_REPAIRS_PATH,
   archived: STOCK_ARCHIVED_PATH,
   webshop: STOCK_WEBSHOP_PATH,
+  outOfStock: STOCK_PRODUCTS_PATH,
 };
 
 export default function ListContainer({ type } : { type: ProductType }) {

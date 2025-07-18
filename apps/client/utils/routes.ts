@@ -20,6 +20,7 @@ export const ORDERS_PURCHASES = '/orders/purchases';
 export const ORDERS_SALES = '/orders/sales';
 export const ORDERS_REPAIRS = '/orders/repairs';
 export const STOCKS_PRODUCTS = '/stock/products';
+export const STOCKS_OUT_OF_STOCK = '/stock/out-of-stock';
 export const ORDERS_PURCHASES_NEW = '/orders/purchases/new';
 export const ORDERS_PURCHASES_EDIT = '/orders/purchases/[id]';
 export const ORDERS_REPAIRS_EDIT = '/orders/repairs/[id]';
