@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CognitoAuthModule } from '@nestjs-cognito/auth';
 import { HttpModule } from '@nestjs/axios';
+import { ScheduleModule } from '@nestjs/schedule';
 import { DashboardModule } from '../dashboard/dashboard.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -99,6 +100,7 @@ import { DriverAdminModule } from '../admin/driver/driver.module';
     SecurityModule,
     VehicleAdminModule,
     DriverAdminModule,
+    ScheduleModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [AppService],
