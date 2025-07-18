@@ -18,15 +18,66 @@ export class OrderRepository extends AOrderRepository {
   }
 
   async analytics(groupBy: GroupBy, email?: string): Promise<AnalyticsResultDto> {
-    const REPAIR_STATUS_ID = 45;
-    const LAST_THIRTY_DAYS = '30';
-    const LAST_TWELVE_MONTH = '12';
+    const MONTH_QUERY_INIT = Prisma.sql`
+      WITH last_12_months AS (
+        SELECT
+          YEAR(DATE_SUB(CURRENT_DATE, INTERVAL n MONTH)) AS year,
+          MONTH(DATE_SUB(CURRENT_DATE, INTERVAL n MONTH)) AS month
+        FROM
+          (SELECT 0 n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3
+          UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7
+          UNION ALL SELECT 8 UNION ALL SELECT 9 UNION ALL SELECT 10 UNION ALL SELECT 11) AS nums
+        )
+        SELECT
+          m.year,
+          m.month,
+          COUNT(o.id) AS count
+        FROM
+          last_12_months m
+        LEFT JOIN
+          aorder o
+            ON YEAR(o.order_date) = m.year AND MONTH(o.order_date) = m.month
+            AND o.order_date > CURRENT_DATE - INTERVAL 12 MONTH
+    `;
+    const DAY_QUERY_INIT = Prisma.sql`
+      WITH last_30_days AS (
+        SELECT
+          DATE(DATE_SUB(CURRENT_DATE, INTERVAL n DAY)) AS day_date,
+          YEAR(DATE_SUB(CURRENT_DATE, INTERVAL n DAY)) AS year,
+          MONTH(DATE_SUB(CURRENT_DATE, INTERVAL n DAY)) AS month,
+          DAY(DATE_SUB(CURRENT_DATE, INTERVAL n DAY)) AS day
+        FROM
+          (SELECT 0 n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4
+          UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
+          UNION ALL SELECT 10 UNION ALL SELECT 11 UNION ALL SELECT 12 UNION ALL SELECT 13 UNION ALL SELECT 14
+          UNION ALL SELECT 15 UNION ALL SELECT 16 UNION ALL SELECT 17 UNION ALL SELECT 18 UNION ALL SELECT 19
+          UNION ALL SELECT 20 UNION ALL SELECT 21 UNION ALL SELECT 22 UNION ALL SELECT 23 UNION ALL SELECT 24
+          UNION ALL SELECT 25 UNION ALL SELECT 26 UNION ALL SELECT 27 UNION ALL SELECT 28 UNION ALL SELECT 29) nums
+        )
+        SELECT
+          d.year,
+          d.month,
+          d.day,
+          COUNT(o.id) AS count
+        FROM
+          last_30_days d
+        LEFT JOIN
+          aorder o
+            ON DATE(o.order_date) = d.day_date
+    `;
+    const PURCHASE_COND = Prisma.sql`AND o.discr = ${AOrderDiscrimination.PURCHASE}`;
+    const SALE_COND = Prisma.sql`AND o.discr = ${AOrderDiscrimination.SALE}
+                      AND NOT EXISTS (SELECT 1 FROM repair r WHERE r.order_id = o.id)`;
+    const REPAIR_COND = Prisma.sql`AND o.discr = ${AOrderDiscrimination.SALE}
+                        AND EXISTS (SELECT 1 FROM repair r WHERE r.order_id = o.id)`;
+    const MONTH_GROUP_SORT = Prisma.sql`GROUP BY year, month ORDER BY year, month;`;
+    const DAY_GROUP_SORT = Prisma.sql`GROUP BY year, month, day ORDER BY year, month, day;`;
 
-    let repairQuery;
-    let saleQuery;
     let purchaseQuery: Sql;
+    let saleQuery: Sql;
+    let repairQuery: Sql;
 
-    const emailCondition = email
+    const EMAIL_COND = email
       ? Prisma.sql`
         AND (
           o.customer_id IN (
@@ -77,76 +128,54 @@ export class OrderRepository extends AOrderRepository {
       `
       : Prisma.sql``;
 
-    saleQuery = Prisma.sql`
-      SELECT YEAR(o.order_date) year, MONTH(o.order_date) month, count(1) count
-      FROM aorder o
-      WHERE o.discr = ${AOrderDiscrimination.SALE}
-      AND o.order_date > CURRENT_DATE - INTERVAL ${LAST_TWELVE_MONTH} MONTH
-      AND o.status_id <> ${REPAIR_STATUS_ID}
-      ${emailCondition}
-      GROUP BY year, month
-      ORDER BY year, month;
-    `;
     purchaseQuery = Prisma.sql`
-      SELECT YEAR(o.order_date) year, MONTH(o.order_date) month, count(1) count
-      FROM aorder o
-      WHERE o.discr = ${AOrderDiscrimination.PURCHASE}
-      AND o.order_date > CURRENT_DATE - INTERVAL ${LAST_TWELVE_MONTH} MONTH
-      AND o.status_id <> ${REPAIR_STATUS_ID}
-      ${emailCondition}
-      GROUP BY year, month
-      ORDER BY year, month;
+      ${MONTH_QUERY_INIT}
+      ${PURCHASE_COND}
+      ${EMAIL_COND}
+      ${MONTH_GROUP_SORT}
+    `;
+    saleQuery = Prisma.sql`
+      ${MONTH_QUERY_INIT}
+      ${SALE_COND}
+      ${EMAIL_COND}
+      ${MONTH_GROUP_SORT}
     `;
     repairQuery = Prisma.sql`
-      SELECT YEAR(o.order_date) year, MONTH(o.order_date) month, count(1) count
-      FROM aorder o
-      WHERE o.order_date > CURRENT_DATE - INTERVAL ${LAST_TWELVE_MONTH} MONTH
-      AND o.status_id = ${REPAIR_STATUS_ID}
-      ${emailCondition}
-      GROUP BY year, month
-      ORDER BY year, month;
+      ${MONTH_QUERY_INIT}
+      ${REPAIR_COND}
+      ${EMAIL_COND}
+      ${MONTH_GROUP_SORT}
     `;
     if (groupBy === GroupBy.DAYS) {
-      saleQuery = Prisma.sql`
-        SELECT YEAR(o.order_date) year, MONTH(o.order_date) month, DAY(o.order_date) day, count(1) count
-        FROM aorder o
-        WHERE o.discr = ${AOrderDiscrimination.SALE}
-        AND o.order_date > CURRENT_DATE - INTERVAL ${LAST_THIRTY_DAYS} DAY
-        AND o.status_id <> ${REPAIR_STATUS_ID}
-        ${emailCondition}
-        GROUP BY year, month, day
-        ORDER BY year, month, day;
-      `;
       purchaseQuery = Prisma.sql`
-        SELECT YEAR(o.order_date) year, MONTH(o.order_date) month, DAY(o.order_date) day, count(1) count
-        FROM aorder o
-        WHERE o.discr = ${AOrderDiscrimination.PURCHASE}
-        AND o.order_date > CURRENT_DATE - INTERVAL ${LAST_THIRTY_DAYS} DAY
-        AND o.status_id <> ${REPAIR_STATUS_ID}
-        ${emailCondition}
-        GROUP BY year, month, day
-        ORDER BY year, month, day;
+        ${DAY_QUERY_INIT}
+        ${PURCHASE_COND}
+        ${EMAIL_COND}
+        ${DAY_GROUP_SORT}
+      `;
+      saleQuery = Prisma.sql`
+        ${DAY_QUERY_INIT}
+        ${SALE_COND}
+        ${EMAIL_COND}
+        ${DAY_GROUP_SORT}
       `;
       repairQuery = Prisma.sql`
-        SELECT YEAR(o.order_date) year, MONTH(o.order_date) month, DAY(o.order_date) day, count(1) count
-        FROM aorder o
-        WHERE o.order_date > CURRENT_DATE - INTERVAL ${LAST_THIRTY_DAYS} DAY
-        AND o.status_id = ${REPAIR_STATUS_ID}
-        ${emailCondition}
-        GROUP BY year, month, day
-        ORDER BY year, month, day;
+        ${DAY_QUERY_INIT}
+        ${REPAIR_COND}
+        ${EMAIL_COND}
+        ${DAY_GROUP_SORT}
       `;
     }
 
     const submission = await this.prisma.$transaction([
-      this.prisma.$queryRaw(saleQuery),
       this.prisma.$queryRaw(purchaseQuery),
+      this.prisma.$queryRaw(saleQuery),
       this.prisma.$queryRaw(repairQuery),
     ]);
 
     const result = {
-      sale: submission[0] as GroupByDateResult[],
-      purchase: submission[1] as GroupByDateResult[],
+      purchase: submission[0] as GroupByDateResult[],
+      sale: submission[1] as GroupByDateResult[],
       repair: submission[2] as GroupByDateResult[],
     };
 
