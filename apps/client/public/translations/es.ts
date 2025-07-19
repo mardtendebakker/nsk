@@ -11,6 +11,7 @@ const translation = {
   editDriver: 'Editar conductor',
   manageLogistics: 'Gestionar logística',
   dashboardMessage: 'Mensaje del tablero',
+  outOfStock: 'Sin stock',
   vehiclesList: {
     search: {
       placeholder: 'Buscar por nombre o número de matrícula',

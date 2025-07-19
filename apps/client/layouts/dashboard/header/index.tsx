@@ -21,6 +21,7 @@ import {
   getRouteGroups,
   COMPANIES,
   STOCKS_WEBSHOP,
+  STOCKS_OUT_OF_STOCK,
 } from '../../../utils/routes';
 import useTranslation from '../../../hooks/useTranslation';
 import useResponsive from '../../../hooks/useResponsive';
@@ -92,6 +93,11 @@ export default function Header() {
           title: trans('products'),
           path: STOCKS_PRODUCTS,
           active: router.pathname.startsWith(STOCKS_PRODUCTS),
+        },
+        {
+          title: trans('outOfStock'),
+          path: STOCKS_OUT_OF_STOCK,
+          active: router.pathname.startsWith(STOCKS_OUT_OF_STOCK),
         },
         {
           title: trans('repairServices'),

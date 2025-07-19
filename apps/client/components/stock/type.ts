@@ -1,1 +1,1 @@
-export type ProductType = 'product' | 'repair' | 'archived' | 'webshop';
+export type ProductType = 'product' | 'repair' | 'archived' | 'webshop' | 'outOfStock';
