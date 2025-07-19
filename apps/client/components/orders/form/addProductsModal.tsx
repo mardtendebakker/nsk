@@ -25,6 +25,7 @@ function refreshList({
   formRepresentation,
   call,
   orderId,
+  inStockOnly,
 }) {
   const paramsToSend = {};
 
@@ -46,6 +47,7 @@ function refreshList({
       entityStatus: 0,
       take: rowsPerPage,
       skip: (page - 1) * rowsPerPage,
+      inStockOnly: inStockOnly ? '1' : '0',
       ...paramsToSend,
     },
   }).catch(() => {});
@@ -55,10 +57,12 @@ export default function AddProductsModal({
   orderId,
   onClose,
   onProductsAdded,
+  inStockOnly = false,
 }:{
   orderId: string,
   onClose: ()=>void,
   onProductsAdded: (productIds: number[]) => void,
+  inStockOnly?: boolean
 }) {
   const { trans } = useTranslation();
   const [page, setPage] = useState<number>(1);
@@ -99,6 +103,7 @@ export default function AddProductsModal({
       formRepresentation,
       call,
       orderId,
+      inStockOnly,
     });
   }, [
     page,

@@ -245,7 +245,7 @@ export default function ProductsTable({ orderId, refreshOrder, vatFactor }:{ ord
           ))}
         </TableBody>
       </PaginatedTable>
-      {showProductsModal && (<AddProductsModal orderId={orderId} onProductsAdded={handleProductsAdded} onClose={() => setShowProductsModal(false)} />)}
+      {showProductsModal && (<AddProductsModal inStockOnly orderId={orderId} onProductsAdded={handleProductsAdded} onClose={() => setShowProductsModal(false)} />)}
     </>
   );
 }
