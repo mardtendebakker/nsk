@@ -30,9 +30,9 @@ export default function SplitModal({ onClose, onConfirm, product }:{
       required: true,
       value: '',
       validator: (({ value }): string | undefined => {
-        if (value.value >= product.stockQuantity) {
+        if (value.value >= product.stock) {
           const vars = new Map();
-          vars.set('value', product.stockQuantity - 1);
+          vars.set('value', product.stock - 1);
           return trans('splitModal.maxStockExceeded', { vars });
         }
         if (value.value < 1) {

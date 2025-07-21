@@ -97,7 +97,7 @@ export default function Row(
         </TableCell>
         )}
         <TableCell>
-          {product.stockQuantity}
+          {product.stock}
         </TableCell>
         <TableCell>
           {product.sale}

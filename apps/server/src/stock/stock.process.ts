@@ -146,7 +146,7 @@ export class StockProcess {
       updated_at: this.rest.updated_at,
       location: this.locationName,
       type: this.typeName,
-      stockQuantity: this.quantityInStock,
+      stock: this.quantityInStock,
       purch: this.quantityPurchased,
       hold: this.quantityOnHold,
       sale: this.quantitySaleable,

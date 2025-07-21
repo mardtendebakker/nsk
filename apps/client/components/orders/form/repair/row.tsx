@@ -59,7 +59,7 @@ export default function Row({
           {product.price}
         </TableCell>
         <TableCell>
-          {product.stockQuantity}
+          {product.stock}
         </TableCell>
         <TableCell>
           <TextField

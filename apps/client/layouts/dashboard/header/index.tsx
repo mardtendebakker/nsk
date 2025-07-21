@@ -95,7 +95,7 @@ export default function Header() {
           active: router.pathname.startsWith(STOCKS_PRODUCTS),
         },
         {
-          title: trans('outOfStock'),
+          title: trans('soldOut'),
           path: STOCKS_OUT_OF_STOCK,
           active: router.pathname.startsWith(STOCKS_OUT_OF_STOCK),
         },

@@ -78,5 +78,5 @@ export class FindManyDto extends BaseFindManyDto {
   @ApiPropertyOptional()
   @IsOptional()
   @Transform(({ value }) => value === '1')
-    outOfStockOnly?: boolean;
+    soldOutOnly?: boolean;
 }

@@ -11,7 +11,7 @@ const translation = {
   editDriver: 'تعديل السائق',
   manageLogistics: 'إدارة الخدمات اللوجستية',
   dashboardMessage: 'رسالة لوحة المعلومات',
-  outOfStock: 'نفدت الكمية',
+  soldOut: 'نفد المخزون',
   vehiclesList: {
     search: {
       placeholder: 'البحث بالاسم أو رقم التسجيل',

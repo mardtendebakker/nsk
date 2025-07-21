@@ -79,7 +79,7 @@ export class StockService {
       orderBy,
       select,
       inStockOnly,
-      outOfStockOnly,
+      soldOutOnly,
       ...restQuery
     } = query;
 
@@ -98,8 +98,8 @@ export class StockService {
 
     const productwhere: Prisma.productWhereInput = {
       ...where,
-      ...inStockOnly ? { stock: { isNot: null } } : {},
-      ...outOfStockOnly ? { stock: { is: null } } : {},
+      ...(inStockOnly && { sold_out: { is: null } }),
+      ...(soldOutOnly && { sold_out: { isNot: null } }),
       ...(Number.isFinite(entityStatus) && { entity_status: entityStatus }),
       ...(Number.isFinite(this.entityStatus) && { entity_status: this.entityStatus }),
       ...(orderId || excludeByOrderId || excludeByOrderDiscr || email) && {

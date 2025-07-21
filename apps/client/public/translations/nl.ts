@@ -153,7 +153,7 @@ const translation = {
   orderStatus: 'Bestelstatus',
   pricingDetails: 'Prijsdetails',
   transportCost: 'Transportkosten',
-  outOfStock: 'Niet op voorraad',
+  soldOut: 'Uitverkocht',
   forgotPasswordSuccessMessage: 'Er is een email verzonden met een verificatiecode.',
   invalidLocationLabelFormat: 'Locatie label is als volgt: %e.g.%',
   emailOrUsername: 'Email of gebruikersnaam',

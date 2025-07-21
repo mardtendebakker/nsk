@@ -23,7 +23,7 @@ export default function Header({ onProductCreated }: { onProductCreated: () => v
     },
     {
       active: router.pathname === STOCKS_OUT_OF_STOCK,
-      text: trans('outOfStock'),
+      text: trans('soldOut'),
       href: STOCKS_OUT_OF_STOCK,
     },
     {

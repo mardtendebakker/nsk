@@ -3,7 +3,7 @@ import useTranslation from '../../../hooks/useTranslation';
 import List from '../../../components/stock/list';
 import DashboardLayout from '../../../layouts/dashboard';
 
-function OutOfStock() {
+function SoldOut() {
   const { trans } = useTranslation();
 
   return (
@@ -11,9 +11,9 @@ function OutOfStock() {
       <Head>
         <title>{trans('stock')}</title>
       </Head>
-      <List type="outOfStock" />
+      <List type="soldOut" />
     </DashboardLayout>
   );
 }
 
-export default OutOfStock;
+export default SoldOut;

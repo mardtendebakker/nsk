@@ -10,7 +10,7 @@ const translation = {
   editVehicle: 'Fahrzeug bearbeiten',
   editDriver: 'Fahrer bearbeiten',
   manageLogistics: 'Logistik verwalten',
-  outOfStock: 'Nicht vorrätig',
+  soldOut: 'Ausverkauft',
   vehiclesList: {
     search: {
       placeholder: 'Nach Name oder Zulassungsnummer suchen',

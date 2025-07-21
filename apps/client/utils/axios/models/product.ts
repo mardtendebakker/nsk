@@ -72,7 +72,7 @@ export interface ProductListItem {
   sale:number,
   sold:number,
   splittable:boolean,
-  stockQuantity:number,
+  stock:number,
   location:string,
   type:string,
   product_order:ProductOrder,

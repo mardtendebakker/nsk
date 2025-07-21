@@ -1,10 +1,10 @@
-import { product, stock } from '@prisma/client';
+import { product, sold_out } from '@prisma/client';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsEnum, IsOptional } from 'class-validator';
 import { Type } from 'class-transformer';
 import { EntityStatus } from '../../common/types/entity-status.enum';
 
-export class Stock implements stock {
+export class SoldOut implements sold_out {
   @ApiProperty()
   @Type(() => Number)
     id: number;
@@ -81,6 +81,6 @@ export class ProductEntity implements product {
     entity_status: EntityStatus;
 
   @ApiProperty()
-  @Type(() => Stock)
-    stock: Stock;
+  @Type(() => SoldOut)
+    sold_out: SoldOut;
 }

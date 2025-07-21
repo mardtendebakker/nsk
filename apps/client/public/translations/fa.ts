@@ -11,7 +11,7 @@ const translation = {
   editDriver: 'ویرایش راننده',
   manageLogistics: 'مدیریت لجستیک',
   dashboardMessage: 'پیام داشبورد',
-  outOfStock: 'خارج از انبار',
+  soldOut: 'ناموجود',
   vehiclesList: {
     search: {
       placeholder: 'جستجو بر اساس نام یا شماره ثبت',

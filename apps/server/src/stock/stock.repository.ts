@@ -10,16 +10,16 @@ export class StockRepository {
   ) {}
 
   async refreshStock(): Promise<void> {
-    await this.prisma.$queryRaw`TRUNCATE TABLE stock;`;
+    await this.prisma.$queryRaw`TRUNCATE TABLE sold_out;`;
 
     await this.prisma.$queryRaw`
-    INSERT INTO stock (product_id)
+    INSERT INTO sold_out (product_id)
     SELECT p.id
     FROM product p
     JOIN product_order po ON po.product_id = p.id
 
     LEFT JOIN (
-        SELECT po.product_id, SUM(po.quantity) AS purchased_qty
+        SELECT po.product_id, SUM(COALESCE(po.quantity, 1)) AS purchased_qty
         FROM product_order po
         JOIN aorder ao ON ao.id = po.order_id
         WHERE ao.discr = 'p'
@@ -27,7 +27,7 @@ export class StockRepository {
     ) pq ON pq.product_id = p.id
 
     LEFT JOIN (
-        SELECT po.product_id, SUM(po.quantity) AS sold_qty
+        SELECT po.product_id, SUM(COALESCE(po.quantity, 1)) AS sold_qty
         FROM product_order po
         JOIN aorder ao ON ao.id = po.order_id
         LEFT JOIN repair r ON r.order_id = ao.id
@@ -35,7 +35,7 @@ export class StockRepository {
         GROUP BY po.product_id
     ) sq ON sq.product_id = p.id
 
-    WHERE COALESCE(pq.purchased_qty, 0) > COALESCE(sq.sold_qty, 0)
+    WHERE COALESCE(pq.purchased_qty, 0) <= COALESCE(sq.sold_qty, 0)
     GROUP BY p.id;
     `;
   }
