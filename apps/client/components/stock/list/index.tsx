@@ -28,6 +28,7 @@ import useBulkPrintChecklist from '../../../hooks/apiCalls/useBulkPrintChecklist
 import useBulkPrintPriceCards from '../../../hooks/apiCalls/useBulkPrintPriceCards';
 import useBulkPrintLabels from '../../../hooks/apiCalls/useBulkPrintLabels';
 import useBulkPrintBarcodes from '../../../hooks/apiCalls/useBulkPrintBarcodes';
+import PatchStatusModal from './patchStatusModal';
 
 function initFormState(
   {
@@ -122,6 +123,7 @@ export default function ListContainer({ type } : { type: ProductType }) {
   const { state: { user } } = useSecurity();
   const router = useRouter();
   const [showChangeLocationModal, setShowChangeLocationModal] = useState(false);
+  const [showChangeStatusModal, setShowChangeStatusModal] = useState(false);
   const [showChangeProductTypeModal, setShowChangeProductTypeModal] = useState(false);
   const [page, setPage] = useState<number>(parseInt(getQueryParam('page', '1'), 10));
   const [rowsPerPage, setRowsPerPage] = useState<number>(parseInt(getQueryParam('rowsPerPage', '10'), 10));
@@ -263,6 +265,7 @@ export default function ListContainer({ type } : { type: ProductType }) {
       .finally(() => {
         setShowChangeLocationModal(false);
         setShowChangeProductTypeModal(false);
+        setShowChangeStatusModal(false);
       });
   };
 
@@ -311,6 +314,7 @@ export default function ListContainer({ type } : { type: ProductType }) {
           onAllCheck={handleAllChecked}
           onArchive={handlePatchArchive}
           onUnarchive={handlePatchUnarchive}
+          onChangeStatus={() => setShowChangeStatusModal(true)}
           onChangeLocation={() => setShowChangeLocationModal(true)}
           onChangeProductType={() => setShowChangeProductTypeModal(true)}
           onPrint={() => printBarcodes(checkedProductIds)}
@@ -344,6 +348,12 @@ export default function ListContainer({ type } : { type: ProductType }) {
           onSubmit={handleSubmitEditProduct}
           id={editProductId.toString()}
           type={type}
+        />
+        )}
+        {showChangeStatusModal && (
+        <PatchStatusModal
+          onClose={() => setShowChangeStatusModal(false)}
+          onSubmit={handlePatch}
         />
         )}
         {showChangeLocationModal && (

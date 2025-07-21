@@ -349,7 +349,7 @@ export class StockService {
   async updateMany(updateManyProductDto: UpdateManyProductDto): Promise<UpdateManyProductResponseDto> {
     const {
       ids, product: {
-        locationId, locationLabel: locationLabelBody, productTypeId, entityStatus, orderUpdatedAt,
+        locationId, locationLabel: locationLabelBody, productTypeId, entityStatus, orderUpdatedAt, statusId,
       },
     } = updateManyProductDto;
 
@@ -374,6 +374,7 @@ export class StockService {
         },
         data: {
           ...(Number.isFinite(locationId) && { location_id: locationId }),
+          ...(Number.isFinite(statusId) && { status_id: statusId }),
           ...(Number.isFinite(locationLabelId) && { location_label_id: locationLabelId }),
           ...(Number.isFinite(entityStatus) && { entity_status: entityStatus }),
           ...(orderUpdatedAt && { order_updated_at: orderUpdatedAt }),

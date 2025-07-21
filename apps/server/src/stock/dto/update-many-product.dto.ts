@@ -16,6 +16,9 @@ export class Product {
 
   @ApiPropertyOptional()
     orderUpdatedAt?: Date;
+
+  @ApiPropertyOptional()
+    statusId?: number;
 }
 
 export class UpdateManyProductDto {
