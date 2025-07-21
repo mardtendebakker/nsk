@@ -4,6 +4,8 @@ import {
 import useTranslation from '../../../hooks/useTranslation';
 import Checkbox from '../../checkbox';
 import PrintActions from '../../printActions';
+import Can from '../../can';
+import Delete from '../../button/delete';
 
 export default function ProductsAction({
   disabled,
@@ -14,6 +16,7 @@ export default function ProductsAction({
   onPrintChecklist,
   onPrintPriceCard,
   onPrintLabel,
+  onDeleteProducts,
 }:{
   disabled: boolean,
   allChecked: boolean,
@@ -23,6 +26,7 @@ export default function ProductsAction({
   onPrintChecklist: () => void,
   onPrintPriceCard: () => void,
   onPrintLabel: () => void,
+  onDeleteProducts?: () => void
 }) {
   const { trans } = useTranslation();
 
@@ -37,13 +41,22 @@ export default function ProductsAction({
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         {checkedProductsCount > 0
         && (
-        <PrintActions
-          disabled={disabled}
-          onPrint={onPrint}
-          onPrintChecklist={onPrintChecklist}
-          onPrintPriceCard={onPrintPriceCard}
-          onPrintLabel={onPrintLabel}
-        />
+          <>
+            <PrintActions
+              disabled={disabled}
+              onPrint={onPrint}
+              onPrintChecklist={onPrintChecklist}
+              onPrintPriceCard={onPrintPriceCard}
+              onPrintLabel={onPrintLabel}
+            />
+            {
+              onDeleteProducts && (
+              <Can requiredGroups={['admin', 'manager', 'logistics', 'local']}>
+                <Delete onClick={onDeleteProducts} />
+              </Can>
+              )
+            }
+          </>
         )}
       </Box>
     </Box>
