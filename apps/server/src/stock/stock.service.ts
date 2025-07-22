@@ -58,7 +58,7 @@ export class StockService {
     return processProdcut.run();
   }
 
-  @Cron(CronExpression.EVERY_10_MINUTES, { name: 'refreshStock' })
+  @Cron(CronExpression.EVERY_MINUTE, { name: 'refreshStock' })
   async refreshStock() {
     await this.repository.refreshStock();
   }
