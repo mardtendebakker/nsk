@@ -19,7 +19,7 @@ export class StockRepository {
     JOIN product_order po ON po.product_id = p.id
 
     LEFT JOIN (
-        SELECT po.product_id, SUM(po.quantity) AS purchased_qty
+        SELECT po.product_id, SUM(COALESCE(po.quantity, 1)) AS purchased_qty
         FROM product_order po
         JOIN aorder ao ON ao.id = po.order_id
         WHERE ao.discr = 'p'
@@ -27,7 +27,7 @@ export class StockRepository {
     ) pq ON pq.product_id = p.id
 
     LEFT JOIN (
-        SELECT po.product_id, SUM(po.quantity) AS sold_qty
+        SELECT po.product_id, SUM(COALESCE(po.quantity, 1)) AS sold_qty
         FROM product_order po
         JOIN aorder ao ON ao.id = po.order_id
         LEFT JOIN repair r ON r.order_id = ao.id
