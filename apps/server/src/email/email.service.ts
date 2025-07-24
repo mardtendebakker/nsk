@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import {
-  SESClient, SendBulkTemplatedEmailCommandInput, SendEmailCommandInput, Template,
+  SESClient, SendBulkTemplatedEmailCommandInput, SendEmailCommandInput, SendEmailCommandOutput, Template,
 } from '@aws-sdk/client-ses';
 import { SendEmailDto } from './dto/send-email.dto';
 import { EmailSES } from './email.ses';
@@ -16,7 +16,7 @@ export class EmailService {
     private readonly emailSES: EmailSES,
   ) {}
 
-  send(sendEmailDto: SendEmailDto) {
+  send(sendEmailDto: SendEmailDto): Promise<SendEmailCommandOutput> {
     const params: SendEmailCommandInput = {
       Destination: {
         ToAddresses: sendEmailDto.to,

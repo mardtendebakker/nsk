@@ -1,9 +1,10 @@
 import { INestApplication, Injectable, OnModuleInit } from '@nestjs/common';
 import { Prisma, PrismaClient } from '@prisma/client';
+import { RabbitMQService } from '../rabbitmq/rabbitmq.service';
 
 @Injectable()
 export class PrismaService extends PrismaClient<Prisma.PrismaClientOptions, Prisma.LogLevel> implements OnModuleInit {
-  constructor() {
+  constructor(private rabbitMQService: RabbitMQService) {
     super();
     // TODO: prisma middleware for updateAt
     /*
@@ -53,6 +54,33 @@ export class PrismaService extends PrismaClient<Prisma.PrismaClientOptions, Pris
       this,
       this.$extends({
         query: {
+          aorder: {
+            update: async ({ args, query }) => {
+              const order = await this.aorder.findFirst({ where: { ...args.where, discr: 'p' } });
+              const result = await query(args);
+
+              if (order && result.status_id != order.status_id) {
+                await this.rabbitMQService.purchaseOrderStatusUpdated(order.id, order.status_id);
+              }
+
+              return result;
+            },
+            updateMany: async ({ args, query }) => {
+              const orders = await this.aorder.findMany({ where: { ...args.where, discr: 'p' } });
+              const result = await query(args);
+              const updatedOrders = await this.aorder.findMany({ where: { id: { in: orders.map(({ id }) => id) } } });
+
+              for (const order of orders) {
+                for (const updatedOrder of updatedOrders) {
+                  if ((updatedOrder.id == order.id) && (updatedOrder.status_id != order.status_id)) {
+                    this.rabbitMQService.purchaseOrderStatusUpdated(order.id, order.status_id);
+                  }
+                }
+              }
+
+              return result;
+            },
+          },
           async $allOperations({
             model, operation, args, query,
           }) {

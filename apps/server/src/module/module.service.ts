@@ -18,6 +18,10 @@ interface TrackingConfig {
   password: string;
 }
 
+interface OrderStatusConfig {
+  fromEmailAddress?: string;
+}
+
 interface BlanccoConfig {
   apiUrl: string;
   apiKey: string;
@@ -68,6 +72,12 @@ export class ModuleService {
 
   async getTrackingConfig(): Promise<TrackingConfig> {
     const result = await this.repository.findOne({ where: { name: 'tracking' } });
+
+    return JSON.parse(result.config);
+  }
+
+  async getOrderStatusConfig(): Promise<OrderStatusConfig> {
+    const result = await this.repository.findOne({ where: { name: 'order_status' } });
 
     return JSON.parse(result.config);
   }
@@ -146,6 +156,13 @@ export class ModuleService {
             required: true,
             type: 'multiSelect' as Type,
             options: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'],
+          },
+        };
+      case 'order_statuses':
+        return {
+          fromEmailAddress: {
+            value: config.fromEmailAddress,
+            type: 'string' as Type,
           },
         };
       default:
