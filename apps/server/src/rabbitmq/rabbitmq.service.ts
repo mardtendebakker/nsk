@@ -1,12 +1,12 @@
 import {
-  Injectable, Logger, OnModuleDestroy, OnModuleInit,
+  Injectable, Logger, OnModuleDestroy,
 } from '@nestjs/common';
 import { ConfirmChannel } from 'amqplib';
 import amqp, { AmqpConnectionManager, ChannelWrapper } from 'amqp-connection-manager';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
-export class RabbitMQService implements OnModuleInit, OnModuleDestroy {
+export class RabbitMQService implements OnModuleDestroy {
   private connection: AmqpConnectionManager;
 
   private ch1: ChannelWrapper;
@@ -15,6 +15,8 @@ export class RabbitMQService implements OnModuleInit, OnModuleDestroy {
 
   private readonly MAGENTO_PAYMENT_PAID: string;
 
+  private readonly RABBITMQ_PURCHASE_ORDER_STATUS_UPDATED_QUEUE: string;
+
   private readonly EXCHANGE: string;
 
   private readonly logger = new Logger(RabbitMQService.name);
@@ -22,19 +24,16 @@ export class RabbitMQService implements OnModuleInit, OnModuleDestroy {
   constructor(private readonly configService: ConfigService) {
     this.URI = this.configService.get<string>('RABBITMQ_URI');
     this.MAGENTO_PAYMENT_PAID = this.configService.get<string>('RABBITMQ_MAGENTO_PAYMENT_PAID');
+    this.RABBITMQ_PURCHASE_ORDER_STATUS_UPDATED_QUEUE = this.configService.get<string>('RABBITMQ_PURCHASE_ORDER_STATUS_UPDATED_QUEUE');
     this.EXCHANGE = this.configService.get<string>('RABBITMQ_EXCHANGE');
   }
 
-  async onModuleInit(): Promise<void> {
-    await this.connect();
-  }
-
-  private async connect(): Promise<void> {
+  public async connect(): Promise<void> {
     try {
       this.connection = amqp.connect([this.URI]);
       this.ch1 = this.connection.createChannel({
         json: true,
-        setup: async (channel: ConfirmChannel) => this.setupQueue(channel, this.MAGENTO_PAYMENT_PAID),
+        setup: async (channel: ConfirmChannel) => this.setupQueues(channel),
       });
       this.logger.log('*** CONNECTED TO RABBITMQ SERVERE ***');
     } catch (err) {
@@ -42,14 +41,24 @@ export class RabbitMQService implements OnModuleInit, OnModuleDestroy {
     }
   }
 
-  private async setupQueue(channel: ConfirmChannel, queue: string) {
+  private async setupQueues(channel: ConfirmChannel) {
     try {
-      await channel.assertQueue(queue, { durable: true });
       await channel.assertExchange(this.EXCHANGE, 'topic', { durable: true });
-      await channel.bindQueue(queue, this.EXCHANGE, queue);
+      await channel.assertQueue(this.MAGENTO_PAYMENT_PAID, { durable: true });
+      await channel.assertQueue(this.RABBITMQ_PURCHASE_ORDER_STATUS_UPDATED_QUEUE, { durable: true });
+      await channel.bindQueue(this.MAGENTO_PAYMENT_PAID, this.EXCHANGE, this.MAGENTO_PAYMENT_PAID);
+      await channel.bindQueue(this.RABBITMQ_PURCHASE_ORDER_STATUS_UPDATED_QUEUE, this.EXCHANGE, this.RABBITMQ_PURCHASE_ORDER_STATUS_UPDATED_QUEUE);
     } catch (err) {
-      this.logger.debug(`Error occuered setting up the queue ${queue}:`, err);
+      this.logger.debug('Error occuered setting up the queues.', err);
     }
+  }
+
+  async purchaseOrderStatusUpdated(orderId: number, previousStatusId: number): Promise<void> {
+    await this.pushToQueue(this.ch1, this.RABBITMQ_PURCHASE_ORDER_STATUS_UPDATED_QUEUE, JSON.stringify({ orderId, previousStatusId }));
+  }
+
+  async consumePurchaseOrderStatusUpdated(onMessage: (msg) => void) {
+    return this.pullFromQueue(this.ch1, this.RABBITMQ_PURCHASE_ORDER_STATUS_UPDATED_QUEUE, onMessage);
   }
 
   async publishOrderFromStore(orderId: string): Promise<void> {
