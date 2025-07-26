@@ -1,5 +1,7 @@
-export interface TotalCount {
+export interface DashboardTotal {
+  totalSpent?: number;
+  totalEarned?: number;
+  totalOrders?: number;
   totalSuppliers?: number;
   totalCustomers?: number;
-  totalOrders?: number;
 }

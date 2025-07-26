@@ -8,7 +8,7 @@ export class DashboardService {
     protected readonly repository: DashboardRepository,
   ) { }
 
-  async totalCount(email?: string) {
+  async total(email?: string) {
     const totalCustomers = await this.repository.companyCount({
       where: {
         is_customer: true,
@@ -36,10 +36,14 @@ export class DashboardService {
       where: this.getOrderWhereInput(email),
     });
 
+    const finances = await this.repository.finances(email);
+
     return {
+      totalSpent: (finances.total_spent / 100),
+      totalEarned: (finances.total_earned / 100),
+      totalOrders,
       totalCustomers,
       totalSuppliers,
-      totalOrders,
     };
   }
 
