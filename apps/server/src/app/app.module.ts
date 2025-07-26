@@ -50,6 +50,7 @@ import { DriverAdminModule } from '../admin/driver/driver.module';
           MAX_RELATION_QUERY_LIMIT: process.env.MAX_RELATION_QUERY_LIMIT || 100,
           MAX_NONE_RELATION_QUERY_LIMIT: process.env.MAX_NONE_RELATION_QUERY_LIMIT || 5000,
           RABBITMQ_MAGENTO_PAYMENT_PAID: process.env.RABBITMQ_MAGENTO_PAYMENT_PAID || 'magento_payment_paid',
+          RABBITMQ_PURCHASE_ORDER_STATUS_UPDATED_QUEUE: process.env.RABBITMQ_PURCHASE_ORDER_STATUS_UPDATED_QUEUE || 'purchase_order_status_updated',
           RABBITMQ_EXCHANGE: process.env.RABBITMQ_EXCHANGE || 'nexxus',
         }),
       ],

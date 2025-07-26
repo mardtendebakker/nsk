@@ -20,9 +20,10 @@ export class ConsumerService implements OnModuleInit {
   ) {}
 
   async onModuleInit() {
-    await this.rabbitMQService.connect();
-    await this.rabbitMQService.consumeWebshopOrderCreated(this.handleWebshopOrderCreated.bind(this));
-    await this.rabbitMQService.consumePurchaseOrderStatusUpdated(this.handleOrderStatusUpdated.bind(this));
+    await this.rabbitMQService.connect(async () => {
+      await this.rabbitMQService.consumeWebshopOrderCreated(this.handleWebshopOrderCreated.bind(this));
+      await this.rabbitMQService.consumePurchaseOrderStatusUpdated(this.handleOrderStatusUpdated.bind(this));
+    });
   }
 
   private async handleWebshopOrderCreated(msg: { order_id: string }): Promise<void> {
