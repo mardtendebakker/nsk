@@ -50,7 +50,7 @@ export const ADMIN_SETTINGS_PRODUCT_STATUSES = '/admin/settings/product-statuses
 export const ADMIN_SETTINGS_ORDER_STATUSES = '/admin/settings/order-statuses';
 export const LOGISTICS_PICKUP = '/logistics/pickups';
 export const LOGISTICS_DELIVERY = '/logistics/deliveries';
-export const DASHBOARD_TOTAL_COUNT = 'dashboard/total/count';
+export const DASHBOARD_TOTAL = '/dashboard/total';
 
 export const getRouteGroups = (uri: string): Group[] => {
   if (uri.startsWith('/admin')) {

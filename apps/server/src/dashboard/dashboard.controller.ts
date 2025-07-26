@@ -3,7 +3,7 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { DashboardService } from './dashboard.service';
-import { TotalCount } from './dto/total-count.dto';
+import { DashboardTotal } from './dto/dashboard-total.dto';
 import { ConnectedUser, ConnectedUserType } from '../security/decorator/connected-user.decorator';
 import { ALL_MAIN_GROUPS, LOCAL_GROUPS, PARTNERS_GROUPS } from '../user/model/group.enum';
 import { Authorization } from '../security/decorator/authorization.decorator';
@@ -15,9 +15,9 @@ import { Authorization } from '../security/decorator/authorization.decorator';
 export class DashboardController {
   constructor(protected readonly dashboardService: DashboardService) {}
 
-  @Get('total/count')
-  @ApiResponse({ type: TotalCount })
-  totalCount(
+  @Get('total')
+  @ApiResponse({ type: DashboardTotal })
+  total(
   @ConnectedUser()
     {
       groups,
@@ -25,9 +25,9 @@ export class DashboardController {
     }: ConnectedUserType,
   ) {
     if (groups.some((group) => LOCAL_GROUPS.includes(group))) {
-      return this.dashboardService.totalCount();
+      return this.dashboardService.total();
     } if (groups.some((group) => PARTNERS_GROUPS.includes(group))) {
-      return this.dashboardService.totalCount(email);
+      return this.dashboardService.total(email);
     }
     throw new ForbiddenException('Insufficient permissions to access this api!');
   }
