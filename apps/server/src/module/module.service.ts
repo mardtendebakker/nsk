@@ -76,8 +76,8 @@ export class ModuleService {
     return JSON.parse(result.config);
   }
 
-  async getOrderStatusConfig(): Promise<OrderStatusConfig> {
-    const result = await this.repository.findOne({ where: { name: 'order_status' } });
+  async getOrderStatusesConfig(): Promise<OrderStatusConfig> {
+    const result = await this.repository.findOne({ where: { name: 'order_statuses' } });
 
     return JSON.parse(result.config);
   }

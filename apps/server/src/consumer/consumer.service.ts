@@ -20,10 +20,8 @@ export class ConsumerService implements OnModuleInit {
   ) {}
 
   async onModuleInit() {
-    await this.rabbitMQService.connect(async () => {
-      await this.rabbitMQService.consumeWebshopOrderCreated(this.handleWebshopOrderCreated.bind(this));
-      await this.rabbitMQService.consumePurchaseOrderStatusUpdated(this.handleOrderStatusUpdated.bind(this));
-    });
+    await this.rabbitMQService.consumeWebshopOrderCreated(this.handleWebshopOrderCreated.bind(this));
+    await this.rabbitMQService.consumePurchaseOrderStatusUpdated(this.handleOrderStatusUpdated.bind(this));
   }
 
   private async handleWebshopOrderCreated(msg: { order_id: string }): Promise<void> {
@@ -74,7 +72,7 @@ export class ConsumerService implements OnModuleInit {
       return;
     }
 
-    const from = (await this.moduleService.getOrderStatusConfig()).fromEmailAddress;
+    const from = (await this.moduleService.getOrderStatusesConfig())?.fromEmailAddress;
 
     if (!order.order_status.mailbody || !from) {
       return;
