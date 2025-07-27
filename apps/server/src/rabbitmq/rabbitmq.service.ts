@@ -9,7 +9,9 @@ import { ConfigService } from '@nestjs/config';
 export class RabbitMQService implements OnModuleDestroy {
   private connection: AmqpConnectionManager;
 
-  private ch1: ChannelWrapper;
+  private purchaseOrderStatusUpdatedChannel: ChannelWrapper;
+
+  private magentoPaymentPaidChannel: ChannelWrapper;
 
   private readonly URI: string;
 
@@ -28,52 +30,55 @@ export class RabbitMQService implements OnModuleDestroy {
     this.EXCHANGE = this.configService.get<string>('RABBITMQ_EXCHANGE');
   }
 
-  public async connect(): Promise<void> {
+  async purchaseOrderStatusUpdated(orderId: number, previousStatusId: number): Promise<void> {
+    await this.pushToQueue(this.purchaseOrderStatusUpdatedChannel, this.RABBITMQ_PURCHASE_ORDER_STATUS_UPDATED_QUEUE, JSON.stringify({ orderId, previousStatusId }));
+  }
+
+  async consumePurchaseOrderStatusUpdated(onMessage: (msg) => void) {
     try {
       this.connection = amqp.connect([this.URI]);
-      this.ch1 = this.connection.createChannel({
+      this.purchaseOrderStatusUpdatedChannel = this.connection.createChannel({
         json: true,
-        setup: async (channel: ConfirmChannel) => this.setupQueues(channel),
+        setup: (channel: ConfirmChannel) => this.setupQueue(channel, this.RABBITMQ_PURCHASE_ORDER_STATUS_UPDATED_QUEUE, () => {
+          this.pullFromQueue(this.purchaseOrderStatusUpdatedChannel, this.RABBITMQ_PURCHASE_ORDER_STATUS_UPDATED_QUEUE, onMessage);
+        }),
       });
-      this.logger.log('*** CONNECTED TO RABBITMQ SERVERE ***');
     } catch (err) {
-      this.logger.debug('Error connecting to RabbitMQ:', err);
+      this.logger.debug('RabbitMQ:', err);
     }
   }
 
-  private async setupQueues(channel: ConfirmChannel) {
+  async publishOrderFromStore(orderId: string): Promise<void> {
+    await this.pushToQueue(this.magentoPaymentPaidChannel, this.MAGENTO_PAYMENT_PAID, JSON.stringify({ order_id: orderId }));
+  }
+
+  async consumeWebshopOrderCreated(onMessage: (msg) => void) {
+    try {
+      this.connection = amqp.connect([this.URI]);
+      this.magentoPaymentPaidChannel = this.connection.createChannel({
+        json: true,
+        setup: (channel: ConfirmChannel) => this.setupQueue(channel, this.MAGENTO_PAYMENT_PAID, () => {
+          this.pullFromQueue(this.magentoPaymentPaidChannel, this.MAGENTO_PAYMENT_PAID, onMessage);
+        }),
+      });
+    } catch (err) {
+      this.logger.debug('RabbitMQ:', err);
+    }
+  }
+
+  private async setupQueue(channel: ConfirmChannel, queue: string, onSetup: () => void) {
     try {
       await channel.assertExchange(this.EXCHANGE, 'topic', { durable: true });
-      await channel.assertQueue(this.MAGENTO_PAYMENT_PAID, { durable: true });
-      await channel.assertQueue(this.RABBITMQ_PURCHASE_ORDER_STATUS_UPDATED_QUEUE, { durable: true });
-      await channel.bindQueue(this.MAGENTO_PAYMENT_PAID, this.EXCHANGE, this.MAGENTO_PAYMENT_PAID);
-      await channel.bindQueue(this.RABBITMQ_PURCHASE_ORDER_STATUS_UPDATED_QUEUE, this.EXCHANGE, this.RABBITMQ_PURCHASE_ORDER_STATUS_UPDATED_QUEUE);
+      await channel.assertQueue(queue, { durable: true });
+      await channel.bindQueue(queue, this.EXCHANGE, queue);
+      onSetup();
     } catch (err) {
       this.logger.debug('Error occuered setting up the queues.', err);
     }
   }
 
-  async purchaseOrderStatusUpdated(orderId: number, previousStatusId: number): Promise<void> {
-    await this.pushToQueue(this.ch1, this.RABBITMQ_PURCHASE_ORDER_STATUS_UPDATED_QUEUE, JSON.stringify({ orderId, previousStatusId }));
-  }
-
-  async consumePurchaseOrderStatusUpdated(onMessage: (msg) => void) {
-    return this.pullFromQueue(this.ch1, this.RABBITMQ_PURCHASE_ORDER_STATUS_UPDATED_QUEUE, onMessage);
-  }
-
-  async publishOrderFromStore(orderId: string): Promise<void> {
-    await this.pushToQueue(this.ch1, this.MAGENTO_PAYMENT_PAID, JSON.stringify({ order_id: orderId }));
-  }
-
-  async consumeWebshopOrderCreated(onMessage: (msg) => void) {
-    return this.pullFromQueue(this.ch1, this.MAGENTO_PAYMENT_PAID, onMessage);
-  }
-
   private async pushToQueue(channelWrapper: ChannelWrapper, queue: string, text: string) {
     try {
-      if (!channelWrapper) {
-        await this.connect();
-      }
       await channelWrapper.sendToQueue(queue, text);
       this.logger.log(`-- message pushed to queue ${queue} --`);
     } catch (err) {
