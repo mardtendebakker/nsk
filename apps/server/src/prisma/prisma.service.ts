@@ -80,6 +80,12 @@ export class PrismaService extends PrismaClient<Prisma.PrismaClientOptions, Pris
 
               return result;
             },
+            create: async ({ args, query }) => {
+              const order = await query(args);
+              await this.rabbitMQService.purchaseOrderStatusUpdated(order.id, order.status_id);
+
+              return order;
+            },
           },
           async $allOperations({
             model, operation, args, query,
