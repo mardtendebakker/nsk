@@ -11,6 +11,11 @@ const translation = {
   editDriver: 'Bestuurder bewerken',
   manageLogistics: 'Logistiek beheren',
   dashboardMessage: 'Dashboard-bericht',
+  apply: 'Toepassen',
+  clear: 'Wissen',
+  selectDateRange: 'Datumbereik selecteren',
+  startDate: 'Startdatum',
+  endDate: 'Einddatum',
   vehiclesList: {
     search: {
       placeholder: 'Zoeken op naam of kentekennummer',

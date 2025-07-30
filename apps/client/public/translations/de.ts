@@ -11,6 +11,11 @@ const translation = {
   editDriver: 'Fahrer bearbeiten',
   manageLogistics: 'Logistik verwalten',
   outOfStock: 'Nicht vorrätig',
+  apply: 'Anwenden',
+  clear: 'Löschen',
+  selectDateRange: 'Datumsbereich auswählen',
+  startDate: 'Startdatum',
+  endDate: 'Enddatum',
   vehiclesList: {
     search: {
       placeholder: 'Nach Name oder Zulassungsnummer suchen',
