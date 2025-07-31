@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { SetValue, FormRepresentation } from '../../../../../hooks/useForm';
 import useTranslation from '../../../../../hooks/useTranslation';
 import BorderedBox from '../../../../borderedBox';
@@ -23,7 +23,7 @@ export default function Form({
       <TextField
         sx={{ mb: '1rem' }}
         fullWidth
-        label={trans('orderStatusForm.name.label')}
+        label={trans('name')}
         placeholder={trans('orderStatusForm.name.placeholder')}
         value={formRepresentation.name.value || ''}
         helperText={formRepresentation.name.error}
@@ -45,19 +45,19 @@ export default function Form({
           disabled={disabled}
           onCheck={(checked) => setValue({ field: 'isPurchase', value: checked })}
           checked={formRepresentation.isPurchase.value as boolean}
-          label={trans('isPurchase')}
+          label={trans('purchase')}
         />
         <Checkbox
           disabled={disabled}
           onCheck={(checked) => setValue({ field: 'isSale', value: checked })}
           checked={formRepresentation.isSale.value as boolean}
-          label={trans('isSale')}
+          label={trans('sale')}
         />
         <Checkbox
           disabled={disabled}
           onCheck={(checked) => setValue({ field: 'isRepair', value: checked })}
           checked={formRepresentation.isRepair.value as boolean}
-          label={trans('isRepair')}
+          label={trans('repair')}
         />
       </Box>
       <TextField
@@ -68,11 +68,15 @@ export default function Form({
         label={trans('orderStatusForm.mailBody.label')}
         placeholder={trans('orderStatusForm.mailBody.placeholder')}
         value={formRepresentation.mailBody.value || ''}
-        helperText={formRepresentation.mailBody.error}
-        error={!!formRepresentation.mailBody.error}
+        helperText={trans('orderStatusForm.mailBody.helperText')}
         onChange={(e) => setValue({ field: 'mailBody', value: e.target.value })}
         disabled={disabled}
       />
+      <Typography sx={{ mx: '.8rem' }} variant="body1" color="text.secondary">{trans('orderStatusForm.mailBodyVariables.orderNr')}</Typography>
+      <Typography sx={{ mx: '.8rem' }} variant="body1" color="text.secondary">{trans('orderStatusForm.mailBodyVariables.pickupDate')}</Typography>
+      <Typography sx={{ mx: '.8rem' }} variant="body1" color="text.secondary">{trans('orderStatusForm.mailBodyVariables.orderDate')}</Typography>
+      <Typography sx={{ mx: '.8rem' }} variant="body1" color="text.secondary">{trans('orderStatusForm.mailBodyVariables.supplierName')}</Typography>
+      <Typography sx={{ mx: '.8rem' }} variant="body1" color="text.secondary">{trans('orderStatusForm.mailBodyVariables.customerName')}</Typography>
     </BorderedBox>
   );
 }

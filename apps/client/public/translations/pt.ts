@@ -645,8 +645,17 @@ const translation = {
     mailBody: {
       label: 'Corpo do e-mail',
       placeholder: 'Digite corpo do e-mail',
+      helperText: 'Use as variáveis disponíveis para enriquecer o e-mail usando a seguinte sintaxe: {{variável}}. As variáveis disponíveis são:',
+    },
+    mailBodyVariables: {
+      orderNr: '{{orderNr}} O identificador único do pedido.',
+      pickupDate: '{{pickupDate}} A data de coleta planejada.',
+      orderDate: '{{orderDate}} A data em que o pedido foi criado.',
+      supplierName: '{{supplierName}} Nome do fornecedor.',
+      customerName: '{{customerName}} Nome do cliente.',
     },
   },
+  editOrderStatus: 'Editar status do pedido',
   productStatuses: 'Status do produto',
   newProductStatus: 'Novo status do produto',
   createProductStatus: 'Criar status do produto',

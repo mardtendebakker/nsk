@@ -669,8 +669,17 @@ const translation = {
     mailBody: {
       label: 'جسم البريد',
       placeholder: 'أدخل محتوى البريد',
+      helperText: 'استخدم المتغيرات المتاحة لإثراء البريد الإلكتروني باستخدام البنية التالية: {{متغير}}. المتغيرات المتاحة هي:',
+    },
+    mailBodyVariables: {
+      orderNr: '{{orderNr}} المعرف الفريد للطلب.',
+      pickupDate: '{{pickupDate}} تاريخ الاستلام المخطط له.',
+      orderDate: '{{orderDate}} التاريخ الذي تم إنشاء الطلب فيه.',
+      supplierName: '{{supplierName}} نام تامین‌کننده.',
+      customerName: '{{customerName}} نام مشتری.',
     },
   },
+  editOrderStatus: 'تعديل حالة الطلب',
   productStatuses: 'حالات المنتجات',
   newProductStatus: 'حالة منتج جديدة',
   createProductStatus: 'إنشاء حالة منتج',

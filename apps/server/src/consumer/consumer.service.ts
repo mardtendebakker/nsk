@@ -88,6 +88,8 @@ export class ConsumerService implements OnModuleInit {
         orderNr: order.order_nr,
         pickupDate: order.pickup?.real_pickup_date ? format(order.pickup.real_pickup_date, 'd-MM-Y') : '',
         orderDate: format(order.order_date, 'd-MM-Y H:i'),
+        supplierName: order.contact_aorder_supplier_idTocontact?.name,
+        customerName: order.contact_aorder_customer_idTocontact?.name,
       }),
     });
   }

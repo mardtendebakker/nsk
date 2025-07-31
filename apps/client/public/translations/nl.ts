@@ -666,8 +666,17 @@ const translation = {
     mailBody: {
       label: 'Post inhoud',
       placeholder: 'Typ Post inhoud',
+      helperText: 'Gebruik beschikbare variabelen om de e-mail te verrijken met de volgende syntaxis: {{variabele}}. Beschikbare variabelen zijn:',
+    },
+    mailBodyVariables: {
+      orderNr: '{{orderNr}} De unieke identificatie van de bestelling.',
+      pickupDate: '{{pickupDate}} De geplande ophaaldatum.',
+      orderDate: '{{orderDate}} De datum waarop de bestelling is aangemaakt.',
+      supplierName: '{{supplierName}} Naam van de leverancier.',
+      customerName: '{{customerName}} Naam van de klant.',
     },
   },
+  editOrderStatus: 'Bestelstatus bew  erken',
   productStatuses: 'Productstatussen',
   newProductStatus: 'Nieuwe productstatus',
   createProductStatus: 'Productstatus aanmaken',
