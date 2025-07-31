@@ -12,6 +12,11 @@ const translation = {
   manageLogistics: 'مدیریت لجستیک',
   dashboardMessage: 'پیام داشبورد',
   outOfStock: 'خارج از انبار',
+  apply: 'اعمال',
+  clear: 'پاک کردن',
+  selectDateRange: 'انتخاب بازه تاریخ',
+  startDate: 'تاریخ شروع',
+  endDate: 'تاریخ پایان',
   vehiclesList: {
     search: {
       placeholder: 'جستجو بر اساس نام یا شماره ثبت',

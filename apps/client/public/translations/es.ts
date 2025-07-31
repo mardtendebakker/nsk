@@ -12,6 +12,11 @@ const translation = {
   manageLogistics: 'Gestionar logística',
   dashboardMessage: 'Mensaje del tablero',
   outOfStock: 'Sin stock',
+  apply: 'Aplicar',
+  clear: 'Limpiar',
+  selectDateRange: 'Seleccionar rango de fechas',
+  startDate: 'Fecha de inicio',
+  endDate: 'Fecha de fin',
   vehiclesList: {
     search: {
       placeholder: 'Buscar por nombre o número de matrícula',

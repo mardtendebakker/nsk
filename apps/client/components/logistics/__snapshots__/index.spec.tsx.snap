@@ -151,55 +151,58 @@ exports[`Logistics component matches snapshot 1`] = `
           class="MuiBox-root css-gvrrax"
         >
           <div
-            class="MuiBox-root css-70qvj9"
+            class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-f6qis1-MuiFormControl-root-MuiTextField-root"
           >
-            <button
-              class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1s57ptu-MuiButtonBase-root-MuiIconButton-root"
-              data-testid="previous"
-              tabindex="0"
-              type="button"
+            <div
+              class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-sizeSmall MuiInputBase-adornedEnd Mui-readOnly MuiInputBase-readOnly css-154xyx0-MuiInputBase-root-MuiOutlinedInput-root"
             >
-              <svg
-                aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
-                data-testid="ChevronLeftIcon"
-                focusable="false"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"
-                />
-              </svg>
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              <input
+                aria-invalid="false"
+                class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall MuiInputBase-inputAdornedEnd Mui-readOnly MuiInputBase-readOnly css-19qh8xo-MuiInputBase-input-MuiOutlinedInput-input"
+                id=":r4:"
+                readonly=""
+                type="text"
+                value="10/05/2020 - 10/10/2020"
               />
-            </button>
-            <h4
-              class="MuiTypography-root MuiTypography-h4 css-5lbw0b-MuiTypography-root"
-            >
-              05 oktober 2020
-            </h4>
-            <button
-              class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-qhtpox-MuiButtonBase-root-MuiIconButton-root"
-              data-testid="next"
-              tabindex="0"
-              type="button"
-            >
-              <svg
-                aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
-                data-testid="ChevronRightIcon"
-                focusable="false"
-                viewBox="0 0 24 24"
+              <div
+                class="MuiInputAdornment-root MuiInputAdornment-positionEnd MuiInputAdornment-outlined MuiInputAdornment-sizeSmall css-1laqsz7-MuiInputAdornment-root"
               >
-                <path
-                  d="M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"
-                />
-              </svg>
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-              />
-            </button>
+                <button
+                  class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+                  tabindex="0"
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                    data-testid="CalendarTodayIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2m0 18H4V8h16z"
+                    />
+                  </svg>
+                  <span
+                    class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                  />
+                </button>
+              </div>
+              <fieldset
+                aria-hidden="true"
+                class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+              >
+                <legend
+                  class="css-ihdtdm"
+                >
+                  <span
+                    class="notranslate"
+                  >
+                    ​
+                  </span>
+                </legend>
+              </fieldset>
+            </div>
           </div>
           <div
             class="MuiFormControl-root MuiTextField-root css-151uf07-MuiFormControl-root-MuiTextField-root"
@@ -221,7 +224,7 @@ exports[`Logistics component matches snapshot 1`] = `
               <input
                 aria-invalid="false"
                 class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall MuiInputBase-inputAdornedStart css-1ua80n0-MuiInputBase-input-MuiOutlinedInput-input"
-                id=":r4:"
+                id=":r5:"
                 name="logistics-search"
                 placeholder="logisticsPage.search.placeholder"
                 type="text"
@@ -245,7 +248,7 @@ exports[`Logistics component matches snapshot 1`] = `
           </div>
         </div>
         <div
-          class="MuiBox-root css-8atqhb"
+          class="MuiBox-root css-1gw5oic"
         >
           <table
             class="MuiTable-root css-6g2jax-MuiTable-root"
@@ -261,34 +264,40 @@ exports[`Logistics component matches snapshot 1`] = `
                   scope="col"
                 />
                 <th
-                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-2w85qi-MuiTableCell-root"
+                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-p5h3am-MuiTableCell-root"
                   scope="col"
                 >
-                  maandag 5
+                  oktober - maandag 5
                 </th>
                 <th
-                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-2w85qi-MuiTableCell-root"
+                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-p5h3am-MuiTableCell-root"
                   scope="col"
                 >
-                  dinsdag 6
+                  oktober - dinsdag 6
                 </th>
                 <th
-                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-2w85qi-MuiTableCell-root"
+                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-p5h3am-MuiTableCell-root"
                   scope="col"
                 >
-                  woensdag 7
+                  oktober - woensdag 7
                 </th>
                 <th
-                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-2w85qi-MuiTableCell-root"
+                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-p5h3am-MuiTableCell-root"
                   scope="col"
                 >
-                  donderdag 8
+                  oktober - donderdag 8
                 </th>
                 <th
-                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-2w85qi-MuiTableCell-root"
+                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-p5h3am-MuiTableCell-root"
                   scope="col"
                 >
-                  vrijdag 9
+                  oktober - vrijdag 9
+                </th>
+                <th
+                  class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-p5h3am-MuiTableCell-root"
+                  scope="col"
+                >
+                  oktober - zaterdag 10
                 </th>
               </tr>
             </thead>
@@ -323,7 +332,7 @@ exports[`Logistics component matches snapshot 1`] = `
                   class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-8ylwpj-MuiTableCell-root"
                 >
                   <div
-                    class="MuiBox-root css-2nrh03"
+                    class="MuiBox-root css-1o6ff3l"
                     data-testid="event"
                   >
                     <div
@@ -338,7 +347,7 @@ exports[`Logistics component matches snapshot 1`] = `
                     </div>
                   </div>
                   <div
-                    class="MuiBox-root css-9gge1a"
+                    class="MuiBox-root css-1sqriqn"
                     data-testid="event"
                   >
                     <div
@@ -348,11 +357,14 @@ exports[`Logistics component matches snapshot 1`] = `
                       <p
                         class="MuiTypography-root MuiTypography-inherit css-191i2np-MuiTypography-root"
                       >
-                        event22, 11:10
+                        event22, 11:40
                       </p>
                     </div>
                   </div>
                 </td>
+                <td
+                  class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-8ylwpj-MuiTableCell-root"
+                />
               </tr>
               <tr
                 class="MuiTableRow-root css-6trxil-MuiTableRow-root"
@@ -364,6 +376,9 @@ exports[`Logistics component matches snapshot 1`] = `
                     class="MuiBox-root css-uncmf7"
                   />
                 </td>
+                <td
+                  class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-8ylwpj-MuiTableCell-root"
+                />
                 <td
                   class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-8ylwpj-MuiTableCell-root"
                 />
@@ -407,6 +422,9 @@ exports[`Logistics component matches snapshot 1`] = `
                 <td
                   class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-8ylwpj-MuiTableCell-root"
                 />
+                <td
+                  class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-8ylwpj-MuiTableCell-root"
+                />
               </tr>
               <tr
                 class="MuiTableRow-root css-6trxil-MuiTableRow-root"
@@ -418,6 +436,9 @@ exports[`Logistics component matches snapshot 1`] = `
                     class="MuiBox-root css-uncmf7"
                   />
                 </td>
+                <td
+                  class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-8ylwpj-MuiTableCell-root"
+                />
                 <td
                   class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-8ylwpj-MuiTableCell-root"
                 />
@@ -461,6 +482,9 @@ exports[`Logistics component matches snapshot 1`] = `
                 <td
                   class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-8ylwpj-MuiTableCell-root"
                 />
+                <td
+                  class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-8ylwpj-MuiTableCell-root"
+                />
               </tr>
               <tr
                 class="MuiTableRow-root css-6trxil-MuiTableRow-root"
@@ -472,6 +496,9 @@ exports[`Logistics component matches snapshot 1`] = `
                     class="MuiBox-root css-uncmf7"
                   />
                 </td>
+                <td
+                  class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-8ylwpj-MuiTableCell-root"
+                />
                 <td
                   class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-8ylwpj-MuiTableCell-root"
                 />
@@ -515,6 +542,9 @@ exports[`Logistics component matches snapshot 1`] = `
                 <td
                   class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-8ylwpj-MuiTableCell-root"
                 />
+                <td
+                  class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-8ylwpj-MuiTableCell-root"
+                />
               </tr>
               <tr
                 class="MuiTableRow-root css-6trxil-MuiTableRow-root"
@@ -526,6 +556,9 @@ exports[`Logistics component matches snapshot 1`] = `
                     class="MuiBox-root css-uncmf7"
                   />
                 </td>
+                <td
+                  class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-8ylwpj-MuiTableCell-root"
+                />
                 <td
                   class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-8ylwpj-MuiTableCell-root"
                 />
@@ -569,6 +602,9 @@ exports[`Logistics component matches snapshot 1`] = `
                 <td
                   class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-8ylwpj-MuiTableCell-root"
                 />
+                <td
+                  class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-8ylwpj-MuiTableCell-root"
+                />
               </tr>
               <tr
                 class="MuiTableRow-root css-6trxil-MuiTableRow-root"
@@ -580,6 +616,9 @@ exports[`Logistics component matches snapshot 1`] = `
                     class="MuiBox-root css-uncmf7"
                   />
                 </td>
+                <td
+                  class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-8ylwpj-MuiTableCell-root"
+                />
                 <td
                   class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-8ylwpj-MuiTableCell-root"
                 />
@@ -623,6 +662,9 @@ exports[`Logistics component matches snapshot 1`] = `
                 <td
                   class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-8ylwpj-MuiTableCell-root"
                 />
+                <td
+                  class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-8ylwpj-MuiTableCell-root"
+                />
               </tr>
               <tr
                 class="MuiTableRow-root css-6trxil-MuiTableRow-root"
@@ -634,6 +676,9 @@ exports[`Logistics component matches snapshot 1`] = `
                     class="MuiBox-root css-uncmf7"
                   />
                 </td>
+                <td
+                  class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-8ylwpj-MuiTableCell-root"
+                />
                 <td
                   class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-8ylwpj-MuiTableCell-root"
                 />
@@ -677,6 +722,9 @@ exports[`Logistics component matches snapshot 1`] = `
                 <td
                   class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-8ylwpj-MuiTableCell-root"
                 />
+                <td
+                  class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-8ylwpj-MuiTableCell-root"
+                />
               </tr>
               <tr
                 class="MuiTableRow-root css-6trxil-MuiTableRow-root"
@@ -688,6 +736,9 @@ exports[`Logistics component matches snapshot 1`] = `
                     class="MuiBox-root css-uncmf7"
                   />
                 </td>
+                <td
+                  class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-8ylwpj-MuiTableCell-root"
+                />
                 <td
                   class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-8ylwpj-MuiTableCell-root"
                 />
@@ -731,6 +782,9 @@ exports[`Logistics component matches snapshot 1`] = `
                 <td
                   class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-8ylwpj-MuiTableCell-root"
                 />
+                <td
+                  class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-8ylwpj-MuiTableCell-root"
+                />
               </tr>
               <tr
                 class="MuiTableRow-root css-6trxil-MuiTableRow-root"
@@ -742,6 +796,9 @@ exports[`Logistics component matches snapshot 1`] = `
                     class="MuiBox-root css-uncmf7"
                   />
                 </td>
+                <td
+                  class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-8ylwpj-MuiTableCell-root"
+                />
                 <td
                   class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-8ylwpj-MuiTableCell-root"
                 />
@@ -785,6 +842,9 @@ exports[`Logistics component matches snapshot 1`] = `
                 <td
                   class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-8ylwpj-MuiTableCell-root"
                 />
+                <td
+                  class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-8ylwpj-MuiTableCell-root"
+                />
               </tr>
               <tr
                 class="MuiTableRow-root css-6trxil-MuiTableRow-root"
@@ -796,6 +856,9 @@ exports[`Logistics component matches snapshot 1`] = `
                     class="MuiBox-root css-uncmf7"
                   />
                 </td>
+                <td
+                  class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-8ylwpj-MuiTableCell-root"
+                />
                 <td
                   class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-8ylwpj-MuiTableCell-root"
                 />
@@ -839,6 +902,9 @@ exports[`Logistics component matches snapshot 1`] = `
                 <td
                   class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-8ylwpj-MuiTableCell-root"
                 />
+                <td
+                  class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-8ylwpj-MuiTableCell-root"
+                />
               </tr>
               <tr
                 class="MuiTableRow-root css-6trxil-MuiTableRow-root"
@@ -850,6 +916,9 @@ exports[`Logistics component matches snapshot 1`] = `
                     class="MuiBox-root css-uncmf7"
                   />
                 </td>
+                <td
+                  class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-8ylwpj-MuiTableCell-root"
+                />
                 <td
                   class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-8ylwpj-MuiTableCell-root"
                 />

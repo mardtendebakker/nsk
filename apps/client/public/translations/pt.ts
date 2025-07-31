@@ -15,6 +15,11 @@ const translation = {
   manageLogistics: 'Gerenciar logística',
   dashboardMessage: 'Mensagem do painel',
   outOfStock: 'Fora de estoque',
+  apply: 'Aplicar',
+  clear: 'Limpar',
+  selectDateRange: 'Selecionar intervalo de datas',
+  startDate: 'Data de início',
+  endDate: 'Data de fim',
   vehiclesList: {
     search: {
       placeholder: 'Pesquisar por nome ou número de registro',

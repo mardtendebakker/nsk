@@ -12,6 +12,11 @@ const translation = {
   manageLogistics: 'إدارة الخدمات اللوجستية',
   dashboardMessage: 'رسالة لوحة المعلومات',
   outOfStock: 'نفدت الكمية',
+  apply: 'تطبيق',
+  clear: 'مسح',
+  selectDateRange: 'اختيار نطاق التاريخ',
+  startDate: 'تاريخ البداية',
+  endDate: 'تاريخ النهاية',
   vehiclesList: {
     search: {
       placeholder: 'البحث بالاسم أو رقم التسجيل',

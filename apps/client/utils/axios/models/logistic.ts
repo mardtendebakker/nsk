@@ -23,14 +23,14 @@ export interface LogisticServiceListItem {
 
 export interface Supplier {
   city:string,
-  country:string,
-  state:string,
-  zip:string,
-  street:string,
+  country?:string,
+  state?:string,
+  zip?:string,
+  street?:string,
   phone:string,
   company_name:string,
   email:string,
-  name:string
+  name?:string
 }
 
 export type Customer = Supplier;
