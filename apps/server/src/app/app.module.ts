@@ -39,6 +39,7 @@ import { ConsumerModule } from '../consumer/consumer.module';
 import { SecurityModule } from '../security/security.module';
 import { VehicleAdminModule } from '../admin/vehicle/vehicle.module';
 import { DriverAdminModule } from '../admin/driver/driver.module';
+import { LogModule } from '../log/log.module';
 
 @Module({
   imports: [
@@ -101,6 +102,7 @@ import { DriverAdminModule } from '../admin/driver/driver.module';
     SecurityModule,
     VehicleAdminModule,
     DriverAdminModule,
+    LogModule,
     ScheduleModule.forRoot(),
   ],
   controllers: [AppController],
