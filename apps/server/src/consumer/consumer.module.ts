@@ -12,6 +12,7 @@ import { PurchaseRepository } from '../purchase/purchase.repository';
 import { PrismaService } from '../prisma/prisma.service';
 import { ModuleService } from '../module/module.service';
 import { ModuleRepository } from '../module/module.repository';
+import { EmailLogRepository } from '../log/email-log.repository';
 
 @Module({
   providers: [
@@ -23,6 +24,8 @@ import { ModuleRepository } from '../module/module.repository';
     PrismaService,
     ModuleService,
     ModuleRepository,
+    EmailLogRepository,
+    EmailService,
   ],
   imports: [
     RabbitMQModule,

@@ -33,7 +33,9 @@ export const STOCKS_WEBSHOP = '/stock/webshop';
 export const ADMIN_USERS = '/admin/users';
 export const ADMIN_MODULES = '/admin/modules';
 export const ADMIN_LOGISTICS = '/admin/logistics';
+export const ADMIN_LOGS = '/logs';
 export const ADMIN_THEME = '/admin/theme';
+export const LOGS_EMAILS = '/logs/emails';
 export const ADMIN_MODULES_PAYMENTS = '/admin/modules/payments';
 export const ADMIN_MODULES_CART = '/admin/modules/cart';
 export const ADMIN_LOGISTICS_VEHICLES = '/admin/logistics/vehicles';
@@ -67,6 +69,9 @@ export const getRouteGroups = (uri: string): Group[] => {
 
   if (uri.startsWith('/stock')) {
     return ['super_admin', 'admin', 'manager', 'logistics', 'local', 'store_publisher'];
+  }
+  if (uri.startsWith('/logs')) {
+    return ['logistics', 'manager', 'admin', 'super_admin'];
   }
 
   if (

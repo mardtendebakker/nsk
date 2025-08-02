@@ -39,6 +39,7 @@ export const PRODUCT_TYPES_PATH = '/admin/product-types/:id';
 export const LOCATIONS_PATH = '/admin/locations/:id';
 export const ADMIN_VEHICLES_PATH = '/admin/vehicles/:id';
 export const ADMIN_DRIVERS_PATH = '/admin/drivers/:id';
+export const LOGS_EMAILS_PATH = '/logs/emails';
 export const VEHICLES_PATH = '/vehicles';
 export const BULK_PRINT_NORMAL_SALES_PATH = '/sales/bulk/print/normal';
 export const BULK_PRINT_NORMAL_REPAIRS_PATH = '/repairs/bulk/print/normal';
