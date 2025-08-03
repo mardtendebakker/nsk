@@ -3,7 +3,7 @@ import { Transform, Type } from 'class-transformer';
 import { IsInt, IsString } from 'class-validator';
 import { PostCommonDto } from './PostCommon.dto';
 import { CommonFormDto } from './common-form.dto';
-import { formDataNumberTransform, formDataStringTransform } from '../../common/transforms/form-date.transform';
+import { formDataNumberTransform, formDataStringTransform } from '../../common/transforms/form-data.transform';
 import { TermsDto } from './terms.dto';
 import { OrderContactDto } from './order-contact.dto';
 import { ExtraDto } from './extra.dto';

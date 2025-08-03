@@ -4,7 +4,7 @@ import { Transform, Type } from 'class-transformer';
 import {
   IsBoolean, IsInt, IsNumber, IsOptional, IsString,
 } from 'class-validator';
-import { formDataDateTransform, formDataNumberTransform, formDataStringTransform } from '../../common/transforms/form-date.transform';
+import { formDataDateTransform, formDataNumberTransform, formDataStringTransform } from '../../common/transforms/form-data.transform';
 
 export class PrismaAOrderCreateInputDto implements Prisma.aorderCreateInput {
   @ApiPropertyOptional()

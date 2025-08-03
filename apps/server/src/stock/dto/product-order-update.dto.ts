@@ -2,7 +2,7 @@ import { ApiProperty, OmitType } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
 import { IsNumber } from 'class-validator';
 import { ProductOrderCreateDto } from './product-order-create.dto';
-import { formDataNumberTransform } from '../../common/transforms/form-date.transform';
+import { formDataNumberTransform } from '../../common/transforms/form-data.transform';
 
 export class ProductOrderUpdateDto extends OmitType(ProductOrderCreateDto, ['order_id']) {
   @ApiProperty()

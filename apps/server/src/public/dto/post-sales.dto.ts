@@ -4,7 +4,7 @@ import { IsInt, IsString } from 'class-validator';
 import { PostCommonDto } from './PostCommon.dto';
 import { CommonFormDto } from './common-form.dto';
 import { NewContactDto } from './new-contact.dto';
-import { formDataNumberTransform, formDataStringTransform } from '../../common/transforms/form-date.transform';
+import { formDataNumberTransform, formDataStringTransform } from '../../common/transforms/form-data.transform';
 
 class Product {
   @ApiProperty()

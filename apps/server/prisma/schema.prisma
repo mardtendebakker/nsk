@@ -177,7 +177,6 @@ model product {
   location_label_id                                             Int?
   status_id                                                     Int?
   owner_id                                                      Int?
-  stock                                                         stock?
   sku                                                           String              @db.VarChar(16)
   name                                                          String              @db.VarChar(255)
   description                                                   String?             @db.LongText
@@ -195,6 +194,8 @@ model product {
   product_attribute_product_attribute_product_idToproduct       product_attribute[] @relation("product_attribute_product_idToproduct")
   product_attribute_product_attribute_value_product_idToproduct product_attribute[] @relation("product_attribute_value_product_idToproduct")
   product_order                                                 product_order[]
+  stock                                                         stock?
+
   @@index([location_id], map: "IDX_D34A04AD64D218E")
   @@index([status_id], map: "IDX_D34A04AD6BF700BD")
   @@index([type_id], map: "IDX_D34A04ADC54C8C93")
@@ -202,9 +203,9 @@ model product {
 }
 
 model stock {
-  id                             Int                 @id @default(autoincrement())
-  product_id                     Int                 @unique(map: "uniq_product") 
-  product                        product             @relation(fields: [product_id], references: [id], onUpdate: Restrict, onDelete: Cascade, map: "fk_product")
+  id         Int     @id @default(autoincrement())
+  product_id Int     @unique(map: "uk_product_id")
+  product    product @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_product")
 
   @@index([product_id], map: "idx_product")
 }
@@ -493,6 +494,35 @@ model vehicle {
   pickup              pickup[]
 }
 
+model email_log {
+  id         Int      @id @default(autoincrement())
+  from       String   @db.VarChar(255)
+  to         String   @db.Text
+  subject    String   @db.VarChar(255)
+  successful Boolean
+  content    String   @db.LongText
+  api_error  String?  @db.LongText
+  created_at DateTime @default(now()) @db.DateTime(0)
+  updated_at DateTime @default(now()) @updatedAt @db.DateTime(0)
+}
+
+model activity_log {
+  id         Int      @id @default(autoincrement())
+  username   String?  @db.VarChar(255)
+  groups     String?  @db.VarChar(255)
+  method     String?  @db.VarChar(20)
+  route      String?  @db.VarChar(255)
+  params     String?  @db.LongText
+  body       String?  @db.LongText
+  model      String?  @db.VarChar(30)
+  action     String?  @db.VarChar(20)
+  before     String?  @db.LongText
+  query      String?  @db.LongText
+  bulk       Boolean  @default(false)
+  createdAt  DateTime @default(now()) @db.DateTime(0)
+  updated_at DateTime @default(now()) @updatedAt @db.DateTime(0)
+}
+
 enum VehicleType {
   car
 }
@@ -500,16 +530,4 @@ enum VehicleType {
 enum Gender {
   male
   female
-}
-
-model email_log {
-  id                  Int          @id @default(autoincrement())
-  from                String       @db.VarChar(255)
-  to                  String       @db.Text
-  subject             String       @db.VarChar(255)
-  successful          Boolean
-  content             String       @db.LongText
-  api_error           String?      @db.LongText
-  created_at          DateTime     @default(now()) @db.DateTime(0)
-  updated_at          DateTime     @updatedAt @db.DateTime(0)
 }

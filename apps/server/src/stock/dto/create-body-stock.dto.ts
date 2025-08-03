@@ -7,7 +7,7 @@ import { ProductAttributeDto } from './product-attribute.dto';
 import {
   formDataNumberTransform,
   formDataStringTransform,
-} from '../../common/transforms/form-date.transform';
+} from '../../common/transforms/form-data.transform';
 import { ProductOrderCreateDto } from './product-order-create.dto';
 import { EntityStatus } from '../../common/types/entity-status.enum';
 

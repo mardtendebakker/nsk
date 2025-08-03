@@ -171,7 +171,15 @@ export class ContactService {
       company_is_customer: companyIsCustomer = false,
       company_is_supplier: companyIsSupplier = false,
       company_partner_id: companyPartnerId,
+      is_main: isMain,
     } = updateDto;
+
+    if (isMain) {
+      const mainContact = await this.getMainContact(id);
+      if (mainContact) {
+        throw new BadRequestException('Only one main contact is allowed per company');
+      }
+    }
 
     try {
       return await this.repository.update({
@@ -208,6 +216,10 @@ export class ContactService {
         throw err;
       }
     }
+  }
+
+  async getMainContact(id: number) {
+    return this.repository.getMainContact(id);
   }
 
   async checkExists(createDto: CreateContactDto) {

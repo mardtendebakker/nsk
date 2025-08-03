@@ -65,4 +65,18 @@ export class ContactRepository {
     const { where } = params;
     return this.prisma.contact.delete({ where });
   }
+
+  getMainContact(id: number) {
+    return this.prisma.contact.findFirst({
+      where: {
+        is_main: true,
+        NOT: { id },
+        company_contact_company_idTocompany: {
+          companyContacts: {
+            some: { id },
+          },
+        },
+      },
+    });
+  }
 }

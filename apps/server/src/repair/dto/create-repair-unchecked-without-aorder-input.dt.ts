@@ -1,7 +1,7 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Prisma } from '@prisma/client';
 import { Transform } from 'class-transformer';
-import { formDataStringTransform } from '../../common/transforms/form-date.transform';
+import { formDataStringTransform } from '../../common/transforms/form-data.transform';
 
 export class CreateRepairUncheckedWithoutAOrderInputDto
 implements Prisma.repairUncheckedCreateWithoutAorderInput {

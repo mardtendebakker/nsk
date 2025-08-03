@@ -3,7 +3,7 @@ import {
 } from '@nestjs/swagger';
 import { IsNumber, IsOptional } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
-import { formDataNumberTransform } from '../../common/transforms/form-date.transform';
+import { formDataNumberTransform } from '../../common/transforms/form-data.transform';
 import { ProductOrderEntity } from '../entities/product-order.entity';
 
 export class ProductOrderCreateDto extends PartialType(OmitType(ProductOrderEntity, ['id', 'product_id'])) {

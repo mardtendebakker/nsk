@@ -1,7 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
 import { IsInt } from 'class-validator';
-import { formDataNumberTransform } from '../../common/transforms/form-date.transform';
+import { formDataNumberTransform } from '../../common/transforms/form-data.transform';
 import { NewContactDto } from './new-contact.dto';
 
 export class OrderContactDto extends NewContactDto {
