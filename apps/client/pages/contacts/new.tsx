@@ -74,6 +74,9 @@ export function initFormState(trans: Trans, contact?: Contact) {
     zip2: {
       value: contact?.zip2,
     },
+    is_main: {
+      value: contact?.is_main || false,
+    },
   };
 }
 
@@ -96,6 +99,7 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
     country2: formRepresentation.country2.value || undefined,
     state2: formRepresentation.state2.value || undefined,
     zip2: formRepresentation.zip2.value || undefined,
+    is_main: formRepresentation.is_main.value || false,
   };
 }
 

@@ -43,6 +43,7 @@ export class ContactService {
         id: true,
         name: true,
         email: true,
+        is_main: true,
         _count: {
           select: {
             customerOrders: true,
@@ -105,9 +106,14 @@ export class ContactService {
       throw new BadRequestException('Either company_id or company name is required');
     }
 
-    if (restContactDto.is_main === undefined
-      && !Number.isFinite(companyId)) { // check if it is the first contact of a new company
-      restContactDto.is_main = true;
+    if (restContactDto.is_main === undefined) {
+      // check if it is the first contact of a new company
+      if (!Number.isFinite(companyId)) {
+        const company = await this.companyService.findByName(companyName);
+        if (!company) {
+          restContactDto.is_main = true;
+        }
+      }
     }
 
     let customConnectOrCreate: Prisma.companyCreateNestedOneWithoutCompanyContactsInput;
@@ -171,7 +177,15 @@ export class ContactService {
       company_is_customer: companyIsCustomer = false,
       company_is_supplier: companyIsSupplier = false,
       company_partner_id: companyPartnerId,
+      is_main: isMain,
     } = updateDto;
+
+    if (isMain) {
+      const mainContact = await this.getMainContact(id);
+      if (mainContact) {
+        throw new BadRequestException('Only one main contact is allowed per company');
+      }
+    }
 
     try {
       return await this.repository.update({
@@ -208,6 +222,10 @@ export class ContactService {
         throw err;
       }
     }
+  }
+
+  async getMainContact(id: number) {
+    return this.repository.getMainContact(id);
   }
 
   async checkExists(createDto: CreateContactDto) {

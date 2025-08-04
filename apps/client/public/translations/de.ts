@@ -671,6 +671,7 @@ const translation = {
   successful: 'Erfolgreich',
   log: 'Log',
   logs: 'Logs',
+  main: 'Haupt',
   productStatuses: 'Produktstatusse',
   newProductStatus: 'Neuer Produktstatus',
   createProductStatus: 'Produktstatus erstellen',

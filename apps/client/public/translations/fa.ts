@@ -681,6 +681,7 @@ const translation = {
   successful: 'موفق',
   log: 'گزارش',
   logs: 'گزارش‌ها',
+  main: 'اصلی',
   productStatuses: 'وضعیت محصول',
   newProductStatus: 'وضعیت جدید محصول',
   createProductStatus: 'ایجاد وضعیت محصول',
