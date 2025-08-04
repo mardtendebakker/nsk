@@ -3,7 +3,7 @@ import { Prisma } from '@prisma/client';
 import { Transform, Type } from 'class-transformer';
 import { IsInt, IsOptional } from 'class-validator';
 import { DataDestruction } from '../types/destruction.enum';
-import { formDataDateTransform, formDataNumberTransform, formDataStringTransform } from '../../../common/transforms/form-date.transform';
+import { formDataDateTransform, formDataNumberTransform, formDataStringTransform } from '../../../common/transforms/form-data.transform';
 
 export class CreatePickupUncheckedWithoutAorderInputDto implements Prisma.pickupUncheckedCreateWithoutAorderInput {
   @ApiPropertyOptional()

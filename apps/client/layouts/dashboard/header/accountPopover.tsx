@@ -5,7 +5,7 @@ import {
 import PowerSettingsNew from '@mui/icons-material/PowerSettingsNew';
 import ChevronRight from '@mui/icons-material/ChevronRight';
 import Link from 'next/link';
-import { ADMIN_USERS, SETTINGS } from '../../../utils/routes';
+import { ADMIN_USERS, LOGS_EMAILS, SETTINGS } from '../../../utils/routes';
 import useSecurity from '../../../hooks/useSecurity';
 import useTranslation from '../../../hooks/useTranslation';
 import Can from '../../../components/can';
@@ -57,6 +57,13 @@ export default function AccountPopover() {
             <Link href={ADMIN_USERS} style={{ textDecoration: 'none', color: 'inherit' }} passHref>
               <MenuItem>
                 {trans('admin')}
+              </MenuItem>
+            </Link>
+          </Can>
+          <Can requiredGroups={['logistics', 'manager']}>
+            <Link href={LOGS_EMAILS} style={{ textDecoration: 'none', color: 'inherit' }} passHref>
+              <MenuItem>
+                {trans('logs')}
               </MenuItem>
             </Link>
           </Can>

@@ -2,7 +2,7 @@ import { ApiPropertyOptional, OmitType } from '@nestjs/swagger';
 import { IsBoolean, IsInt, IsOptional } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
 import { PrismaContactCreateInputDto } from './prisma-contact-create-input.dto';
-import { formDataNumberTransform, formDataStringTransform } from '../../common/transforms/form-date.transform';
+import { formDataNumberTransform, formDataStringTransform } from '../../common/transforms/form-data.transform';
 
 export class CreateContactDto extends OmitType(PrismaContactCreateInputDto, [
   'supplierOrders',

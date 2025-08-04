@@ -12,6 +12,7 @@ export interface ContactListItem {
     partner:{ id: number, name: string },
   },
   email:string,
+  is_main:boolean,
   is_partner:boolean,
   is_supplier:boolean,
   is_customer:boolean,
@@ -42,4 +43,5 @@ export interface Contact {
   is_partner:boolean,
   is_customer:boolean,
   is_supplier:boolean,
+  is_main:boolean
 }

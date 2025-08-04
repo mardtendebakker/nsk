@@ -2,7 +2,7 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Prisma } from '@prisma/client';
 import { Transform } from 'class-transformer';
 import { IsInt, IsOptional, IsString } from 'class-validator';
-import { formDataDateTransform, formDataNumberTransform, formDataStringTransform } from '../../../common/transforms/form-date.transform';
+import { formDataDateTransform, formDataNumberTransform, formDataStringTransform } from '../../../common/transforms/form-data.transform';
 
 export class CreateDeliveryUncheckedWithoutAorderInputDto implements Prisma.deliveryUncheckedCreateWithoutAorderInput {
   @ApiPropertyOptional()

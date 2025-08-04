@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CognitoAuthModule } from '@nestjs-cognito/auth';
 import { HttpModule } from '@nestjs/axios';
 import { ScheduleModule } from '@nestjs/schedule';
+import { ClsModule } from 'nestjs-cls';
 import { DashboardModule } from '../dashboard/dashboard.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -39,6 +40,7 @@ import { ConsumerModule } from '../consumer/consumer.module';
 import { SecurityModule } from '../security/security.module';
 import { VehicleAdminModule } from '../admin/vehicle/vehicle.module';
 import { DriverAdminModule } from '../admin/driver/driver.module';
+import { LogModule } from '../log/log.module';
 
 @Module({
   imports: [
@@ -66,6 +68,11 @@ import { DriverAdminModule } from '../admin/driver/driver.module';
       }),
       inject: [ConfigService],
     }),
+    ClsModule.forRoot({
+      global: true,
+      middleware: { mount: true },
+    }),
+    ScheduleModule.forRoot(),
     UserModule,
     DashboardModule,
     PurchaseModule,
@@ -101,7 +108,7 @@ import { DriverAdminModule } from '../admin/driver/driver.module';
     SecurityModule,
     VehicleAdminModule,
     DriverAdminModule,
-    ScheduleModule.forRoot(),
+    LogModule,
   ],
   controllers: [AppController],
   providers: [AppService],

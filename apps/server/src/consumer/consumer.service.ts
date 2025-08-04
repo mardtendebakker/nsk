@@ -91,6 +91,7 @@ export class ConsumerService implements OnModuleInit {
         supplierName: order.contact_aorder_supplier_idTocontact?.name,
         customerName: order.contact_aorder_customer_idTocontact?.name,
       }),
+      log: true,
     });
   }
 }
