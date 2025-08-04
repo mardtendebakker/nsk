@@ -670,8 +670,17 @@ const translation = {
     mailBody: {
       label: 'ارسال مطالب',
       placeholder: 'ارسال مطالب را بنویسید',
+      helperText: 'از متغیرهای موجود برای غنی‌سازی ایمیل با استفاده از نحو زیر استفاده کنید: {{متغیر}}. متغیرهای موجود عبارتند از:',
+    },
+    mailBodyVariables: {
+      orderNr: '{{orderNr}} شناسه منحصر به فرد سفارش.',
+      pickupDate: '{{pickupDate}} تاریخ برنامه‌ریزی شده تحویل.',
+      orderDate: '{{orderDate}} تاریخی که سفارش ایجاد شده است.',
+      supplierName: '{{supplierName}} نام تامین‌کننده.',
+      customerName: '{{customerName}} نام مشتری.',
     },
   },
+  editOrderStatus: 'ویرایش وضعیت سفارش',
   emailLogs: 'گزارش‌های ایمیل',
   emails: 'ایمیل‌ها',
   from: 'از',

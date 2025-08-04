@@ -660,8 +660,18 @@ const translation = {
     mailBody: {
       label: 'Postinhalt',
       placeholder: 'Geben Sie den Postinhalt ein',
+      helperText: 'Verwenden Sie verfügbare Variablen, um die E-Mail mit der folgenden Syntax anzureichern: {{Variable}}. Verfügbare Variablen sind:',
+    },
+    mailBodyVariables: {
+      orderNr: '{{orderNr}} Die eindeutige Kennung der Bestellung.',
+      pickupDate: '{{pickupDate}} Das geplante Abholdatum.',
+      orderDate: '{{orderDate}} Das Datum, an dem die Bestellung erstellt wurde.',
+      supplierName: '{{supplierName}} Name des Lieferanten.',
+      customerName: '{{customerName}} Name des Kunden.',
+
     },
   },
+  editOrderStatus: 'Bestellstatus bearbeiten',
   emailLogs: 'E-Mail Protokolle',
   emails: 'E-Mails',
   from: 'Von',
