@@ -680,6 +680,7 @@ const translation = {
   successful: 'نجح',
   log: 'سجل',
   logs: 'سجلات',
+  main: 'الرئيسي',
   productStatuses: 'حالات المنتجات',
   newProductStatus: 'حالة منتج جديدة',
   createProductStatus: 'إنشاء حالة منتج',

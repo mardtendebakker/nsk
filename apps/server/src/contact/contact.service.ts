@@ -43,6 +43,7 @@ export class ContactService {
         id: true,
         name: true,
         email: true,
+        is_main: true,
         _count: {
           select: {
             customerOrders: true,

@@ -56,6 +56,9 @@ export default function List({
           <TableCell>
             {trans('email')}
           </TableCell>
+          <TableCell>
+            {trans('main')}
+          </TableCell>
           {!hideCompanyFields && (
             <>
               <TableCell>
@@ -91,6 +94,9 @@ export default function List({
             </TableCell>
             <TableCell>
               {contact.email}
+            </TableCell>
+            <TableCell>
+              {contact.is_main && <Check />}
             </TableCell>
             {!hideCompanyFields && (
               <>
