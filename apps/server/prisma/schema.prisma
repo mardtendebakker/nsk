@@ -507,20 +507,26 @@ model email_log {
 }
 
 model activity_log {
-  id         Int      @id @default(autoincrement())
-  username   String?  @db.VarChar(255)
-  groups     String?  @db.VarChar(255)
-  method     String?  @db.VarChar(20)
-  route      String?  @db.VarChar(255)
-  params     String?  @db.LongText
-  body       String?  @db.LongText
-  model      String?  @db.VarChar(30)
-  action     String?  @db.VarChar(20)
-  before     String?  @db.LongText
-  query      String?  @db.LongText
-  bulk       Boolean  @default(false)
-  createdAt  DateTime @default(now()) @db.DateTime(0)
-  updated_at DateTime @default(now()) @updatedAt @db.DateTime(0)
+  id         Int          @id @default(autoincrement())
+  username   String?      @db.VarChar(255)
+  method     String?      @db.VarChar(20)
+  route      String?      @db.VarChar(255)
+  params     String?      @db.LongText
+  body       String?      @db.LongText
+  model      String?      @db.VarChar(30)
+  action     String?      @db.VarChar(20)
+  before     String?      @db.LongText
+  query      String?      @db.LongText
+  bulk       Boolean      @default(false)
+  createdAt  DateTime     @default(now()) @db.DateTime(0)
+  updated_at DateTime     @default(now()) @updatedAt @db.DateTime(0)
+  userGroups user_group[] @relation("activity_logTouser_group")
+}
+
+model user_group {
+  id           Int            @id @default(autoincrement())
+  name         String         @unique
+  activityLogs activity_log[] @relation("activity_logTouser_group")
 }
 
 enum VehicleType {

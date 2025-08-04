@@ -119,16 +119,25 @@ export function Price100() {
 
 export function ActivityLogging(cls: ClsService, prisma: PrismaClient) {
   const IGNORED_MODELS = ['email_log', 'activity_log'];
-  function buildIncludeFromData(data: any): any {
-    const include: Record<string, any> = {};
-    for (const key in data) {
-      if (typeof data[key] === 'object' && data[key] !== null) {
-      // Assume keys that contain nested operations correspond to relations
-        include[key] = true; // or recursively build if deeper nesting
+  function buildSelectFromData(data: any): any {
+    if (!data || typeof data !== 'object') return true;
+
+    const select: Record<string, any> = {};
+
+    for (const [key, value] of Object.entries(data)) {
+      if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+      // Check for nested updates (e.g., update: { ... })
+        if ('update' in value || 'set' in value || 'connect' in value) {
+          select[key] = true;
+        }
+      } else {
+        select[key] = true;
       }
     }
-    return Object.keys(include).length > 0 ? include : undefined;
+
+    return select;
   }
+
   return Prisma.defineExtension({
     name: 'audit-logging',
     query: {
@@ -137,9 +146,14 @@ export function ActivityLogging(cls: ClsService, prisma: PrismaClient) {
       }) {
         if (IGNORED_MODELS.includes(model)) return query(args);
 
-        const data = {
+        const data: Prisma.activity_logUncheckedCreateInput = {
           username: cls.get('username'),
-          groups: JSON.stringify(cls.get('groups') ?? []),
+          userGroups: {
+            connectOrCreate: (cls.get('groups') ?? []).map((name) => ({
+              where: { name },
+              create: { name },
+            })),
+          },
           method: cls.get('method'),
           route: cls.get('route'),
           params: JSON.stringify(cls.get('params')),
@@ -153,7 +167,7 @@ export function ActivityLogging(cls: ClsService, prisma: PrismaClient) {
           if (['update', 'delete'].includes(operation)) {
             const before = await prisma[model].findFirst({
               where: args.where,
-              include: buildIncludeFromData(args.data),
+              select: buildSelectFromData(args.data),
             });
             const result = await query(args);
 
@@ -163,7 +177,7 @@ export function ActivityLogging(cls: ClsService, prisma: PrismaClient) {
                 before: before ? JSON.stringify(before) : null,
                 query: JSON.stringify(args),
               },
-            }).catch(() => null);
+            }).catch((err) => console.log(err.message));
 
             return result;
           }
@@ -171,7 +185,7 @@ export function ActivityLogging(cls: ClsService, prisma: PrismaClient) {
           if (['updateMany', 'deleteMany'].includes(operation)) {
             const beforeRecords = await prisma[model].findMany({
               where: args.where,
-              include: buildIncludeFromData(args.data),
+              select: buildSelectFromData(args.data),
             });
             const result = await query(args);
 

@@ -106,9 +106,14 @@ export class ContactService {
       throw new BadRequestException('Either company_id or company name is required');
     }
 
-    if (restContactDto.is_main === undefined
-      && !Number.isFinite(companyId)) { // check if it is the first contact of a new company
-      restContactDto.is_main = true;
+    if (restContactDto.is_main === undefined) {
+      // check if it is the first contact of a new company
+      if (!Number.isFinite(companyId)) {
+        const company = await this.companyService.findByName(companyName);
+        if (!company) {
+          restContactDto.is_main = true;
+        }
+      }
     }
 
     let customConnectOrCreate: Prisma.companyCreateNestedOneWithoutCompanyContactsInput;

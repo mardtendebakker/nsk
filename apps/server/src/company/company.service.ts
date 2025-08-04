@@ -65,6 +65,14 @@ export class CompanyService {
     });
   }
 
+  findByName(name: string) {
+    return this.repository.findOne({
+      where: {
+        name,
+      },
+    });
+  }
+
   async create(createDto: CreateCompanyDto, email?: string) {
     if (await this.repository.findOne({ where: { name: createDto.name } })) {
       throw new ConflictException('Name already exist');
