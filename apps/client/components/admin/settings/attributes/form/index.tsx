@@ -69,7 +69,6 @@ export default function Form({
             onChange={(e) => setValue({ field: 'magento_attr_code', value: e.target.value })}
             disabled={disabled}
           />
-          { !formRepresentation.id.value && (
           <Select
             sx={{ flex: 0.25, mt: '.5rem' }}
             value={formRepresentation.type.value}
@@ -82,7 +81,6 @@ export default function Form({
             ]}
             label={trans('attributeForm.type.label')}
           />
-          )}
           <Checkbox
             disabled={disabled}
             onCheck={(checked) => setValue({ field: 'isPublic', value: checked })}
