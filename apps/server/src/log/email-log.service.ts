@@ -23,6 +23,6 @@ export class EmailLogService {
       ];
     }
 
-    return this.repository.findAll({ ...query, where });
+    return this.repository.findAll({ ...query, where, orderBy: { created_at: 'desc' } });
   }
 }
