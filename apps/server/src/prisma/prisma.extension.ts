@@ -2,6 +2,7 @@
 import { Prisma, PrismaClient } from '@prisma/client';
 import { ClsService } from 'nestjs-cls';
 import { RabbitMQService } from '../rabbitmq/rabbitmq.service';
+import { AOrderDiscrimination } from '../aorder/types/aorder-discrimination.enum';
 
 const multiplyPriceBy100 = <T extends { [key: string]: any }>(obj: T): T => {
   for (const key in obj) {
@@ -41,7 +42,7 @@ export function PurchaseOrderStatus(rabbitMQService: RabbitMQService, prisma: Pr
     query: {
       aorder: {
         update: async ({ args, query }) => {
-          const order = await prisma.aorder.findFirst({ where: { ...args.where, discr: 'p' } });
+          const order = await prisma.aorder.findFirst({ where: { ...args.where, discr: AOrderDiscrimination.PURCHASE } });
           const result = await query(args);
 
           if (order && result.status_id != order.status_id) {
@@ -51,7 +52,7 @@ export function PurchaseOrderStatus(rabbitMQService: RabbitMQService, prisma: Pr
           return result;
         },
         updateMany: async ({ args, query }) => {
-          const orders = await prisma.aorder.findMany({ where: { ...args.where, discr: 'p' } });
+          const orders = await prisma.aorder.findMany({ where: { ...args.where, discr: AOrderDiscrimination.PURCHASE } });
           const result = await query(args);
           const updatedOrders = await prisma.aorder.findMany({ where: { id: { in: orders.map(({ id }) => id) } } });
 
@@ -67,7 +68,9 @@ export function PurchaseOrderStatus(rabbitMQService: RabbitMQService, prisma: Pr
         },
         create: async ({ args, query }) => {
           const order = await query(args);
-          await rabbitMQService.purchaseOrderStatusUpdated(order.id, order.status_id);
+          if (order.discr === AOrderDiscrimination.PURCHASE) {
+            await rabbitMQService.purchaseOrderStatusUpdated(order.id, order.status_id);
+          }
 
           return order;
         },

@@ -1,6 +1,7 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import * as Handlebars from 'handlebars';
 import { format } from 'date-fns';
+import { MessageProperties } from 'amqplib';
 import { SaleService } from '../sale/sale.service';
 import { WebshopService } from '../webshop/webshop.service';
 import { RabbitMQService } from '../rabbitmq/rabbitmq.service';
@@ -59,7 +60,10 @@ export class ConsumerService implements OnModuleInit {
       .map(({ nexxus_id, quantity }) => ({ productId: parseInt(nexxus_id, 10), quantity })));
   }
 
-  private async handleOrderStatusUpdated({ orderId }: { orderId: number, previousStatusId: number }): Promise<void> {
+  private async handleOrderStatusUpdated(
+    { orderId, previousStatusId }: { orderId: number; previousStatusId: number },
+    properties: MessageProperties,
+  ): Promise<void> {
     const order: any = await this.purchaseRepository.findOne({
       where: { id: orderId },
       select: {
@@ -70,6 +74,15 @@ export class ConsumerService implements OnModuleInit {
     if (!order) {
       Logger.error(`ConsumerService.handleOrderStatusUpdated: order not found ${orderId}`);
       return;
+    }
+
+    if (order.order_nr.includes('TEMP')) {
+      const retryCount = properties?.headers?.['x-retry-count'] || 0;
+      if (retryCount <= 5) {
+        await this.rabbitMQService.delayPurchaseOrderStatusUpdated(orderId, previousStatusId, { headers: { 'x-retry-count': retryCount }, persistent: true });
+        return;
+      }
+      Logger.log('Max retries reached, sending to dead-letter queue', 'RabbitMQ');
     }
 
     const from = (await this.moduleService.getOrderStatusesConfig())?.fromEmailAddress;
