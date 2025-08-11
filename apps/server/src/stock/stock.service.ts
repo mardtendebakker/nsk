@@ -58,7 +58,7 @@ export class StockService {
     return processProdcut.run();
   }
 
-  @Cron(CronExpression.EVERY_MINUTE, { name: 'refreshStock' })
+  @Cron(CronExpression.EVERY_5_MINUTES, { name: 'refreshStock' })
   async refreshStock() {
     await this.repository.refreshStock();
   }
@@ -245,7 +245,6 @@ export class StockService {
 
     const createInput: Prisma.productUncheckedCreateInput = {
       location_label_id: locationLabelId,
-      stock: { create: {} },
       ...rest,
       ...(!rest.sku && { sku: Math.floor(Date.now() / 1000).toString() }),
       ...(productOrders?.length > 0 && {
@@ -271,6 +270,10 @@ export class StockService {
     }
 
     return stock;
+  }
+
+  async setProductAsInStock(id: number) {
+    return this.repository.insertIntoStock(id);
   }
 
   async updateOne(id: number, body: UpdateBodyStockDto, files?: ProductAttributeFile[]) {

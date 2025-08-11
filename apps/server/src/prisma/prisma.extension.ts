@@ -46,7 +46,7 @@ export function PurchaseOrderStatus(rabbitMQService: RabbitMQService, prisma: Pr
           const result = await query(args);
 
           if (order && result.status_id != order.status_id) {
-            await rabbitMQService.purchaseOrderStatusUpdated(order.id, order.status_id);
+            rabbitMQService.purchaseOrderStatusUpdated(order.id, order.status_id);
           }
 
           return result;
@@ -69,7 +69,7 @@ export function PurchaseOrderStatus(rabbitMQService: RabbitMQService, prisma: Pr
         create: async ({ args, query }) => {
           const order = await query(args);
           if (order.discr === AOrderDiscrimination.PURCHASE) {
-            await rabbitMQService.purchaseOrderStatusUpdated(order.id, order.status_id);
+            rabbitMQService.purchaseOrderStatusUpdated(order.id, order.status_id);
           }
 
           return order;
@@ -121,7 +121,7 @@ export function Price100() {
 }
 
 export function ActivityLogging(cls: ClsService, prisma: PrismaClient) {
-  const IGNORED_MODELS = ['email_log', 'activity_log'];
+  const IGNORED_MODELS = ['email_log', 'activity_log', 'user_group', 'stock'];
   function buildSelectFromData(data: any): any {
     if (!data || typeof data !== 'object') return true;
 
@@ -220,7 +220,7 @@ export function ActivityLogging(cls: ClsService, prisma: PrismaClient) {
 
           if (operation === 'createMany') {
             const result = await query(args);
-            const records = args.data ?? [];
+            const records = Array.isArray(args.data) ? args.data : [args.data];
 
             for (const record of records) {
               prisma.activity_log.create({
@@ -239,6 +239,33 @@ export function ActivityLogging(cls: ClsService, prisma: PrismaClient) {
         } catch (e) {
           return query(args); // fail-safe fallback
         }
+      },
+    },
+  });
+}
+
+export function StockManagment(rabbitMQService: RabbitMQService) {
+  return Prisma.defineExtension({
+    name: 'stock-managment',
+    query: {
+      product: {
+        create: async ({ args, query }) => {
+          const product = await query(args);
+          try {
+            rabbitMQService.productCreated(product.id);
+          } catch (e) { console.log(e.message); }
+          return product;
+        },
+        createMany: async ({ args, query }) => {
+          const products = await query(args);
+          try {
+            const records = Array.isArray(args.data) ? args.data : [args.data];
+            for (const record of records) {
+              rabbitMQService.productCreated(record.id);
+            }
+          } catch (e) { console.log(e.message); }
+          return products;
+        },
       },
     },
   });

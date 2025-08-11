@@ -17,6 +17,8 @@ export class RabbitMQService implements OnModuleInit, OnModuleDestroy {
 
   private magentoPaymentPaidChannel: ChannelWrapper;
 
+  private nexxusProductCreatedChannel: ChannelWrapper;
+
   private readonly URI: string;
 
   private readonly MAGENTO_PAYMENT_PAID: string;
@@ -26,6 +28,8 @@ export class RabbitMQService implements OnModuleInit, OnModuleDestroy {
   private readonly EXCHANGE: string;
 
   private readonly DELAY_PURCHASE_ORDER_STATUS_UPDATED_QUEUE: string;
+
+  private readonly NEXXUS_PRODUCT_CREATED_QUEUE: string;
 
   private readonly DELAY_EXCHANGE: string;
 
@@ -41,18 +45,47 @@ export class RabbitMQService implements OnModuleInit, OnModuleDestroy {
     this.DELAY_PURCHASE_ORDER_STATUS_UPDATED_QUEUE = this.configService.get<string>('RABBITMQ_DELAY_PURCHASE_ORDER_STATUS_UPDATED_QUEUE');
     this.DELAY_EXCHANGE = this.configService.get<string>('RABBITMQ_DELAY_EXCHANGE');
     this.PURCHASE_ORDER_STATUS_UPDATED_ROUTING_KEY = this.configService.get<string>('RABBITMQ_PURCHASE_ORDER_STATUS_UPDATED_ROUTING_KEY');
+    this.NEXXUS_PRODUCT_CREATED_QUEUE = this.configService.get<string>('RABBITMQ_NEXXUS_PRODUCT_CREATED_QUEUE');
   }
 
   async onModuleInit() {
     await this.startDelayPurchaseOrderStatusUpdated();
   }
 
+  async publishOrderFromStore(orderId: string): Promise<void> {
+    this.pushToQueue(this.magentoPaymentPaidChannel, this.MAGENTO_PAYMENT_PAID, JSON.stringify({ order_id: orderId }));
+  }
+
   async purchaseOrderStatusUpdated(orderId: number, previousStatusId: number): Promise<void> {
-    await this.pushToQueue(this.purchaseOrderStatusUpdatedChannel, this.PURCHASE_ORDER_STATUS_UPDATED_QUEUE, JSON.stringify({ orderId, previousStatusId }));
+    this.pushToQueue(this.purchaseOrderStatusUpdatedChannel, this.PURCHASE_ORDER_STATUS_UPDATED_QUEUE, JSON.stringify({ orderId, previousStatusId }));
   }
 
   async delayPurchaseOrderStatusUpdated(orderId: number, previousStatusId: number, publishOptions: PublishOptions): Promise<void> {
-    await this.pushToQueue(this.delayPurchaseOrderStatusUpdatedChannel, this.DELAY_PURCHASE_ORDER_STATUS_UPDATED_QUEUE, JSON.stringify({ orderId, previousStatusId }), publishOptions);
+    this.pushToQueue(this.delayPurchaseOrderStatusUpdatedChannel, this.DELAY_PURCHASE_ORDER_STATUS_UPDATED_QUEUE, JSON.stringify({ orderId, previousStatusId }), publishOptions);
+  }
+
+  async productCreated(productId: number): Promise<void> {
+    this.pushToQueue(this.nexxusProductCreatedChannel, this.NEXXUS_PRODUCT_CREATED_QUEUE, JSON.stringify({ productId }));
+  }
+
+  async consumeWebshopOrderCreated(onMessage: (msg, properties) => void) {
+    try {
+      this.connection = amqp.connect([this.URI]);
+      this.magentoPaymentPaidChannel = this.connection.createChannel({
+        json: true,
+        setup: (channel: ConfirmChannel) => this.setupQueue({
+          channel,
+          exchange: this.EXCHANGE,
+          type: 'topic',
+          queue: this.MAGENTO_PAYMENT_PAID,
+          onSetup: () => {
+            this.pullFromQueue(this.magentoPaymentPaidChannel, this.MAGENTO_PAYMENT_PAID, onMessage);
+          },
+        }),
+      });
+    } catch (err) {
+      this.logger.debug('RabbitMQ:', err);
+    }
   }
 
   async consumePurchaseOrderStatusUpdated(onMessage: (msg, properties) => void) {
@@ -101,22 +134,18 @@ export class RabbitMQService implements OnModuleInit, OnModuleDestroy {
     }
   }
 
-  async publishOrderFromStore(orderId: string): Promise<void> {
-    await this.pushToQueue(this.magentoPaymentPaidChannel, this.MAGENTO_PAYMENT_PAID, JSON.stringify({ order_id: orderId }));
-  }
-
-  async consumeWebshopOrderCreated(onMessage: (msg, properties) => void) {
+  async consumeProductCreated(onMessage: (msg, properties) => void) {
     try {
       this.connection = amqp.connect([this.URI]);
-      this.magentoPaymentPaidChannel = this.connection.createChannel({
+      this.nexxusProductCreatedChannel = this.connection.createChannel({
         json: true,
         setup: (channel: ConfirmChannel) => this.setupQueue({
           channel,
           exchange: this.EXCHANGE,
           type: 'topic',
-          queue: this.MAGENTO_PAYMENT_PAID,
+          queue: this.NEXXUS_PRODUCT_CREATED_QUEUE,
           onSetup: () => {
-            this.pullFromQueue(this.magentoPaymentPaidChannel, this.MAGENTO_PAYMENT_PAID, onMessage);
+            this.pullFromQueue(this.nexxusProductCreatedChannel, this.NEXXUS_PRODUCT_CREATED_QUEUE, onMessage);
           },
         }),
       });

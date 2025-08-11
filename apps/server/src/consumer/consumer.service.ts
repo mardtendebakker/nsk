@@ -8,21 +8,24 @@ import { RabbitMQService } from '../rabbitmq/rabbitmq.service';
 import { EmailService } from '../email/email.service';
 import { PurchaseRepository } from '../purchase/purchase.repository';
 import { ModuleService } from '../module/module.service';
+import { ProductService } from '../product/product.service';
 
 @Injectable()
 export class ConsumerService implements OnModuleInit {
   constructor(
-    private saleService: SaleService,
-    private webshopService: WebshopService,
-    private rabbitMQService: RabbitMQService,
-    private emailService: EmailService,
-    private purchaseRepository: PurchaseRepository,
-    private moduleService: ModuleService,
+    private readonly saleService: SaleService,
+    private readonly webshopService: WebshopService,
+    private readonly rabbitMQService: RabbitMQService,
+    private readonly emailService: EmailService,
+    private readonly purchaseRepository: PurchaseRepository,
+    private readonly moduleService: ModuleService,
+    private readonly productService: ProductService,
   ) {}
 
   async onModuleInit() {
     await this.rabbitMQService.consumeWebshopOrderCreated(this.handleWebshopOrderCreated.bind(this));
     await this.rabbitMQService.consumePurchaseOrderStatusUpdated(this.handleOrderStatusUpdated.bind(this));
+    await this.rabbitMQService.consumeProductCreated(this.handleProductCreated.bind(this));
   }
 
   private async handleWebshopOrderCreated(msg: { order_id: string }): Promise<void> {
@@ -106,5 +109,9 @@ export class ConsumerService implements OnModuleInit {
       }),
       log: true,
     });
+  }
+
+  private async handleProductCreated({ productId }: { productId: number }): Promise<void> {
+    await this.productService.setProductAsInStock(productId);
   }
 }
