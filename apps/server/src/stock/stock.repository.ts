@@ -98,6 +98,10 @@ export class StockRepository {
     });
   }
 
+  insertIntoStock(id: number) {
+    return this.prisma.stock.create({ data: { product_id: id } });
+  }
+
   findOne(params: { where: Prisma.productWhereUniqueInput }) {
     const where = { ...params.where };
     return this.prisma.product.findUnique({ where });

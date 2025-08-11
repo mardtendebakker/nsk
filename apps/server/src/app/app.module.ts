@@ -57,6 +57,7 @@ import { LogModule } from '../log/log.module';
           RABBITMQ_DELAY_PURCHASE_ORDER_STATUS_UPDATED_QUEUE: process.env.RABBITMQ_DELAY_PURCHASE_ORDER_STATUS_UPDATED_QUEUE || 'delay_purchase_order_status_updated',
           RABBITMQ_DELAY_EXCHANGE: process.env.RABBITMQ_DELAY_EXCHANGE || 'delay_nexxus',
           RABBITMQ_PURCHASE_ORDER_STATUS_UPDATED_ROUTING_KEY: process.env.RABBITMQ_PURCHASE_ORDER_STATUS_UPDATED_ROUTING_KEY || 'purchase_order_status_updated_rk',
+          RABBITMQ_NEXXUS_PRODUCT_CREATED_QUEUE: process.env.RABBITMQ_NEXXUS_PRODUCT_CREATED_QUEUE || 'nexxus_product_created',
         }),
       ],
     }),
