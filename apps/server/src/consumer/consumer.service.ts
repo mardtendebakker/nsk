@@ -24,7 +24,7 @@ export class ConsumerService implements OnModuleInit {
 
   async onModuleInit() {
     await this.rabbitMQService.consumeWebshopOrderCreated(this.handleWebshopOrderCreated.bind(this));
-    await this.rabbitMQService.consumePurchaseOrderStatusUpdated(this.handleOrderStatusUpdated.bind(this));
+    await this.rabbitMQService.consumeOrderStatusUpdated(this.handleOrderStatusUpdated.bind(this));
     await this.rabbitMQService.consumeProductCreated(this.handleProductCreated.bind(this));
   }
 
@@ -70,7 +70,7 @@ export class ConsumerService implements OnModuleInit {
     const order: any = await this.purchaseRepository.findOne({
       where: { id: orderId },
       select: {
-        pickup: true, order_date: true, order_nr: true, contact_aorder_supplier_idTocontact: true, order_status: true,
+        pickup: true, delivery: true, order_date: true, order_nr: true, contact_aorder_supplier_idTocontact: true, order_status: true,
       },
     });
 
@@ -82,7 +82,7 @@ export class ConsumerService implements OnModuleInit {
     if (order.order_nr.includes('TEMP')) {
       const retryCount = properties?.headers?.['x-retry-count'] || 0;
       if (retryCount <= 5) {
-        await this.rabbitMQService.delayPurchaseOrderStatusUpdated(orderId, previousStatusId, { headers: { 'x-retry-count': retryCount }, persistent: true });
+        await this.rabbitMQService.delayOrderStatusUpdated(orderId, previousStatusId, { headers: { 'x-retry-count': retryCount }, persistent: true });
         return;
       }
       Logger.log('Max retries reached, sending to dead-letter queue', 'RabbitMQ');
@@ -103,6 +103,7 @@ export class ConsumerService implements OnModuleInit {
       html: template({
         orderNr: order.order_nr,
         pickupDate: order.pickup?.real_pickup_date ? format(order.pickup.real_pickup_date, 'd-MM-Y') : '',
+        deliveryDate: order.delivery?.date ? format(order.delivery.date, 'd-MM-Y') : '',
         orderDate: format(order.order_date, 'd-MM-Y H:i'),
         supplierName: order.contact_aorder_supplier_idTocontact?.name,
         customerName: order.contact_aorder_customer_idTocontact?.name,

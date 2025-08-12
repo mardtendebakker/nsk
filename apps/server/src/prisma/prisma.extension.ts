@@ -2,7 +2,6 @@
 import { Prisma, PrismaClient } from '@prisma/client';
 import { ClsService } from 'nestjs-cls';
 import { RabbitMQService } from '../rabbitmq/rabbitmq.service';
-import { AOrderDiscrimination } from '../aorder/types/aorder-discrimination.enum';
 
 const multiplyPriceBy100 = <T extends { [key: string]: any }>(obj: T): T => {
   for (const key in obj) {
@@ -42,24 +41,24 @@ export function PurchaseOrderStatus(rabbitMQService: RabbitMQService, prisma: Pr
     query: {
       aorder: {
         update: async ({ args, query }) => {
-          const order = await prisma.aorder.findFirst({ where: { ...args.where, discr: AOrderDiscrimination.PURCHASE } });
+          const order = await prisma.aorder.findFirst({ where: { ...args.where } });
           const result = await query(args);
 
           if (order && result.status_id != order.status_id) {
-            rabbitMQService.purchaseOrderStatusUpdated(order.id, order.status_id);
+            rabbitMQService.orderStatusUpdated(order.id, order.status_id);
           }
 
           return result;
         },
         updateMany: async ({ args, query }) => {
-          const orders = await prisma.aorder.findMany({ where: { ...args.where, discr: AOrderDiscrimination.PURCHASE } });
+          const orders = await prisma.aorder.findMany({ where: { ...args.where } });
           const result = await query(args);
           const updatedOrders = await prisma.aorder.findMany({ where: { id: { in: orders.map(({ id }) => id) } } });
 
           for (const order of orders) {
             for (const updatedOrder of updatedOrders) {
               if ((updatedOrder.id == order.id) && (updatedOrder.status_id != order.status_id)) {
-                rabbitMQService.purchaseOrderStatusUpdated(order.id, order.status_id);
+                rabbitMQService.orderStatusUpdated(order.id, order.status_id);
               }
             }
           }
@@ -68,9 +67,7 @@ export function PurchaseOrderStatus(rabbitMQService: RabbitMQService, prisma: Pr
         },
         create: async ({ args, query }) => {
           const order = await query(args);
-          if (order.discr === AOrderDiscrimination.PURCHASE) {
-            rabbitMQService.purchaseOrderStatusUpdated(order.id, order.status_id);
-          }
+          rabbitMQService.orderStatusUpdated(order.id, order.status_id);
 
           return order;
         },
@@ -122,6 +119,7 @@ export function Price100() {
 
 export function ActivityLogging(cls: ClsService, prisma: PrismaClient) {
   const IGNORED_MODELS = ['email_log', 'activity_log', 'user_group', 'stock'];
+  const INCLUDED_OPERATIONS = ['create', 'createMany', 'update', 'updateMany', 'delete', 'deleteMany'];
   function buildSelectFromData(data: any): any {
     if (!data || typeof data !== 'object') return true;
 
@@ -148,6 +146,7 @@ export function ActivityLogging(cls: ClsService, prisma: PrismaClient) {
         model, operation, args, query,
       }) {
         if (IGNORED_MODELS.includes(model)) return query(args);
+        if (!INCLUDED_OPERATIONS.includes(operation)) return query(args);
 
         const data: Prisma.activity_logUncheckedCreateInput = {
           username: cls.get('username'),
@@ -163,12 +162,25 @@ export function ActivityLogging(cls: ClsService, prisma: PrismaClient) {
           body: JSON.stringify(cls.get('body')),
           model,
           action: operation,
+          query: JSON.stringify(args),
           bulk: ['createMany', 'updateMany', 'deleteMany'].includes(operation),
         };
 
         try {
-          if (['update', 'delete'].includes(operation)) {
-            const before = await prisma[model].findFirst({
+          if (['create', 'createMany'].includes(operation)) {
+            const result = await query(args);
+
+            prisma.activity_log.create({
+              data: {
+                ...data,
+              },
+            }).catch((e) => console.log(e.message));
+
+            return result;
+          }
+
+          if (['update', 'updateMany'].includes(operation)) {
+            const before = await prisma[model].findMany({
               where: args.where,
               select: buildSelectFromData(args.data),
             });
@@ -178,58 +190,24 @@ export function ActivityLogging(cls: ClsService, prisma: PrismaClient) {
               data: {
                 ...data,
                 before: before ? JSON.stringify(before) : null,
-                query: JSON.stringify(args),
               },
-            }).catch((err) => console.log(err.message));
+            }).catch((e) => console.log(e.message));
 
             return result;
           }
 
-          if (['updateMany', 'deleteMany'].includes(operation)) {
-            const beforeRecords = await prisma[model].findMany({
+          if (['delete', 'deleteMany'].includes(operation)) {
+            const before = await prisma[model].findFirst({
               where: args.where,
-              select: buildSelectFromData(args.data),
             });
-            const result = await query(args);
-
-            for (const record of beforeRecords) {
-              prisma.activity_log.create({
-                data: {
-                  ...data,
-                  before: JSON.stringify(record),
-                  query: JSON.stringify(args),
-                },
-              }).catch(() => null);
-            }
-
-            return result;
-          }
-
-          if (operation === 'create') {
             const result = await query(args);
 
             prisma.activity_log.create({
               data: {
                 ...data,
-                query: JSON.stringify(args),
+                before: before ? JSON.stringify(before) : null,
               },
-            }).catch(() => null);
-
-            return result;
-          }
-
-          if (operation === 'createMany') {
-            const result = await query(args);
-            const records = Array.isArray(args.data) ? args.data : [args.data];
-
-            for (const record of records) {
-              prisma.activity_log.create({
-                data: {
-                  ...data,
-                  query: JSON.stringify(record),
-                },
-              }).catch(() => null);
-            }
+            }).catch((e) => console.log(e.message));
 
             return result;
           }

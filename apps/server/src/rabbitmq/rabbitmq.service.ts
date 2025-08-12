@@ -11,9 +11,9 @@ import { PublishOptions } from 'amqp-connection-manager/dist/types/ChannelWrappe
 export class RabbitMQService implements OnModuleInit, OnModuleDestroy {
   private connection: AmqpConnectionManager;
 
-  private purchaseOrderStatusUpdatedChannel: ChannelWrapper;
+  private orderStatusUpdatedChannel: ChannelWrapper;
 
-  private delayPurchaseOrderStatusUpdatedChannel: ChannelWrapper;
+  private delayOrderStatusUpdatedChannel: ChannelWrapper;
 
   private magentoPaymentPaidChannel: ChannelWrapper;
 
@@ -23,11 +23,11 @@ export class RabbitMQService implements OnModuleInit, OnModuleDestroy {
 
   private readonly MAGENTO_PAYMENT_PAID: string;
 
-  private readonly PURCHASE_ORDER_STATUS_UPDATED_QUEUE: string;
+  private readonly ORDER_STATUS_UPDATED_QUEUE: string;
 
   private readonly EXCHANGE: string;
 
-  private readonly DELAY_PURCHASE_ORDER_STATUS_UPDATED_QUEUE: string;
+  private readonly DELAY_ORDER_STATUS_UPDATED_QUEUE: string;
 
   private readonly NEXXUS_PRODUCT_CREATED_QUEUE: string;
 
@@ -35,33 +35,33 @@ export class RabbitMQService implements OnModuleInit, OnModuleDestroy {
 
   private readonly logger = new Logger(RabbitMQService.name);
 
-  private readonly PURCHASE_ORDER_STATUS_UPDATED_ROUTING_KEY: string;
+  private readonly ORDER_STATUS_UPDATED_ROUTING_KEY: string;
 
   constructor(private readonly configService: ConfigService) {
     this.URI = this.configService.get<string>('RABBITMQ_URI');
     this.MAGENTO_PAYMENT_PAID = this.configService.get<string>('RABBITMQ_MAGENTO_PAYMENT_PAID');
-    this.PURCHASE_ORDER_STATUS_UPDATED_QUEUE = this.configService.get<string>('RABBITMQ_PURCHASE_ORDER_STATUS_UPDATED_QUEUE');
+    this.ORDER_STATUS_UPDATED_QUEUE = this.configService.get<string>('RABBITMQ_ORDER_STATUS_UPDATED_QUEUE');
     this.EXCHANGE = this.configService.get<string>('RABBITMQ_EXCHANGE');
-    this.DELAY_PURCHASE_ORDER_STATUS_UPDATED_QUEUE = this.configService.get<string>('RABBITMQ_DELAY_PURCHASE_ORDER_STATUS_UPDATED_QUEUE');
+    this.DELAY_ORDER_STATUS_UPDATED_QUEUE = this.configService.get<string>('RABBITMQ_DELAY_ORDER_STATUS_UPDATED_QUEUE');
     this.DELAY_EXCHANGE = this.configService.get<string>('RABBITMQ_DELAY_EXCHANGE');
-    this.PURCHASE_ORDER_STATUS_UPDATED_ROUTING_KEY = this.configService.get<string>('RABBITMQ_PURCHASE_ORDER_STATUS_UPDATED_ROUTING_KEY');
+    this.ORDER_STATUS_UPDATED_ROUTING_KEY = this.configService.get<string>('RABBITMQ_ORDER_STATUS_UPDATED_ROUTING_KEY');
     this.NEXXUS_PRODUCT_CREATED_QUEUE = this.configService.get<string>('RABBITMQ_NEXXUS_PRODUCT_CREATED_QUEUE');
   }
 
   async onModuleInit() {
-    await this.startDelayPurchaseOrderStatusUpdated();
+    await this.startDelayOrderStatusUpdated();
   }
 
   async publishOrderFromStore(orderId: string): Promise<void> {
     this.pushToQueue(this.magentoPaymentPaidChannel, this.MAGENTO_PAYMENT_PAID, JSON.stringify({ order_id: orderId }));
   }
 
-  async purchaseOrderStatusUpdated(orderId: number, previousStatusId: number): Promise<void> {
-    this.pushToQueue(this.purchaseOrderStatusUpdatedChannel, this.PURCHASE_ORDER_STATUS_UPDATED_QUEUE, JSON.stringify({ orderId, previousStatusId }));
+  async orderStatusUpdated(orderId: number, previousStatusId: number): Promise<void> {
+    this.pushToQueue(this.orderStatusUpdatedChannel, this.ORDER_STATUS_UPDATED_QUEUE, JSON.stringify({ orderId, previousStatusId }));
   }
 
-  async delayPurchaseOrderStatusUpdated(orderId: number, previousStatusId: number, publishOptions: PublishOptions): Promise<void> {
-    this.pushToQueue(this.delayPurchaseOrderStatusUpdatedChannel, this.DELAY_PURCHASE_ORDER_STATUS_UPDATED_QUEUE, JSON.stringify({ orderId, previousStatusId }), publishOptions);
+  async delayOrderStatusUpdated(orderId: number, previousStatusId: number, publishOptions: PublishOptions): Promise<void> {
+    this.pushToQueue(this.delayOrderStatusUpdatedChannel, this.DELAY_ORDER_STATUS_UPDATED_QUEUE, JSON.stringify({ orderId, previousStatusId }), publishOptions);
   }
 
   async productCreated(productId: number): Promise<void> {
@@ -88,19 +88,19 @@ export class RabbitMQService implements OnModuleInit, OnModuleDestroy {
     }
   }
 
-  async consumePurchaseOrderStatusUpdated(onMessage: (msg, properties) => void) {
+  async consumeOrderStatusUpdated(onMessage: (msg, properties) => void) {
     try {
       this.connection = amqp.connect([this.URI]);
-      this.purchaseOrderStatusUpdatedChannel = this.connection.createChannel({
+      this.orderStatusUpdatedChannel = this.connection.createChannel({
         json: true,
         setup: (channel: ConfirmChannel) => this.setupQueue({
           channel,
           exchange: this.EXCHANGE,
           type: 'topic',
-          queue: this.PURCHASE_ORDER_STATUS_UPDATED_QUEUE,
-          routingKey: this.PURCHASE_ORDER_STATUS_UPDATED_ROUTING_KEY,
+          queue: this.ORDER_STATUS_UPDATED_QUEUE,
+          routingKey: this.ORDER_STATUS_UPDATED_ROUTING_KEY,
           onSetup: () => {
-            this.pullFromQueue(this.purchaseOrderStatusUpdatedChannel, this.PURCHASE_ORDER_STATUS_UPDATED_QUEUE, onMessage);
+            this.pullFromQueue(this.orderStatusUpdatedChannel, this.ORDER_STATUS_UPDATED_QUEUE, onMessage);
           },
         }),
       });
@@ -109,23 +109,23 @@ export class RabbitMQService implements OnModuleInit, OnModuleDestroy {
     }
   }
 
-  async startDelayPurchaseOrderStatusUpdated() {
+  async startDelayOrderStatusUpdated() {
     try {
       this.connection = amqp.connect([this.URI]);
-      this.delayPurchaseOrderStatusUpdatedChannel = this.connection.createChannel({
+      this.delayOrderStatusUpdatedChannel = this.connection.createChannel({
         json: true,
         setup: (channel: ConfirmChannel) => this.setupQueue({
           channel,
           exchange: this.DELAY_EXCHANGE,
           type: 'direct',
-          queue: this.DELAY_PURCHASE_ORDER_STATUS_UPDATED_QUEUE,
+          queue: this.DELAY_ORDER_STATUS_UPDATED_QUEUE,
           delay: {
             ttl: 1000,
             dlx: this.EXCHANGE,
-            dlk: this.PURCHASE_ORDER_STATUS_UPDATED_ROUTING_KEY,
+            dlk: this.ORDER_STATUS_UPDATED_ROUTING_KEY,
           },
           onSetup: () => {
-            this.logger.log('DELAY_PURCHASE_ORDER_STATUS_UPDATED_QUEUE STARTED!');
+            this.logger.log('DELAY_ORDER_STATUS_UPDATED_QUEUE STARTED!');
           },
         }),
       });

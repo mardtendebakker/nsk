@@ -74,6 +74,7 @@ export default function Form({
       />
       <Typography sx={{ mx: '.8rem' }} variant="body1" color="text.secondary">{trans('orderStatusForm.mailBodyVariables.orderNr')}</Typography>
       <Typography sx={{ mx: '.8rem' }} variant="body1" color="text.secondary">{trans('orderStatusForm.mailBodyVariables.pickupDate')}</Typography>
+      <Typography sx={{ mx: '.8rem' }} variant="body1" color="text.secondary">{trans('orderStatusForm.mailBodyVariables.deliveryData')}</Typography>
       <Typography sx={{ mx: '.8rem' }} variant="body1" color="text.secondary">{trans('orderStatusForm.mailBodyVariables.orderDate')}</Typography>
       <Typography sx={{ mx: '.8rem' }} variant="body1" color="text.secondary">{trans('orderStatusForm.mailBodyVariables.supplierName')}</Typography>
       <Typography sx={{ mx: '.8rem' }} variant="body1" color="text.secondary">{trans('orderStatusForm.mailBodyVariables.customerName')}</Typography>
