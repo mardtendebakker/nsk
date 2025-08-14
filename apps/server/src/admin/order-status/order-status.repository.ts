@@ -38,6 +38,10 @@ export class OrderStatusRepository {
     return this.prisma.order_status.findFirst(params);
   }
 
+  async findBy(params: Prisma.order_statusFindManyArgs) {
+    return this.prisma.order_status.findMany(params);
+  }
+
   async create(params: Prisma.order_statusCreateArgs) {
     return this.prisma.order_status.create(params);
   }

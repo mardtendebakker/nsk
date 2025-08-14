@@ -1,4 +1,5 @@
 import { Global, Module } from '@nestjs/common';
+import { HttpModule } from '@nestjs/axios';
 import { SaleService } from './sale.service';
 import { SaleController } from './sale.controller';
 import { SaleRepository } from './sale.repository';
@@ -10,6 +11,8 @@ import { ContactModule } from '../contact/contact.module';
 import { PrintModule } from '../print/print.module';
 import { RabbitMQModule } from '../rabbitmq/rabbitmq.module';
 import { LogModule } from '../log/log.module';
+import { ExactModule } from '../exact/exact.module';
+import { ProductModule } from '../product/product.module';
 
 @Global()
 @Module({
@@ -27,10 +30,13 @@ import { LogModule } from '../log/log.module';
     FileModule,
     ContactModule,
     AProductModule,
+    ProductModule,
     OrderStatusModule,
     PrintModule,
     RabbitMQModule,
     LogModule,
+    ExactModule,
+    HttpModule,
   ],
   exports: [SaleService],
 })

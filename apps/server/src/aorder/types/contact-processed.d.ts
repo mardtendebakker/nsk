@@ -28,6 +28,7 @@ ContactRelation,
 'country2' |
 'state2' |
 'zip2' |
+'exact_id' |
 'is_main' |
 'company_contact_company_idTocompany' |
 'contact' |

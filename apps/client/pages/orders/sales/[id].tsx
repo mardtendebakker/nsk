@@ -24,7 +24,7 @@ function UpdateSalesOrder() {
   const { trans } = useTranslation();
   const router = useRouter();
   const { id } = router.query;
-  const [performingPrint, setPerformingPrint] = useState(false);
+  const [performingAction, setPerformingAction] = useState(false);
 
   const { call, performing } = useAxios(
     'put',
@@ -59,7 +59,7 @@ function UpdateSalesOrder() {
     }
   }, [id]);
 
-  const canSubmit = () => !performing && !performingFetchSalesOrder && !performingPrint && !performingDeleteFilte;
+  const canSubmit = () => !performing && !performingFetchSalesOrder && !performingAction && !performingDeleteFilte;
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
@@ -105,9 +105,10 @@ function UpdateSalesOrder() {
             {trans('editSales')}
           </Typography>
           <Action
+            order={salesOrder}
             disabled={!canSubmit()}
             onSave={handleSubmit}
-            setPerformingPrint={setPerformingPrint}
+            onPerformingAction={setPerformingAction}
             id={id?.toString()}
             type="sales"
           />
@@ -139,9 +140,10 @@ function UpdateSalesOrder() {
               </Grid>
             </Grid>
             <Action
+              order={salesOrder}
               disabled={!canSubmit()}
               onSave={handleSubmit}
-              setPerformingPrint={setPerformingPrint}
+              onPerformingAction={setPerformingAction}
               id={id?.toString()}
               type="sales"
             />
