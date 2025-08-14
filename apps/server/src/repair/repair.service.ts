@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
+import { HttpService } from '@nestjs/axios';
 import { RepairRepository } from './repair.repository';
 import { PrintService } from '../print/print.service';
 import { FileService } from '../file/file.service';
@@ -13,6 +14,8 @@ import { ContactService } from '../contact/contact.service';
 import { OrderStatuses } from '../admin/order-status/enums/order-statuses.enum';
 import { ProductLogService } from '../log/product-log.service';
 import { AorderLogService } from '../log/aorder-log.service';
+import { ExactService } from '../exact/exact.service';
+import { ProductService } from '../product/product.service';
 
 @Injectable()
 export class RepairService extends SaleService {
@@ -22,11 +25,14 @@ export class RepairService extends SaleService {
     protected readonly fileService: FileService,
     protected readonly contactService: ContactService,
     protected readonly aProductService: AProductService,
+    protected readonly productService: ProductService,
     protected readonly orderStatusService: OrderStatusService,
     protected readonly productLogService: ProductLogService,
     protected readonly aorderLogService: AorderLogService,
+    protected readonly httpService: HttpService,
+    exactService: ExactService,
   ) {
-    super(repository, printService, fileService, contactService, aProductService, orderStatusService, productLogService, aorderLogService);
+    super(repository, printService, fileService, contactService, aProductService, productService, orderStatusService, productLogService, aorderLogService, httpService, exactService);
   }
 
   async create(orderDto: CreateAOrderDto) {

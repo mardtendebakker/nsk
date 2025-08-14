@@ -1,5 +1,5 @@
 import {
-  Body, Controller, Delete, ForbiddenException, Param, Post, Put, UploadedFile, UseInterceptors,
+  Body, Controller, Delete, ForbiddenException, Headers, Param, Post, Put, UploadedFile, UseInterceptors,
 } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -31,6 +31,11 @@ export class SaleController extends AOrderController {
   @ApiBody({ type: [Number], description: 'Array of product IDs' })
   removeProducts(@Param('id') id: number, @Body() productIds: number[]) {
     return this.saleService.removeProducts(id, productIds);
+  }
+
+  @Post(':id/request-exact-invoice')
+  requestInvoice(@Param('id') id: number, @Headers('exact-authorization') authorization) {
+    return this.saleService.requestExactInvoice(id, { token: authorization?.replace('Bearer ', '') || '' });
   }
 
   @Post('import')

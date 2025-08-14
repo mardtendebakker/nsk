@@ -1,5 +1,7 @@
 import { contact } from '@prisma/client';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsOptional } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class ContactEntity implements contact {
   @ApiProperty()
@@ -37,6 +39,11 @@ export class ContactEntity implements contact {
 
   @ApiPropertyOptional()
     zip: string | null;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @Type(() => String)
+    exact_id: string | null;
 
   @ApiPropertyOptional()
     street2: string | null;

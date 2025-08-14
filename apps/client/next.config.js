@@ -15,6 +15,10 @@ const nextConfig = {
   env: {
     AXIOS_BASE_URL:
       process.env.NX_AXIOS_BASE_URL,
+    EXACT_ONLINE_CLIENT_ID:
+      process.env.NX_EXACT_ONLINE_CLIENT_ID,
+    EXACT_ONLINE_AUTH_BASE_URL:
+      process.env.NX_EXACT_ONLINE_AUTH_BASE_URL,
     MYPTV_MAP_STYLE_URL:
       'https://vectormaps-resources.myptv.com/styles/latest/standard.json',
     MYPTV_MAP_TILE_URL:

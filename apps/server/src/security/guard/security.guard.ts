@@ -37,7 +37,7 @@ export class SecurityGuard implements CanActivate {
     try {
       request.user = this.configService.get(SECURITY_SYSTEM) == SecuritySystem.COGNITO ? await this.cognitoVerify(token) : this.jwtVerify(token);
     } catch (e) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('INVALID_OR_EXPIRED_TOKEN');
     }
     return true;
   }
