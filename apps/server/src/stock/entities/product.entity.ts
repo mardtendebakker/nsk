@@ -50,6 +50,11 @@ export class ProductEntity implements product {
     name: string;
 
   @ApiPropertyOptional()
+  @IsOptional()
+  @Type(() => String)
+    exact_id: string | null;
+
+  @ApiPropertyOptional()
     description: string | null;
 
   @ApiPropertyOptional()

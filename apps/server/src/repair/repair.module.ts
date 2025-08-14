@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { HttpModule } from '@nestjs/axios';
 import { RepairService } from './repair.service';
 import { RepairController } from './repair.controller';
 import { RepairRepository } from './repair.repository';
@@ -10,6 +11,8 @@ import { AProductModule } from '../aproduct/aproduct.module';
 import { ContactModule } from '../contact/contact.module';
 import { PrintModule } from '../print/print.module';
 import { RabbitMQModule } from '../rabbitmq/rabbitmq.module';
+import { ExactModule } from '../exact/exact.module';
+import { ProductModule } from '../product/product.module';
 
 @Module({
   providers: [
@@ -27,9 +30,12 @@ import { RabbitMQModule } from '../rabbitmq/rabbitmq.module';
     FileModule,
     ContactModule,
     AProductModule,
+    ProductModule,
     OrderStatusModule,
     PrintModule,
     RabbitMQModule,
+    HttpModule,
+    ExactModule,
   ],
   exports: [RepairService],
 })
