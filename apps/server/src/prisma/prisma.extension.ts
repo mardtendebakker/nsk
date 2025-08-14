@@ -162,7 +162,7 @@ export function ActivityLogging(cls: ClsService, prisma: PrismaClient) {
           body: JSON.stringify(cls.get('body')),
           model,
           action: operation,
-          query: JSON.stringify(args),
+          query: JSON.stringify(['delete', 'deleteMany'].includes(operation) ? args.where : args.data),
           bulk: ['createMany', 'updateMany', 'deleteMany'].includes(operation),
         };
 
@@ -180,10 +180,18 @@ export function ActivityLogging(cls: ClsService, prisma: PrismaClient) {
           }
 
           if (['update', 'updateMany'].includes(operation)) {
-            const before = await prisma[model].findMany({
-              where: args.where,
-              select: buildSelectFromData(args.data),
-            });
+            let before;
+            if (operation === 'update') {
+              before = await prisma[model].findFirst({
+                where: args.where,
+                select: buildSelectFromData(args.data),
+              });
+            } else if (operation === 'updateMany') {
+              before = await prisma[model].findMany({
+                where: args.where,
+                select: buildSelectFromData(args.data),
+              });
+            }
             const result = await query(args);
 
             prisma.activity_log.create({
@@ -197,9 +205,16 @@ export function ActivityLogging(cls: ClsService, prisma: PrismaClient) {
           }
 
           if (['delete', 'deleteMany'].includes(operation)) {
-            const before = await prisma[model].findFirst({
-              where: args.where,
-            });
+            let before;
+            if (operation === 'delete') {
+              before = await prisma[model].findFirst({
+                where: args.where,
+              });
+            } else if (operation === 'deleteMany') {
+              before = await prisma[model].findMany({
+                where: args.where,
+              });
+            }
             const result = await query(args);
 
             prisma.activity_log.create({
