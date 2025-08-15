@@ -692,6 +692,21 @@ const translation = {
   409: 'Recurso exclusivo já usado para este recurso',
   422: 'A ação não pode ser executada',
   500: 'Problema interno do servidor. Tente novamente mais tarde',
+  january: 'Janeiro',
+  february: 'Fevereiro',
+  march: 'Março',
+  april: 'Abril',
+  may: 'Maio',
+  june: 'Junho',
+  july: 'Julho',
+  august: 'Agosto',
+  september: 'Setembro',
+  october: 'Outubro',
+  november: 'Novembro',
+  december: 'Dezembro',
+  year: 'Ano',
+  month: 'Mês',
+  toMonth: 'Até o mês',
 };
 
 export default translation;

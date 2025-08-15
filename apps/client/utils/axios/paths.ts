@@ -80,3 +80,4 @@ export const AUTOCOMPLETE_PRODUCT_STATUSES_PATH = '/autocomplete/product-statuse
 export const AUTOCOMPLETE_COMPANIES_PATH = '/autocomplete/companies';
 export const ADMIN_USERS_GROUPS = '/admin/users/groups/:username';
 export const PAYMENTS_SETUP = '/payments/setup';
+export const DASHBOARD_TOTAL = '/dashboard/total';
