@@ -720,6 +720,21 @@ const translation = {
   409: 'ویژگی منحصر به فرد قبلاً برای این منبع استفاده شده است',
   422: 'عمل نمی تواند انجام شود',
   500: 'مشکل سرور داخلی. لطفا بعدا تلاش کنید',
+  january: 'ژانویه',
+  february: 'فوریه',
+  march: 'مارس',
+  april: 'آوریل',
+  may: 'مه',
+  june: 'ژوئن',
+  july: 'ژوئیه',
+  august: 'اوت',
+  september: 'سپتامبر',
+  october: 'اکتبر',
+  november: 'نوامبر',
+  december: 'دسامبر',
+  year: 'سال',
+  month: 'ماه',
+  toMonth: 'تا ماه',
 };
 
 export default translation;

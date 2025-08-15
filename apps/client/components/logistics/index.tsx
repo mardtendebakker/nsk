@@ -7,7 +7,7 @@ import {
 import Search from '@mui/icons-material/Search';
 import {
   addMinutes, areIntervalsOverlapping, differenceInMinutes, format, setHours, setMinutes, setSeconds, eachDayOfInterval,
-  getHours, isValid,
+  getHours, isValid, startOfWeek, endOfWeek,
 } from 'date-fns';
 import { NextRouter, useRouter } from 'next/router';
 import useTranslation from '../../hooks/useTranslation';
@@ -47,10 +47,26 @@ const refreshList = ({
   }).then(() => pushURLParams({ params, router })).catch(() => {});
 };
 
-const getInitialDate = (paramName: string) => {
-  const dateParam = getQueryParam(paramName, new Date().toISOString());
-  const date = new Date(dateParam);
-  return isValid(date) ? date : undefined;
+const getInitialStartDate = () => {
+  const dateParam = getQueryParam('startDate', '');
+
+  if (dateParam) {
+    const date = new Date(dateParam);
+    return isValid(date) ? date : undefined;
+  }
+
+  return startOfWeek(new Date(), { weekStartsOn: 1 });
+};
+
+const getInitialEndDate = () => {
+  const dateParam = getQueryParam('endDate', '');
+
+  if (dateParam) {
+    const date = new Date(dateParam);
+    return isValid(date) ? date : undefined;
+  }
+
+  return endOfWeek(new Date(), { weekStartsOn: 1 });
 };
 
 const generateTimeSlots = (minHour: number, maxHour: number) => {
@@ -165,8 +181,8 @@ export default function Logistics({ type }: { type: 'pickup' | 'delivery' }) {
   const router = useRouter();
   const { state: { config } } = useRemoteConfig();
 
-  const initStartDate = useMemo(() => getInitialDate('startDate'), []);
-  const initEndDate = useMemo(() => getInitialDate('endDate'), []);
+  const initStartDate = useMemo(() => getInitialStartDate(), []);
+  const initEndDate = useMemo(() => getInitialEndDate(), []);
 
   const [openHours, setOpenHours] = useState<string[]>([]);
   const [dates, setDates] = useState<Date[]>([]);

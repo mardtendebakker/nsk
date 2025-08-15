@@ -710,6 +710,21 @@ const translation = {
   409: 'Atributo único ya utilizado para este recurso',
   422: 'Acción no puede ser completada',
   500: 'Problema interno del servidor. Por favor, intente más tarde',
+  january: 'Enero',
+  february: 'Febrero',
+  march: 'Marzo',
+  april: 'Abril',
+  may: 'Mayo',
+  june: 'Junio',
+  july: 'Julio',
+  august: 'Agosto',
+  september: 'Septiembre',
+  october: 'Octubre',
+  november: 'Noviembre',
+  december: 'Diciembre',
+  year: 'Año',
+  month: 'Mes',
+  toMonth: 'Al mes',
 };
 
 export default translation;

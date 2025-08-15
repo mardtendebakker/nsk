@@ -716,6 +716,21 @@ const translation = {
   409: 'Unieke eigenschap die al voor deze bron wordt gebruikt',
   422: 'Actie kan niet worden uitgevoerd',
   500: 'Intern serverprobleem. Probeert u het later alstublieft',
+  january: 'Januari',
+  february: 'Februari',
+  march: 'Maart',
+  april: 'April',
+  may: 'Mei',
+  june: 'Juni',
+  july: 'Juli',
+  august: 'Augustus',
+  september: 'September',
+  october: 'Oktober',
+  november: 'November',
+  december: 'December',
+  year: 'Jaar',
+  month: 'Maand',
+  toMonth: 'Tot maand',
 };
 
 export default translation;

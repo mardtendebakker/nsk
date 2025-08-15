@@ -716,7 +716,21 @@ const translation = {
     422: "L'action ne peut pas être effectuée",
     500: 'Problème interne du serveur. Veuillez réessayer plus tard',
   },
-
+  january: 'Janvier',
+  february: 'Février',
+  march: 'Mars',
+  april: 'Avril',
+  may: 'Mai',
+  june: 'Juin',
+  july: 'Juillet',
+  august: 'Août',
+  september: 'Septembre',
+  october: 'Octobre',
+  november: 'Novembre',
+  december: 'Décembre',
+  year: 'Année',
+  month: 'Mois',
+  toMonth: 'Au mois',
 };
 
 export default translation;

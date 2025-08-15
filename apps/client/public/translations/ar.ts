@@ -721,6 +721,21 @@ const translation = {
     422: 'لا يمكن إجراء العملية',
     500: 'مشكلة داخلية في الخادم. يرجى المحاولة مرة أخرى لاحقًا',
   },
+  january: 'يناير',
+  february: 'فبراير',
+  march: 'مارس',
+  april: 'أبريل',
+  may: 'مايو',
+  june: 'يونيو',
+  july: 'يوليو',
+  august: 'أغسطس',
+  september: 'سبتمبر',
+  october: 'أكتوبر',
+  november: 'نوفمبر',
+  december: 'ديسمبر',
+  year: 'السنة',
+  month: 'الشهر',
+  toMonth: 'إلى الشهر',
 };
 
 export default translation;

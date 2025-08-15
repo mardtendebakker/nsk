@@ -711,6 +711,21 @@ const translation = {
   409: 'Eindeutige Eigenschaft, die bereits für diese Ressource verwendet wird',
   422: 'Aktion kann nicht durchgeführt werden',
   500: 'Internes Serverproblem. Bitte versuchen Sie es später noch einmal',
+  january: 'Januar',
+  february: 'Februar',
+  march: 'März',
+  april: 'April',
+  may: 'Mai',
+  june: 'Juni',
+  july: 'Juli',
+  august: 'August',
+  september: 'September',
+  october: 'Oktober',
+  november: 'November',
+  december: 'Dezember',
+  year: 'Jahr',
+  month: 'Monat',
+  toMonth: 'Bis Monat',
 };
 
 export default translation;
