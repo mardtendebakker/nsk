@@ -22,7 +22,7 @@ export default function DashboardFilters({
 }) {
   const currentYear = new Date().getFullYear();
   const years = Array.from(
-    { length: 10 },
+    { length: 7 },
     (_, i) => (currentYear - i).toString(),
   );
   const months = [
