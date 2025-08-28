@@ -14,6 +14,7 @@ import Analytics from '../components/dashboard/analytics';
 import { ORDERS_ANALYTICS_PATH } from '../utils/axios';
 import useResponsive from '../hooks/useResponsive';
 import useTheme from '../hooks/useTheme';
+import Can from '../components/can';
 
 function Dashboard() {
   const { state: { user } } = useSecurity();
@@ -38,7 +39,9 @@ function Dashboard() {
         </Typography>
       </Box>
       <Box sx={{ m: '.5rem' }} />
-      <IndicatorRow />
+      <Can requiredGroups={['admin']}>
+        <IndicatorRow />
+      </Can>
       <Box sx={{ mt: '.5rem', display: 'flex', flexDirection: isDesktop ? undefined : 'column-reverse' }}>
         <Box sx={{ flex: '.8', mr: '.5rem' }}>
           <Analytics label={trans('productAnalytics')} path={ORDERS_ANALYTICS_PATH} />

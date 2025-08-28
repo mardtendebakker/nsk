@@ -7,7 +7,9 @@ import { DashboardService } from './dashboard.service';
 import { DashboardTotalDto } from './dto/dashboard-total.dto';
 import { DashboardTotalResponseDto } from './dto/dashboard-total-response.dto';
 import { ConnectedUser, ConnectedUserType } from '../security/decorator/connected-user.decorator';
-import { ALL_MAIN_GROUPS, LOCAL_GROUPS, PARTNERS_GROUPS } from '../user/model/group.enum';
+import {
+  ADMINS_GROUPS, ALL_MAIN_GROUPS, LOCAL_GROUPS, PARTNERS_GROUPS,
+} from '../user/model/group.enum';
 import { Authorization } from '../security/decorator/authorization.decorator';
 
 @ApiBearerAuth()
@@ -18,6 +20,7 @@ export class DashboardController {
   constructor(protected readonly dashboardService: DashboardService) {}
 
   @Get('total')
+  @Authorization(ADMINS_GROUPS)
   @ApiResponse({ type: DashboardTotalResponseDto })
   total(
   @Query() query: DashboardTotalDto,
