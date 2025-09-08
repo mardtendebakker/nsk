@@ -267,6 +267,7 @@ model product_type {
   product                product[]
   product_type_attribute product_type_attribute[]
   product_type_task      product_type_task[]
+  productSubTypes        product_sub_type[]
 }
 
 model product_type_attribute {
@@ -527,6 +528,17 @@ model user_group {
   id           Int            @id @default(autoincrement())
   name         String         @unique
   activityLogs activity_log[] @relation("activity_logTouser_group")
+}
+
+model product_sub_type {
+  id                     Int                      @id @default(autoincrement())
+  product_type_id        Int
+  name                   String                   @db.VarChar(255)
+  magento_category_id    String?                  @db.VarChar(50)
+  magento_attr_set_id    String?                  @db.VarChar(50)
+  magento_group_spec_id  String?                  @db.VarChar(50)
+  pindex                 Int?
+  productType product_type @relation(fields: [product_type_id], references: [id])
 }
 
 enum VehicleType {
