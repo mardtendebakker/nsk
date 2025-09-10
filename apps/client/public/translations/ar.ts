@@ -83,6 +83,43 @@ const translation = {
   createUser: 'إنشاء مستخدم',
   admin: 'مدير',
   productType: 'نوع المنتج',
+  productSubType: 'نوع فرعي للمنتج',
+  selectProductSubType: 'اختر نوع فرعي للمنتج',
+  productSubTypes: 'أنواع فرعية للمنتجات',
+  newProductSubType: 'نوع فرعي جديد للمنتج',
+  createProductSubType: 'إنشاء نوع فرعي للمنتج',
+  editProductSubType: 'تعديل نوع فرعي للمنتج',
+  productSubTypesList: {
+    search: {
+      placeholder: 'البحث بالاسم',
+    },
+  },
+  productSubTypeForm: {
+    name: {
+      label: 'الاسم',
+      placeholder: 'أدخل الاسم',
+    },
+    productType: {
+      label: 'نوع المنتج',
+      placeholder: 'اختر نوع المنتج',
+    },
+    magentoCategoryId: {
+      label: 'معرف فئة ماجنتو',
+      placeholder: 'أدخل معرف فئة ماجنتو',
+    },
+    magentoAttrSetId: {
+      label: 'معرف مجموعة السمات ماجنتو',
+      placeholder: 'أدخل معرف مجموعة السمات ماجنتو',
+    },
+    magentoGroupSpecId: {
+      label: 'معرف مواصفات المجموعة ماجنتو',
+      placeholder: 'أدخل معرف مواصفات المجموعة ماجنتو',
+    },
+    pindex: {
+      label: 'الفهرس',
+      placeholder: 'أدخل الفهرس',
+    },
+  },
   orders: 'الطلبيات',
   editSupplier: 'تحرير المورد',
   editSales: 'تحرير البيع',

@@ -61,8 +61,17 @@ export class ProductSubTypeService {
       ...select,
       id: true,
       name: true,
+      product_type_id: true,
       magento_category_id: true,
       magento_attr_set_id: true,
+      magento_group_spec_id: true,
+      pindex: true,
+      productType: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
     };
   }
 }

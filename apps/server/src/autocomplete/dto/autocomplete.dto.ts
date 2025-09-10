@@ -20,3 +20,11 @@ export class LocationLabelsAutocompleteDto extends AutocompleteDto {
   @ValidateIf((_, value) => value !== undefined)
     location_id?: number;
 }
+
+export class ProductSubTypesAutocompleteDto extends AutocompleteDto {
+  @ApiPropertyOptional()
+  @IsInt()
+  @Type(() => Number)
+  @ValidateIf((_, value) => value !== undefined)
+    product_type_id?: number;
+}

@@ -6,6 +6,7 @@ import { ProductEntity } from '../entities/product.entity';
 import { ProductAttributeEntity } from '../entities/product-attribute.entity';
 import { AOrderEntity } from '../../aorder/entities/aorder.entity';
 import { ProductTypeEntity } from '../../admin/product-type/entities/product-type.entity';
+import { ProductSubTypeEntity } from '../../admin/product-sub-type/entities/product-sub-type.entity';
 import { ProductStatusEntity } from '../../admin/product-status/entities/product-status.entity';
 import { LocationLabelEntity } from '../../location-label/entities/location-label.entity';
 
@@ -66,6 +67,11 @@ class ProductTypeDto extends PickType(ProductTypeEntity, [
   'name',
 ]) {}
 
+class ProductSubTypeDto extends PickType(ProductSubTypeEntity, [
+  'id',
+  'name',
+]) {}
+
 export class FindOneProductResponeDto extends PickType(ProductEntity, [
   'id',
   'sku',
@@ -95,4 +101,7 @@ export class FindOneProductResponeDto extends PickType(ProductEntity, [
 
   @ApiProperty()
     product_type: ProductTypeDto;
+
+  @ApiPropertyOptional()
+    product_sub_type?: ProductSubTypeDto;
 }

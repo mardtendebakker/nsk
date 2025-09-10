@@ -83,6 +83,43 @@ const translation = {
   createUser: 'ایجاد کاربر',
   admin: 'ادمین',
   productType: 'نوع محصول',
+  productSubType: 'زیرنوع محصول',
+  selectProductSubType: 'انتخاب زیرنوع محصول',
+  productSubTypes: 'زیرنوع‌های محصول',
+  newProductSubType: 'زیرنوع جدید محصول',
+  createProductSubType: 'ایجاد زیرنوع محصول',
+  editProductSubType: 'ویرایش زیرنوع محصول',
+  productSubTypesList: {
+    search: {
+      placeholder: 'جستجو بر اساس نام',
+    },
+  },
+  productSubTypeForm: {
+    name: {
+      label: 'نام',
+      placeholder: 'نام را وارد کنید',
+    },
+    productType: {
+      label: 'نوع محصول',
+      placeholder: 'انتخاب نوع محصول',
+    },
+    magentoCategoryId: {
+      label: 'شناسه دسته‌بندی ماجنتو',
+      placeholder: 'شناسه دسته‌بندی ماجنتو را وارد کنید',
+    },
+    magentoAttrSetId: {
+      label: 'شناسه مجموعه ویژگی ماجنتو',
+      placeholder: 'شناسه مجموعه ویژگی ماجنتو را وارد کنید',
+    },
+    magentoGroupSpecId: {
+      label: 'شناسه مشخصات گروه ماجنتو',
+      placeholder: 'شناسه مشخصات گروه ماجنتو را وارد کنید',
+    },
+    pindex: {
+      label: 'شاخص',
+      placeholder: 'شاخص را وارد کنید',
+    },
+  },
   orders: 'سفارشات',
   editSupplier: 'ویرایش تامین کننده',
   editSales: 'ویرایش فروش',

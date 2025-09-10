@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { AutocompleteRepository } from './autocomplete.repository';
-import { AutocompleteDto, LocationLabelsAutocompleteDto } from './dto/autocomplete.dto';
+import { AutocompleteDto, LocationLabelsAutocompleteDto, ProductSubTypesAutocompleteDto } from './dto/autocomplete.dto';
 
 @Injectable()
 export class AutocompleteService {
@@ -8,6 +8,10 @@ export class AutocompleteService {
 
   async findProductTypes(autocompleteDto: AutocompleteDto) {
     return this.repository.findProductTypes(autocompleteDto);
+  }
+
+  async findProductSubTypes(autocompleteDto: ProductSubTypesAutocompleteDto) {
+    return this.repository.findProductSubTypes(autocompleteDto);
   }
 
   async findTasks(autocompleteDto: AutocompleteDto) {

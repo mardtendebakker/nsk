@@ -173,6 +173,7 @@ model pickup {
 model product {
   id                                                            Int                 @id @default(autoincrement())
   type_id                                                       Int?
+  sub_type_id                                                   Int?
   location_id                                                   Int
   location_label_id                                             Int?
   status_id                                                     Int?
@@ -190,6 +191,7 @@ model product {
   location                                                      location            @relation(fields: [location_id], references: [id], onUpdate: Restrict, map: "FK_D34A04AD64D218E")
   product_status                                                product_status?     @relation(fields: [status_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK_D34A04AD6BF700BD")
   product_type                                                  product_type?       @relation(fields: [type_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK_D34A04ADC54C8C93")
+  product_sub_type                                              product_sub_type?   @relation(fields: [sub_type_id], references: [id], onDelete: Restrict, onUpdate: Restrict)
   location_label                                                location_label?     @relation(fields: [location_label_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "product_location_label_id_fkey")
   product_attribute_product_attribute_product_idToproduct       product_attribute[] @relation("product_attribute_product_idToproduct")
   product_attribute_product_attribute_value_product_idToproduct product_attribute[] @relation("product_attribute_value_product_idToproduct")
@@ -539,6 +541,7 @@ model product_sub_type {
   magento_group_spec_id  String?                  @db.VarChar(50)
   pindex                 Int?
   productType product_type @relation(fields: [product_type_id], references: [id])
+  products product[]
 }
 
 enum VehicleType {
