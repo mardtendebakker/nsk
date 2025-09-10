@@ -1,5 +1,6 @@
 import {
   Button, Box, Tooltip, IconButton, Typography,
+  SxProps,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useState } from 'react';
@@ -10,10 +11,12 @@ export default function Delete({
   onClick,
   tooltip = false,
   disabled = false,
+  sx,
 }: {
   tooltip?: boolean,
   onClick: () => void,
   disabled?: boolean,
+  sx?: SxProps
 }) {
   const { trans } = useTranslation();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -24,12 +27,12 @@ export default function Delete({
         <span>
           {tooltip
             ? (
-              <IconButton size="small" sx={{ borderRadius: 0, border: 0 }} onClick={() => setShowDeleteModal(true)} color="error" disabled={disabled}>
+              <IconButton size="small" sx={{ borderRadius: 0, border: 0, ...sx }} onClick={() => setShowDeleteModal(true)} color="error" disabled={disabled}>
                 <DeleteIcon sx={{ fontSize: '1rem' }} />
               </IconButton>
             )
             : (
-              <Button size="small" onClick={() => setShowDeleteModal(true)} variant="outlined" color="error" disabled={disabled}>
+              <Button size="small" sx={sx} onClick={() => setShowDeleteModal(true)} variant="outlined" color="error" disabled={disabled}>
                 <DeleteIcon />
                 {trans('delete')}
               </Button>

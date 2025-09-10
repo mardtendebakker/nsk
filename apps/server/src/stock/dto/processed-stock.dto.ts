@@ -29,7 +29,7 @@ export class ProcessedStock extends PickType(ProductEntity, [
     purch: number;
 
   @ApiProperty()
-    stock: number;
+    stockQuantity: number;
 
   @ApiProperty()
     hold: number;

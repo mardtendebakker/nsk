@@ -19,6 +19,12 @@ export class PrismaCompanyCreateInputDto implements Prisma.companyUncheckedCreat
   @Type(() => Number)
     kvk_nr?: number;
 
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsInt()
+  @Type(() => Number)
+    rsin?: number;
+
   @ApiProperty()
   @IsBoolean()
     is_partner: boolean;

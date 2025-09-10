@@ -4,10 +4,8 @@ import {
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import TextField from '../../../memoizedInput/textField';
-import Delete from '../../../button/delete';
 import TableCell from '../../../tableCell';
 import can from '../../../../utils/can';
-import Can from '../../../can';
 import { ProductListItem } from '../../../../utils/axios/models/product';
 import useSecurity from '../../../../hooks/useSecurity';
 
@@ -17,7 +15,6 @@ export default function Row({
   disabled,
   onRowChecked,
   checkedProductIds,
-  onDeleteProduct,
   vatFactor,
 }: {
   product: ProductListItem,
@@ -25,7 +22,6 @@ export default function Row({
   disabled: boolean,
   onRowChecked: ({ id, checked }: { id: number, checked:boolean })=> void,
   checkedProductIds: number[],
-  onDeleteProduct: (id: number)=> void,
   vatFactor: number,
 }) {
   const { state: { user } } = useSecurity();
@@ -52,7 +48,7 @@ export default function Row({
         {product.price}
       </TableCell>
       <TableCell>
-        {product.stock}
+        {product.stockQuantity}
       </TableCell>
       <TableCell>
         <TextField
@@ -100,11 +96,6 @@ export default function Row({
           )}
           disabled={!user || !can({ user, requiredGroups: ['admin', 'manager', 'logistics', 'local'] })}
         />
-      </TableCell>
-      <TableCell align="right">
-        <Can requiredGroups={['admin', 'manager', 'logistics', 'local']}>
-          <Delete onClick={() => onDeleteProduct(product.id)} tooltip />
-        </Can>
       </TableCell>
     </TableRow>
   );

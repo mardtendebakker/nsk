@@ -7,7 +7,7 @@ interface TableCellProps extends BaseTableCellProps {
 export default function TableCell({ children, withPlaceHolder = true, ...rest }: TableCellProps) {
   return (
     <BaseTableCell {...rest}>
-      {withPlaceHolder && (children || '--')}
+      {withPlaceHolder && (children === null || children === undefined ? '--' : children)}
     </BaseTableCell>
   );
 }

@@ -1,81 +1,207 @@
 import {
-  Injectable, Logger, OnModuleDestroy, OnModuleInit,
+  Injectable, Logger, OnModuleDestroy,
+  OnModuleInit,
 } from '@nestjs/common';
 import { ConfirmChannel } from 'amqplib';
 import amqp, { AmqpConnectionManager, ChannelWrapper } from 'amqp-connection-manager';
 import { ConfigService } from '@nestjs/config';
+import { PublishOptions } from 'amqp-connection-manager/dist/types/ChannelWrapper';
 
 @Injectable()
 export class RabbitMQService implements OnModuleInit, OnModuleDestroy {
   private connection: AmqpConnectionManager;
 
-  private ch1: ChannelWrapper;
+  private orderStatusUpdatedChannel: ChannelWrapper;
+
+  private delayOrderStatusUpdatedChannel: ChannelWrapper;
+
+  private magentoPaymentPaidChannel: ChannelWrapper;
+
+  private nexxusProductCreatedChannel: ChannelWrapper;
 
   private readonly URI: string;
 
-  private readonly MAGENTO_ORDER_CREATED: string;
+  private readonly MAGENTO_PAYMENT_PAID: string;
+
+  private readonly ORDER_STATUS_UPDATED_QUEUE: string;
 
   private readonly EXCHANGE: string;
 
+  private readonly DELAY_ORDER_STATUS_UPDATED_QUEUE: string;
+
+  private readonly NEXXUS_PRODUCT_CREATED_QUEUE: string;
+
+  private readonly DELAY_EXCHANGE: string;
+
   private readonly logger = new Logger(RabbitMQService.name);
+
+  private readonly ORDER_STATUS_UPDATED_ROUTING_KEY: string;
 
   constructor(private readonly configService: ConfigService) {
     this.URI = this.configService.get<string>('RABBITMQ_URI');
-    this.MAGENTO_ORDER_CREATED = this.configService.get<string>('RABBITMQ_MAGENTO_ORDER_CREATED');
+    this.MAGENTO_PAYMENT_PAID = this.configService.get<string>('RABBITMQ_MAGENTO_PAYMENT_PAID');
+    this.ORDER_STATUS_UPDATED_QUEUE = this.configService.get<string>('RABBITMQ_ORDER_STATUS_UPDATED_QUEUE');
     this.EXCHANGE = this.configService.get<string>('RABBITMQ_EXCHANGE');
+    this.DELAY_ORDER_STATUS_UPDATED_QUEUE = this.configService.get<string>('RABBITMQ_DELAY_ORDER_STATUS_UPDATED_QUEUE');
+    this.DELAY_EXCHANGE = this.configService.get<string>('RABBITMQ_DELAY_EXCHANGE');
+    this.ORDER_STATUS_UPDATED_ROUTING_KEY = this.configService.get<string>('RABBITMQ_ORDER_STATUS_UPDATED_ROUTING_KEY');
+    this.NEXXUS_PRODUCT_CREATED_QUEUE = this.configService.get<string>('RABBITMQ_NEXXUS_PRODUCT_CREATED_QUEUE');
   }
 
-  async onModuleInit(): Promise<void> {
-    await this.connect();
-  }
-
-  private async connect(): Promise<void> {
-    try {
-      this.connection = amqp.connect([this.URI]);
-      this.ch1 = this.connection.createChannel({
-        json: true,
-        setup: async (channel: ConfirmChannel) => this.setupQueue(channel, this.MAGENTO_ORDER_CREATED),
-      });
-      this.logger.log('*** CONNECTED TO RABBITMQ SERVERE ***');
-    } catch (err) {
-      this.logger.debug('Error connecting to RabbitMQ:', err);
-    }
-  }
-
-  private async setupQueue(channel: ConfirmChannel, queue: string) {
-    try {
-      await channel.assertQueue(queue, { durable: true });
-      await channel.assertExchange(this.EXCHANGE, 'topic', { durable: true });
-      await channel.bindQueue(queue, this.EXCHANGE, queue);
-    } catch (err) {
-      this.logger.debug(`Error occuered setting up the queue ${queue}:`, err);
-    }
+  async onModuleInit() {
+    await this.startDelayOrderStatusUpdated();
   }
 
   async publishOrderFromStore(orderId: string): Promise<void> {
-    await this.pushToQueue(this.ch1, this.MAGENTO_ORDER_CREATED, JSON.stringify({ orderId }));
+    this.pushToQueue(this.magentoPaymentPaidChannel, this.MAGENTO_PAYMENT_PAID, JSON.stringify({ order_id: orderId }));
   }
 
-  async consumeWebshopOrderCreated(onMessage: (msg) => void) {
-    return this.pullFromQueue(this.ch1, this.MAGENTO_ORDER_CREATED, onMessage);
+  async orderStatusUpdated(orderId: number, previousStatusId: number): Promise<void> {
+    this.pushToQueue(this.orderStatusUpdatedChannel, this.ORDER_STATUS_UPDATED_QUEUE, JSON.stringify({ orderId, previousStatusId }));
   }
 
-  private async pushToQueue(channelWrapper: ChannelWrapper, queue: string, text: string) {
+  async delayOrderStatusUpdated(orderId: number, previousStatusId: number, publishOptions: PublishOptions): Promise<void> {
+    this.pushToQueue(this.delayOrderStatusUpdatedChannel, this.DELAY_ORDER_STATUS_UPDATED_QUEUE, JSON.stringify({ orderId, previousStatusId }), publishOptions);
+  }
+
+  async productCreated(productId: number): Promise<void> {
+    this.pushToQueue(this.nexxusProductCreatedChannel, this.NEXXUS_PRODUCT_CREATED_QUEUE, JSON.stringify({ productId }));
+  }
+
+  async consumeWebshopOrderCreated(onMessage: (msg, properties) => void) {
     try {
-      if (!channelWrapper) {
-        await this.connect();
-      }
-      await channelWrapper.sendToQueue(queue, text);
+      this.connection = amqp.connect([this.URI]);
+      this.magentoPaymentPaidChannel = this.connection.createChannel({
+        json: true,
+        setup: (channel: ConfirmChannel) => this.setupQueue({
+          channel,
+          exchange: this.EXCHANGE,
+          type: 'topic',
+          queue: this.MAGENTO_PAYMENT_PAID,
+          onSetup: () => {
+            this.pullFromQueue(this.magentoPaymentPaidChannel, this.MAGENTO_PAYMENT_PAID, onMessage);
+          },
+        }),
+      });
+    } catch (err) {
+      this.logger.debug('RabbitMQ:', err);
+    }
+  }
+
+  async consumeOrderStatusUpdated(onMessage: (msg, properties) => void) {
+    try {
+      this.connection = amqp.connect([this.URI]);
+      this.orderStatusUpdatedChannel = this.connection.createChannel({
+        json: true,
+        setup: (channel: ConfirmChannel) => this.setupQueue({
+          channel,
+          exchange: this.EXCHANGE,
+          type: 'topic',
+          queue: this.ORDER_STATUS_UPDATED_QUEUE,
+          routingKey: this.ORDER_STATUS_UPDATED_ROUTING_KEY,
+          onSetup: () => {
+            this.pullFromQueue(this.orderStatusUpdatedChannel, this.ORDER_STATUS_UPDATED_QUEUE, onMessage);
+          },
+        }),
+      });
+    } catch (err) {
+      this.logger.debug('RabbitMQ:', err);
+    }
+  }
+
+  async startDelayOrderStatusUpdated() {
+    try {
+      this.connection = amqp.connect([this.URI]);
+      this.delayOrderStatusUpdatedChannel = this.connection.createChannel({
+        json: true,
+        setup: (channel: ConfirmChannel) => this.setupQueue({
+          channel,
+          exchange: this.DELAY_EXCHANGE,
+          type: 'direct',
+          queue: this.DELAY_ORDER_STATUS_UPDATED_QUEUE,
+          delay: {
+            ttl: 1000,
+            dlx: this.EXCHANGE,
+            dlk: this.ORDER_STATUS_UPDATED_ROUTING_KEY,
+          },
+          onSetup: () => {
+            this.logger.log('DELAY_ORDER_STATUS_UPDATED_QUEUE STARTED!');
+          },
+        }),
+      });
+    } catch (err) {
+      this.logger.debug('RabbitMQ:', err);
+    }
+  }
+
+  async consumeProductCreated(onMessage: (msg, properties) => void) {
+    try {
+      this.connection = amqp.connect([this.URI]);
+      this.nexxusProductCreatedChannel = this.connection.createChannel({
+        json: true,
+        setup: (channel: ConfirmChannel) => this.setupQueue({
+          channel,
+          exchange: this.EXCHANGE,
+          type: 'topic',
+          queue: this.NEXXUS_PRODUCT_CREATED_QUEUE,
+          onSetup: () => {
+            this.pullFromQueue(this.nexxusProductCreatedChannel, this.NEXXUS_PRODUCT_CREATED_QUEUE, onMessage);
+          },
+        }),
+      });
+    } catch (err) {
+      this.logger.debug('RabbitMQ:', err);
+    }
+  }
+
+  private async setupQueue({
+    channel, exchange, type, queue, delay, routingKey, onSetup,
+  }: { channel: ConfirmChannel,
+    exchange: string,
+    type: 'direct' | 'topic' | 'headers' | 'fanout' | 'match',
+    queue: string,
+    delay?: {
+      ttl: number,
+      dlx: string,
+      dlk: string
+    },
+    routingKey?: string,
+    onSetup: () => void
+  }) {
+    try {
+      await channel.assertExchange(exchange, type, { durable: true });
+      await channel.assertQueue(queue, {
+        durable: true,
+        autoDelete: false,
+        exclusive: false,
+        ...(delay && {
+          arguments: {
+            'x-message-ttl': delay.ttl,
+            'x-dead-letter-exchange': delay.dlx,
+            'x-dead-letter-routing-key': delay.dlk,
+          },
+        }),
+      });
+      await channel.bindQueue(queue, exchange, routingKey ?? '');
+      onSetup();
+    } catch (err) {
+      this.logger.debug('Error occuered setting up the queues.', err);
+    }
+  }
+
+  private async pushToQueue(channelWrapper: ChannelWrapper, queue: string, text: string, publishOptions: PublishOptions = {}) {
+    try {
+      await channelWrapper.sendToQueue(queue, text, publishOptions);
       this.logger.log(`-- message pushed to queue ${queue} --`);
     } catch (err) {
       this.logger.debug(`-- error pushing message to queue ${queue} --`, err);
     }
   }
 
-  private async pullFromQueue(channelWrapper: ChannelWrapper, queue: string, onMessage: (msg) => void) {
+  private async pullFromQueue(channelWrapper: ChannelWrapper, queue: string, onMessage: (msg: any, properties: any) => void) {
     await channelWrapper.addSetup((channel: ConfirmChannel) => channel.consume(queue, (msg) => {
       if (msg !== null) {
-        onMessage(JSON.parse(JSON.parse(msg.content.toString())));
+        onMessage(JSON.parse(JSON.parse(msg.content.toString())), msg.properties);
         channel.ack(msg);
       }
     }));

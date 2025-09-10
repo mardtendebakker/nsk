@@ -20,6 +20,7 @@ export const ORDERS_PURCHASES = '/orders/purchases';
 export const ORDERS_SALES = '/orders/sales';
 export const ORDERS_REPAIRS = '/orders/repairs';
 export const STOCKS_PRODUCTS = '/stock/products';
+export const STOCKS_OUT_OF_STOCK = '/stock/out-of-stock';
 export const ORDERS_PURCHASES_NEW = '/orders/purchases/new';
 export const ORDERS_PURCHASES_EDIT = '/orders/purchases/[id]';
 export const ORDERS_REPAIRS_EDIT = '/orders/repairs/[id]';
@@ -32,7 +33,9 @@ export const STOCKS_WEBSHOP = '/stock/webshop';
 export const ADMIN_USERS = '/admin/users';
 export const ADMIN_MODULES = '/admin/modules';
 export const ADMIN_LOGISTICS = '/admin/logistics';
+export const ADMIN_LOGS = '/logs';
 export const ADMIN_THEME = '/admin/theme';
+export const LOGS_EMAILS = '/logs/emails';
 export const ADMIN_MODULES_PAYMENTS = '/admin/modules/payments';
 export const ADMIN_MODULES_CART = '/admin/modules/cart';
 export const ADMIN_LOGISTICS_VEHICLES = '/admin/logistics/vehicles';
@@ -49,7 +52,7 @@ export const ADMIN_SETTINGS_PRODUCT_STATUSES = '/admin/settings/product-statuses
 export const ADMIN_SETTINGS_ORDER_STATUSES = '/admin/settings/order-statuses';
 export const LOGISTICS_PICKUP = '/logistics/pickups';
 export const LOGISTICS_DELIVERY = '/logistics/deliveries';
-export const DASHBOARD_TOTAL_COUNT = 'dashboard/total/count';
+export const DASHBOARD_TOTAL = '/dashboard/total';
 
 export const getRouteGroups = (uri: string): Group[] => {
   if (uri.startsWith('/admin')) {
@@ -66,6 +69,9 @@ export const getRouteGroups = (uri: string): Group[] => {
 
   if (uri.startsWith('/stock')) {
     return ['super_admin', 'admin', 'manager', 'logistics', 'local', 'store_publisher'];
+  }
+  if (uri.startsWith('/logs')) {
+    return ['logistics', 'manager', 'admin', 'super_admin'];
   }
 
   if (

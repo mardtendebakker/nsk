@@ -16,8 +16,6 @@ export class PickupService {
       ...query,
       select: {
         id: true,
-        data_destruction: true,
-        origin: true,
         real_pickup_date: true,
         aorder: {
           select: {

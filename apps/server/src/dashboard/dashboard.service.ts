@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
 import { DashboardRepository } from './dashboard.repository';
+import { DashboardTotalDto } from './dto/dashboard-total.dto';
+import { DateRange } from './types/DateRange';
 
 @Injectable()
 export class DashboardService {
@@ -8,68 +9,38 @@ export class DashboardService {
     protected readonly repository: DashboardRepository,
   ) { }
 
-  async totalCount(email?: string) {
-    const totalCustomers = await this.repository.companyCount({
-      where: {
-        is_customer: true,
-        ...(email && {
-          OR: [
-            { companyContacts: { some: { email } } },
-            { company: { companyContacts: { some: { email } } } },
-          ],
-        }),
-      },
-    });
-    const totalSuppliers = await this.repository.companyCount({
-      where: {
-        is_supplier: true,
-        ...(email && {
-          OR: [
-            { companyContacts: { some: { email } } },
-            { company: { companyContacts: { some: { email } } } },
-          ],
-        }),
-      },
-    });
-
-    const totalOrders = await this.repository.orderCount({
-      where: this.getOrderWhereInput(email),
-    });
+  async total(query: DashboardTotalDto, email?: string) {
+    const range = this.buildMysqlDateRange(query);
+    const total = await this.repository.total(range, email);
 
     return {
-      totalCustomers,
-      totalSuppliers,
-      totalOrders,
+      totalSpent: (total.spent / 100),
+      totalEarned: (total.earned / 100),
+      totalOrders: total.orders,
+      totalSuppliers: total.suppliers,
+      totalCustomers: total.customers,
     };
   }
 
-  private getContactWhereInput(email?: string): Prisma.contactWhereInput {
-    return {
-      ...(email && {
-        company_contact_company_idTocompany: {
-          OR: [
-            { companyContacts: { some: { email } } },
-            { company: { companyContacts: { some: { email } } } },
-          ],
-        },
-      }),
-    };
-  }
+  private buildMysqlDateRange({ year, month, toMonth }: DashboardTotalDto): DateRange {
+    let startDate: string;
+    let endDate: string;
 
-  private getOrderWhereInput(email?: string): Prisma.aorderWhereInput {
-    return {
-      ...(email && {
-        OR: [
-          {
-            contact_aorder_supplier_idTocontact: this
-              .getContactWhereInput(email),
-          },
-          {
-            contact_aorder_customer_idTocontact: this
-              .getContactWhereInput(email),
-          },
-        ],
-      }),
-    };
+    if (year && month && toMonth) {
+      startDate = `${year}-${month}-01`;
+      const lastDay = new Date(Number(year), Number(toMonth), 0).getDate(); // 0 gives last day of previous month
+      endDate = `${year}-${toMonth}-${String(lastDay).padStart(2, '0')}`;
+    } else if (year && month) {
+      startDate = `${year}-${month}-01`;
+      const lastDay = new Date(Number(year), Number(month), 0).getDate();
+      endDate = `${year}-${month}-${String(lastDay).padStart(2, '0')}`;
+    } else if (year) {
+      startDate = `${year}-01-01`;
+      endDate = `${year}-12-31`;
+    } else {
+      return null; // No filtering
+    }
+
+    return { startDate, endDate };
   }
 }

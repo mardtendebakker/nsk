@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import * as xlsx from 'xlsx';
 import { HttpService } from '@nestjs/axios';
 import { lastValueFrom } from 'rxjs';
+import { Cron, CronExpression } from '@nestjs/schedule';
 import { LocationService } from '../admin/location/location.service';
 import { StockRepository } from './stock.repository';
 import { StockProcess } from './stock.process';
@@ -57,6 +58,11 @@ export class StockService {
     return processProdcut.run();
   }
 
+  @Cron(CronExpression.EVERY_5_MINUTES, { name: 'refreshStock' })
+  async refreshStock() {
+    await this.repository.refreshStock();
+  }
+
   async findAll(query: FindManyDto, email?: string)
     : Promise<{ count: number; data: ProcessedStock[]; }> {
     const {
@@ -72,6 +78,8 @@ export class StockService {
       search,
       orderBy,
       select,
+      inStockOnly,
+      outOfStockOnly,
       ...restQuery
     } = query;
 
@@ -90,6 +98,8 @@ export class StockService {
 
     const productwhere: Prisma.productWhereInput = {
       ...where,
+      ...inStockOnly ? { stock: { isNot: null } } : {},
+      ...outOfStockOnly ? { stock: { is: null } } : {},
       ...(Number.isFinite(entityStatus) && { entity_status: entityStatus }),
       ...(Number.isFinite(this.entityStatus) && { entity_status: this.entityStatus }),
       ...(orderId || excludeByOrderId || excludeByOrderDiscr || email) && {
@@ -262,6 +272,10 @@ export class StockService {
     return stock;
   }
 
+  async setProductAsInStock(id: number) {
+    return this.repository.insertIntoStock(id);
+  }
+
   async updateOne(id: number, body: UpdateBodyStockDto, files?: ProductAttributeFile[]) {
     if (!Number.isFinite(id)) {
       throw new Error('product id is required');
@@ -339,7 +353,7 @@ export class StockService {
   async updateMany(updateManyProductDto: UpdateManyProductDto): Promise<UpdateManyProductResponseDto> {
     const {
       ids, product: {
-        locationId, locationLabel: locationLabelBody, productTypeId, entityStatus, orderUpdatedAt,
+        locationId, locationLabel: locationLabelBody, productTypeId, entityStatus, orderUpdatedAt, statusId,
       },
     } = updateManyProductDto;
 
@@ -364,6 +378,7 @@ export class StockService {
         },
         data: {
           ...(Number.isFinite(locationId) && { location_id: locationId }),
+          ...(Number.isFinite(statusId) && { status_id: statusId }),
           ...(Number.isFinite(locationLabelId) && { location_label_id: locationLabelId }),
           ...(Number.isFinite(entityStatus) && { entity_status: entityStatus }),
           ...(orderUpdatedAt && { order_updated_at: orderUpdatedAt }),

@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CognitoAuthModule } from '@nestjs-cognito/auth';
 import { HttpModule } from '@nestjs/axios';
+import { ScheduleModule } from '@nestjs/schedule';
+import { ClsModule } from 'nestjs-cls';
 import { DashboardModule } from '../dashboard/dashboard.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -38,6 +40,7 @@ import { ConsumerModule } from '../consumer/consumer.module';
 import { SecurityModule } from '../security/security.module';
 import { VehicleAdminModule } from '../admin/vehicle/vehicle.module';
 import { DriverAdminModule } from '../admin/driver/driver.module';
+import { LogModule } from '../log/log.module';
 
 @Module({
   imports: [
@@ -48,8 +51,13 @@ import { DriverAdminModule } from '../admin/driver/driver.module';
         () => ({
           MAX_RELATION_QUERY_LIMIT: process.env.MAX_RELATION_QUERY_LIMIT || 100,
           MAX_NONE_RELATION_QUERY_LIMIT: process.env.MAX_NONE_RELATION_QUERY_LIMIT || 5000,
-          RABBITMQ_MAGENTO_ORDER_CREATED: process.env.RABBITMQ_MAGENTO_ORDER_CREATED || 'magento_order_created',
+          RABBITMQ_MAGENTO_PAYMENT_PAID: process.env.RABBITMQ_MAGENTO_PAYMENT_PAID || 'magento_payment_paid',
+          RABBITMQ_ORDER_STATUS_UPDATED_QUEUE: process.env.RABBITMQ_ORDER_STATUS_UPDATED_QUEUE || 'order_status_updated',
           RABBITMQ_EXCHANGE: process.env.RABBITMQ_EXCHANGE || 'nexxus',
+          RABBITMQ_DELAY_ORDER_STATUS_UPDATED_QUEUE: process.env.RABBITMQ_DELAY_ORDER_STATUS_UPDATED_QUEUE || 'delay_order_status_updated',
+          RABBITMQ_DELAY_EXCHANGE: process.env.RABBITMQ_DELAY_EXCHANGE || 'delay_nexxus',
+          RABBITMQ_ORDER_STATUS_UPDATED_ROUTING_KEY: process.env.RABBITMQ_ORDER_STATUS_UPDATED_ROUTING_KEY || 'order_status_updated_rk',
+          RABBITMQ_NEXXUS_PRODUCT_CREATED_QUEUE: process.env.RABBITMQ_NEXXUS_PRODUCT_CREATED_QUEUE || 'nexxus_product_created',
         }),
       ],
     }),
@@ -64,6 +72,11 @@ import { DriverAdminModule } from '../admin/driver/driver.module';
       }),
       inject: [ConfigService],
     }),
+    ClsModule.forRoot({
+      global: true,
+      middleware: { mount: true },
+    }),
+    ScheduleModule.forRoot(),
     UserModule,
     DashboardModule,
     PurchaseModule,
@@ -99,6 +112,7 @@ import { DriverAdminModule } from '../admin/driver/driver.module';
     SecurityModule,
     VehicleAdminModule,
     DriverAdminModule,
+    LogModule,
   ],
   controllers: [AppController],
   providers: [AppService],

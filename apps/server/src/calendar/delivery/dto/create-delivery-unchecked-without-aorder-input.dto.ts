@@ -1,31 +1,47 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Prisma } from '@prisma/client';
-import { Type } from 'class-transformer';
-import { IsInt, IsString, ValidateIf } from 'class-validator';
+import { Transform } from 'class-transformer';
+import { IsInt, IsOptional, IsString } from 'class-validator';
+import { formDataDateTransform, formDataNumberTransform, formDataStringTransform } from '../../../common/transforms/form-data.transform';
 
 export class CreateDeliveryUncheckedWithoutAorderInputDto implements Prisma.deliveryUncheckedCreateWithoutAorderInput {
   @ApiPropertyOptional()
+  @Transform(formDataNumberTransform)
   @IsInt()
-  @Type(() => Number)
-  @ValidateIf((_, value) => value !== undefined)
+  @IsOptional()
     logistics_id?: number;
 
   @ApiPropertyOptional()
+  @Transform(formDataDateTransform)
     date?: string | Date;
 
   @ApiPropertyOptional()
+  @Transform(formDataNumberTransform)
   @IsInt()
-  @Type(() => Number)
-  @ValidateIf((_, value) => value !== undefined)
+  @IsOptional()
     type?: number;
 
   @ApiPropertyOptional()
+  @Transform(formDataStringTransform)
   @IsString()
-  @ValidateIf((_, value) => value !== undefined)
+  @IsOptional()
     instructions?: string;
 
   @ApiPropertyOptional()
+  @Transform(formDataStringTransform)
   @IsString()
-  @ValidateIf((_, value) => value !== undefined)
+  @IsOptional()
     dhl_tracking_code?: string;
+
+  @ApiPropertyOptional()
+  @Transform(formDataNumberTransform)
+  @IsInt()
+  @IsOptional()
+    driver_id?: number;
+
+  @ApiPropertyOptional()
+  @Transform(formDataNumberTransform)
+  @IsInt()
+  @IsOptional()
+    vehicle_id?: number;
 }

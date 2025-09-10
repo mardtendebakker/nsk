@@ -261,6 +261,12 @@ exports[`List matches snapshot 1`] = `
               class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-1howxi1-MuiTableCell-root"
               scope="col"
             >
+              company_rsin_nr
+            </th>
+            <th
+              class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-1howxi1-MuiTableCell-root"
+              scope="col"
+            >
               isPartner
             </th>
             <th
@@ -289,6 +295,11 @@ exports[`List matches snapshot 1`] = `
           <tr
             class="MuiTableRow-root MuiTableRow-hover css-1xe9h37-MuiTableRow-root"
           >
+            <td
+              class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeSmall css-dsuxgy-MuiTableCell-root"
+            >
+              --
+            </td>
             <td
               class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeSmall css-dsuxgy-MuiTableCell-root"
             >

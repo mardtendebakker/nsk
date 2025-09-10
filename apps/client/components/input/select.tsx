@@ -6,10 +6,11 @@ type Options = { options: Option[] };
 export type Props = TextFieldProps & Options;
 
 export default function Select({
-  label, sx, fullWidth, options = [], placeholder, onChange, value, defaultValue, error, helperText, variant,
+  label, sx, fullWidth, options = [], placeholder, onChange, value, defaultValue, error, helperText, variant, disabled,
 } : Props) {
   return (
     <TextField
+      disabled={disabled}
       variant={variant}
       fullWidth={fullWidth}
       error={error}

@@ -6,13 +6,41 @@
 
   <div class="panel panel-default">
     <div class="panel-heading">
+      <span class="glyphicon glyphicon-play" aria-hidden="true"></span> Acceptatiecriteria rondom donaties van apparatuur zijn als volgt omschreven:
+    </div>
+    <div class="panel-body">
+      <ol>
+        <li>
+          TCS (of haar leverancier) schenkt uit naam van UWV bruikbare ICT hardware aan Stichtingen, Gemeenten, Scholen en Verenigingen in Nederland, die als doel hebben mensen die woonachtig zijn in Nederland, te helpen/ondersteunen met:
+          <ul>
+            <li>(re)integratie in de samenleving en/of</li>
+            <li>het verminderen van de afstand tot de arbeidsmarkt en/of</li>
+            <li>stimuleren bij het ontwikkelen van een (sportief) gezonde levensstijl en/of</li>
+            <li>(re)socialisatie ondersteunen</li>
+          </ul>
+        </li>
+        <li>Aanvragen kunnen uitsluitend schriftelijk via het webformulier ingediend worden.</li>
+        <li>Alleen volledig ingevulde formulieren worden in behandeling genomen.</li>
+        <li>Minimaal aantal werkplekken per aanvraag: 2 units</li>
+        <li>Maximaal aantal werkplekken per aanvraag: 50 units</li>
+        <li>Kosten voor het ophalen van de hardware worden betaald door de aanvragende partij (dus niet door de geselecteerde leverancier van TCS)</li>
+        <li>Organisatie beschikt over een geldig KvK-nummer met als toevoeging een RSIN-nummer indien van toepassing.</li>
+        <li>Apparatuur wordt geleverd met Windows besturingssysteem.</li>
+        <li>UWV/TCS (geselecteerde leverancier) behoudt zich het recht voor een inschrijfstop in te stellen bij een te grote hoeveelheid aanvragen.</li>
+        <li>Aanvragen worden per kwartaal beoordeeld en af- of toegewezen. Hierover wordt de aanvrager geïnformeerd.</li>
+        <li>Over uiteindelijke toewijzing/afwijzing wordt niet gecorrespondeerd.</li>
+      </ol>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
       <span class="glyphicon glyphicon-play" aria-hidden="true"></span> Contactgegevens
     </div>
     <div class="panel-body">
       {{#each form}}
         {{#each customer}}
           <div class="form-group">
-            <label class="col-sm-3 control-label required" for="public_order_form_customer_{{@key}}">{{this.label}}{{#if this.required}} *{{/if}}</label>
+            <label class="col-sm-3 control-label required" for="public_order_form_customer_{{@key}}">{{this.label}}{{#if this.required}} *{{else}} (Optioneel){{/if}}</label>
             <div class="col-sm-9">
               <input 
                 type="text"
@@ -22,12 +50,13 @@
                 class="form-control"
                 value="{{this.value}}"
               >
+              {{#if this.error}}<div id="public_order_form_customer_error_{{@key}}" class="alert alert-warning text-center" style="padding:5px;margin:5px auto;display:none;">{{this.error}}</div>{{/if}}
             </div>
           </div>
         {{/each}}
         {{#each extra}}
           <div class="form-group">
-            <label class="col-sm-3 control-label required" for="public_order_form_extra_{{@key}}">{{this.label}}{{#if this.required}} *{{/if}}</label>
+            <label class="col-sm-3 control-label required" for="public_order_form_extra_{{@key}}">{{this.label}}{{#if this.required}} *{{else}} (Optioneel){{/if}}</label>
             <div class="col-sm-9">
               <input 
                 type="text"
@@ -41,6 +70,7 @@
           </div>
         {{/each}}
       {{/each}}
+      <div>*Is verplicht om in te vullen.</div>
     </div>
   </div>
 
@@ -69,42 +99,46 @@
           </div>
         {{/each}}
       {{/each}}
+      <div>
+        <div class="col-xs-12">
+          <div id="terms-error" class="alert alert-warning text-center" style="padding:5px;margin:5px auto;display:none;">Selecteer minimaal één optie</div>
+        </div>
+      </div>
     </div>
   </div>
   <div class="panel panel-default">
     <div class="panel-heading">
-      <span class="glyphicon glyphicon-play" aria-hidden="true"></span> Gewenste producten
+      <span class="glyphicon glyphicon-play" aria-hidden="true"></span> Gewenst product
     </div>
     <div class="panel-body">
-      <p>Het is mogelijk om werkplekken en smartphones aan te vragen. U mag hierbij maximaal 50 werkplekken en maximaal 20 smartphones aanvragen.</p>
+      <p>Het is mogelijk om werkplekken aan te vragen. U mag hierbij minimaal 2 en maximaal 50 aantallen voor aanvragen.</p>
       {{#each products}}
-        {{#if this.title}}
-          <h3>{{this.title}}</h3>
-        {{/if}}
-        {{#if this.desc}}
-          <p>{{this.desc}}</p>
-        {{/if}}
-        <div class="form-group">
-          <div class="col-sm-3" style="margin-top: 8px"><b>{{this.name}}</b></div>
-          <div class="col-sm-5" style="margin-top: 8px">{{this.remark}}</div>
-          <div class="col-sm-2" style="margin-top: 8px"></div>
-          <div class="col-sm-2">
-            <input
-              type="number"
-              id="public_order_form_products_{{@index}}_quantity"
-              name="public_order_form[products][{{@index}}][quantity]"
-              class="form-control"
-              placeholder="0"
-              min="0"
-            >
+        <div class="panel panel-default">
+          <div class="panel-body">
+            {{#if this.desc}}
+              <p>{{this.desc}}</p>
+            {{/if}}
+            <div class="col-sm-5" ><b>{{this.name}}</b></div>
+              <div class="col-sm-5" >{{this.remark}}</div>
+              <div class="col-sm-2">
+                <input
+                  type="number"
+                  id="public_order_form_products_{{@index}}_quantity"
+                  name="public_order_form[products][{{@index}}][quantity]"
+                  class="form-control"
+                  placeholder="0"
+                  min="0"
+                >
+              </div>
+            <input type="hidden" id="public_order_form_products_{{@index}}_name" name="public_order_form[products][{{@index}}][name]" value="{{this.name}}">
           </div>
         </div>
-        <input type="hidden" id="public_order_form_products_{{@index}}_name" name="public_order_form[products][{{@index}}][name]" value="{{this.name}}">
-        {{#unless this.title}}
-          <p>&nbsp;</p>
-        {{/unless}}
       {{/each}}
-
+      <div>
+        <div class="col-xs-12">
+          <div id="quantity-error" class="alert alert-warning text-center" style="padding:5px;margin:5px auto;display:none;">Het totale aantal moet groter zijn dan 2</div>
+        </div>
+      </div>
     </div>
   </div>
 

@@ -2,6 +2,7 @@ import {
   Box, Button,
 } from '@mui/material';
 import EditLocation from '@mui/icons-material/EditLocation';
+import CategoryOutlined from '@mui/icons-material/CategoryOutlined';
 import Category from '@mui/icons-material/Category';
 import Archive from '@mui/icons-material/Archive';
 import AddBusiness from '@mui/icons-material/AddBusiness';
@@ -22,6 +23,7 @@ export default function Action({
   onArchive,
   onUnarchive,
   onChangeLocation,
+  onChangeStatus,
   onChangeProductType,
   onPrint,
   onPrintChecklist,
@@ -37,6 +39,7 @@ export default function Action({
   onArchive: () => void,
   onUnarchive: () => void,
   onChangeLocation: () => void,
+  onChangeStatus: () => void,
   onChangeProductType: () => void,
   onPrint: () => void,
   onPrintChecklist: () => void,
@@ -59,6 +62,7 @@ export default function Action({
         display: 'flex',
         alignItems: isDesktop ? 'center' : 'flex-start',
         flexDirection: isDesktop ? undefined : 'column',
+        flexWrap: 'wrap',
       }}
       >
         {checkedProductsCount > 0 && ['product', 'webshop'].includes(type)
@@ -83,6 +87,15 @@ export default function Action({
           <Unarchive sx={{ mr: '.1rem' }} />
           {trans('unarchive')}
         </Button>
+        )}
+        {checkedProductsCount > 0
+        && (
+          <Can requiredGroups={['manager']}>
+            <Button size="small" onClick={onChangeStatus} sx={{ m: '.5rem' }} variant="outlined" color="primary" disabled={disabled}>
+              <CategoryOutlined sx={{ mr: '.1rem' }} />
+              {trans('changeStatus')}
+            </Button>
+          </Can>
         )}
         {checkedProductsCount > 0
         && (

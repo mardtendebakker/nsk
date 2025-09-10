@@ -2,7 +2,7 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsInt, IsOptional, IsString } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
 import { DataDestruction } from '../../calendar/pickup/types/destruction.enum';
-import { formDataDateTransform, formDataNumberTransform, formDataStringTransform } from '../../common/transforms/form-date.transform';
+import { formDataDateTransform, formDataNumberTransform, formDataStringTransform } from '../../common/transforms/form-data.transform';
 import { NewContactDto } from './new-contact.dto';
 import { CommonFormDto } from './common-form.dto';
 import { PostCommonDto } from './PostCommon.dto';
@@ -116,21 +116,19 @@ export class PostPickupDto extends PostCommonDto {
   @Type(() => PickupFormDto)
     'pickup_form': PickupFormDto;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     type: 'array',
     items: { type: 'string', format: 'binary' },
     description: 'Multiple images',
   })
-  @IsOptional()
   @Type(() => Object)
     pi: Express.Multer.File[];
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     type: 'string',
     format: 'binary',
     description: 'Single PDF',
   })
-  @IsOptional()
   @Type(() => Object)
     pa: Express.Multer.File;
 }

@@ -2,9 +2,11 @@ import {
   Get, Post, Put, Patch, Delete,
   Body, Param, Query,
   HttpStatus, Res, StreamableFile, ForbiddenException,
+  UploadedFiles, UseInterceptors,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiConsumes, ApiResponse } from '@nestjs/swagger';
 import type { Response } from 'express';
+import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { AOrderService } from './aorder.service';
 import { CreateAOrderDto } from './dto/create-aorder.dto';
 import { FindAOrdersResponeDto } from './dto/find-aorder-response.dto';
@@ -53,16 +55,27 @@ export class AOrderController {
 
   @Post('')
   @Authorization(LOCAL_GROUPS)
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(AnyFilesInterceptor())
   @ApiResponse({ type: AOrderEntity })
-  create(@Body() body: CreateAOrderDto) {
-    return this.aorderService.create(body);
+  create(
+  @Body() body: CreateAOrderDto,
+    @UploadedFiles() files: Express.Multer.File[],
+  ) {
+    return this.aorderService.create(body, files);
   }
 
   @Put(':id')
   @Authorization(LOCAL_GROUPS)
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(AnyFilesInterceptor())
   @ApiResponse({ type: AOrderEntity })
-  update(@Param('id') id: number, @Body() updateAOrderDto: UpdateAOrderDto) {
-    return this.aorderService.update(id, updateAOrderDto);
+  update(
+  @Param('id') id: number,
+    @Body() updateAOrderDto: UpdateAOrderDto,
+    @UploadedFiles() files: Express.Multer.File[],
+  ) {
+    return this.aorderService.update(id, updateAOrderDto, files);
   }
 
   @Patch('')

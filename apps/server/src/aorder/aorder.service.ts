@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client';
+import { afile, Prisma } from '@prisma/client';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { AOrderRepository } from './aorder.repository';
 import { CreateAOrderDto } from './dto/create-aorder.dto';
@@ -14,6 +14,8 @@ import { ContactService } from '../contact/contact.service';
 import { AOrderPayloadRelation } from './types/aorder-payload-relation';
 import { AOrderFindManyReturnType } from './types/aorder-find-many-return-type';
 import { VAT_CODES } from '../company/const/vat-code';
+import { FileDiscrimination } from '../file/types/file-discrimination.enum';
+import { CreateFileDto } from '../file/dto/create-file.dto';
 
 type CommonAOrderDto = Partial<Omit<CreateAOrderDto, 'pickup' | 'repair'>>;
 type CommonAOrderInput = Partial<Omit<Prisma.aorderCreateInput, 'pickup' | 'repair' | 'delivery'>>;
@@ -66,7 +68,9 @@ export class AOrderService {
             },
           },
         }),
-        delivery: true,
+        ...(this.type !== AOrderDiscrimination.PURCHASE && {
+          delivery: true,
+        }),
         contact_aorder_supplier_idTocontact: {
           select: this.getContactSelect(),
         },
@@ -113,7 +117,7 @@ export class AOrderService {
     return new AOrderProcess(order).run();
   }
 
-  async create(aorderDto: CreateAOrderDto) {
+  async create(aorderDto: CreateAOrderDto, files?: Express.Multer.File[]) {
     if (this.type === undefined) {
       throw new BadRequestException('The operation requires a specific order type');
     }
@@ -137,13 +141,20 @@ export class AOrderService {
     const order = <AOrderPayloadRelation> await this.repository
       .create(this.commonIncludePart(params));
 
+    if (files?.length) {
+      await this.uploadLogisticsFiles({
+        files,
+        logisticsId: this.type === AOrderDiscrimination.PURCHASE ? order.pickup.id : order.delivery.id,
+      });
+    }
+
     const vatCode = order.contact_aorder_supplier_idTocontact?.company_contact_company_idTocompany?.vat_code
     || order?.contact_aorder_customer_idTocontact?.company_contact_company_idTocompany?.vat_code
     || 2;
 
     const vatRate = VAT_CODES.find(({ code }) => code == vatCode).value || 0;
 
-    if (commonDto.order_nr === undefined) {
+    if (!commonDto.order_nr || commonDto.order_nr === '') {
       const { id, order_date: orderDate } = order;
 
       const orderNumber = orderDate.getFullYear() + id.toString().padStart(6, '0');
@@ -164,7 +175,7 @@ export class AOrderService {
     return new AOrderProcess(order).run();
   }
 
-  async update(id: number, aorderDto: UpdateAOrderDto) {
+  async update(id: number, aorderDto: UpdateAOrderDto, files?: Express.Multer.File[]) {
     const {
       pickup, repair, delivery, ...commonDto
     } = aorderDto;
@@ -183,6 +194,13 @@ export class AOrderService {
 
     const order = <AOrderPayloadRelation> await this.repository
       .update(this.commonIncludePart(params));
+
+    if (files?.length) {
+      await this.uploadLogisticsFiles({
+        files,
+        logisticsId: this.type === AOrderDiscrimination.PURCHASE ? order.pickup.id : order.delivery.id,
+      });
+    }
 
     return new AOrderProcess(order).run();
   }
@@ -207,9 +225,14 @@ export class AOrderService {
       if (order?.pickup?.id) {
         await this.repository.deletePickup(order?.pickup?.id);
       }
-    } else if (order.discr === AOrderDiscrimination.SALE) {
-      if (order.afile?.length) {
-        this.fileService.deleteMany(order.afile?.map((file) => file.id));
+    } else {
+      if (order?.delivery?.afile?.length) {
+        await this.fileService.deleteMany(
+          order?.delivery?.afile?.map((file: { id: unknown; }) => file.id),
+        );
+      }
+      if (order?.delivery?.id) {
+        await this.repository.deleteDelivery(order?.delivery?.id);
       }
     }
 
@@ -266,6 +289,45 @@ export class AOrderService {
     return this.printService.printExport(aorders);
   }
 
+  protected async uploadLogisticsFiles({
+    files, logisticsId,
+  }: {
+    files: Express.Multer.File[], logisticsId: number
+  }): Promise<afile[]> {
+    const afiles: afile[] = [];
+    // group files by attribute id
+    const filesGroupByFileDiscr: { [key in FileDiscrimination]?: Express.Multer.File[] } = files.reduce((acc, obj) => {
+      const { fieldname } = obj;
+
+      if (!acc[fieldname]) {
+        acc[fieldname] = [];
+      }
+
+      acc[fieldname].push(obj);
+      return acc;
+    }, {});
+
+    for (const [fileDiscr, mfiles] of Object.entries(filesGroupByFileDiscr)) {
+      const createFileDto: CreateFileDto = {
+        discr: <FileDiscrimination>fileDiscr,
+        ...(this.type === AOrderDiscrimination.PURCHASE && { pickup_id: logisticsId }),
+        ...(this.type !== AOrderDiscrimination.PURCHASE && { delivery_id: logisticsId }),
+      };
+
+      for (let i = 0; i < mfiles.length; i++) {
+        const mfile = mfiles[i];
+        // eslint-disable-next-line no-await-in-loop
+        const aFile = await this.fileService.create(createFileDto, {
+          Body: mfile.buffer,
+          ContentType: mfile.mimetype,
+        });
+        afiles.push(aFile);
+      }
+    }
+
+    return afiles;
+  }
+
   protected async processCreateOrUpdateOrderInput(orderDto: CommonAOrderDto):
   Promise<CommonAOrderInput> {
     const {
@@ -274,6 +336,7 @@ export class AOrderService {
       customer,
       supplier_id: supplierIdDto,
       supplier,
+      pa, pi, da, di,
       ...rest
     } = orderDto;
 
@@ -294,7 +357,7 @@ export class AOrderService {
         company_is_partner: false,
         company_is_customer: false,
         company_is_supplier: true,
-      })).id;
+      }))?.id;
     }
 
     const data: CommonAOrderInput = {
@@ -343,7 +406,7 @@ export class AOrderService {
       },
     };
 
-    if (this.type !== AOrderDiscrimination.SALE) {
+    if (this.type === AOrderDiscrimination.PURCHASE) {
       include = {
         ...include,
         pickup: {
@@ -367,13 +430,16 @@ export class AOrderService {
     if (this.type !== AOrderDiscrimination.PURCHASE) {
       include = {
         ...include,
-        delivery: true,
-        afile: {
-          select: {
-            id: true,
-            unique_server_filename: true,
-            original_client_filename: true,
-            discr: true,
+        delivery: {
+          include: {
+            afile: {
+              select: {
+                id: true,
+                unique_server_filename: true,
+                original_client_filename: true,
+                discr: true,
+              },
+            },
           },
         },
         contact_aorder_customer_idTocontact: {

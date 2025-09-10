@@ -4,7 +4,7 @@ import {
 import { IsNumber, IsOptional, IsString } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
 import { ProductAttributeEntity } from '../entities/product-attribute.entity';
-import { formDataNumberTransform, formDataStringTransform } from '../../common/transforms/form-date.transform';
+import { formDataNumberTransform, formDataStringTransform } from '../../common/transforms/form-data.transform';
 
 export class ProductAttributeDto extends PartialType(OmitType(ProductAttributeEntity, ['product_id'])) {
   @ApiProperty()

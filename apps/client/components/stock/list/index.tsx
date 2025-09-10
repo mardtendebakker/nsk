@@ -1,6 +1,6 @@
 import { Box, Card } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import { NextRouter, useRouter } from 'next/router';
 import _ from 'lodash';
 import { trans } from 'itranslator';
 import {
@@ -28,6 +28,7 @@ import useBulkPrintChecklist from '../../../hooks/apiCalls/useBulkPrintChecklist
 import useBulkPrintPriceCards from '../../../hooks/apiCalls/useBulkPrintPriceCards';
 import useBulkPrintLabels from '../../../hooks/apiCalls/useBulkPrintLabels';
 import useBulkPrintBarcodes from '../../../hooks/apiCalls/useBulkPrintBarcodes';
+import PatchStatusModal from './patchStatusModal';
 
 function initFormState(
   {
@@ -66,6 +67,14 @@ function refreshList({
   formRepresentation,
   router,
   call,
+  type,
+}:{
+  page: number,
+  rowsPerPage: number,
+  formRepresentation: object,
+  router: NextRouter,
+  call,
+  type: ProductType,
 }) {
   const params = new URLSearchParams();
 
@@ -95,6 +104,8 @@ function refreshList({
     params: {
       take: rowsPerPage,
       skip: (page - 1) * rowsPerPage,
+      inStockOnly: type == 'product' ? 1 : 0,
+      outOfStockOnly: type == 'outOfStock' ? 1 : 0,
       ...paramsToSend,
     },
   }).then(() => pushURLParams({ params, router })).catch(() => {});
@@ -105,12 +116,14 @@ const AJAX_PATHS = {
   repair: STOCK_REPAIRS_PATH,
   archived: STOCK_ARCHIVED_PATH,
   webshop: STOCK_WEBSHOP_PATH,
+  outOfStock: STOCK_PRODUCTS_PATH,
 };
 
 export default function ListContainer({ type } : { type: ProductType }) {
   const { state: { user } } = useSecurity();
   const router = useRouter();
   const [showChangeLocationModal, setShowChangeLocationModal] = useState(false);
+  const [showChangeStatusModal, setShowChangeStatusModal] = useState(false);
   const [showChangeProductTypeModal, setShowChangeProductTypeModal] = useState(false);
   const [page, setPage] = useState<number>(parseInt(getQueryParam('page', '1'), 10));
   const [rowsPerPage, setRowsPerPage] = useState<number>(parseInt(getQueryParam('rowsPerPage', '10'), 10));
@@ -177,6 +190,7 @@ export default function ListContainer({ type } : { type: ProductType }) {
     formRepresentation,
     router,
     call,
+    type,
   });
 
   useEffect(() => {
@@ -251,6 +265,7 @@ export default function ListContainer({ type } : { type: ProductType }) {
       .finally(() => {
         setShowChangeLocationModal(false);
         setShowChangeProductTypeModal(false);
+        setShowChangeStatusModal(false);
       });
   };
 
@@ -299,6 +314,7 @@ export default function ListContainer({ type } : { type: ProductType }) {
           onAllCheck={handleAllChecked}
           onArchive={handlePatchArchive}
           onUnarchive={handlePatchUnarchive}
+          onChangeStatus={() => setShowChangeStatusModal(true)}
           onChangeLocation={() => setShowChangeLocationModal(true)}
           onChangeProductType={() => setShowChangeProductTypeModal(true)}
           onPrint={() => printBarcodes(checkedProductIds)}
@@ -332,6 +348,12 @@ export default function ListContainer({ type } : { type: ProductType }) {
           onSubmit={handleSubmitEditProduct}
           id={editProductId.toString()}
           type={type}
+        />
+        )}
+        {showChangeStatusModal && (
+        <PatchStatusModal
+          onClose={() => setShowChangeStatusModal(false)}
+          onSubmit={handlePatch}
         />
         )}
         {showChangeLocationModal && (

@@ -122,8 +122,8 @@ export default function ProductsTable({ orderId, refreshOrder, vatFactor }:{ ord
     });
   };
 
-  const handleDeleteProduct = (id: number) => {
-    callDelete({ path: SALES_ORDERS_PRODUCTS_PATH.replace(':id', orderId), body: [id] }).then(() => {
+  const handleDeleteProducts = () => {
+    callDelete({ path: SALES_ORDERS_PRODUCTS_PATH.replace(':id', orderId), body: checkedProductIds }).then(() => {
       call({
         params: {
           take: rowsPerPage,
@@ -190,6 +190,7 @@ export default function ProductsTable({ orderId, refreshOrder, vatFactor }:{ ord
         onPrintChecklist={() => printChecklists(checkedProductIds)}
         onPrintPriceCard={() => printPriceCards(checkedProductIds)}
         onPrintLabel={() => printLabels(checkedProductIds)}
+        onDeleteProducts={() => handleDeleteProducts()}
       />
       <Box sx={{ m: '.5rem' }} />
       <PaginatedTable
@@ -225,9 +226,6 @@ export default function ProductsTable({ orderId, refreshOrder, vatFactor }:{ ord
             <TableCell>
               {trans('quantity')}
             </TableCell>
-            <TableCell align="right">
-              {trans('actions')}
-            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -239,13 +237,12 @@ export default function ProductsTable({ orderId, refreshOrder, vatFactor }:{ ord
               disabled={disabled()}
               onRowChecked={handleRowChecked}
               checkedProductIds={checkedProductIds}
-              onDeleteProduct={handleDeleteProduct}
               vatFactor={vatFactor}
             />
           ))}
         </TableBody>
       </PaginatedTable>
-      {showProductsModal && (<AddProductsModal orderId={orderId} onProductsAdded={handleProductsAdded} onClose={() => setShowProductsModal(false)} />)}
+      {showProductsModal && (<AddProductsModal inStockOnly orderId={orderId} onProductsAdded={handleProductsAdded} onClose={() => setShowProductsModal(false)} />)}
     </>
   );
 }

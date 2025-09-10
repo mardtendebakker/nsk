@@ -4,15 +4,11 @@ import {
 import { HttpService } from '@nestjs/axios';
 import { catchError, lastValueFrom } from 'rxjs';
 import { ConfigService } from '@nestjs/config';
-import { AxiosError, AxiosRequestConfig } from 'axios';
-import { afile } from '@prisma/client';
+import { AxiosError } from 'axios';
 import { PurchaseService } from '../purchase/purchase.service';
 import { PostPickupDto, PickupFormDto } from './dto/post-pickup.dto';
 import { OrderStatusService } from '../admin/order-status/order-status.service';
 import { CreateOrderStatusDto } from '../admin/order-status/dto/create-order-status.dto';
-import { FileService } from '../file/file.service';
-import { CreateFileDto } from '../file/dto/create-file.dto';
-import { FileDiscrimination } from '../file/types/file-discrimination.enum';
 import { CreateAOrderDto } from '../aorder/dto/create-aorder.dto';
 import { CreatePickupUncheckedWithoutAorderInputDto } from '../calendar/pickup/dto/create-pickup-unchecked-without-aorder-input.dto';
 import { ProductService } from '../product/product.service';
@@ -37,7 +33,6 @@ export class PublicService {
     private readonly saleService: SaleService,
     private readonly contactService: ContactService,
     private readonly orderStatusService: OrderStatusService,
-    private readonly fileService: FileService,
     private readonly productService: ProductService,
     private readonly httpService: HttpService,
     private readonly configService: ConfigService,
@@ -113,11 +108,7 @@ export class PublicService {
       status_id: orderStatus.id,
     };
 
-    const purchase = await this.purchaseService.create(purchaseData);
-
-    if (files?.length) {
-      await this.uploadFiles(purchase.pickup.id, files);
-    }
+    const purchase = await this.purchaseService.create(purchaseData, files);
 
     await this.createProductsForPickup(pickupForm, purchase.id);
 
@@ -176,11 +167,13 @@ export class PublicService {
 
   async postOrder(params: PostOrderDto): Promise<void> {
     const { public_order_form: publicOrderForm } = params;
+    const TCS_COMPANY_ID = 9043;
 
     await this.verifyCaptcha(params['g-recaptcha-response']);
 
     const { customer: customerDto } = publicOrderForm;
     customerDto.company_is_customer = true;
+    customerDto.company_partner_id = TCS_COMPANY_ID;
     const customer = await this.contactService.checkExists(publicOrderForm.customer);
 
     const orderStatus = await this.findOrderStatusByNameOrCreate(publicOrderForm.orderStatusName, false, true, false);
@@ -252,7 +245,7 @@ export class PublicService {
     return {
       reason: {
         label: 'Reden aanvraag',
-        required: false,
+        required: true,
       },
     };
   }
@@ -315,7 +308,7 @@ export class PublicService {
     return {
       name: {
         label: 'Uw volledige naam',
-        required: false,
+        required: true,
       },
       company_name: {
         label: 'Naam organisatie',
@@ -324,6 +317,11 @@ export class PublicService {
       company_kvk_nr: {
         label: 'KVK-nummer',
         required: true,
+        error: 'KvK-nummer bestaat uit precies 8 cijfers, bijvoorbeeld: 12345678',
+      },
+      company_rsin_nr: {
+        label: 'RSIN-nummer',
+        required: false,
       },
       street: {
         label: 'Adres organisatie',
@@ -332,6 +330,7 @@ export class PublicService {
       zip: {
         label: 'Postcode',
         required: true,
+        error: 'Postcode bestaat uit 4 cijfers gevolgd door 2 letters, bijvoorbeeld: 3706BL of 3706 BL',
       },
       city: {
         label: 'Vestigingsplaats',
@@ -346,40 +345,6 @@ export class PublicService {
         required: true,
       },
     };
-  }
-
-  private async uploadFiles(pickupId: number, pickupFiles: Express.Multer.File[]): Promise<afile[]> {
-    const afiles: afile[] = [];
-    // group files by attribute id
-    const filesGroupByFileDiscr: { [key in FileDiscrimination]?: Express.Multer.File[] } = pickupFiles.reduce((acc, obj) => {
-      const { fieldname } = obj;
-
-      if (!acc[fieldname]) {
-        acc[fieldname] = [];
-      }
-
-      acc[fieldname].push(obj);
-      return acc;
-    }, {});
-
-    for (const [fileDiscr, files] of Object.entries(filesGroupByFileDiscr)) {
-      const createFileDto: CreateFileDto = {
-        discr: <FileDiscrimination>fileDiscr,
-        pickup_id: pickupId,
-      };
-
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        // eslint-disable-next-line no-await-in-loop
-        const aFile = await this.fileService.create(createFileDto, {
-          Body: file.buffer,
-          ContentType: file.mimetype,
-        });
-        afiles.push(aFile);
-      }
-    }
-
-    return afiles;
   }
 
   private findOrderStatusByNameOrCreate(name: string, isPurchase: boolean, isSale: boolean, isRepair: boolean) {

@@ -34,6 +34,7 @@ export class CompanyService {
         id: true,
         name: true,
         kvk_nr: true,
+        rsin_nr: true,
         is_customer: true,
         is_partner: true,
         is_supplier: true,
@@ -64,6 +65,14 @@ export class CompanyService {
     });
   }
 
+  findByName(name: string) {
+    return this.repository.findOne({
+      where: {
+        name,
+      },
+    });
+  }
+
   async create(createDto: CreateCompanyDto, email?: string) {
     if (await this.repository.findOne({ where: { name: createDto.name } })) {
       throw new ConflictException('Name already exist');
@@ -76,10 +85,6 @@ export class CompanyService {
   }
 
   async update(id: number, updateDto: UpdateCompanyDto, email?: string) {
-    if (await this.repository.findOne({ where: { name: updateDto.name, NOT: { id } } })) {
-      throw new ConflictException('Name already exist');
-    }
-
     return this.repository.update({
       where: {
         id,

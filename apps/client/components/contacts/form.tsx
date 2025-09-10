@@ -13,6 +13,7 @@ import { FormRepresentation, SetValue } from '../../hooks/useForm';
 import TextField from '../memoizedInput/textField';
 import DataSourcePicker from '../memoizedInput/dataSourcePicker';
 import useResponsive from '../../hooks/useResponsive';
+import Checkbox from '../checkbox';
 
 function Form({
   formRepresentation,
@@ -61,16 +62,27 @@ function Form({
               helperText={formRepresentation.company_id.error}
               fetchWhileDisabled
             />
-            <Box sx={{ m: '.25rem' }} />
+
             {company && (
-            <TextField
-              sx={{ flex: 0.33 }}
-              label={trans('kvk_nr')}
-              name="kvk_nr"
-              value={company.kvk_nr || ''}
-              disabled
-            />
+            <>
+              <Box sx={{ m: '.25rem' }} />
+              <TextField
+                sx={{ flex: 0.33 }}
+                label={trans('kvk_nr')}
+                name="kvk_nr"
+                value={company.kvk_nr || ''}
+                disabled
+              />
+            </>
             )}
+            <Box sx={{ m: '.25rem' }} />
+            <Box sx={{ flex: 0.33, display: 'flex' }}>
+              <Checkbox
+                checked={formRepresentation.is_main.value}
+                onCheck={(checked) => setValue({ field: 'is_main', value: checked })}
+                label={trans('main')}
+              />
+            </Box>
           </Grid>
         </Grid>
       </CardContent>

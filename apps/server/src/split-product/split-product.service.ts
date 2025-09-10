@@ -49,7 +49,7 @@ export class SplitProductService {
     const product = await this.productService.findOneRelation(id);
     const processedProduct = this.productService.processStock(product);
 
-    const quantity = processedProduct.stock - 1;
+    const quantity = processedProduct.stockQuantity - 1;
     const individualize = true;
 
     return this.splitStock({

@@ -10,7 +10,7 @@ import {
 import Form from '../../../components/orders/form/sales';
 import DashboardLayout from '../../../layouts/dashboard';
 import useAxios from '../../../hooks/useAxios';
-import { SALES_ORDERS_PATH } from '../../../utils/axios';
+import { SALES_ORDERS_FILES_PATH, SALES_ORDERS_PATH } from '../../../utils/axios';
 import useForm from '../../../hooks/useForm';
 import useTranslation from '../../../hooks/useTranslation';
 import { initFormState, formRepresentationToBody } from './new';
@@ -18,6 +18,7 @@ import { ORDERS_SALES, ORDERS_SALES_NEW } from '../../../utils/routes';
 import ProductsTable from '../../../components/orders/form/sales/productsTable';
 import { Order } from '../../../utils/axios/models/order';
 import Action from '../../../components/orders/form/action';
+import { AFile } from '../../../utils/axios/models/aFile';
 
 function UpdateSalesOrder() {
   const { trans } = useTranslation();
@@ -37,6 +38,14 @@ function UpdateSalesOrder() {
     { withProgressBar: true },
   );
 
+  const { call: deleteFile, performing: performingDeleteFilte } = useAxios(
+    'delete',
+    SALES_ORDERS_FILES_PATH
+      .replace(':orderId', id?.toString())
+      .replace(':id', ''),
+    { withProgressBar: true, showSuccessMessage: true },
+  );
+
   const { formRepresentation, setValue, validate } = useForm(useMemo(() => initFormState(trans, salesOrder), [salesOrder]));
 
   useEffect(() => {
@@ -50,7 +59,7 @@ function UpdateSalesOrder() {
     }
   }, [id]);
 
-  const canSubmit = () => !performing && !performingFetchSalesOrder && !performingPrint;
+  const canSubmit = () => !performing && !performingFetchSalesOrder && !performingPrint && !performingDeleteFilte;
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
@@ -59,7 +68,14 @@ function UpdateSalesOrder() {
       return;
     }
 
-    call({ body: formRepresentationToBody(formRepresentation) })
+    call({ body: formRepresentationToBody(formRepresentation), headers: { 'Content-Type': 'multipart/form-data' } })
+      .then(() => {
+        fetchSalesOrder();
+      });
+  };
+
+  const handleDeleteFile = (file: AFile) => {
+    deleteFile({ body: [file.id] })
       .then(() => {
         fetchSalesOrder();
       });
@@ -98,6 +114,7 @@ function UpdateSalesOrder() {
         </Box>
         <Card>
           <Form
+            onFileDelete={handleDeleteFile}
             formRepresentation={formRepresentation}
             disabled={!canSubmit()}
             setValue={setValue}

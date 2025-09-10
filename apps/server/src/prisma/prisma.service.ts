@@ -1,9 +1,15 @@
 import { INestApplication, Injectable, OnModuleInit } from '@nestjs/common';
 import { Prisma, PrismaClient } from '@prisma/client';
+import { ClsService } from 'nestjs-cls';
+import { RabbitMQService } from '../rabbitmq/rabbitmq.service';
+import { ActivityLogging, Price100, PurchaseOrderStatus, StockManagment } from './prisma.extension';
 
 @Injectable()
 export class PrismaService extends PrismaClient<Prisma.PrismaClientOptions, Prisma.LogLevel> implements OnModuleInit {
-  constructor() {
+  constructor(
+    private readonly rabbitMQService: RabbitMQService,
+    private readonly cls: ClsService,
+  ) {
     super();
     // TODO: prisma middleware for updateAt
     /*
@@ -16,78 +22,13 @@ export class PrismaService extends PrismaClient<Prisma.PrismaClientOptions, Pris
 
   async onModuleInit() {
     await this.$connect();
-
-    const multiplyPriceBy100 = <T extends { [key: string]: any }>(obj: T): T => {
-      for (const key in obj) {
-        if (Object.prototype.hasOwnProperty.call(obj, key)) {
-          const value = obj[key];
-          if (key === 'price' && Number.isFinite(value)) {
-            obj[key] = Math.ceil(value * 100) as T[Extract<keyof T, string>];
-          } else if (typeof value === 'object') {
-            obj[key] = multiplyPriceBy100(value);
-          }
-        }
-      }
-      return obj;
-    };
-
-    const dividePriceBy100 = <T extends { [key: string]: any }>(obj: T): T => {
-      for (const key in obj) {
-        if (Object.prototype.hasOwnProperty.call(obj, key)) {
-          const value = obj[key];
-          if (key === 'price') {
-            if (Number.isFinite(value)) {
-              obj[key] = Number((value / 100).toFixed(2)) as T[Extract<keyof T, string>];
-            } else {
-              obj[key] = 0 as T[Extract<keyof T, string>];
-            }
-          } else if (typeof value === 'object') {
-            obj[key] = dividePriceBy100(value);
-          }
-        }
-      }
-      return obj;
-    };
-
     Object.assign(
       this,
-      this.$extends({
-        query: {
-          async $allOperations({
-            model, operation, args, query,
-          }) {
-            if (
-              [
-                'create',
-                'createMany',
-                'update',
-                'updateMany',
-                'upsert',
-              ].includes(operation)
-            ) {
-              args.data = multiplyPriceBy100(args.data);
-              const result = await query(args);
-              return dividePriceBy100(result);
-            }
-
-            if (
-              [
-                'find',
-                'findMany',
-                'findFirst',
-                'findFirstOrThrow',
-                'findUnique',
-                'findUniqueOrThrow',
-              ].includes(operation)
-            ) {
-              const result = await query(args);
-              return dividePriceBy100(result);
-            }
-
-            return query(args);
-          },
-        },
-      }),
+      this
+        .$extends(PurchaseOrderStatus(this.rabbitMQService, this))
+        .$extends(Price100())
+        .$extends(ActivityLogging(this.cls, this))
+        .$extends(StockManagment(this.rabbitMQService)),
     );
   }
 

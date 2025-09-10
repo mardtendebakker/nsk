@@ -79,11 +79,12 @@ export class AttributeService {
     const {
       productTypes,
       options,
+      type,
       ...rest
     } = updateAttributeDto;
 
     if (productTypes) await this.repository.deleteAllProductTypes(id);
-    if (options) await this.repository.deleteAllOptions(id);
+    if (options || type) await this.repository.deleteAllOptions(id);
 
     return this.repository.update({
       where: { id },
@@ -95,6 +96,7 @@ export class AttributeService {
           },
         }),
         ...(options && { attribute_option: { create: options } }),
+        type,
       },
     });
   }

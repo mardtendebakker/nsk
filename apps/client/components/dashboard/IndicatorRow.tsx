@@ -1,13 +1,16 @@
 import {
   Box, Card, CardContent, Typography,
 } from '@mui/material';
-import { useEffect } from 'react';
+import {
+  useEffect, useState, useCallback, useMemo,
+} from 'react';
 import { trans } from 'itranslator';
-import { price } from '../../utils/formatter';
+import { count, price } from '../../utils/formatter';
 import useAxios from '../../hooks/useAxios';
-import { DASHBOARD_TOTAL_COUNT } from '../../utils/routes';
-import { TotalCount } from '../../utils/axios/models/dashboard';
+import { DashboardTotal } from '../../utils/axios/models/dashboard';
+import { DASHBOARD_TOTAL } from '../../utils/axios/paths';
 import useResponsive from '../../hooks/useResponsive';
+import DashboardFilters from './DashboardFilters';
 
 function Indicator({ title, value }: { title: string, value: number | string }) {
   return (
@@ -19,29 +22,64 @@ function Indicator({ title, value }: { title: string, value: number | string }) 
 }
 
 export default function IndicatorRow() {
-  const { call, data = {} } = useAxios<TotalCount | undefined>('get', DASHBOARD_TOTAL_COUNT);
+  const currentYear = useMemo(() => new Date().getFullYear().toString(), []);
+  const [year, setYear] = useState<string>(currentYear);
+  const [month, setMonth] = useState<string>('');
+  const [toMonth, setToMonth] = useState<string>('');
+  const { call, data = {} } = useAxios<DashboardTotal | undefined>('get', DASHBOARD_TOTAL);
   const isDesktop = useResponsive('up', 'md');
 
   useEffect(() => {
-    call().catch(() => {});
+    const params: { year: string; month?: string; toMonth?: string } = {
+      year,
+    };
+    if (month) params.month = month;
+    if (toMonth) params.toMonth = toMonth;
+
+    call({ params }).catch(() => {});
+  }, [year, month, toMonth]);
+
+  const handleYearChange = useCallback((newYear: string) => {
+    setYear(newYear);
+  }, []);
+
+  const handleMonthChange = useCallback((newMonth: string) => {
+    setMonth(newMonth);
+    if (!newMonth) {
+      setToMonth('');
+    }
+  }, []);
+
+  const handleToMonthChange = useCallback((newToMonth: string) => {
+    setToMonth(newToMonth);
   }, []);
 
   return (
     <Card>
+      <CardContent>
+        <DashboardFilters
+          year={year}
+          month={month}
+          toMonth={toMonth}
+          onYearChange={handleYearChange}
+          onMonthChange={handleMonthChange}
+          onToMonthChange={handleToMonthChange}
+        />
+      </CardContent>
       <CardContent sx={{
         display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', flexDirection: isDesktop ? undefined : 'column',
       }}
       >
         {
-        [
-          { title: 'Test Test 1', value: price(100) },
-          { title: 'Test Test 2', value: price(100) },
-          { title: trans('totalOrders'), value: String(data?.totalOrders) || '0' },
-          { title: trans('totalSuppliers'), value: String(data?.totalSuppliers) || '0' },
-          { title: trans('totalCustomers'), value: String(data?.totalCustomers) || '0' },
-        ]
-          .map(({ title, value }) => <Indicator key={title} title={title} value={value} />)
-        }
+          [
+            { title: trans('totalSpent'), value: price(data?.totalSpent) || '0' },
+            { title: trans('totalEarned'), value: price(data?.totalEarned) || '0' },
+            { title: trans('totalOrders'), value: count(data?.totalOrders) || '0' },
+            { title: trans('totalSuppliers'), value: count(data?.totalSuppliers) || '0' },
+            { title: trans('totalCustomers'), value: count(data?.totalCustomers) || '0' },
+          ]
+            .map(({ title, value }) => <Indicator key={title} title={title} value={value} />)
+          }
       </CardContent>
     </Card>
   );

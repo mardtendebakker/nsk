@@ -4,7 +4,7 @@ import { useState } from 'react';
 import useTranslation from '../../hooks/useTranslation';
 import useResponsive from '../../hooks/useResponsive';
 import {
-  STOCKS_ARCHIVED, STOCKS_PRODUCTS, STOCKS_REPAIR_SERVICES, STOCKS_WEBSHOP,
+  STOCKS_ARCHIVED, STOCKS_PRODUCTS, STOCKS_REPAIR_SERVICES, STOCKS_WEBSHOP, STOCKS_OUT_OF_STOCK,
 } from '../../utils/routes';
 import CreateModal from './createModal';
 import HeaderItem from '../list/headerItem';
@@ -20,6 +20,11 @@ export default function Header({ onProductCreated }: { onProductCreated: () => v
       active: router.pathname === STOCKS_PRODUCTS,
       text: trans('products'),
       href: STOCKS_PRODUCTS,
+    },
+    {
+      active: router.pathname === STOCKS_OUT_OF_STOCK,
+      text: trans('outOfStock'),
+      href: STOCKS_OUT_OF_STOCK,
     },
     {
       active: router.pathname === STOCKS_REPAIR_SERVICES,
