@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import {
   ADMIN_SETTINGS_LOCATIONS,
   ADMIN_SETTINGS_PRODUCT_TYPES,
+  ADMIN_SETTINGS_PRODUCT_SUB_TYPES,
   ADMIN_SETTINGS_ATTRIBUTES,
   ADMIN_SETTINGS_TASKS,
   ADMIN_SETTINGS_PRODUCT_STATUSES,
@@ -24,6 +25,11 @@ export default function Menu() {
       active: router.pathname === ADMIN_SETTINGS_PRODUCT_TYPES,
       title: trans('productTypes'),
       path: ADMIN_SETTINGS_PRODUCT_TYPES,
+    },
+    {
+      active: router.pathname === ADMIN_SETTINGS_PRODUCT_SUB_TYPES,
+      title: trans('productSubTypes'),
+      path: ADMIN_SETTINGS_PRODUCT_SUB_TYPES,
     },
     {
       active: router.pathname === ADMIN_SETTINGS_ATTRIBUTES,

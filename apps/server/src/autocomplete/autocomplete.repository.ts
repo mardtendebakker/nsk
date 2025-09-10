@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { AutocompleteDto, LocationLabelsAutocompleteDto } from './dto/autocomplete.dto';
+import { AutocompleteDto, LocationLabelsAutocompleteDto, ProductSubTypesAutocompleteDto } from './dto/autocomplete.dto';
 import { AutocompleteResponseDto } from './dto/autocomplete-response.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { Group } from '../user/model/group.enum';
@@ -14,6 +14,18 @@ export class AutocompleteRepository {
     return this.commonFind({
       autocompleteDto,
       prismaModel: this.prisma.product_type,
+    });
+  }
+
+  async findProductSubTypes(autocompleteDto: ProductSubTypesAutocompleteDto): Promise<AutocompleteResponseDto[]> {
+    const additionalWhereCondition = autocompleteDto.product_type_id
+      ? { product_type_id: autocompleteDto.product_type_id }
+      : {};
+
+    return this.commonFind({
+      autocompleteDto,
+      prismaModel: this.prisma.product_sub_type,
+      additionalWhereCondition,
     });
   }
 

@@ -56,6 +56,13 @@ export class CreateBodyStockDto {
   @IsOptional()
   @IsInt()
   @Type(() => Number)
+    sub_type_id?: number;
+
+  @ApiPropertyOptional()
+  @Transform(formDataNumberTransform)
+  @IsOptional()
+  @IsInt()
+  @Type(() => Number)
     status_id?: number;
 
   @ApiProperty()

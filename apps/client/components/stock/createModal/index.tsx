@@ -33,6 +33,7 @@ export function initFormState(trans: Trans, product?: Product): FormRepresentati
     sku: { value: product?.sku },
     name: { value: product?.name, required: true },
     type_id: { value: product?.product_type?.id },
+    sub_type_id: { value: product?.product_sub_type?.id },
     location_id: { value: product?.location?.id, required: true, additionalData: { location_template: product?.location.location_template || [] } },
     location_label: {
       value: product?.location_label?.label,
@@ -47,7 +48,6 @@ export function initFormState(trans: Trans, product?: Product): FormRepresentati
         locationTemplates.forEach((element) => {
           if (new RegExp(element.template).test(formRepresentation.location_label.value)) {
             supported = true;
-            return undefined;
           }
         });
 

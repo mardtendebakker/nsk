@@ -3,7 +3,7 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AutocompleteService } from './autocomplete.service';
-import { AutocompleteDto, LocationLabelsAutocompleteDto } from './dto/autocomplete.dto';
+import { AutocompleteDto, LocationLabelsAutocompleteDto, ProductSubTypesAutocompleteDto } from './dto/autocomplete.dto';
 import { AutocompleteResponseDto, LocationAutocompleteResponseDto } from './dto/autocomplete-response.dto';
 import { ALL_MAIN_GROUPS, LOCAL_GROUPS, PARTNERS_GROUPS } from '../user/model/group.enum';
 import { ConnectedUser, ConnectedUserType } from '../security/decorator/connected-user.decorator';
@@ -21,6 +21,12 @@ export class AutocompleteController {
   @ApiResponse({ type: AutocompleteResponseDto, isArray: true })
   productTypes(@Query() query: AutocompleteDto) {
     return this.autocompleteService.findProductTypes(query);
+  }
+
+  @Get('/product-sub-types')
+  @ApiResponse({ type: AutocompleteResponseDto, isArray: true })
+  productSubTypes(@Query() query: ProductSubTypesAutocompleteDto) {
+    return this.autocompleteService.findProductSubTypes(query);
   }
 
   @Get('/tasks')

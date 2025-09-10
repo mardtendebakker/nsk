@@ -5,6 +5,7 @@ import { OrderStatusModule } from './order-status/order-status.module';
 import { LocationModule } from './location/location.module';
 import { ProductStatusModule } from './product-status/product-status.module';
 import { ProductTypeModule } from './product-type/product-type.module';
+import { ProductSubTypeModule } from './product-sub-type/product-sub-type.module';
 import { ThemeModule } from './theme/theme.module';
 
 @Module({
@@ -13,6 +14,7 @@ import { ThemeModule } from './theme/theme.module';
     OrderStatusModule,
     ProductStatusModule,
     ProductTypeModule,
+    ProductSubTypeModule,
     LocationModule,
     LocationTemplateModule,
     ThemeModule,

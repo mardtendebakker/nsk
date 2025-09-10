@@ -83,6 +83,43 @@ const translation = {
   createUser: 'Maak een gebruiker aan',
   admin: 'Beheerder',
   productType: 'Productsoort',
+  productSubType: 'Product subsoort',
+  selectProductSubType: 'Selecteer product subsoort',
+  productSubTypes: 'Product subsoorten',
+  newProductSubType: 'Nieuwe product subsoort',
+  createProductSubType: 'Product subsoort aanmaken',
+  editProductSubType: 'Product subsoort bewerken',
+  productSubTypesList: {
+    search: {
+      placeholder: 'Zoeken op naam',
+    },
+  },
+  productSubTypeForm: {
+    name: {
+      label: 'Naam',
+      placeholder: 'Voer naam in',
+    },
+    productType: {
+      label: 'Productsoort',
+      placeholder: 'Selecteer productsoort',
+    },
+    magentoCategoryId: {
+      label: 'Magento categorie ID',
+      placeholder: 'Voer Magento categorie ID in',
+    },
+    magentoAttrSetId: {
+      label: 'Magento attribuut set ID',
+      placeholder: 'Voer Magento attribuut set ID in',
+    },
+    magentoGroupSpecId: {
+      label: 'Magento groep spec ID',
+      placeholder: 'Voer Magento groep spec ID in',
+    },
+    pindex: {
+      label: 'Index',
+      placeholder: 'Voer index in',
+    },
+  },
   orders: 'Bestellingen',
   editSupplier: 'Leverancier wijzigen',
   editSales: 'Verkoop bewerken',
