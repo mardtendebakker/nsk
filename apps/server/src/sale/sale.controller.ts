@@ -33,6 +33,11 @@ export class SaleController extends AOrderController {
     return this.saleService.removeProducts(id, productIds);
   }
 
+  @Post(':id/request-exact-invoice')
+  requestInvoice(@Param('id') id: number) {
+    return this.saleService.requestExactInvoice(id);
+  }
+
   @Post('import')
   @Authorization(SALE_UPLOADER_GROUPS)
   @UseInterceptors(FileInterceptor('file'))

@@ -708,6 +708,10 @@ const translation = {
 
     },
   },
+  yes: 'Ja',
+  no: 'Nein',
+  createInvoice: 'Rechnung erstellen',
+  createInvoiceConfirmationQuestion: 'Bitte überprüfen Sie die Informationen erneut, bevor Sie eine Rechnung erstellen.',
   editOrderStatus: 'Bestellstatus bearbeiten',
   emailLogs: 'E-Mail Protokolle',
   emails: 'E-Mails',
