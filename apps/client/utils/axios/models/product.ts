@@ -133,6 +133,5 @@ export interface ProductSubType {
   };
   magento_category_id?: string;
   magento_attr_set_id?: string;
-  magento_group_spec_id?: string;
   pindex?: number;
 }

@@ -118,7 +118,6 @@ describe('List', () => {
         product_type_id: 1,
         magento_category_id: null,
         magento_attr_set_id: null,
-        magento_group_spec_id: null,
         pindex: 1,
         productType: {
           id: 1,

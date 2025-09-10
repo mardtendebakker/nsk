@@ -59,7 +59,6 @@ describe('CreateModal', () => {
         product_type_id: null,
         magento_category_id: null,
         magento_attr_set_id: null,
-        magento_group_spec_id: null,
         pindex: null,
       },
     });
