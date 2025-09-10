@@ -26,6 +26,7 @@ export interface Product {
   product_orders: { quantity: number, order: Order }[],
   product_status:{ id: number, name: string },
   product_type:{ id: number, name: string },
+  product_sub_type?:{ id: number, name: string },
   description:string,
   updated_at:string,
   created_at:string,
@@ -120,4 +121,17 @@ export interface ProductType {
   is_public: boolean,
   attributes:Attribute[]
   tasks:Task[]
+}
+
+export interface ProductSubType {
+  id: number;
+  name: string;
+  product_type_id: number;
+  productType?: {
+    id: number;
+    name: string;
+  };
+  magento_category_id?: string;
+  magento_attr_set_id?: string;
+  pindex?: number;
 }

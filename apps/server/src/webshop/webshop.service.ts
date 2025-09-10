@@ -25,6 +25,8 @@ import { MagentoAttrGroupCode, MagentoAttrGroupName } from './enum/magento-attr-
 import { MagentoAttrSetId } from './enum/magento-attr-set-id.enum';
 import { MagentoAttrSet } from './types/magento-attr-set';
 import { ProductTypeService } from '../admin/product-type/product-type.service';
+import { ProductSubTypeService } from '../admin/product-sub-type/product-sub-type.service';
+import { MagentoIds } from './types/magento-ids';
 
 @Injectable()
 export class WebshopService {
@@ -33,6 +35,7 @@ export class WebshopService {
     private readonly configService: ConfigService,
     private readonly fileService: FileService,
     private readonly productTypeService: ProductTypeService,
+    private readonly productSubTypeService: ProductSubTypeService,
     private readonly attributeService: AttributeService,
   ) {}
 
@@ -146,8 +149,33 @@ export class WebshopService {
   }
 
   private async uploadProduct(product: ProductRelation, availableQuantity: number): Promise<AxiosResponse> {
-    let magentoAttrSetId = product.product_type.magento_attr_set_id;
-    let magentoGroupSpecId = product.product_type.magento_group_spec_id;
+    const magentoIds = this.getProductMagentoIds(product);
+
+    if (!hasValue(magentoIds.attrSet)) {
+      magentoIds.attrSet = await this.getAttrSetId(product.product_type.name);
+      if (magentoIds.isSub) {
+        this.productSubTypeService.update(product.product_sub_type.id, {
+          magento_attr_set_id: magentoIds.attrSet,
+        });
+      } else {
+        this.productTypeService.update(product.product_type.id, {
+          magento_attr_set_id: magentoIds.attrSet,
+        });
+      }
+    }
+    if (!hasValue(magentoIds.groupSpec)) {
+      magentoIds.groupSpec = await this.getGroupSpecId(magentoIds.attrSet);
+      if (magentoIds.isSub) {
+        this.productSubTypeService.update(product.product_sub_type.id, {
+          magento_group_spec_id: magentoIds.groupSpec,
+        });
+      } else {
+        this.productTypeService.update(product.product_type.id, {
+          magento_group_spec_id: magentoIds.groupSpec,
+        });
+      }
+    }
+
     const customAttributes: MagentoCustomeAttrs[] = [
       {
         attribute_code: 'meta_title',
@@ -170,24 +198,10 @@ export class WebshopService {
         value: '2',
       },
     ];
-
-    if (!hasValue(magentoAttrSetId)) {
-      magentoAttrSetId = await this.getAttrSetId(product.product_type.name);
-      this.productTypeService.update(product.product_type.id, {
-        magento_attr_set_id: magentoAttrSetId,
-      });
-    }
-    if (!hasValue(magentoGroupSpecId)) {
-      magentoGroupSpecId = await this.getGroupSpecId(magentoAttrSetId);
-      this.productTypeService.update(product.product_type.id, {
-        magento_group_spec_id: magentoGroupSpecId,
-      });
-    }
-
     const otherCustomAttributes = await this.getCustomAttrs({
       product,
-      attributeSetId: magentoAttrSetId,
-      attributeGroupId: magentoGroupSpecId,
+      attributeSetId: magentoIds.attrSet,
+      attributeGroupId: magentoIds.groupSpec,
     });
     customAttributes.push(...otherCustomAttributes);
 
@@ -198,13 +212,13 @@ export class WebshopService {
         product: {
           sku: product.id,
           name: this.getProductNameId(product),
-          attribute_set_id: magentoAttrSetId || 4,
+          attribute_set_id: magentoIds.attrSet || 4,
           price: product.price,
           extension_attributes: {
-            category_links: product.product_type.magento_category_id ? [
+            category_links: magentoIds.category ? [
               {
                 position: 0,
-                category_id: product.product_type.magento_category_id,
+                category_id: magentoIds.category,
               },
             ] : undefined,
             stock_item: {
@@ -216,6 +230,23 @@ export class WebshopService {
         },
       },
     });
+  }
+
+  private getProductMagentoIds(product: ProductRelation): MagentoIds {
+    const magentoIds: MagentoIds = {
+      isSub: false,
+      category: product.product_type.magento_category_id,
+      attrSet: product.product_type.magento_attr_set_id,
+      groupSpec: product.product_type.magento_group_spec_id,
+    };
+    if (product.product_sub_type?.magento_category_id) {
+      magentoIds.isSub = true;
+      magentoIds.category = product.product_sub_type.magento_category_id;
+      magentoIds.attrSet = product.product_sub_type.magento_attr_set_id;
+      magentoIds.groupSpec = product.product_sub_type.magento_group_spec_id;
+    }
+
+    return magentoIds;
   }
 
   private async getAttrSetId(attributeSetName: string): Promise<string> {

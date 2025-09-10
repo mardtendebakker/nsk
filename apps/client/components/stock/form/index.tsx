@@ -8,7 +8,7 @@ import BorderedBox from '../../borderedBox';
 import TextField from '../../memoizedInput/textField';
 import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
 import {
-  AUTOCOMPLETE_PRODUCT_TYPES_PATH, AUTOCOMPLETE_LOCATIONS_PATH, AUTOCOMPLETE_PRODUCT_STATUSES_PATH,
+  AUTOCOMPLETE_PRODUCT_TYPES_PATH, AUTOCOMPLETE_PRODUCT_SUB_TYPES_PATH, AUTOCOMPLETE_LOCATIONS_PATH, AUTOCOMPLETE_PRODUCT_STATUSES_PATH,
 } from '../../../utils/axios';
 import AttributeForm, { buildProductTypeKey } from './AttributeForm';
 import { price } from '../../../utils/formatter';
@@ -96,10 +96,25 @@ export default function Form({
               path={AUTOCOMPLETE_PRODUCT_TYPES_PATH}
               label={trans('productType')}
               placeholder={trans('selectProductType')}
-              onChange={(selected: { id: number }) => setValue({ field: 'type_id', value: selected?.id })}
+              onChange={(selected: { id: number }) => {
+                setValue({ field: 'type_id', value: selected?.id });
+                setValue({ field: 'sub_type_id', value: undefined });
+              }}
               value={formRepresentation.type_id.value?.toString()}
               disabled={disabled}
             />
+            {formRepresentation.type_id.value && (
+              <DataSourcePicker
+                sx={{ flex: 0.33, m: '.5rem' }}
+                path={AUTOCOMPLETE_PRODUCT_SUB_TYPES_PATH}
+                label={trans('productSubType')}
+                placeholder={trans('selectProductSubType')}
+                onChange={(selected: { id: number }) => setValue({ field: 'sub_type_id', value: selected?.id })}
+                value={formRepresentation.sub_type_id?.value?.toString()}
+                disabled={disabled}
+                params={{ product_type_id: formRepresentation.type_id.value }}
+              />
+            )}
           </Grid>
           <Grid
             item

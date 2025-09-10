@@ -7,6 +7,43 @@ const translation = {
   },
   dataDestruction: 'Data Destruction',
   selectLogistic: 'Select Logistics',
+  productSubType: 'Product Sub-Type',
+  selectProductSubType: 'Select Product Sub-Type',
+  productSubTypes: 'Product Sub-Types',
+  newProductSubType: 'New Product Sub-Type',
+  createProductSubType: 'Create Product Sub-Type',
+  editProductSubType: 'Edit Product Sub-Type',
+  productSubTypesList: {
+    search: {
+      placeholder: 'Search by name',
+    },
+  },
+  productSubTypeForm: {
+    name: {
+      label: 'Name',
+      placeholder: 'Enter name',
+    },
+    productType: {
+      label: 'Product Type',
+      placeholder: 'Select product type',
+    },
+    magentoCategoryId: {
+      label: 'Magento Category ID',
+      placeholder: 'Enter Magento category ID',
+    },
+    magentoAttrSetId: {
+      label: 'Magento Attribute Set ID',
+      placeholder: 'Enter Magento attribute set ID',
+    },
+    magentoGroupSpecId: {
+      label: 'Magento Group Spec ID',
+      placeholder: 'Enter Magento group spec ID',
+    },
+    pindex: {
+      label: 'Index',
+      placeholder: 'Enter index',
+    },
+  },
   none: 'No Data Carrier',
   format: 'Format disk',
   statement: 'Statement of Destruction',

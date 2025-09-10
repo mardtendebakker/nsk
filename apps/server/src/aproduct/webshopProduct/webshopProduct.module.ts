@@ -15,6 +15,7 @@ import { WebshopProductController } from './webshopProduct.controller';
 import { WebshopModule } from '../../webshop/webshop.module';
 import { AttributeModule } from '../../attribute/attribute.module';
 import { ProductTypeModule } from '../../admin/product-type/product-type.module';
+import { ProductSubTypeModule } from '../../admin/product-sub-type/product-sub-type.module';
 import { SecurityModule } from '../../security/security.module';
 
 @Global()
@@ -40,6 +41,7 @@ import { SecurityModule } from '../../security/security.module';
     HttpModule,
     WebshopModule,
     ProductTypeModule,
+    ProductSubTypeModule,
     AttributeModule,
     SecurityModule,
   ],

@@ -43,6 +43,7 @@ export const ADMIN_LOGISTICS_DRIVERS = '/admin/logistics/drivers';
 export const ADMIN_SETTINGS = '/admin/settings';
 export const ADMIN_SETTINGS_LOCATIONS = '/admin/settings/locations';
 export const ADMIN_SETTINGS_PRODUCT_TYPES = '/admin/settings/product-types';
+export const ADMIN_SETTINGS_PRODUCT_SUB_TYPES = '/admin/settings/product-sub-types';
 export const ADMIN_SETTINGS_ATTRIBUTES = '/admin/settings/attributes';
 export const ADMIN_SETTINGS_TASKS = '/admin/settings/tasks';
 export const ADMIN_SETTINGS_STATUS = '/admin/settings/status';

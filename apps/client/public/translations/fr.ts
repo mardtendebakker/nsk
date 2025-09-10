@@ -81,6 +81,43 @@ const translation = {
   createUser: 'Créer un utilisateur',
   admin: 'Administrateur',
   productType: 'Type de produit',
+  productSubType: 'Sous-type de produit',
+  selectProductSubType: 'Sélectionner le sous-type de produit',
+  productSubTypes: 'Sous-types de produit',
+  newProductSubType: 'Nouveau sous-type de produit',
+  createProductSubType: 'Créer un sous-type de produit',
+  editProductSubType: 'Modifier le sous-type de produit',
+  productSubTypesList: {
+    search: {
+      placeholder: 'Rechercher par nom',
+    },
+  },
+  productSubTypeForm: {
+    name: {
+      label: 'Nom',
+      placeholder: 'Entrez le nom',
+    },
+    productType: {
+      label: 'Type de produit',
+      placeholder: 'Sélectionner le type de produit',
+    },
+    magentoCategoryId: {
+      label: 'ID de catégorie Magento',
+      placeholder: 'Entrez l\'ID de catégorie Magento',
+    },
+    magentoAttrSetId: {
+      label: 'ID d\'ensemble d\'attributs Magento',
+      placeholder: 'Entrez l\'ID d\'ensemble d\'attributs Magento',
+    },
+    magentoGroupSpecId: {
+      label: 'ID de spécification de groupe Magento',
+      placeholder: 'Entrez l\'ID de spécification de groupe Magento',
+    },
+    pindex: {
+      label: 'Index',
+      placeholder: 'Entrez l\'index',
+    },
+  },
   orders: 'Commandes',
   editSupplier: 'Modifier le fournisseur',
   editSales: 'Modifier la vente',

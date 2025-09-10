@@ -575,6 +575,11 @@ export class StockService {
       },
     };
 
+    const productSubTypeSelect: Prisma.product_sub_typeSelect = {
+      id: true,
+      name: true,
+    };
+
     const productStatusSelect: Prisma.product_statusSelect = {
       id: true,
       name: true,
@@ -694,6 +699,9 @@ export class StockService {
       },
       product_type: {
         select: productTypeSelect,
+      },
+      product_sub_type: {
+        select: productSubTypeSelect,
       },
       product_order: {
         select: productOrderSelect,

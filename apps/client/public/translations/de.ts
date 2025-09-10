@@ -80,6 +80,43 @@ const translation = {
   createUser: 'Einen Benutzer erstellen',
   admin: 'Administrator',
   productType: 'Produktart',
+  productSubType: 'Produktunterart',
+  selectProductSubType: 'Produktunterart auswählen',
+  productSubTypes: 'Produktunterarten',
+  newProductSubType: 'Neue Produktunterart',
+  createProductSubType: 'Produktunterart erstellen',
+  editProductSubType: 'Produktunterart bearbeiten',
+  productSubTypesList: {
+    search: {
+      placeholder: 'Nach Name suchen',
+    },
+  },
+  productSubTypeForm: {
+    name: {
+      label: 'Name',
+      placeholder: 'Namen eingeben',
+    },
+    productType: {
+      label: 'Produktart',
+      placeholder: 'Produktart auswählen',
+    },
+    magentoCategoryId: {
+      label: 'Magento Kategorie ID',
+      placeholder: 'Magento Kategorie ID eingeben',
+    },
+    magentoAttrSetId: {
+      label: 'Magento Attribut-Set ID',
+      placeholder: 'Magento Attribut-Set ID eingeben',
+    },
+    magentoGroupSpecId: {
+      label: 'Magento Group Spec ID',
+      placeholder: 'Magento Group Spec ID eingeben',
+    },
+    pindex: {
+      label: 'Index',
+      placeholder: 'Index eingeben',
+    },
+  },
   orders: 'Bestellungen',
   editSupplier: 'Lieferanten bearbeiten',
   editSales: 'Verkauf bearbeiten',

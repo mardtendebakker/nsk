@@ -24,6 +24,11 @@ export class ProductEntity implements product {
   @Type(() => Number)
     type_id: number | null;
 
+  @ApiPropertyOptional()
+  @IsOptional()
+  @Type(() => Number)
+    sub_type_id: number | null;
+
   @ApiProperty()
   @Type(() => Number)
     location_id: number;
