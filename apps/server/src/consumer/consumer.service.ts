@@ -67,6 +67,8 @@ export class ConsumerService implements OnModuleInit {
     { orderId, previousStatusId }: { orderId: number; previousStatusId: number },
     properties: MessageProperties,
   ): Promise<void> {
+    if (!Number.isFinite(orderId) || !Number.isFinite(previousStatusId)) return;
+
     const order: any = await this.purchaseRepository.findOne({
       where: { id: orderId },
       select: {
