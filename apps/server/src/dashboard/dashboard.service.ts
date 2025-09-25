@@ -15,7 +15,7 @@ export class DashboardService {
 
     return {
       totalSpent: total.spent,
-      totalEarned: total.spent,
+      totalEarned: total.earned,
       totalOrders: total.orders,
       totalSuppliers: total.suppliers,
       totalCustomers: total.customers,
