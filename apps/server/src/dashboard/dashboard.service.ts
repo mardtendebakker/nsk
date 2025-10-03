@@ -14,8 +14,8 @@ export class DashboardService {
     const total = await this.repository.total(range, email);
 
     return {
-      totalSpent: total.spent,
-      totalEarned: total.earned,
+      totalSpent: total.spent / 100,
+      totalEarned: total.earned / 100,
       totalOrders: total.orders,
       totalSuppliers: total.suppliers,
       totalCustomers: total.customers,
