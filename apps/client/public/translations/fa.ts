@@ -772,6 +772,14 @@ const translation = {
   year: 'سال',
   month: 'ماه',
   toMonth: 'تا ماه',
+  activityLogs: 'گزارش‌های فعالیت',
+  aorderLogs: 'گزارش‌های سفارش',
+  previousStatus: 'وضعیت قبلی',
+  route: 'مسیر',
+  model: 'مدل',
+  action: 'عمل',
+  params: 'پارامترها',
+  body: 'بدنه',
 };
 
 export default translation;

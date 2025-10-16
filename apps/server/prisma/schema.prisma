@@ -137,15 +137,17 @@ model location {
 }
 
 model order_status {
-  id          Int      @id @default(autoincrement())
-  is_purchase Boolean
-  is_sale     Boolean
-  is_repair   Boolean
-  pindex      Int?
-  name        String   @db.VarChar(255)
-  color       String?  @db.VarChar(7)
-  mailbody    String?  @db.LongText
-  aorder      aorder[]
+  id                                    Int           @id @default(autoincrement())
+  is_purchase                           Boolean
+  is_sale                               Boolean
+  is_repair                             Boolean
+  pindex                                Int?
+  name                                  String        @db.VarChar(255)
+  color                                 String?       @db.VarChar(7)
+  mailbody                              String?       @db.LongText
+  aorder                                aorder[]
+  aorder_log_previous_status            aorder_log[]  @relation("aorder_log_previous_status")
+  aorder_log_status                     aorder_log[]  @relation("aorder_log_status")
 }
 
 model pickup {
@@ -525,6 +527,20 @@ model activity_log {
   createdAt  DateTime     @default(now()) @db.DateTime(0)
   updated_at DateTime     @default(now()) @updatedAt @db.DateTime(0)
   userGroups user_group[] @relation("activity_logTouser_group")
+}
+
+model aorder_log {
+  id                        Int          @id @default(autoincrement())
+  username                  String       @db.VarChar(255)
+  previous_status_id        Int
+  status_id                 Int
+  created_at                DateTime     @default(now()) @db.DateTime(0)
+  updated_at                DateTime     @default(now()) @updatedAt @db.DateTime(0)
+  previous_status           order_status @relation("aorder_log_previous_status", fields: [previous_status_id], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  status                    order_status @relation("aorder_log_status", fields: [status_id], references: [id], onDelete: Restrict, onUpdate: Restrict)
+
+  @@index([previous_status_id])
+  @@index([status_id])
 }
 
 model user_group {

@@ -8,7 +8,7 @@ export function PrismaExtention({
 }: {
   prisma: PrismaClient, cls: ClsService, rabbitMQService: RabbitMQService
 }) {
-  const IGNORED_MODELS = ['email_log', 'activity_log', 'user_group', 'stock'];
+  const IGNORED_MODELS = ['email_log', 'activity_log', 'user_group', 'stock', 'aorder_log'];
   const MUTATION_OPERATIONS = ['create', 'createMany', 'update', 'updateMany', 'upsert', 'delete', 'deleteMany'];
   const multiplyPriceBy100 = <T extends { [key: string]: any }>(obj: T): T => {
     for (const key in obj) {
@@ -41,6 +41,7 @@ export function PrismaExtention({
     }
     return obj;
   };
+
   const buildSelectFromData = (data: any): any => {
     if (!data || typeof data !== 'object') return true;
 
@@ -59,6 +60,15 @@ export function PrismaExtention({
 
     return select;
   };
+
+  const buildAOrderSelectFromData = (data: any): any => ({
+    ...buildSelectFromData(data),
+    product_order: {
+      select: { quantity: true },
+    },
+    id: true,
+    status_id: true,
+  });
 
   return Prisma.defineExtension({
     name: 'prisma-extension',
@@ -94,7 +104,7 @@ export function PrismaExtention({
               if (operation === 'create') {
                 result = await query(args);
                 if (model === 'aorder') {
-                  rabbitMQService.orderStatusUpdated(result.id, result.status_id);
+                  rabbitMQService.orderStatusUpdated(result.id, result.status_id, cls.get('username'));
                 }
                 if (model === 'product') {
                   rabbitMQService.productCreated(result.id);
@@ -133,26 +143,52 @@ export function PrismaExtention({
               if (operation === 'update') {
                 before = await prisma[model].findFirst({
                   where: args.where,
-                  select: buildSelectFromData(args.data),
+                  select: model == 'aorder' ? buildAOrderSelectFromData(args.data) : buildSelectFromData(args.data),
                 });
                 result = await query(args);
                 if (model === 'aorder' && before && result.status_id != before.status_id) {
-                  rabbitMQService.orderStatusUpdated(before.id, before.status_id);
+                  prisma.aorder_log.create({
+                    data: {
+                      username: cls.get('username') || '',
+                      previous_status_id: before.status_id,
+                      status_id: result.status_id,
+                    },
+                  }).catch((e) => console.log(e.message));
+
+                  rabbitMQService.orderStatusUpdated(before.id, before.status_id, cls.get('username'));
                 }
               } else if (operation === 'updateMany') {
                 before = await prisma[model].findMany({
                   where: args.where,
-                  select: buildSelectFromData(args.data),
+                  select: model == 'aorder' ? buildAOrderSelectFromData(args.data) : buildSelectFromData(args.data),
                 });
                 result = await query(args);
 
                 if (model === 'aorder') {
-                  const updatedOrders = await prisma.aorder.findMany({ where: { id: { in: before.map(({ id }) => id) } } });
+                  const updatedOrders = await prisma.aorder.findMany({
+                    where: { id: { in: before.map(({ id }) => id) } },
+                    select: {
+                      id: true,
+                      status_id: true,
+                      product_order: {
+                        select: { quantity: true },
+                      },
+                    },
+                  });
 
                   for (const order of before) {
                     for (const updatedOrder of updatedOrders) {
                       if ((updatedOrder.id == order.id) && (updatedOrder.status_id != order.status_id)) {
-                        rabbitMQService.orderStatusUpdated(order.id, order.status_id);
+                        // eslint-disable-next-line no-await-in-loop
+                        prisma.aorder_log.create({
+                          data: {
+                            username: cls.get('username') || '',
+                            previous_status_id: order.status_id,
+                            status_id: updatedOrder.status_id,
+                          },
+                        }).catch((e) => console.log(e.message));
+
+                        rabbitMQService.orderStatusUpdated(order.id, order.status_id, cls.get('username'));
                       }
                     }
                   }
@@ -197,6 +233,7 @@ export function PrismaExtention({
               return dividePriceBy100(result);
             }
           } catch (e) {
+            console.log(e);
             return query(args); // fail-safe fallback
           }
         } else if (

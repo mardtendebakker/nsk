@@ -762,6 +762,14 @@ const translation = {
   year: 'Año',
   month: 'Mes',
   toMonth: 'Al mes',
+  activityLogs: 'Registros de actividad',
+  aorderLogs: 'Registros de pedidos',
+  previousStatus: 'Estado anterior',
+  route: 'Ruta',
+  model: 'Modelo',
+  action: 'Acción',
+  params: 'Parámetros',
+  body: 'Cuerpo',
 };
 
 export default translation;
