@@ -773,6 +773,14 @@ const translation = {
   year: 'السنة',
   month: 'الشهر',
   toMonth: 'إلى الشهر',
+  activityLogs: 'سجلات النشاط',
+  aorderLogs: 'سجلات الطلبات',
+  previousStatus: 'الحالة السابقة',
+  route: 'المسار',
+  model: 'النموذج',
+  action: 'الإجراء',
+  params: 'المعاملات',
+  body: 'المحتوى',
 };
 
 export default translation;
