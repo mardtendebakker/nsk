@@ -7,7 +7,7 @@ import {
 import Search from '@mui/icons-material/Search';
 import {
   addMinutes, areIntervalsOverlapping, differenceInMinutes, format, setHours, setMinutes, setSeconds, eachDayOfInterval,
-  getHours, isValid, startOfWeek, endOfWeek,
+  getHours, isValid, startOfWeek, endOfWeek, addDays,
 } from 'date-fns';
 import { NextRouter, useRouter } from 'next/router';
 import useTranslation from '../../hooks/useTranslation';
@@ -42,7 +42,7 @@ const refreshList = ({
   call({
     params: {
       startsAt: format(startDate, 'yyyy-MM-dd'),
-      endsAt: format(endDate, 'yyyy-MM-dd'),
+      endsAt: format(addDays(endDate, 1), 'yyyy-MM-dd'),
     },
   }).then(() => pushURLParams({ params, router })).catch(() => {});
 };
