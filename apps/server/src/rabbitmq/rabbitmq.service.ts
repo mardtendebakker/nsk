@@ -56,12 +56,16 @@ export class RabbitMQService implements OnModuleInit, OnModuleDestroy {
     this.pushToQueue(this.magentoPaymentPaidChannel, this.MAGENTO_PAYMENT_PAID, JSON.stringify({ order_id: orderId }));
   }
 
-  async orderStatusUpdated(orderId: number, previousStatusId: number): Promise<void> {
-    this.pushToQueue(this.orderStatusUpdatedChannel, this.ORDER_STATUS_UPDATED_QUEUE, JSON.stringify({ orderId, previousStatusId }));
+  async orderStatusUpdated(orderId: number, previousStatusId: number, username?: string): Promise<void> {
+    this.pushToQueue(this.orderStatusUpdatedChannel, this.ORDER_STATUS_UPDATED_QUEUE, JSON.stringify({
+      orderId, previousStatusId, username,
+    }));
   }
 
-  async delayOrderStatusUpdated(orderId: number, previousStatusId: number, publishOptions: PublishOptions): Promise<void> {
-    this.pushToQueue(this.delayOrderStatusUpdatedChannel, this.DELAY_ORDER_STATUS_UPDATED_QUEUE, JSON.stringify({ orderId, previousStatusId }), publishOptions);
+  async delayOrderStatusUpdated(publishOptions: PublishOptions, orderId: number, previousStatusId: number, username?: string): Promise<void> {
+    this.pushToQueue(this.delayOrderStatusUpdatedChannel, this.DELAY_ORDER_STATUS_UPDATED_QUEUE, JSON.stringify({
+      orderId, previousStatusId, username,
+    }), publishOptions);
   }
 
   async productCreated(productId: number): Promise<void> {

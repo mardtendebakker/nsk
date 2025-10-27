@@ -64,13 +64,23 @@ export class ConsumerService implements OnModuleInit {
   }
 
   private async handleOrderStatusUpdated(
-    { orderId, previousStatusId }: { orderId: number; previousStatusId: number },
+    {
+      orderId, previousStatusId, username,
+    }: { orderId: number; previousStatusId: number, username?: string },
     properties: MessageProperties,
   ): Promise<void> {
+    if (!Number.isFinite(orderId) || !Number.isFinite(previousStatusId)) return;
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const order: any = await this.purchaseRepository.findOne({
       where: { id: orderId },
       select: {
-        pickup: true, delivery: true, order_date: true, order_nr: true, contact_aorder_supplier_idTocontact: true, order_status: true,
+        pickup: true,
+        delivery: true,
+        order_date: true,
+        order_nr: true,
+        contact_aorder_supplier_idTocontact: true,
+        order_status: true,
       },
     });
 
@@ -82,7 +92,7 @@ export class ConsumerService implements OnModuleInit {
     if (order.order_nr.includes('TEMP')) {
       const retryCount = properties?.headers?.['x-retry-count'] || 0;
       if (retryCount <= 5) {
-        await this.rabbitMQService.delayOrderStatusUpdated(orderId, previousStatusId, { headers: { 'x-retry-count': retryCount }, persistent: true });
+        await this.rabbitMQService.delayOrderStatusUpdated({ headers: { 'x-retry-count': retryCount }, persistent: true }, orderId, previousStatusId, username);
         return;
       }
       Logger.log('Max retries reached, sending to dead-letter queue', 'RabbitMQ');

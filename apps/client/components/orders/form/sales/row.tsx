@@ -25,8 +25,8 @@ export default function Row({
   vatFactor: number,
 }) {
   const { state: { user } } = useSecurity();
-  const [price, setPrice] = useState(product.product_order.price.toString());
-  const [priceInclVat, setPriceInclVat] = useState(product.product_order.price.toString());
+  const [price, setPrice] = useState(product.product_order.price?.toString() || '0');
+  const [priceInclVat, setPriceInclVat] = useState(product.product_order?.toString() || '0');
 
   useEffect(() => {
     setPriceInclVat((product.product_order.price * vatFactor).toString());
