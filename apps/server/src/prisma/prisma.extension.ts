@@ -48,7 +48,7 @@ export function PrismaExtention({
     const select: Record<string, any> = {};
 
     for (const [key, value] of Object.entries(data)) {
-      if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+      if (typeof value === 'object' && value !== null && !Array.isArray(value) && !(value instanceof Date)) {
       // Check for nested updates (e.g., update: { ... })
         if ('update' in value || 'set' in value || 'connect' in value) {
           select[key] = true;
@@ -140,11 +140,10 @@ export function PrismaExtention({
             if (['update', 'updateMany'].includes(operation)) {
               let before;
               let result;
+
+              const select = model == 'aorder' ? buildAOrderSelectFromData(args.data) : buildSelectFromData(args.data);
               if (operation === 'update') {
-                before = await prisma[model].findFirst({
-                  where: args.where,
-                  select: model == 'aorder' ? buildAOrderSelectFromData(args.data) : buildSelectFromData(args.data),
-                });
+                before = await prisma[model].findFirst({ where: args.where, select });
                 result = await query(args);
                 if (model === 'aorder' && before && result.status_id != before.status_id) {
                   prisma.aorder_log.create({
@@ -158,10 +157,7 @@ export function PrismaExtention({
                   rabbitMQService.orderStatusUpdated(before.id, before.status_id, cls.get('username'));
                 }
               } else if (operation === 'updateMany') {
-                before = await prisma[model].findMany({
-                  where: args.where,
-                  select: model == 'aorder' ? buildAOrderSelectFromData(args.data) : buildSelectFromData(args.data),
-                });
+                before = await prisma[model].findMany({ where: args.where, select });
                 result = await query(args);
 
                 if (model === 'aorder') {
