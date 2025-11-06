@@ -11,6 +11,7 @@ import { AFile } from '../../../../utils/axios/models/aFile';
 import useResponsive from '../../../../hooks/useResponsive';
 import { Order } from '../../../../utils/axios/models/order';
 import ShippingDetails from '../shippingDetails';
+import TotalPerProductType from '../totalPerProductType';
 
 function PurchaseForm({
   formRepresentation,
@@ -44,8 +45,14 @@ function PurchaseForm({
       order && (
       <>
         <Divider sx={{ mx: '1.5rem' }} />
-        <CardContent>
-          <ShippingDetails formRepresentation={formRepresentation} disabled={disabled} setValue={setValue} order={order} onFileDelete={onFileDelete} />
+        <CardContent sx={{ display: 'flex', flexDirection: isDesktop ? 'row' : 'column' }}>
+          <Box sx={{ flex: 1 }}>
+            <ShippingDetails formRepresentation={formRepresentation} disabled={disabled} setValue={setValue} order={order} onFileDelete={onFileDelete} />
+          </Box>
+          <Box sx={{ m: '.5rem' }} />
+          <Box sx={{ flex: 1 }}>
+            <TotalPerProductType formRepresentation={formRepresentation} />
+          </Box>
         </CardContent>
       </>
       )

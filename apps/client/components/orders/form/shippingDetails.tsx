@@ -68,10 +68,7 @@ export default function ShippingDetails({
         spacing={1}
         sx={{ flexDirection: 'column' }}
       >
-        <Grid
-          sx={{ display: 'flex', width: isDesktop ? '50%' : 'unset', flexDirection: isDesktop ? undefined : 'column' }}
-          item
-        >
+        <Grid sx={{ display: 'flex', flexDirection: isDesktop ? undefined : 'column' }} item>
           <DateTimePicker
             disabled={disabled}
             onChange={(value) => {
@@ -125,10 +122,7 @@ export default function ShippingDetails({
           />
         </Grid>
         {showPickupDateChangedMessage && <Typography color="error" sx={{ m: '.5rem' }}>{trans('orderMightShouldChangeWarning')}</Typography>}
-        <Grid
-          sx={{ display: 'flex', width: isDesktop ? '50%' : 'unset' }}
-          item
-        >
+        <Grid sx={{ display: 'flex' }} item>
           <Table size="small">
             <TableBody>
               <TableRow>
