@@ -291,4 +291,19 @@ export class AutocompleteRepository {
 
     return result.map(({ id, name, company_contact_company_idTocompany }) => ({ id, label: `${name} - ${company_contact_company_idTocompany.name}` }));
   }
+
+  async findTeams(autocompleteDto: AutocompleteDto): Promise<AutocompleteResponseDto[]> {
+    return this.commonFind({
+      autocompleteDto,
+      prismaModel: this.prisma.team,
+    });
+  }
+
+  async findUsers(autocompleteDto: AutocompleteDto): Promise<AutocompleteResponseDto[]> {
+    return this.commonFind({
+      autocompleteDto,
+      prismaModel: this.prisma.user,
+      searchKey: 'username',
+    });
+  }
 }

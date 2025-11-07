@@ -8,6 +8,7 @@ import {
   ADMIN_SETTINGS_TASKS,
   ADMIN_SETTINGS_PRODUCT_STATUSES,
   ADMIN_SETTINGS_ORDER_STATUSES,
+  ADMIN_SETTINGS_TEAMS,
 } from '../../../utils/routes';
 import useTranslation from '../../../hooks/useTranslation';
 import NavItem from '../../navItem';
@@ -50,6 +51,11 @@ export default function Menu() {
       active: router.pathname === ADMIN_SETTINGS_ORDER_STATUSES,
       title: trans('orderStatuses'),
       path: ADMIN_SETTINGS_ORDER_STATUSES,
+    },
+    {
+      active: router.pathname === ADMIN_SETTINGS_TEAMS,
+      title: trans('teams'),
+      path: ADMIN_SETTINGS_TEAMS,
     },
   ];
 

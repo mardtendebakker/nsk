@@ -9,11 +9,11 @@ export default function NewResource({
   onClick,
   disabled = false,
   label,
-}:{ onClick: () => void, requiredModule: ModuleName, disabled?: boolean, label: string }) {
+}:{ onClick: () => void, requiredModule?: ModuleName, disabled?: boolean, label: string }) {
   const { trans } = useTranslation();
   const { hasModule } = useSecurity();
 
-  const activeModule = hasModule(requiredModule);
+  const activeModule = requiredModule ? hasModule(requiredModule) : true;
 
   return (
     <Tooltip title={!activeModule && trans('inactiveModuleMessage', { vars: (new Map()).set('module', requiredModule) })}>

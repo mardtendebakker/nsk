@@ -120,6 +120,21 @@ const translation = {
       placeholder: 'شاخص را وارد کنید',
     },
   },
+  teams: 'تیم‌ها',
+  newTeam: 'تیم جدید',
+  createTeam: 'ایجاد تیم',
+  editTeam: 'ویرایش تیم',
+  teamsList: {
+    search: {
+      placeholder: 'جستجو بر اساس نام',
+    },
+  },
+  teamForm: {
+    name: {
+      label: 'نام تیم',
+      placeholder: 'نام تیم را وارد کنید',
+    },
+  },
   orders: 'سفارشات',
   editSupplier: 'ویرایش تامین کننده',
   editSales: 'ویرایش فروش',

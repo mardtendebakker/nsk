@@ -120,6 +120,21 @@ const translation = {
       placeholder: 'Voer index in',
     },
   },
+  teams: 'Teams',
+  newTeam: 'Nieuw team',
+  createTeam: 'Team aanmaken',
+  editTeam: 'Team bewerken',
+  teamsList: {
+    search: {
+      placeholder: 'Zoeken op naam',
+    },
+  },
+  teamForm: {
+    name: {
+      label: 'Teamnaam',
+      placeholder: 'Voer teamnaam in',
+    },
+  },
   orders: 'Bestellingen',
   editSupplier: 'Leverancier wijzigen',
   editSales: 'Verkoop bewerken',

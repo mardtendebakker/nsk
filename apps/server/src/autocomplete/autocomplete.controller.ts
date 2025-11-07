@@ -150,4 +150,16 @@ export class AutocompleteController {
   productStatuses(@Query() query: AutocompleteDto) {
     return this.autocompleteService.findProductStatuses(query);
   }
+
+  @Get('/teams')
+  @ApiResponse({ type: AutocompleteResponseDto, isArray: true })
+  teams(@Query() query: AutocompleteDto) {
+    return this.autocompleteService.findTeams(query);
+  }
+
+  @Get('/users')
+  @ApiResponse({ type: AutocompleteResponseDto, isArray: true })
+  users(@Query() query: AutocompleteDto) {
+    return this.autocompleteService.findUsers(query);
+  }
 }

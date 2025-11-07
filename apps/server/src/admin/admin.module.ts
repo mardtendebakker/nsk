@@ -7,6 +7,7 @@ import { ProductStatusModule } from './product-status/product-status.module';
 import { ProductTypeModule } from './product-type/product-type.module';
 import { ProductSubTypeModule } from './product-sub-type/product-sub-type.module';
 import { ThemeModule } from './theme/theme.module';
+import { TeamModule } from './team/team.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ThemeModule } from './theme/theme.module';
     LocationModule,
     LocationTemplateModule,
     ThemeModule,
+    TeamModule,
   ],
 })
 export class AdminModule {}

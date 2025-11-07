@@ -40,6 +40,11 @@ export interface OrderStatus {
   mailbody:string
 }
 
+export interface Team {
+  id: number,
+  name: string,
+}
+
 export interface OrderListItem {
   id: number,
   order_nr:string

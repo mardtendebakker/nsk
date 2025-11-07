@@ -118,6 +118,21 @@ const translation = {
       placeholder: 'Entrez l\'index',
     },
   },
+  teams: 'Équipes',
+  newTeam: 'Nouvelle équipe',
+  createTeam: 'Créer une équipe',
+  editTeam: 'Modifier l\'équipe',
+  teamsList: {
+    search: {
+      placeholder: 'Rechercher par nom',
+    },
+  },
+  teamForm: {
+    name: {
+      label: 'Nom de l\'équipe',
+      placeholder: 'Entrez le nom de l\'équipe',
+    },
+  },
   orders: 'Commandes',
   editSupplier: 'Modifier le fournisseur',
   editSales: 'Modifier la vente',

@@ -120,6 +120,21 @@ const translation = {
       placeholder: 'أدخل الفهرس',
     },
   },
+  teams: 'الفرق',
+  newTeam: 'فريق جديد',
+  createTeam: 'إنشاء فريق',
+  editTeam: 'تعديل الفريق',
+  teamsList: {
+    search: {
+      placeholder: 'البحث بالاسم',
+    },
+  },
+  teamForm: {
+    name: {
+      label: 'اسم الفريق',
+      placeholder: 'أدخل اسم الفريق',
+    },
+  },
   orders: 'الطلبيات',
   editSupplier: 'تحرير المورد',
   editSales: 'تحرير البيع',

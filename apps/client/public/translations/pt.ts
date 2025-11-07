@@ -121,6 +121,21 @@ const translation = {
       placeholder: 'Digite o índice',
     },
   },
+  teams: 'Equipes',
+  newTeam: 'Nova equipe',
+  createTeam: 'Criar equipe',
+  editTeam: 'Editar equipe',
+  teamsList: {
+    search: {
+      placeholder: 'Pesquisar por nome',
+    },
+  },
+  teamForm: {
+    name: {
+      label: 'Nome da equipe',
+      placeholder: 'Digite o nome da equipe',
+    },
+  },
   orders: 'Pedidos',
   editSupplier: 'Alterar fornecedor',
   editSales: 'Editar Ordem de Venda',

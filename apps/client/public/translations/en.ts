@@ -1,5 +1,22 @@
 const translation = {
-  // translate to english
+  id: 'ID',
+  name: 'Name',
+  actions: 'Actions',
+  teams: 'Teams',
+  newTeam: 'New Team',
+  createTeam: 'Create Team',
+  editTeam: 'Edit Team',
+  teamsList: {
+    search: {
+      placeholder: 'Search by name',
+    },
+  },
+  teamForm: {
+    name: {
+      label: 'Team Name',
+      placeholder: 'Enter team name',
+    },
+  },
   blancco: {
     name: 'Blancco',
     import: 'Import',

@@ -73,4 +73,12 @@ export class AutocompleteService {
   async findProductStatuses(autocompleteDto: AutocompleteDto) {
     return this.repository.findProductStatuses(autocompleteDto);
   }
+
+  async findTeams(autocompleteDto: AutocompleteDto) {
+    return this.repository.findTeams(autocompleteDto);
+  }
+
+  async findUsers(autocompleteDto: AutocompleteDto) {
+    return this.repository.findUsers(autocompleteDto);
+  }
 }
