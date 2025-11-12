@@ -144,7 +144,7 @@ export default function List({
   disabled: boolean,
   onDelete: (id: number) => void,
 }) {
-  const { trans } = useTranslation();
+  const { trans, locale } = useTranslation();
   const editPath = EDIT_PATHS[type] || ORDERS_PURCHASES_EDIT;
 
   return (
@@ -237,7 +237,7 @@ export default function List({
                       fontWeight: (theme) => theme.typography.fontWeightMedium,
                     }}
                     >
-                      {order.order_status.name}
+                      {order.order_status.translations?.[locale] || order.order_status.name}
                     </Box>
                   </Box>
                 )}

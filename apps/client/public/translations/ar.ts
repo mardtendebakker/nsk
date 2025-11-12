@@ -701,6 +701,10 @@ const translation = {
       label: 'الاسم',
       placeholder: 'أدخل الاسم',
     },
+    translations: {
+      label: 'الترجمات',
+      placeholder: 'أدخل اسم حالة المنتج المترجم',
+    },
   },
   orderStatusForm: {
     mailBody: {
@@ -712,8 +716,12 @@ const translation = {
       orderNr: '{{orderNr}} المعرف الفريد للطلب.',
       pickupDate: '{{pickupDate}} تاريخ الاستلام المخطط له.',
       orderDate: '{{orderDate}} التاريخ الذي تم إنشاء الطلب فيه.',
-      supplierName: '{{supplierName}} نام تامین‌کننده.',
-      customerName: '{{customerName}} نام مشتری.',
+      supplierName: '{{supplierName}} اسم المورد.',
+      customerName: '{{customerName}} اسم العميل.',
+    },
+    translations: {
+      label: 'الترجمات',
+      placeholder: 'أدخل اسم حالة الطلب المترجم',
     },
   },
   editOrderStatus: 'تعديل حالة الطلب',

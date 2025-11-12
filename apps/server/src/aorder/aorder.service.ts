@@ -59,6 +59,7 @@ export class AOrderService {
             id: true,
             name: true,
             color: true,
+            translations: true,
           },
         },
         ...(this.type === AOrderDiscrimination.PURCHASE && {
@@ -381,6 +382,7 @@ export class AOrderService {
           id: true,
           name: true,
           color: true,
+          translations: true,
         },
       },
       product_order: {

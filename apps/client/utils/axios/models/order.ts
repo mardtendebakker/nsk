@@ -37,7 +37,8 @@ export interface OrderStatus {
   is_sale:boolean,
   is_repair:boolean,
   color:string,
-  mailbody:string
+  mailbody:string,
+  translations?: Record<string, string> | null
 }
 
 export interface OrderListItem {
@@ -46,7 +47,7 @@ export interface OrderListItem {
   order_date:string,
   pickup: { real_pickup_date: string },
   delivery: { date: string },
-  order_status: { id: number, name:string, color:string }
+  order_status: { id: number, name:string, color:string, translations?: [key: string, value: string] }
   product_orders: ProductOrder[];
   contact_aorder_supplier_idTocontact:Contact,
   contact_aorder_customer_idTocontact:Contact
