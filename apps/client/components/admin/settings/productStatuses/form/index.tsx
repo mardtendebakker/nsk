@@ -1,10 +1,21 @@
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { SetValue, FormRepresentation } from '../../../../../hooks/useForm';
 import useTranslation from '../../../../../hooks/useTranslation';
 import BorderedBox from '../../../../borderedBox';
 import TextField from '../../../../memoizedInput/textField';
 import Checkbox from '../../../../checkbox';
 import useResponsive from '../../../../../hooks/useResponsive';
+
+const LANGUAGES = [
+  { code: 'en', label: 'English' },
+  { code: 'nl', label: 'Dutch' },
+  { code: 'de', label: 'German' },
+  { code: 'fr', label: 'French' },
+  { code: 'es', label: 'Spanish' },
+  { code: 'pt', label: 'Portuguese' },
+  { code: 'ar', label: 'Arabic' },
+  { code: 'fa', label: 'Farsi' },
+];
 
 export default function Form({
   setValue,
@@ -51,6 +62,21 @@ export default function Form({
           label={trans('isSaleable')}
         />
       </Box>
+      <Typography sx={{ mt: '1.5rem', mb: '.5rem' }} variant="h6">{trans('productStatusForm.translations.label')}</Typography>
+      {LANGUAGES.map((lang) => (
+        <TextField
+          key={lang.code}
+          sx={{ mb: '1rem' }}
+          fullWidth
+          label={`${trans('name')} ${lang.label}`}
+          placeholder={trans('productStatusForm.translations.placeholder')}
+          value={formRepresentation[`translation_${lang.code}`]?.value || ''}
+          helperText={formRepresentation[`translation_${lang.code}`]?.error}
+          error={!!formRepresentation[`translation_${lang.code}`]?.error}
+          onChange={(e) => setValue({ field: `translation_${lang.code}`, value: e.target.value })}
+          disabled={disabled}
+        />
+      ))}
     </BorderedBox>
   );
 }

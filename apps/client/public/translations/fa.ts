@@ -702,6 +702,10 @@ const translation = {
       label: 'نام',
       placeholder: 'نام را بنویسید',
     },
+    translations: {
+      label: 'ترجمه‌ها',
+      placeholder: 'نام ترجمه شده وضعیت محصول را وارد کنید',
+    },
   },
   orderStatusForm: {
     mailBody: {
@@ -715,6 +719,10 @@ const translation = {
       orderDate: '{{orderDate}} تاریخی که سفارش ایجاد شده است.',
       supplierName: '{{supplierName}} نام تامین‌کننده.',
       customerName: '{{customerName}} نام مشتری.',
+    },
+    translations: {
+      label: 'ترجمه‌ها',
+      placeholder: 'نام ترجمه شده وضعیت سفارش را وارد کنید',
     },
   },
   editOrderStatus: 'ویرایش وضعیت سفارش',

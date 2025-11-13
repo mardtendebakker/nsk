@@ -71,6 +71,18 @@ const translation = {
   params: 'Params',
   body: 'Body',
   search: 'Search',
+  orderStatusForm: {
+    translations: {
+      label: 'Translations',
+      placeholder: 'Enter translated order status name',
+    },
+  },
+  productStatusForm: {
+    translations: {
+      label: 'Translations',
+      placeholder: 'Enter translated product status name',
+    },
+  },
 };
 
 export default translation;

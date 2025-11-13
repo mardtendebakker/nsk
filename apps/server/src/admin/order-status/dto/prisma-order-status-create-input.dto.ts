@@ -40,5 +40,9 @@ export class PrismaOrderStatusCreateInputDto implements Prisma.order_statusCreat
 
   @ApiPropertyOptional()
   @IsOptional()
+    translations?: Prisma.InputJsonValue;
+
+  @ApiPropertyOptional()
+  @IsOptional()
     aorder?: Prisma.aorderCreateNestedManyWithoutOrder_statusInput;
 }

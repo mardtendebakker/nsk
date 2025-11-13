@@ -47,6 +47,7 @@ export interface ProductStatus {
   is_stock:boolean,
   is_saleable:boolean,
   color:string,
+  translations?: Record<string, string> | null
 }
 
 export interface Service {

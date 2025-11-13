@@ -692,6 +692,10 @@ const translation = {
       label: 'Name',
       placeholder: 'Namen eingeben',
     },
+    translations: {
+      label: 'Übersetzungen',
+      placeholder: 'Übersetzten Produktstatus Namen eingeben',
+    },
   },
   orderStatusForm: {
     mailBody: {
@@ -705,7 +709,10 @@ const translation = {
       orderDate: '{{orderDate}} Das Datum, an dem die Bestellung erstellt wurde.',
       supplierName: '{{supplierName}} Name des Lieferanten.',
       customerName: '{{customerName}} Name des Kunden.',
-
+    },
+    translations: {
+      label: 'Übersetzungen',
+      placeholder: 'Übersetzten Bestellstatus Namen eingeben',
     },
   },
   editOrderStatus: 'Bestellstatus bearbeiten',

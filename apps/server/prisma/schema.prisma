@@ -145,6 +145,7 @@ model order_status {
   name                                  String        @db.VarChar(255)
   color                                 String?       @db.VarChar(7)
   mailbody                              String?       @db.LongText
+  translations                          Json?
   aorder                                aorder[]
   aorder_log_previous_status            aorder_log[]  @relation("aorder_log_previous_status")
   aorder_log_status                     aorder_log[]  @relation("aorder_log_status")
@@ -254,6 +255,7 @@ model product_status {
   pindex      Int?
   name        String    @db.VarChar(255)
   color       String?   @db.VarChar(7)
+  translations Json?
   product     product[]
 }
 

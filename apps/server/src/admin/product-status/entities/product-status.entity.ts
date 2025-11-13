@@ -1,4 +1,4 @@
-import { product_status } from '@prisma/client';
+import { product_status, Prisma } from '@prisma/client';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class ProductStatusEntity implements product_status {
@@ -19,4 +19,7 @@ export class ProductStatusEntity implements product_status {
 
   @ApiPropertyOptional()
     color: string | null;
+
+  @ApiPropertyOptional()
+    translations: Prisma.JsonValue | null;
 }

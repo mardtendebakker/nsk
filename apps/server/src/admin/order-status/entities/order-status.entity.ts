@@ -1,4 +1,4 @@
-import { order_status } from '@prisma/client';
+import { order_status, Prisma } from '@prisma/client';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class OrderStatusEntity implements order_status {
@@ -25,4 +25,7 @@ export class OrderStatusEntity implements order_status {
 
   @ApiPropertyOptional()
     mailbody: string | null;
+
+  @ApiPropertyOptional()
+    translations: Prisma.JsonValue | null;
 }

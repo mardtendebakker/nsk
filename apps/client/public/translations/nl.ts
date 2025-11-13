@@ -698,6 +698,10 @@ const translation = {
       label: 'Naam',
       placeholder: 'Typ naam',
     },
+    translations: {
+      label: 'Vertalingen',
+      placeholder: 'Voer vertaalde productstatus naam in',
+    },
   },
   orderStatusForm: {
     mailBody: {
@@ -711,6 +715,10 @@ const translation = {
       orderDate: '{{orderDate}} De datum waarop de bestelling is aangemaakt.',
       supplierName: '{{supplierName}} Naam van de leverancier.',
       customerName: '{{customerName}} Naam van de klant.',
+    },
+    translations: {
+      label: 'Vertalingen',
+      placeholder: 'Voer vertaalde bestelstatus naam in',
     },
   },
   editOrderStatus: 'Bestelstatus bew  erken',

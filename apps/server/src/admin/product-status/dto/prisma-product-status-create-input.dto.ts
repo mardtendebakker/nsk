@@ -2,7 +2,7 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Prisma } from '@prisma/client';
 import { Type } from 'class-transformer';
 import {
-  IsBoolean, IsNumber, IsString, ValidateIf,
+  IsBoolean, IsNumber, IsOptional, IsString, ValidateIf,
 } from 'class-validator';
 
 export class PrismaProductStatusCreateInputDto implements Prisma.product_statusCreateInput {
@@ -31,6 +31,10 @@ export class PrismaProductStatusCreateInputDto implements Prisma.product_statusC
   @IsString()
   @ValidateIf((_, value) => value !== undefined)
     color?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+    translations?: Prisma.InputJsonValue;
 
   @ApiPropertyOptional()
     product?: Prisma.productCreateNestedManyWithoutProduct_statusInput;
