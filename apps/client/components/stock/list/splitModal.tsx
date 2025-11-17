@@ -2,25 +2,28 @@ import { Box } from '@mui/material';
 import { useCallback } from 'react';
 import useForm, { FormRepresentation } from '../../../hooks/useForm';
 import useTranslation from '../../../hooks/useTranslation';
-import { AUTOCOMPLETE_PRODUCT_STATUSES_PATH } from '../../../utils/axios';
 import ConfirmationDialog from '../../confirmationDialog';
-import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
 import Select from '../../memoizedInput/select';
 import TextField from '../../memoizedInput/textField';
 import Checkbox from '../../checkbox';
 import { ProductListItem } from '../../../utils/axios/models/product';
+import ProductStatusDataSourcePicker from '../../memoizedInput/productStatusDataSourcePicker';
 
 export interface SplitData {
-  mode: 'individualize' | 'newBundle',
-  value: number,
-  statusId?: number,
-  newSKU: boolean,
+  mode: 'individualize' | 'newBundle';
+  value: number;
+  statusId?: number;
+  newSKU: boolean;
 }
 
-export default function SplitModal({ onClose, onConfirm, product }:{
-  onClose: () => void,
-  onConfirm: (data: SplitData)=>void,
-  product: ProductListItem
+export default function SplitModal({
+  onClose,
+  onConfirm,
+  product,
+}: {
+  onClose: () => void;
+  onConfirm: (data: SplitData) => void;
+  product: ProductListItem;
 }) {
   const { trans } = useTranslation();
 
@@ -29,7 +32,7 @@ export default function SplitModal({ onClose, onConfirm, product }:{
     value: {
       required: true,
       value: '',
-      validator: (({ value }): string | undefined => {
+      validator: ({ value }): string | undefined => {
         if (value.value >= product.stockQuantity) {
           const vars = new Map();
           vars.set('value', product.stockQuantity - 1);
@@ -38,13 +41,15 @@ export default function SplitModal({ onClose, onConfirm, product }:{
         if (value.value < 1) {
           return trans('required');
         }
-      }),
+      },
     },
     statusId: {},
     newSKU: { value: false },
   });
 
-  const { setValue, formRepresentation, validate } = useForm(useCallback(() => initFormState(), [])());
+  const { setValue, formRepresentation, validate } = useForm(
+    useCallback(() => initFormState(), [])()
+  );
 
   const handleConfirm = () => {
     if (validate()) {
@@ -66,7 +71,7 @@ export default function SplitModal({ onClose, onConfirm, product }:{
   return (
     <ConfirmationDialog
       title={<>{trans('split')}</>}
-      content={(
+      content={
         <form onSubmit={handleSubmit}>
           <Select
             fullWidth
@@ -74,7 +79,13 @@ export default function SplitModal({ onClose, onConfirm, product }:{
             helperText={formRepresentation.mode.error}
             error={!!formRepresentation.mode.error}
             value={formRepresentation.mode.value}
-            options={[{ title: trans('splitModal.newBundle'), value: 'newBundle' }, { title: trans('splitModal.individualize'), value: 'individualize' }]}
+            options={[
+              { title: trans('splitModal.newBundle'), value: 'newBundle' },
+              {
+                title: trans('splitModal.individualize'),
+                value: 'individualize',
+              },
+            ]}
             onChange={(e) => {
               setValue({ field: 'mode', value: e.target.value });
             }}
@@ -87,15 +98,18 @@ export default function SplitModal({ onClose, onConfirm, product }:{
             type="number"
             fullWidth
             value={formRepresentation.value.value}
-            onChange={(e) => setValue({ field: 'value', value: e.target.value })}
+            onChange={(e) =>
+              setValue({ field: 'value', value: e.target.value })
+            }
           />
-          <DataSourcePicker
+          <ProductStatusDataSourcePicker
             fullWidth
             sx={{ mt: '.5rem' }}
-            path={AUTOCOMPLETE_PRODUCT_STATUSES_PATH}
             label={trans('newStatus')}
             placeholder={trans('selectStatus')}
-            onChange={(selected: { id: number }) => setValue({ field: 'statusId', value: selected?.id })}
+            onChange={(selected: { id: number }) =>
+              setValue({ field: 'statusId', value: selected?.id })
+            }
             value={formRepresentation.statusId.value?.toString()}
           />
           <Box sx={{ mt: '.5rem' }} />
@@ -106,7 +120,7 @@ export default function SplitModal({ onClose, onConfirm, product }:{
           />
           <input type="submit" style={{ display: 'none' }} />
         </form>
-        )}
+      }
       onConfirm={handleConfirm}
       onClose={onClose}
       confirmButtonText={trans('save')}

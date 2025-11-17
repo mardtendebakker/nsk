@@ -4,7 +4,7 @@ import {
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AutocompleteService } from './autocomplete.service';
 import { AutocompleteDto, LocationLabelsAutocompleteDto, ProductSubTypesAutocompleteDto } from './dto/autocomplete.dto';
-import { AutocompleteResponseDto, LocationAutocompleteResponseDto } from './dto/autocomplete-response.dto';
+import { AutocompleteResponseDto, LocationAutocompleteResponseDto, OrderStatusAutocompleteResponseDto, ProductStatusAutocompleteResponseDto } from './dto/autocomplete-response.dto';
 import { ALL_MAIN_GROUPS, LOCAL_GROUPS, PARTNERS_GROUPS } from '../user/model/group.enum';
 import { ConnectedUser, ConnectedUserType } from '../security/decorator/connected-user.decorator';
 import { Authorization } from '../security/decorator/authorization.decorator';
@@ -92,19 +92,19 @@ export class AutocompleteController {
   }
 
   @Get('/purchase-statuses')
-  @ApiResponse({ type: AutocompleteResponseDto, isArray: true })
+  @ApiResponse({ type: OrderStatusAutocompleteResponseDto, isArray: true })
   purchaseStatuses(@Query() query: AutocompleteDto) {
     return this.autocompleteService.findPurchaseStatuses(query);
   }
 
   @Get('/sale-statuses')
-  @ApiResponse({ type: AutocompleteResponseDto, isArray: true })
+  @ApiResponse({ type: OrderStatusAutocompleteResponseDto, isArray: true })
   salesStatuses(@Query() query: AutocompleteDto) {
     return this.autocompleteService.findSalesStatuses(query);
   }
 
   @Get('/repair-statuses')
-  @ApiResponse({ type: AutocompleteResponseDto, isArray: true })
+  @ApiResponse({ type: OrderStatusAutocompleteResponseDto, isArray: true })
   repairStatuses(@Query() query: AutocompleteDto) {
     return this.autocompleteService.findRepairStatuses(query);
   }
@@ -146,7 +146,7 @@ export class AutocompleteController {
   }
 
   @Get('/product-statuses')
-  @ApiResponse({ type: AutocompleteResponseDto, isArray: true })
+  @ApiResponse({ type: ProductStatusAutocompleteResponseDto, isArray: true })
   productStatuses(@Query() query: AutocompleteDto) {
     return this.autocompleteService.findProductStatuses(query);
   }

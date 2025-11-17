@@ -4,6 +4,7 @@ import {
   LOGS_EMAILS,
   LOGS_ACTIVITY,
   LOGS_AORDER,
+  LOGS_PRODUCT,
 } from '../../utils/routes';
 import useTranslation from '../../hooks/useTranslation';
 import NavItem from '../navItem';
@@ -27,6 +28,11 @@ export default function Menu() {
       active: router.pathname === LOGS_AORDER,
       title: trans('aorderLogs'),
       path: LOGS_AORDER,
+    },
+    {
+      active: router.pathname === LOGS_PRODUCT,
+      title: trans('productLogs'),
+      path: LOGS_PRODUCT,
     },
   ];
 

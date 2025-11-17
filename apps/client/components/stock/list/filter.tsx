@@ -4,11 +4,14 @@ import useTranslation from '../../../hooks/useTranslation';
 import { FormRepresentation, SetValue } from '../../../hooks/useForm';
 import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
 import {
-  AUTOCOMPLETE_PRODUCT_TYPES_PATH, AUTOCOMPLETE_LOCATIONS_PATH, AUTOCOMPLETE_PRODUCT_STATUSES_PATH, AUTOCOMPLETE_LOCATION_LABELS_PATH,
+  AUTOCOMPLETE_PRODUCT_TYPES_PATH,
+  AUTOCOMPLETE_LOCATIONS_PATH,
+  AUTOCOMPLETE_LOCATION_LABELS_PATH,
 } from '../../../utils/axios';
 import SearchAccordion from '../../searchAccordion';
 import useResponsive from '../../../hooks/useResponsive';
 import ListFilterDivider from '../../listFilterDivider';
+import ProductStatusDataSourcePicker from '../../memoizedInput/productStatusDataSourcePicker';
 
 export default function Filter({
   disabled,
@@ -17,11 +20,11 @@ export default function Filter({
   onReset,
   autoFocus = false,
 }: {
-  disabled: boolean,
-  formRepresentation : FormRepresentation,
-  setValue: SetValue,
-  onReset: () => void,
-  autoFocus?: boolean
+  disabled: boolean;
+  formRepresentation: FormRepresentation;
+  setValue: SetValue;
+  onReset: () => void;
+  autoFocus?: boolean;
 }) {
   const { trans } = useTranslation();
   const isDesktop = useResponsive('up', 'sm');
@@ -36,12 +39,13 @@ export default function Filter({
         searchLabel={trans('searchBySkuOrDescOrNameOrAttr')}
         autoFocus={autoFocus}
       >
-        <Box sx={{
-          flex: 1,
-          display: 'flex',
-          alignItems: 'center',
-          flexDirection: isDesktop ? 'unset' : 'column',
-        }}
+        <Box
+          sx={{
+            flex: 1,
+            display: 'flex',
+            alignItems: 'center',
+            flexDirection: isDesktop ? 'unset' : 'column',
+          }}
         >
           <DataSourcePicker
             path={AUTOCOMPLETE_PRODUCT_TYPES_PATH}
@@ -49,7 +53,9 @@ export default function Filter({
             fullWidth
             displayFieldset={false}
             placeholder={trans('productType')}
-            onChange={(selected: { id: number }) => setValue({ field: 'productType', value: selected?.id })}
+            onChange={(selected: { id: number }) =>
+              setValue({ field: 'productType', value: selected?.id })
+            }
             value={formRepresentation.productType.value?.toString()}
           />
           <ListFilterDivider horizontal={!isDesktop} />
@@ -68,23 +74,30 @@ export default function Filter({
           />
           <ListFilterDivider horizontal={!isDesktop} />
           <DataSourcePicker
-            params={{ location_id: formRepresentation.location.value?.toString() }}
+            params={{
+              location_id: formRepresentation.location.value?.toString(),
+            }}
             path={AUTOCOMPLETE_LOCATION_LABELS_PATH}
-            disabled={disabled || !formRepresentation.location.value?.toString()}
+            disabled={
+              disabled || !formRepresentation.location.value?.toString()
+            }
             fullWidth
             displayFieldset={false}
             placeholder={trans('locationLabel')}
-            onChange={(selected: { id: number }) => setValue({ field: 'locationLabel', value: selected?.id })}
+            onChange={(selected: { id: number }) =>
+              setValue({ field: 'locationLabel', value: selected?.id })
+            }
             value={formRepresentation.locationLabel?.value?.toString()}
           />
           <ListFilterDivider horizontal={!isDesktop} />
-          <DataSourcePicker
-            path={AUTOCOMPLETE_PRODUCT_STATUSES_PATH}
+          <ProductStatusDataSourcePicker
             disabled={disabled}
             fullWidth
             displayFieldset={false}
             placeholder={trans('productStatus')}
-            onChange={(selected: { id: number }) => setValue({ field: 'productStatus', value: selected?.id })}
+            onChange={(selected: { id: number }) =>
+              setValue({ field: 'productStatus', value: selected?.id })
+            }
             value={formRepresentation.productStatus.value?.toString()}
           />
         </Box>

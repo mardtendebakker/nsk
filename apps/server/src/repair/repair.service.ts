@@ -11,6 +11,8 @@ import { AProductService } from '../aproduct/aproduct.service';
 import { REPAIR_PRODUCT_LOCATION_ID, REPAIR_PRODUCT_NAME } from '../to-repair/enum/repair-product.const';
 import { ContactService } from '../contact/contact.service';
 import { OrderStatuses } from '../admin/order-status/enums/order-statuses.enum';
+import { ProductLogService } from '../log/product-log.service';
+import { AorderLogService } from '../log/aorder-log.service';
 
 @Injectable()
 export class RepairService extends SaleService {
@@ -21,8 +23,10 @@ export class RepairService extends SaleService {
     protected readonly contactService: ContactService,
     protected readonly aProductService: AProductService,
     protected readonly orderStatusService: OrderStatusService,
+    protected readonly productLogService: ProductLogService,
+    protected readonly aorderLogService: AorderLogService,
   ) {
-    super(repository, printService, fileService, contactService, aProductService, orderStatusService);
+    super(repository, printService, fileService, contactService, aProductService, orderStatusService, productLogService, aorderLogService);
   }
 
   async create(orderDto: CreateAOrderDto) {

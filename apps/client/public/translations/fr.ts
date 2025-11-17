@@ -724,6 +724,7 @@ const translation = {
   emails: 'E-mails',
   activityLogs: 'Journaux d\'activité',
   aorderLogs: 'Journaux de commandes',
+  productLogs: 'Journaux de produits',
   previousStatus: 'Statut précédent',
   from: 'De',
   to: 'À',

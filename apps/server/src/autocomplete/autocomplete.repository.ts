@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { AutocompleteDto, LocationLabelsAutocompleteDto, ProductSubTypesAutocompleteDto } from './dto/autocomplete.dto';
-import { AutocompleteResponseDto } from './dto/autocomplete-response.dto';
+import { AutocompleteResponseDto, OrderStatusAutocompleteResponseDto, ProductStatusAutocompleteResponseDto } from './dto/autocomplete-response.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { Group } from '../user/model/group.enum';
 
@@ -43,27 +43,30 @@ export class AutocompleteRepository {
     });
   }
 
-  async findPurchaseStatuses(autocompleteDto: AutocompleteDto): Promise<AutocompleteResponseDto[]> {
+  async findPurchaseStatuses(autocompleteDto: AutocompleteDto): Promise<OrderStatusAutocompleteResponseDto[]> {
     return this.commonFind({
       autocompleteDto,
       prismaModel: this.prisma.order_status,
       additionalWhereCondition: { is_purchase: true },
+      selectProperties: ['translations'],
     });
   }
 
-  async findSalesStatuses(autocompleteDto: AutocompleteDto): Promise<AutocompleteResponseDto[]> {
+  async findSalesStatuses(autocompleteDto: AutocompleteDto): Promise<OrderStatusAutocompleteResponseDto[]> {
     return this.commonFind({
       autocompleteDto,
       prismaModel: this.prisma.order_status,
       additionalWhereCondition: { is_sale: true },
+      selectProperties: ['translations'],
     });
   }
 
-  async findRepairStatuses(autocompleteDto: AutocompleteDto): Promise<AutocompleteResponseDto[]> {
+  async findRepairStatuses(autocompleteDto: AutocompleteDto): Promise<OrderStatusAutocompleteResponseDto[]> {
     return this.commonFind({
       autocompleteDto,
       prismaModel: this.prisma.order_status,
       additionalWhereCondition: { is_repair: true },
+      selectProperties: ['translations'],
     });
   }
 
@@ -116,10 +119,11 @@ export class AutocompleteRepository {
     });
   }
 
-  async findProductStatuses(autocompleteDto: AutocompleteDto): Promise<AutocompleteResponseDto[]> {
+  async findProductStatuses(autocompleteDto: AutocompleteDto): Promise<ProductStatusAutocompleteResponseDto[]> {
     return this.commonFind({
       autocompleteDto,
       prismaModel: this.prisma.product_status,
+      selectProperties: ['translations'],
     });
   }
 

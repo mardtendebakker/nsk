@@ -43,6 +43,7 @@ export const ADMIN_DRIVERS_PATH = '/admin/drivers/:id';
 export const LOGS_EMAILS_PATH = '/logs/emails';
 export const LOGS_ACTIVITY_PATH = '/logs/activities';
 export const LOGS_AORDER_PATH = '/logs/aorders';
+export const LOGS_PRODUCT_PATH = '/logs/products';
 export const VEHICLES_PATH = '/vehicles';
 export const BULK_PRINT_NORMAL_SALES_PATH = '/sales/bulk/print/normal';
 export const BULK_PRINT_NORMAL_REPAIRS_PATH = '/repairs/bulk/print/normal';

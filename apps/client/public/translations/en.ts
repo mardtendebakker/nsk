@@ -53,6 +53,7 @@ const translation = {
   emailLogs: 'Email Logs',
   activityLogs: 'Activity Logs',
   aorderLogs: 'Order Logs',
+  productLogs: 'Product Logs',
   previousStatusId: 'Previous Status',
   statusId: 'Status',
   from: 'From',
@@ -71,6 +72,7 @@ const translation = {
   params: 'Params',
   body: 'Body',
   search: 'Search',
+  orderNr: 'Order Number',
   orderStatusForm: {
     translations: {
       label: 'Translations',
