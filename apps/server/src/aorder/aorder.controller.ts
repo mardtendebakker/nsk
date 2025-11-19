@@ -74,15 +74,19 @@ export class AOrderController {
   @Param('id') id: number,
     @Body() updateAOrderDto: UpdateAOrderDto,
     @UploadedFiles() files: Express.Multer.File[],
+    @ConnectedUser() { username }: ConnectedUserType,
   ) {
-    return this.aorderService.update(id, updateAOrderDto, files);
+    return this.aorderService.update(id, updateAOrderDto, username, files);
   }
 
   @Patch('')
   @Authorization(LOCAL_GROUPS)
   @ApiResponse({ type: UpdateManyResponseAOrderDto })
-  updateMany(@Body() updateManyAOrderDto: UpdateManyAOrderDto) {
-    return this.aorderService.updateMany(updateManyAOrderDto);
+  updateMany(
+    @Body() updateManyAOrderDto: UpdateManyAOrderDto,
+    @ConnectedUser() { username }: ConnectedUserType,
+  ) {
+    return this.aorderService.updateMany(updateManyAOrderDto, username);
   }
 
   @Delete(':id')

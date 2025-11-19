@@ -23,6 +23,8 @@ import { ContactService } from '../contact/contact.service';
 import { AOrderProcessed } from '../aorder/types/aorder-processed';
 import { IProductToOrder } from './types/product-to-order';
 import { OrderStatuses } from '../admin/order-status/enums/order-statuses.enum';
+import { ProductLogService } from '../log/product-log.service';
+import { AorderLogService } from '../log/aorder-log.service';
 
 @Injectable()
 export class SaleService extends AOrderService {
@@ -33,8 +35,10 @@ export class SaleService extends AOrderService {
     protected readonly contactService: ContactService,
     protected readonly aProductService: AProductService,
     protected readonly orderStatusService: OrderStatusService,
+    protected readonly productLogService: ProductLogService,
+    protected readonly aorderLogService: AorderLogService,
   ) {
-    super(repository, printService, fileService, contactService, AOrderDiscrimination.SALE);
+    super(repository, printService, fileService, contactService, aorderLogService, AOrderDiscrimination.SALE);
   }
 
   async addProducts(id: number, productsToOrder: IProductToOrder[]) {
@@ -55,6 +59,8 @@ export class SaleService extends AOrderService {
         'One or more products are not saleable',
       );
     }
+
+    const order = await this.repository.findOne({ where: { id }, select: { order_nr: true } });
 
     const productOrderData: Prisma.product_orderCreateManyAorderInput[] = products.data
       .map((product) => ({
@@ -79,10 +85,41 @@ export class SaleService extends AOrderService {
       product: { orderUpdatedAt: new Date() },
     });
 
-    return this.repository.update(this.commonIncludePart(addProductsToOrderParams));
+    const updatedOrder = await this.repository.update(this.commonIncludePart(addProductsToOrderParams));
+
+    for (const product of products.data) {
+      this.productLogService.create({
+        product_id: product.id,
+        name: product.name,
+        sku: product.sku,
+        order_nr: order?.order_nr || '',
+        action: 'add',
+      } as any).catch((e) => console.log(e.message));
+    }
+
+    return updatedOrder;
   }
 
   async removeProducts(id: number, productIds: number[]) {
+    const order = await this.repository.findOne({
+      where: { id },
+      include: {
+        product_order: {
+          where: {
+            product_id: { in: productIds },
+          },
+          include: {
+            product: {
+              select: {
+                name: true,
+                sku: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
     const deleteProductsFromOrderParams: Prisma.aorderUpdateArgs = {
       where: { id },
       data: {
@@ -96,7 +133,22 @@ export class SaleService extends AOrderService {
       },
     };
 
-    return this.repository.update(this.commonIncludePart(deleteProductsFromOrderParams));
+    const updatedOrder = await this.repository.update(this.commonIncludePart(deleteProductsFromOrderParams));
+
+    const orderWithProducts = order as any;
+    if (orderWithProducts?.product_order) {
+      for (const productOrder of orderWithProducts.product_order) {
+        this.productLogService.create({
+          product_id: productOrder.product_id,
+          name: productOrder.product.name,
+          sku: productOrder.product.sku,
+          order_nr: orderWithProducts.order_nr || '',
+          action: 'delete',
+        } as any).catch((e) => console.log(e.message));
+      }
+    }
+
+    return updatedOrder;
   }
 
   async import(

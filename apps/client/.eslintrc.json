@@ -5,7 +5,8 @@
     "next/core-web-vitals",
     "../../.eslintrc.json",
     "airbnb",
-    "airbnb-typescript"
+    "airbnb-typescript",
+    "prettier"
   ],
   "ignorePatterns": ["!**/*", ".next/**/*"],
   "parserOptions": {

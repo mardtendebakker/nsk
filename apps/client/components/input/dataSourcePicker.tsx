@@ -1,54 +1,59 @@
 import { SxProps, Autocomplete } from '@mui/material';
-import {
-  useCallback, useEffect, useState,
-} from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import TextField from './textField';
 import useAxios from '../../hooks/useAxios';
 import debounce from '../../utils/debounce';
 import { AxiosResponse } from '../../utils/axios';
 
-export default function DataSourcePicker(
-  {
-    onChange,
+export type DataSourcePickerProps = {
+  disabled?: boolean;
+  params?: { [key: string]: string | number };
+  value?: string | string[];
+  sx?: SxProps;
+  fullWidth?: boolean;
+  label?: string;
+  placeholder?: string;
+  displayFieldset?: boolean;
+  formatter?: (arg0: object) => { id: number | string; label: string };
+  onChange: (arg0: undefined | object | object[]) => void;
+  onCurrentValueChange?: (arg0: undefined | object | object[]) => void;
+  path: string;
+  searchKey?: string;
+  helperText?: string;
+  error?: boolean;
+  multiple?: boolean;
+  fetchOnSearch?: boolean;
+  fetchWhileDisabled?: boolean;
+};
+
+export default function DataSourcePicker({
+  onChange,
+  path,
+  searchKey = 'search',
+  params = {},
+  disabled = false,
+  value,
+  sx,
+  fullWidth,
+  label,
+  placeholder,
+  onCurrentValueChange,
+  displayFieldset = true,
+  formatter = (object: {
+    id: number | string;
+    label: string;
+  }): { id: number | string; label: string } => object,
+  helperText,
+  error = false,
+  multiple = false,
+  fetchOnSearch = true,
+  fetchWhileDisabled = false,
+}: DataSourcePickerProps) {
+  const { data, call, cancelCalls } = useAxios<undefined | object[]>(
+    'get',
     path,
-    searchKey = 'search',
-    params = {},
-    disabled = false,
-    value,
-    sx,
-    fullWidth,
-    label,
-    placeholder,
-    onCurrentValueChange,
-    displayFieldset = true,
-    formatter = (object: { id: number | string, label: string }): { id: number | string, label: string } => object,
-    helperText,
-    error = false,
-    multiple = false,
-    fetchOnSearch = true,
-    fetchWhileDisabled = false,
-  }: {
-    disabled?: boolean,
-    params?: { [key: string]: string | number },
-    value?: string | string[],
-    sx?: SxProps,
-    fullWidth?: boolean,
-    label?: string,
-    placeholder?: string,
-    displayFieldset?: boolean,
-    formatter?: (arg0: object) => { id: number | string, label: string },
-    onChange: (arg0: undefined | object | object[])=>void,
-    onCurrentValueChange?: (arg0: undefined | object | object[])=>void,
-    path: string,
-    searchKey?: string,
-    helperText?: string,
-    error?: boolean,
-    multiple?: boolean,
-    fetchOnSearch?: boolean,
-    fetchWhileDisabled?: boolean
-  },
-) {
-  const { data, call, cancelCalls } = useAxios<undefined | object[]>('get', path, { showErrorMessage: false });
+    { showErrorMessage: false }
+  );
   const debouncedCall = useCallback(debounce(call), []);
   const [currentValue, setCurrentValue] = useState(null);
 
@@ -69,26 +74,32 @@ export default function DataSourcePicker(
 
     cancelCalls();
 
-    call({ params: { ...params, ids } }).then((response: AxiosResponse) => {
-      if (response?.data) {
-        const found = multiple
-          ? response.data.filter((item) => !!(value as string[]).find((id) => id == item.id))
-          : response.data.find((item) => item.id == value);
+    call({ params: { ...params, ids } })
+      .then((response: AxiosResponse) => {
+        if (response?.data) {
+          const found = multiple
+            ? response.data.filter(
+                (item) => !!(value as string[]).find((id) => id == item.id)
+              )
+            : response.data.find((item) => item.id == value);
 
-        if (multiple && found.length > 0) {
-          setCurrentValue(ids
-            .map((id) => {
-              const foundItem = found.find((item) => item.id == id);
-              return foundItem ? formatter(foundItem) : undefined;
-            })
-            .filter((item) => item));
-        } else if (!multiple && found) {
-          setCurrentValue(formatter(found));
-        } else if (value === undefined) {
-          setCurrentValue(undefined);
+          if (multiple && found.length > 0) {
+            setCurrentValue(
+              ids
+                .map((id) => {
+                  const foundItem = found.find((item) => item.id == id);
+                  return foundItem ? formatter(foundItem) : undefined;
+                })
+                .filter((item) => item)
+            );
+          } else if (!multiple && found) {
+            setCurrentValue(formatter(found));
+          } else if (value === undefined) {
+            setCurrentValue(undefined);
+          }
         }
-      }
-    }).catch(() => {});
+      })
+      .catch(() => {});
   }, [value?.toString(), JSON.stringify(params), disabled.toString()]);
 
   useEffect(() => {
@@ -116,30 +127,30 @@ export default function DataSourcePicker(
         onChange(selected);
       }}
       filterSelectedOptions
-      isOptionEqualToValue={(option, selectedValue) => option.id == selectedValue.id}
-      renderInput={
-                (inputParams) => (
-                  <TextField
-                    helperText={helperText}
-                    error={error}
-                    {...inputParams}
-                    placeholder={placeholder}
-                    label={label}
-                    sx={{
-                      fieldset: {
-                        display: !displayFieldset && 'none',
-                      },
-                    }}
-                    onChange={(e) => {
-                      if (fetchOnSearch) {
-                        debouncedCall({
-                          params: { [searchKey]: e.target.value, ...params },
-                        });
-                      }
-                    }}
-                  />
-                )
+      isOptionEqualToValue={(option, selectedValue) =>
+        option.id == selectedValue.id
       }
+      renderInput={(inputParams) => (
+        <TextField
+          helperText={helperText}
+          error={error}
+          {...inputParams}
+          placeholder={placeholder}
+          label={label}
+          sx={{
+            fieldset: {
+              display: !displayFieldset && 'none',
+            },
+          }}
+          onChange={(e) => {
+            if (fetchOnSearch) {
+              debouncedCall({
+                params: { [searchKey]: e.target.value, ...params },
+              });
+            }
+          }}
+        />
+      )}
     />
   );
 }

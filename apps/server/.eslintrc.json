@@ -3,7 +3,8 @@
     "../../.eslintrc.json",
     "eslint:recommended",
     "airbnb-base",
-    "airbnb-typescript/base"
+    "airbnb-typescript/base",
+    "prettier"
   ],
   "ignorePatterns": ["!**/*"],
   "parserOptions": {

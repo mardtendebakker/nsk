@@ -1,16 +1,20 @@
 import { Box } from '@mui/material';
 import ConfirmationDialog from '../../confirmationDialog';
 import useTranslation from '../../../hooks/useTranslation';
-import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
-import { AUTOCOMPLETE_PRODUCT_STATUSES_PATH } from '../../../utils/axios';
 import useForm from '../../../hooks/useForm';
+import ProductStatusDataSourcePicker from '../../memoizedInput/productStatusDataSourcePicker';
 
-export default function PatchStatusModal({ onSubmit, onClose } : {
-  onSubmit: (arg0: { statusId: string }) => void,
-  onClose: () => void
+export default function PatchStatusModal({
+  onSubmit,
+  onClose,
+}: {
+  onSubmit: (arg0: { statusId: string }) => void;
+  onClose: () => void;
 }) {
   const { trans } = useTranslation();
-  const { formRepresentation, setValue, validate } = useForm({ statusId: { required: true } });
+  const { formRepresentation, setValue, validate } = useForm({
+    statusId: { required: true },
+  });
 
   const handleSubmit = () => {
     if (validate()) {
@@ -25,12 +29,16 @@ export default function PatchStatusModal({ onSubmit, onClose } : {
   return (
     <ConfirmationDialog
       title={<>{trans('changeStatus')}</>}
-      content={(
-        <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
+      content={
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSubmit();
+          }}
+        >
           {trans('changeStatusContent')}
           <Box sx={{ pb: '.5rem' }} />
-          <DataSourcePicker
-            path={AUTOCOMPLETE_PRODUCT_STATUSES_PATH}
+          <ProductStatusDataSourcePicker
             searchKey="name"
             fullWidth
             placeholder={trans('selectStatus')}
@@ -43,7 +51,7 @@ export default function PatchStatusModal({ onSubmit, onClose } : {
           />
           <input type="submit" style={{ display: 'none' }} />
         </form>
-    )}
+      }
       onConfirm={handleSubmit}
       onClose={onClose}
       confirmButtonText={trans('save')}

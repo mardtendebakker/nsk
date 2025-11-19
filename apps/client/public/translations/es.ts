@@ -772,6 +772,8 @@ const translation = {
   toMonth: 'Al mes',
   activityLogs: 'Registros de actividad',
   aorderLogs: 'Registros de pedidos',
+  productLogs: 'Registros de productos',
+  orderNr: 'Número de pedido',
   previousStatus: 'Estado anterior',
   route: 'Ruta',
   model: 'Modelo',

@@ -20,26 +20,27 @@ import Filter from './filter';
 import Action from './action';
 import ConfirmationDialog from '../../confirmationDialog';
 import useTranslation from '../../../hooks/useTranslation';
-import DataSourcePicker from '../../memoizedInput/dataSourcePicker';
 import pushURLParams from '../../../utils/pushURLParams';
 import { OrderListItem } from '../../../utils/axios/models/order';
 import { getQueryParam } from '../../../utils/location';
 import { OrderPrint, OrderType } from '../../../utils/axios/models/types';
-import { autocompleteOrderStatusesPathMapper } from '../../../utils/axios/helpers/typeMapper';
+import OrderStatusDataSourcePicker from '../../memoizedInput/orderStatusDataSourcePicker';
 
-function initFormState(
-  {
-    search, createdAt, orderBy, status, partner, createdBy,
-  }:
-  {
-    search?: string,
-    createdAt?: string,
-    orderBy?: string,
-    status?: string,
-    partner?: string,
-    createdBy?:string
-  },
-) {
+function initFormState({
+  search,
+  createdAt,
+  orderBy,
+  status,
+  partner,
+  createdBy,
+}: {
+  search?: string;
+  createdAt?: string;
+  orderBy?: string;
+  status?: string;
+  partner?: string;
+  createdBy?: string;
+}) {
   return {
     search: {
       value: search,
@@ -79,13 +80,15 @@ function refreshList({
 
   const paramsToSend = {};
 
-  ['status', 'search', 'partner', 'createdBy', 'createdAt'].forEach((filter) => {
-    if (formRepresentation[filter].value) {
-      const value = formRepresentation[filter].value.toString();
-      params.append(filter, value);
-      paramsToSend[filter] = formRepresentation[filter].value;
+  ['status', 'search', 'partner', 'createdBy', 'createdAt'].forEach(
+    (filter) => {
+      if (formRepresentation[filter].value) {
+        const value = formRepresentation[filter].value.toString();
+        params.append(filter, value);
+        paramsToSend[filter] = formRepresentation[filter].value;
+      }
     }
-  });
+  );
 
   const orderBy = {};
 
@@ -105,7 +108,9 @@ function refreshList({
       ...paramsToSend,
       orderBy: JSON.stringify(orderBy),
     },
-  }).then(() => pushURLParams({ params, router })).catch(() => {});
+  })
+    .then(() => pushURLParams({ params, router }))
+    .catch(() => {});
 }
 const AJAX_PATHS = {
   purchase: PURCHASE_ORDERS_PATH,
@@ -126,32 +131,46 @@ const AJAX_BULK_PRINT_EXPORT_PATHS = {
 export default function ListContainer({ type }: { type: OrderType }) {
   const { trans } = useTranslation();
   const [showChangeStatusModal, setShowChangeStatusModal] = useState(false);
-  const [changeStatusValue, setChangeStatusValue] = useState<number | undefined>();
+  const [changeStatusValue, setChangeStatusValue] = useState<
+    number | undefined
+  >();
   const router = useRouter();
-  const [page, setPage] = useState<number>(parseInt(getQueryParam('page', '1'), 10));
-  const [rowsPerPage, setRowsPerPage] = useState<number>(parseInt(getQueryParam('rowsPerPage', '10'), 10));
+  const [page, setPage] = useState<number>(
+    parseInt(getQueryParam('page', '1'), 10)
+  );
+  const [rowsPerPage, setRowsPerPage] = useState<number>(
+    parseInt(getQueryParam('rowsPerPage', '10'), 10)
+  );
   const [checkedOrderIds, setCheckedOrderIds] = useState<number[]>([]);
 
   const ajaxPath = AJAX_PATHS[type] || PURCHASE_ORDERS_PATH;
 
-  const ajaxBulkPrintNormalPath = AJAX_BULK_PRINT_NORMAL_PATHS[type] || BULK_PRINT_NORMAL_PURCHASES_PATH;
-  const ajaxBulkPrintExportPath = AJAX_BULK_PRINT_EXPORT_PATHS[type] || BULK_PRINT_EXPORT_SALES_PATH;
+  const ajaxBulkPrintNormalPath =
+    AJAX_BULK_PRINT_NORMAL_PATHS[type] || BULK_PRINT_NORMAL_PURCHASES_PATH;
+  const ajaxBulkPrintExportPath =
+    AJAX_BULK_PRINT_EXPORT_PATHS[type] || BULK_PRINT_EXPORT_SALES_PATH;
 
-  const { formRepresentation, setValue, setData } = useForm(initFormState({
-    search: getQueryParam('search'),
-    createdAt: getQueryParam('createdAt'),
-    orderBy: getQueryParam('orderBy'),
-    status: getQueryParam('status'),
-    partner: getQueryParam('partner'),
-    createdBy: getQueryParam('createdBy'),
-  }));
+  const { formRepresentation, setValue, setData } = useForm(
+    initFormState({
+      search: getQueryParam('search'),
+      createdAt: getQueryParam('createdAt'),
+      orderBy: getQueryParam('orderBy'),
+      status: getQueryParam('status'),
+      partner: getQueryParam('partner'),
+      createdBy: getQueryParam('createdBy'),
+    })
+  );
 
-  const { data: { data = [], count = 0 } = {}, call, performing } = useAxios<undefined | { data?: OrderListItem[], count?: number }>(
+  const {
+    data: { data = [], count = 0 } = {},
+    call,
+    performing,
+  } = useAxios<undefined | { data?: OrderListItem[]; count?: number }>(
     'get',
     ajaxPath.replace(':id', ''),
     {
       withProgressBar: true,
-    },
+    }
   );
 
   const { call: callDelete, performing: performingDelete } = useAxios(
@@ -160,19 +179,19 @@ export default function ListContainer({ type }: { type: OrderType }) {
     {
       withProgressBar: true,
       showSuccessMessage: true,
-    },
+    }
   );
 
   const { call: callPrintNormal, performing: performingPrintNormal } = useAxios(
     'get',
     ajaxBulkPrintNormalPath,
-    { withProgressBar: true },
+    { withProgressBar: true }
   );
 
   const { call: callPrintExport, performing: performingPrintExport } = useAxios(
     'get',
     ajaxBulkPrintExportPath,
-    { withProgressBar: true },
+    { withProgressBar: true }
   );
 
   const { call: callPatch, performing: performingPatch } = useAxios(
@@ -181,15 +200,16 @@ export default function ListContainer({ type }: { type: OrderType }) {
     {
       withProgressBar: true,
       showSuccessMessage: true,
-    },
+    }
   );
-  const defaultRefreshList = () => refreshList({
-    page,
-    rowsPerPage,
-    formRepresentation,
-    router,
-    call,
-  });
+  const defaultRefreshList = () =>
+    refreshList({
+      page,
+      rowsPerPage,
+      formRepresentation,
+      router,
+      call,
+    });
 
   useEffect(() => {
     defaultRefreshList();
@@ -207,28 +227,50 @@ export default function ListContainer({ type }: { type: OrderType }) {
   const handleAllChecked = (checked: boolean) => {
     setCheckedOrderIds(
       checked
-        ? _.union(checkedOrderIds, data.map(({ id }) => id))
-        : checkedOrderIds.filter((orderId) => !data.find((order: OrderListItem) => order.id == orderId)),
+        ? _.union(
+            checkedOrderIds,
+            data.map(({ id }) => id)
+          )
+        : checkedOrderIds.filter(
+            (orderId) =>
+              !data.find((order: OrderListItem) => order.id == orderId)
+          )
     );
   };
 
-  const handleRowChecked = ({ id, checked }: { id: number, checked: boolean }) => {
+  const handleRowChecked = ({
+    id,
+    checked,
+  }: {
+    id: number;
+    checked: boolean;
+  }) => {
     if (checked) {
       setCheckedOrderIds((oldValue) => [...oldValue, id]);
     } else {
-      setCheckedOrderIds((oldValue) => oldValue.filter((currentId) => currentId !== id));
+      setCheckedOrderIds((oldValue) =>
+        oldValue.filter((currentId) => currentId !== id)
+      );
     }
   };
 
-  const disabled = (): boolean => performing || performingDelete || performingPatch || performingPrintNormal || performingPrintExport;
+  const disabled = (): boolean =>
+    performing ||
+    performingDelete ||
+    performingPatch ||
+    performingPrintNormal ||
+    performingPrintExport;
 
   const handleDelete = (id: number) => {
-    callDelete({ path: ajaxPath.replace(':id', id.toString()) })
-      .then(() => defaultRefreshList());
+    callDelete({ path: ajaxPath.replace(':id', id.toString()) }).then(() =>
+      defaultRefreshList()
+    );
   };
 
   const handlePatchStatus = () => {
-    callPatch({ body: { ids: checkedOrderIds, order: { status_id: changeStatusValue } } })
+    callPatch({
+      body: { ids: checkedOrderIds, order: { status_id: changeStatusValue } },
+    })
       .then(() => {
         setCheckedOrderIds([]);
         defaultRefreshList();
@@ -244,23 +286,29 @@ export default function ListContainer({ type }: { type: OrderType }) {
     setData(initFormState({}));
   };
 
-  const onPrints: OrderPrint[] = [{
-    onClick: () => {
-      callPrintNormal({ params: { ids: checkedOrderIds }, responseType: 'blob' })
-        .then((response: AxiosResponse) => {
+  const onPrints: OrderPrint[] = [
+    {
+      onClick: () => {
+        callPrintNormal({
+          params: { ids: checkedOrderIds },
+          responseType: 'blob',
+        }).then((response: AxiosResponse) => {
           openBlob(response.data);
         });
+      },
+      transKey: 'normal',
     },
-    transKey: 'normal',
-  }];
+  ];
 
   if (type === 'sales') {
     onPrints.push({
       onClick: () => {
-        callPrintExport({ params: { ids: checkedOrderIds }, responseType: 'blob' })
-          .then((response: AxiosResponse) => {
-            openBlob(response.data);
-          });
+        callPrintExport({
+          params: { ids: checkedOrderIds },
+          responseType: 'blob',
+        }).then((response: AxiosResponse) => {
+          openBlob(response.data);
+        });
       },
       transKey: 'export',
     });
@@ -281,7 +329,13 @@ export default function ListContainer({ type }: { type: OrderType }) {
       <Box sx={{ m: '.5rem' }} />
       <Action
         disabled={disabled()}
-        allChecked={(_.intersectionWith(checkedOrderIds, data, (orderId: number, order: OrderListItem) => orderId === order.id).length === data.length) && data.length != 0}
+        allChecked={
+          _.intersectionWith(
+            checkedOrderIds,
+            data,
+            (orderId: number, order: OrderListItem) => orderId === order.id
+          ).length === data.length && data.length != 0
+        }
         checkedOrdersCount={checkedOrderIds.length}
         onAllCheck={handleAllChecked}
         onChangeStatus={() => setShowChangeStatusModal(true)}
@@ -305,27 +359,34 @@ export default function ListContainer({ type }: { type: OrderType }) {
         onDelete={handleDelete}
       />
       {showChangeStatusModal && (
-      <ConfirmationDialog
-        disabled={!changeStatusValue}
-        title={<>{trans('changeStatus')}</>}
-        content={(
-          <form onSubmit={(e) => { e.preventDefault(); handlePatchStatus(); }}>
-            {trans('changeStatusContent')}
-            <Box sx={{ pb: '2rem' }} />
-            <DataSourcePicker
-              path={autocompleteOrderStatusesPathMapper(type)}
-              disabled={disabled()}
-              fullWidth
-              placeholder={trans('selectStatus')}
-              onChange={(value: { id: number }) => setChangeStatusValue(value?.id)}
-              value={changeStatusValue?.toString()}
-            />
-          </form>
-        )}
-        onConfirm={handlePatchStatus}
-        onClose={() => setShowChangeStatusModal(false)}
-        confirmButtonText={trans('save')}
-      />
+        <ConfirmationDialog
+          disabled={!changeStatusValue}
+          title={<>{trans('changeStatus')}</>}
+          content={
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handlePatchStatus();
+              }}
+            >
+              {trans('changeStatusContent')}
+              <Box sx={{ pb: '2rem' }} />
+              <OrderStatusDataSourcePicker
+                type={type}
+                disabled={disabled()}
+                fullWidth
+                placeholder={trans('selectStatus')}
+                onChange={(value: { id: number }) =>
+                  setChangeStatusValue(value?.id)
+                }
+                value={changeStatusValue?.toString()}
+              />
+            </form>
+          }
+          onConfirm={handlePatchStatus}
+          onClose={() => setShowChangeStatusModal(false)}
+          confirmButtonText={trans('save')}
+        />
       )}
     </Card>
   );

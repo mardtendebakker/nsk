@@ -754,6 +754,8 @@ const translation = {
   toMonth: 'Até o mês',
   activityLogs: 'Logs de atividade',
   aorderLogs: 'Logs de pedidos',
+  productLogs: 'Logs de produtos',
+  orderNr: 'Número do pedido',
   previousStatus: 'Status anterior',
   updatedAt: 'Atualizado em',
   method: 'Método',

@@ -10,6 +10,9 @@ import { ActivityLogRepository } from './activity-log.repository';
 import { AorderLogService } from './aorder-log.service';
 import { AorderLogController } from './aorder-log.controller';
 import { AorderLogRepository } from './aorder-log.repository';
+import { ProductLogService } from './product-log.service';
+import { ProductLogController } from './product-log.controller';
+import { ProductLogRepository } from './product-log.repository';
 
 @Global()
 @Module({
@@ -20,14 +23,17 @@ import { AorderLogRepository } from './aorder-log.repository';
     ActivityLogRepository,
     AorderLogService,
     AorderLogRepository,
+    ProductLogService,
+    ProductLogRepository,
     UserRepository,
   ],
   exports: [
     EmailLogService,
     ActivityLogService,
     AorderLogService,
+    ProductLogService,
   ],
-  controllers: [EmailLogController, ActivityLogController, AorderLogController],
+  controllers: [EmailLogController, ActivityLogController, AorderLogController, ProductLogController],
   imports: [PrismaModule],
 })
 export class LogModule {}

@@ -536,6 +536,7 @@ model aorder_log {
   username                  String       @db.VarChar(255)
   previous_status_id        Int
   status_id                 Int
+  order_nr                  String?      @db.VarChar(255)
   created_at                DateTime     @default(now()) @db.DateTime(0)
   updated_at                DateTime     @default(now()) @updatedAt @db.DateTime(0)
   previous_status           order_status @relation("aorder_log_previous_status", fields: [previous_status_id], references: [id], onDelete: Restrict, onUpdate: Restrict)
@@ -543,6 +544,17 @@ model aorder_log {
 
   @@index([previous_status_id])
   @@index([status_id])
+}
+
+model product_log {
+  id         Int              @id @default(autoincrement())
+  product_id Int
+  name       String           @db.VarChar(255)
+  sku        String           @db.VarChar(255)
+  order_nr   String           @db.VarChar(255)
+  action     ProductLogAction
+  created_at DateTime         @default(now()) @db.DateTime(0)
+  updated_at DateTime         @default(now()) @updatedAt @db.DateTime(0)
 }
 
 model user_group {
@@ -572,4 +584,10 @@ enum VehicleType {
 enum Gender {
   male
   female
+}
+
+enum ProductLogAction {
+  delete
+  add
+  update
 }

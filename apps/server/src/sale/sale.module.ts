@@ -9,6 +9,7 @@ import { OrderStatusModule } from '../admin/order-status/order-status.module';
 import { ContactModule } from '../contact/contact.module';
 import { PrintModule } from '../print/print.module';
 import { RabbitMQModule } from '../rabbitmq/rabbitmq.module';
+import { LogModule } from '../log/log.module';
 
 @Global()
 @Module({
@@ -29,6 +30,7 @@ import { RabbitMQModule } from '../rabbitmq/rabbitmq.module';
     OrderStatusModule,
     PrintModule,
     RabbitMQModule,
+    LogModule,
   ],
   exports: [SaleService],
 })

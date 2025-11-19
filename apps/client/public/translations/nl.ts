@@ -726,6 +726,8 @@ const translation = {
   emails: 'E-mails',
   activityLogs: 'Activiteiten logs',
   aorderLogs: 'Bestel logs',
+  productLogs: 'Product logs',
+  orderNr: 'Bestelnummer',
   previousStatus: 'Vorige status',
   from: 'Van',
   to: 'Naar',

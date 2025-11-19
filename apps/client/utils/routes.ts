@@ -38,6 +38,7 @@ export const ADMIN_THEME = '/admin/theme';
 export const LOGS_EMAILS = '/logs/emails';
 export const LOGS_ACTIVITY = '/logs/activities';
 export const LOGS_AORDER = '/logs/aorders';
+export const LOGS_PRODUCT = '/logs/products';
 export const ADMIN_MODULES_PAYMENTS = '/admin/modules/payments';
 export const ADMIN_MODULES_CART = '/admin/modules/cart';
 export const ADMIN_LOGISTICS_VEHICLES = '/admin/logistics/vehicles';

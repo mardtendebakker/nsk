@@ -1,0 +1,13 @@
+-- CreateTable
+CREATE TABLE `product_log` (
+  `id` INTEGER NOT NULL AUTO_INCREMENT,
+  `sku` VARCHAR(255) NOT NULL,
+  `order_nr` VARCHAR(255) NOT NULL,
+  `name` VARCHAR(255) NOT NULL,
+  `product_id` INTEGER NOT NULL,
+  `action` ENUM('delete', 'add', 'update') NOT NULL,
+  `created_at` DATETIME(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
+  `updated_at` DATETIME(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0),
+
+  PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

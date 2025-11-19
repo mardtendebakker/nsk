@@ -782,6 +782,8 @@ const translation = {
   toMonth: 'تا ماه',
   activityLogs: 'گزارش‌های فعالیت',
   aorderLogs: 'گزارش‌های سفارش',
+  productLogs: 'گزارش‌های محصول',
+  orderNr: 'شماره سفارش',
   previousStatus: 'وضعیت قبلی',
   route: 'مسیر',
   model: 'مدل',

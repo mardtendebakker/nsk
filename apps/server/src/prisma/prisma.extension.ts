@@ -8,7 +8,7 @@ export function PrismaExtention({
 }: {
   prisma: PrismaClient, cls: ClsService, rabbitMQService: RabbitMQService
 }) {
-  const IGNORED_MODELS = ['email_log', 'activity_log', 'user_group', 'stock', 'aorder_log'];
+  const IGNORED_MODELS = ['email_log', 'activity_log', 'user_group', 'stock', 'aorder_log', 'product_log'];
   const MUTATION_OPERATIONS = ['create', 'createMany', 'update', 'updateMany', 'upsert', 'delete', 'deleteMany'];
   const multiplyPriceBy100 = <T extends { [key: string]: any }>(obj: T): T => {
     for (const key in obj) {
@@ -146,14 +146,6 @@ export function PrismaExtention({
                 before = await prisma[model].findFirst({ where: args.where, select });
                 result = await query(args);
                 if (model === 'aorder' && before && result.status_id != before.status_id) {
-                  prisma.aorder_log.create({
-                    data: {
-                      username: cls.get('username') || '',
-                      previous_status_id: before.status_id,
-                      status_id: result.status_id,
-                    },
-                  }).catch((e) => console.log(e.message));
-
                   rabbitMQService.orderStatusUpdated(before.id, before.status_id, cls.get('username'));
                 }
               } else if (operation === 'updateMany') {
@@ -175,15 +167,6 @@ export function PrismaExtention({
                   for (const order of before) {
                     for (const updatedOrder of updatedOrders) {
                       if ((updatedOrder.id == order.id) && (updatedOrder.status_id != order.status_id)) {
-                        // eslint-disable-next-line no-await-in-loop
-                        prisma.aorder_log.create({
-                          data: {
-                            username: cls.get('username') || '',
-                            previous_status_id: order.status_id,
-                            status_id: updatedOrder.status_id,
-                          },
-                        }).catch((e) => console.log(e.message));
-
                         rabbitMQService.orderStatusUpdated(order.id, order.status_id, cls.get('username'));
                       }
                     }

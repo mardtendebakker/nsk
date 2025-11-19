@@ -16,6 +16,7 @@ import { AOrderFindManyReturnType } from './types/aorder-find-many-return-type';
 import { VAT_CODES } from '../company/const/vat-code';
 import { FileDiscrimination } from '../file/types/file-discrimination.enum';
 import { CreateFileDto } from '../file/dto/create-file.dto';
+import { AorderLogService } from '../log/aorder-log.service';
 
 type CommonAOrderDto = Partial<Omit<CreateAOrderDto, 'pickup' | 'repair'>>;
 type CommonAOrderInput = Partial<Omit<Prisma.aorderCreateInput, 'pickup' | 'repair' | 'delivery'>>;
@@ -26,6 +27,7 @@ export class AOrderService {
     protected readonly printService: PrintService,
     protected readonly fileService: FileService,
     protected readonly contactService: ContactService,
+    protected readonly aorderLogService?: AorderLogService,
     protected readonly type?: AOrderDiscrimination,
   ) {}
 
@@ -176,10 +178,19 @@ export class AOrderService {
     return new AOrderProcess(order).run();
   }
 
-  async update(id: number, aorderDto: UpdateAOrderDto, files?: Express.Multer.File[]) {
+  async update(id: number, aorderDto: UpdateAOrderDto, username: string, files?: Express.Multer.File[]) {
     const {
       pickup, repair, delivery, ...commonDto
     } = aorderDto;
+
+    const before = await this.repository.findOne({
+      where: { id },
+      select: {
+        id: true,
+        status_id: true,
+        order_nr: true,
+      },
+    });
 
     const data: Prisma.aorderUpdateInput = {
       ...await this.processCreateOrUpdateOrderInput(commonDto),
@@ -196,6 +207,15 @@ export class AOrderService {
     const order = <AOrderPayloadRelation> await this.repository
       .update(this.commonIncludePart(params));
 
+    if (before && order.status_id !== before.status_id && this.aorderLogService) {
+      this.aorderLogService.create({
+        username,
+        previous_status_id: before.status_id,
+        status_id: order.status_id,
+        order_nr: before.order_nr,
+      } as any).catch((e) => console.log(e.message));
+    }
+
     if (files?.length) {
       await this.uploadLogisticsFiles({
         files,
@@ -206,13 +226,50 @@ export class AOrderService {
     return new AOrderProcess(order).run();
   }
 
-  async updateMany(updateManyOrderDto: UpdateManyAOrderDto) {
-    return this.repository.updateMany({
+  async updateMany(updateManyOrderDto: UpdateManyAOrderDto, username: string) {
+    const before = await this.repository.findAll({
+      where: {
+        id: { in: updateManyOrderDto.ids },
+      },
+      select: {
+        id: true,
+        status_id: true,
+        order_nr: true,
+      },
+    });
+
+    const result = await this.repository.updateMany({
       data: updateManyOrderDto.order,
       where: {
         id: { in: updateManyOrderDto.ids },
       },
     });
+
+    if (this.aorderLogService && updateManyOrderDto.order.status_id !== undefined) {
+      const updatedOrders = await this.repository.findAll({
+        where: {
+          id: { in: updateManyOrderDto.ids },
+        },
+        select: {
+          id: true,
+          status_id: true,
+        },
+      });
+
+      for (const order of before.data) {
+        const updatedOrder = updatedOrders.data.find((o) => o.id === order.id);
+        if (updatedOrder && updatedOrder.status_id !== order.status_id) {
+          this.aorderLogService.create({
+            username,
+            previous_status_id: order.status_id,
+            status_id: updatedOrder.status_id,
+            order_nr: order.order_nr,
+          } as any).catch((e) => console.log(e.message));
+        }
+      }
+    }
+
+    return result;
   }
 
   async deleteOne(id: number) {

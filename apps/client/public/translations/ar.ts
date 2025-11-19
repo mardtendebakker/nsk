@@ -783,6 +783,8 @@ const translation = {
   toMonth: 'إلى الشهر',
   activityLogs: 'سجلات النشاط',
   aorderLogs: 'سجلات الطلبات',
+  productLogs: 'سجلات المنتجات',
+  orderNr: 'رقم الطلب',
   previousStatus: 'الحالة السابقة',
   route: 'المسار',
   model: 'النموذج',
