@@ -1,8 +1,6 @@
 import { useEffect, useRef } from 'react';
 import useSecurity from './useSecurity';
 
-const INACTIVITY_TIMEOUT = 15 * 60 * 1000;
-
 export default function useInactivityTimer() {
   const { state: { user }, signOut } = useSecurity();
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -15,7 +13,7 @@ export default function useInactivityTimer() {
     if (user) {
       timeoutRef.current = setTimeout(() => {
         signOut();
-      }, INACTIVITY_TIMEOUT);
+      }, parseInt(process.env.INACTIVITY_TIMEOUT || '25', 10) * 60 * 1000);
     }
   };
 
