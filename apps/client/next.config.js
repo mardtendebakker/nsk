@@ -1,7 +1,9 @@
 // @ts-check
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const { withNx } = require('@nx/next/plugins/with-nx');
+const {
+  withNx
+} = require('@nx/next/plugins/with-nx');
 
 /**
  * @type {import('@nx/next/plugins/with-nx').WithNxOptions}
@@ -13,22 +15,15 @@ const nextConfig = {
     svgr: false,
   },
   env: {
-    AXIOS_BASE_URL:
-      process.env.NX_AXIOS_BASE_URL,
-    MYPTV_MAP_STYLE_URL:
-      'https://vectormaps-resources.myptv.com/styles/latest/standard.json',
-    MYPTV_MAP_TILE_URL:
-      'https://api.myptv.com/maps/v1/vector-tiles/{z}/{x}/{y}',
-    MYPTV_WAY_POINTS_URL:
-      'https://api.myptv.com/routing/v1/routes?results=POLYLINE&options[trafficMode]=AVERAGE',
-    MYPTV_WAY_POINTS_SEARCH_PREFIX:
-      'waypoints',
-    MYPTV_SEARCH_TEXT_URL:
-      'https://api.myptv.com/geocoding/v1/locations/by-text?searchText=',
-    MYPTV_UNKNOWN_ADDRESS:
-      'Yacuiba Null Cañitas',
-    MYPTV_FULFILLED_STATUS:
-      'fulfilled',
+    AXIOS_BASE_URL: process.env.NX_AXIOS_BASE_URL,
+    INACTIVITY_TIMEOUT: process.env.NX_INACTIVITY_TIMEOUT,
+    MYPTV_MAP_STYLE_URL: 'https://vectormaps-resources.myptv.com/styles/latest/standard.json',
+    MYPTV_MAP_TILE_URL: 'https://api.myptv.com/maps/v1/vector-tiles/{z}/{x}/{y}',
+    MYPTV_WAY_POINTS_URL: 'https://api.myptv.com/routing/v1/routes?results=POLYLINE&options[trafficMode]=AVERAGE',
+    MYPTV_WAY_POINTS_SEARCH_PREFIX: 'waypoints',
+    MYPTV_SEARCH_TEXT_URL: 'https://api.myptv.com/geocoding/v1/locations/by-text?searchText=',
+    MYPTV_UNKNOWN_ADDRESS: 'Yacuiba Null Cañitas',
+    MYPTV_FULFILLED_STATUS: 'fulfilled',
   },
 };
 
