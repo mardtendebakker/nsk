@@ -2,6 +2,12 @@ import { aorder } from '@prisma/client';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class AOrderEntity implements aorder {
+  @ApiPropertyOptional()
+    exact_invoice_id: string | null;
+
+  @ApiPropertyOptional()
+    exact_invoice_pdf: string | null;
+
   @ApiProperty()
     id: number;
 

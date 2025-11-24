@@ -1,15 +1,19 @@
+/* eslint-disable no-await-in-loop */
 import {
   Injectable,
+  NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import * as xlsx from 'xlsx';
+import { HttpService } from '@nestjs/axios';
 import { AOrderDiscrimination } from '../aorder/types/aorder-discrimination.enum';
 import { AOrderService } from '../aorder/aorder.service';
 import { SaleRepository } from './sale.repository';
 import { PrintService } from '../print/print.service';
 import { FileService } from '../file/file.service';
 import { AProductService } from '../aproduct/aproduct.service';
+import { ProductService } from '../product/product.service';
 import { CreateAServiceDto } from '../aservice/dto/create-aservice.dto';
 import { AServiceDiscrimination } from '../aservice/enum/aservice-discrimination.enum';
 import { AServiceStatus } from '../aservice/enum/aservice-status.enum';
@@ -25,6 +29,7 @@ import { IProductToOrder } from './types/product-to-order';
 import { OrderStatuses } from '../admin/order-status/enums/order-statuses.enum';
 import { ProductLogService } from '../log/product-log.service';
 import { AorderLogService } from '../log/aorder-log.service';
+import { ExactService } from '../exact/exact.service';
 
 @Injectable()
 export class SaleService extends AOrderService {
@@ -34,11 +39,119 @@ export class SaleService extends AOrderService {
     protected readonly fileService: FileService,
     protected readonly contactService: ContactService,
     protected readonly aProductService: AProductService,
+    protected readonly productService: ProductService,
     protected readonly orderStatusService: OrderStatusService,
     protected readonly productLogService: ProductLogService,
     protected readonly aorderLogService: AorderLogService,
+    protected readonly httpService: HttpService,
+    private readonly exactService: ExactService,
   ) {
     super(repository, printService, fileService, contactService, aorderLogService, AOrderDiscrimination.SALE);
+  }
+
+  async requestExactInvoice(orderId: number, body: { token: string }) {
+    const orderWithDetails = await this.repository.findOne({
+      where: { id: orderId },
+      include: {
+        contact_aorder_customer_idTocontact: {
+          include: {
+            company_contact_company_idTocompany: true,
+          },
+        },
+        product_order: {
+          include: {
+            product: true,
+          },
+        },
+      },
+    }) as any;
+
+    if (!orderWithDetails) {
+      throw new NotFoundException('Sales order not found!');
+    }
+
+    const customer = orderWithDetails.contact_aorder_customer_idTocontact;
+    const company = customer?.company_contact_company_idTocompany;
+    const products = orderWithDetails.product_order;
+
+    if (!customer || !company) {
+      throw new UnprocessableEntityException('Customer information is missing');
+    }
+
+    if (!products || products.length === 0) {
+      throw new UnprocessableEntityException('No products found in order');
+    }
+
+    const formatDate = (date: Date) => date.toISOString().split('T')[0];
+    let customerId = company.exact_id;
+
+    if (!customerId) {
+      const createdCustomer = await this.exactService.createCustomer({
+        Name: customer.name,
+        Email: customer.email,
+        Status: 'C',
+      }, body);
+      customerId = createdCustomer.ID;
+
+      await this.repository.update({
+        where: { id: orderId },
+        data: {
+          contact_aorder_customer_idTocontact: {
+            update: {
+              exact_id: createdCustomer.ID,
+            },
+          },
+        },
+      });
+    }
+
+    const salesInvoiceLines = [];
+    for (const productOrder of products) {
+      const itemCode = productOrder.product.sku || productOrder.product.name;
+
+      if (!productOrder.product.exact_id) {
+        const itemData = {
+          Code: itemCode,
+          Description: productOrder.product.name,
+          Unit: 'PCS',
+          ItemGroup: '1',
+        };
+        const createdItem = await this.exactService.createItem(itemData, body);
+
+        await this.productService.updateOne(productOrder.product.id, { exact_id: createdItem.ID });
+      }
+
+      salesInvoiceLines.push({
+        Item: productOrder.product.exact_id || itemCode,
+        Quantity: productOrder.quantity || 1,
+        UnitPrice: productOrder.price || 0,
+        Description: productOrder.product.name,
+      });
+    }
+
+    const exactResponse = await this.exactService.createSalesInvoice({
+      Customer: customerId,
+      Description: orderWithDetails.remarks || `Order ${orderWithDetails.order_nr || orderId}`,
+      DocumentDate: formatDate(orderWithDetails.order_date),
+      InvoiceDate: formatDate(new Date()),
+      InvoiceTo: customer.name || company.name,
+      OrderDate: formatDate(orderWithDetails.order_date),
+      OrderNumber: orderWithDetails.order_nr || orderId.toString(),
+      SalesInvoiceLines: salesInvoiceLines,
+    }, body);
+
+    await this.repository.update({
+      where: { id: orderId },
+      data: {
+        exact_invoice_id: exactResponse.InvoiceID,
+        remarks: `${orderWithDetails.remarks || ''}\n\nExact Invoice: ${exactResponse.InvoiceNumber} (ID: ${exactResponse.InvoiceID})`,
+      },
+    });
+
+    return {
+      invoiceId: exactResponse.InvoiceID,
+      invoiceNumber: exactResponse.InvoiceNumber,
+    };
   }
 
   async addProducts(id: number, productsToOrder: IProductToOrder[]) {
@@ -198,7 +311,6 @@ export class SaleService extends AOrderService {
       } = row;
 
       if (Bedrijfsnaam || Voornaam || Achternaam) {
-      // Leergeld puts partner name in field Bedrijfsnaam :-(
         let companyName: string;
 
         if (Bedrijfsnaam && !Bedrijfsnaam?.includes('Leergeld')) {

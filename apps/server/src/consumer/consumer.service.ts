@@ -117,6 +117,7 @@ export class ConsumerService implements OnModuleInit {
         orderDate: format(order.order_date, 'd-MM-Y H:i'),
         supplierName: order.contact_aorder_supplier_idTocontact?.name,
         customerName: order.contact_aorder_customer_idTocontact?.name,
+        invoicePdfUrl: order.exact_invoice_pdf,
       }),
       log: true,
     });

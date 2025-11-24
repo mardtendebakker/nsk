@@ -1,12 +1,25 @@
 {
-    "files.eol": "\n",
-    "files.insertFinalNewline": false,
-    "typescript.preferences.importModuleSpecifier": "relative",
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-    "javascript.format.enable": false,
-    "typescript.format.enable": false,
-    "[typescript]": {
-        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
-    },
-    "typescript.preferences.quoteStyle": "single"
+  "files.eol": "\n",
+  "files.insertFinalNewline": false,
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "typescript.preferences.quoteStyle": "single"
 }

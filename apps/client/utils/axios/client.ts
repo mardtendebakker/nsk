@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getUser } from '../storage';
+import { getUser, getExactOnlineToken } from '../storage';
 
 const baseURL = process.env.AXIOS_BASE_URL;
 
@@ -16,8 +16,12 @@ client.interceptors.request.use(
   (config) => {
     const token = getUser()?.accessToken;
     if (token) {
-      // eslint-disable-next-line no-param-reassign
       config.headers.Authorization = `Bearer ${getUser()?.accessToken}`;
+    }
+
+    const exactToken = getExactOnlineToken();
+    if (exactToken) {
+      config.headers.ExactAuthorization = `Bearer ${exactToken}`;
     }
 
     return config;

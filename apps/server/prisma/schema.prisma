@@ -43,6 +43,8 @@ model aorder {
   discr                               String          @db.VarChar(255)
   backingPurchaseOrder_id             Int?
   external_id                         Int?
+  exact_invoice_id                    String?         @db.VarChar(255)
+  exact_invoice_pdf                   String?         @db.Text
   vat_rate                            Float?          @db.Float
   contact_aorder_supplier_idTocontact contact?        @relation("aorder_supplier_idTocontact", fields: [supplier_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK_416119D92ADD6D8C")
   aorder                              aorder?         @relation("aorderToaorder", fields: [backingPurchaseOrder_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK_416119D930005451")
@@ -188,6 +190,7 @@ model product {
   updated_at                                                    DateTime            @updatedAt @db.DateTime(0)
   order_updated_at                                              DateTime?           @default(now()) @db.DateTime(0)
   external_id                                                   Int?
+  exact_id                                                      String?             @db.VarChar(255)
   entity_status                                                 Int                 @default(0)
   sub_type_id                                                   Int?
   afile                                                         afile[]
@@ -374,6 +377,7 @@ model contact {
   zip2                                String?  @db.VarChar(255)
   is_main                             Boolean?
   external_id                         Int?
+  exact_id                            String?  @db.VarChar(255)
   supplierOrders                      aorder[] @relation("aorder_supplier_idTocontact")
   customerOrders                      aorder[] @relation("aorder_customer_idTocontact")
   company_contact_company_idTocompany company  @relation("contact_company_idTocompany", fields: [company_id], references: [id], onUpdate: Restrict)
