@@ -167,6 +167,7 @@ export class AOrderProcess {
     return {
       company_id: company.id,
       company_name: company.name,
+      ...(company.kvk_nr && { company_kvk_nr: company.kvk_nr}),
       vat: VAT_CODES.find(({ code }) => code == company.vat_code),
     };
   }
