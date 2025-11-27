@@ -5,6 +5,7 @@ import { AOrderContact } from './aorder-contact';
 type AaOrderCompany = {
   company_id: number,
   company_name: string,
+  company_kvk_nr: number | null,
   vat: VatCode
 };
 export type ContactProcessed = Omit<

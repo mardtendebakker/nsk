@@ -10,9 +10,6 @@ type CompanyWithoutCompany = Omit<CompanyRelation, 'company'>;
 type CompanyWithoutCompanyContacts = Omit<CompanyRelation, 'companyContacts'>;
 
 export class AOrderProcess {
-  private totalPrice: number;
-
-  private vatValue: number;
 
   private totalPerProductType: TotalPerProductReturn;
 
@@ -68,10 +65,6 @@ export class AOrderProcess {
       }),
     };
 
-    const { totalPrice, vatValue } = this.calculateTotalPrice(customerProcessed?.vat?.value || 0);
-    this.totalPrice = totalPrice;
-    this.vatValue = vatValue;
-
     const supplierProcessed: ContactProcessed = {
       ...restSupplier,
       ...(restCompanySupplier
@@ -95,50 +88,48 @@ export class AOrderProcess {
       ...(companySupplier && {
         contact_aorder_supplier_idTocontact: supplierProcessed,
       }),
-      totalPrice: this.totalPrice,
-      vatValue: this.vatValue,
-      totalPriceExtVat: this.totalPrice - this.vatValue,
       totalPerProductType: this.totalPerProductType,
+      ...this.calculateTotalPrice(customerProcessed?.vat?.value || 0)
     };
   }
 
-  private calculateTotalPrice(vat: number): { totalPrice: number, vatValue: number } {
-    let price = 0;
-
-    if (this.aorder.is_gift) {
-      return {
-        totalPrice: 0,
-        vatValue: 0,
-      };
-    }
+  private calculateTotalPrice(vat: number): {
+    subtotal: number;
+    subtotalAfterDiscount: number;
+    totalPriceExtVat: number;
+    vatValue: number
+    totalPrice: number,
+  } {
+    let subtotal = 0;
 
     for (let i = 0; i < this.aorder?.product_order?.length; i += 1) {
       const pOrder = this.aorder?.product_order?.[i];
-      price += (pOrder?.price ?? 0) * (pOrder?.quantity || 1);
+      subtotal += (pOrder?.price ?? 0) * (pOrder?.quantity || 1);
 
       for (let j = 0; j < pOrder?.aservice?.length; j += 1) {
         const service = pOrder?.aservice?.[j];
 
         if (this.aorder.discr === AOrderDiscrimination.SALE
           && service.status !== AServiceStatus.STATUS_CANCEL) {
-          price += service.price ?? 0;
+          subtotal += service.price ?? 0;
         }
       }
     }
 
-    if (this.aorder.transport > 0) {
-      price += this.aorder.transport;
-    }
+    const discount = this.aorder.discount > 0 ? this.aorder.discount : 0;
+    const transport = this.aorder.transport > 0 ? this.aorder.transport : 0;
 
-    if (this.aorder.discount > 0) {
-      price -= this.aorder.discount;
-    }
-
-    const totalPrice = price * (1 + vat / 100);
+    const subtotalAfterDiscount = subtotal - discount;
+    const totalPriceExtVat = subtotalAfterDiscount + transport;
+    const vatValue = totalPriceExtVat * (vat / 100);
+    const totalPrice = this.aorder.is_gift ? 0 : totalPriceExtVat + vatValue;
 
     return {
-      totalPrice,
-      vatValue: totalPrice - price,
+      subtotal,
+      subtotalAfterDiscount,
+      totalPriceExtVat,
+      vatValue,
+      totalPrice
     };
   }
 
@@ -167,6 +158,7 @@ export class AOrderProcess {
     return {
       company_id: company.id,
       company_name: company.name,
+      ...(company.kvk_nr && { company_kvk_nr: company.kvk_nr}),
       vat: VAT_CODES.find(({ code }) => code == company.vat_code),
     };
   }

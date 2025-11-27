@@ -551,6 +551,7 @@ export class AOrderService {
         select: {
           id: true,
           name: true,
+          kvk_nr: true,
           vat_code: true,
           company: {
             select: {

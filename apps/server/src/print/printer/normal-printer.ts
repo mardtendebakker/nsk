@@ -20,9 +20,13 @@ export class NormalPrinter extends IOrderPrinter {
       order_nr: aorder.order_nr,
       order_date: aorder.order_date ? format(aorder.order_date, 'dd-MM-yyyy') : 'Unknown',
       remarks: aorder.remarks ?? 'None',
+      subtotal: aorder.subtotal ? this.currencyFormat.format(aorder.subtotal) : '€ 0.00',
+      subtotalAfterDiscount: aorder.subtotalAfterDiscount ? this.currencyFormat.format(aorder.subtotalAfterDiscount) : '€ 0.00',
+      totalPriceExtVat: aorder.totalPriceExtVat ? this.currencyFormat.format(aorder.totalPriceExtVat) : '€ 0.00',
+      vatValue: aorder.vatValue ? this.currencyFormat.format(aorder.vatValue) : null,
       totalPrice: aorder.totalPrice ? this.currencyFormat.format(aorder.totalPrice) : '€ 0.00',
-      transport: aorder.transport ? this.currencyFormat.format(aorder.transport) : '€ 0.00',
-      discount: aorder.discount ? this.currencyFormat.format(aorder.discount) : '€ 0.00',
+      transport: aorder.transport ? this.currencyFormat.format(aorder.transport) : null,
+      discount: aorder.discount ? this.currencyFormat.format(aorder.discount) : null,
       isGift: aorder.is_gift,
       delivery_date: aorder.delivery?.date ? format(aorder.delivery.date, 'dd-MM-yyyy') : 'Unknown',
       delivery_type: this.getDeliveryTypeLabel(aorder.delivery?.type),
@@ -64,6 +68,9 @@ export class NormalPrinter extends IOrderPrinter {
           price: productOrder.price ? this.currencyFormat.format(productOrder.price) : '€ 0.00',
         }))),
       },
+      ...(aorder.totalPerProductType && {
+        totalPerProductType: aorder.totalPerProductType,
+      }),
     })));
   }
 }
