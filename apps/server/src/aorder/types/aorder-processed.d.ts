@@ -10,9 +10,11 @@ AOrderPayloadRelation,
 'contact_aorder_supplier_idTocontact' |
 'contact_aorder_customer_idTocontact'
 > & {
-  totalPrice: number;
-  vatValue: number;
+  subtotal: number;
+  subtotalAfterDiscount: number;
   totalPriceExtVat: number;
+  vatValue: number;
+  totalPrice: number;
   totalPerProductType: TotalPerProductReturn;
   product_order: ProductOrderRelationProduct[];
   contact_aorder_supplier_idTocontact?: ContactProcessed;
