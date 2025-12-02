@@ -101,8 +101,6 @@ export function formRepresentationToBody(formRepresentation: FormRepresentation)
         formData.append(`product_attributes[${prIndex}][value]`, value);
         prIndex += 1;
       }
-    } else if (key == 'sku' && (value == null || value === '')) {
-      formData.append(key, Math.floor(Date.now() / 1000).toString());
     } else {
       formData.append(key, value);
     }

@@ -246,7 +246,7 @@ export class StockService {
     const createInput: Prisma.productUncheckedCreateInput = {
       location_label_id: locationLabelId,
       ...rest,
-      ...(!rest.sku && { sku: Math.floor(Date.now() / 1000).toString() }),
+      ...(!rest.sku && { sku: Math.floor(Date.now() / 10).toString() }),
       ...(productOrders?.length > 0 && {
         product_order: {
           connectOrCreate: productOrders.map((productOrder) => ({
