@@ -24,6 +24,8 @@ const nextConfig = {
     MYPTV_SEARCH_TEXT_URL: 'https://api.myptv.com/geocoding/v1/locations/by-text?searchText=',
     MYPTV_UNKNOWN_ADDRESS: 'Yacuiba Null Cañitas',
     MYPTV_FULFILLED_STATUS: 'fulfilled',
+    EXACT_ONLINE_CLIENT_ID: process.env.NX_EXACT_ONLINE_CLIENT_ID,
+    EXACT_ONLINE_AUTH_BASE_URL: process.env.NX_EXACT_ONLINE_AUTH_BASE_URL,
   },
 };
 

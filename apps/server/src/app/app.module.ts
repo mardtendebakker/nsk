@@ -41,6 +41,7 @@ import { SecurityModule } from '../security/security.module';
 import { VehicleAdminModule } from '../admin/vehicle/vehicle.module';
 import { DriverAdminModule } from '../admin/driver/driver.module';
 import { LogModule } from '../log/log.module';
+import { ExactModule } from '../exact/exact.module';
 
 @Module({
   imports: [
@@ -113,6 +114,7 @@ import { LogModule } from '../log/log.module';
     VehicleAdminModule,
     DriverAdminModule,
     LogModule,
+    ExactModule,
   ],
   controllers: [AppController],
   providers: [AppService],

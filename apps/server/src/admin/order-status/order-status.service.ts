@@ -54,6 +54,10 @@ export class OrderStatusService {
     }
   }
 
+  async findBy(params: Prisma.order_statusFindManyArgs) {
+    return this.repository.findBy(params);
+  }
+
   async findByNameOrCreate(createOrderStatusDto: CreateOrderStatusDto) {
     let orderStatus = await this.repository.findFirst({
       where: { name: createOrderStatusDto.name },

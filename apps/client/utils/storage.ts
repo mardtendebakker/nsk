@@ -31,3 +31,8 @@ export const getCart = (): Cart => {
 export const setCart = (cart: Cart) => {
   localStorage.setItem('cart', JSON.stringify(cart));
 };
+
+export const getExactOnlineToken = (): string | null => typeof window !== 'undefined' && localStorage.getItem('exactOnlineToken');
+export const setExactOnlineToken = (token: string) => typeof window !== 'undefined' && localStorage.setItem('exactOnlineToken', token);
+export const getExactOnlineRefreshToken = (): string | null => typeof window !== 'undefined' && localStorage.getItem('exactOnlineRefreshToken');
+export const setExactOnlineRefreshToken = (token: string) => typeof window !== 'undefined' && localStorage.setItem('exactOnlineRefreshToken', token);
