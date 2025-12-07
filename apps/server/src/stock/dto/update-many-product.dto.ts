@@ -19,6 +19,9 @@ export class Product {
 
   @ApiPropertyOptional()
     statusId?: number;
+
+  @ApiPropertyOptional()
+    price?: number;
 }
 
 export class UpdateManyProductDto {

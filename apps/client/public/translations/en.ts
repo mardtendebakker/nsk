@@ -85,6 +85,8 @@ const translation = {
       placeholder: 'Enter translated product status name',
     },
   },
+  changePrice: 'Change Price',
+  changePriceContent: 'You can change the price of the selected products',
 };
 
 export default translation;

@@ -153,12 +153,15 @@ const translation = {
   extraAddress: 'Complemento de dirección',
   signUp: 'Registrarse',
   confirmAccount: 'Confirmar datos',
-  accountVerificationMessage: 'Ingrese su nombre de usuario y el código que recibió por correo electrónico.',
+  accountVerificationMessage:
+    'Ingrese su nombre de usuario y el código que recibió por correo electrónico.',
   accountVerification: 'Confirmación de cuenta',
   confirm: 'Confirmar',
   reminder: 'Recordatorio',
-  productEditConfirmation: '¿Está seguro de que ha introducido correctamente el precio de venta? Precio de venta: %price%',
-  orderMightShouldChangeWarning: 'Verifique si el estado del pedido sigue siendo correcto.',
+  productEditConfirmation:
+    '¿Está seguro de que ha introducido correctamente el precio de venta? Precio de venta: %price%',
+  orderMightShouldChangeWarning:
+    'Verifique si el estado del pedido sigue siendo correcto.',
   code: 'Código',
   oldPassword: 'Contraseña Antigua',
   newPassword: 'Contraseña Nueva',
@@ -167,11 +170,14 @@ const translation = {
   changePassword: 'Cambiar contraseña',
   sendCode: 'Enviar código',
   settings: 'Configuraciones',
-  signUpSuccessMessage: 'Registro procesado. Verifique su dirección de correo electrónico con el código de confirmación.',
+  signUpSuccessMessage:
+    'Registro procesado. Verifique su dirección de correo electrónico con el código de confirmación.',
   confirmAccountSuccessMessage: 'Cuenta confirmada exitosamente.',
   forgotPasswordQuestion: '¿Olvidó su contraseña?',
-  forgotPasswordMessage: 'Recibirá un código de verificación por correo electrónico, que se relaciona con el nombre de usuario o la dirección de correo electrónico que va a utilizar.',
-  passwordRegexError: 'La contraseña debe tener al menos 8 caracteres, incluyendo una mayúscula, una minúscula, un número y un carácter especial.',
+  forgotPasswordMessage:
+    'Recibirá un código de verificación por correo electrónico, que se relaciona con el nombre de usuario o la dirección de correo electrónico que va a utilizar.',
+  passwordRegexError:
+    'La contraseña debe tener al menos 8 caracteres, incluyendo una mayúscula, una minúscula, un número y un carácter especial.',
   verificationCode: 'Código de verificación',
   orderNumber: 'Número de pedido',
   showOrder: 'Mostrar pedido',
@@ -192,8 +198,10 @@ const translation = {
   orderStatus: 'Estado del pedido',
   pricingDetails: 'Detalles de precios',
   transportCost: 'Costo de transporte',
-  forgotPasswordSuccessMessage: 'Se ha enviado un correo electrónico con un código de verificación.',
-  invalidLocationLabelFormat: 'La etiqueta de ubicación es la siguiente: Bahía 1-2, Compartimento 1-24, Ranura 1-4. Por ejemplo, tome nota como sigue: %e.g.%',
+  forgotPasswordSuccessMessage:
+    'Se ha enviado un correo electrónico con un código de verificación.',
+  invalidLocationLabelFormat:
+    'La etiqueta de ubicación es la siguiente: Bahía 1-2, Compartimento 1-24, Ranura 1-4. Por ejemplo, tome nota como sigue: %e.g.%',
   emailOrUsername: 'Correo electrónico o nombre de usuario',
   orderDetails: 'Detalles del pedido',
   pricing: 'Precios',
@@ -229,8 +237,10 @@ const translation = {
   importSales: 'Importar lista de ventas',
   createdAt: 'Creado el',
   createProduct: 'Crear producto',
-  searchByCustomerNameOrEmail: 'Buscar por nombre de cliente o correo electrónico',
-  searchBySkuOrDescOrNameOrAttr: 'Buscar por número de serie o descuento o nombre o atributo',
+  searchByCustomerNameOrEmail:
+    'Buscar por nombre de cliente o correo electrónico',
+  searchBySkuOrDescOrNameOrAttr:
+    'Buscar por número de serie o descuento o nombre o atributo',
   contact: 'Contacto',
   bulkEmail: 'Correo electrónico masivo',
   invalidEmail: 'Correo electrónico no válido',
@@ -269,7 +279,8 @@ const translation = {
     permissionDetail: {
       placeholder: 'Detalle del permiso',
     },
-    permissions: 'Permisos (Puedes seleccionar múltiples permisos para este rol)',
+    permissions:
+      'Permisos (Puedes seleccionar múltiples permisos para este rol)',
   },
   addAnother: 'Añadir otro',
   emailForm: {
@@ -279,7 +290,8 @@ const translation = {
     },
     subject: {
       placeholder: 'Escriba el asunto del correo',
-      label: 'Asunto del correo (Esto aparecerá en la bandeja de entrada del destinatario)',
+      label:
+        'Asunto del correo (Esto aparecerá en la bandeja de entrada del destinatario)',
     },
     senderName: {
       placeholder: 'Escriba el nombre',
@@ -291,7 +303,8 @@ const translation = {
     },
     recipients: {
       placeholder: 'Seleccione uno o varios destinatarios',
-      label: 'Destinatarios (puede añadir una o varias listas o escribir correos manualmente)',
+      label:
+        'Destinatarios (puede añadir una o varias listas o escribir correos manualmente)',
     },
   },
   companyForm: {
@@ -522,8 +535,10 @@ const translation = {
   numberOfAttributes: 'Número de atributos',
   newMailingList: 'Nueva lista de correo',
   customerTags: 'Etiquetas de clientes',
-  inactiveModuleMessage: 'Compre el siguiente módulo para usar esta función: (%module%)',
-  recurrentPaymentConfirmation: 'Si seleccionas esta opción, la misma cantidad será debitada de tu cuenta cada mes en la misma fecha. Puedes cancelar esta acción en cualquier momento.',
+  inactiveModuleMessage:
+    'Compre el siguiente módulo para usar esta función: (%module%)',
+  recurrentPaymentConfirmation:
+    'Si seleccionas esta opción, la misma cantidad será debitada de tu cuenta cada mes en la misma fecha. Puedes cancelar esta acción en cualquier momento.',
   tagName: 'Nombre de la etiqueta',
   newCustomerTag: 'Nueva etiqueta de cliente',
   toDo: 'Por hacer',
@@ -538,12 +553,16 @@ const translation = {
   customerDetails: 'Detalles del cliente',
   customerType: 'Tipo de cliente',
   deleteResourceQuestion: '¿Eliminar este recurso?',
-  deleteResourceContent: 'Esta acción es irreversible. El recurso eliminado se perderá para siempre.',
+  deleteResourceContent:
+    'Esta acción es irreversible. El recurso eliminado se perderá para siempre.',
   deleteConfirm: 'Sí, eliminar',
-  changeLocationContent: 'Puede cambiar la ubicación de los productos seleccionados',
+  changeLocationContent:
+    'Puede cambiar la ubicación de los productos seleccionados',
   selectLocation: 'Seleccionar ubicación',
   changeStatus: 'Cambiar estado',
   changeStatusContent: 'Cambiar contenido del estado',
+  changePrice: 'Cambiar precio',
+  changePriceContent: 'Puede cambiar el precio de los productos seleccionados',
   selectStatus: 'Seleccionar estado',
   selectProductType: 'Seleccionar tipo de producto',
   deliveryType: 'Tipo de entrega',
@@ -607,7 +626,8 @@ const translation = {
     },
     locationTemplate: {
       label: 'Plantilla de ubicación',
-      placeholder: 'Pulsa Enter para seleccionar múltiples plantillas de ubicación. Se necesita una expresión regular JavaScript válida.',
+      placeholder:
+        'Pulsa Enter para seleccionar múltiples plantillas de ubicación. Se necesita una expresión regular JavaScript válida.',
     },
   },
   zipcodes: 'Códigos postales',
@@ -701,7 +721,8 @@ const translation = {
     mailBody: {
       label: 'Contenido del correo',
       placeholder: 'Escriba el contenido del correo',
-      helperText: 'Utilice las variables disponibles para enriquecer el correo usando la siguiente sintaxis: {{variable}}. Las variables disponibles son:',
+      helperText:
+        'Utilice las variables disponibles para enriquecer el correo usando la siguiente sintaxis: {{variable}}. Las variables disponibles son:',
     },
     mailBodyVariables: {
       orderNr: '{{orderNr}} El identificador único del pedido.',
@@ -715,6 +736,11 @@ const translation = {
       placeholder: 'Ingrese el nombre traducido del estado del pedido',
     },
   },
+  yes: 'Sí',
+  no: 'No',
+  createInvoice: 'Crear factura',
+  createInvoiceConfirmationQuestion:
+    'Por favor, revise nuevamente la información antes de crear una factura.',
   editOrderStatus: 'Editar estado del pedido',
   emailLogs: 'Registros de correos',
   emails: 'Correos',
@@ -739,7 +765,8 @@ const translation = {
   driverInfo: 'Información del conductor',
   vehicleInfo: 'Información del vehículo',
   contacts: 'Contactos',
-  deleteUsedOrderStatusMessage: 'Estado del pedido utilizado por un pedido existente.',
+  deleteUsedOrderStatusMessage:
+    'Estado del pedido utilizado por un pedido existente.',
   vehiclesTracking: 'Seguimiento de vehículos',
   vehicle: 'Vehículo',
   driver: 'Conductor',

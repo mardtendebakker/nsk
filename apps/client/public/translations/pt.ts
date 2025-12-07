@@ -152,12 +152,14 @@ const translation = {
   extraAddress: 'Adicionar endereço',
   signUp: 'Registrar',
   confirmAccount: 'Confirmação de conta',
-  accountVerificationMessage: 'Insira o nome do usuário e o código recebido por e-mail.',
+  accountVerificationMessage:
+    'Insira o nome do usuário e o código recebido por e-mail.',
   accountVerification: 'Verificação de conta',
   confirm: 'Confirmar',
   reminder: 'Lembrete',
   productEditConfirmation: 'O valor inserido está correto? Preço: %price%',
-  orderMightShouldChangeWarning: 'Verifique se o status do pedido está correto.',
+  orderMightShouldChangeWarning:
+    'Verifique se o status do pedido está correto.',
   code: 'Código',
   oldPassword: 'Senha antiga',
   newPassword: 'Nova senha',
@@ -166,11 +168,14 @@ const translation = {
   changePassword: 'Alterar senha',
   sendCode: 'Enviar código',
   settings: 'Configurações',
-  signUpSuccessMessage: 'Registro feito com sucesso. Verifique o seu e-mail o código de confirmação.',
+  signUpSuccessMessage:
+    'Registro feito com sucesso. Verifique o seu e-mail o código de confirmação.',
   confirmAccountSuccessMessage: 'Conta confirmada com sucesso.',
   forgotPasswordQuestion: 'Esqueceu a senha?',
-  forgotPasswordMessage: 'Você receberá por e-mail um código de verificação relacionado ao nome do usuário ou a conta de e-mail utilizada.',
-  passwordRegexError: 'A senha deve conter, no mínimo, 8 caracteres com uma letra maiúscula, uma letra minúscula, um número e um caractere especial.',
+  forgotPasswordMessage:
+    'Você receberá por e-mail um código de verificação relacionado ao nome do usuário ou a conta de e-mail utilizada.',
+  passwordRegexError:
+    'A senha deve conter, no mínimo, 8 caracteres com uma letra maiúscula, uma letra minúscula, um número e um caractere especial.',
   verificationCode: 'Verificação de código',
   orderNumber: 'Número do pedido',
   showOrder: 'Mostrar pedido',
@@ -191,7 +196,8 @@ const translation = {
   orderStatus: 'Status do pedido',
   pricingDetails: 'Detalhes do preço',
   transportCost: 'Valor do transporte',
-  forgotPasswordSuccessMessage: 'Foi enviado um e-mail com um código de verificação.',
+  forgotPasswordSuccessMessage:
+    'Foi enviado um e-mail com um código de verificação.',
   invalidLocationLabelFormat: 'Formato da etiqueta da localização: %e.g.%',
   emailOrUsername: 'E-mail ou nome do usuário',
   orderDetails: 'Detalhes do pedido',
@@ -268,7 +274,8 @@ const translation = {
     permissionDetail: {
       placeholder: 'Detalhe da permissão',
     },
-    permissions: 'Permissões (você pode selecionar várias permissões para esta função)',
+    permissions:
+      'Permissões (você pode selecionar várias permissões para esta função)',
   },
   addAnother: 'Adicionar mais um',
   emailForm: {
@@ -290,7 +297,8 @@ const translation = {
     },
     recipients: {
       placeholder: 'Selecionar um ou mais destinatários',
-      label: 'Destinatários (Você pode adicionar uma ou mais listas ou digitar o endereço de e-mail)',
+      label:
+        'Destinatários (Você pode adicionar uma ou mais listas ou digitar o endereço de e-mail)',
     },
   },
   companyForm: {
@@ -521,14 +529,19 @@ const translation = {
   customerDetails: 'Detalhes do cliente',
   customerType: 'Tipo de cliente',
   deleteResourceQuestion: 'Excluir esse pedido?',
-  deleteResourceContent: 'Esta ação é irreversível. O recurso excluído será perdido para sempre.',
+  deleteResourceContent:
+    'Esta ação é irreversível. O recurso excluído será perdido para sempre.',
   deleteConfirm: 'Sim, excluir!',
-  changeLocationContent: 'Você pode alterar a localização dos produtos selecionados',
+  changeLocationContent:
+    'Você pode alterar a localização dos produtos selecionados',
   changeProductTypeContent: 'Você pode alterar o tipo de produtos selecionados',
-  changeProductTypeWarning: 'Alterar o tipo de produto remove todos os atributos associados',
+  changeProductTypeWarning:
+    'Alterar o tipo de produto remove todos os atributos associados',
   selectLocation: 'Selecionar uma localização',
   changeStatus: 'Alterar status',
   changeStatusContent: 'Alterar conteúdo de status',
+  changePrice: 'Alterar preço',
+  changePriceContent: 'Você pode alterar o preço dos produtos selecionados',
   selectStatus: 'Selecionar status',
   selectProductType: 'Selecionar um tipo de produto',
   deliveryType: 'Tipo de entrega',
@@ -592,7 +605,8 @@ const translation = {
     },
     locationTemplate: {
       label: 'Modelo de localização',
-      placeholder: 'Digite enter para selecionar vários modelos de localização. É necessário RegExp JavaScript válido.',
+      placeholder:
+        'Digite enter para selecionar vários modelos de localização. É necessário RegExp JavaScript válido.',
     },
   },
   zipcodes: 'Códigos postais',
@@ -686,7 +700,8 @@ const translation = {
     mailBody: {
       label: 'Corpo do e-mail',
       placeholder: 'Digite corpo do e-mail',
-      helperText: 'Use as variáveis disponíveis para enriquecer o e-mail usando a seguinte sintaxe: {{variável}}. As variáveis disponíveis são:',
+      helperText:
+        'Use as variáveis disponíveis para enriquecer o e-mail usando a seguinte sintaxe: {{variável}}. As variáveis disponíveis são:',
     },
     mailBodyVariables: {
       orderNr: '{{orderNr}} O identificador único do pedido.',
@@ -700,6 +715,11 @@ const translation = {
       placeholder: 'Digite o nome traduzido do status do pedido',
     },
   },
+  yes: 'Sim',
+  no: 'Não',
+  createInvoice: 'Criar fatura',
+  createInvoiceConfirmationQuestion:
+    'Por favor, verifique novamente as informações antes de criar uma fatura.',
   editOrderStatus: 'Editar status do pedido',
   emailLogs: 'Logs de e-mails',
   emails: 'E-mails',
@@ -726,7 +746,8 @@ const translation = {
   vehicle: 'veículo',
   driver: 'Motorista',
   contacts: 'Contatos',
-  deleteUsedOrderStatusMessage: 'Status do pedido usado por um pedido existente.',
+  deleteUsedOrderStatusMessage:
+    'Status do pedido usado por um pedido existente.',
   // http status
   200: 'Ação concluída com sucesso',
   201: 'Fonte criada',

@@ -7,6 +7,7 @@ import Category from '@mui/icons-material/Category';
 import Archive from '@mui/icons-material/Archive';
 import AddBusiness from '@mui/icons-material/AddBusiness';
 import Unarchive from '@mui/icons-material/Unarchive';
+import AttachMoney from '@mui/icons-material/AttachMoney';
 import useTranslation from '../../../hooks/useTranslation';
 import Checkbox from '../../checkbox';
 import Can from '../../can';
@@ -25,6 +26,7 @@ export default function Action({
   onChangeLocation,
   onChangeStatus,
   onChangeProductType,
+  onChangePrice,
   onPrint,
   onPrintChecklist,
   onPrintPriceCard,
@@ -41,6 +43,7 @@ export default function Action({
   onChangeLocation: () => void,
   onChangeStatus: () => void,
   onChangeProductType: () => void,
+  onChangePrice: () => void,
   onPrint: () => void,
   onPrintChecklist: () => void,
   onPrintPriceCard: () => void,
@@ -112,6 +115,15 @@ export default function Action({
             <Button size="small" onClick={onChangeProductType} sx={{ m: '.5rem' }} variant="outlined" color="primary" disabled={disabled}>
               <Category sx={{ mr: '.1rem' }} />
               {trans('changeProductType')}
+            </Button>
+          </Can>
+        )}
+        {checkedProductsCount > 0
+        && (
+          <Can requiredGroups={['manager']}>
+            <Button size="small" onClick={onChangePrice} sx={{ m: '.5rem' }} variant="outlined" color="primary" disabled={disabled}>
+              <AttachMoney sx={{ mr: '.1rem' }} />
+              {trans('changePrice')}
             </Button>
           </Can>
         )}

@@ -153,11 +153,13 @@ const translation = {
   extraAddress: 'تفاصيل العنوان الإضافية',
   signUp: 'التسجيل',
   confirmAccount: 'تأكيد الحساب',
-  accountVerificationMessage: 'الرجاء إدخال اسم المستخدم والرمز الذي تلقيته عبر البريد الإلكتروني.',
+  accountVerificationMessage:
+    'الرجاء إدخال اسم المستخدم والرمز الذي تلقيته عبر البريد الإلكتروني.',
   accountVerification: 'تحقق من الحساب',
   confirm: 'تأكيد',
   reminder: 'تذكير',
-  productEditConfirmation: 'هل أنت متأكد من أنك أدخلت سعر البيع بشكل صحيح؟ سعر البيع: %price%',
+  productEditConfirmation:
+    'هل أنت متأكد من أنك أدخلت سعر البيع بشكل صحيح؟ سعر البيع: %price%',
   orderMightShouldChangeWarning: 'تحقق مما إذا كانت حالة الطلب لا تزال صحيحة.',
   code: 'الرمز',
   oldPassword: 'كلمة المرور القديمة',
@@ -167,11 +169,14 @@ const translation = {
   changePassword: 'تغيير كلمة المرور',
   sendCode: 'إرسال الرمز',
   settings: 'الإعدادات',
-  signUpSuccessMessage: 'تم التسجيل بنجاح. يرجى التحقق من بريدك الإلكتروني للحصول على رمز التأكيد.',
+  signUpSuccessMessage:
+    'تم التسجيل بنجاح. يرجى التحقق من بريدك الإلكتروني للحصول على رمز التأكيد.',
   confirmAccountSuccessMessage: 'تم تأكيد الحساب بنجاح.',
   forgotPasswordQuestion: 'هل نسيت كلمة المرور؟',
-  forgotPasswordMessage: 'ستتلقى رمز التحقق عبر البريد الإلكتروني، المرتبط بإسم المستخدم أو البريد الإلكتروني الذي ستستخدمه.',
-  passwordRegexError: 'يجب أن تحتوي كلمة المرور على 8 أحرف على الأقل، وتشمل حرف كبير وحرف صغير ورقم ورمز خاص.',
+  forgotPasswordMessage:
+    'ستتلقى رمز التحقق عبر البريد الإلكتروني، المرتبط بإسم المستخدم أو البريد الإلكتروني الذي ستستخدمه.',
+  passwordRegexError:
+    'يجب أن تحتوي كلمة المرور على 8 أحرف على الأقل، وتشمل حرف كبير وحرف صغير ورقم ورمز خاص.',
   verificationCode: 'رمز التحقق',
   orderNumber: 'رقم الطلب',
   showOrder: 'عرض الطلب',
@@ -193,7 +198,8 @@ const translation = {
   pricingDetails: 'تفاصيل التسعير',
   transportCost: 'تكلفة النقل',
   forgotPasswordSuccessMessage: 'تم إرسال بريد إلكتروني مع رمز التحقق.',
-  invalidLocationLabelFormat: 'يجب أن تكون تسمية الموقع بالتنسيق التالي : %e.g.%',
+  invalidLocationLabelFormat:
+    'يجب أن تكون تسمية الموقع بالتنسيق التالي : %e.g.%',
   emailOrUsername: 'البريد الإلكتروني أو اسم المستخدم',
   orderDetails: 'تفاصيل الطلب',
   pricing: 'التسعير',
@@ -230,7 +236,8 @@ const translation = {
   createdAt: 'تاريخ الإنشاء',
   createProduct: 'إنشاء منتج',
   searchByCustomerNameOrEmail: 'البحث حسب اسم العميل أو البريد الإلكتروني',
-  searchBySkuOrDescOrNameOrAttr: 'البحث حسب رقم التسلسل أو الوصف أو الاسم أو سمة',
+  searchBySkuOrDescOrNameOrAttr:
+    'البحث حسب رقم التسلسل أو الوصف أو الاسم أو سمة',
   searchByOrderNumberOrRemarks: 'البحث حسب رقم الطلب أو الملاحظات',
   contact: 'الاتصال',
   bulkEmail: 'البريد الإلكتروني الجماعي',
@@ -292,7 +299,8 @@ const translation = {
     },
     recipients: {
       placeholder: 'حدد مستلمًا أو عدة مستلمين',
-      label: 'المستلمون (يمكنك إضافة قائمة واحدة أو أكثر أو إدخال البريد الإلكتروني يدويًا)',
+      label:
+        'المستلمون (يمكنك إضافة قائمة واحدة أو أكثر أو إدخال البريد الإلكتروني يدويًا)',
     },
   },
   companyForm: {
@@ -494,8 +502,10 @@ const translation = {
   method: 'طريقة',
   transactionId: 'رقم المعاملة',
   cart: 'سلة',
-  inactiveModuleMessage: 'يرجى شراء الوحدة التالية من أجل استخدام هذه الميزة: (%module%)',
-  recurrentPaymentConfirmation: 'إذا قمت بتحديد هذا الخيار، فسيتم خصم نفس المبلغ من حسابك كل شهر وفي نفس تاريخ الدفع. يمكنك إلغاء هذا الإجراء في أي وقت.',
+  inactiveModuleMessage:
+    'يرجى شراء الوحدة التالية من أجل استخدام هذه الميزة: (%module%)',
+  recurrentPaymentConfirmation:
+    'إذا قمت بتحديد هذا الخيار، فسيتم خصم نفس المبلغ من حسابك كل شهر وفي نفس تاريخ الدفع. يمكنك إلغاء هذا الإجراء في أي وقت.',
   emptyCartMessage: 'لا شيء في سلة التسوق الخاصة بك',
   amount: 'المبلغ',
   payments: 'المدفوعات',
@@ -543,7 +553,8 @@ const translation = {
   customerDetails: 'تفاصيل العميل',
   customerType: 'نوع العميل',
   deleteResourceQuestion: 'حذف هذا المورد؟',
-  deleteResourceContent: 'هذا الإجراء لا يمكن التراجع عنه. سيتم فقدان المورد المحذوف إلى الأبد.',
+  deleteResourceContent:
+    'هذا الإجراء لا يمكن التراجع عنه. سيتم فقدان المورد المحذوف إلى الأبد.',
   deleteConfirm: 'نعم، حذف!',
   changeLocationContent: 'يمكنك تغيير موقع المنتجات المحددة',
   changeProductTypeContent: 'يمكنك تغيير نوع المنتجات المحددة',
@@ -551,6 +562,8 @@ const translation = {
   selectLocation: 'حدد موقعًا',
   changeStatus: 'تغيير الحالة',
   changeStatusContent: 'تغيير محتوى الحالة',
+  changePrice: 'تغيير السعر',
+  changePriceContent: 'يمكنك تغيير سعر المنتجات المحددة',
   selectStatus: 'حدد الحالة',
   selectProductType: 'حدد نوع المنتج',
   deliveryType: 'نوع التسليم',
@@ -614,7 +627,8 @@ const translation = {
     },
     locationTemplate: {
       label: 'قالب الموقع',
-      placeholder: 'اضغط على Enter لتحديد عدة قوالب موقع. مطلوب RegExp JavaScript صالح.',
+      placeholder:
+        'اضغط على Enter لتحديد عدة قوالب موقع. مطلوب RegExp JavaScript صالح.',
     },
   },
   zipcodes: 'الرموز البريدية',
@@ -638,9 +652,7 @@ const translation = {
   attributeForm: {
     code: {
       label: 'الكود',
-      placeholder:
-
- 'أدخل الكود',
+      placeholder: 'أدخل الكود',
     },
     name: {
       label: 'الاسم',
@@ -710,7 +722,8 @@ const translation = {
     mailBody: {
       label: 'جسم البريد',
       placeholder: 'أدخل محتوى البريد',
-      helperText: 'استخدم المتغيرات المتاحة لإثراء البريد الإلكتروني باستخدام البنية التالية: {{متغير}}. المتغيرات المتاحة هي:',
+      helperText:
+        'استخدم المتغيرات المتاحة لإثراء البريد الإلكتروني باستخدام البنية التالية: {{متغير}}. المتغيرات المتاحة هي:',
     },
     mailBodyVariables: {
       orderNr: '{{orderNr}} المعرف الفريد للطلب.',
@@ -724,6 +737,11 @@ const translation = {
       placeholder: 'أدخل اسم حالة الطلب المترجم',
     },
   },
+  yes: 'نعم',
+  no: 'لا',
+  createInvoice: 'إنشاء فاتورة',
+  createInvoiceConfirmationQuestion:
+    'يرجى مراجعة المعلومات مرة أخرى قبل إنشاء فاتورة.',
   editOrderStatus: 'تعديل حالة الطلب',
   emailLogs: 'سجلات البريد الإلكتروني',
   emails: 'رسائل البريد الإلكتروني',

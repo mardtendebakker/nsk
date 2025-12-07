@@ -6,7 +6,7 @@ const translation = {
   lastName: 'Nom',
   newDriver: 'Nouveau conducteur',
   newVehicle: 'Nouveau véhicule',
-  registrationNumber: 'Numéro d\'immatriculation',
+  registrationNumber: "Numéro d'immatriculation",
   editVehicle: 'Modifier le véhicule',
   editDriver: 'Modifier le conducteur',
   manageLogistics: 'Gérer la logistique',
@@ -19,7 +19,7 @@ const translation = {
   endDate: 'Date de fin',
   vehiclesList: {
     search: {
-      placeholder: 'Rechercher par nom ou numéro d\'immatriculation',
+      placeholder: "Rechercher par nom ou numéro d'immatriculation",
     },
   },
   vehicleForm: {
@@ -28,8 +28,8 @@ const translation = {
       placeholder: 'Saisir le nom du véhicule',
     },
     registrationNumber: {
-      label: 'Numéro d\'immatriculation du véhicule',
-      placeholder: 'Saisir le numéro d\'immatriculation du véhicule',
+      label: "Numéro d'immatriculation du véhicule",
+      placeholder: "Saisir le numéro d'immatriculation du véhicule",
     },
   },
   driverForm: {
@@ -43,11 +43,11 @@ const translation = {
     },
     email: {
       label: 'Email',
-      placeholder: 'Saisir l\'email du conducteur',
+      placeholder: "Saisir l'email du conducteur",
     },
     username: {
-      label: 'Nom d\'utilisateur',
-      placeholder: 'Saisir le nom d\'utilisateur du conducteur',
+      label: "Nom d'utilisateur",
+      placeholder: "Saisir le nom d'utilisateur du conducteur",
     },
   },
   signIn: 'Se connecter',
@@ -57,7 +57,7 @@ const translation = {
   dashboard: 'Tableau de bord',
   newContact: 'Nouveau contact',
   newEmail: 'Nouvel email',
-  changeLocation: 'Changer de l\'emplacement',
+  changeLocation: "Changer de l'emplacement",
   changeAvailability: 'Modifier la disponibilité',
   assign: 'Attribuer',
   print: 'Imprimer',
@@ -103,19 +103,19 @@ const translation = {
     },
     magentoCategoryId: {
       label: 'ID de catégorie Magento',
-      placeholder: 'Entrez l\'ID de catégorie Magento',
+      placeholder: "Entrez l'ID de catégorie Magento",
     },
     magentoAttrSetId: {
-      label: 'ID d\'ensemble d\'attributs Magento',
-      placeholder: 'Entrez l\'ID d\'ensemble d\'attributs Magento',
+      label: "ID d'ensemble d'attributs Magento",
+      placeholder: "Entrez l'ID d'ensemble d'attributs Magento",
     },
     magentoGroupSpecId: {
       label: 'ID de spécification de groupe Magento',
-      placeholder: 'Entrez l\'ID de spécification de groupe Magento',
+      placeholder: "Entrez l'ID de spécification de groupe Magento",
     },
     pindex: {
       label: 'Index',
-      placeholder: 'Entrez l\'index',
+      placeholder: "Entrez l'index",
     },
   },
   orders: 'Commandes',
@@ -132,27 +132,30 @@ const translation = {
   partner: 'Partenaire',
   email: 'Email',
   name: 'Nom',
-  username: 'Nom d\'utilisateur',
+  username: "Nom d'utilisateur",
   phone: 'Téléphone',
   phone2: 'Mobile',
-  companyName: 'Nom de l\'entreprise',
+  companyName: "Nom de l'entreprise",
   company_kvk_nr: 'Numéro de la Chambre de Commerce',
   street: 'Rue',
-  street_extra: 'Complément d\'adresse',
+  street_extra: "Complément d'adresse",
   zipcode: 'Code postal',
   state: 'État',
   createOrder: 'Créer une commande',
   save: 'Enregistrer',
   address: 'Adresse',
-  extraAddress: 'Complément d\'adresse',
-  signUp: 'S\'inscrire',
+  extraAddress: "Complément d'adresse",
+  signUp: "S'inscrire",
   confirmAccount: 'Confirmer le compte',
-  accountVerificationMessage: 'Veuillez saisir votre nom d\'utilisateur et le code reçu par email.',
+  accountVerificationMessage:
+    "Veuillez saisir votre nom d'utilisateur et le code reçu par email.",
   accountVerification: 'Vérification du compte',
   confirm: 'Confirmer',
   reminder: 'Rappel',
-  productEditConfirmation: 'Êtes-vous sûr d\'avoir saisi correctement le prix de vente? Prix de vente: %price%',
-  orderMightShouldChangeWarning: 'Vérifiez si le statut de la commande est toujours correct.',
+  productEditConfirmation:
+    "Êtes-vous sûr d'avoir saisi correctement le prix de vente? Prix de vente: %price%",
+  orderMightShouldChangeWarning:
+    'Vérifiez si le statut de la commande est toujours correct.',
   code: 'Code',
   oldPassword: 'Ancien mot de passe',
   newPassword: 'Nouveau mot de passe',
@@ -161,11 +164,14 @@ const translation = {
   changePassword: 'Changer le mot de passe',
   sendCode: 'Envoyer le code',
   settings: 'Paramètres',
-  signUpSuccessMessage: 'Inscription réussie. Veuillez vérifier votre adresse email pour le code de confirmation.',
+  signUpSuccessMessage:
+    'Inscription réussie. Veuillez vérifier votre adresse email pour le code de confirmation.',
   confirmAccountSuccessMessage: 'Compte confirmé avec succès.',
   forgotPasswordQuestion: 'Mot de passe oublié?',
-  forgotPasswordMessage: 'Vous recevrez un code de vérification par email, lié au nom d\'utilisateur ou à l\'adresse email que vous allez utiliser.',
-  passwordRegexError: 'Le mot de passe doit comporter au moins 8 caractères avec une majuscule, une minuscule, un chiffre et un caractère spécial.',
+  forgotPasswordMessage:
+    "Vous recevrez un code de vérification par email, lié au nom d'utilisateur ou à l'adresse email que vous allez utiliser.",
+  passwordRegexError:
+    'Le mot de passe doit comporter au moins 8 caractères avec une majuscule, une minuscule, un chiffre et un caractère spécial.',
   verificationCode: 'Code de vérification',
   orderNumber: 'Numéro de commande',
   showOrder: 'Afficher la commande',
@@ -179,16 +185,18 @@ const translation = {
   selectPickupDate: 'Sélectionner la date de ramassage',
   instructions: 'Instructions',
   selectPartner: 'Sélectionner le partenaire',
-  locationLabel: 'Étiquette de l\'emplacement',
-  selectLocationLabel: 'Sélectionner l\'étiquette de l\'emplacement',
+  locationLabel: "Étiquette de l'emplacement",
+  selectLocationLabel: "Sélectionner l'étiquette de l'emplacement",
   pending: 'En cours',
   label: 'Étiquette',
   orderStatus: 'Statut de la commande',
   pricingDetails: 'Détails des prix',
   transportCost: 'Frais de transport',
-  forgotPasswordSuccessMessage: 'Un email a été envoyé avec un code de vérification.',
-  invalidLocationLabelFormat: 'L\'étiquette de l\'emplacement doit être au format suivant: %e.g.%',
-  emailOrUsername: 'Email ou nom d\'utilisateur',
+  forgotPasswordSuccessMessage:
+    'Un email a été envoyé avec un code de vérification.',
+  invalidLocationLabelFormat:
+    "L'étiquette de l'emplacement doit être au format suivant: %e.g.%",
+  emailOrUsername: "Email ou nom d'utilisateur",
   orderDetails: 'Détails de la commande',
   pricing: 'Tarification',
   customer: 'Client',
@@ -217,27 +225,28 @@ const translation = {
   stockQuantity: 'Quantité en stock',
   addAnotherProduct: 'Ajouter un autre produit',
   addProducts: 'Ajouter des produits',
-  editAttribute: 'Modifier l\'attribut',
+  editAttribute: "Modifier l'attribut",
   stock: 'Stock',
   search: 'Recherche',
   importSales: 'Importer la liste des expéditions',
   createdAt: 'Date de création',
   createProduct: 'Créer un produit',
   searchByCustomerNameOrEmail: 'Rechercher par nom de client ou email',
-  searchBySkuOrDescOrNameOrAttr: 'Rechercher par numéro de série ou description ou nom ou attribut',
+  searchBySkuOrDescOrNameOrAttr:
+    'Rechercher par numéro de série ou description ou nom ou attribut',
   searchByOrderNumberOrRemarks: 'Recherche par numéro de commande ou remarques',
   contact: 'Contact',
   bulkEmail: 'Email en masse',
   invalidEmail: 'Adresse email invalide',
   basicDetails: 'Détails de base',
-  addressDetails: 'Détails de l\'adresse',
-  optionalAddressDetails: 'Détails de l\'adresse optionnels',
+  addressDetails: "Détails de l'adresse",
+  optionalAddressDetails: "Détails de l'adresse optionnels",
   list: 'Liste',
   tag: 'Étiquette',
   tags: 'Étiquettes',
   content: 'Contenu',
   recipients: 'Destinataires',
-  openRate: 'Taux d\'ouverture',
+  openRate: "Taux d'ouverture",
   clickRate: 'Taux de clic',
   unsubscribes: 'Désabonnements',
   edit: 'Modifier',
@@ -248,8 +257,8 @@ const translation = {
   },
   userForm: {
     username: {
-      label: 'Nom d\'utilisateur',
-      placeholder: 'Saisissez le nom d\'utilisateur',
+      label: "Nom d'utilisateur",
+      placeholder: "Saisissez le nom d'utilisateur",
     },
     firstName: {
       label: 'Prénom',
@@ -261,7 +270,7 @@ const translation = {
     },
     email: {
       label: 'E-mail',
-      placeholder: 'Saisissez l\'adresse e-mail',
+      placeholder: "Saisissez l'adresse e-mail",
     },
     permission: {
       placeholder: 'Permission',
@@ -269,7 +278,8 @@ const translation = {
     permissionDetail: {
       placeholder: 'Détail de la permission',
     },
-    permissions: 'Permissions (Vous pouvez sélectionner plusieurs autorisations pour ce rôle)',
+    permissions:
+      'Permissions (Vous pouvez sélectionner plusieurs autorisations pour ce rôle)',
   },
   addAnother: 'Ajouter un autre',
   emailForm: {
@@ -278,26 +288,28 @@ const translation = {
       label: 'Nom',
     },
     subject: {
-      placeholder: 'Saisissez le sujet de l\'email',
-      label: 'Sujet de l\'email (Celui-ci apparaîtra dans la boîte de réception du destinataire)',
+      placeholder: "Saisissez le sujet de l'email",
+      label:
+        "Sujet de l'email (Celui-ci apparaîtra dans la boîte de réception du destinataire)",
     },
     senderName: {
       placeholder: 'Saisissez le nom',
-      label: 'Nom de l\'expéditeur (L\'email est signé avec ce nom)',
+      label: "Nom de l'expéditeur (L'email est signé avec ce nom)",
     },
     senderEmail: {
       placeholder: 'Sélectionnez un email expéditeur',
-      label: 'Envoyer l\'email',
+      label: "Envoyer l'email",
     },
     recipients: {
       placeholder: 'Sélectionnez un ou plusieurs destinataires',
-      label: 'Destinataires (Vous pouvez ajouter une ou plusieurs listes ou saisir manuellement l\'email)',
+      label:
+        "Destinataires (Vous pouvez ajouter une ou plusieurs listes ou saisir manuellement l'email)",
     },
   },
   companyForm: {
     name: {
-      placeholder: 'Saisissez le nom de l\'entreprise',
-      label: 'Nom de l\'entreprise',
+      placeholder: "Saisissez le nom de l'entreprise",
+      label: "Nom de l'entreprise",
     },
     kvk_nr: {
       placeholder: 'Saisissez le numéro de la Chambre de Commerce',
@@ -330,7 +342,7 @@ const translation = {
       label: 'Liste',
     },
     tag: {
-      placeholder: 'Sélectionnez l\'étiquette',
+      placeholder: "Sélectionnez l'étiquette",
       label: 'Étiquette',
     },
     street: {
@@ -338,8 +350,8 @@ const translation = {
       label: 'Rue',
     },
     extraStreet: {
-      placeholder: 'Saisissez le complément d\'adresse',
-      label: 'Complément d\'adresse',
+      placeholder: "Saisissez le complément d'adresse",
+      label: "Complément d'adresse",
     },
     city: {
       placeholder: 'Saisissez le nom de la ville',
@@ -360,7 +372,8 @@ const translation = {
   },
   orderForm: {
     orderNr: {
-      placeholder: 'Vous pouvez laisser ce champ vide pour une génération automatique',
+      placeholder:
+        'Vous pouvez laisser ce champ vide pour une génération automatique',
       label: 'Numéro de commande',
     },
   },
@@ -414,7 +427,7 @@ const translation = {
   magentoAttrCode: "Code d'attribut Magento",
   magentoAttrSetId: "Identifiant de l'ensemble d'attributs Magento",
   listPrice: 'Prix catalogue',
-  editPurchase: 'Modifier l\'achat',
+  editPurchase: "Modifier l'achat",
   totalPerProductType: 'Total par type de produit',
   printBarcodes: 'Imprimer les codes-barres',
   printChecklist: 'Imprimer la liste de contrôle',
@@ -465,7 +478,7 @@ const translation = {
   days: 'Jours',
   company: 'Entreprise',
   companies: 'Entreprises',
-  editCompany: 'Modifier l\'entreprise',
+  editCompany: "Modifier l'entreprise",
   reset: 'Réinitialiser',
   filter: 'Fltre',
   newCompany: 'Nouvelle entreprise',
@@ -482,7 +495,8 @@ const translation = {
   hideDoneTasks: 'Masquer les tâches terminées',
   productAnalytics: 'Analyse des produits',
   myTasks: 'Mes tâches',
-  checkForDamagesAndCleanDevices: 'Vérifier les dégâts et nettoyer les appareils',
+  checkForDamagesAndCleanDevices:
+    'Vérifier les dégâts et nettoyer les appareils',
   adminCenter: "Centre d'administration",
   manageUsers: 'Gérer les utilisateurs',
   lastActive: 'Dernière activité',
@@ -497,8 +511,10 @@ const translation = {
   emptyCartMessage: 'Rien dans votre panier',
   clientSecret: 'Clé secrète du client',
   activeAt: 'Actif depuis',
-  inactiveModuleMessage: 'Veuillez acheter le module suivant afin d\'utiliser cette fonctionnalité : (%module%)',
-  recurrentPaymentConfirmation: 'Si vous cochez cette option, la même somme sera déduite de votre compte chaque mois et a la meme date de votre paiement. Vous pouvez annuler cette action à tout moment.',
+  inactiveModuleMessage:
+    "Veuillez acheter le module suivant afin d'utiliser cette fonctionnalité : (%module%)",
+  recurrentPaymentConfirmation:
+    'Si vous cochez cette option, la même somme sera déduite de votre compte chaque mois et a la meme date de votre paiement. Vous pouvez annuler cette action à tout moment.',
   addToCart: 'Ajouter au panier',
   transactionId: 'Identifiant de transaction',
   method: 'Méthode',
@@ -506,7 +522,7 @@ const translation = {
   recurrentPayment: 'Paiement récurrent',
   payments: 'Paiements',
   updatedAt: 'Modifié le',
-  startFreeTrial: 'Commencer l\'essai gratuit',
+  startFreeTrial: "Commencer l'essai gratuit",
   expiresAt: 'Expire le',
   locations: 'Emplacements',
   unitCapacity: 'Capacité unitaire',
@@ -540,14 +556,20 @@ const translation = {
   customerDetails: 'Détails du client',
   customerType: 'Type de client',
   deleteResourceQuestion: 'Supprimer cette ressource ?',
-  deleteResourceContent: 'Cette action est irréversible. La ressource supprimé sera perdu à jamais.',
+  deleteResourceContent:
+    'Cette action est irréversible. La ressource supprimé sera perdu à jamais.',
   deleteConfirm: 'Oui, supprimer !',
-  changeLocationContent: "Vous pouvez modifier l'emplacement des produits sélectionnés",
-  changeProductTypeContent: 'Vous pouvez modifier le type des produits sélectionnés',
-  changeProductTypeWarning: 'La modification du type de produit supprime tous les attributs associés',
+  changeLocationContent:
+    "Vous pouvez modifier l'emplacement des produits sélectionnés",
+  changeProductTypeContent:
+    'Vous pouvez modifier le type des produits sélectionnés',
+  changeProductTypeWarning:
+    'La modification du type de produit supprime tous les attributs associés',
   selectLocation: 'Sélectionner un emplacement',
   changeStatus: 'Changer de statut',
   changeStatusContent: 'Modifier le contenu du statut',
+  changePrice: 'Changer le prix',
+  changePriceContent: 'Vous pouvez modifier le prix des produits sélectionnés',
   selectStatus: 'Sélectionner un statut',
   selectProductType: 'Sélectionner un type de produit',
   deliveryType: 'Type de livraison',
@@ -585,7 +607,7 @@ const translation = {
       label: 'Commentaire',
     },
     magentoCategoryId: {
-      placeholder: 'Saisissez l\'identifiant ici',
+      placeholder: "Saisissez l'identifiant ici",
       label: 'Identifiant de catégorie Magento',
     },
     tasks: {
@@ -607,11 +629,13 @@ const translation = {
     },
     zipcodes: {
       label: 'Codes postaux',
-      placeholder: 'Appuyez sur Entrée pour sélectionner plusieurs codes postaux',
+      placeholder:
+        'Appuyez sur Entrée pour sélectionner plusieurs codes postaux',
     },
     locationTemplate: {
       label: "Modèle d'emplacement",
-      placeholder: "Appuyez sur Entrée pour sélectionner plusieurs modèles d'emplacement. RegExp JavaScript valide requis.",
+      placeholder:
+        "Appuyez sur Entrée pour sélectionner plusieurs modèles d'emplacement. RegExp JavaScript valide requis.",
     },
   },
   zipcodes: 'Codes postaux',
@@ -705,10 +729,11 @@ const translation = {
     mailBody: {
       label: 'Corps du courrier',
       placeholder: 'Saisissez le contenu du courrier',
-      helperText: 'Utilisez les variables disponibles pour enrichir le mail en utilisant la syntaxe suivante : {{variable}}. Les variables disponibles sont :',
+      helperText:
+        'Utilisez les variables disponibles pour enrichir le mail en utilisant la syntaxe suivante : {{variable}}. Les variables disponibles sont :',
     },
     mailBodyVariables: {
-      orderNr: '{{orderNr}} L\'identifiant unique de la commande.',
+      orderNr: "{{orderNr}} L'identifiant unique de la commande.",
       pickupDate: '{{pickupDate}} La date de collecte planifiée.',
       orderDate: '{{orderDate}} La date de création de la commande.',
       supplierName: '{{supplierName}} Nom du fournisseur.',
@@ -719,10 +744,15 @@ const translation = {
       placeholder: 'Entrez le nom traduit du statut de commande',
     },
   },
+  yes: 'Oui',
+  no: 'Non',
+  createInvoice: 'Créer une facture',
+  createInvoiceConfirmationQuestion:
+    'Veuillez vérifier à nouveau les informations avant de créer une facture.',
   editOrderStatus: 'Modifier le statut de la commande',
-  emailLogs: 'Journaux d\'e-mails',
+  emailLogs: "Journaux d'e-mails",
   emails: 'E-mails',
-  activityLogs: 'Journaux d\'activité',
+  activityLogs: "Journaux d'activité",
   aorderLogs: 'Journaux de commandes',
   productLogs: 'Journaux de produits',
   previousStatus: 'Statut précédent',
@@ -752,7 +782,8 @@ const translation = {
   driverInfo: 'Informations sur le conducteur',
   vehicleInfo: 'Informations sur le véhicule',
   contacts: 'Contacts',
-  deleteUsedOrderStatusMessage: 'Statut de commande utilisé par une commande existante.',
+  deleteUsedOrderStatusMessage:
+    'Statut de commande utilisé par une commande existante.',
   vehiclesTracking: 'Suivi des véhicules',
   vehicle: 'Véhicule',
   driver: 'Conducteur',

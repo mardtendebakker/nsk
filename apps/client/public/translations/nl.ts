@@ -156,11 +156,13 @@ const translation = {
   extraAddress: 'Adres toevoeging',
   signUp: 'Registreren',
   confirmAccount: 'Gegevens bevestigen',
-  accountVerificationMessage: 'Voer uw gebruikersnaam en de code in, die u per email heeft gekregen.',
+  accountVerificationMessage:
+    'Voer uw gebruikersnaam en de code in, die u per email heeft gekregen.',
   accountVerification: 'Account bevestiging',
   confirm: 'Bevestigen',
   reminder: 'Herinnering',
-  productEditConfirmation: 'Bent u er zeker van, dat u de verkoopprijs correct heeft ingevuld? Verkoopprijs: %price%',
+  productEditConfirmation:
+    'Bent u er zeker van, dat u de verkoopprijs correct heeft ingevuld? Verkoopprijs: %price%',
   orderMightShouldChangeWarning: 'Controleer of de bestelstatus nog klopt.',
   code: 'Code',
   oldPassword: 'Oud Wachtwoord',
@@ -170,11 +172,14 @@ const translation = {
   changePassword: 'Verander wachtwoord',
   sendCode: 'Code verzenden',
   settings: 'Instellingen',
-  signUpSuccessMessage: 'Registratie verwerkt. Controleer uw emailadres met de bevestigingscode.',
+  signUpSuccessMessage:
+    'Registratie verwerkt. Controleer uw emailadres met de bevestigingscode.',
   confirmAccountSuccessMessage: 'Account succesvol bevestigd.',
   forgotPasswordQuestion: 'Wachtwoord vergeten?',
-  forgotPasswordMessage: 'U ontvangt een verificatiecode in de email, die betrekking heeft op de gebruikersnaam of het emailadres dat u gaat gebruiken.',
-  passwordRegexError: 'wachtwoord moet minimaal 8 karakters lang zijn met een hoofdletter, een kleine letter, een cijfer en een speciaal teken.',
+  forgotPasswordMessage:
+    'U ontvangt een verificatiecode in de email, die betrekking heeft op de gebruikersnaam of het emailadres dat u gaat gebruiken.',
+  passwordRegexError:
+    'wachtwoord moet minimaal 8 karakters lang zijn met een hoofdletter, een kleine letter, een cijfer en een speciaal teken.',
   verificationCode: 'Verificatiecode',
   orderNumber: 'Bestelnummer',
   showOrder: 'Volgorde tonen',
@@ -196,7 +201,8 @@ const translation = {
   pricingDetails: 'Prijsdetails',
   transportCost: 'Transportkosten',
   outOfStock: 'Niet op voorraad',
-  forgotPasswordSuccessMessage: 'Er is een email verzonden met een verificatiecode.',
+  forgotPasswordSuccessMessage:
+    'Er is een email verzonden met een verificatiecode.',
   invalidLocationLabelFormat: 'Locatie label is als volgt: %e.g.%',
   emailOrUsername: 'Email of gebruikersnaam',
   orderDetails: 'Besteldetails',
@@ -234,7 +240,8 @@ const translation = {
   createdAt: 'Datum opgave',
   createProduct: 'Product genereren',
   searchByCustomerNameOrEmail: 'Zoek op klantnaam of e-mail',
-  searchBySkuOrDescOrNameOrAttr: 'Zoek op serienummer of beschrijving of naam of eigenschap',
+  searchBySkuOrDescOrNameOrAttr:
+    'Zoek op serienummer of beschrijving of naam of eigenschap',
   searchByOrderNumberOrRemarks: 'Zoek op bestelnummer of opmerkingen',
   contact: 'Contact',
   bulkEmail: 'Bulk email',
@@ -274,7 +281,8 @@ const translation = {
     permissionDetail: {
       placeholder: 'Toestemmingsdetail',
     },
-    permissions: 'Machtigingen (U kunt meerdere machtigingen voor deze rol selecteren)',
+    permissions:
+      'Machtigingen (U kunt meerdere machtigingen voor deze rol selecteren)',
   },
   addAnother: 'Een andere toevoegen',
   emailForm: {
@@ -296,7 +304,8 @@ const translation = {
     },
     recipients: {
       placeholder: 'Selecteer een of meerdere ontvangers',
-      label: 'Ontvangers (u kunt een of meerdere lijsten toevoegen of handmatig email typen)',
+      label:
+        'Ontvangers (u kunt een of meerdere lijsten toevoegen of handmatig email typen)',
     },
   },
   companyForm: {
@@ -415,6 +424,11 @@ const translation = {
       caption: 'Uw bestand mag niet groter zijn dan 80 KB',
     },
   },
+  yes: 'Ja',
+  no: 'Nee',
+  createInvoice: 'Factuur aanmaken',
+  createInvoiceConfirmationQuestion:
+    'Controleer de informatie opnieuw voordat u een factuur aanmaakt.',
   magentoAttrCode: 'Magento-attribuutcode',
   magentoAttrSetId: 'Magento-attributenset-ID',
   manageTheme: 'Thema beheren',
@@ -487,7 +501,8 @@ const translation = {
   hideDoneTasks: 'Verberg voltooide taken',
   productAnalytics: 'Productanalyse',
   myTasks: 'Mijn taken',
-  checkForDamagesAndCleanDevices: 'Controleer op schade en maak apparaten schoon',
+  checkForDamagesAndCleanDevices:
+    'Controleer op schade en maak apparaten schoon',
   adminCenter: 'Beheer panel',
   manageUsers: 'Gebruikers beheren',
   lastActive: 'Laatst actief',
@@ -527,8 +542,10 @@ const translation = {
   numberOfAttributes: 'Aantal eigenschappen',
   newMailingList: 'Nieuwe mailinglijst',
   customerTags: 'Klantenlabels',
-  inactiveModuleMessage: 'Koop de volgende module om deze functie te gebruiken: (%module%)',
-  recurrentPaymentConfirmation: 'Als u deze optie aanvinkt, wordt elke maand en op dezelfde datum van uw betaling hetzelfde bedrag van uw rekening afgeschreven. U kunt deze actie op elk moment annuleren.',
+  inactiveModuleMessage:
+    'Koop de volgende module om deze functie te gebruiken: (%module%)',
+  recurrentPaymentConfirmation:
+    'Als u deze optie aanvinkt, wordt elke maand en op dezelfde datum van uw betaling hetzelfde bedrag van uw rekening afgeschreven. U kunt deze actie op elk moment annuleren.',
   tagName: 'Label naam',
   newCustomerTag: 'Nieuwe klantenlabel',
   toDo: 'Te doen',
@@ -543,14 +560,19 @@ const translation = {
   customerDetails: 'Klant details',
   customerType: 'Klant soort',
   deleteResourceQuestion: 'Deze bestelling verwijderen?',
-  deleteResourceContent: 'Deze actie is onomkeerbaar. De verwijderde bron zal voor altijd verloren gaan.',
+  deleteResourceContent:
+    'Deze actie is onomkeerbaar. De verwijderde bron zal voor altijd verloren gaan.',
   deleteConfirm: 'Ja, verwijderen!',
-  changeLocationContent: 'U kunt de locatie van de geselecteerde producten wijzigen',
+  changeLocationContent:
+    'U kunt de locatie van de geselecteerde producten wijzigen',
   changeProductTypeContent: 'U kunt het type geselecteerde producten wijzigen',
-  changeProductTypeWarning: 'Als u het producttype wijzigt, worden alle bijbehorende kenmerken verwijderd',
+  changeProductTypeWarning:
+    'Als u het producttype wijzigt, worden alle bijbehorende kenmerken verwijderd',
   selectLocation: 'Selecteer een locatie',
   changeStatus: 'Verander status',
   changeStatusContent: 'Statusinhoud wijzigen',
+  changePrice: 'Verander prijs',
+  changePriceContent: 'U kunt de prijs van de geselecteerde producten wijzigen',
   selectStatus: 'Selecteer status',
   selectProductType: 'Selecteer een productsoort',
   deliveryType: 'Leveringstype',
@@ -613,7 +635,8 @@ const translation = {
     },
     locationTemplate: {
       label: 'Locatie sjabloon',
-      placeholder: 'Typ enter om meerdere locatie sjablonen te selecteren. Geldig javascript RegExp nodig.',
+      placeholder:
+        'Typ enter om meerdere locatie sjablonen te selecteren. Geldig javascript RegExp nodig.',
     },
   },
   zipcodes: 'Postcodes',
@@ -707,7 +730,8 @@ const translation = {
     mailBody: {
       label: 'Post inhoud',
       placeholder: 'Typ Post inhoud',
-      helperText: 'Gebruik beschikbare variabelen om de e-mail te verrijken met de volgende syntaxis: {{variabele}}. Beschikbare variabelen zijn:',
+      helperText:
+        'Gebruik beschikbare variabelen om de e-mail te verrijken met de volgende syntaxis: {{variabele}}. Beschikbare variabelen zijn:',
     },
     mailBodyVariables: {
       orderNr: '{{orderNr}} De unieke identificatie van de bestelling.',
@@ -755,7 +779,8 @@ const translation = {
   driverInfo: 'Bestuurder',
   vehicleInfo: 'Voertuig',
   contacts: 'Contacten',
-  deleteUsedOrderStatusMessage: 'Bestelstatus gebruikt door een bestaande bestelling.',
+  deleteUsedOrderStatusMessage:
+    'Bestelstatus gebruikt door een bestaande bestelling.',
   vehiclesTracking: 'Voertuig volgen',
   vehicle: 'Wagen',
   driver: 'Chauffeur',
