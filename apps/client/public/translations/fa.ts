@@ -154,12 +154,15 @@ const translation = {
   extraAddress: 'جزئیات آدرس',
   signUp: 'ثبت نام',
   confirmAccount: 'تایید حساب کاربری',
-  accountVerificationMessage: 'نام کاربری و کدی که از طریق ایمیل دریافت کرده اید را وارد کنید.',
+  accountVerificationMessage:
+    'نام کاربری و کدی که از طریق ایمیل دریافت کرده اید را وارد کنید.',
   accountVerification: 'تایید حساب کاربری',
   confirm: 'تایید',
   reminder: 'یاد آوری',
-  productEditConfirmation: 'آیا مطمئن هستید که قیمت فروش را به درستی وارد کرده اید؟ قیمت فروش: %price%',
-  orderMightShouldChangeWarning: 'بررسی کنید که آیا وضعیت سفارش هنوز درست است یا خیر.',
+  productEditConfirmation:
+    'آیا مطمئن هستید که قیمت فروش را به درستی وارد کرده اید؟ قیمت فروش: %price%',
+  orderMightShouldChangeWarning:
+    'بررسی کنید که آیا وضعیت سفارش هنوز درست است یا خیر.',
   code: 'کد',
   oldPassword: 'رمز عبور قدیم',
   newPassword: 'رمز عبور جدید',
@@ -168,11 +171,14 @@ const translation = {
   changePassword: 'تغییر رمز عبور',
   sendCode: 'ارسال کد',
   settings: 'تنظیمات',
-  signUpSuccessMessage: 'ثبت نام انجام شد آدرس ایمیل خود را با کد تایید بررسی کنید.',
+  signUpSuccessMessage:
+    'ثبت نام انجام شد آدرس ایمیل خود را با کد تایید بررسی کنید.',
   confirmAccountSuccessMessage: 'حساب کاربری با موفقیت تأیید شد.',
   forgotPasswordQuestion: 'رمز عبور خود را فراموش کرده اید؟',
-  forgotPasswordMessage: 'یک کد تأیید در ایمیل دریافت خواهید کرد که به نام کاربری یا آدرس ایمیلی که استفاده می کنید مربوط می شود.',
-  passwordRegexError: 'رمز عبور باید حداقل 8 کاراکتر با یک حرف بزرگ، یک حرف کوچک، یک عدد و یک کاراکتر خاص باشد.',
+  forgotPasswordMessage:
+    'یک کد تأیید در ایمیل دریافت خواهید کرد که به نام کاربری یا آدرس ایمیلی که استفاده می کنید مربوط می شود.',
+  passwordRegexError:
+    'رمز عبور باید حداقل 8 کاراکتر با یک حرف بزرگ، یک حرف کوچک، یک عدد و یک کاراکتر خاص باشد.',
   verificationCode: 'کد تایید',
   orderNumber: 'شماره سفارش',
   showOrder: 'نمایش سفارش',
@@ -231,7 +237,8 @@ const translation = {
   createdAt: 'ایجاد شده در',
   createProduct: 'ایجاد کردن محصول',
   searchByCustomerNameOrEmail: 'جستوجو با نام مشتری یا ایمبل',
-  searchBySkuOrDescOrNameOrAttr: 'جستوجو با شماره سریال یا شرح یا نام یا مشخصات',
+  searchBySkuOrDescOrNameOrAttr:
+    'جستوجو با شماره سریال یا شرح یا نام یا مشخصات',
   searchByOrderNumberOrRemarks: 'جستجو بر اساس شماره سفارش یا اظهارات',
   contact: 'مخاطب',
   bulkEmail: 'ایمیل همگانی',
@@ -293,7 +300,8 @@ const translation = {
     },
     recipients: {
       placeholder: 'یک یا چند گیرنده را انتخاب کنید',
-      label: 'گیرندگان (می توانید یک یا چند لیست اضافه کنید یا ایمیل را به صورت دستی تایپ کنید)',
+      label:
+        'گیرندگان (می توانید یک یا چند لیست اضافه کنید یا ایمیل را به صورت دستی تایپ کنید)',
     },
   },
   companyForm: {
@@ -488,7 +496,8 @@ const translation = {
   hideDoneTasks: 'مخفی کردن وظایف تکمیل شده',
   productAnalytics: 'تجزیه و تحلیل محصول',
   myTasks: 'وظایف من',
-  checkForDamagesAndCleanDevices: 'آسیب دیدگی و تمیز کردن تجهیزات را بررسی کنید',
+  checkForDamagesAndCleanDevices:
+    'آسیب دیدگی و تمیز کردن تجهیزات را بررسی کنید',
   adminCenter: 'پنل مدیریت',
   manageUsers: 'مدیریت کاربران',
   lastActive: 'آخرین فعالیت',
@@ -501,8 +510,10 @@ const translation = {
   active: 'فعال',
   method: 'روش',
   transactionId: 'شناسه تراکنش',
-  inactiveModuleMessage: 'لطفا ماژول زیر را برای استفاده از این ویژگی خریداری کنید: (%module%)',
-  recurrentPaymentConfirmation: 'اگر این گزینه را تیک بزنید، هر ماه و در همان تاریخ پرداخت شما، همان مبلغ از حساب شما کسر می شود. در هر زمانی می توانید این اقدام را لغو کنید.',
+  inactiveModuleMessage:
+    'لطفا ماژول زیر را برای استفاده از این ویژگی خریداری کنید: (%module%)',
+  recurrentPaymentConfirmation:
+    'اگر این گزینه را تیک بزنید، هر ماه و در همان تاریخ پرداخت شما، همان مبلغ از حساب شما کسر می شود. در هر زمانی می توانید این اقدام را لغو کنید.',
   cart: 'سبد',
   emptyCartMessage: 'هیچ چیز در سبد خرید شما نیست',
   amount: 'مقدار',
@@ -546,14 +557,18 @@ const translation = {
   customerDetails: 'مشخصات مشتری',
   customerType: 'نوع مشتری',
   deleteResourceQuestion: 'این سفارش حذف شود؟',
-  deleteResourceContent: 'این عمل قابل بازگشت نیست و همه کاربران دسترسی به آن را از دست خواهند داد.',
+  deleteResourceContent:
+    'این عمل قابل بازگشت نیست و همه کاربران دسترسی به آن را از دست خواهند داد.',
   deleteConfirm: 'بله حذف کنید!',
   changeLocationContent: 'می توانید مکان محصولات انتخاب شده را تغییر دهید',
   changeProductTypeContent: 'تعديل نوع المنتج يكمل جميع السمات المرتبطة به',
-  changeProductTypeWarning: 'تغییر نوع محصول تمام ویژگی های مرتبط را حذف می کند',
+  changeProductTypeWarning:
+    'تغییر نوع محصول تمام ویژگی های مرتبط را حذف می کند',
   selectLocation: 'یک مکان را انتخاب کنید',
   changeStatus: 'تغییر وضعیت',
   changeStatusContent: 'تغییر محتوای وضعیت',
+  changePrice: 'تغییر قیمت',
+  changePriceContent: 'می توانید قیمت محصولات انتخاب شده را تغییر دهید',
   selectStatus: 'وضعیت را انتخاب کنید',
   selectProductType: 'نوع محصول را انتخاب کنید',
   deliveryType: 'نوع تحویل',
@@ -617,7 +632,8 @@ const translation = {
     },
     locationTemplate: {
       label: 'الگوی مکان',
-      placeholder: 'برای انتخاب چندین الگوی مکان، enter را تایپ کنید. جاوا اسکریپت معتبر RegExp مورد نیاز است.',
+      placeholder:
+        'برای انتخاب چندین الگوی مکان، enter را تایپ کنید. جاوا اسکریپت معتبر RegExp مورد نیاز است.',
     },
   },
   zipcodes: 'کد پستی ها',
@@ -711,7 +727,8 @@ const translation = {
     mailBody: {
       label: 'ارسال مطالب',
       placeholder: 'ارسال مطالب را بنویسید',
-      helperText: 'از متغیرهای موجود برای غنی‌سازی ایمیل با استفاده از نحو زیر استفاده کنید: {{متغیر}}. متغیرهای موجود عبارتند از:',
+      helperText:
+        'از متغیرهای موجود برای غنی‌سازی ایمیل با استفاده از نحو زیر استفاده کنید: {{متغیر}}. متغیرهای موجود عبارتند از:',
     },
     mailBodyVariables: {
       orderNr: '{{orderNr}} شناسه منحصر به فرد سفارش.',
@@ -725,6 +742,11 @@ const translation = {
       placeholder: 'نام ترجمه شده وضعیت سفارش را وارد کنید',
     },
   },
+  yes: 'بله',
+  no: 'خیر',
+  createInvoice: 'ایجاد فاکتور',
+  createInvoiceConfirmationQuestion:
+    'لطفاً قبل از ایجاد فاکتور، اطلاعات را دوباره بررسی کنید.',
   editOrderStatus: 'ویرایش وضعیت سفارش',
   emailLogs: 'گزارش‌های ایمیل',
   emails: 'ایمیل‌ها',
@@ -749,7 +771,8 @@ const translation = {
   driverInfo: 'اطلاعات راننده',
   vehicleInfo: 'اطلاعات وسیله نقلیه',
   contacts: 'مخاطبین',
-  deleteUsedOrderStatusMessage: 'وضعیت سفارش توسط یک سفارش موجود استفاده می شود.',
+  deleteUsedOrderStatusMessage:
+    'وضعیت سفارش توسط یک سفارش موجود استفاده می شود.',
   vehicle: 'وسیله نقلیه',
   driver: 'راننده',
   vehiclesTracking: 'ردیابی وسیله نقلیه',

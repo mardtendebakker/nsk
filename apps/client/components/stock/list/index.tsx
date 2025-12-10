@@ -4,7 +4,14 @@ import { NextRouter, useRouter } from 'next/router';
 import _ from 'lodash';
 import { trans } from 'itranslator';
 import {
-  STOCK_PRODUCTS_PATH, STOCK_WEBSHOP_PATH, STOCK_REPAIRS_PATH, SPLIT_PRODUCT_INDIVIDUALIZE_PATH, SPLIT_PRODUCT_STOCK_PART_PATH, STOCK_ARCHIVED_PATH, APRODUCTS_ARCHIVE_SET, APRODUCTS_ARCHIVE_UNSET,
+  STOCK_PRODUCTS_PATH,
+  STOCK_WEBSHOP_PATH,
+  STOCK_REPAIRS_PATH,
+  SPLIT_PRODUCT_INDIVIDUALIZE_PATH,
+  SPLIT_PRODUCT_STOCK_PART_PATH,
+  STOCK_ARCHIVED_PATH,
+  APRODUCTS_ARCHIVE_SET,
+  APRODUCTS_ARCHIVE_UNSET,
   APRODUCT_BULK_PUBLISH_TO_STORE,
   AxiosResponse,
 } from '../../../utils/axios';
@@ -23,6 +30,7 @@ import can from '../../../utils/can';
 import useSecurity from '../../../hooks/useSecurity';
 import PatchLocationModal from './patchLocationModal';
 import PatchProductTypeModal from './patchProductTypeModal';
+import PatchPriceModal from './patchPriceModal';
 import { ProductType } from '../type';
 import useBulkPrintChecklist from '../../../hooks/apiCalls/useBulkPrintChecklist';
 import useBulkPrintPriceCards from '../../../hooks/apiCalls/useBulkPrintPriceCards';
@@ -30,18 +38,19 @@ import useBulkPrintLabels from '../../../hooks/apiCalls/useBulkPrintLabels';
 import useBulkPrintBarcodes from '../../../hooks/apiCalls/useBulkPrintBarcodes';
 import PatchStatusModal from './patchStatusModal';
 
-function initFormState(
-  {
-    search, productType, location, locationLabel, productStatus,
-  }:
-  {
-    search?: string,
-    productType?: string,
-    location?: string,
-    locationLabel?: string,
-    productStatus?: string,
-  },
-) {
+function initFormState({
+  search,
+  productType,
+  location,
+  locationLabel,
+  productStatus,
+}: {
+  search?: string;
+  productType?: string;
+  location?: string;
+  locationLabel?: string;
+  productStatus?: string;
+}) {
   return {
     search: {
       value: search,
@@ -68,13 +77,13 @@ function refreshList({
   router,
   call,
   type,
-}:{
-  page: number,
-  rowsPerPage: number,
-  formRepresentation: object,
-  router: NextRouter,
-  call,
-  type: ProductType,
+}: {
+  page: number;
+  rowsPerPage: number;
+  formRepresentation: object;
+  router: NextRouter;
+  call;
+  type: ProductType;
 }) {
   const params = new URLSearchParams();
 
@@ -93,7 +102,10 @@ function refreshList({
     'locationLabel',
     'productStatus',
   ].forEach((filter) => {
-    if (formRepresentation[filter].value || formRepresentation[filter].value === 0) {
+    if (
+      formRepresentation[filter].value ||
+      formRepresentation[filter].value === 0
+    ) {
       const value = formRepresentation[filter].value.toString();
       params.append(filter, value);
       paramsToSend[filter] = formRepresentation[filter].value;
@@ -108,7 +120,9 @@ function refreshList({
       outOfStockOnly: type == 'outOfStock' ? 1 : 0,
       ...paramsToSend,
     },
-  }).then(() => pushURLParams({ params, router })).catch(() => {});
+  })
+    .then(() => pushURLParams({ params, router }))
+    .catch(() => {});
 }
 
 const AJAX_PATHS = {
@@ -119,53 +133,76 @@ const AJAX_PATHS = {
   outOfStock: STOCK_PRODUCTS_PATH,
 };
 
-export default function ListContainer({ type } : { type: ProductType }) {
-  const { state: { user } } = useSecurity();
+export default function ListContainer({ type }: { type: ProductType }) {
+  const {
+    state: { user },
+  } = useSecurity();
   const router = useRouter();
   const [showChangeLocationModal, setShowChangeLocationModal] = useState(false);
   const [showChangeStatusModal, setShowChangeStatusModal] = useState(false);
-  const [showChangeProductTypeModal, setShowChangeProductTypeModal] = useState(false);
-  const [page, setPage] = useState<number>(parseInt(getQueryParam('page', '1'), 10));
-  const [rowsPerPage, setRowsPerPage] = useState<number>(parseInt(getQueryParam('rowsPerPage', '10'), 10));
+  const [showChangeProductTypeModal, setShowChangeProductTypeModal] =
+    useState(false);
+  const [showChangePriceModal, setShowChangePriceModal] = useState(false);
+  const [page, setPage] = useState<number>(
+    parseInt(getQueryParam('page', '1'), 10)
+  );
+  const [rowsPerPage, setRowsPerPage] = useState<number>(
+    parseInt(getQueryParam('rowsPerPage', '10'), 10)
+  );
   const [editProductId, setEditProductId] = useState<number | undefined>();
   const [checkedProductIds, setCheckedProductIds] = useState<number[]>([]);
-  const [splitProduct, setSplitProduct] = useState<ProductListItem | undefined>();
+  const [splitProduct, setSplitProduct] = useState<
+    ProductListItem | undefined
+  >();
 
   const ajaxPath = AJAX_PATHS[type] || STOCK_PRODUCTS_PATH;
 
-  const { formRepresentation, setValue, setData } = useForm(initFormState({
-    search: getQueryParam('search'),
-    productType: getQueryParam('productType'),
-    location: getQueryParam('location'),
-    locationLabel: getQueryParam('locationLabel'),
-    productStatus: getQueryParam('productStatus'),
-  }));
+  const { formRepresentation, setValue, setData } = useForm(
+    initFormState({
+      search: getQueryParam('search'),
+      productType: getQueryParam('productType'),
+      location: getQueryParam('location'),
+      locationLabel: getQueryParam('locationLabel'),
+      productStatus: getQueryParam('productStatus'),
+    })
+  );
 
-  const { data: { data = [], count = 0 } = {}, call, performing } = useAxios<undefined | { data?: ProductListItem[], count?: number }>(
+  const {
+    data: { data = [], count = 0 } = {},
+    call,
+    performing,
+  } = useAxios<undefined | { data?: ProductListItem[]; count?: number }>(
     'get',
     ajaxPath.replace(':id', ''),
     {
       withProgressBar: true,
-    },
+    }
   );
-  const { printBarcodes, performing: performingBulkPrintBarcodes } = useBulkPrintBarcodes({ withProgressBar: true });
-  const { printChecklists, performing: performingBulkPrintChecklists } = useBulkPrintChecklist({ withProgressBar: true });
-  const { printPriceCards, performing: performingBulkPrintPriceCards } = useBulkPrintPriceCards({ withProgressBar: true });
-  const { printLabels, performing: performingBulkPrintLabels } = useBulkPrintLabels({ withProgressBar: true });
-  const { call: bulkPatchArchive, performing: performingBulkPatchArchive } = useAxios('patch', APRODUCTS_ARCHIVE_SET, { withProgressBar: true });
-  const { call: bulkPublishToStore, performing: performingBulkPublishToStore } = useAxios('post', APRODUCT_BULK_PUBLISH_TO_STORE, {
-    showSuccessMessage: true,
-    withProgressBar: true,
-    customSuccessMessage: (response: AxiosResponse) => trans(response.data),
-  });
-  const { call: bulkPatchUnarchive, performing: performingBulkPatchUnarchive } = useAxios('patch', APRODUCTS_ARCHIVE_UNSET, { withProgressBar: true });
+  const { printBarcodes, performing: performingBulkPrintBarcodes } =
+    useBulkPrintBarcodes({ withProgressBar: true });
+  const { printChecklists, performing: performingBulkPrintChecklists } =
+    useBulkPrintChecklist({ withProgressBar: true });
+  const { printPriceCards, performing: performingBulkPrintPriceCards } =
+    useBulkPrintPriceCards({ withProgressBar: true });
+  const { printLabels, performing: performingBulkPrintLabels } =
+    useBulkPrintLabels({ withProgressBar: true });
+  const { call: bulkPatchArchive, performing: performingBulkPatchArchive } =
+    useAxios('patch', APRODUCTS_ARCHIVE_SET, { withProgressBar: true });
+  const { call: bulkPublishToStore, performing: performingBulkPublishToStore } =
+    useAxios('post', APRODUCT_BULK_PUBLISH_TO_STORE, {
+      showSuccessMessage: true,
+      withProgressBar: true,
+      customSuccessMessage: (response: AxiosResponse) => trans(response.data),
+    });
+  const { call: bulkPatchUnarchive, performing: performingBulkPatchUnarchive } =
+    useAxios('patch', APRODUCTS_ARCHIVE_UNSET, { withProgressBar: true });
   const { call: callDelete, performing: performingDelete } = useAxios(
     'delete',
     ajaxPath,
     {
       withProgressBar: true,
       showSuccessMessage: true,
-    },
+    }
   );
   const { call: callPatch, performing: performingPatch } = useAxios(
     'patch',
@@ -173,25 +210,22 @@ export default function ListContainer({ type } : { type: ProductType }) {
     {
       withProgressBar: true,
       showSuccessMessage: true,
-    },
+    }
   );
-  const { call: splitCall, performing: performingSplit } = useAxios(
-    'put',
-    '',
-    {
-      withProgressBar: true,
-      showSuccessMessage: true,
-    },
-  );
-
-  const defaultRefreshList = () => refreshList({
-    page,
-    rowsPerPage,
-    formRepresentation,
-    router,
-    call,
-    type,
+  const { call: splitCall, performing: performingSplit } = useAxios('put', '', {
+    withProgressBar: true,
+    showSuccessMessage: true,
   });
+
+  const defaultRefreshList = () =>
+    refreshList({
+      page,
+      rowsPerPage,
+      formRepresentation,
+      router,
+      call,
+      type,
+    });
 
   useEffect(() => {
     defaultRefreshList();
@@ -208,47 +242,70 @@ export default function ListContainer({ type } : { type: ProductType }) {
   const handleAllChecked = (checked: boolean) => {
     setCheckedProductIds(
       checked
-        ? _.union(checkedProductIds, data.map(({ id }) => id))
-        : checkedProductIds.filter((productId) => !data.find((product: ProductListItem) => product.id == productId)),
+        ? _.union(
+            checkedProductIds,
+            data.map(({ id }) => id)
+          )
+        : checkedProductIds.filter(
+            (productId) =>
+              !data.find((product: ProductListItem) => product.id == productId)
+          )
     );
   };
 
-  const handleRowChecked = ({ id, checked }: { id: number, checked: boolean }) => {
+  const handleRowChecked = ({
+    id,
+    checked,
+  }: {
+    id: number;
+    checked: boolean;
+  }) => {
     if (checked) {
       setCheckedProductIds((oldValue) => [...oldValue, id]);
     } else {
-      setCheckedProductIds((oldValue) => oldValue.filter((currentId) => currentId !== id));
+      setCheckedProductIds((oldValue) =>
+        oldValue.filter((currentId) => currentId !== id)
+      );
     }
   };
 
   const handleDelete = (id: number) => {
-    callDelete({ path: ajaxPath.replace(':id', id.toString()) })
-      .then(() => defaultRefreshList());
+    callDelete({ path: ajaxPath.replace(':id', id.toString()) }).then(() =>
+      defaultRefreshList()
+    );
   };
 
-  const disabled = (): boolean => performing || performingBulkPublishToStore || performingDelete || performingPatch || performingBulkPatchArchive || performingBulkPatchUnarchive || performingSplit || performingBulkPrintBarcodes || performingBulkPrintChecklists || performingBulkPrintPriceCards || performingBulkPrintLabels;
+  const disabled = (): boolean =>
+    performing ||
+    performingBulkPublishToStore ||
+    performingDelete ||
+    performingPatch ||
+    performingBulkPatchArchive ||
+    performingBulkPatchUnarchive ||
+    performingSplit ||
+    performingBulkPrintBarcodes ||
+    performingBulkPrintChecklists ||
+    performingBulkPrintPriceCards ||
+    performingBulkPrintLabels;
 
   const handlePatchArchive = () => {
-    bulkPatchArchive({ body: checkedProductIds })
-      .then(() => {
-        setCheckedProductIds([]);
-        defaultRefreshList();
-      });
+    bulkPatchArchive({ body: checkedProductIds }).then(() => {
+      setCheckedProductIds([]);
+      defaultRefreshList();
+    });
   };
 
   const handlePublishToStore = () => {
-    bulkPublishToStore({ body: checkedProductIds })
-      .then(() => {
-        setCheckedProductIds([]);
-      });
+    bulkPublishToStore({ body: checkedProductIds }).then(() => {
+      setCheckedProductIds([]);
+    });
   };
 
   const handlePatchUnarchive = () => {
-    bulkPatchUnarchive({ body: checkedProductIds })
-      .then(() => {
-        setCheckedProductIds([]);
-        defaultRefreshList();
-      });
+    bulkPatchUnarchive({ body: checkedProductIds }).then(() => {
+      setCheckedProductIds([]);
+      defaultRefreshList();
+    });
   };
 
   const handleSubmitEditProduct = () => {
@@ -266,13 +323,16 @@ export default function ListContainer({ type } : { type: ProductType }) {
         setShowChangeLocationModal(false);
         setShowChangeProductTypeModal(false);
         setShowChangeStatusModal(false);
+        setShowChangePriceModal(false);
       });
   };
 
   const handleSplit = (splitData: SplitData) => {
-    const path = (splitData.mode == 'individualize'
-      ? SPLIT_PRODUCT_INDIVIDUALIZE_PATH
-      : SPLIT_PRODUCT_STOCK_PART_PATH).replace(':id', splitProduct.id.toString());
+    const path = (
+      splitData.mode == 'individualize'
+        ? SPLIT_PRODUCT_INDIVIDUALIZE_PATH
+        : SPLIT_PRODUCT_STOCK_PART_PATH
+    ).replace(':id', splitProduct.id.toString());
 
     setSplitProduct(undefined);
 
@@ -283,8 +343,7 @@ export default function ListContainer({ type } : { type: ProductType }) {
         newSku: !!splitData.newSKU,
         status: splitData.statusId,
       },
-    })
-      .then(() => defaultRefreshList());
+    }).then(() => defaultRefreshList());
   };
 
   const handleReset = () => {
@@ -309,7 +368,14 @@ export default function ListContainer({ type } : { type: ProductType }) {
         <Action
           disabled={disabled()}
           type={type}
-          allChecked={(_.intersectionWith(checkedProductIds, data, (productId: number, product: ProductListItem) => productId === product.id).length === data.length) && data.length != 0}
+          allChecked={
+            _.intersectionWith(
+              checkedProductIds,
+              data,
+              (productId: number, product: ProductListItem) =>
+                productId === product.id
+            ).length === data.length && data.length != 0
+          }
           checkedProductsCount={checkedProductIds.length}
           onAllCheck={handleAllChecked}
           onArchive={handlePatchArchive}
@@ -317,6 +383,7 @@ export default function ListContainer({ type } : { type: ProductType }) {
           onChangeStatus={() => setShowChangeStatusModal(true)}
           onChangeLocation={() => setShowChangeLocationModal(true)}
           onChangeProductType={() => setShowChangeProductTypeModal(true)}
+          onChangePrice={() => setShowChangePriceModal(true)}
           onPrint={() => printBarcodes(checkedProductIds)}
           onPrintChecklist={() => printChecklists(checkedProductIds)}
           onPrintPriceCard={() => printPriceCards(checkedProductIds)}
@@ -340,40 +407,50 @@ export default function ListContainer({ type } : { type: ProductType }) {
           }}
           rowsPerPage={rowsPerPage}
           onEdit={(id) => setEditProductId(id)}
-          onDelete={user && can({ user, requiredGroups: ['admin', 'manager'] }) ? handleDelete : undefined}
+          onDelete={
+            user && can({ user, requiredGroups: ['admin', 'manager'] })
+              ? handleDelete
+              : undefined
+          }
         />
         {editProductId && (
-        <EditModal
-          onClose={() => setEditProductId(undefined)}
-          onSubmit={handleSubmitEditProduct}
-          id={editProductId.toString()}
-          type={type}
-        />
+          <EditModal
+            onClose={() => setEditProductId(undefined)}
+            onSubmit={handleSubmitEditProduct}
+            id={editProductId.toString()}
+            type={type}
+          />
         )}
         {showChangeStatusModal && (
-        <PatchStatusModal
-          onClose={() => setShowChangeStatusModal(false)}
-          onSubmit={handlePatch}
-        />
+          <PatchStatusModal
+            onClose={() => setShowChangeStatusModal(false)}
+            onSubmit={handlePatch}
+          />
         )}
         {showChangeLocationModal && (
-        <PatchLocationModal
-          onClose={() => setShowChangeLocationModal(false)}
-          onSubmit={handlePatch}
-        />
+          <PatchLocationModal
+            onClose={() => setShowChangeLocationModal(false)}
+            onSubmit={handlePatch}
+          />
         )}
         {showChangeProductTypeModal && (
-        <PatchProductTypeModal
-          onClose={() => setShowChangeProductTypeModal(false)}
-          onSubmit={handlePatch}
-        />
+          <PatchProductTypeModal
+            onClose={() => setShowChangeProductTypeModal(false)}
+            onSubmit={handlePatch}
+          />
+        )}
+        {showChangePriceModal && (
+          <PatchPriceModal
+            onClose={() => setShowChangePriceModal(false)}
+            onSubmit={handlePatch}
+          />
         )}
         {splitProduct && (
-        <SplitModal
-          product={splitProduct}
-          onClose={() => setSplitProduct(undefined)}
-          onConfirm={handleSplit}
-        />
+          <SplitModal
+            product={splitProduct}
+            onClose={() => setSplitProduct(undefined)}
+            onConfirm={handleSplit}
+          />
         )}
       </Card>
     </>
